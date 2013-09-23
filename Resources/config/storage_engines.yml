@@ -1,0 +1,14 @@
+parameters:
+    ezpublish.fieldType.xrowmetadata.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
+    ezpublish.fieldType.sckenhancedselection.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
+
+services:
+    ezpublish.fieldType.xrowmetadata.converter:
+        class: %ezpublish.fieldType.xrowmetadata.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: xrowmetadata, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.sckenhancedselection.converter:
+        class: %ezpublish.fieldType.sckenhancedselection.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: sckenhancedselection, lazy: true, callback: '::create'}

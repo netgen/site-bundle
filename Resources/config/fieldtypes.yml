@@ -1,0 +1,18 @@
+parameters:
+    ezpublish.fieldType.xrowmetadata.class: %ezpublish.fieldType.eznull.class%
+    ezpublish.fieldType.sckenhancedselection.class: %ezpublish.fieldType.eznull.class%
+
+services:
+    ezpublish.fieldType.xrowmetadata:
+        class: %ezpublish.fieldType.xrowmetadata.class%
+        parent: ezpublish.fieldType
+        arguments: [ "xrowmetadata" ]
+        tags:
+            - {name: ezpublish.fieldType, alias: xrowmetadata}
+
+    ezpublish.fieldType.sckenhancedselection:
+        class: %ezpublish.fieldType.sckenhancedselection.class%
+        parent: ezpublish.fieldType
+        arguments: [ "sckenhancedselection" ]
+        tags:
+            - {name: ezpublish.fieldType, alias: sckenhancedselection}

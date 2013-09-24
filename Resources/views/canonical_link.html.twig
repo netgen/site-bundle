@@ -1,0 +1,7 @@
+{% if pageData.canonicalUrl is defined and pageData.canonicalUrl is not empty %}
+    {# Multiple locations, pointing search engines to the original #}
+    <link rel="canonical" href="{{ pageData.canonicalUrl }}" />
+{% elseif pageData.canonicalLanguageUrl is defined and pageData.canonicalLanguageUrl is not empty %}
+    {# Language url, generated with LanguageSwitcherClass #}
+    <link rel="canonical" href="{{ pageData.canonicalLanguageUrl }}" />
+{/if}

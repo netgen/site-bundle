@@ -1,0 +1,18 @@
+<meta charset="utf-8">
+<title>{{ title|default( 'Home' ) }}</title>
+
+<meta name="author" content="Netgen" />
+<meta name="copyright" content="Netgen" />
+<meta name="description" content="Netgen More" />
+<meta name="keywords" content="netgen, netgenlabs, ngmore" />
+
+<meta name="generator" content="eZ Publish">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+{% if canonical_link is defined and canonical_link %}
+    {% include 'NetgenMoreBundle::canonical_link.html.twig' %}
+{% endif %}
+
+{% if enable_link is defined and enable_link %}
+    {% include 'NetgenMoreBundle::link.html.twig' %}
+{% endif %}

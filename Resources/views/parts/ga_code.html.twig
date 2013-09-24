@@ -10,7 +10,7 @@
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-            ga( 'create', '{{ google_analytics_code }}' );
+            ga( 'create', '{{ google_analytics_code|raw|escape( 'js' ) }}' );
             ga( 'send', 'pageview' );
 
         </script>
@@ -18,7 +18,7 @@
         <script type="text/javascript">
 
             var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', '{{ google_analytics_code }}']);
+            _gaq.push(['_setAccount', '{{ google_analytics_code|raw|escape( 'js' ) }}']);
             _gaq.push(['_trackPageview']);
 
             (function() {

@@ -1,0 +1,9 @@
+parameters:
+    netgen.more.api.role.limitation_type.function_list.class: Netgen\Bundle\MoreBundle\Core\Limitation\FunctionListLimitationType
+
+services:
+    netgen.more.api.role.limitation_type.function_list:
+        class: %netgen.more.api.role.limitation_type.function_list.class%
+        arguments: [@ezpublish.api.persistence_handler]
+        tags:
+            - {name: ezpublish.limitationType, alias: FunctionList}

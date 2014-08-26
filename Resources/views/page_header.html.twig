@@ -1,7 +1,15 @@
+{% set siteName = configResolver.getParameter( 'SiteSettings.SiteName' ) %}
+
+<!--[if lte IE 8]><div class="header-ie8lte"><![endif]--> {# just remove this line when support for IE8 ends #}
 <header>
     <div class="container">
+        <a id="logo" href="{{ path( rootLocation ) }}" title="{{ siteName }}">{{ siteName }}</a>
+        <div id="lang">
+            {% include 'design:page_header_languages.tpl' %}
+        </div>
         <div id="main-nav">
-            {% include 'design:page_topmenu.tpl' with {"root_node": rootLocation, "site_info_node": siteInfoLocation, "current_node_id": mainCategoryLocationId } %}
+            {% include 'design:page_topmenu.tpl' with { 'root_node': rootLocation, 'site_info_node': siteInfoLocation, 'current_node_id': mainCategoryLocationId } %}
         </div>
     </div>
 </header>
+<!--[if lte IE 8]></div><![endif]--> {# just remove this line when support for IE8 ends #}

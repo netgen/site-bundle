@@ -1,4 +1,4 @@
-{% set sublime_video_code = config_resolver.getParameter( 'SiteSettings.SublimeVideoCode', 'ngmore' ) %}
-{% if sublime_video_code is not empty %}
-    <script type="text/javascript" src="//cdn.sublimevideo.net/js/{{ sublime_video_code }}.js"></script>
+{% set sublimeVideoCode = configResolver.getParameter( 'SiteSettings.SublimeVideoCode', 'ngmore' ) %}
+{% if sublimeVideoCode is not empty %}
+    <script type="text/javascript" src="//cdn.sublimevideo.net/js/{{ sublimeVideoCode }}.js"></script>
 {% endif %}

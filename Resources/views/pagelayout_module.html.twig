@@ -1,3 +1,5 @@
-{% extends 'NetgenMoreBundle::pagelayout.html.twig' %}
+{% extends 'NetgenMoreBundle::pagelayout_legacy.html.twig' %}
 
-{% block content %}{{ module_result.content|raw }}{% endblock %}
+{% block content %}
+    {{ module_result.content|raw }}
+{% endblock %}

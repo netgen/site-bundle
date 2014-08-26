@@ -1,6 +1,6 @@
-{% set typekit_code = config_resolver.getParameter( 'SiteSettings.TypeKitCode', 'ngmore' ) %}
+{% set typekitCode = configResolver.getParameter( 'SiteSettings.TypeKitCode', 'ngmore' ) %}
 
-{% if typekit_code is not empty %}
-    <script type="text/javascript" src="//use.typekit.com/{{ typekit_code }}.js"></script>
+{% if typekitCode is not empty %}
+    <script type="text/javascript" src="//use.typekit.com/{{ typekitCode }}.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 {% endif %}

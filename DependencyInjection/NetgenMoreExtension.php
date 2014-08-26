@@ -28,5 +28,6 @@ class NetgenMoreExtension extends Extension
         $loader->load( 'fieldtypes.yml' );
         $loader->load( 'storage_engines.yml' );
         $loader->load( 'roles.yml' );
+        $loader->load( 'services.yml' );
     }
 }

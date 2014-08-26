@@ -1,5 +1,0 @@
-<ul class="nav clearfix">
-    {% for main_menu_item in main_menu_items %}
-        <li><a href="{{ path( 'ez_urlalias', { 'locationId': main_menu_item.contentInfo.mainLocationId } ) }}">{{ main_menu_item.contentInfo.name }}</a></li>
-    {% endfor %}
-</ul>

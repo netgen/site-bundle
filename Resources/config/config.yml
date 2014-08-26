@@ -1,5 +1,1 @@
 parameters:
-    netgen_more.default.site_settings.typekit_code: ''
-    netgen_more.default.site_settings.google_analytics_code: ''
-    netgen_more.default.site_settings.universal_google_analytics: false
-    netgen_more.default.site_settings.site_info_location_id: 179

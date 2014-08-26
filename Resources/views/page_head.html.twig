@@ -1,18 +1,63 @@
-<meta charset="utf-8">
-<title>{{ title|default( 'Home' ) }}</title>
-
-<meta name="author" content="Netgen" />
-<meta name="copyright" content="Netgen" />
-<meta name="description" content="Netgen More" />
-<meta name="keywords" content="netgen, netgenlabs, ngmore" />
-
-<meta name="generator" content="eZ Publish">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-{% if canonical_link is defined and canonical_link %}
-    {% include 'NetgenMoreBundle::canonical_link.html.twig' %}
+{% if ezpublish.legacy.has( 'path' ) %}
+    {% set path = ezpublish.legacy.get( 'path' ) %}
 {% endif %}
 
-{% if enable_link is defined and enable_link %}
-    {% include 'NetgenMoreBundle::link.html.twig' %}
+{% if module_result.path is defined %}
+    {% set path = module_result.path %}
 {% endif %}
+
+{% set siteTitle = config_resolver.getParameter('SiteSettings.SiteName') %}
+{% if persistent_variable.site_title is defined %}
+    {% set siteTitle = persistent_variable.site_title %}
+{% elseif config_resolver.getParameter('SeoSettings.ShowPathInTitle', 'ngmore') == 'false' %}
+    {% set siteTitle = path|reverse[0].text ~ " - " ~  config_resolver.getParameter('SiteSettings.SiteName') %}
+{% else %}
+    {% if path[0].node_id is defined %}
+        {% set path = path[1:]|reverse %}
+    {% endif %}
+    {% set siteTitle = "" %}
+    {% for p in path %}
+        {% set siteTitle = siteTitle ~ p.text %}
+        {% if not loop.last %}
+            {% set siteTitle = " - " %}
+        {% endif %}
+    {% endfor %}
+    {% set siteTitle = siteTitle ~ config_resolver.getParameter('SiteSettings.SiteName') %}
+{% endif %}
+
+{% if metaData["title"] is defined %}
+    {% set siteTitle = metaData["title"] %}
+{% endif %}
+
+<title>{{ siteTitle }}</title>
+
+{% set meta = config_resolver.getParameter('SiteSettings.MetaDataArray') %}
+{% for key in meta|keys %}
+    {% if metaData[key] is defined %}
+    <meta name="{{ key }}" content="{{ metaData[key] }}" />
+    {% elseif persistent_variable[key] is defined %}
+    <meta name="{{ key }}" content="{{ persistent_variable[key] }}" />
+    {% else %}
+    <meta name="{{ key }}" content="{{ meta[key] }}" />
+    {% endif %}
+{% endfor %}
+
+{% if persistent_variable.noindex is defined %}
+<meta name="robots" content="noindex" />
+{% endif %}
+
+{# Prefer chrome frame on IE 8 and lower, or at least as new engine as possible #}
+<!--[if lt IE 9 ]>
+<meta http-equiv="X-UA-Compatible" content="IE=8,chrome=1" />
+<![endif]-->
+
+<meta name="generator" content="eZ Platform powered by Netgen">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+{% if content_info.main_node_url_alias is defined %}
+    <link rel="canonical" href="{{ app.request.uriForPath(content_info.main_node_url_alias) }}" />
+{% endif %}
+{# Language url, generated with LanguageSwitcherClass
+<link rel="canonical" href="{canonical_language_url|wash}" /> #}
+
+{% include 'design:link.tpl'  with {"site": {"title": siteTitle}, "enable_print": false } %}

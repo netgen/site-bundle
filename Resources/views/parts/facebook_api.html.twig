@@ -1,0 +1,15 @@
+{% set facebook_api = config_resolver.getParameter( 'SiteSettings.FacebookApi', 'ngmore' ) %}
+
+{# We check for 'enabled' for compatibility with legacy config #}
+{% if facebook_api == 'enabled' or facebook_api == true %}
+    {% set facebook_app_id = config_resolver.getParameter( 'GenericData.app_id', 'ngopengraph' ) %}
+
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId={{ facebook_app_id|raw|escape( 'js' ) }}";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+{% endif %}

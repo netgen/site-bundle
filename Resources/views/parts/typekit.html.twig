@@ -1,4 +1,4 @@
-{% set typekit_code = config_resolver.getParameter( 'site_settings.typekit_code', 'netgen_more' ) %}
+{% set typekit_code = config_resolver.getParameter( 'SiteSettings.TypeKitCode', 'ngmore' ) %}
 
 {% if typekit_code is not empty %}
     <script type="text/javascript" src="//use.typekit.com/{{ typekit_code }}.js"></script>

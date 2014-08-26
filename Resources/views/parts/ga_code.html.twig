@@ -1,8 +1,9 @@
-{% set google_analytics_code = config_resolver.getParameter( 'site_settings.google_analytics_code', 'netgen_more' ) %}
-{% set universal_google_analytics = config_resolver.getParameter( 'site_settings.universal_google_analytics', 'netgen_more' ) %}
+{% set google_analytics_code = config_resolver.getParameter( 'SiteSettings.GoogleAnalyticsCode', 'ngmore' ) %}
+{% set universal_google_analytics = config_resolver.getParameter( 'SiteSettings.GoogleAnalyticsUniversal', 'ngmore' ) %}
 
 {% if google_analytics_code is not empty %}
-    {% if universal_google_analytics %}
+    {# We check for 'enabled' for compatibility with legacy config #}
+    {% if universal_google_analytics == 'enabled' or universal_google_analytics == true %}
         <script type="text/javascript">
 
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

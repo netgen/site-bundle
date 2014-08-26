@@ -1,0 +1,196 @@
+{% set content_info = null %}
+{% if ezpublish.legacy.has( 'content_info' ) %}
+    {% set content_info = ezpublish.legacy.get( 'content_info' ) %}
+{% endif %}
+
+{% if module_result.content_info is defined %}
+    {% set content_info = module_result.content_info %}
+{% endif %}
+
+{% set persistent_variable = null %}
+{% if content_info['persistent_variable'] is defined %}
+    {% set persistent_variable = content_info['persistent_variable'] %}
+{% endif %}
+
+{% set config_resolver = ezpublish.getConfigResolver() %}
+
+{% set disable_layout_regions = ( persistent_variable.disable_layout_regions is defined and persistent_variable.disable_layout_regions ) %}
+{% set disable_top_region = ( disable_layout_regions or layout is not defined or layout == null or ez_field_value( layout, 'disable_top_region' ).bool )  %}
+{% set disable_right_region = ( disable_layout_regions or layout is not defined or layout == null or ez_field_value( layout, 'disable_right_region' ).bool ) %}
+{% set disable_left_region = ( disable_layout_regions or layout is not defined or layout == null or ez_field_value( layout, 'disable_left_region' ).bool )  %}
+{% set disable_bottom_region = ( disable_layout_regions or layout is not defined or layout == null or ez_field_value( layout, 'disable_bottom_region' ).bool ) %}
+{% set disable_containers = ( persistent_variable.disable_containers is defined and persistent_variable.disable_containers == true ) %}
+{% set left_column_available = ( persistent_variable.placeholder_left_top is defined or persistent_variable.placeholder_left_bottom is defined or not disable_left_region ) %}
+{% set right_column_available = ( persistent_variable.placeholder_right_top is defined or persistent_variable.placeholder_right_bottom is defined or not disable_right_region ) %}
+
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+<head>
+    <meta charset="utf-8">
+
+    {% include 'NetgenMoreBundle:parts:typekit.html.twig' %}
+
+    {% block head %}
+        {% include 'NetgenMoreBundle::page_head.html.twig' %}
+    {% endblock %}
+
+    {% block headStyle %}
+        {% include 'design:page_head_style.tpl' %}
+    {% endblock %}
+
+    {% block headScript %}
+        {% include 'design:page_head_script.tpl' %}
+    {% endblock %}
+
+    {% include 'design:parts/opengraph_persistent.tpl'  with { 'pagedata': { 'persistent_variable': persistent_variable } } %}
+
+    {% include 'NetgenMoreBundle:parts:sublime_video.html.twig' %}
+
+    {% include 'NetgenMoreBundle:parts:ga_code.html.twig' %}
+</head>
+<body>
+
+{% include 'NetgenMoreBundle:parts:facebook_api.html.twig' %}
+
+<div id="page" class="container">
+
+    {% block header %}
+        {{ render_esi( controller( 'netgen_more.controller.page_layout:header', { 'mainCategoryLocationId': mainCategoryLocationId } ) ) }}
+    {% endblock %}
+
+    {% block regionTop %}
+        <div class="placeholder placeholder-top-top">
+            {% block placeholderTopTop %}
+                {% if persistent_variable.placeholder_top_top is defined %}
+                    {{ persistent_variable.placeholder_top_top|raw }}
+                {% endif %}
+            {% endblock %}
+        </div>
+
+        {% if not disable_top_region %}
+            {{ render_esi( controller( 'netgen_more.controller.page_layout:region', { 'layoutContentId': layout.id, 'region': 'top' } ) ) }}
+        {% endif %}
+
+        <div class="placeholder placeholder-top-bottom">
+            {% block placeholderTopBottom %}
+                {% if persistent_variable.placeholder_top_bottom is defined %}
+                    {{ persistent_variable.placeholder_top_bottom|raw }}
+                {% endif %}
+            {% endblock %}
+        </div>
+    {% endblock %}
+
+    {% if not disable_containers %}<div class="container"><div class="row">{% endif %}
+
+    {% if not disable_containers and left_column_available %}
+        <div class="col-lg-3 col-md-3 col-sm-3">
+    {% endif %}
+
+    {% block regionLeft %}
+        <div class="placeholder placeholder-left-top">
+            {% block placeholderLeftTop %}
+                {% if persistent_variable.placeholder_left_top is defined %}
+                    {{ persistent_variable.placeholder_left_top|raw }}
+                {% endif %}
+            {% endblock %}
+        </div>
+
+        {% if not disable_left_region %}
+            {{ render_esi( controller( 'netgen_more.controller.page_layout:region', { 'layoutContentId': layout.id, 'region': 'left' } ) ) }}
+        {% endif %}
+
+        <div class="placeholder placeholder-left-bottom">
+            {% block placeholderLeftBottom %}
+                {% if persistent_variable.placeholder_left_bottom is defined %}
+                    {{ persistent_variable.placeholder_left_bottom|raw }}
+                {% endif %}
+            {% endblock %}
+        </div>
+    {% endblock %}
+
+    {% if not disable_containers and left_column_available %}
+        </div>
+    {% endif %}
+
+    {% if not disable_containers %}
+        {% if left_column_available and right_column_available %}
+            <div class="col-lg-6 col-md-6 col-sm-6">
+        {% elseif left_column_available or right_column_available %}
+            <div class="col-lg-9 col-md-9 col-sm-9">
+        {% else %}
+            <div class="col-lg-12 col-md-12 col-sm-12">
+        {% endif %}
+    {% endif %}
+
+    <div id="main" class="clearfix">
+        {% block content %}{% endblock %}
+    </div>
+
+    {% if not disable_containers %}</div>{% endif %}
+
+    {% if not disable_containers and right_column_available %}
+        <div class="col-lg-3 col-md-3 col-sm-3">
+    {% endif %}
+
+    {% block regionRight %}
+        <div class="placeholder placeholder-right-top">
+            {% block placeholderRightTop %}
+                {% if persistent_variable.placeholder_right_top is defined %}
+                    {{ persistent_variable.placeholder_right_top|raw }}
+                {% endif %}
+            {% endblock %}
+        </div>
+
+        {% if not disable_right_region %}
+            {{ render_esi( controller( 'netgen_more.controller.page_layout:region', { 'layoutContentId': layout.id, 'region': 'right' } ) ) }}
+        {% endif %}
+
+        <div class="placeholder placeholder-right-bottom">
+            {% block placeholderRightBottom %}
+                {% if persistent_variable.placeholder_right_bottom is defined %}
+                    {{ persistent_variable.placeholder_right_bottom|raw }}
+                {% endif %}
+            {% endblock %}
+        </div>
+    {% endblock %}
+
+    {% if not disable_containers and right_column_available %}
+        </div>
+    {% endif %}
+
+    {% if not disable_containers %}</div></div>{% endif %}
+
+    {% block regionBottom %}
+        <div class="placeholder placeholder-bottom-top">
+            {% block placeholderBottomTop %}
+                {% if persistent_variable.placeholder_bottom_top is defined %}
+                    {{ persistent_variable.placeholder_bottom_top|raw }}
+                {% endif %}
+            {% endblock %}
+        </div>
+
+        {% if not disable_bottom_region %}
+            {{ render_esi( controller( 'netgen_more.controller.page_layout:region', { 'layoutContentId': layout.id, 'region': 'bottom' } ) ) }}
+        {% endif %}
+
+        <div class="placeholder placeholder-bottom-bottom">
+            {% block placeholderBottomBottom %}
+                {% if persistent_variable.placeholder_bottom_bottom is defined %}
+                    {{ persistent_variable.placeholder_bottom_bottom|raw }}
+                {% endif %}
+            {% endblock %}
+        </div>
+    {% endblock %}
+
+    {% block footer %}
+        {{ render_esi( controller( 'netgen_more.controller.page_layout:footer', { 'mainCategoryLocationId': mainCategoryLocationId } ) ) }}
+    {% endblock %}
+
+</div>
+
+{% block footerScript %}
+    {% include 'NetgenMoreBundle::page_footer_script.html.twig' %}
+{% endblock %}
+
+</body>
+</html>

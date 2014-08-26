@@ -1,14 +1,20 @@
 parameters:
-    ezpublish.fieldType.xrowmetadata.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
     ezpublish.fieldType.sckenhancedselection.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
+    ezpublish.fieldType.ngclasslist.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
+    ezpublish.fieldType.childrenindexer.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
 
 services:
-    ezpublish.fieldType.xrowmetadata.converter:
-        class: %ezpublish.fieldType.xrowmetadata.converter.class%
-        tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: xrowmetadata, lazy: true, callback: '::create'}
-
     ezpublish.fieldType.sckenhancedselection.converter:
         class: %ezpublish.fieldType.sckenhancedselection.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: sckenhancedselection, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ngclasslist.converter:
+        class: %ezpublish.fieldType.ngclasslist.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ngclasslist, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.childrenindexer.converter:
+        class: %ezpublish.fieldType.childrenindexer.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: childrenindexer, lazy: true, callback: '::create'}

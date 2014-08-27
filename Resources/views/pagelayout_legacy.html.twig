@@ -92,6 +92,30 @@
 {% endspaceless %}
 {% endblock %}
 
+{# SITE TITLE #}
+
+{% if persistent_variable.site_title is defined %}
+    {% set siteTitle = persistent_variable.site_title %}
+{% endif %}
+
+{# METADATA #}
+
+{% set configMetaData = ezpublish.configResolver.getParameter( 'SiteSettings.MetaDataArray' ) %}
+{% set metaData = [] %}
+{% for key in configMetaData|keys %}
+    {% if persistent_variable[key] is defined %}
+        {% set metaData = metaData|merge( { ( key ): persistent_variable[key] } ) %}
+    {% endif %}
+{% endfor %}
+
+{# CANONICAL URL #}
+
+{% if persistent_variable.canonical_url is defined %}
+    {% set canonicalUrl = persistent_variable.canonical_url %}
+{% elseif persistent_variable.canonical_language_url is defined %}
+    {% set canonicalUrl = persistent_variable.canonical_language_url %}
+{% endif %}
+
 {# CONTENT BLOCK #}
 
 {% block content %}

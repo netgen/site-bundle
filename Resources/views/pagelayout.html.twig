@@ -1,12 +1,11 @@
-{% if location is defined and not location.isDraft %}
+{% if content is defined and location is defined and not location.isDraft %}
     {% set currentLocation = location %}
+    {% set currentContent = content %}
 {% endif %}
-
-{% set configResolver = ezpublish.getConfigResolver() %}
 
 {% set disableLayoutRegions = disableLayoutRegions|default( false ) %}
 {% set disableContainers = disableContainers|default( false ) %}
-{% set layout = layout|default( false ) %}
+{% set layout = ezpublish.layout|default( false ) %}
 
 {% set disableTopRegion = ( disableLayoutRegions or not layout or ez_field_value( layout, 'disable_top_region' ).bool )  %}
 {% set disableRightRegion = ( disableLayoutRegions or not layout or ez_field_value( layout, 'disable_right_region' ).bool ) %}
@@ -33,7 +32,7 @@
     {% include 'NetgenMoreBundle:parts:typekit.html.twig' %}
 
     {% block pageHead %}
-        {#% include 'NetgenMoreBundle::page_head.html.twig' %#}
+        {% include 'NetgenMoreBundle::page_head.html.twig' %}
     {% endblock %}
 
     {% block pageHeadStyle %}

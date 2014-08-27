@@ -3,7 +3,7 @@
         {% if
             block.items is not empty
             or ( block.customAttributes is defined and block.customAttributes is not empty )
-            or ( configResolver.getParameter( block.type ~ '.ManualAddingOfItems', 'block' ) in ['disabled', false] and not configResolver.hasParameter( block.type ~ '.FetchClass', 'block' ) ) %}
+            or ( ezpublish.configResolver.getParameter( block.type ~ '.ManualAddingOfItems', 'block' ) in ['disabled', false] and not ezpublish.configResolver.hasParameter( block.type ~ '.FetchClass', 'block' ) ) %}
                 {% if params[block.type] is defined %}
                     {{ render_esi( controller( 'ez_page:viewBlockById', { 'id': block.id, 'params': params[block.type] } ) ) }}
                 {% else %}

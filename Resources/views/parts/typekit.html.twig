@@ -1,4 +1,4 @@
-{% set typekitCode = configResolver.getParameter( 'SiteSettings.TypeKitCode', 'ngmore' ) %}
+{% set typekitCode = ezpublish.configResolver.getParameter( 'SiteSettings.TypeKitCode', 'ngmore' ) %}
 
 {% if typekitCode is not empty %}
     <script type="text/javascript" src="//use.typekit.com/{{ typekitCode }}.js"></script>

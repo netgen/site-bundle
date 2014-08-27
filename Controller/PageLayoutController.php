@@ -27,10 +27,7 @@ class PageLayoutController extends Controller
         return $this->render(
             'NetgenMoreBundle::page_header.html.twig',
             array(
-                'mainCategoryLocationId' => $mainCategoryLocationId,
-                'rootLocation' => $pageLayout->getRootLocation(),
-                'siteInfoLocation' => $pageLayout->getSiteInfoLocation(),
-                'configResolver' => $this->getConfigResolver()
+                'mainCategoryLocationId' => $mainCategoryLocationId
             ),
             $response
         );
@@ -53,10 +50,7 @@ class PageLayoutController extends Controller
         return $this->render(
             'NetgenMoreBundle::page_footer.html.twig',
             array(
-                'mainCategoryLocationId' => $mainCategoryLocationId,
-                'rootLocation' => $pageLayout->getRootLocation(),
-                'siteInfoLocation' => $pageLayout->getSiteInfoLocation(),
-                'configResolver' => $this->getConfigResolver()
+                'mainCategoryLocationId' => $mainCategoryLocationId
             ),
             $response
         );
@@ -92,8 +86,7 @@ class PageLayoutController extends Controller
                         'zone' => $zone,
                         'region' => $region,
                         'cssClass' => $cssClass,
-                        'params' => $params,
-                        'configResolver' => $this->getConfigResolver()
+                        'params' => $params
                     ),
                     $response
                 );

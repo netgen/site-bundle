@@ -7,6 +7,10 @@ parameters:
 
     netgen_more.response_manager.class: Netgen\Bundle\MoreBundle\LegacyResponse\LegacyResponseManager
 
+    netgen_more.helper.path_helper.class: Netgen\Bundle\MoreBundle\Helper\PathHelper
+
+    netgen_more.templating.twig.extension.class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\NetgenMoreExtension
+
 services:
     netgen_more.controller.page_layout:
         class: %netgen_more.controller.page_layout.class%
@@ -29,3 +33,17 @@ services:
     ezpublish_legacy.response_manager:
         alias: netgen_more.response_manager
     # END: Temporary workaround because original 'ezpublish_legacy.response_manager' service has private variables
+
+    netgen_more.helper.path_helper:
+        class: %netgen_more.helper.path_helper.class%
+        arguments:
+            - @ezpublish.api.service.location
+            - @ezpublish.config.resolver
+            - @ezpublish.translation_helper
+            - @router
+
+    netgen_more.templating.twig.extension:
+        class: %netgen_more.templating.twig.extension.class%
+        arguments: [@netgen_more.helper.path_helper]
+        tags:
+            - { name: twig.extension }

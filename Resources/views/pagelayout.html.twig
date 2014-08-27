@@ -63,9 +63,7 @@
     {% endblock %}
 
     {% block pagePath %}
-        {% if currentLocation is defined %}
-            {{ render( controller( 'netgen_more.controller.page_layout:path', { 'locationId': currentLocation.id } ) ) }}
-        {% endif %}
+        {% include 'NetgenMoreBundle::page_path.html.twig' %}
     {% endblock %}
 
     {% block regionTop %}

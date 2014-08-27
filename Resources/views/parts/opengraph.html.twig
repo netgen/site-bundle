@@ -1,0 +1,11 @@
+{% if openGraph is defined and openGraph|length > 0 %}
+    {% for key, value in openGraph %}
+        {% if value is iterable %}
+            {% for valueKey, valueItem in value %}
+                <meta property="{{ valueKey }}" content="{{ valueItem }}">
+            {% endfor %}
+        {% else %}
+            <meta property="{{ key }}" content="{{ value }}">
+        {% endif %}
+    {% endfor %}
+{% endif %}

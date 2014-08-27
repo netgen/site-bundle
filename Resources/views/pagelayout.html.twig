@@ -44,9 +44,9 @@
         {% include 'NetgenMoreBundle::page_head_script.html.twig' %}
     {% endblock %}
 
-    {% if persistent_variable is defined %}
-        {% include 'design:parts/opengraph_persistent.tpl'  with { 'pagedata': { 'persistent_variable': persistent_variable } } %}
-    {% endif %}
+    {% block openGraph %}
+        {% include 'NetgenMoreBundle:parts:opengraph.html.twig' %}
+    {% endblock %}
 
     {% include 'NetgenMoreBundle:parts:sublime_video.html.twig' %}
 

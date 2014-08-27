@@ -92,6 +92,12 @@
 {% endspaceless %}
 {% endblock %}
 
+{# OPENGRAPH #}
+
+{% if persistent_variable.opengraph is defined %}
+    {% set openGraph = persistent_variable.opengraph %}
+{% endif %}
+
 {# SITE TITLE #}
 
 {% if persistent_variable.site_title is defined %}

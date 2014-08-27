@@ -1,11 +1,7 @@
 parameters:
     ezpublish.controller.page.view.class: Netgen\Bundle\MoreBundle\Controller\PageController
-    ezpublish.controller.content.view.class: Netgen\Bundle\MoreBundle\Controller\ViewController
 
     netgen_more.controller.page_layout.class: Netgen\Bundle\MoreBundle\Controller\PageLayoutController
-    netgen_more.component.page_layout.class: Netgen\Bundle\MoreBundle\Component\PageLayout
-
-    netgen_more.response_manager.class: Netgen\Bundle\MoreBundle\LegacyResponse\LegacyResponseManager
 
     netgen_more.templating.global_helper.class: Netgen\Bundle\MoreBundle\Templating\GlobalHelper
 
@@ -17,24 +13,6 @@ services:
     netgen_more.controller.page_layout:
         class: %netgen_more.controller.page_layout.class%
         parent: ezpublish.controller.base
-
-    netgen_more.component.page_layout:
-        class: %netgen_more.component.page_layout.class%
-        arguments:
-            - @ezpublish_legacy.kernel
-            - @ezpublish.api.repository
-            - @ezpublish.config.resolver
-
-    # START: Temporary workaround because original 'ezpublish_legacy.response_manager' service has private variables
-    netgen_more.response_manager:
-        class: %netgen_more.response_manager.class%
-        arguments: [@templating, @ezpublish.config.resolver]
-        calls:
-            - [setContainer, [@service_container]]
-
-    ezpublish_legacy.response_manager:
-        alias: netgen_more.response_manager
-    # END: Temporary workaround because original 'ezpublish_legacy.response_manager' service has private variables
 
     netgen_more.templating.global_helper:
         class: %netgen_more.templating.global_helper.class%

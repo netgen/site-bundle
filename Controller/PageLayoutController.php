@@ -13,7 +13,7 @@ class PageLayoutController extends Controller
     /**
      * Returns rendered header template
      *
-     * @param int $mainCategoryLocationId
+     * @param mixed $mainCategoryLocationId
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -21,8 +21,6 @@ class PageLayoutController extends Controller
     {
         $response = new Response();
         $response->setPublic()->setSharedMaxAge( 86400 );
-
-        $pageLayout = $this->get( 'netgen_more.component.page_layout' );
 
         return $this->render(
             'NetgenMoreBundle::page_header.html.twig',
@@ -36,7 +34,7 @@ class PageLayoutController extends Controller
     /**
      * Returns rendered footer template
      *
-     * @param int $mainCategoryLocationId
+     * @param mixed $mainCategoryLocationId
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -44,8 +42,6 @@ class PageLayoutController extends Controller
     {
         $response = new Response();
         $response->setPublic()->setSharedMaxAge( 86400 );
-
-        $pageLayout = $this->get( 'netgen_more.component.page_layout' );
 
         return $this->render(
             'NetgenMoreBundle::page_footer.html.twig',

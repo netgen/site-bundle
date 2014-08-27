@@ -1,6 +1,7 @@
 {% if content is defined and location is defined and not location.isDraft %}
     {% set currentLocation = location %}
     {% set currentContent = content %}
+    {% set mainCategoryLocationId = currentLocation.path[2] is defined ? currentLocation.path[2] : currentLocation.path[1] %}
 {% endif %}
 
 {% set disableLayoutRegions = disableLayoutRegions|default( false ) %}
@@ -58,7 +59,14 @@
 <div id="page">
 
     {% block pageHeader %}
-        {{ render_esi( controller( 'netgen_more.controller.page_layout:header', { 'mainCategoryLocationId': mainCategoryLocationId } ) ) }}
+        {{
+            render_esi(
+                controller(
+                    'netgen_more.controller.page_layout:header',
+                    { 'mainCategoryLocationId': mainCategoryLocationId is defined ? mainCategoryLocationId : 0 }
+                )
+            )
+        }}
     {% endblock %}
 
     {% block pagePath %}
@@ -150,7 +158,14 @@
     {% endblock %}
 
     {% block pageFooter %}
-        {{ render_esi( controller( 'netgen_more.controller.page_layout:footer', { 'mainCategoryLocationId': mainCategoryLocationId } ) ) }}
+        {{
+            render_esi(
+                controller(
+                    'netgen_more.controller.page_layout:footer',
+                    { 'mainCategoryLocationId': mainCategoryLocationId is defined ? mainCategoryLocationId : 0 }
+                )
+            )
+        }}
     {% endblock %}
 
 </div>

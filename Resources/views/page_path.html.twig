@@ -1,19 +1,15 @@
-{% if currentLocation is defined %}
-    {% set path = ngmore_get_path( currentLocation.id ) %}
-
-    {% if path|length > 1 %}
-        <div class="breadcrumb-wrapper">
-            <div class="container">
-                <ol class="breadcrumb">
-                    {% for pathItem in path %}
-                        {% if pathItem.url != false %}
-                            <li><a href="{{ pathItem.url }}">{{ pathItem.text }}</a></li>
-                        {% else %}
-                            <li>{{ pathItem.text }}</li>
-                        {% endif %}
-                    {% endfor %}
-                </ol>
-            </div>
+{% if currentLocationPath|length > 1 %}
+    <div class="breadcrumb-wrapper">
+        <div class="container">
+            <ol class="breadcrumb">
+                {% for pathItem in currentLocationPath %}
+                    {% if pathItem.url != false %}
+                        <li><a href="{{ pathItem.url }}">{{ pathItem.text }}</a></li>
+                    {% else %}
+                        <li>{{ pathItem.text }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
         </div>
-    {% endif %}
+    </div>
 {% endif %}

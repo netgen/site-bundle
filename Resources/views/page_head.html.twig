@@ -23,14 +23,12 @@
 {% if siteTitle is not defined %}
     {% set siteTitle = siteName %}
 
-    {% if currentLocation is defined %}
-        {% set path = ngmore_get_path( currentLocation.id ) %}
-
-        {% if path is not empty %}
+    {% if currentLocationPath is defined %}
+        {% if currentLocationPath is not empty %}
             {% if ezpublish.configResolver.getParameter( 'SeoSettings.ShowPathInTitle', 'ngmore' ) in ['false', false] %}
-                {% set siteTitle = path[path|length - 1].text ~ ' - ' ~ siteTitle %}
-            {% elseif path|length > 1 %}
-                {% for pathItem in path %}
+                {% set siteTitle = currentLocationPath[currentLocationPath|length - 1].text ~ ' - ' ~ siteTitle %}
+            {% elseif currentLocationPath|length > 1 %}
+                {% for pathItem in currentLocationPath %}
                     {% if not loop.first %}
                         {% set siteTitle = pathItem.text ~ ' - ' ~ siteTitle %}
                     {% endif %}

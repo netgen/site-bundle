@@ -9,6 +9,8 @@ parameters:
 
     netgen_more.templating.twig.extension.class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\NetgenMoreExtension
 
+    netgen_more.data_collector.legacy_debug_data_collector.class: Netgen\Bundle\MoreBundle\DataCollector\LegacyDebugDataCollector
+
 services:
     netgen_more.controller.page_layout:
         class: %netgen_more.controller.page_layout.class%
@@ -37,3 +39,10 @@ services:
         arguments: [@netgen_more.helper.path_helper]
         tags:
             - { name: twig.extension }
+
+    netgen_more.data_collector.legacy_debug_data_collector:
+        class: %netgen_more.data_collector.legacy_debug_data_collector.class%
+        arguments:
+            - @ezpublish_legacy.kernel
+        tags:
+            - { name: data_collector, template: "NetgenMoreBundle:Profiler:LegacyDebug.html.twig", id: "ngmore_legacy_debug" }

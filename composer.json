@@ -9,7 +9,8 @@
     ],
     "require": {
         "ezsystems/ezpublish-kernel": "*",
-        "netgen/metadata-bundle": "*"
+        "netgen/metadata-bundle": "0.2",
+        "netgen/generator-bundle": "dev-master"
     },
     "minimum-stability": "dev",
     "autoload": {

@@ -85,7 +85,8 @@ class PathHelper
                     $this->pathArray[] = array(
                         'text' => $this->translationHelper->getTranslatedContentNameByContentInfo( $location->contentInfo ),
                         'url' => $location->id != $locationId ? $this->router->generate( $location ) : false,
-                        'locationId' => $location->id
+                        'locationId' => $location->id,
+                        'contentId' => $location->contentId
                     );
                 }
             }
@@ -95,7 +96,8 @@ class PathHelper
                 $this->pathArray[] = array(
                     'text' => $this->translationHelper->getTranslatedContentNameByContentInfo( $location->contentInfo ),
                     'url' => $location->id != $locationId ? $this->router->generate( $location ) : false,
-                    'locationId' => $location->id
+                    'locationId' => $location->id,
+                    'contentId' => $location->contentId
                 );
             }
         }

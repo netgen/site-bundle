@@ -2,8 +2,10 @@
 
 namespace Netgen\Bundle\MoreBundle\Templating;
 
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\Core\MVC\Legacy\Templating\GlobalHelper as BaseGlobalHelper;
 use eZ\Publish\API\Repository\ContentService;
+use Netgen\Bundle\MoreBundle\Helper\LayoutHelper;
 use NgMoreFunctionCollection;
 use eZContentObjectTreeNode;
 use eZContentObject;
@@ -20,6 +22,11 @@ class GlobalHelper extends BaseGlobalHelper
      * @var \eZ\Publish\API\Repository\ContentService
      */
     protected $contentService;
+
+    /**
+     * @var \Netgen\Bundle\MoreBundle\Helper\LayoutHelper
+     */
+    protected $layoutHelper;
 
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location
@@ -52,6 +59,16 @@ class GlobalHelper extends BaseGlobalHelper
     }
 
     /**
+     * Sets the layout helper
+     *
+     * @param \Netgen\Bundle\MoreBundle\Helper\LayoutHelper $layoutHelper
+     */
+    public function setLayoutHelper( LayoutHelper $layoutHelper )
+    {
+        $this->layoutHelper = $layoutHelper;
+    }
+
+    /**
      * Returns the SiteInfo location
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
@@ -78,23 +95,12 @@ class GlobalHelper extends BaseGlobalHelper
         if ( $this->layout === null )
         {
             $locationId = $this->request->attributes->get( 'locationId' );
-            $pathInfo = $this->request->getPathInfo();
+            $pathInfo = $this->request->attributes->get( 'semanticPathinfo' ) . $this->request->attributes->get( 'viewParametersString' );
 
-            $legacyKernelClosure = $this->legacyKernel;
-            $layout = $legacyKernelClosure()->runCallback(
-                function () use ( $locationId, $pathInfo )
-                {
-                    return NgMoreFunctionCollection::fetchLayout( $locationId, $pathInfo );
-                }
-            );
-
-            if ( $layout['result'] instanceof eZContentObject )
+            $layout = $this->layoutHelper->getLayout( $locationId, $pathInfo );
+            if ( $layout instanceof Content )
             {
-                $this->layout = $this->contentService->loadContent( $layout['result']->attribute( 'id' ) );
-            }
-            else if ( $layout['result'] instanceof eZContentObjectTreeNode )
-            {
-                $this->layout = $this->contentService->loadContent( $layout['result']->attribute( 'contentobject_id' ) );
+                $this->layout = $layout;
             }
             else
             {

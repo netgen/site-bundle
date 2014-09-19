@@ -1,19 +1,7 @@
 parameters:
-    ezpublish.fieldType.sckenhancedselection.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
-    ezpublish.fieldType.ngclasslist.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
     ezpublish.fieldType.childrenindexer.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
 
 services:
-    ezpublish.fieldType.sckenhancedselection.converter:
-        class: %ezpublish.fieldType.sckenhancedselection.converter.class%
-        tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: sckenhancedselection, lazy: true, callback: '::create'}
-
-    ezpublish.fieldType.ngclasslist.converter:
-        class: %ezpublish.fieldType.ngclasslist.converter.class%
-        tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ngclasslist, lazy: true, callback: '::create'}
-
     ezpublish.fieldType.childrenindexer.converter:
         class: %ezpublish.fieldType.childrenindexer.converter.class%
         tags:

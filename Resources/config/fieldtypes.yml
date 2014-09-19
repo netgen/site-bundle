@@ -1,26 +1,9 @@
 parameters:
-    ezpublish.fieldType.sckenhancedselection.class: %ezpublish.fieldType.eznull.class%
-    ezpublish.fieldType.ngclasslist.class: %ezpublish.fieldType.eznull.class%
     ezpublish.fieldType.childrenindexer.class: %ezpublish.fieldType.eznull.class%
 
 services:
-    ezpublish.fieldType.sckenhancedselection:
-        class: %ezpublish.fieldType.sckenhancedselection.class%
-        parent: ezpublish.fieldType
-        arguments: [ "sckenhancedselection" ]
-        tags:
-            - {name: ezpublish.fieldType, alias: sckenhancedselection}
-
-    ezpublish.fieldType.ngclasslist:
-        class: %ezpublish.fieldType.ngclasslist.class%
-        parent: ezpublish.fieldType
-        arguments: [ "ngclasslist" ]
-        tags:
-            - {name: ezpublish.fieldType, alias: ngclasslist}
-
     ezpublish.fieldType.childrenindexer:
         class: %ezpublish.fieldType.childrenindexer.class%
         parent: ezpublish.fieldType
-        arguments: [ "childrenindexer" ]
         tags:
             - {name: ezpublish.fieldType, alias: childrenindexer}

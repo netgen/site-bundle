@@ -11,7 +11,8 @@
         "ezsystems/ezpublish-kernel": "*",
         "netgen/metadata-bundle": "0.2",
         "netgen/generator-bundle": "dev-master",
-        "netgen/content-type-list-bundle": "1.0"
+        "netgen/content-type-list-bundle": "1.0",
+        "netgen/enhanced-selection-bundle": "1.0"
     },
     "minimum-stability": "dev",
     "autoload": {

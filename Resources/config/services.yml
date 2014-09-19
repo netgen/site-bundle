@@ -1,6 +1,9 @@
 parameters:
     ezpublish.controller.page.view.class: Netgen\Bundle\MoreBundle\Controller\PageController
 
+    ezpublish.persistence.legacy.search.gateway.criterion_handler.common.field.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\Field
+    ezpublish.persistence.legacy.search.gateway.criterion_field_value_handler.composite.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\FieldValue\Handler\Composite
+
     netgen_more.controller.page_layout.class: Netgen\Bundle\MoreBundle\Controller\PageLayoutController
 
     netgen_more.templating.global_helper.class: Netgen\Bundle\MoreBundle\Templating\GlobalHelper

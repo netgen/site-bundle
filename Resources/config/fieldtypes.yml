@@ -1,5 +1,6 @@
 parameters:
     ezpublish.fieldType.childrenindexer.class: %ezpublish.fieldType.eznull.class%
+    ezpublish.fieldType.childrenindexer.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
 
 services:
     ezpublish.fieldType.childrenindexer:
@@ -7,3 +8,8 @@ services:
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: childrenindexer}
+
+    ezpublish.fieldType.childrenindexer.converter:
+        class: %ezpublish.fieldType.childrenindexer.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: childrenindexer, lazy: true, callback: '::create'}

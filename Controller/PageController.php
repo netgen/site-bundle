@@ -27,15 +27,19 @@ class PageController extends BasePageController
         $block = $this->pageService->loadBlock( $id );
         $configResolver = $this->getConfigResolver();
 
-        $cacheSettings['smax-age'] = $configResolver->hasParameter( 'block.' . $block->type . '.ttl', 'ngmore' ) ?
-            (int)$configResolver->getParameter( 'block.' . $block->type . '.ttl', 'ngmore' ) :
-            900;
+        if ( !isset( $cacheSettings['smax-age'] ) )
+        {
+            if ( $configResolver->hasParameter( 'BlockSettings.' . $block->type . '.TTL', 'ngmore' ) )
+            {
+                $cacheSettings['smax-age'] = (int)$configResolver->getParameter( 'BlockSettings.' . $block->type . '.TTL', 'ngmore' );
+            }
+        }
 
         $response = $this->viewBlock( $block, $params, $cacheSettings );
 
         if ( isset( $block->customAttributes['parent_node'] ) )
         {
-            $response->headers->set( 'X-Location-Id', $block->customAttributes['parent_node'] );
+            $response->headers->set( 'X-Location-Id', (int)$block->customAttributes['parent_node'] );
         }
 
         return $response;

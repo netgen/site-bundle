@@ -5,6 +5,7 @@ namespace Netgen\Bundle\MoreBundle\DataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
+use RuntimeException;
 use Exception;
 use Closure;
 use eZDebug;
@@ -66,11 +67,19 @@ class LegacyDebugDataCollector extends DataCollector
     protected function getLegacyDebugData()
     {
         $legacyKernel = $this->legacyKernel;
-        return $legacyKernel()->runCallback(
-            function()
-            {
-                return eZDebug::instance()->printReportInternal();
-            }
-        );
+
+        try
+        {
+            return $legacyKernel()->runCallback(
+                function ()
+                {
+                    return eZDebug::instance()->printReportInternal();
+                }
+            );
+        }
+        catch ( RuntimeException $e )
+        {
+            return "";
+        }
     }
 }

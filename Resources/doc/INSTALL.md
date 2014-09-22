@@ -39,10 +39,10 @@ public function registerBundles()
    $bundles = array(
        new FrameworkBundle(),
        ...
-       new NetgenMoreBundle(),
        new NetgenMetadataBundle(),
        new NetgenContentTypeListBundle(),
-       new NetgenEnhancedSelectionBundle()
+       new NetgenEnhancedSelectionBundle(),
+       new NetgenMoreBundle()
    );
 
    ...

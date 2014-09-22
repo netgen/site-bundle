@@ -5,9 +5,9 @@
 {% set configMetaData = ezpublish.configResolver.getParameter( 'SiteSettings.MetaDataArray' ) %}
 {% set metaData = configMetaData|merge( metaData ) %}
 
-{% if currentContent is defined %}
-    {% if not ez_is_field_empty( currentContent, 'metadata' ) %}
-        {% set contentMetaData = ez_field_value( currentContent, 'metadata' ) %}
+{% if content is defined %}
+    {% if not ez_is_field_empty( content, 'metadata' ) %}
+        {% set contentMetaData = ez_field_value( content, 'metadata' ) %}
         {% for key in configMetaData|keys %}
             {% if contentMetaData[key] is defined and contentMetaData[key] is not empty %}
                 {% set metaData = metaData|merge( { ( key ): contentMetaData[key] } ) %}
@@ -23,17 +23,15 @@
 {% if siteTitle is not defined %}
     {% set siteTitle = siteName %}
 
-    {% if currentLocationPath is defined %}
-        {% if currentLocationPath is not empty %}
-            {% if ezpublish.configResolver.getParameter( 'SeoSettings.ShowPathInTitle', 'ngmore' ) in ['false', false] %}
-                {% set siteTitle = currentLocationPath[currentLocationPath|length - 1].text ~ ' - ' ~ siteTitle %}
-            {% elseif currentLocationPath|length > 1 %}
-                {% for pathItem in currentLocationPath %}
-                    {% if not loop.first %}
-                        {% set siteTitle = pathItem.text ~ ' - ' ~ siteTitle %}
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
+    {% if locationPath is defined and locationPath is not empty %}
+        {% if ezpublish.configResolver.getParameter( 'SeoSettings.ShowPathInTitle', 'ngmore' ) in ['false', false] %}
+            {% set siteTitle = locationPath[locationPath|length - 1].text ~ ' - ' ~ siteTitle %}
+        {% elseif locationPath|length > 1 %}
+            {% for pathItem in locationPath %}
+                {% if not loop.first %}
+                    {% set siteTitle = pathItem.text ~ ' - ' ~ siteTitle %}
+                {% endif %}
+            {% endfor %}
         {% endif %}
     {% endif %}
 

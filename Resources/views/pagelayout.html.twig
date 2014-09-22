@@ -1,8 +1,6 @@
 {% if content is defined and location is defined and not location.isDraft %}
-    {% set currentLocation = location %}
-    {% set currentContent = content %}
-    {% set currentLocationPath = ngmore_get_path( currentLocation.id ) %}
-    {% set mainCategoryLocationId = currentLocationPath[1] is defined ? currentLocationPath[1].locationId : currentLocationPath[0].locationId %}
+    {% set locationPath = ngmore_get_path( location.id ) %}
+    {% set mainCategoryLocationId = locationPath[1] is defined ? locationPath[1].locationId : locationPath[0].locationId %}
 {% endif %}
 
 {% set disableLayoutRegions = disableLayoutRegions|default( false ) %}
@@ -71,9 +69,7 @@
     {% endblock %}
 
     {% block pagePath %}
-        {% if currentLocationPath is defined %}
-            {% include 'NetgenMoreBundle::page_path.html.twig' %}
-        {% endif %}
+        {% include 'NetgenMoreBundle::page_path.html.twig' %}
     {% endblock %}
 
     {% block regionTop %}

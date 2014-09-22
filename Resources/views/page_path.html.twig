@@ -1,8 +1,8 @@
-{% if currentLocationPath|length > 1 %}
+{% if locationPath is defined and locationPath|length > 1 %}
     <div class="breadcrumb-wrapper">
         <div class="container">
             <ol class="breadcrumb">
-                {% for pathItem in currentLocationPath %}
+                {% for pathItem in locationPath %}
                     {% if pathItem.url != false %}
                         <li><a href="{{ pathItem.url }}">{{ pathItem.text }}</a></li>
                     {% else %}

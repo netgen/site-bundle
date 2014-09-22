@@ -1,6 +1,6 @@
 parameters:
     ezpublish.fieldType.childrenindexer.class: %ezpublish.fieldType.eznull.class%
-    ezpublish.fieldType.childrenindexer.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
+    ezpublish.fieldType.childrenindexer.converter.class: %ezpublish.fieldType.eznull.converter.class%
 
 services:
     ezpublish.fieldType.childrenindexer:

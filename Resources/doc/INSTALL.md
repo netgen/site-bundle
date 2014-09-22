@@ -4,31 +4,33 @@ Netgen More Bundle installation instructions
 Requirements
 ------------
 
-* eZ Publish 5.3+ / eZ Publish Community Project 2014.05+
-* `NetgenMetadataBundle` installed and configured
+* eZ Publish 5.3+ / eZ Publish Community Project 2014.07+
 
 Installation steps
 ------------------
 
 ### Use Composer
 
-Add the following to your composer.json and run `php composer.phar update netgen/morebundle` to refresh dependencies:
+Add the following to your composer.json and run `php composer.phar update netgen/more-bundle` to refresh dependencies:
 
 ```json
 "repositories": [
     { "type": "composer", "url": "http://packagist.netgen.biz" }
 ],
 "require": {
-    "netgen/morebundle": "dev-master"
+    "netgen/more-bundle": "dev-master"
 }
 ```
 
 ### Activate the bundle
 
-Activate the bundle in `ezpublish\EzPublishKernel.php` file.
+Activate the bundle (together with other required bundles) in `ezpublish\EzPublishKernel.php` file.
 
 ```php
 use Netgen\Bundle\MoreBundle\NetgenMoreBundle;
+use Netgen\Bundle\MetadataBundle\NetgenMetadataBundle;
+use Netgen\Bundle\ContentTypeListBundle\NetgenContentTypeListBundle;
+use Netgen\Bundle\EnhancedSelectionBundle\NetgenEnhancedSelectionBundle;
 
 ...
 
@@ -37,7 +39,10 @@ public function registerBundles()
    $bundles = array(
        new FrameworkBundle(),
        ...
-       new NetgenMoreBundle()
+       new NetgenMoreBundle(),
+       new NetgenMetadataBundle(),
+       new NetgenContentTypeListBundle(),
+       new NetgenEnhancedSelectionBundle()
    );
 
    ...

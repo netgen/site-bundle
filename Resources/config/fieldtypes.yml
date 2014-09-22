@@ -6,6 +6,7 @@ services:
     ezpublish.fieldType.childrenindexer:
         class: %ezpublish.fieldType.childrenindexer.class%
         parent: ezpublish.fieldType
+        arguments: [ "childrenindexer" ]
         tags:
             - {name: ezpublish.fieldType, alias: childrenindexer}
 

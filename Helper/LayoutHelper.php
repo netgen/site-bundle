@@ -64,7 +64,7 @@ class LayoutHelper
 
         try
         {
-            $location = $this->repository->getLocationService()->loadLocation( $locationId );
+            $location = $this->repository->getLocationService()->loadLocation( (int)$locationId );
         }
         catch ( NotFoundException $e )
         {

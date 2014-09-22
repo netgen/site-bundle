@@ -3,6 +3,7 @@
 namespace Netgen\Bundle\MoreBundle\Templating\Twig\Extension;
 
 use Netgen\Bundle\MoreBundle\Helper\PathHelper;
+use Netgen\Bundle\MoreBundle\Templating\GlobalHelper;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
@@ -14,13 +15,20 @@ class NetgenMoreExtension extends Twig_Extension
     protected $pathHelper;
 
     /**
+     * @var \Netgen\Bundle\MoreBundle\Templating\GlobalHelper
+     */
+    protected $globalHelper;
+
+    /**
      * Constructor
      *
      * @param \Netgen\Bundle\MoreBundle\Helper\PathHelper $pathHelper
+     * @param \Netgen\Bundle\MoreBundle\Templating\GlobalHelper $globalHelper
      */
-    public function __construct( PathHelper $pathHelper )
+    public function __construct( PathHelper $pathHelper, GlobalHelper $globalHelper )
     {
         $this->pathHelper = $pathHelper;
+        $this->globalHelper = $globalHelper;
     }
 
     /**
@@ -59,5 +67,15 @@ class NetgenMoreExtension extends Twig_Extension
     public function getPath( $locationId )
     {
         return $this->pathHelper->getPath( $locationId );
+    }
+
+    /**
+     * Returns a list of global variables to add to the existing list.
+     *
+     * @return array An array of global variables
+     */
+    public function getGlobals()
+    {
+        return array( 'ngmore' => $this->globalHelper );
     }
 }

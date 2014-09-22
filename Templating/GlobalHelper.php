@@ -2,22 +2,32 @@
 
 namespace Netgen\Bundle\MoreBundle\Templating;
 
-use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\Core\MVC\Legacy\Templating\GlobalHelper as BaseGlobalHelper;
-use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\LocationService;
 use Netgen\Bundle\MoreBundle\Helper\LayoutHelper;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Symfony\Component\HttpFoundation\Request;
 
-class GlobalHelper extends BaseGlobalHelper
+class GlobalHelper
 {
     /**
-     * @var \eZ\Publish\API\Repository\ContentService
+     * @var \eZ\Publish\API\Repository\LocationService
      */
-    protected $contentService;
+    protected $locationService;
 
     /**
      * @var \Netgen\Bundle\MoreBundle\Helper\LayoutHelper
      */
     protected $layoutHelper;
+
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    protected $configResolver;
+
+    /**
+     * @var \Symfony\Component\HttpFoundation\Request
+     */
+    protected $request;
 
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location
@@ -30,23 +40,31 @@ class GlobalHelper extends BaseGlobalHelper
     protected $layout;
 
     /**
-     * Sets the content service
+     * Constructor
      *
-     * @param \eZ\Publish\API\Repository\ContentService $contentService
+     * @param \eZ\Publish\API\Repository\LocationService $locationService
+     * @param \Netgen\Bundle\MoreBundle\Helper\LayoutHelper $layoutHelper
+     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      */
-    public function setContentService( ContentService $contentService )
+    public function __construct(
+        LocationService $locationService,
+        LayoutHelper $layoutHelper,
+        ConfigResolverInterface $configResolver
+    )
     {
-        $this->contentService = $contentService;
+        $this->locationService = $locationService;
+        $this->layoutHelper = $layoutHelper;
+        $this->configResolver = $configResolver;
     }
 
     /**
-     * Sets the layout helper
+     * Sets the request
      *
-     * @param \Netgen\Bundle\MoreBundle\Helper\LayoutHelper $layoutHelper
+     * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    public function setLayoutHelper( LayoutHelper $layoutHelper )
+    public function setRequest( Request $request = null )
     {
-        $this->layoutHelper = $layoutHelper;
+        $this->request = $request;
     }
 
     /**
@@ -73,20 +91,12 @@ class GlobalHelper extends BaseGlobalHelper
      */
     public function getLayout()
     {
-        if ( $this->layout === null )
+        if ( $this->request !== null && $this->layout === null )
         {
             $locationId = $this->request->attributes->get( 'locationId' );
             $pathInfo = $this->request->attributes->get( 'semanticPathinfo' ) . $this->request->attributes->get( 'viewParametersString' );
 
-            $layout = $this->layoutHelper->getLayout( $locationId, $pathInfo );
-            if ( $layout instanceof Content )
-            {
-                $this->layout = $layout;
-            }
-            else
-            {
-                $this->layout = false;
-            }
+            $this->layout = $this->layoutHelper->getLayout( $locationId, $pathInfo );
         }
 
         return $this->layout;

@@ -6,11 +6,10 @@ parameters:
 
     netgen_more.controller.page_layout.class: Netgen\Bundle\MoreBundle\Controller\PageLayoutController
 
-    netgen_more.templating.global_helper.class: Netgen\Bundle\MoreBundle\Templating\GlobalHelper
-
     netgen_more.helper.path_helper.class: Netgen\Bundle\MoreBundle\Helper\PathHelper
     netgen_more.helper.layout_helper.class: Netgen\Bundle\MoreBundle\Helper\LayoutHelper
 
+    netgen_more.templating.global_helper.class: Netgen\Bundle\MoreBundle\Templating\GlobalHelper
     netgen_more.templating.twig.extension.class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\NetgenMoreExtension
 
     netgen_more.data_collector.legacy_debug_data_collector.class: Netgen\Bundle\MoreBundle\DataCollector\LegacyDebugDataCollector
@@ -19,16 +18,6 @@ services:
     netgen_more.controller.page_layout:
         class: %netgen_more.controller.page_layout.class%
         parent: ezpublish.controller.base
-
-    netgen_more.templating.global_helper:
-        class: %netgen_more.templating.global_helper.class%
-        parent: ezpublish.templating.global_helper.legacy
-        calls:
-          - [setContentService, [@ezpublish.api.service.content]]
-          - [setLayoutHelper, [@netgen_more.helper.layout_helper]]
-
-    ezpublish.templating.global_helper:
-        alias: netgen_more.templating.global_helper
 
     netgen_more.helper.path_helper:
         class: %netgen_more.helper.path_helper.class%
@@ -45,9 +34,20 @@ services:
             - @netgen_more.helper.path_helper
             - @ezpublish.config.resolver
 
+    netgen_more.templating.global_helper:
+        class: %netgen_more.templating.global_helper.class%
+        arguments:
+            - @ezpublish.api.service.location
+            - @netgen_more.helper.layout_helper
+            - @ezpublish.config.resolver
+        calls:
+            - [setRequest, [@?request=]]
+
     netgen_more.templating.twig.extension:
         class: %netgen_more.templating.twig.extension.class%
-        arguments: [@netgen_more.helper.path_helper]
+        arguments:
+            - @netgen_more.helper.path_helper
+            - @netgen_more.templating.global_helper
         tags:
             - { name: twig.extension }
 

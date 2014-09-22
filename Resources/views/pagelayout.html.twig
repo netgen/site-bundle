@@ -7,7 +7,7 @@
 
 {% set disableLayoutRegions = disableLayoutRegions|default( false ) %}
 {% set disableContainers = disableContainers|default( false ) %}
-{% set layout = ezpublish.layout|default( false ) %}
+{% set layout = ngmore.layout|default( false ) %}
 
 {% set disableTopRegion = ( disableLayoutRegions or not layout or ez_field_value( layout, 'disable_top_region' ).bool )  %}
 {% set disableRightRegion = ( disableLayoutRegions or not layout or ez_field_value( layout, 'disable_right_region' ).bool ) %}

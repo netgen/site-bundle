@@ -3,6 +3,7 @@ parameters:
 
     ezpublish.persistence.legacy.search.gateway.criterion_handler.common.field.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\Field
     ezpublish.persistence.legacy.search.gateway.criterion_field_value_handler.composite.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\FieldValue\Handler\Composite
+    ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common.field_length.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler\FieldLength
 
     netgen_more.controller.page_layout.class: Netgen\Bundle\MoreBundle\Controller\PageLayoutController
 
@@ -15,6 +16,13 @@ parameters:
     netgen_more.data_collector.legacy_debug_data_collector.class: Netgen\Bundle\MoreBundle\DataCollector\LegacyDebugDataCollector
 
 services:
+    ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common.field_length:
+        class: %ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common.field_length.class%
+        parent: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common.field
+        tags:
+            - {name: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.content}
+            - {name: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.location}
+
     netgen_more.controller.page_layout:
         class: %netgen_more.controller.page_layout.class%
         parent: ezpublish.controller.base

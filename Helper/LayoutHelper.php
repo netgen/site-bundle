@@ -11,6 +11,7 @@ use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use Netgen\Bundle\MoreBundle\API\Repository\Values\Content\Query\Criterion\Field;
+use Netgen\Bundle\MoreBundle\API\Repository\Values\Content\Query\SortClause\FieldLength;
 
 class LayoutHelper
 {
@@ -183,10 +184,9 @@ class LayoutHelper
             )
         );
 
-        //TODO: Sort by length descending
-        // $query->sortClauses = array(
-            // new Query\SortClause\Field( "ng_layout", "apply_layout_to_uri", Query::SORT_DESC )
-        // );
+        $query->sortClauses = array(
+            new FieldLength( "ng_layout", "apply_layout_to_uri", Query::SORT_DESC )
+        );
 
         $searchResult = $this->repository->getSearchService()->findContent( $query );
         if ( $searchResult->totalCount < 1 )

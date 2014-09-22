@@ -24,7 +24,6 @@ services:
         class: %netgen_more.templating.global_helper.class%
         parent: ezpublish.templating.global_helper.legacy
         calls:
-          - [setLegacyKernel, [@ezpublish_legacy.kernel]]
           - [setContentService, [@ezpublish.api.service.content]]
           - [setLayoutHelper, [@netgen_more.helper.layout_helper]]
 

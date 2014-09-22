@@ -6,18 +6,9 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\Core\MVC\Legacy\Templating\GlobalHelper as BaseGlobalHelper;
 use eZ\Publish\API\Repository\ContentService;
 use Netgen\Bundle\MoreBundle\Helper\LayoutHelper;
-use NgMoreFunctionCollection;
-use eZContentObjectTreeNode;
-use eZContentObject;
-use Closure;
 
 class GlobalHelper extends BaseGlobalHelper
 {
-    /**
-     * @var \Closure
-     */
-    protected $legacyKernel;
-
     /**
      * @var \eZ\Publish\API\Repository\ContentService
      */
@@ -37,16 +28,6 @@ class GlobalHelper extends BaseGlobalHelper
      * @var \eZ\Publish\API\Repository\Values\Content\Content
      */
     protected $layout;
-
-    /**
-     * Sets the legacy kernel
-     *
-     * @param \Closure $legacyKernel
-     */
-    public function setLegacyKernel( Closure $legacyKernel )
-    {
-        $this->legacyKernel = $legacyKernel;
-    }
 
     /**
      * Sets the content service

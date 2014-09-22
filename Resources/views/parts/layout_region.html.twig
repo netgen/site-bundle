@@ -1,14 +1,3 @@
 <section class="region zone-{{ zone.identifier|lower }}{% if cssClass is defined and cssClass is not empty %} {{ cssClass }}{% endif %}">
-    {% for block in zone.blocks %}
-        {% if
-            block.items is not empty
-            or ( block.customAttributes is defined and block.customAttributes is not empty )
-            or ( ezpublish.configResolver.getParameter( block.type ~ '.ManualAddingOfItems', 'block' ) in ['disabled', false] and not ezpublish.configResolver.hasParameter( block.type ~ '.FetchClass', 'block' ) ) %}
-                {% if params[block.type] is defined %}
-                    {{ render_esi( controller( 'ez_page:viewBlockById', { 'id': block.id, 'params': params[block.type] } ) ) }}
-                {% else %}
-                    {{ render_esi( controller( 'ez_page:viewBlockById', { 'id': block.id } ) ) }}
-                {% endif %}
-        {% endif %}
-    {% endfor %}
+    {% include "NetgenMoreBundle:parts:zone_content.html.twig" with { "zone": zone } %}
 </section>

@@ -29,9 +29,17 @@ class PageController extends BasePageController
 
         if ( !isset( $cacheSettings['smax-age'] ) )
         {
-            if ( $configResolver->hasParameter( 'BlockSettings.' . $block->type . '.TTL', 'ngmore' ) )
+            if ( $configResolver->hasParameter( 'BlockSettings.' . $block->type . '.SharedMaxAge', 'ngmore' ) )
             {
-                $cacheSettings['smax-age'] = (int)$configResolver->getParameter( 'BlockSettings.' . $block->type . '.TTL', 'ngmore' );
+                $cacheSettings['smax-age'] = (int)$configResolver->getParameter( 'BlockSettings.' . $block->type . '.SharedMaxAge', 'ngmore' );
+            }
+        }
+
+        if ( !isset( $cacheSettings['max-age'] ) )
+        {
+            if ( $configResolver->hasParameter( 'BlockSettings.' . $block->type . '.MaxAge', 'ngmore' ) )
+            {
+                $cacheSettings['max-age'] = (int)$configResolver->getParameter( 'BlockSettings.' . $block->type . '.MaxAge', 'ngmore' );
             }
         }
 

@@ -1,15 +1,18 @@
-{% set facebookApi = ezpublish.configResolver.getParameter( 'SiteSettings.FacebookApi', 'ngmore' ) %}
+{% if ezpublish.configResolver.hasParameter( 'SiteSettings.FacebookApi', 'ngmore' )
+    and ezpublish.configResolver.hasParameter( 'GenericData.app_id', 'ngopengraph' ) %}
+    {% set facebookApi = ezpublish.configResolver.getParameter( 'SiteSettings.FacebookApi', 'ngmore' ) %}
 
-{# We check for 'enabled' for compatibility with legacy config #}
-{% if facebookApi == 'enabled' or facebookApi == true %}
-    {% set facebookAppId = ezpublish.configResolver.getParameter( 'GenericData.app_id', 'ngopengraph' ) %}
+    {# We check for 'enabled' for compatibility with legacy config #}
+    {% if facebookApi == 'enabled' or facebookApi == true %}
+        {% set facebookAppId = ezpublish.configResolver.getParameter( 'GenericData.app_id', 'ngopengraph' ) %}
 
-    <div id="fb-root"></div>
-    <script>(function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId={{ facebookAppId|raw|escape( 'js' ) }}";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
+        <div id="fb-root"></div>
+        <script>(function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId={{ facebookAppId|raw|escape( 'js' ) }}";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+    {% endif %}
 {% endif %}

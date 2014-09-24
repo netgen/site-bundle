@@ -3,9 +3,10 @@
 namespace Netgen\Bundle\MoreBundle\Templating;
 
 use eZ\Publish\API\Repository\LocationService;
-use Netgen\Bundle\MoreBundle\Helper\LayoutHelper;
+use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Netgen\Bundle\MoreBundle\Helper\LayoutHelper;
 
 class GlobalHelper
 {
@@ -13,6 +14,11 @@ class GlobalHelper
      * @var \eZ\Publish\API\Repository\LocationService
      */
     protected $locationService;
+
+    /**
+     * @var \eZ\Publish\API\Repository\ContentService
+     */
+    protected $contentService;
 
     /**
      * @var \Netgen\Bundle\MoreBundle\Helper\LayoutHelper
@@ -37,22 +43,30 @@ class GlobalHelper
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Content
      */
+    protected $siteInfoContent;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Content
+     */
     protected $layout;
 
     /**
      * Constructor
      *
      * @param \eZ\Publish\API\Repository\LocationService $locationService
+     * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \Netgen\Bundle\MoreBundle\Helper\LayoutHelper $layoutHelper
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      */
     public function __construct(
         LocationService $locationService,
+        ContentService $contentService,
         LayoutHelper $layoutHelper,
         ConfigResolverInterface $configResolver
     )
     {
         $this->locationService = $locationService;
+        $this->contentService = $contentService;
         $this->layoutHelper = $layoutHelper;
         $this->configResolver = $configResolver;
     }
@@ -82,6 +96,27 @@ class GlobalHelper
         }
 
         return $this->siteInfoLocation;
+    }
+
+    /**
+     * Returns the SiteInfo content
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    public function getSiteInfoContent()
+    {
+        if ( $this->siteInfoContent === null )
+        {
+            $siteInfoLocation = $this->getSiteInfoLocation();
+            if ( $siteInfoLocation !== null )
+            {
+                $this->siteInfoContent = $this->contentService->loadContentByContentInfo(
+                    $siteInfoLocation->getContentInfo()
+                );
+            }
+        }
+
+        return $this->siteInfoContent;
     }
 
     /**

@@ -46,6 +46,7 @@ services:
         class: %netgen_more.templating.global_helper.class%
         arguments:
             - @ezpublish.api.service.location
+            - @ezpublish.api.service.content
             - @netgen_more.helper.layout_helper
             - @ezpublish.config.resolver
         calls:

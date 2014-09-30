@@ -80,8 +80,8 @@ class SiteInfoHelper
             $siteInfoLocation = $this->getSiteInfoLocation();
             if ( $siteInfoLocation !== null )
             {
-                $this->siteInfoContent = $this->contentService->loadContentByContentInfo(
-                    $siteInfoLocation->getContentInfo()
+                $this->siteInfoContent = $this->contentService->loadContent(
+                    $siteInfoLocation->contentId
                 );
             }
         }

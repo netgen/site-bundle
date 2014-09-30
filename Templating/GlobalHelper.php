@@ -67,7 +67,7 @@ class GlobalHelper
      */
     public function getSiteInfoContent()
     {
-        $this->siteInfoHelper->getSiteInfoContent();
+        return $this->siteInfoHelper->getSiteInfoContent();
     }
 
     /**

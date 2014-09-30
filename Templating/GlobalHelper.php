@@ -2,23 +2,16 @@
 
 namespace Netgen\Bundle\MoreBundle\Templating;
 
-use eZ\Publish\API\Repository\LocationService;
-use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;
 use Netgen\Bundle\MoreBundle\Helper\LayoutHelper;
+use Symfony\Component\HttpFoundation\Request;
 
 class GlobalHelper
 {
     /**
-     * @var \eZ\Publish\API\Repository\LocationService
+     * @var \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper
      */
-    protected $locationService;
-
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
-    protected $contentService;
+    protected $siteInfoHelper;
 
     /**
      * @var \Netgen\Bundle\MoreBundle\Helper\LayoutHelper
@@ -26,24 +19,9 @@ class GlobalHelper
     protected $layoutHelper;
 
     /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
-
-    /**
      * @var \Symfony\Component\HttpFoundation\Request
      */
     protected $request;
-
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
-    protected $siteInfoLocation;
-
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    protected $siteInfoContent;
 
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Content
@@ -53,22 +31,13 @@ class GlobalHelper
     /**
      * Constructor
      *
-     * @param \eZ\Publish\API\Repository\LocationService $locationService
-     * @param \eZ\Publish\API\Repository\ContentService $contentService
+     * @param \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper $siteInfoHelper
      * @param \Netgen\Bundle\MoreBundle\Helper\LayoutHelper $layoutHelper
-     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      */
-    public function __construct(
-        LocationService $locationService,
-        ContentService $contentService,
-        LayoutHelper $layoutHelper,
-        ConfigResolverInterface $configResolver
-    )
+    public function __construct( SiteInfoHelper $siteInfoHelper, LayoutHelper $layoutHelper )
     {
-        $this->locationService = $locationService;
-        $this->contentService = $contentService;
+        $this->siteInfoHelper = $siteInfoHelper;
         $this->layoutHelper = $layoutHelper;
-        $this->configResolver = $configResolver;
     }
 
     /**
@@ -88,14 +57,7 @@ class GlobalHelper
      */
     public function getSiteInfoLocation()
     {
-        if ( $this->siteInfoLocation === null )
-        {
-            $this->siteInfoLocation = $this->locationService->loadLocation(
-                $this->configResolver->getParameter( 'SpecialNodes.SiteInfoNode', 'ngmore' )
-            );
-        }
-
-        return $this->siteInfoLocation;
+        return $this->siteInfoHelper->getSiteInfoLocation();
     }
 
     /**
@@ -105,18 +67,7 @@ class GlobalHelper
      */
     public function getSiteInfoContent()
     {
-        if ( $this->siteInfoContent === null )
-        {
-            $siteInfoLocation = $this->getSiteInfoLocation();
-            if ( $siteInfoLocation !== null )
-            {
-                $this->siteInfoContent = $this->contentService->loadContentByContentInfo(
-                    $siteInfoLocation->getContentInfo()
-                );
-            }
-        }
-
-        return $this->siteInfoContent;
+        $this->siteInfoHelper->getSiteInfoContent();
     }
 
     /**

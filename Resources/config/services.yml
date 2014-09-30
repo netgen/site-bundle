@@ -8,6 +8,7 @@ parameters:
     netgen_more.controller.page_layout.class: Netgen\Bundle\MoreBundle\Controller\PageLayoutController
 
     netgen_more.helper.path_helper.class: Netgen\Bundle\MoreBundle\Helper\PathHelper
+    netgen_more.helper.site_info_helper.class: Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper
     netgen_more.helper.layout_helper.class: Netgen\Bundle\MoreBundle\Helper\LayoutHelper
 
     netgen_more.templating.global_helper.class: Netgen\Bundle\MoreBundle\Templating\GlobalHelper
@@ -35,6 +36,13 @@ services:
             - @ezpublish.translation_helper
             - @router
 
+    netgen_more.helper.site_info_helper:
+        class: %netgen_more.helper.site_info_helper.class%
+        arguments:
+            - @ezpublish.api.service.location
+            - @ezpublish.api.service.content
+            - @ezpublish.config.resolver
+
     netgen_more.helper.layout_helper:
         class: %netgen_more.helper.layout_helper.class%
         arguments:
@@ -45,8 +53,7 @@ services:
     netgen_more.templating.global_helper:
         class: %netgen_more.templating.global_helper.class%
         arguments:
-            - @ezpublish.api.service.location
-            - @ezpublish.api.service.content
+            - @netgen_more.helper.site_info_helper
             - @netgen_more.helper.layout_helper
             - @ezpublish.config.resolver
         calls:

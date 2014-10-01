@@ -1,8 +1,8 @@
 {% set rootLocationPath = path( ezpublish.rootLocation ) %}
 
-<link rel="home" href="{{ rootLocationPath }}" title="{{ siteTitle }} front page" />
+<link rel="home" href="{{ rootLocationPath }}" title="{{ siteName }} front page" />
 <link rel="index" href="{{ rootLocationPath }}" />
-<link rel="search" href="{{ path( 'ez_legacy', { 'module_uri': '/content/search' } ) }}" title="Search {{ siteTitle }}" />
+<link rel="search" href="{{ path( 'ez_legacy', { 'module_uri': '/content/search' } ) }}" title="Search {{ siteName }}" />
 
 <!-- Favicons -->
 <!-- For iPad with high-resolution Retina display running iOS ≥ 7: -->
@@ -29,9 +29,9 @@
 <link rel="icon" href="{{ asset( 'bundles/netgenmore/images/favicon.png' ) }}" type="image/x-icon" />
 
 {% set localeConversionMap = ezpublish.configResolver.getParameter( 'locale.conversion_map', 'ngmore' ) %}
+{% set prioritizedLanguages = ezpublish.configResolver.getParameter( 'languages' ) %}
 
 {% set route = location is defined ? location : app.request.attributes.get( '_route' ) %}
-{% set prioritizedLanguages = ezpublish.configResolver.getParameter( 'languages' ) %}
 
 {% if ezpublish.availableLanguages|length > 1 %}
     {% for language in ezpublish.availableLanguages %}

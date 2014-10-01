@@ -36,7 +36,7 @@
 {% if ezpublish.availableLanguages|length > 1 %}
     {% for language in ezpublish.availableLanguages %}
         {% if language != prioritizedLanguages.0 %}
-            <link rel="alternate" href="{{ url( ez_route( route, { 'language': language } ) ) }}" hreflang="{{ localeConversionMap[language][-2:]|lower }}" />
+            <link rel="alternate" href="{{ url( ez_route( route, { 'language': language } ) ) }}" hreflang="{{ localeConversionMap[language][0:2] }}" />
         {% endif %}
     {% endfor %}
 {% endif %}

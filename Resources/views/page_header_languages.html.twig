@@ -1,0 +1,16 @@
+{% set prioritizedLanguages = ezpublish.configResolver.getParameter( 'languages' ) %}
+{% set route = location is defined ? location : app.request.attributes.get( '_route' ) %}
+
+<div id="lang-selector" class="transition-showed dropdown">
+    <a href="#lang-selector" data-toggle="dropdown" class="current-lang">{{ ngmore_language_name( prioritizedLanguages.0 ) }}&nbsp;<b class="caret"></b></a>
+
+    <ul class="lang-select dropdown-menu">
+        {% for language in ezpublish.availableLanguages %}
+            {% if language != prioritizedLanguages.0 %}
+                <li><a href="{{ url( ez_route( route, { 'language': language } ) ) }}">{{ ngmore_language_name( language ) }}</a></li>
+            {% else %}
+                <li class="current"><a href="#" data-toggle="dropdown">{{ ngmore_language_name( language ) }}</a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>

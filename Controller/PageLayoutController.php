@@ -46,27 +46,6 @@ class PageLayoutController extends Controller
     }
 
     /**
-     * Returns rendered footer template
-     *
-     * @param mixed $mainCategoryLocationId
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function footer( $mainCategoryLocationId )
-    {
-        $response = new Response();
-        $response->setPublic()->setSharedMaxAge( 86400 );
-
-        return $this->render(
-            'NetgenMoreBundle::page_footer.html.twig',
-            array(
-                'mainCategoryLocationId' => $mainCategoryLocationId
-            ),
-            $response
-        );
-    }
-
-    /**
      * Returns rendered region template
      *
      * @param mixed $layoutId

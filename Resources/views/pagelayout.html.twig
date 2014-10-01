@@ -150,14 +150,7 @@
     {% endblock %}
 
     {% block pageFooter %}
-        {{
-            render_esi(
-                controller(
-                    'netgen_more.controller.page_layout:footer',
-                    { 'mainCategoryLocationId': mainCategoryLocationId is defined ? mainCategoryLocationId : 0 }
-                )
-            )
-        }}
+        {% include 'NetgenMoreBundle::page_footer.html.twig' %}
     {% endblock %}
 
 </div>

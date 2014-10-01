@@ -59,8 +59,8 @@ class NetgenMoreExtension extends Twig_Extension
     {
         return array(
             new Twig_SimpleFunction(
-                'ngmore_get_path',
-                array( $this, 'getPath' ),
+                'ngmore_location_path',
+                array( $this, 'getLocationPath' ),
                 array( 'is_safe' => array( 'html' ) )
             ),
             new Twig_SimpleFunction(
@@ -77,7 +77,7 @@ class NetgenMoreExtension extends Twig_Extension
      *
      * @return array
      */
-    public function getPath( $locationId )
+    public function getLocationPath( $locationId )
     {
         return $this->pathHelper->getPath( $locationId );
     }

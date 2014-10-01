@@ -59,16 +59,7 @@
 
 <div id="page">
 
-    {% block pageHeader %}
-        {{
-            render_esi(
-                controller(
-                    'netgen_more.controller.page_layout:header',
-                    { 'mainCategoryLocationId': mainCategoryLocationId is defined ? mainCategoryLocationId : 0 }
-                )
-            )
-        }}
-    {% endblock %}
+    {% include 'NetgenMoreBundle::page_header.html.twig' %}
 
     {% block pagePath %}
         {% include 'NetgenMoreBundle::page_path.html.twig' %}

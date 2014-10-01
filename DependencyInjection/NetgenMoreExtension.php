@@ -28,10 +28,5 @@ class NetgenMoreExtension extends Extension
         $loader->load( 'fieldtypes.yml' );
         $loader->load( 'roles.yml' );
         $loader->load( 'services.yml' );
-
-        $localeConversionMap = $container->getParameter( 'ezpublish.locale.conversion_map' );
-        $localeConversionMap['eng-EU'] = 'en';
-
-        $container->setParameter( 'ezpublish.locale.conversion_map', $localeConversionMap );
     }
 }

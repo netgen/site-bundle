@@ -59,7 +59,9 @@
 
 <div id="page">
 
-    {% include 'NetgenMoreBundle::page_header.html.twig' %}
+    {% block pageHeader %}
+        {% include 'NetgenMoreBundle::page_header.html.twig' %}
+    {% endblock %}
 
     {% block pagePath %}
         {% include 'NetgenMoreBundle::page_path.html.twig' %}

@@ -7,25 +7,39 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use Symfony\Component\HttpFoundation\Response;
+use eZContentObject;
 
 class PageLayoutController extends Controller
 {
     /**
-     * Returns rendered header template
+     * Returns rendered relation menu template
      *
-     * @param mixed $mainCategoryLocationId
+     * @param mixed $activeLocationId
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function header( $mainCategoryLocationId )
+    public function relationMenu( $activeLocationId )
     {
         $response = new Response();
         $response->setPublic()->setSharedMaxAge( 86400 );
 
+        $siteInfoContent = $this->get( 'netgen_more.helper.site_info_helper' )->getSiteInfoContent();
+        $relationList = $this->getLegacyKernel()->runCallback(
+            function() use ( $siteInfoContent )
+            {
+                $object = eZContentObject::fetch( $siteInfoContent->id );
+                $attributes = array_values( $object->fetchAttributesByIdentifier( array( 'main_menu' ) ) );
+
+                $attributeContent = $attributes[0]->content();
+                return $attributeContent['relation_list'];
+            }
+        );
+
         return $this->render(
-            'NetgenMoreBundle::page_header.html.twig',
+            'NetgenMoreBundle:menu:relation_menu.html.twig',
             array(
-                'mainCategoryLocationId' => $mainCategoryLocationId
+                'relationList' => $relationList,
+                'activeLocationId' => $activeLocationId
             ),
             $response
         );

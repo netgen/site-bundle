@@ -1,1 +1,2 @@
 parameters:
+    ngmore.default.locale.conversion_map: %ezpublish.locale.conversion_map%

@@ -54,8 +54,6 @@
 <meta name="generator" content="eZ Publish Platform powered by Netgen">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-{% if canonicalUrl is defined and canonicalUrl is not empty %}
-    <link rel="canonical" href="{{ canonicalUrl }}" />
-{% endif %}
+{% include 'NetgenMoreBundle::canonical_link.html.twig' %}
 
-{% include 'design:link.tpl' with { 'enable_print': false, 'site': { 'title': siteName } } %}
+{% include 'NetgenMoreBundle::link.html.twig' %}

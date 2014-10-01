@@ -64,6 +64,7 @@ services:
         arguments:
             - @netgen_more.helper.path_helper
             - @netgen_more.templating.global_helper
+            - @ezpublish.locale.converter
         tags:
             - { name: twig.extension }
 

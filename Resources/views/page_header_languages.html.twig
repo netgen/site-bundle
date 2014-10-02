@@ -1,35 +1,37 @@
-{% set prioritizedLanguages = ezpublish.configResolver.getParameter( 'languages' ) %}
-{% set route = location is defined ? location : app.request.attributes.get( '_route' ) %}
+{% block pageHeaderLanguages %}
+    {% set prioritizedLanguages = ezpublish.configResolver.getParameter( 'languages' ) %}
+    {% set route = location is defined ? location : app.request.attributes.get( '_route' ) %}
 
-<div id="lang-selector" class="transition-showed dropdown">
-    <a href="#lang-selector" data-toggle="dropdown" class="current-lang">{{ ngmore_language_name( prioritizedLanguages.0 ) }}&nbsp;<b class="caret"></b></a>
+    <div id="lang-selector" class="transition-showed dropdown">
+        <a href="#lang-selector" data-toggle="dropdown" class="current-lang">{{ ngmore_language_name( prioritizedLanguages.0 ) }}&nbsp;<b class="caret"></b></a>
 
-    <ul class="lang-select dropdown-menu">
-        {% for language in ezpublish.availableLanguages %}
-            {% set translationSiteAccess = ezpublish.translationSiteAccess( language ) %}
+        <ul class="lang-select dropdown-menu">
+            {% for language in ezpublish.availableLanguages %}
+                {% set translationSiteAccess = ezpublish.translationSiteAccess( language ) %}
 
-            {% if translationSiteAccess is not empty %}
-                {% if language != prioritizedLanguages.0 %}
-                    {% if route == 'ez_legacy' %}
-                        {% set url = url(
-                            ez_route( params={
-                                'module_uri': app.request.attributes.get( 'semanticPathinfo' ) ~ app.request.attributes.get( 'viewParametersString' ),
-                                'siteaccess': ezpublish.translationSiteAccess( language )
-                            } )
-                        ) %}
+                {% if translationSiteAccess is not empty %}
+                    {% if language != prioritizedLanguages.0 %}
+                        {% if route == 'ez_legacy' %}
+                            {% set url = url(
+                                ez_route( params={
+                                    'module_uri': app.request.attributes.get( 'semanticPathinfo' ) ~ app.request.attributes.get( 'viewParametersString' ),
+                                    'siteaccess': ezpublish.translationSiteAccess( language )
+                                } )
+                            ) %}
+                        {% else %}
+                            {% set url = url(
+                                ez_route( params={
+                                    'siteaccess': ezpublish.translationSiteAccess( language )
+                                } )
+                            ) %}
+                        {% endif %}
+
+                        <li><a href="{{ url }}">{{ ngmore_language_name( language ) }}</a></li>
                     {% else %}
-                        {% set url = url(
-                            ez_route( params={
-                                'siteaccess': ezpublish.translationSiteAccess( language )
-                            } )
-                        ) %}
+                        <li class="current"><a href="#" data-toggle="dropdown">{{ ngmore_language_name( language ) }}</a></li>
                     {% endif %}
-
-                    <li><a href="{{ url }}">{{ ngmore_language_name( language ) }}</a></li>
-                {% else %}
-                    <li class="current"><a href="#" data-toggle="dropdown">{{ ngmore_language_name( language ) }}</a></li>
                 {% endif %}
-            {% endif %}
-        {% endfor %}
-    </ul>
-</div>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

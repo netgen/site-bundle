@@ -28,34 +28,36 @@
 
 <link rel="icon" href="{{ asset( 'bundles/netgenmore/images/favicon.png' ) }}" type="image/x-icon" />
 
-{% set localeConversionMap = ezpublish.configResolver.getParameter( 'locale.conversion_map', 'ngmore' ) %}
-{% set prioritizedLanguages = ezpublish.configResolver.getParameter( 'languages' ) %}
+{% block alternateLinks %}
+    {% set localeConversionMap = ezpublish.configResolver.getParameter( 'locale.conversion_map', 'ngmore' ) %}
+    {% set prioritizedLanguages = ezpublish.configResolver.getParameter( 'languages' ) %}
 
-{% set route = location is defined ? location : app.request.attributes.get( '_route' ) %}
+    {% set route = location is defined ? location : app.request.attributes.get( '_route' ) %}
 
-{% if ezpublish.availableLanguages|length > 1 %}
-    {% for language in ezpublish.availableLanguages %}
-        {% set translationSiteAccess = ezpublish.translationSiteAccess( language ) %}
+    {% if ezpublish.availableLanguages|length > 1 %}
+        {% for language in ezpublish.availableLanguages %}
+            {% set translationSiteAccess = ezpublish.translationSiteAccess( language ) %}
 
-        {% if translationSiteAccess is not empty %}
-            {% if language != prioritizedLanguages.0 %}
-                {% if route == 'ez_legacy' %}
-                    {% set url = url(
-                        ez_route( params={
-                            'module_uri': app.request.attributes.get( 'semanticPathinfo' ) ~ app.request.attributes.get( 'viewParametersString' ),
-                            'siteaccess': ezpublish.translationSiteAccess( language )
-                        } )
-                    ) %}
-                {% else %}
-                    {% set url = url(
-                        ez_route( params={
-                            'siteaccess': ezpublish.translationSiteAccess( language )
-                        } )
-                    ) %}
+            {% if translationSiteAccess is not empty %}
+                {% if language != prioritizedLanguages.0 %}
+                    {% if route == 'ez_legacy' %}
+                        {% set url = url(
+                            ez_route( params={
+                                'module_uri': app.request.attributes.get( 'semanticPathinfo' ) ~ app.request.attributes.get( 'viewParametersString' ),
+                                'siteaccess': ezpublish.translationSiteAccess( language )
+                            } )
+                        ) %}
+                    {% else %}
+                        {% set url = url(
+                            ez_route( params={
+                                'siteaccess': ezpublish.translationSiteAccess( language )
+                            } )
+                        ) %}
+                    {% endif %}
+
+                    <link rel="alternate" href="{{ url }}" hreflang="{{ localeConversionMap[language][0:2] }}" />
                 {% endif %}
-
-                <link rel="alternate" href="{{ url }}" hreflang="{{ localeConversionMap[language][0:2] }}" />
             {% endif %}
-        {% endif %}
-    {% endfor %}
-{% endif %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}

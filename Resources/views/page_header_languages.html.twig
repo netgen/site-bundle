@@ -6,10 +6,29 @@
 
     <ul class="lang-select dropdown-menu">
         {% for language in ezpublish.availableLanguages %}
-            {% if language != prioritizedLanguages.0 %}
-                <li><a href="{{ url( ez_route( route, { 'language': language } ) ) }}">{{ ngmore_language_name( language ) }}</a></li>
-            {% else %}
-                <li class="current"><a href="#" data-toggle="dropdown">{{ ngmore_language_name( language ) }}</a></li>
+            {% set translationSiteAccess = ezpublish.translationSiteAccess( language ) %}
+
+            {% if translationSiteAccess is not empty %}
+                {% if language != prioritizedLanguages.0 %}
+                    {% if route == 'ez_legacy' %}
+                        {% set url = url(
+                            ez_route( params={
+                                'module_uri': app.request.attributes.get( 'semanticPathinfo' ) ~ app.request.attributes.get( 'viewParametersString' ),
+                                'siteaccess': ezpublish.translationSiteAccess( language )
+                            } )
+                        ) %}
+                    {% else %}
+                        {% set url = url(
+                            ez_route( params={
+                                'siteaccess': ezpublish.translationSiteAccess( language )
+                            } )
+                        ) %}
+                    {% endif %}
+
+                    <li><a href="{{ url }}">{{ ngmore_language_name( language ) }}</a></li>
+                {% else %}
+                    <li class="current"><a href="#" data-toggle="dropdown">{{ ngmore_language_name( language ) }}</a></li>
+                {% endif %}
             {% endif %}
         {% endfor %}
     </ul>

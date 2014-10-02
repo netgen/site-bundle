@@ -35,8 +35,27 @@
 
 {% if ezpublish.availableLanguages|length > 1 %}
     {% for language in ezpublish.availableLanguages %}
-        {% if language != prioritizedLanguages.0 %}
-            <link rel="alternate" href="{{ url( ez_route( route, { 'language': language } ) ) }}" hreflang="{{ localeConversionMap[language][0:2] }}" />
+        {% set translationSiteAccess = ezpublish.translationSiteAccess( language ) %}
+
+        {% if translationSiteAccess is not empty %}
+            {% if language != prioritizedLanguages.0 %}
+                {% if route == 'ez_legacy' %}
+                    {% set url = url(
+                        ez_route( params={
+                            'module_uri': app.request.attributes.get( 'semanticPathinfo' ) ~ app.request.attributes.get( 'viewParametersString' ),
+                            'siteaccess': ezpublish.translationSiteAccess( language )
+                        } )
+                    ) %}
+                {% else %}
+                    {% set url = url(
+                        ez_route( params={
+                            'siteaccess': ezpublish.translationSiteAccess( language )
+                        } )
+                    ) %}
+                {% endif %}
+
+                <link rel="alternate" href="{{ url }}" hreflang="{{ localeConversionMap[language][0:2] }}" />
+            {% endif %}
         {% endif %}
     {% endfor %}
 {% endif %}

@@ -136,31 +136,7 @@ class LegacySymlinkCommand extends ContainerAwareCommand
         foreach ( $legacyExtensions as $legacyExtensionPath )
         {
             $this->symlinkLegacyExtensionSiteAccesses( $legacyExtensionPath, $input, $output );
-        }
-
-        $overrideFolder = $this->getContainer()->getParameter( 'ezpublish_legacy.root_dir' ) . '/settings/override';
-
-        if ( $this->fileSystem->exists( $overrideFolder ) && !is_link( $overrideFolder ) )
-        {
-            $output->writeln( '<comment>settings/override</comment> folder already exists in <comment>ezpublish_legacy/settings</comment> and is not a symlink. Skipping...' );
-        }
-        else
-        {
-            if ( $this->fileSystem->exists( $overrideFolder ) && !$this->forceSymlinks )
-            {
-                $output->writeln( 'Skipped creating the symlink for <comment>settings/override</comment> folder. Symlink already exists! (Use <comment>--force</comment> to override)' );
-            }
-            else
-            {
-                foreach ( $legacyExtensions as $legacyExtensionPath )
-                {
-                    $this->symlinkLegacyExtensionOverride( $legacyExtensionPath, $input, $output );
-                }
-            }
-        }
-
-        foreach ( $legacyExtensions as $legacyExtensionPath )
-        {
+            $this->symlinkLegacyExtensionOverride( $legacyExtensionPath, $input, $output );
             $this->symlinkLegacyExtensionFiles( $legacyExtensionPath, $input, $output );
         }
     }
@@ -190,7 +166,7 @@ class LegacySymlinkCommand extends ContainerAwareCommand
 
             $siteAccessDestination = $legacyRootDir . '/settings/siteaccess/' . $item->getBasename();
 
-            $this->verifyAndSymlinkDirectory( $item->getPathname(), $siteAccessDestination );
+            $this->verifyAndSymlinkDirectory( $item->getPathname(), $siteAccessDestination, $output );
         }
     }
 
@@ -211,7 +187,7 @@ class LegacySymlinkCommand extends ContainerAwareCommand
             return;
         }
 
-        $this->verifyAndSymlinkDirectory( $sourceFolder, $legacyRootDir . '/settings/override' );
+        $this->verifyAndSymlinkDirectory( $sourceFolder, $legacyRootDir . '/settings/override', $output );
     }
 
     /**
@@ -260,7 +236,8 @@ class LegacySymlinkCommand extends ContainerAwareCommand
 
                         $this->verifyAndSymlinkFile(
                             $file,
-                            $this->getContainer()->getParameter( 'ezpublish_legacy.root_dir' ) . '/' . $filePath
+                            $this->getContainer()->getParameter( 'ezpublish_legacy.root_dir' ) . '/' . $filePath,
+                            $output
                         );
                     }
                 }
@@ -273,7 +250,8 @@ class LegacySymlinkCommand extends ContainerAwareCommand
 
                     $this->verifyAndSymlinkDirectory(
                         $item->getPathname(),
-                        $this->getContainer()->getParameter( 'kernel.root_dir' ) . '/../web/' . $item->getBasename()
+                        $this->getContainer()->getParameter( 'kernel.root_dir' ) . '/../web/' . $item->getBasename(),
+                        $output
                     );
                 }
                 else if ( $item->isFile() )
@@ -285,7 +263,8 @@ class LegacySymlinkCommand extends ContainerAwareCommand
 
                     $this->verifyAndSymlinkFile(
                         $item->getPathname(),
-                        $this->getContainer()->getParameter( 'kernel.root_dir' ) . '/../web/' . $item->getBasename()
+                        $this->getContainer()->getParameter( 'kernel.root_dir' ) . '/../web/' . $item->getBasename(),
+                        $output
                     );
                 }
             }
@@ -297,8 +276,9 @@ class LegacySymlinkCommand extends ContainerAwareCommand
      *
      * @param string $source
      * @param string $destination
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    protected function verifyAndSymlinkFile( $source, $destination )
+    protected function verifyAndSymlinkFile( $source, $destination, OutputInterface $output )
     {
         if ( !$this->fileSystem->exists( dirname( $destination ) ) )
         {
@@ -307,6 +287,7 @@ class LegacySymlinkCommand extends ContainerAwareCommand
 
         if ( $this->fileSystem->exists( $destination ) && !is_file( $destination ) )
         {
+            $output->writeln( '<comment>' . basename( $destination ) . '</comment> already exists in <comment>' . dirname( $destination ) . '/</comment> and is not a symlink. Skipping...' );
             return;
         }
 
@@ -319,6 +300,7 @@ class LegacySymlinkCommand extends ContainerAwareCommand
         {
             if ( $this->fileSystem->exists( $destination . '.original' ) )
             {
+                $output->writeln( 'Cannot create backup file <comment>' . basename( $destination ) . '.original</comment> in <comment>' . dirname( $destination ) . '/</comment>. Skipping...' );
                 return;
             }
 
@@ -327,6 +309,15 @@ class LegacySymlinkCommand extends ContainerAwareCommand
 
         if ( $this->fileSystem->exists( $destination ) )
         {
+            if ( is_link( $destination ) )
+            {
+                $output->writeln( 'Skipped creating the symlink for <comment>' . basename( $destination ) . '</comment> in <comment>' . dirname( $destination ) . '/</comment>. Symlink already exists! (Use <comment>--force</comment> to override)' );
+            }
+            else
+            {
+                $output->writeln( 'Skipped creating the symlink for <comment>' . basename( $destination ) . '</comment> in <comment>' . dirname( $destination ) . '/</comment> due to an unknown error.' );
+            }
+
             return;
         }
 
@@ -344,11 +335,13 @@ class LegacySymlinkCommand extends ContainerAwareCommand
      *
      * @param string $source
      * @param string $destination
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    protected function verifyAndSymlinkDirectory( $source, $destination )
+    protected function verifyAndSymlinkDirectory( $source, $destination, OutputInterface $output )
     {
         if ( $this->fileSystem->exists( $destination ) && !is_link( $destination ) )
         {
+            $output->writeln( '<comment>' . basename( $destination ) . '</comment> already exists in <comment>' . dirname( $destination ) . '/</comment> and is not a symlink. Skipping...' );
             return;
         }
 
@@ -359,6 +352,7 @@ class LegacySymlinkCommand extends ContainerAwareCommand
 
         if ( $this->fileSystem->exists( $destination ) )
         {
+            $output->writeln( 'Skipped creating the symlink for <comment>' . basename( $destination ) . '</comment> in <comment>' . dirname( $destination ) . '/</comment>. Symlink already exists! (Use <comment>--force</comment> to override)' );
             return;
         }
 

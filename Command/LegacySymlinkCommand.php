@@ -2,12 +2,13 @@
 
 namespace Netgen\Bundle\MoreBundle\Command;
 
+use Netgen\Bundle\GeneratorBundle\Helper\FileHelper;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use DirectoryIterator;
-use RuntimeException;
 
 class LegacySymlinkCommand extends ContainerAwareCommand
 {
@@ -24,6 +25,58 @@ class LegacySymlinkCommand extends ContainerAwareCommand
      * @var string
      */
     protected $environment = 'dev';
+
+    /**
+     * @var \Symfony\Component\Filesystem\Filesystem
+     */
+    protected $fileSystem = null;
+
+    /**
+     * The list of folders available in standard distribution of eZ Publish Legacy
+     *
+     * @var array
+     */
+    protected $legacyDistFolders = array(
+        'autoload',
+        'benchmarks',
+        'bin',
+        'cronjobs',
+        'design',
+        'doc',
+        'extension',
+        'kernel',
+        'lib',
+        'schemas',
+        'settings',
+        'share',
+        'support',
+        'templates',
+        'tests',
+        'update',
+        'var'
+    );
+
+    /**
+     * Files that will not be symlinked in root and root_* folders
+     *
+     * @var array
+     */
+    protected $blacklistedFiles = array(
+        'config.php',
+        'offline_cro.html',
+        'offline_eng.html'
+    );
+
+    /**
+     * Directories that will not be symlinked in root and root_* folders
+     *
+     * P.S. "settings" folder has special handling anyways
+     *
+     * @var array
+     */
+    protected $blacklistedFolders = array(
+        'settings'
+    );
 
     /**
      * Configures the command
@@ -47,7 +100,7 @@ class LegacySymlinkCommand extends ContainerAwareCommand
     {
         $this->forceSymlinks = (bool)$input->getOption( 'force' );
         $this->environment = $this->getContainer()->get( 'kernel' )->getEnvironment();
-        $fileSystem = $this->getContainer()->get( 'filesystem' );
+        $this->fileSystem = $this->getContainer()->get( 'filesystem' );
 
         $legacyExtensions = array();
 
@@ -57,6 +110,11 @@ class LegacySymlinkCommand extends ContainerAwareCommand
             if ( !in_array( 'Netgen\\Bundle\\MoreBundle\\NetgenMoreProjectBundleInterface', class_implements( $bundle ) ) )
             {
                 continue;
+            }
+
+            if ( !$this->fileSystem->exists( $bundle->getPath() . '/ezpublish_legacy/' ) )
+            {
+                return;
             }
 
             foreach ( new DirectoryIterator( $bundle->getPath() . '/ezpublish_legacy/' ) as $item )
@@ -82,13 +140,13 @@ class LegacySymlinkCommand extends ContainerAwareCommand
 
         $overrideFolder = $this->getContainer()->getParameter( 'ezpublish_legacy.root_dir' ) . '/settings/override';
 
-        if ( $fileSystem->exists( $overrideFolder ) && !is_link( $overrideFolder ) )
+        if ( $this->fileSystem->exists( $overrideFolder ) && !is_link( $overrideFolder ) )
         {
             $output->writeln( '<comment>settings/override</comment> folder already exists in <comment>ezpublish_legacy/settings</comment> and is not a symlink. Skipping...' );
         }
         else
         {
-            if ( $fileSystem->exists( $overrideFolder ) && !$this->forceSymlinks )
+            if ( $this->fileSystem->exists( $overrideFolder ) && !$this->forceSymlinks )
             {
                 $output->writeln( 'Skipped creating the symlink for <comment>settings/override</comment> folder. Symlink already exists! (Use <comment>--force</comment> to override)' );
             }
@@ -99,6 +157,11 @@ class LegacySymlinkCommand extends ContainerAwareCommand
                     $this->symlinkLegacyExtensionOverride( $legacyExtensionPath, $input, $output );
                 }
             }
+        }
+
+        foreach ( $legacyExtensions as $legacyExtensionPath )
+        {
+            $this->symlinkLegacyExtensionFiles( $legacyExtensionPath, $input, $output );
         }
     }
 
@@ -112,7 +175,11 @@ class LegacySymlinkCommand extends ContainerAwareCommand
     protected function symlinkLegacyExtensionSiteAccesses( $legacyExtensionPath, InputInterface $input, OutputInterface $output )
     {
         $legacyRootDir = $this->getContainer()->getParameter( 'ezpublish_legacy.root_dir' );
-        $fileSystem = $this->getContainer()->get( 'filesystem' );
+
+        if ( !$this->fileSystem->exists( $legacyExtensionPath . '/root_' . $this->environment . '/settings/siteaccess/' ) )
+        {
+            return;
+        }
 
         foreach ( new DirectoryIterator( $legacyExtensionPath . '/root_' . $this->environment . '/settings/siteaccess/' ) as $item )
         {
@@ -123,30 +190,7 @@ class LegacySymlinkCommand extends ContainerAwareCommand
 
             $siteAccessDestination = $legacyRootDir . '/settings/siteaccess/' . $item->getBasename();
 
-            if ( $fileSystem->exists( $siteAccessDestination ) && !is_link( $siteAccessDestination ) )
-            {
-                $output->writeln( '<comment>' . $item->getBasename() . '</comment> already exists in <comment>ezpublish_legacy/settings/siteaccess</comment> and is not a symlink. Skipping...' );
-                continue;
-            }
-
-            if ( is_link( $siteAccessDestination ) && $this->forceSymlinks )
-            {
-                unlink( $siteAccessDestination );
-            }
-
-            if ( $fileSystem->exists( $siteAccessDestination ) )
-            {
-                $output->writeln( 'Skipped creating the symlink for <comment>' . $item->getBasename() . '</comment> siteaccess. Symlink already exists! (Use <comment>--force</comment> to override)' );
-                continue;
-            }
-
-            $fileSystem->symlink(
-                $fileSystem->makePathRelative(
-                    $item->getPathname(),
-                    $legacyRootDir
-                ),
-                $siteAccessDestination
-            );
+            $this->verifyAndSymlinkDirectory( $item->getPathname(), $siteAccessDestination );
         }
     }
 
@@ -160,37 +204,170 @@ class LegacySymlinkCommand extends ContainerAwareCommand
     protected function symlinkLegacyExtensionOverride( $legacyExtensionPath, InputInterface $input, OutputInterface $output )
     {
         $legacyRootDir = $this->getContainer()->getParameter( 'ezpublish_legacy.root_dir' );
-        $fileSystem = $this->getContainer()->get( 'filesystem' );
 
         $sourceFolder = $legacyExtensionPath . '/root_' . $this->environment . '/settings/override';
-        if ( !$fileSystem->exists( $sourceFolder ) || !is_dir( $sourceFolder ) )
+        if ( !$this->fileSystem->exists( $sourceFolder ) || !is_dir( $sourceFolder ) )
         {
             return;
         }
 
-        $destinationFolder = $legacyRootDir . '/settings/override';
+        $this->verifyAndSymlinkDirectory( $sourceFolder, $legacyRootDir . '/settings/override' );
+    }
 
-        if ( $fileSystem->exists( $destinationFolder ) && !is_link( $destinationFolder ) )
+    /**
+     * Symlinks siteccesses from a legacy extension
+     *
+     * @param string $legacyExtensionPath
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    protected function symlinkLegacyExtensionFiles( $legacyExtensionPath, InputInterface $input, OutputInterface $output )
+    {
+        if ( !$this->fileSystem->exists( $legacyExtensionPath . '/root/' ) )
         {
             return;
         }
 
-        if ( is_link( $destinationFolder ) && $this->forceSymlinks )
+        /** @var \DirectoryIterator[] $directories */
+        $directories = array(
+            new DirectoryIterator( $legacyExtensionPath . '/root/' ),
+            new DirectoryIterator( $legacyExtensionPath . '/root_' . $this->environment . '/' ),
+        );
+
+        foreach ( $directories as $directory )
         {
-            unlink( $destinationFolder );
+            foreach ( $directory as $item )
+            {
+                if ( $item->isDot() || $item->isLink() )
+                {
+                    continue;
+                }
+
+                if ( $item->isDir() && in_array( $item->getBasename(), $this->legacyDistFolders ) )
+                {
+                    if ( in_array( $item->getBasename(), $this->blacklistedFolders ) )
+                    {
+                        continue;
+                    }
+
+                    $files = FileHelper::findFilesInDirectory( $item->getPathname() );
+                    foreach ( $files as $file )
+                    {
+                        $filePath = $this->fileSystem->makePathRelative(
+                            realpath( dirname( $file ) ),
+                            $directory->getPath()
+                        ) . basename( $file );
+
+                        $this->verifyAndSymlinkFile(
+                            $file,
+                            $this->getContainer()->getParameter( 'ezpublish_legacy.root_dir' ) . '/' . $filePath
+                        );
+                    }
+                }
+                else if ( $item->isDir() )
+                {
+                    if ( in_array( $item->getBasename(), $this->blacklistedFolders ) )
+                    {
+                        continue;
+                    }
+
+                    $this->verifyAndSymlinkDirectory(
+                        $item->getPathname(),
+                        $this->getContainer()->getParameter( 'kernel.root_dir' ) . '/../web/' . $item->getBasename()
+                    );
+                }
+                else if ( $item->isFile() )
+                {
+                    if ( in_array( $item->getBasename(), $this->blacklistedFiles ) )
+                    {
+                        continue;
+                    }
+
+                    $this->verifyAndSymlinkFile(
+                        $item->getPathname(),
+                        $this->getContainer()->getParameter( 'kernel.root_dir' ) . '/../web/' . $item->getBasename()
+                    );
+                }
+            }
+        }
+    }
+
+    /**
+     * Verify that source file can be symlinked to destination and do symlinking
+     *
+     * @param string $source
+     * @param string $destination
+     */
+    protected function verifyAndSymlinkFile( $source, $destination )
+    {
+        if ( !$this->fileSystem->exists( dirname( $destination ) ) )
+        {
+            $this->fileSystem->mkdir( dirname( $destination ), 0755 );
         }
 
-        if ( $fileSystem->exists( $destinationFolder ) )
+        if ( $this->fileSystem->exists( $destination ) && !is_file( $destination ) )
         {
             return;
         }
 
-        $fileSystem->symlink(
-            $fileSystem->makePathRelative(
-                $sourceFolder,
-                $this->getContainer()->getParameter( 'kernel.root_dir' ) . '/..'
+        if ( is_link( $destination ) && $this->forceSymlinks )
+        {
+            unlink( $destination );
+        }
+
+        if ( is_file( $destination ) && !is_link( $destination ) )
+        {
+            if ( $this->fileSystem->exists( $destination . '.original' ) )
+            {
+                return;
+            }
+
+            $this->fileSystem->rename( $destination, $destination . '.original' );
+        }
+
+        if ( $this->fileSystem->exists( $destination ) )
+        {
+            return;
+        }
+
+        $this->fileSystem->symlink(
+            $this->fileSystem->makePathRelative(
+                dirname( $source ),
+                realpath( dirname( $destination ) )
+            ) . basename( $source ),
+            $destination
+        );
+    }
+
+    /**
+     * Verify that source directory can be symlinked to destination and do symlinking
+     *
+     * @param string $source
+     * @param string $destination
+     */
+    protected function verifyAndSymlinkDirectory( $source, $destination )
+    {
+        if ( $this->fileSystem->exists( $destination ) && !is_link( $destination ) )
+        {
+            return;
+        }
+
+        if ( is_link( $destination ) && $this->forceSymlinks )
+        {
+            unlink( $destination );
+        }
+
+        if ( $this->fileSystem->exists( $destination ) )
+        {
+            return;
+        }
+
+        $this->fileSystem->symlink(
+            $this->fileSystem->makePathRelative(
+                $source,
+                realpath( dirname( $destination ) )
             ),
-            $destinationFolder
+            $destination
         );
     }
 }

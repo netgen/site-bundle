@@ -287,7 +287,7 @@ class LegacySymlinkCommand extends ContainerAwareCommand
 
         if ( $this->fileSystem->exists( $destination ) && !is_file( $destination ) )
         {
-            $output->writeln( '<comment>' . basename( $destination ) . '</comment> already exists in <comment>' . dirname( $destination ) . '/</comment> and is not a symlink. Skipping...' );
+            $output->writeln( '<comment>' . basename( $destination ) . '</comment> already exists in <comment>' . dirname( $destination ) . '/</comment> and is not a file/symlink. Skipping...' );
             return;
         }
 

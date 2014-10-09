@@ -85,7 +85,7 @@ class LegacySymlinkCommand extends ContainerAwareCommand
     {
         $this->addOption( 'force', null, InputOption::VALUE_NONE, 'If set, it will destroy existing symlinks before recreating them' );
         $this->setDescription( 'Symlinks legacy siteaccesses and various other legacy files to their proper locations' );
-        $this->setName( 'ngmore:legacy:symlink' );
+        $this->setName( 'ngmore:symlink:legacy' );
     }
 
     /**

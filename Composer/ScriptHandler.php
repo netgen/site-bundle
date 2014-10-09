@@ -23,7 +23,7 @@ class ScriptHandler extends DistributionBundleScriptHandler
             return;
         }
 
-        static::executeCommand( $event, $appDir, 'ngmore:legacy:symlink', $options['process-timeout'] );
+        static::executeCommand( $event, $appDir, 'ngmore:symlink:legacy', $options['process-timeout'] );
     }
 
     /**

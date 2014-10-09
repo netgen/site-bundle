@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use DirectoryIterator;
 
-class LegacySymlinkCommand extends ContainerAwareCommand
+class SymlinkLegacyCommand extends ContainerAwareCommand
 {
     /**
      * If true, command will destroy existing symlinks before recreating them

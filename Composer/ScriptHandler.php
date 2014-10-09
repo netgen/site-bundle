@@ -4,6 +4,7 @@ namespace Netgen\Bundle\MoreBundle\Composer;
 
 use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler as DistributionBundleScriptHandler;
 use Composer\Script\CommandEvent;
+use Symfony\Component\Process\ProcessBuilder;
 
 class ScriptHandler extends DistributionBundleScriptHandler
 {
@@ -53,14 +54,35 @@ class ScriptHandler extends DistributionBundleScriptHandler
     public static function generateLegacyAutoloads( CommandEvent $event )
     {
         $options = self::getOptions( $event );
-        $appDir = $options['symfony-app-dir'];
 
-        if ( !is_dir( $appDir ) )
+        $currentWorkingDirectory = getcwd();
+        $legacyRootDir = $currentWorkingDirectory . '/' . $options['ezpublish-legacy-dir'];
+
+        if ( !is_dir( $legacyRootDir ) )
         {
-            echo 'The symfony-app-dir (' . $appDir . ') specified in composer.json was not found in ' . getcwd() . ', can not generate legacy autoloads.' . PHP_EOL;
+            echo 'The ezpublish-legacy-dir (' . $options['ezpublish-legacy-dir'] . ') specified in composer.json was not found in ' . $currentWorkingDirectory . ', can not generate legacy autoloads.' . PHP_EOL;
             return;
         }
 
-        static::executeCommand( $event, $appDir, 'ezpublish:legacy:script bin/php/ezpgenerateautoloads.php', $options['process-timeout'] );
+        chdir( $legacyRootDir );
+
+        $processBuilder = new ProcessBuilder(
+            array(
+                'php',
+                'bin/php/ezpgenerateautoloads.php'
+            )
+        );
+
+        $process = $processBuilder->getProcess();
+
+        $process->setTimeout( 3600 );
+        $process->run(
+            function ( $type, $buffer )
+            {
+                echo $buffer;
+            }
+        );
+
+        chdir( $currentWorkingDirectory );
     }
 }

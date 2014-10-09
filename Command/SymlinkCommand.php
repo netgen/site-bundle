@@ -88,7 +88,7 @@ abstract class SymlinkCommand extends ContainerAwareCommand
         {
             if ( is_link( $destination ) )
             {
-                $output->writeln( 'Skipped creating the symlink for <comment>' . basename( $destination ) . '</comment> in <comment>' . dirname( $destination ) . '/</comment>. Symlink already exists! (Use <comment>--force</comment> to override)' );
+                $output->writeln( 'Skipped creating the symlink for <comment>' . basename( $destination ) . '</comment> in <comment>' . dirname( $destination ) . '/</comment>. Symlink already exists!' );
             }
             else
             {
@@ -129,7 +129,7 @@ abstract class SymlinkCommand extends ContainerAwareCommand
 
         if ( $this->fileSystem->exists( $destination ) )
         {
-            $output->writeln( 'Skipped creating the symlink for <comment>' . basename( $destination ) . '</comment> in <comment>' . dirname( $destination ) . '/</comment>. Symlink already exists! (Use <comment>--force</comment> to override)' );
+            $output->writeln( 'Skipped creating the symlink for <comment>' . basename( $destination ) . '</comment> in <comment>' . dirname( $destination ) . '/</comment>. Symlink already exists!' );
             return;
         }
 

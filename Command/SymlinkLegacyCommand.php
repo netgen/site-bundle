@@ -214,7 +214,6 @@ class SymlinkLegacyCommand extends SymlinkCommand
                     // Same directory exists in comparable bundle location, so we won't symlink it from here
                     if ( $this->fileSystem->exists( $bundleDirectory . '/' . $item->getBasename() ) )
                     {
-                        $output->writeln( 'Skipped creating the symlink for <comment>' . $item->getBasename() . '</comment>. Directory is symlinked from bundle!' );
                         continue;
                     }
 
@@ -234,7 +233,6 @@ class SymlinkLegacyCommand extends SymlinkCommand
                     // Same file exists in comparable bundle location, so we won't symlink it from here
                     if ( $this->fileSystem->exists( $bundleDirectory . '/' . $item->getBasename() ) )
                     {
-                        $output->writeln( 'Skipped creating the symlink for <comment>' . $item->getBasename() . '</comment>. File is symlinked from bundle!' );
                         continue;
                     }
 

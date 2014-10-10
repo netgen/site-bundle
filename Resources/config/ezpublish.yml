@@ -1,6 +1,2 @@
-imports:
-    - { resource: ezpage.yml }
-
-ezpublish:
-    locale_conversion:
-        eng-EU: en
+locale_conversion:
+    eng-EU: en

@@ -1,9 +1,11 @@
+{% set params = params|default( [] ) %}
+
 {% for block in zone.blocks %}
     {% if
         block.items is not empty
         or ( block.customAttributes is defined and block.customAttributes is not empty )
         or ( ezpublish.configResolver.getParameter( block.type ~ '.ManualAddingOfItems', 'block' ) in ['disabled', false] and not ezpublish.configResolver.hasParameter( block.type ~ '.FetchClass', 'block' ) ) %}
-            {% set blockParams = params[block.type]|default( [] ) %}
+            {% set blockParams = params|merge( blockSpecificParams[block.type]|default( [] ) ) %}
 
             {% if ezpublish.configResolver.hasParameter( 'BlockSettings.' ~ block.type ~ '.SharedMaxAge' ) %}
                 {{ render_esi( controller( 'ez_page:viewBlockById', { 'id': block.id, 'params': blockParams } ) ) }}

@@ -1,0 +1,42 @@
+ezpublish:
+    ezpage:
+        layouts:
+            1ZonesA:
+                name: 1 zone A
+            4ZonesA:
+                name: 4 zones A
+            4ZonesB:
+                name: 4 zones B
+            4ZonesC:
+                name: 4 zones C
+            6ZonesA:
+                name: 6 zones A
+            NGRegionLayout:
+                name: Region layout
+
+        enabledLayouts:
+            - 1ZonesA
+            - 4ZonesA
+            - 4ZonesB
+            - 4ZonesC
+            - 6ZonesA
+            - NGRegionLayout
+
+        blocks:
+            PageTitle:
+                name: Page title
+            ContentGrid:
+                name: Content grid
+            ContentGridDynamic:
+                name: Content grid (dynamic)
+            MenuDynamic:
+                name: Menu (dynamic)
+            TagsCloud:
+                name: Tags cloud
+
+        enabledBlocks:
+            - PageTitle
+            - ContentGrid
+            - ContentGridDynamic
+            - MenuDynamic
+            - TagsCloud

@@ -13,6 +13,7 @@ ezpublish:
                 name: 6 zones A
             NGRegionLayout:
                 name: Region layout
+                template: 'NetgenMoreBundle:zone:ngmoreregionlayout.html.twig'
 
         enabledLayouts:
             - 1ZonesA

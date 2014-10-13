@@ -62,6 +62,7 @@ services:
     netgen_more.templating.twig.extension:
         class: %netgen_more.templating.twig.extension.class%
         arguments:
+            - @ezpublish.api.repository
             - @netgen_more.helper.path_helper
             - @netgen_more.templating.global_helper
             - @ezpublish.locale.converter

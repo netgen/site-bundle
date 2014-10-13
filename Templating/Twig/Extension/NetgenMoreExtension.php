@@ -5,12 +5,19 @@ namespace Netgen\Bundle\MoreBundle\Templating\Twig\Extension;
 use Netgen\Bundle\MoreBundle\Helper\PathHelper;
 use Netgen\Bundle\MoreBundle\Templating\GlobalHelper;
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
+use eZ\Publish\API\Repository\Repository;
 use Symfony\Component\Intl\Intl;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
 class NetgenMoreExtension extends Twig_Extension
 {
+
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    protected $repository;
+
     /**
      * @var \Netgen\Bundle\MoreBundle\Helper\PathHelper
      */
@@ -29,12 +36,19 @@ class NetgenMoreExtension extends Twig_Extension
     /**
      * Constructor
      *
+     * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \Netgen\Bundle\MoreBundle\Helper\PathHelper $pathHelper
      * @param \Netgen\Bundle\MoreBundle\Templating\GlobalHelper $globalHelper
      * @param \eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface $localeConverter
      */
-    public function __construct( PathHelper $pathHelper, GlobalHelper $globalHelper, LocaleConverterInterface $localeConverter )
+    public function __construct(
+        Repository $repository,
+        PathHelper $pathHelper,
+        GlobalHelper $globalHelper,
+        LocaleConverterInterface $localeConverter
+    )
     {
+        $this->repository = $repository;
         $this->pathHelper = $pathHelper;
         $this->globalHelper = $globalHelper;
         $this->localeConverter = $localeConverter;
@@ -66,6 +80,10 @@ class NetgenMoreExtension extends Twig_Extension
             new Twig_SimpleFunction(
                 'ngmore_language_name',
                 array( $this, 'getLanguageName' )
+            ),
+            new Twig_SimpleFunction(
+                'ngmore_content_type_identifier',
+                array( $this, 'getContentTypeIdentifier' )
             )
         );
     }
@@ -105,6 +123,17 @@ class NetgenMoreExtension extends Twig_Extension
         $posixLanguageCode = substr( $posixLanguageCode, 0, 2 );
         $languageName = Intl::getLanguageBundle()->getLanguageName( $posixLanguageCode, null, $posixLanguageCode );
         return ucwords( $languageName );
+    }
+
+    /**
+     * Returns content type identifier for specified content type ID
+     *
+     * @param mixed $contentTypeId
+     * @return string
+     */
+    public function getContentTypeIdentifier( $contentTypeId )
+    {
+        return $this->repository->getContentTypeService()->loadContentType( $contentTypeId )->identifier;
     }
 
     /**

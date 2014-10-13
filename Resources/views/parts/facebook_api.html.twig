@@ -5,13 +5,17 @@
     {# We check for 'enabled' for compatibility with legacy config #}
     {% if facebookApi == 'enabled' or facebookApi == true %}
         {% set facebookAppId = ezpublish.configResolver.getParameter( 'GenericData.app_id', 'ngopengraph' ) %}
+        {% set facebookLocale = 'en_US' %}
+        {% if ezpublish.configResolver.hasParameter( 'SiteSettings.FacebookLocale', 'ngmore' ) %}
+            {% set facebookLocale = ezpublish.configResolver.parameter( 'SiteSettings.FacebookLocale', 'ngmore' ) %}
+        {% endif %}
 
         <div id="fb-root"></div>
         <script>(function(d, s, id) {
           var js, fjs = d.getElementsByTagName(s)[0];
           if (d.getElementById(id)) return;
           js = d.createElement(s); js.id = id;
-          js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId={{ facebookAppId|raw|escape( 'js' ) }}";
+          js.src = "//connect.facebook.net/{{ facebookLocale|raw|escape( 'js' ) }}/all.js#xfbml=1&appId={{ facebookAppId|raw|escape( 'js' ) }}";
           fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));</script>
     {% endif %}

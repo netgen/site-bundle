@@ -2,7 +2,7 @@
 
 namespace Netgen\Bundle\MoreBundle\Command;
 
-use Netgen\Bundle\GeneratorBundle\Helper\FileHelper;
+use Netgen\Bundle\MoreGeneratorBundle\Helper\FileHelper;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

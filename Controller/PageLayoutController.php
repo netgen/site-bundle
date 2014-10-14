@@ -15,10 +15,11 @@ class PageLayoutController extends Controller
      * Returns rendered relation menu template
      *
      * @param mixed $activeLocationId
+     * @param string $template
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function relationMenu( $activeLocationId )
+    public function relationMenu( $activeLocationId, $template = null )
     {
         $response = new Response();
         $response->setPublic()->setSharedMaxAge( 86400 );
@@ -36,7 +37,7 @@ class PageLayoutController extends Controller
         );
 
         return $this->render(
-            'NetgenMoreBundle:menu:relation_menu.html.twig',
+            $template !== null ? $template : 'NetgenMoreBundle:menu:relation_menu.html.twig',
             array(
                 'relationList' => $relationList,
                 'activeLocationId' => $activeLocationId

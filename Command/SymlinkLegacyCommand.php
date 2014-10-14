@@ -2,7 +2,6 @@
 
 namespace Netgen\Bundle\MoreBundle\Command;
 
-use Netgen\Bundle\MoreGeneratorBundle\Helper\FileHelper;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -189,7 +188,7 @@ class SymlinkLegacyCommand extends SymlinkCommand
                         continue;
                     }
 
-                    $files = FileHelper::findFilesInDirectory( $item->getPathname() );
+                    $files = self::findFilesInDirectory( $item->getPathname() );
                     foreach ( $files as $file )
                     {
                         $filePath = $this->fileSystem->makePathRelative(

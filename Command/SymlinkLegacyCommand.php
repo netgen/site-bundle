@@ -41,6 +41,7 @@ class SymlinkLegacyCommand extends SymlinkCommand
     protected function configure()
     {
         $this->addOption( 'force', null, InputOption::VALUE_NONE, 'If set, it will destroy existing symlinks before recreating them' );
+        $this->addOption( 'web-folder', null, InputOption::VALUE_OPTIONAL, 'Name of the webroot folder to use' );
         $this->setDescription( 'Symlinks legacy siteaccesses and various other legacy files to their proper locations' );
         $this->setName( 'ngmore:symlink:legacy' );
     }
@@ -148,7 +149,7 @@ class SymlinkLegacyCommand extends SymlinkCommand
     }
 
     /**
-     * Symlinks siteccesses from a legacy extension
+     * Symlinks files from a legacy extension
      *
      * @param string $bundlePath
      * @param string $legacyExtensionPath
@@ -183,7 +184,7 @@ class SymlinkLegacyCommand extends SymlinkCommand
 
                 if ( $item->isDir() && in_array( $item->getBasename(), $this->legacyDistFolders ) )
                 {
-                    if ( in_array( $item->getBasename(), $this->blacklistedFolders ) )
+                    if ( in_array( $item->getBasename(), $this->blacklistedItems ) )
                     {
                         continue;
                     }
@@ -203,43 +204,46 @@ class SymlinkLegacyCommand extends SymlinkCommand
                         );
                     }
                 }
-                else if ( $item->isDir() )
+                else if ( $item->isDir() || $item->isFile() )
                 {
-                    if ( in_array( $item->getBasename(), $this->blacklistedFolders ) )
+                    if ( in_array( $item->getBasename(), $this->blacklistedItems ) )
                     {
                         continue;
                     }
 
-                    // Same directory exists in comparable bundle location, so we won't symlink it from here
+                    // Same directory/file exists in comparable bundle location, so we won't symlink it from here
                     if ( $this->fileSystem->exists( $bundleDirectory . '/' . $item->getBasename() ) )
                     {
                         continue;
                     }
 
-                    $this->verifyAndSymlinkDirectory(
-                        $item->getPathname(),
-                        $this->getContainer()->getParameter( 'kernel.root_dir' ) . '/../web/' . $item->getBasename(),
-                        $output
-                    );
-                }
-                else if ( $item->isFile() )
-                {
-                    if ( in_array( $item->getBasename(), $this->blacklistedFiles ) )
+                    $webFolderName = $input->getOption( 'web-folder' );
+                    $webFolderName = !empty( $webFolderName ) ? $webFolderName : 'web';
+
+                    $destination = $this->getContainer()->getParameter( 'kernel.root_dir' ) . '/../' . $webFolderName . '/' . $item->getBasename();
+
+                    if ( !$this->fileSystem->exists( dirname( $destination ) ) )
                     {
+                        $output->writeln( 'Skipped creating the symlink for <comment>' . basename( $destination ) . '</comment> in <comment>' . dirname( $destination ) . '/</comment>. Folder does not exist!' );
                         continue;
                     }
 
-                    // Same file exists in comparable bundle location, so we won't symlink it from here
-                    if ( $this->fileSystem->exists( $bundleDirectory . '/' . $item->getBasename() ) )
+                    if ( $item->isDir() )
                     {
-                        continue;
+                        $this->verifyAndSymlinkDirectory(
+                            $item->getPathname(),
+                            $destination,
+                            $output
+                        );
                     }
-
-                    $this->verifyAndSymlinkFile(
-                        $item->getPathname(),
-                        $this->getContainer()->getParameter( 'kernel.root_dir' ) . '/../web/' . $item->getBasename(),
-                        $output
-                    );
+                    else
+                    {
+                        $this->verifyAndSymlinkFile(
+                            $item->getPathname(),
+                            $destination,
+                            $output
+                        );
+                    }
                 }
             }
         }

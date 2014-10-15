@@ -27,24 +27,16 @@ abstract class SymlinkCommand extends ContainerAwareCommand
     protected $fileSystem = null;
 
     /**
-     * Files that will not be symlinked in root and root_* folders
-     *
-     * @var array
-     */
-    protected $blacklistedFiles = array(
-        'config.php',
-        'offline_cro.html',
-        'offline_eng.html'
-    );
-
-    /**
-     * Directories that will not be symlinked in root and root_* folders
+     * Files/directories that will not be symlinked in root and root_* folders
      *
      * P.S. "settings" folder has special handling anyways
      *
      * @var array
      */
-    protected $blacklistedFolders = array(
+    protected $blacklistedItems = array(
+        'config.php',
+        'offline_cro.html',
+        'offline_eng.html',
         'settings'
     );
 

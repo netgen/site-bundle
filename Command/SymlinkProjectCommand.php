@@ -15,6 +15,7 @@ class SymlinkProjectCommand extends SymlinkCommand
     protected function configure()
     {
         $this->addOption( 'force', null, InputOption::VALUE_NONE, 'If set, it will destroy existing symlinks before recreating them' );
+        $this->addOption( 'web-folder', null, InputOption::VALUE_OPTIONAL, 'Name of the webroot folder to use' );
         $this->setDescription( 'Symlinks various project files and folders to their proper locations' );
         $this->setName( 'ngmore:symlink:project' );
     }
@@ -85,31 +86,40 @@ class SymlinkProjectCommand extends SymlinkCommand
                     continue;
                 }
 
-                if ( $item->isDir() )
+                if ( $item->isDir() || $item->isFile() )
                 {
-                    if ( in_array( $item->getBasename(), $this->blacklistedFolders ) )
+                    if ( in_array( $item->getBasename(), $this->blacklistedItems ) )
                     {
                         continue;
                     }
 
-                    $this->verifyAndSymlinkDirectory(
-                        $item->getPathname(),
-                        $this->getContainer()->getParameter( 'kernel.root_dir' ) . '/../web/' . $item->getBasename(),
-                        $output
-                    );
-                }
-                else if ( $item->isFile() )
-                {
-                    if ( in_array( $item->getBasename(), $this->blacklistedFiles ) )
+                    $webFolderName = $input->getOption( 'web-folder' );
+                    $webFolderName = !empty( $webFolderName ) ? $webFolderName : 'web';
+
+                    $destination = $this->getContainer()->getParameter( 'kernel.root_dir' ) . '/../' . $webFolderName . '/' . $item->getBasename();
+
+                    if ( !$this->fileSystem->exists( dirname( $destination ) ) )
                     {
+                        $output->writeln( 'Skipped creating the symlink for <comment>' . basename( $destination ) . '</comment> in <comment>' . dirname( $destination ) . '/</comment>. Folder does not exist!' );
                         continue;
                     }
 
-                    $this->verifyAndSymlinkFile(
-                        $item->getPathname(),
-                        $this->getContainer()->getParameter( 'kernel.root_dir' ) . '/../web/' . $item->getBasename(),
-                        $output
-                    );
+                    if ( $item->isDir() )
+                    {
+                        $this->verifyAndSymlinkDirectory(
+                            $item->getPathname(),
+                            $destination,
+                            $output
+                        );
+                    }
+                    else
+                    {
+                        $this->verifyAndSymlinkFile(
+                            $item->getPathname(),
+                            $destination,
+                            $output
+                        );
+                    }
                 }
             }
         }

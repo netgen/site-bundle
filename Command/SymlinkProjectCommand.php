@@ -44,7 +44,7 @@ class SymlinkProjectCommand extends SymlinkCommand
 
             $projectFilesPath = $bundle->getPath() . '/Resources/symlink';
 
-            if ( !$this->fileSystem->exists( $projectFilesPath ) )
+            if ( !$this->fileSystem->exists( $projectFilesPath ) || !is_dir( $projectFilesPath ) || is_link( $projectFilesPath ) )
             {
                 return;
             }

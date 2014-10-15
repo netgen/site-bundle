@@ -6,6 +6,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use DirectoryIterator;
 
 class SymlinkLegacyCommand extends SymlinkCommand
@@ -189,19 +191,22 @@ class SymlinkLegacyCommand extends SymlinkCommand
                         continue;
                     }
 
-                    $files = self::findFilesInDirectory( $item->getPathname() );
-                    foreach ( $files as $file )
+                    foreach( new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $item->getPathname() ) ) as $subItem )
                     {
-                        $filePath = $this->fileSystem->makePathRelative(
-                            realpath( dirname( $file ) ),
-                            $directory->getPath()
-                        ) . basename( $file );
+                        /** @var \SplFileInfo $subItem */
+                        if ( $subItem->isFile() && !$subItem->isLink() )
+                        {
+                            $filePath = $this->fileSystem->makePathRelative(
+                                realpath( $subItem->getPath() ),
+                                $directory->getPath()
+                            ) . $subItem->getBasename();
 
-                        $this->verifyAndSymlinkFile(
-                            $file,
-                            $this->getContainer()->getParameter( 'ezpublish_legacy.root_dir' ) . '/' . $filePath,
-                            $output
-                        );
+                            $this->verifyAndSymlinkFile(
+                                $subItem->getPathname(),
+                                $this->getContainer()->getParameter( 'ezpublish_legacy.root_dir' ) . '/' . $filePath,
+                                $output
+                            );
+                        }
                     }
                 }
                 else if ( $item->isDir() || $item->isFile() )

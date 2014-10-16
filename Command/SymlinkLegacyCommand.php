@@ -191,7 +191,7 @@ class SymlinkLegacyCommand extends SymlinkCommand
                         continue;
                     }
 
-                    foreach( new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $item->getPathname() ) ) as $subItem )
+                    foreach ( new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $item->getPathname() ) ) as $subItem )
                     {
                         /** @var \SplFileInfo $subItem */
                         if ( $subItem->isFile() && !$subItem->isLink() )

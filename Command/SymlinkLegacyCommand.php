@@ -80,7 +80,7 @@ class SymlinkLegacyCommand extends SymlinkCommand
 
             foreach ( new DirectoryIterator( $bundle->getPath() . '/ezpublish_legacy/' ) as $item )
             {
-                if ( !$item->isDir() || $item->isDot() || $item->isLink() )
+                if ( !$item->isDir() || $item->isDot() )
                 {
                     continue;
                 }

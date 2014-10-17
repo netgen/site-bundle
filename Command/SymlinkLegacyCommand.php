@@ -120,7 +120,7 @@ class SymlinkLegacyCommand extends SymlinkCommand
 
         foreach ( new DirectoryIterator( $legacyExtensionPath . '/root_' . $this->environment . '/settings/siteaccess/' ) as $item )
         {
-            if ( !$item->isDir() || $item->isDot() || $item->isLink() )
+            if ( !$item->isDir() || $item->isDot() )
             {
                 continue;
             }
@@ -143,7 +143,7 @@ class SymlinkLegacyCommand extends SymlinkCommand
         $legacyRootDir = $this->getContainer()->getParameter( 'ezpublish_legacy.root_dir' );
 
         $sourceFolder = $legacyExtensionPath . '/root_' . $this->environment . '/settings/override';
-        if ( !$this->fileSystem->exists( $sourceFolder ) || !is_dir( $sourceFolder ) || is_link( $sourceFolder ) )
+        if ( !$this->fileSystem->exists( $sourceFolder ) || !is_dir( $sourceFolder ) )
         {
             return;
         }

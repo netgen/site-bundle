@@ -67,13 +67,13 @@ class SymlinkProjectCommand extends SymlinkCommand
         $directories = array();
 
         $path = $projectFilesPath . '/root/';
-        if ( $this->fileSystem->exists( $path ) )
+        if ( $this->fileSystem->exists( $path ) && is_dir( $path ) )
         {
             $directories[] = new DirectoryIterator( $path );
         }
 
         $path = $projectFilesPath . '/root_' . $this->environment . '/';
-        if ( $this->fileSystem->exists( $path ) )
+        if ( $this->fileSystem->exists( $path ) && is_dir( $path ) )
         {
             $directories[] = new DirectoryIterator( $path );
         }

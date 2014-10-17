@@ -5,6 +5,7 @@ namespace Netgen\Bundle\MoreBundle\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Netgen\Bundle\MoreBundle\NetgenMoreProjectBundleInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -67,7 +68,7 @@ class SymlinkLegacyCommand extends SymlinkCommand
         $kernel = $this->getContainer()->get( 'kernel' );
         foreach ( $kernel->getBundles() as $bundle )
         {
-            if ( !in_array( 'Netgen\\Bundle\\MoreBundle\\NetgenMoreProjectBundleInterface', class_implements( $bundle ) ) )
+            if ( !$bundle instanceof NetgenMoreProjectBundleInterface )
             {
                 continue;
             }

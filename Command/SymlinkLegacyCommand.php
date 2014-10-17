@@ -165,13 +165,13 @@ class SymlinkLegacyCommand extends SymlinkCommand
         $directories = array();
 
         $path = $legacyExtensionPath . '/root/';
-        if ( $this->fileSystem->exists( $path ) )
+        if ( $this->fileSystem->exists( $path ) && is_dir( $path ) )
         {
             $directories[$bundlePath . '/Resources/symlink/root'] = new DirectoryIterator( $path );
         }
 
         $path = $legacyExtensionPath . '/root_' . $this->environment . '/';
-        if ( $this->fileSystem->exists( $path ) )
+        if ( $this->fileSystem->exists( $path ) && is_dir( $path ) )
         {
             $directories[$bundlePath . '/Resources/symlink/root_' . $this->environment] = new DirectoryIterator( $path );
         }

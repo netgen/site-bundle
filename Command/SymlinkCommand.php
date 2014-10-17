@@ -62,7 +62,7 @@ abstract class SymlinkCommand extends ContainerAwareCommand
 
         if ( is_link( $destination ) && $this->forceSymlinks )
         {
-            unlink( $destination );
+            $this->fileSystem->remove( $destination );
         }
 
         if ( is_file( $destination ) && !is_link( $destination ) )
@@ -116,7 +116,7 @@ abstract class SymlinkCommand extends ContainerAwareCommand
 
         if ( is_link( $destination ) && $this->forceSymlinks )
         {
-            unlink( $destination );
+            $this->fileSystem->remove( $destination );
         }
 
         if ( $this->fileSystem->exists( $destination ) )

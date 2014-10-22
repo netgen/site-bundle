@@ -28,5 +28,6 @@ class NetgenMoreExtension extends Extension
         $loader->load( 'fieldtypes.yml' );
         $loader->load( 'roles.yml' );
         $loader->load( 'services.yml' );
+        $loader->load( 'twig_services.yml' );
     }
 }

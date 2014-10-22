@@ -1,0 +1,14 @@
+parameters:
+    twig.extension.text.class: Twig_Extensions_Extension_Text
+    twig.extension.array.class: Twig_Extensions_Extension_Array
+
+services:
+    twig.extension.text:
+        class: %twig.extension.text.class%
+        tags:
+            - { name: twig.extension }
+
+    twig.extension.array:
+        class: %twig.extension.array.class%
+        tags:
+            - { name: twig.extension }

@@ -29,5 +29,49 @@ class NetgenMoreExtension extends Extension
         $loader->load( 'roles.yml' );
         $loader->load( 'services.yml' );
         $loader->load( 'twig_services.yml' );
+
+        $this->injectBlockMatchCustomControllers( $container );
+    }
+
+    /**
+     * Injects custom controllers to block view match config, used by overriden controller manager
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    public function injectBlockMatchCustomControllers( ContainerBuilder $container )
+    {
+        $siteAccessGroups = $container->getParameter( 'ezpublish.siteaccess.groups' );
+
+        if ( $container->hasParameter( 'ngmore.block_view' ) )
+        {
+            $newBlockViewConfig = $container->getParameter( 'ngmore.block_view' );
+            foreach ( $newBlockViewConfig as $siteAccess => $matchList )
+            {
+                if ( $container->hasParameter( 'ezsettings.' . $siteAccess . '.block_view' ) )
+                {
+                    $originalBlockViewConfig = $container->getParameter( 'ezsettings.' . $siteAccess . '.block_view' );
+
+                    $container->setParameter(
+                        'ezsettings.' . $siteAccess . '.block_view',
+                        array_merge_recursive( $originalBlockViewConfig, array( 'block' => $matchList ) )
+                    );
+                }
+                else if ( isset( $siteAccessGroups[$siteAccess] ) )
+                {
+                    foreach ( $siteAccessGroups[$siteAccess] as $groupSiteAccess )
+                    {
+                        if ( $container->hasParameter( 'ezsettings.' . $groupSiteAccess . '.block_view' ) )
+                        {
+                            $originalBlockViewConfig = $container->getParameter( 'ezsettings.' . $groupSiteAccess . '.block_view' );
+
+                            $container->setParameter(
+                                'ezsettings.' . $groupSiteAccess . '.block_view',
+                                array_merge_recursive( $originalBlockViewConfig, array( 'block' => $matchList ) )
+                            );
+                        }
+                    }
+                }
+            }
+        }
     }
 }

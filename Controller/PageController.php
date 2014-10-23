@@ -2,7 +2,7 @@
 
 namespace Netgen\Bundle\MoreBundle\Controller;
 
-use eZ\Publish\Core\MVC\Symfony\Controller\PageController as BasePageController;
+use eZ\Bundle\EzPublishCoreBundle\Controller\PageController as BasePageController;
 
 class PageController extends BasePageController
 {

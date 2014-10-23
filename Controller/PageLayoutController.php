@@ -53,10 +53,11 @@ class PageLayoutController extends Controller
      * @param string $region
      * @param string|bool $cssClass
      * @param array $params
+     * @param string $template
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function region( $layoutId, $region, $cssClass = false, $params = array() )
+    public function region( $layoutId, $region, $cssClass = false, $params = array(), $template = null )
     {
         $response = new Response();
         $response->setPublic()->setSharedMaxAge( 300 );
@@ -71,7 +72,7 @@ class PageLayoutController extends Controller
             if ( strtolower( $zone->identifier ) == strtolower( $region ) && !empty( $zone->blocks ) )
             {
                 return $this->render(
-                    'NetgenMoreBundle:parts:layout_region.html.twig',
+                    $template !== null ? $template : 'NetgenMoreBundle:parts:layout_region.html.twig',
                     array(
                         'zone' => $zone,
                         'region' => $region,

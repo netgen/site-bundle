@@ -3,28 +3,22 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller\PageController as BasePageController;
+use eZ\Publish\Core\FieldType\Page\Parts\Block;
 
 class PageController extends BasePageController
 {
     /**
-     * Renders the block with given $id.
+     * Render the block
      *
-     * This method can be used with ESI rendering strategy.
-     *
-     * @uses self::viewBlock()
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If block could not be found.
-     *
-     * @param mixed $id Block id
+     * @param \eZ\Publish\Core\FieldType\Page\Parts\Block $block
      * @param array $params
      * @param array $cacheSettings settings for the HTTP cache, 'smax-age' and
-     *              'max-age' are checked.
+     *        'max-age' are checked.
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewBlockById( $id, array $params = array(), array $cacheSettings = array() )
+    public function viewBlock( Block $block, array $params = array(), array $cacheSettings = array() )
     {
-        $block = $this->pageService->loadBlock( $id );
         $configResolver = $this->getConfigResolver();
 
         if ( !isset( $cacheSettings['smax-age'] ) )
@@ -43,13 +37,6 @@ class PageController extends BasePageController
             }
         }
 
-        $response = $this->viewBlock( $block, $params, $cacheSettings );
-
-        if ( isset( $block->customAttributes['parent_node'] ) )
-        {
-            $response->headers->set( 'X-Location-Id', (int)$block->customAttributes['parent_node'] );
-        }
-
-        return $response;
+        return parent::viewBlock( $block, $params, $cacheSettings );
     }
 }

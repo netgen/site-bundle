@@ -4,7 +4,7 @@ Netgen More Bundle installation instructions
 Requirements
 ------------
 
-* eZ Publish 5.3+ / eZ Publish Community Project 2014.07+
+* eZ Publish 5.4+ / eZ Publish Community Project 2014.09+
 
 Installation steps
 ------------------
@@ -18,7 +18,7 @@ Add the following to your composer.json and run `php composer.phar update netgen
     { "type": "composer", "url": "http://packagist.netgen.biz" }
 ],
 "require": {
-    "netgen/more-bundle": "dev-master"
+    "netgen/more-bundle": "~2.0.0"
 }
 ```
 
@@ -27,46 +27,19 @@ Add the following to your composer.json and run `php composer.phar update netgen
 Activate the bundle (together with other required bundles) in `ezpublish\EzPublishKernel.php` file.
 
 ```php
-use Netgen\Bundle\MoreBundle\NetgenMoreBundle;
-use Netgen\Bundle\MetadataBundle\NetgenMetadataBundle;
-use Netgen\Bundle\ContentTypeListBundle\NetgenContentTypeListBundle;
-use Netgen\Bundle\EnhancedSelectionBundle\NetgenEnhancedSelectionBundle;
-
-...
-
 public function registerBundles()
 {
-   $bundles = array(
-       new FrameworkBundle(),
-       ...
-       new NetgenMetadataBundle(),
-       new NetgenContentTypeListBundle(),
-       new NetgenEnhancedSelectionBundle(),
-       new NetgenMoreBundle()
-   );
-
    ...
+
+    $bundles[] = new \Netgen\Bundle\MetadataBundle\NetgenMetadataBundle();
+    $bundles[] = new \Netgen\Bundle\ContentTypeListBundle\NetgenContentTypeListBundle();
+    $bundles[] = new \Netgen\Bundle\EnhancedSelectionBundle\NetgenEnhancedSelectionBundle();
+    $bundles[] = new \Netgen\Bundle\MoreGeneratorBundle\NetgenMoreGeneratorBundle();
+    $bundles[] = new \Netgen\Bundle\MoreBundle\NetgenMoreBundle();
+
+    return $bundles;
 }
 ```
-
-### Edit configuration
-
-Put the following config in your `ezpublish/config/config.yml` file to be able to use legacy page layouts provided with the bundle:
-
-```yml
-ez_publish_legacy:
-    system:
-        YOUR_SITEACCESS_NAME:
-            templating:
-                view_layout: NetgenMoreBundle::pagelayout_legacy.html.twig
-                module_layout: NetgenMoreBundle::pagelayout_module.html.twig
-        YOUR_SITEACCESS_NAME:
-            templating:
-                view_layout: NetgenMoreBundle::pagelayout_legacy.html.twig
-                module_layout: NetgenMoreBundle::pagelayout_module.html.twig
-```
-
-Be sure to replace `YOUR_SITEACCESS_NAME` text with the name of your frontend siteaccess.
 
 ### Clear the caches
 

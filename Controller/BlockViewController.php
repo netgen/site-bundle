@@ -12,7 +12,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\FieldType\Page\Parts\Item;
 
-class BlockController extends Controller
+class BlockViewController extends Controller
 {
     /**
      * Renders the ContentGridDynamic block with given $id.

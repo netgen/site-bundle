@@ -16,9 +16,6 @@ parameters:
 
     netgen_more.data_collector.legacy_debug_data_collector.class: Netgen\Bundle\MoreBundle\DataCollector\LegacyDebugDataCollector
 
-    netgen_more.event_listener.block_view_controller_listener.class: Netgen\Bundle\MoreBundle\EventListener\BlockViewControllerListener
-    netgen_more.controller_manager.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Controller\Manager
-
 services:
     ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common.field_length:
         class: %ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common.field_length.class%
@@ -78,24 +75,3 @@ services:
             - @ezpublish_legacy.kernel
         tags:
             - { name: data_collector, template: "NetgenMoreBundle:Profiler:LegacyDebug.html.twig", id: "ngmore_legacy_debug" }
-
-    netgen_more.event_listener.block_view_controller_listener:
-        class: %netgen_more.event_listener.block_view_controller_listener.class%
-        arguments:
-            - @controller_resolver
-            - @ezpublish.controller_manager
-            - @ezpublish.fieldType.ezpage.pageService
-            - @logger
-        tags:
-            - { name: kernel.event_subscriber }
-
-    netgen_more.controller_manager:
-        class: %netgen_more.controller_manager.class%
-        arguments:
-            - @ezpublish.location_view.matcher_factory
-            - @ezpublish.content_view.matcher_factory
-            - @ezpublish.block_view.matcher_factory
-            - @logger
-
-    ezpublish.controller_manager:
-        alias: netgen_more.controller_manager

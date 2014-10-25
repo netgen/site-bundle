@@ -108,8 +108,7 @@ class BlockViewController extends Controller
                     array(
                         'blockId' => $block->id,
                         'contentId' => $searchHit->valueObject->contentInfo->id,
-                        'locationId' => $searchHit->valueObject->id,
-                        'priority' => $searchHit->valueObject->priority
+                        'locationId' => $searchHit->valueObject->id
                     )
                 );
             },

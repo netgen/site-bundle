@@ -24,6 +24,9 @@ class BlockViewController extends Controller
      * @param array $cacheSettings settings for the HTTP cache, 'smax-age' and
      *              'max-age' are checked.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If block has an invalid type or parent_node
+     *         custom attribute is missing
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function viewContentGridDynamicBlockById( $id, array $params = array(), array $cacheSettings = array() )
@@ -160,6 +163,8 @@ class BlockViewController extends Controller
      * @param string $advancedSortField
      * @param string $sortOrder
      * @param \eZ\Publish\API\Repository\Values\Content\Location $parentLocation
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If advanced sort field has an invalid value
      *
      * @return array
      */

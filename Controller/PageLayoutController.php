@@ -29,9 +29,11 @@ class PageLayoutController extends Controller
             function() use ( $siteInfoContent )
             {
                 $object = eZContentObject::fetch( $siteInfoContent->id );
-                $attributes = array_values( $object->fetchAttributesByIdentifier( array( 'main_menu' ) ) );
 
+                /** @var \eZContentObjectAttribute[] $attributes */
+                $attributes = array_values( $object->fetchAttributesByIdentifier( array( 'main_menu' ) ) );
                 $attributeContent = $attributes[0]->content();
+
                 return $attributeContent['relation_list'];
             }
         );

@@ -5,6 +5,7 @@ parameters:
     ezpublish.persistence.legacy.search.gateway.criterion_field_value_handler.composite.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\FieldValue\Handler\Composite
     ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common.field_length.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler\FieldLength
 
+    netgen_more.controller.full_view.class: Netgen\Bundle\MoreBundle\Controller\FullViewController
     netgen_more.controller.block_view.class: Netgen\Bundle\MoreBundle\Controller\BlockViewController
     netgen_more.controller.page_layout.class: Netgen\Bundle\MoreBundle\Controller\PageLayoutController
 
@@ -24,6 +25,10 @@ services:
         tags:
             - {name: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.content}
             - {name: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.location}
+
+    netgen_more.controller.full_view:
+        class: %netgen_more.controller.full_view.class%
+        parent: ezpublish.controller.base
 
     netgen_more.controller.block_view:
         class: %netgen_more.controller.block_view.class%

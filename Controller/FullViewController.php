@@ -7,9 +7,62 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use eZ\Publish\Core\FieldType\Relation\Value as RelationValue;
 use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
+use eZ\Publish\Core\Pagination\Pagerfanta\LocationSearchAdapter;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use Pagerfanta\Pagerfanta;
 
 class FullViewController extends Controller
 {
+    /**
+     * Action for viewing location with ng_category content type identifier
+     *
+     * @param mixed $locationId
+     * @param string $viewType
+     * @param boolean $layout
+     * @param array $params
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewNgCategoryLocation( $locationId, $viewType, $layout = false, array $params = array() )
+    {
+        $response = $this->checkCategoryRedirect( $locationId );
+        if ( $response instanceof Response )
+        {
+            return $response;
+        }
+
+        $featuredLocations = array();
+
+        $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
+
+        $criterions = array(
+            new Criterion\Subtree( $location->pathString ),
+            new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
+            new Criterion\LogicalNot( new Criterion\LocationId( $location->id ) )
+        );
+
+        $query = new LocationQuery();
+        $query->criterion = new Criterion\LogicalAnd( $criterions );
+
+        $pager = new Pagerfanta(
+            new LocationSearchAdapter(
+                $query,
+                $this->getRepository()->getSearchService()
+            )
+        );
+
+        return $this->get( 'ez_content' )->viewLocation(
+            $locationId,
+            $viewType,
+            $layout,
+            $params + array(
+                'featured_locations' => $featuredLocations,
+                'pager' => $pager
+            )
+        );
+    }
+
     /**
      * Action for viewing location with ng_landing_page content type identifier
      *

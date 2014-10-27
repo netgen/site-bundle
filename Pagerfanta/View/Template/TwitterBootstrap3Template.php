@@ -32,4 +32,24 @@ class TwitterBootstrap3Template extends BaseTwitterBootstrap3Template
     {
         return '<div class="text-center">' . parent::container() . '</div>';
     }
+
+    /**
+     * Returns HTML code for previous link when it is disabled
+     *
+     * @return string
+     */
+    public function previousDisabled()
+    {
+        return '';
+    }
+
+    /**
+     * Returns HTML code for next link when it is disabled
+     *
+     * @return string
+     */
+    public function nextDisabled()
+    {
+        return '';
+    }
 }

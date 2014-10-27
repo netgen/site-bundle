@@ -61,14 +61,14 @@ class BlockViewController extends Controller
             }
         }
 
-        $offset = isset( $block->customAttributes['offset'] ) ? (int)$block->customAttributes['offset'] : 0;
-        $limit = isset( $block->customAttributes['limit'] ) ? (int)$block->customAttributes['limit'] : $defaultLimit;
+        $offset = !empty( $block->customAttributes['offset'] ) ? (int)$block->customAttributes['offset'] : 0;
+        $limit = !empty( $block->customAttributes['limit'] ) ? (int)$block->customAttributes['limit'] : $defaultLimit;
 
-        $sortField = isset( $block->customAttributes['advanced_order'] ) ?
+        $sortField = !empty( $block->customAttributes['advanced_order'] ) ?
             $block->customAttributes['advanced_order'] : 'parent_node_sort_array';
 
-        $advancedSortField = isset( $block->customAttributes['advanced_custom_order'] ) ?
-            $block->customAttributes['advanced_custom_order'] : null;
+        $advancedSortField = !empty( $block->customAttributes['advanced_custom_order'] ) ?
+            $block->customAttributes['advanced_custom_order'] : '';
 
         $sortOrder = Query::SORT_ASC;
         if ( isset( $block->customAttributes['advanced_order_direction'] )
@@ -93,7 +93,7 @@ class BlockViewController extends Controller
         {
             $contentTypeFilterCriterion = $this->getContentTypeFilterCriterion(
                 explode( ',', $block->customAttributes['advanced_class_filter_array'] ),
-                isset( $block->customAttributes['advanced_class_filter_type'] ) ?
+                !empty( $block->customAttributes['advanced_class_filter_type'] ) ?
                     $block->customAttributes['advanced_class_filter_type'] :
                     'include'
             );

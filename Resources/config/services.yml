@@ -10,9 +10,6 @@ parameters:
     netgen_more.helper.sort_clause_helper.class: Netgen\Bundle\MoreBundle\Helper\SortClauseHelper
     netgen_more.helper.layout_helper.class: Netgen\Bundle\MoreBundle\Helper\LayoutHelper
 
-    netgen_more.templating.global_helper.class: Netgen\Bundle\MoreBundle\Templating\GlobalHelper
-    netgen_more.templating.twig.extension.class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\NetgenMoreExtension
-
     netgen_more.data_collector.legacy_debug_data_collector.class: Netgen\Bundle\MoreBundle\DataCollector\LegacyDebugDataCollector
 
     netgen_more.limitation_type.function_list.class: Netgen\Bundle\MoreBundle\Core\Limitation\FunctionListLimitationType
@@ -62,24 +59,6 @@ services:
             - @netgen_more.helper.path_helper
             - @ezpublish.config.resolver
 
-    netgen_more.templating.global_helper:
-        class: %netgen_more.templating.global_helper.class%
-        arguments:
-            - @netgen_more.helper.site_info_helper
-            - @netgen_more.helper.layout_helper
-            - @ezpublish.config.resolver
-        calls:
-            - [setRequest, [@?request=]]
-
-    netgen_more.templating.twig.extension:
-        class: %netgen_more.templating.twig.extension.class%
-        arguments:
-            - @ezpublish.api.repository
-            - @netgen_more.helper.path_helper
-            - @netgen_more.templating.global_helper
-            - @ezpublish.locale.converter
-        tags:
-            - { name: twig.extension }
 
     netgen_more.data_collector.legacy_debug_data_collector:
         class: %netgen_more.data_collector.legacy_debug_data_collector.class%

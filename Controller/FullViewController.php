@@ -78,11 +78,14 @@ class FullViewController extends Controller
             )
         );
 
+        $pager->setNormalizeOutOfRangePages( true );
+
         /** @var \eZ\Publish\Core\FieldType\Integer\Value $pageLimitValue */
         $pageLimitValue = $content->getFieldValue( 'page_limit' );
+        $pager->setMaxPerPage( $pageLimitValue->value > 0 ? (int)$pageLimitValue->value : 12 );
 
-        $pager->setMaxPerPage( $pageLimitValue->value > 0 ? $pageLimitValue->value : 12 );
-        $pager->setCurrentPage( $request->get( 'page', 1 ) );
+        $currentPage = (int)$request->get( 'page', 1 );
+        $pager->setCurrentPage( $currentPage > 0 ? $currentPage : 1 );
 
         $query->sortClauses = array(
             $this->container->get( 'netgen_more.helper.sort_clause_helper' )->getSortClauseBySortField(

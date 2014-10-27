@@ -3,6 +3,7 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use eZ\Publish\Core\FieldType\Relation\Value as RelationValue;
@@ -17,6 +18,7 @@ class FullViewController extends Controller
     /**
      * Action for viewing location with ng_category content type identifier
      *
+     * @param \Symfony\Component\HttpFoundation\Request $request
      * @param mixed $locationId
      * @param string $viewType
      * @param boolean $layout
@@ -24,7 +26,7 @@ class FullViewController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewNgCategoryLocation( $locationId, $viewType, $layout = false, array $params = array() )
+    public function viewNgCategoryLocation( Request $request, $locationId, $viewType, $layout = false, array $params = array() )
     {
         $response = $this->checkCategoryRedirect( $locationId );
         if ( $response instanceof Response )
@@ -32,18 +34,59 @@ class FullViewController extends Controller
             return $response;
         }
 
-        $featuredLocations = array();
-
         $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
+        $content = $this->getRepository()->getContentService()->loadContent( $location->contentId );
+        $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
+
+        $featuredLocations = array();
 
         $criterions = array(
             new Criterion\Subtree( $location->pathString ),
             new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
-            new Criterion\LogicalNot( new Criterion\LocationId( $location->id ) )
+            new Criterion\LogicalNot( new Criterion\LocationId( $location->id ) ),
+
         );
+
+        if ( !$content->getFieldValue( 'fetch_subtree' )->bool )
+        {
+            $criterions[] = new Criterion\Location\Depth( Criterion\Operator::EQ, $location->depth + 1 );
+        }
+
+        if ( !$fieldHelper->isFieldEmpty( $content, 'children_class_filter_include' ) )
+        {
+            $criterions[] = new Criterion\ContentTypeIdentifier(
+                array_map(
+                    'trim',
+                    explode( ',', $content->getFieldValue( 'children_class_filter_include' ) )
+                )
+            );
+        }
+        else if ( $this->getConfigResolver()->hasParameter( 'ChildrenNodeList.ExcludedClasses', 'content' ) )
+        {
+            $criterions[] = new Criterion\LogicalNot(
+                new Criterion\ContentTypeIdentifier(
+                    $this->getConfigResolver()->getParameter( 'ChildrenNodeList.ExcludedClasses', 'content' )
+                )
+            );
+        }
 
         $query = new LocationQuery();
         $query->criterion = new Criterion\LogicalAnd( $criterions );
+
+        $viewParameters = $request->attributes->get( 'viewParameters' );
+        /** @var \eZ\Publish\Core\FieldType\Integer\Value $pageLimitValue */
+        $pageLimitValue = $content->getFieldValue( 'page_limit' );
+
+        $query->offset = isset( $viewParameters['offset'] ) && $viewParameters['offset'] > 0 ?
+            (int)$viewParameters['offset'] : 0;
+        $query->limit = $pageLimitValue->value > 0 ? $pageLimitValue->value : 12;
+
+        $query->sortClauses = array(
+            $this->container->get( 'netgen_more.helper.sort_clause_helper' )->getSortClauseBySortField(
+                $location->sortField,
+                $location->sortOrder
+            )
+        );
 
         $pager = new Pagerfanta(
             new LocationSearchAdapter(

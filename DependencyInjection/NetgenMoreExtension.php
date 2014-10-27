@@ -29,5 +29,6 @@ class NetgenMoreExtension extends Extension
         $loader->load( 'roles.yml' );
         $loader->load( 'services.yml' );
         $loader->load( 'twig_services.yml' );
+        $loader->load( 'pagerfanta_services.yml' );
     }
 }

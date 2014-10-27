@@ -1,0 +1,9 @@
+parameters:
+    netgen_more.pagerfanta.view.netgen_more_bootstrap3.class: Netgen\Bundle\MoreBundle\Pagerfanta\View\NetgenMoreBootstrap3View
+
+services:
+    netgen_more.pagerfanta.view.netgen_more_bootstrap3:
+        class: %netgen_more.pagerfanta.view.netgen_more_bootstrap3.class%
+        parent: pagerfanta.view.twitter_bootstrap3
+        tags:
+            - {name: pagerfanta.view, alias: netgen_more_bootstrap3}

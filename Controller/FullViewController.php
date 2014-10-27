@@ -71,6 +71,13 @@ class FullViewController extends Controller
         $query = new LocationQuery();
         $query->criterion = new Criterion\LogicalAnd( $criterions );
 
+        $query->sortClauses = array(
+            $this->container->get( 'netgen_more.helper.sort_clause_helper' )->getSortClauseBySortField(
+                $location->sortField,
+                $location->sortOrder
+            )
+        );
+
         $pager = new Pagerfanta(
             new LocationSearchAdapter(
                 $query,
@@ -86,13 +93,6 @@ class FullViewController extends Controller
 
         $currentPage = (int)$request->get( 'page', 1 );
         $pager->setCurrentPage( $currentPage > 0 ? $currentPage : 1 );
-
-        $query->sortClauses = array(
-            $this->container->get( 'netgen_more.helper.sort_clause_helper' )->getSortClauseBySortField(
-                $location->sortField,
-                $location->sortOrder
-            )
-        );
 
         return $this->get( 'ez_content' )->viewLocation(
             $locationId,

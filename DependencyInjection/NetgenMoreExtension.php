@@ -25,10 +25,10 @@ class NetgenMoreExtension extends Extension
         $loader = new Loader\YamlFileLoader( $container, new FileLocator( __DIR__ . '/../Resources/config' ) );
 
         $loader->load( 'parameters.yml' );
-        $loader->load( 'fieldtypes.yml' );
-        $loader->load( 'roles.yml' );
+        $loader->load( 'field_types.yml' );
+        $loader->load( 'pagerfanta.yml' );
+        $loader->load( 'twig.yml' );
+        $loader->load( 'kernel.yml' );
         $loader->load( 'services.yml' );
-        $loader->load( 'twig_services.yml' );
-        $loader->load( 'pagerfanta_services.yml' );
     }
 }

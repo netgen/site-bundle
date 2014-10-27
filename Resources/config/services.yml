@@ -1,9 +1,5 @@
 parameters:
-    ezpublish.controller.page.view.class: Netgen\Bundle\MoreBundle\Controller\PageController
-
-    ezpublish.persistence.legacy.search.gateway.criterion_handler.common.field.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\Field
-    ezpublish.persistence.legacy.search.gateway.criterion_field_value_handler.composite.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\FieldValue\Handler\Composite
-    ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common.field_length.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler\FieldLength
+    netgen_more.persistence.legacy.search.gateway.sort_clause_handler.common.field_length.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler\FieldLength
 
     netgen_more.controller.full_view.class: Netgen\Bundle\MoreBundle\Controller\FullViewController
     netgen_more.controller.block_view.class: Netgen\Bundle\MoreBundle\Controller\BlockViewController
@@ -19,9 +15,11 @@ parameters:
 
     netgen_more.data_collector.legacy_debug_data_collector.class: Netgen\Bundle\MoreBundle\DataCollector\LegacyDebugDataCollector
 
+    netgen_more.limitation_type.function_list.class: Netgen\Bundle\MoreBundle\Core\Limitation\FunctionListLimitationType
+
 services:
-    ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common.field_length:
-        class: %ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common.field_length.class%
+    netgen_more.persistence.legacy.search.gateway.sort_clause_handler.common.field_length:
+        class: %netgen_more.persistence.legacy.search.gateway.sort_clause_handler.common.field_length.class%
         parent: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common.field
         tags:
             - {name: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.content}
@@ -88,4 +86,10 @@ services:
         arguments:
             - @ezpublish_legacy.kernel
         tags:
-            - { name: data_collector, template: "NetgenMoreBundle:Profiler:LegacyDebug.html.twig", id: "ngmore_legacy_debug" }
+            - { name: data_collector, template: 'NetgenMoreBundle:Profiler:LegacyDebug.html.twig', id: 'ngmore_legacy_debug' }
+
+    netgen_more.limitation_type.function_list:
+        class: %netgen_more.limitation_type.function_list.class%
+        arguments: [@ezpublish.api.persistence_handler]
+        tags:
+            - {name: ezpublish.limitationType, alias: FunctionList}

@@ -18,6 +18,16 @@ class NetgenMoreBootstrap3View extends TwitterBootstrap3View
     }
 
     /**
+     * Sets the default proximity
+     *
+     * @return int
+     */
+    protected function getDefaultProximity()
+    {
+        return 2;
+    }
+
+    /**
      * Returns the canonical name.
      *
      * @return string The canonical name.

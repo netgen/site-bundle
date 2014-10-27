@@ -38,8 +38,6 @@ class FullViewController extends Controller
         $content = $this->getRepository()->getContentService()->loadContent( $location->contentId );
         $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
 
-        $featuredLocations = array();
-
         $criterions = array(
             new Criterion\Subtree( $location->pathString ),
             new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
@@ -73,13 +71,18 @@ class FullViewController extends Controller
         $query = new LocationQuery();
         $query->criterion = new Criterion\LogicalAnd( $criterions );
 
-        $viewParameters = $request->attributes->get( 'viewParameters' );
+        $pager = new Pagerfanta(
+            new LocationSearchAdapter(
+                $query,
+                $this->getRepository()->getSearchService()
+            )
+        );
+
         /** @var \eZ\Publish\Core\FieldType\Integer\Value $pageLimitValue */
         $pageLimitValue = $content->getFieldValue( 'page_limit' );
 
-        $query->offset = isset( $viewParameters['offset'] ) && $viewParameters['offset'] > 0 ?
-            (int)$viewParameters['offset'] : 0;
-        $query->limit = $pageLimitValue->value > 0 ? $pageLimitValue->value : 12;
+        $pager->setMaxPerPage( $pageLimitValue->value > 0 ? $pageLimitValue->value : 12 );
+        $pager->setCurrentPage( $request->get( 'page', 1 ) );
 
         $query->sortClauses = array(
             $this->container->get( 'netgen_more.helper.sort_clause_helper' )->getSortClauseBySortField(
@@ -88,19 +91,11 @@ class FullViewController extends Controller
             )
         );
 
-        $pager = new Pagerfanta(
-            new LocationSearchAdapter(
-                $query,
-                $this->getRepository()->getSearchService()
-            )
-        );
-
         return $this->get( 'ez_content' )->viewLocation(
             $locationId,
             $viewType,
             $layout,
             $params + array(
-                'featured_locations' => $featuredLocations,
                 'pager' => $pager
             )
         );

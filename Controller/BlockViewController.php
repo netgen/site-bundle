@@ -51,8 +51,18 @@ class BlockViewController extends Controller
         $parentLocationId = $block->customAttributes['parent_node'];
         $parentLocation = $this->getRepository()->getLocationService()->loadLocation( $parentLocationId );
 
+        $defaultLimit = 10;
+        if ( isset( $params['itemLimit'] ) )
+        {
+            $itemLimit = (int)$params['itemLimit'];
+            if ( $itemLimit > 0 )
+            {
+                $defaultLimit = $itemLimit;
+            }
+        }
+
         $offset = isset( $block->customAttributes['offset'] ) ? (int)$block->customAttributes['offset'] : 0;
-        $limit = isset( $block->customAttributes['limit'] ) ? (int)$block->customAttributes['limit'] : 10;
+        $limit = isset( $block->customAttributes['limit'] ) ? (int)$block->customAttributes['limit'] : $defaultLimit;
 
         $sortField = isset( $block->customAttributes['advanced_order'] ) ?
             $block->customAttributes['advanced_order'] : 'parent_node_sort_array';

@@ -74,13 +74,14 @@ class PathHelper
 
         for ( $i = 0; $i < count( $path ); $i++ )
         {
-            $location = $this->locationService->loadLocation( $path[$i] );
             // if root location hasn't been found yet
             if ( !$isRootLocation )
             {
                 // If we reach the root location, we begin to add item to the path array from it
-                if ( $location->id == $rootLocationId )
+                if ( $path[$i] == $rootLocationId )
                 {
+                    $location = $this->locationService->loadLocation( $path[$i] );
+
                     $isRootLocation = true;
                     $this->pathArray[] = array(
                         'text' => $this->translationHelper->getTranslatedContentNameByContentInfo( $location->contentInfo ),
@@ -93,6 +94,8 @@ class PathHelper
             // The root location has already been reached, so we can add items to the path array
             else
             {
+                $location = $this->locationService->loadLocation( $path[$i] );
+
                 $this->pathArray[] = array(
                     'text' => $this->translationHelper->getTranslatedContentNameByContentInfo( $location->contentInfo ),
                     'url' => $location->id != $locationId ? $this->router->generate( $location ) : false,

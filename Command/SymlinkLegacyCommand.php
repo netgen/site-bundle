@@ -90,15 +90,18 @@ class SymlinkLegacyCommand extends SymlinkCommand
                     continue;
                 }
 
-                $legacyExtensions[$bundle->getPath()] = $item->getPathname();
+                $legacyExtensions[] = array(
+                    'bundle_path' => $bundle->getPath(),
+                    'legacy_extension_path' => $item->getPathname()
+                );
             }
         }
 
-        foreach ( $legacyExtensions as $bundlePath => $legacyExtensionPath )
+        foreach ( $legacyExtensions as $legacyExtension )
         {
-            $this->symlinkLegacyExtensionSiteAccesses( $legacyExtensionPath, $input, $output );
-            $this->symlinkLegacyExtensionOverride( $legacyExtensionPath, $input, $output );
-            $this->symlinkLegacyExtensionFiles( $bundlePath, $legacyExtensionPath, $input, $output );
+            $this->symlinkLegacyExtensionSiteAccesses( $legacyExtension['legacy_extension_path'], $input, $output );
+            $this->symlinkLegacyExtensionOverride( $legacyExtension['legacy_extension_path'], $input, $output );
+            $this->symlinkLegacyExtensionFiles( $legacyExtension['bundle_path'], $legacyExtension['legacy_extension_path'], $input, $output );
         }
     }
 

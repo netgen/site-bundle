@@ -27,7 +27,7 @@ class NetgenMoreExtension extends Extension
         $loader->load( 'parameters.yml' );
         $loader->load( 'field_types.yml' );
         $loader->load( 'pagerfanta.yml' );
-        $loader->load( 'twig.yml' );
+        $loader->load( 'templating.yml' );
         $loader->load( 'kernel.yml' );
         $loader->load( 'services.yml' );
     }

@@ -200,18 +200,10 @@ class SymlinkLegacyCommand extends SymlinkCommand
                         /** @var \SplFileInfo $subItem */
                         if ( $subItem->isFile() && !$subItem->isLink() )
                         {
-                            // Allow filename to have .patched at the end of string (dehctap. in reverse file name)
-                            // to work around eZ legacy autoload generator warning about duplicate class names
-                            $fileName = $subItem->getBasename();
-                            if ( strpos( strrev( $fileName ), 'dehctap.' ) === 0 )
-                            {
-                                $fileName = str_replace( '.patched', '', $fileName );
-                            }
-
                             $filePath = $this->fileSystem->makePathRelative(
                                 realpath( $subItem->getPath() ),
                                 $directory->getPath()
-                            ) . $fileName;
+                            ) . $subItem->getBasename();
 
                             $this->verifyAndSymlinkFile(
                                 $subItem->getPathname(),

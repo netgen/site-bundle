@@ -213,11 +213,28 @@ class SymlinkLegacyCommand extends SymlinkCommand
                                 $directory->getPath()
                             ) . $fileName;
 
-                            $this->verifyAndSymlinkFile(
-                                $subItem->getPathname(),
-                                $this->getContainer()->getParameter( 'ezpublish_legacy.root_dir' ) . '/' . $filePath,
-                                $output
-                            );
+                            $filePath = $this->getContainer()->getParameter( 'ezpublish_legacy.root_dir' ) . '/' . $filePath;
+
+                            if ( $this->fileSystem->exists( $filePath ) && is_file( $filePath ) && !is_link( $filePath ) )
+                            {
+                                // If the destination is a real file, we'll just overwrite it, with backup
+                                // but only if it differs from the original
+                                if ( md5( file_get_contents( $subItem->getPathname() ) ) == md5( file_get_contents( $filePath ) ) )
+                                {
+                                    continue;
+                                }
+
+                                $this->fileSystem->copy( $filePath, $filePath . '.backup.' . date( 'Y-m-d-H-i-s' ), true );
+                                $this->fileSystem->copy( $subItem->getPathname(), $filePath, true );
+                            }
+                            else if ( !$this->fileSystem->exists( $filePath ) || is_link( $filePath ) )
+                            {
+                                $this->verifyAndSymlinkFile(
+                                    $subItem->getPathname(),
+                                    $filePath,
+                                    $output
+                                );
+                            }
                         }
                     }
                 }

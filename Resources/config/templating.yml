@@ -1,6 +1,7 @@
 parameters:
     twig.extension.text.class: Twig_Extensions_Extension_Text
     twig.extension.array.class: Twig_Extensions_Extension_Array
+    twig.extension.date.class: Twig_Extensions_Extension_Date
 
     netgen_more.templating.converter.user.class: Netgen\Bundle\MoreBundle\Templating\Converter\UserConverter
     netgen_more.templating.global_helper.class: Netgen\Bundle\MoreBundle\Templating\GlobalHelper
@@ -14,6 +15,11 @@ services:
 
     twig.extension.array:
         class: %twig.extension.array.class%
+        tags:
+            - { name: twig.extension }
+
+    twig.extension.date:
+        class: %twig.extension.date.class%
         tags:
             - { name: twig.extension }
 

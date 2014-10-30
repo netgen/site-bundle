@@ -54,9 +54,9 @@ abstract class SymlinkCommand extends ContainerAwareCommand
             $this->fileSystem->mkdir( dirname( $destination ), 0755 );
         }
 
-        if ( $this->fileSystem->exists( $destination ) && !is_file( $destination ) )
+        if ( $this->fileSystem->exists( $destination ) && !is_link( $destination ) )
         {
-            $output->writeln( '<comment>' . basename( $destination ) . '</comment> already exists in <comment>' . dirname( $destination ) . '/</comment> and is not a file/symlink. Skipping...' );
+            $output->writeln( '<comment>' . basename( $destination ) . '</comment> already exists in <comment>' . dirname( $destination ) . '/</comment> and is not a symlink. Skipping...' );
             return;
         }
 
@@ -65,28 +65,9 @@ abstract class SymlinkCommand extends ContainerAwareCommand
             $this->fileSystem->remove( $destination );
         }
 
-        if ( is_file( $destination ) && !is_link( $destination ) )
-        {
-            if ( $this->fileSystem->exists( $destination . '.original' ) )
-            {
-                $output->writeln( 'Cannot create backup file <comment>' . basename( $destination ) . '.original</comment> in <comment>' . dirname( $destination ) . '/</comment>. Skipping...' );
-                return;
-            }
-
-            $this->fileSystem->rename( $destination, $destination . '.original' );
-        }
-
         if ( $this->fileSystem->exists( $destination ) )
         {
-            if ( is_link( $destination ) )
-            {
-                $output->writeln( 'Skipped creating the symlink for <comment>' . basename( $destination ) . '</comment> in <comment>' . dirname( $destination ) . '/</comment>. Symlink already exists!' );
-            }
-            else
-            {
-                $output->writeln( 'Skipped creating the symlink for <comment>' . basename( $destination ) . '</comment> in <comment>' . dirname( $destination ) . '/</comment> due to an unknown error.' );
-            }
-
+            $output->writeln( 'Skipped creating the symlink for <comment>' . basename( $destination ) . '</comment> in <comment>' . dirname( $destination ) . '/</comment>. Symlink already exists!' );
             return;
         }
 

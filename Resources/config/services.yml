@@ -14,6 +14,8 @@ parameters:
 
     netgen_more.limitation_type.function_list.class: Netgen\Bundle\MoreBundle\Core\Limitation\FunctionListLimitationType
 
+    netgen_more.routing.urlalias_router.class: Netgen\Bundle\MoreBundle\Routing\UrlAliasRouter
+
 services:
     netgen_more.persistence.legacy.search.gateway.sort_clause_handler.common.field_length:
         class: %netgen_more.persistence.legacy.search.gateway.sort_clause_handler.common.field_length.class%
@@ -72,3 +74,17 @@ services:
         arguments: [@ezpublish.api.persistence_handler]
         tags:
             - {name: ezpublish.limitationType, alias: FunctionList}
+
+    netgen_more.routing.urlalias_router:
+        class: %netgen_more.routing.urlalias_router.class%
+        arguments:
+            - @ezpublish.api.service.location
+            - @ezpublish.api.service.url_alias
+            - @ezpublish.api.service.content
+            - @ezpublish.urlalias_generator
+            - @?router.request_context
+            - @?logger
+        calls:
+            - [setConfigResolver, [@ezpublish.config.resolver]]
+        tags:
+            - {name: router, priority: 200}

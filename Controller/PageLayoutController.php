@@ -41,8 +41,8 @@ class PageLayoutController extends Controller
         return $this->render(
             $template !== null ? $template : 'NetgenMoreBundle:menu:relation_menu.html.twig',
             array(
-                'relationList' => $relationList,
-                'activeLocationId' => $activeLocationId
+                'relation_list' => $relationList,
+                'active_location_id' => $activeLocationId
             ),
             $response
         );
@@ -78,7 +78,7 @@ class PageLayoutController extends Controller
                     array(
                         'zone' => $zone,
                         'region' => $region,
-                        'cssClass' => $cssClass,
+                        'css_class' => $cssClass,
                         'params' => $params
                     ),
                     $response

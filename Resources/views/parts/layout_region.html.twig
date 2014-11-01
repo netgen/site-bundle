@@ -1,3 +1,3 @@
-<section class="region zone-{{ zone.identifier|lower }}{% if cssClass is defined and cssClass is not empty %} {{ cssClass }}{% endif %}">
-    {% include "NetgenMoreBundle:parts:zone_content.html.twig" with { "zone": zone } %}
+<section class="region zone-{{ zone.identifier|lower }} {{ css_class|default( '' ) }}">
+    {% include 'NetgenMoreBundle:parts:zone_content.html.twig' with { 'zone': zone } %}
 </section>

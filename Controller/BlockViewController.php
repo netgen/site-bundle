@@ -3,6 +3,7 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -49,7 +50,13 @@ class BlockViewController extends Controller
         }
 
         $parentLocationId = $block->customAttributes['parent_node'];
-        $parentLocation = $this->getRepository()->getLocationService()->loadLocation( $parentLocationId );
+        $repository = $this->getRepository();
+        $parentLocation = $repository->sudo(
+            function ( Repository $repository ) use ( $parentLocationId )
+            {
+                return $repository->getLocationService()->loadLocation( $parentLocationId );
+            }
+        );
 
         $defaultLimit = 10;
         if ( isset( $params['itemLimit'] ) )

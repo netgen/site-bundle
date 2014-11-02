@@ -16,3 +16,25 @@
     {% endif %}
 {% endspaceless %}
 {% endblock %}
+
+{% block ezgmaplocation_field %}
+{% spaceless %}
+    {% set map_height = map_height|default( 500 ) %}
+    {% set zoom = zoom|default( false ) %}
+    {% set map_type = map_type|default( false ) %}
+
+    {% set latitude = field.value.latitude|default( false ) %}
+    {% set longitude = field.value.longitude|default( false ) %}
+
+    {% include
+        'NetgenMoreBundle:parts:google_maps.html.twig' with {
+            'container_id': field.id,
+            'latitude': latitude,
+            'longitude': longitude,
+            'map_height': map_height,
+            'zoom': zoom,
+            'map_type': map_type
+        }
+    %}
+{% endspaceless %}
+{% endblock %}

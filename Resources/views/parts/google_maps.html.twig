@@ -33,14 +33,14 @@
 
 <script type="text/javascript">
     var mapOptions = {
-        {% if container_id is defined %}containerId: "{{ container_id|raw|escape( 'js' ) }}",{% endif %}
-        {% if latitude is defined %}latitude: {{ latitude|raw|escape( 'js' ) }},{% endif %}
-        {% if longitude is defined %}longitude: {{ longitude|raw|escape( 'js' ) }},{% endif %}
-        {% if zoom is defined %}zoom: {{ zoom|raw|escape( 'js' ) }},{% endif %}
-        {% if map_type is defined %}mapType: "{{ map_type|raw|escape( 'js' ) }}"{% endif %}
+        {% if container_id is defined and container_id is not empty %}containerId: "{{ container_id|raw|escape( 'js' ) }}",{% endif %}
+        {% if latitude is defined and latitude is not empty %}latitude: {{ latitude|raw|escape( 'js' ) }},{% endif %}
+        {% if longitude is defined and longitude is not empty %}longitude: {{ longitude|raw|escape( 'js' ) }},{% endif %}
+        {% if zoom is defined and zoom is not empty %}zoom: {{ zoom|raw|escape( 'js' ) }},{% endif %}
+        {% if map_type is defined and map_type is not empty %}mapType: "{{ map_type|raw|escape( 'js' ) }}"{% endif %}
     };
 
     google.maps.event.addDomListener(window, 'load', function(){ initializeGoogleMaps( mapOptions ); });
 </script>
 
-<div id="map-canvas-{% if container_id is defined %}{{ container_id|raw|escape( 'js' ) }}{% else %}0{% endif %}" class="google-maps" style="height:{% if map_height is defined %}{{ map_height|raw|escape( 'js' ) }}{% else %}560{% endif %}px; width:100%;"></div>
+<div id="map-canvas-{{ container_id|default( 0 )|raw|escape( 'js' ) }}" class="google-maps" style="height:{{ map_height|default( 560 )|raw|escape( 'js' ) }}px; width:100%;"></div>

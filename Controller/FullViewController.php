@@ -41,8 +41,7 @@ class FullViewController extends Controller
         $criterions = array(
             new Criterion\Subtree( $location->pathString ),
             new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
-            new Criterion\LogicalNot( new Criterion\LocationId( $location->id ) ),
-
+            new Criterion\LogicalNot( new Criterion\LocationId( $location->id ) )
         );
 
         if ( !$content->getFieldValue( 'fetch_subtree' )->bool )

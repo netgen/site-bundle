@@ -4,7 +4,7 @@ Netgen More Bundle installation instructions
 Requirements
 ------------
 
-* eZ Publish 5.4+ / eZ Publish Community Project 2014.09+
+* eZ Publish 5.4+ / eZ Publish Community Project 2014.11+
 
 Installation steps
 ------------------

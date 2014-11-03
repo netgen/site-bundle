@@ -6,9 +6,8 @@ use eZ\Bundle\EzPublishCoreBundle\Controller;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 
-class FullViewPartsController extends Controller
+class PartsController extends Controller
 {
     /**
      * Action for rendering the ng_article gallery

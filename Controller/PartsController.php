@@ -3,7 +3,6 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
-use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
@@ -12,13 +11,15 @@ class PartsController extends Controller
     /**
      * Action for rendering the ng_article gallery
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param mixed $locationId
      * @param string $template
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewGallery( Location $location, $template )
+    public function viewGallery( $locationId, $template )
     {
+        $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
+
         $contentService = $this->getRepository()->getContentService();
         $content = $contentService->loadContent( $location->contentId );
         $fieldHelper = $this->container->get( 'ezpublish.field_helper' );

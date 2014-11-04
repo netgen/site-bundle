@@ -3,14 +3,14 @@
 {% block ezimage_field %}
 {% spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
-        {% if parameters.href is defined and parameters.href is not empty %}
-            <a href="{{ parameters.href }}" {% if parameters.target is defined and parameters.target is not empty %} target="{{ parameters.target }}" {% endif %} {% if parameters.link_id is defined and parameters.link_id is not empty %} id="{{ parameters.link_id }}" {% endif %} {% if parameters.link_class is defined and parameters.link_class is not empty %} class="{{ parameters.link_class }}" {% endif %} {% if parameters.link_title is defined and parameters.link_title is not empty %} title="{{ parameters.link_title }}" {% endif %}>
+        {% if parameters.link_href is defined and parameters.link_href is not empty %}
+            <a href="{{ parameters.link_href }}" {% if parameters.link_target is defined and parameters.link_target is not empty %} target="{{ parameters.link_target }}" {% endif %} {% if parameters.link_id is defined and parameters.link_id is not empty %} id="{{ parameters.link_id }}" {% endif %} {% if parameters.link_class is defined and parameters.link_class is not empty %} class="{{ parameters.link_class }}" {% endif %} {% if parameters.link_title is defined and parameters.link_title is not empty %} title="{{ parameters.link_title }}" {% endif %}>
         {% endif %}
 
         {% set imageAlias = ez_image_alias( field, versionInfo, parameters.alias|default( 'original' ) ) %}
         <img src="{% if imageAlias %}{{ asset( imageAlias.uri ) }}{% else %}//:0{% endif %}" {% if parameters.image_class is defined and parameters.image_class is not empty %} class="{{ parameters.image_class }}" {% endif %} {% if imageAlias.width is defined and imageAlias.width is not empty %} width="{{ imageAlias.width }}" {% endif %} {% if imageAlias.height is defined and imageAlias.height is not empty %} height="{{ imageAlias.height }}" {% endif %} alt="{{ field.value.alternativeText }}" />
 
-        {% if parameters.href is defined and parameters.href is not empty %}
+        {% if parameters.link_href is defined and parameters.link_href is not empty %}
             </a>
         {% endif %}
     {% endif %}

@@ -37,7 +37,9 @@ abstract class SymlinkCommand extends ContainerAwareCommand
         'config.php',
         'offline_cro.html',
         'offline_eng.html',
-        'settings'
+        'settings',
+        'solrconfig.xml',
+        'schema.xml'
     );
 
     /**

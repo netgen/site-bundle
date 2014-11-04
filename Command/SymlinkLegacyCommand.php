@@ -200,6 +200,11 @@ class SymlinkLegacyCommand extends SymlinkCommand
                         /** @var \SplFileInfo $subItem */
                         if ( $subItem->isFile() && !$subItem->isLink() )
                         {
+                            if ( in_array( $subItem->getBasename(), $this->blacklistedItems ) )
+                            {
+                                continue;
+                            }
+
                             // Allow filename to have .patched at the end of string (dehctap. in reverse file name)
                             // to work around eZ legacy autoload generator warning about duplicate class names
                             $fileName = $subItem->getBasename();

@@ -3,13 +3,14 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 class PartsController extends Controller
 {
     /**
-     * Action for rendering the ng_article gallery
+     * Action for rendering the gallery
      *
      * @param mixed $locationId
      * @param string $template
@@ -60,6 +61,59 @@ class PartsController extends Controller
             $template,
             array(
                 'content_list' => $contentList
+            )
+        );
+    }
+
+    /**
+     * Action for rendering related items
+     *
+     * @param mixed $contentId
+     * @param string $fieldDefinitionIdentifier
+     * @param string $viewType
+     * @param string $template
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewRelatedItems( $contentId, $fieldDefinitionIdentifier, $viewType, $template )
+    {
+        $relatedItems = array();
+
+        $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
+        $translationHelper = $this->container->get( 'ezpublish.translation_helper' );
+        $locationService = $this->getRepository()->getLocationService();
+
+        $content = $this->getRepository()->getContentService()->loadContent( $contentId );
+
+        if ( isset( $content->fields[$fieldDefinitionIdentifier] ) && !$fieldHelper->isFieldEmpty( $content, $fieldDefinitionIdentifier ) )
+        {
+            /** @var \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value $fieldValue */
+            $fieldValue = $translationHelper->getTranslatedField( $content, $fieldDefinitionIdentifier )->value;
+            if ( !empty( $fieldValue->destinationLocationIds ) )
+            {
+                foreach ( $fieldValue->destinationLocationIds as $locationId )
+                {
+                    try
+                    {
+                        $location = $locationService->loadLocation( $locationId );
+                        if ( !$location->invisible )
+                        {
+                            $relatedItems[] = $location;
+                        }
+                    }
+                    catch ( NotFoundException $e )
+                    {
+                        // Do nothing if there's no location
+                    }
+                }
+            }
+        }
+
+        return $this->render(
+            $template,
+            array(
+                'related_items' => $relatedItems,
+                'view_type' => $viewType
             )
         );
     }

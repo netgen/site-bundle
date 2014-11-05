@@ -3,8 +3,6 @@
 namespace Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\Field as BaseFieldCriterionHandler;
-use Netgen\Bundle\MoreBundle\API\Repository\Values\Content\Query\Criterion\Field as APIField;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field as OriginalAPIField;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -12,18 +10,6 @@ use RuntimeException;
 
 class Field extends BaseFieldCriterionHandler
 {
-    /**
-     * Check if this criterion handler accepts to handle the given criterion.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     *
-     * @return boolean
-     */
-    public function accept( Criterion $criterion )
-    {
-        return $criterion instanceof APIField || $criterion instanceof OriginalAPIField;
-    }
-
     /**
      * This method is specifically overriden to disable the check if the field is searchable or not
      *

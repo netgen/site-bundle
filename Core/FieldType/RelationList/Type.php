@@ -88,14 +88,14 @@ class Type extends BaseRelationListType
             );
         }
 
-        foreach ( $value->destinationLocationIds as $key => $value )
+        foreach ( $value->destinationLocationIds as $key => $destinationLocationId )
         {
-            if ( !is_integer( $value ) && !is_string( $value ) )
+            if ( !is_integer( $destinationLocationId ) && !is_string( $destinationLocationId ) )
             {
                 throw new InvalidArgumentType(
                     "\$value->destinationLocationIds[$key]",
                     'string|int',
-                    $value
+                    $destinationLocationId
                 );
             }
         }

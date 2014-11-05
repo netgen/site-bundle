@@ -176,7 +176,9 @@ class LayoutHelper
         $query = new Query();
         $query->filter = new Query\Criterion\LogicalAnd(
             array(
-                new Query\Criterion\ContentTypeIdentifier( "ng_layout" ),
+                new Query\Criterion\ContentTypeIdentifier(
+                    $this->configResolver->getParameter( 'Layout.ContentTypes', 'ngmore' )
+                ),
                 new Query\Criterion\ParentLocationId(
                     (int)$this->configResolver->getParameter( 'SpecialNodes.SidebarsParentNode', 'ngmore' )
                 ),

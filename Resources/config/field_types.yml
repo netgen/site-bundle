@@ -1,6 +1,7 @@
 parameters:
     netgen_more.field_type.childrenindexer.class: %ezpublish.fieldType.eznull.class%
     netgen_more.field_type.childrenindexer.converter.class: %ezpublish.fieldType.eznull.converter.class%
+    netgen_more.field_type.ezxmltext.converter.direct_download.class: Netgen\Bundle\MoreBundle\XmlText\Converter\EzLinkDirectDownload
 
 services:
     netgen_more.field_type.childrenindexer:
@@ -14,3 +15,15 @@ services:
         class: %netgen_more.field_type.childrenindexer.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: childrenindexer, lazy: true, callback: '::create'}
+
+    netgen_more.field_type.ezxmltext.converter.direct_download:
+        class: %netgen_more.field_type.ezxmltext.converter.direct_download.class%
+        arguments:
+            - @ezpublish.api.service.location
+            - @ezpublish.api.service.content
+            - @ezpublish.urlalias_router
+            - @ezpublish.translation_helper
+            - @ezpublish.field_helper
+            - @?logger
+        tags:
+            - { name: ezpublish.ezxml.converter }

@@ -2,6 +2,7 @@ parameters:
     netgen_more.persistence.legacy.search.gateway.sort_clause_handler.common.field_length.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler\FieldLength
 
     netgen_more.controller.full_view.class: Netgen\Bundle\MoreBundle\Controller\FullViewController
+    netgen_more.controller.embed_view.class: Netgen\Bundle\MoreBundle\Controller\EmbedViewController
     netgen_more.controller.block_view.class: Netgen\Bundle\MoreBundle\Controller\BlockViewController
     netgen_more.controller.page_layout.class: Netgen\Bundle\MoreBundle\Controller\PageLayoutController
     netgen_more.controller.parts.class: Netgen\Bundle\MoreBundle\Controller\PartsController
@@ -26,6 +27,12 @@ services:
     netgen_more.controller.full_view:
         class: %netgen_more.controller.full_view.class%
         parent: ezpublish.controller.base
+
+    netgen_more.controller.embed_view:
+        class: %netgen_more.controller.embed_view.class%
+        parent: ezpublish.controller.base
+        arguments:
+            - @?logger
 
     netgen_more.controller.block_view:
         class: %netgen_more.controller.block_view.class%

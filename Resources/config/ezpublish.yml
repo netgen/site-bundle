@@ -1,5 +1,6 @@
 imports:
     - { resource: ezpage.yml }
+    - { resource: override.yml }
 
 ezpublish:
     locale_conversion:

@@ -52,7 +52,7 @@
 
     <xsl:template match="custom[@name='video']">
         <div>
-            <xsl:if test="@custom:video_service=youtube">
+            <xsl:if test="@custom:video_service='youtube'">
                 <xsl:attribute name="class">
                     <xsl:text>ct-video youtube</xsl:text>
                 </xsl:attribute>
@@ -68,7 +68,7 @@
                 </video>
             </xsl:if>
 
-            <xsl:if test="@custom:video_service=vimeo">
+            <xsl:if test="@custom:video_service='vimeo'">
                 <xsl:attribute name="class">
                     <xsl:text>ct-video vimeo</xsl:text>
                 </xsl:attribute>

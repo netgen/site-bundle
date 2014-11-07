@@ -75,7 +75,7 @@ class PartsController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewRelatedItems( $contentId, $fieldDefinitionIdentifier, $viewType, $template )
+    public function viewRelatedItems( $contentId, $fieldDefinitionIdentifier, $template, $viewType = 'line' )
     {
         $relatedItems = array();
 

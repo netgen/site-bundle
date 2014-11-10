@@ -16,6 +16,8 @@ parameters:
 
     netgen_more.limitation_type.function_list.class: Netgen\Bundle\MoreBundle\Core\Limitation\FunctionListLimitationType
 
+    netgen_more.legacy_mapper.configuration.class: Netgen\Bundle\MoreBundle\LegacyMapper\Configuration
+
 services:
     netgen_more.persistence.legacy.search.gateway.sort_clause_handler.common.field_length:
         class: %netgen_more.persistence.legacy.search.gateway.sort_clause_handler.common.field_length.class%
@@ -84,3 +86,13 @@ services:
         arguments: [@ezpublish.api.persistence_handler]
         tags:
             - {name: ezpublish.limitationType, alias: FunctionList}
+
+    netgen_more.legacy_mapper.configuration:
+        class: %netgen_more.legacy_mapper.configuration.class%
+        arguments:
+            - @ezpublish.config.resolver.core
+            - %ngmore.legacy_mapper.configuration.options%
+        calls:
+            - [setContainer, [@service_container]]
+        tags:
+            - { name: kernel.event_subscriber }

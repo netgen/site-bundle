@@ -1,0 +1,10 @@
+parameters:
+    netgen_more.image_alias.imagine.filter.loader.thumbnail.class: Netgen\Bundle\MoreBundle\Imagine\Filter\Loader\ThumbnailFilterLoader
+
+services:
+    netgen_more.image_alias.imagine.filter.loader.thumbnail:
+        class: %netgen_more.image_alias.imagine.filter.loader.thumbnail.class%
+        calls:
+            - [setInnerLoader, [@liip_imagine.filter.loader.thumbnail]]
+        tags:
+            - { name: liip_imagine.filter.loader, loader: "ngmore/thumbnail" }

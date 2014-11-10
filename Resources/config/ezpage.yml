@@ -3,22 +3,22 @@ ezpublish:
         layouts:
             1ZonesA:
                 name: 1 zone A
-                template:
+                template: ~
             4ZonesA:
                 name: 4 zones A
-                template:
+                template: ~
             4ZonesB:
                 name: 4 zones B
-                template:
+                template: ~
             4ZonesC:
                 name: 4 zones C
-                template:
+                template: ~
             6ZonesA:
                 name: 6 zones A
-                template:
+                template: ~
             NGRegionLayout:
                 name: Region layout
-                template: 'NetgenMoreBundle:zone:ngmoreregionlayout.html.twig'
+                template: ~
 
         enabledLayouts:
             - 1ZonesA

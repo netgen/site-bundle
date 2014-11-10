@@ -44,7 +44,6 @@ class SymlinkLegacyCommand extends SymlinkCommand
     protected function configure()
     {
         $this->addOption( 'force', null, InputOption::VALUE_NONE, 'If set, it will destroy existing symlinks before recreating them' );
-        $this->addOption( 'web-folder', null, InputOption::VALUE_OPTIONAL, 'Name of the webroot folder to use' );
         $this->setDescription( 'Symlinks legacy siteaccesses and various other legacy files to their proper locations' );
         $this->setName( 'ngmore:symlink:legacy' );
     }
@@ -90,18 +89,15 @@ class SymlinkLegacyCommand extends SymlinkCommand
                     continue;
                 }
 
-                $legacyExtensions[] = array(
-                    'bundle_path' => $bundle->getPath(),
-                    'legacy_extension_path' => $item->getPathname()
-                );
+                $legacyExtensions[] = $item->getPathname();
             }
         }
 
         foreach ( $legacyExtensions as $legacyExtension )
         {
-            $this->symlinkLegacyExtensionSiteAccesses( $legacyExtension['legacy_extension_path'], $input, $output );
-            $this->symlinkLegacyExtensionOverride( $legacyExtension['legacy_extension_path'], $input, $output );
-            $this->symlinkLegacyExtensionFiles( $legacyExtension['bundle_path'], $legacyExtension['legacy_extension_path'], $input, $output );
+            $this->symlinkLegacyExtensionSiteAccesses( $legacyExtension, $input, $output );
+            $this->symlinkLegacyExtensionOverride( $legacyExtension, $input, $output );
+            $this->symlinkLegacyExtensionFiles( $legacyExtension, $input, $output );
         }
     }
 
@@ -157,12 +153,11 @@ class SymlinkLegacyCommand extends SymlinkCommand
     /**
      * Symlinks files from a legacy extension
      *
-     * @param string $bundlePath
      * @param string $legacyExtensionPath
      * @param \Symfony\Component\Console\Input\InputInterface $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    protected function symlinkLegacyExtensionFiles( $bundlePath, $legacyExtensionPath, InputInterface $input, OutputInterface $output )
+    protected function symlinkLegacyExtensionFiles( $legacyExtensionPath, InputInterface $input, OutputInterface $output )
     {
         /** @var \DirectoryIterator[] $directories */
         $directories = array();
@@ -170,16 +165,16 @@ class SymlinkLegacyCommand extends SymlinkCommand
         $path = $legacyExtensionPath . '/root/';
         if ( $this->fileSystem->exists( $path ) && is_dir( $path ) )
         {
-            $directories[$bundlePath . '/Resources/symlink/root'] = new DirectoryIterator( $path );
+            $directories[] = new DirectoryIterator( $path );
         }
 
         $path = $legacyExtensionPath . '/root_' . $this->environment . '/';
         if ( $this->fileSystem->exists( $path ) && is_dir( $path ) )
         {
-            $directories[$bundlePath . '/Resources/symlink/root_' . $this->environment] = new DirectoryIterator( $path );
+            $directories[] = new DirectoryIterator( $path );
         }
 
-        foreach ( $directories as $bundleDirectory => $directory )
+        foreach ( $directories as $directory )
         {
             foreach ( $directory as $item )
             {
@@ -250,22 +245,7 @@ class SymlinkLegacyCommand extends SymlinkCommand
                         continue;
                     }
 
-                    // Same directory/file exists in comparable bundle location, so we won't symlink it from here
-                    if ( $this->fileSystem->exists( $bundleDirectory . '/' . $item->getBasename() ) )
-                    {
-                        continue;
-                    }
-
-                    $webFolderName = $input->getOption( 'web-folder' );
-                    $webFolderName = !empty( $webFolderName ) ? $webFolderName : 'web';
-
-                    $destination = $this->getContainer()->getParameter( 'kernel.root_dir' ) . '/../' . $webFolderName . '/' . $item->getBasename();
-
-                    if ( !$this->fileSystem->exists( dirname( $destination ) ) )
-                    {
-                        $output->writeln( 'Skipped creating the symlink for <comment>' . basename( $destination ) . '</comment> in <comment>' . dirname( $destination ) . '/</comment>. Folder does not exist!' );
-                        continue;
-                    }
+                    $destination = $this->getContainer()->getParameter( 'ezpublish_legacy.root_dir' ) . '/' . $item->getBasename();
 
                     if ( $item->isDir() )
                     {

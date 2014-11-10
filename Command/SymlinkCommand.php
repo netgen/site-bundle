@@ -34,12 +34,9 @@ abstract class SymlinkCommand extends ContainerAwareCommand
      * @var array
      */
     protected $blacklistedItems = array(
-        'config.php',
         'offline_cro.html',
         'offline_eng.html',
-        'settings',
-        'solrconfig.xml',
-        'schema.xml'
+        'settings'
     );
 
     /**

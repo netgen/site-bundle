@@ -34,7 +34,7 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            LegacyEvents::PRE_BUILD_LEGACY_KERNEL => array( 'onBuildKernel', 0 )
+            LegacyEvents::PRE_BUILD_LEGACY_KERNEL => array( 'onBuildKernel', 64 )
         );
     }
 

@@ -37,7 +37,12 @@ class RelationList extends BaseRelationListConverter
         {
             $row = $data[$id][0];
             $row["ezcontentobject_id"] = $id;
-            $row["ezcontentobject_tree_node_id"] = $value->data['destinationLocationIds'][$key];
+
+            if ( !empty( $value->data['destinationLocationIds'][$key] ) )
+            {
+                $row["ezcontentobject_tree_node_id"] = $value->data['destinationLocationIds'][$key];
+            }
+
             $row["priority"] = ( $priority += 1 );
 
             $relationItem = $doc->createElement( 'relation-item' );

@@ -7,7 +7,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use Symfony\Component\HttpFoundation\Response;
-use eZContentObject;
+use Knp\Menu\ItemInterface;
 
 class PageLayoutController extends Controller
 {
@@ -15,37 +15,37 @@ class PageLayoutController extends Controller
      * Returns rendered relation menu template
      *
      * @param mixed $activeLocationId
-     * @param string $template
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function relationMenu( $activeLocationId, $template = null )
+    public function relationMenu( $activeLocationId )
     {
-        $response = new Response();
-        $response->setPublic()->setSharedMaxAge( 86400 );
+        /** @var \Knp\Menu\ItemInterface $mainMenu */
+        $mainMenu = $this->container->get( 'knp_menu.menu_provider' )->get( 'ngmore_main_menu' );
+        $mainMenu->setChildrenAttribute( 'class', 'nav navbar-nav' );
 
-        $siteInfoContent = $this->get( 'netgen_more.helper.site_info_helper' )->getSiteInfoContent();
-        $relationList = $this->getLegacyKernel()->runCallback(
-            function() use ( $siteInfoContent )
-            {
-                $object = eZContentObject::fetch( $siteInfoContent->id );
+        if ( !empty( $mainMenu[$activeLocationId] ) && $mainMenu[$activeLocationId] instanceof ItemInterface )
+        {
+            $mainMenu[$activeLocationId]->setCurrent( true );
+        }
 
-                /** @var \eZContentObjectAttribute[] $attributes */
-                $attributes = array_values( $object->fetchAttributesByIdentifier( array( 'main_menu' ) ) );
-                $attributeContent = $attributes[0]->content();
-
-                return $attributeContent['relation_list'];
-            }
-        );
-
-        return $this->render(
-            $template !== null ? $template : 'NetgenMoreBundle:menu:relation_menu.html.twig',
+        /** @var \Knp\Menu\Renderer\RendererInterface $mainMenuRenderer */
+        $mainMenuRenderer = $this->container->get( 'knp_menu.renderer_provider' )->get();
+        $menuContent = $mainMenuRenderer->render(
+            $mainMenu,
             array(
-                'relation_list' => $relationList,
-                'active_location_id' => $activeLocationId
-            ),
-            $response
+                'firstClass' => 'firstli',
+                'currentClass' => 'active',
+                'lastClass' => 'lastli'
+            )
         );
+
+        $response = new Response();
+
+        $response->setPublic()->setSharedMaxAge( 86400 );
+        $response->setContent( $menuContent );
+
+        return $response;
     }
 
     /**

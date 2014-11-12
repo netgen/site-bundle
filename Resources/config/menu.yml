@@ -1,0 +1,31 @@
+parameters:
+    netgen_more.menu.relation_list_menu_builder.class: Netgen\Bundle\MoreBundle\Menu\RelationListMenuBuilder
+
+services:
+    netgen_more.menu.relation_list_menu_builder:
+        class: %netgen_more.menu.relation_list_menu_builder.class%
+        arguments:
+            - @knp_menu.factory
+            - @ezpublish.api.repository
+            - @ezpublish.field_helper
+            - @ezpublish.translation_helper
+            - @netgen_more.helper.site_info_helper
+            - @router
+
+    netgen_more.menu.main_menu:
+        class: Knp\Menu\MenuItem
+        factory_service: netgen_more.menu.relation_list_menu_builder
+        factory_method: createRelationListMenu
+        arguments:
+            - main_menu
+        tags:
+            - { name: knp_menu.menu, alias: ngmore_main_menu }
+
+    netgen_more.menu.additional_menu:
+        class: Knp\Menu\MenuItem
+        factory_service: netgen_more.menu.relation_list_menu_builder
+        factory_method: createRelationListMenu
+        arguments:
+            - additional_menu
+        tags:
+            - { name: knp_menu.menu, alias: ngmore_additional_menu }

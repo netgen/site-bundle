@@ -30,6 +30,7 @@ class NetgenMoreExtension extends Extension
         $loader->load( 'templating.yml' );
         $loader->load( 'kernel.yml' );
         $loader->load( 'image.yml' );
+        $loader->load( 'menu.yml' );
         $loader->load( 'services.yml' );
     }
 }

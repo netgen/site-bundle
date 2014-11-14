@@ -73,11 +73,11 @@ services:
             - @netgen_more.helper.path_helper
             - @ezpublish.config.resolver
 
-
     netgen_more.data_collector.legacy_debug_data_collector:
         class: %netgen_more.data_collector.legacy_debug_data_collector.class%
         arguments:
             - @ezpublish_legacy.kernel
+            - @fos_http_cache.user_context.request_matcher
         tags:
             - { name: data_collector, template: 'NetgenMoreBundle:Profiler:LegacyDebug.html.twig', id: 'ngmore_legacy_debug' }
 

@@ -29,8 +29,9 @@ class LegacyDebugDataCollector extends DataCollector
      * Constructor
      *
      * @param \Closure $legacyKernel
+     * @param \Symfony\Component\HttpFoundation\RequestMatcherInterface $userContextRequestMatcher
      */
-    public function __construct( Closure $legacyKernel, RequestMatcherInterface $userContextRequestMatcher )
+    public function __construct( Closure $legacyKernel, RequestMatcherInterface $userContextRequestMatcher = null )
     {
         $this->legacyKernel = $legacyKernel;
         $this->userContextRequestMatcher = $userContextRequestMatcher;
@@ -46,7 +47,7 @@ class LegacyDebugDataCollector extends DataCollector
     public function collect( Request $request, Response $response, Exception $exception = null )
     {
         // Do not collect data if it's a user hash request
-        if ( $this->userContextRequestMatcher->matches( $request ) )
+        if ( $this->userContextRequestMatcher !== null && $this->userContextRequestMatcher->matches( $request ) )
         {
             return;
         }

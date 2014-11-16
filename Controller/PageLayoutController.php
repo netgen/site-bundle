@@ -20,14 +20,14 @@ class PageLayoutController extends Controller
      */
     public function relationMenu( $activeLocationId )
     {
-        return $this->menu( $activeLocationId, 'ngmore_main_menu' );
+        return $this->menu( 'ngmore_main_menu', $activeLocationId );
     }
 
     /**
      * Returns rendered menu
      *
-     * @param mixed $activeItemId
      * @param string $menuName
+     * @param mixed $activeItemId
      * @param string $ulClass
      * @param string $firstClass
      * @param string $currentClass
@@ -35,7 +35,7 @@ class PageLayoutController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function menu( $activeItemId, $menuName, $ulClass = 'nav navbar-nav', $firstClass = 'firstli', $currentClass = 'active', $lastClass = 'lastli' )
+    public function menu( $menuName, $activeItemId, $ulClass = 'nav navbar-nav', $firstClass = 'firstli', $currentClass = 'active', $lastClass = 'lastli' )
     {
         /** @var \Knp\Menu\ItemInterface $menu */
         $menu = $this->container->get( 'knp_menu.menu_provider' )->get( $menuName );

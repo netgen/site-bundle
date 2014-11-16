@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use Netgen\Bundle\MoreBundle\API\Repository\Values\Content\Query\Criterion\Field;
 use Netgen\Bundle\MoreBundle\API\Repository\Values\Content\Query\SortClause\FieldLength;
+use eZ\Publish\Core\Helper\TranslationHelper;
 
 class LayoutHelper
 {
@@ -26,6 +27,11 @@ class LayoutHelper
     protected $pathHelper;
 
     /**
+     * @var \eZ\Publish\Core\Helper\TranslationHelper
+     */
+    protected $translationHelper;
+
+    /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
     protected $configResolver;
@@ -33,12 +39,14 @@ class LayoutHelper
     /**
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \Netgen\Bundle\MoreBundle\Helper\PathHelper $pathHelper
+     * @param \eZ\Publish\Core\Helper\TranslationHelper $translationHelper
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      */
-    public function __construct( Repository $repository, PathHelper $pathHelper, ConfigResolverInterface $configResolver )
+    public function __construct( Repository $repository, PathHelper $pathHelper, TranslationHelper $translationHelper, ConfigResolverInterface $configResolver )
     {
         $this->repository = $repository;
         $this->pathHelper = $pathHelper;
+        $this->translationHelper = $translationHelper;
         $this->configResolver = $configResolver;
     }
 
@@ -122,7 +130,7 @@ class LayoutHelper
             $originalLocation->getContentInfo()->contentTypeId
         );
 
-        $applyLayoutTo = $layoutContent->getFieldValue( 'apply_layout_to' );
+        $applyLayoutTo = $this->translationHelper->getTranslatedField( $layoutContent, 'apply_layout_to' )->value;
         if ( $originalLocation->id != $pathItem['locationId'] )
         {
             if ( !$enhancedSelectionFieldType->isEmptyValue( $applyLayoutTo ) && $applyLayoutTo->identifiers[0] == 'node' )
@@ -138,10 +146,10 @@ class LayoutHelper
             }
         }
 
-        $classFilterType = $layoutContent->getFieldValue( 'class_filter_type' );
+        $classFilterType = $this->translationHelper->getTranslatedField( $layoutContent, 'class_filter_type' )->value;
         if ( !$enhancedSelectionFieldType->isEmptyValue( $classFilterType ) && $classFilterType->identifiers[0] == 'include' )
         {
-            $allowedClasses = $layoutContent->getFieldValue( 'class_filter_array' );
+            $allowedClasses = $this->translationHelper->getTranslatedField( $layoutContent, 'class_filter_array' )->value;
             if ( in_array( $originalContentType->identifier, $allowedClasses->identifiers ) )
             {
                 return true;
@@ -152,7 +160,7 @@ class LayoutHelper
 
         if ( !$enhancedSelectionFieldType->isEmptyValue( $classFilterType ) && $classFilterType->identifiers[0] == 'exclude' )
         {
-            $forbiddenClasses = $layoutContent->getFieldValue( 'class_filter_array' );
+            $forbiddenClasses = $this->translationHelper->getTranslatedField( $layoutContent, 'class_filter_array' )->value;
             if ( !in_array( $originalContentType->identifier, $forbiddenClasses->identifiers ) )
             {
                 return true;

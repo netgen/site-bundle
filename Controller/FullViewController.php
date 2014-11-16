@@ -37,6 +37,7 @@ class FullViewController extends Controller
         $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
         $content = $this->getRepository()->getContentService()->loadContent( $location->contentId );
         $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
+        $translationHelper = $this->container->get( 'ezpublish.translation_helper' );
 
         $criterions = array(
             new Criterion\Subtree( $location->pathString ),
@@ -44,17 +45,19 @@ class FullViewController extends Controller
             new Criterion\LogicalNot( new Criterion\LocationId( $location->id ) )
         );
 
-        if ( !$content->getFieldValue( 'fetch_subtree' )->bool )
+        $fetchSubtreeValue = $translationHelper->getTranslatedField( $content, 'fetch_subtree' )->value;
+        if ( !$fetchSubtreeValue->bool )
         {
             $criterions[] = new Criterion\Location\Depth( Criterion\Operator::EQ, $location->depth + 1 );
         }
 
         if ( !$fieldHelper->isFieldEmpty( $content, 'children_class_filter_include' ) )
         {
+            $contentTypeFilter = $translationHelper->getTranslatedField( $content, 'children_class_filter_include' )->value;
             $criterions[] = new Criterion\ContentTypeIdentifier(
                 array_map(
                     'trim',
-                    explode( ',', $content->getFieldValue( 'children_class_filter_include' ) )
+                    explode( ',', $contentTypeFilter )
                 )
             );
         }
@@ -87,7 +90,7 @@ class FullViewController extends Controller
         $pager->setNormalizeOutOfRangePages( true );
 
         /** @var \eZ\Publish\Core\FieldType\Integer\Value $pageLimitValue */
-        $pageLimitValue = $content->getFieldValue( 'page_limit' );
+        $pageLimitValue = $translationHelper->getTranslatedField( $content, 'page_limit_value' )->value;
 
         $defaultLimit = 12;
         if ( isset( $params['childrenLimit'] ) )
@@ -171,11 +174,13 @@ class FullViewController extends Controller
         $content = $contentService->loadContent( $location->contentId );
 
         $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
+        $translationHelper = $this->container->get( 'ezpublish.translation_helper' );
 
-        if ( ( $internalRedirect = $content->getFieldValue( 'internal_redirect' ) ) instanceof RelationValue &&
-             !$fieldHelper->isFieldEmpty( $content, 'internal_redirect' ) )
+        $internalRedirectValue = $translationHelper->getTranslatedField( $content, 'internal_redirect' )->value;
+        $externalRedirectValue = $translationHelper->getTranslatedField( $content, 'external_redirect' )->value;
+        if ( $internalRedirectValue instanceof RelationValue && !$fieldHelper->isFieldEmpty( $content, 'internal_redirect' ) )
         {
-            $internalRedirectContentInfo = $contentService->loadContentInfo( $internalRedirect->destinationContentId );
+            $internalRedirectContentInfo = $contentService->loadContentInfo( $internalRedirectValue->destinationContentId );
             if ( $internalRedirectContentInfo->mainLocationId != $locationId )
             {
                 return new RedirectResponse(
@@ -189,12 +194,11 @@ class FullViewController extends Controller
                 );
             }
         }
-        else if ( ( $externalRedirect = $content->getFieldValue( 'external_redirect' ) ) instanceof UrlValue &&
-            !$fieldHelper->isFieldEmpty( $content, 'external_redirect' ) )
+        else if ( $externalRedirectValue instanceof UrlValue && !$fieldHelper->isFieldEmpty( $content, 'external_redirect' ) )
         {
-            if ( stripos( $externalRedirect->link, 'http' ) === 0 )
+            if ( stripos( $externalRedirectValue->link, 'http' ) === 0 )
             {
-                return new RedirectResponse( $externalRedirect->link, RedirectResponse::HTTP_MOVED_PERMANENTLY );
+                return new RedirectResponse( $externalRedirectValue->link, RedirectResponse::HTTP_MOVED_PERMANENTLY );
             }
 
             return new RedirectResponse(
@@ -203,7 +207,7 @@ class FullViewController extends Controller
                     array(
                         'locationId' => $this->getConfigResolver()->getParameter( 'content.tree_root.location_id' )
                     )
-                ) . trim( $externalRedirect->link, '/' ),
+                ) . trim( $externalRedirectValue->link, '/' ),
                 RedirectResponse::HTTP_MOVED_PERMANENTLY
             );
         }

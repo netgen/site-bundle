@@ -84,7 +84,7 @@ class PageLayoutController extends Controller
         $layout = $this->getRepository()->getContentService()->loadContent( $layoutId );
 
         /** @var $pageValue \eZ\Publish\Core\FieldType\Page\Value */
-        $pageValue = $layout->getFieldValue( 'page' );
+        $pageValue = $this->get( 'ezpublish.translation_helper' )->getTranslatedField( $layout, 'page' )->value;
 
         foreach ( $pageValue->page->zones as $zone )
         {

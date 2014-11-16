@@ -115,7 +115,11 @@ class EmbedViewController extends Controller
                     }
                     else if ( isset( $content->fields['image'] ) && !$fieldHelper->isFieldEmpty( $content, 'image' ) )
                     {
-                        $imageVariation = $imageVariationService->getVariation( $content->getField( 'image' ), $content->versionInfo, 'original' );
+                        $imageVariation = $imageVariationService->getVariation(
+                            $translationHelper->getTranslatedField( $content, 'image' ),
+                            $content->versionInfo,
+                            'original'
+                        );
                         $targetLink = $imageVariation->uri;
                     }
                 }

@@ -14,7 +14,23 @@ class PageLayoutController extends Controller
     /**
      * Returns rendered relation menu template
      *
+     * @deprecated This method is deprecated in favor of PageLayoutController::mainMenu
+     *             and will be removed in NetgenMoreBundle 2.1
+     *
      * @param mixed $activeLocationId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function relationMenu( $activeLocationId )
+    {
+        return $this->menu( $activeLocationId, 'ngmore_main_menu' );
+    }
+
+    /**
+     * Returns rendered menu
+     *
+     * @param mixed $activeLocationId
+     * @param string $menuName
      * @param string $ulClass
      * @param string $firstClass
      * @param string $currentClass
@@ -22,10 +38,10 @@ class PageLayoutController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function relationMenu( $activeLocationId, $ulClass = 'nav navbar-nav', $firstClass = 'firstli', $currentClass = 'active', $lastClass = 'lastli' )
+    public function menu( $activeLocationId, $menuName, $ulClass = 'nav navbar-nav', $firstClass = 'firstli', $currentClass = 'active', $lastClass = 'lastli' )
     {
         /** @var \Knp\Menu\ItemInterface $mainMenu */
-        $mainMenu = $this->container->get( 'knp_menu.menu_provider' )->get( 'ngmore_main_menu' );
+        $mainMenu = $this->container->get( 'knp_menu.menu_provider' )->get( $menuName );
         $mainMenu->setChildrenAttribute( 'class', $ulClass );
 
         if ( !empty( $mainMenu[$activeLocationId] ) && $mainMenu[$activeLocationId] instanceof ItemInterface )

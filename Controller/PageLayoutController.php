@@ -24,7 +24,7 @@ class PageLayoutController extends Controller
         $response = new Response();
         $response->setPublic()->setSharedMaxAge( 86400 );
 
-        $siteInfoContent = $this->get( 'netgen_more.helper.site_info_helper' )->getSiteInfoContent();
+        $siteInfoContent = $this->get( 'ngmore.helper.site_info_helper' )->getSiteInfoContent();
         $relationList = $this->getLegacyKernel()->runCallback(
             function() use ( $siteInfoContent )
             {

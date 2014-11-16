@@ -186,7 +186,7 @@ class BlockViewController extends Controller
      */
     protected function getSortClause( $sortField, $advancedSortField, $sortOrder, Location $parentLocation )
     {
-        $sortClauseHelper = $this->container->get( 'netgen_more.helper.sort_clause_helper' );
+        $sortClauseHelper = $this->container->get( 'ngmore.helper.sort_clause_helper' );
 
         if ( $sortField === 'parent_node_sort_array' )
         {

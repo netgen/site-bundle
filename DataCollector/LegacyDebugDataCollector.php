@@ -5,6 +5,7 @@ namespace Netgen\Bundle\MoreBundle\DataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
+use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 use RuntimeException;
 use Exception;
 use Closure;
@@ -18,13 +19,22 @@ class LegacyDebugDataCollector extends DataCollector
     protected $legacyKernel;
 
     /**
+     * Request matcher for user context hash requests
+     *
+     * @var \Symfony\Component\HttpFoundation\RequestMatcherInterface
+     */
+    protected $userContextRequestMatcher;
+
+    /**
      * Constructor
      *
      * @param \Closure $legacyKernel
+     * @param \Symfony\Component\HttpFoundation\RequestMatcherInterface $userContextRequestMatcher
      */
-    public function __construct( Closure $legacyKernel )
+    public function __construct( Closure $legacyKernel, RequestMatcherInterface $userContextRequestMatcher = null )
     {
         $this->legacyKernel = $legacyKernel;
+        $this->userContextRequestMatcher = $userContextRequestMatcher;
     }
 
     /**
@@ -36,6 +46,12 @@ class LegacyDebugDataCollector extends DataCollector
      */
     public function collect( Request $request, Response $response, Exception $exception = null )
     {
+        // Do not collect data if it's a user hash request
+        if ( $this->userContextRequestMatcher !== null && $this->userContextRequestMatcher->matches( $request ) )
+        {
+            return;
+        }
+
         $this->data['legacyDebug'] = $this->getLegacyDebugData();
     }
 

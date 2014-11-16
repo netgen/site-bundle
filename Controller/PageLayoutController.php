@@ -14,7 +14,7 @@ class PageLayoutController extends Controller
     /**
      * Returns rendered relation menu template
      *
-     * @deprecated This method is deprecated in favor of PageLayoutController::mainMenu
+     * @deprecated This method is deprecated in favor of PageLayoutController::menu
      *             and will be removed in NetgenMoreBundle 2.1
      *
      * @param mixed $activeLocationId
@@ -40,19 +40,19 @@ class PageLayoutController extends Controller
      */
     public function menu( $activeLocationId, $menuName, $ulClass = 'nav navbar-nav', $firstClass = 'firstli', $currentClass = 'active', $lastClass = 'lastli' )
     {
-        /** @var \Knp\Menu\ItemInterface $mainMenu */
-        $mainMenu = $this->container->get( 'knp_menu.menu_provider' )->get( $menuName );
-        $mainMenu->setChildrenAttribute( 'class', $ulClass );
+        /** @var \Knp\Menu\ItemInterface $menu */
+        $menu = $this->container->get( 'knp_menu.menu_provider' )->get( $menuName );
+        $menu->setChildrenAttribute( 'class', $ulClass );
 
-        if ( !empty( $mainMenu[$activeLocationId] ) && $mainMenu[$activeLocationId] instanceof ItemInterface )
+        if ( !empty( $menu[$activeLocationId] ) && $menu[$activeLocationId] instanceof ItemInterface )
         {
-            $mainMenu[$activeLocationId]->setCurrent( true );
+            $menu[$activeLocationId]->setCurrent( true );
         }
 
-        /** @var \Knp\Menu\Renderer\RendererInterface $mainMenuRenderer */
-        $mainMenuRenderer = $this->container->get( 'knp_menu.renderer_provider' )->get();
-        $menuContent = $mainMenuRenderer->render(
-            $mainMenu,
+        /** @var \Knp\Menu\Renderer\RendererInterface $menuRenderer */
+        $menuRenderer = $this->container->get( 'knp_menu.renderer_provider' )->get();
+        $menuContent = $menuRenderer->render(
+            $menu,
             array(
                 'firstClass' => $firstClass,
                 'currentClass' => $currentClass,

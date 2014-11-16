@@ -15,14 +15,18 @@ class PageLayoutController extends Controller
      * Returns rendered relation menu template
      *
      * @param mixed $activeLocationId
+     * @param string $ulClass
+     * @param string $firstClass
+     * @param string $currentClass
+     * @param string $lastClass
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function relationMenu( $activeLocationId )
+    public function relationMenu( $activeLocationId, $ulClass = 'nav navbar-nav', $firstClass = 'firstli', $currentClass = 'active', $lastClass = 'lastli' )
     {
         /** @var \Knp\Menu\ItemInterface $mainMenu */
         $mainMenu = $this->container->get( 'knp_menu.menu_provider' )->get( 'ngmore_main_menu' );
-        $mainMenu->setChildrenAttribute( 'class', 'nav navbar-nav' );
+        $mainMenu->setChildrenAttribute( 'class', $ulClass );
 
         if ( !empty( $mainMenu[$activeLocationId] ) && $mainMenu[$activeLocationId] instanceof ItemInterface )
         {
@@ -34,9 +38,9 @@ class PageLayoutController extends Controller
         $menuContent = $mainMenuRenderer->render(
             $mainMenu,
             array(
-                'firstClass' => 'firstli',
-                'currentClass' => 'active',
-                'lastClass' => 'lastli'
+                'firstClass' => $firstClass,
+                'currentClass' => $currentClass,
+                'lastClass' => $lastClass
             )
         );
 

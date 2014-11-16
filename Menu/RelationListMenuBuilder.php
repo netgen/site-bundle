@@ -182,8 +182,12 @@ class RelationListMenuBuilder
             }
             else
             {
-                // @TODO: Generate correct siteaccess aware link
-                $menuItemId = $uri = $fieldValue->link;
+                $menuItemId = $uri = $this->router->generate(
+                    'ez_legacy',
+                    array(
+                        'module_uri' => $fieldValue->link
+                    )
+                );
 
                 if ( !empty( $fieldValue->text ) )
                 {
@@ -271,8 +275,12 @@ class RelationListMenuBuilder
             }
             else
             {
-                // @TODO: Generate correct siteaccess aware link
-                $menuItemId = $uri = $fieldValue->link;
+                $menuItemId = $uri = $this->router->generate(
+                    'ez_legacy',
+                    array(
+                        'module_uri' => $fieldValue->link
+                    )
+                );
 
                 if ( !empty( $fieldValue->text ) )
                 {

@@ -2,6 +2,8 @@
 
 namespace Netgen\Bundle\MoreBundle\Menu;
 
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\FactoryInterface;
 use eZ\Publish\API\Repository\Repository;
@@ -10,9 +12,11 @@ use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use Netgen\Bundle\MoreBundle\Helper\SortClauseHelper;
 use Symfony\Component\Routing\RouterInterface;
 use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;
 use Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value as RelationListValue;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 class RelationListMenuBuilder
 {
@@ -42,6 +46,11 @@ class RelationListMenuBuilder
     protected $siteInfoHelper;
 
     /**
+     * @var \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper
+     */
+    protected $sortClauseHelper;
+
+    /**
      * @var \Symfony\Component\Routing\RouterInterface
      */
     protected $router;
@@ -54,6 +63,7 @@ class RelationListMenuBuilder
      * @param \eZ\Publish\Core\Helper\FieldHelper $fieldHelper
      * @param \eZ\Publish\Core\Helper\TranslationHelper $translationHelper
      * @param \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper $siteInfoHelper
+     * @param \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper $sortClauseHelper
      * @param \Symfony\Component\Routing\RouterInterface $router
      */
     public function __construct(
@@ -62,6 +72,7 @@ class RelationListMenuBuilder
         FieldHelper $fieldHelper,
         TranslationHelper $translationHelper,
         SiteInfoHelper $siteInfoHelper,
+        SortClauseHelper $sortClauseHelper,
         RouterInterface $router
     )
     {
@@ -70,6 +81,7 @@ class RelationListMenuBuilder
         $this->fieldHelper = $fieldHelper;
         $this->translationHelper = $translationHelper;
         $this->siteInfoHelper = $siteInfoHelper;
+        $this->sortClauseHelper = $sortClauseHelper;
         $this->router = $router;
     }
 
@@ -336,7 +348,74 @@ class RelationListMenuBuilder
 
         if ( !$this->fieldHelper->isFieldEmpty( $content, 'parent_node' ) )
         {
-            // @TODO: Generate links for child locations
+            /** @var \eZ\Publish\Core\FieldType\Relation\Value $fieldValue */
+            $fieldValue = $this->translationHelper->getTranslatedField( $content, 'parent_node' )->value;
+
+            try
+            {
+                $destinationContent = $this->repository->getContentService()->loadContent( $fieldValue->destinationContentId );
+                $parentLocation = $this->repository->getLocationService()->loadLocation( $destinationContent->contentInfo->mainLocationId );
+
+                $criterions = array(
+                    new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
+                    new Criterion\ParentLocationId( $parentLocation->id )
+                );
+
+                if ( !$this->fieldHelper->isFieldEmpty( $content, 'class_filter' ) && !$this->fieldHelper->isFieldEmpty( $content, 'class_filter_type' ) )
+                {
+                    /** @var \Netgen\Bundle\ContentTypeListBundle\Core\FieldType\ContentTypeList\Value $contentTypeFilter */
+                    $contentTypeFilter = $this->translationHelper->getTranslatedField( $content, 'class_filter' )->value;
+
+                    /** @var \Netgen\Bundle\EnhancedSelectionBundle\Core\FieldType\EnhancedSelection\Value $filterType */
+                    $filterType = $this->translationHelper->getTranslatedField( $content, 'class_filter_type' )->value;
+
+                    if ( $filterType->identifiers[0] === 'include' )
+                    {
+                        $criterions[] = new Criterion\ContentTypeIdentifier( $contentTypeFilter->identifiers );
+                    }
+                    else if ( $filterType->identifiers[0] === 'exclude' )
+                    {
+                        $criterions[] = new Criterion\LogicalNot(
+                            new Criterion\ContentTypeIdentifier( $contentTypeFilter->identifiers )
+                        );
+                    }
+                }
+
+                $query = new LocationQuery();
+                $query->criterion = new Criterion\LogicalAnd( $criterions );
+
+                if ( !$this->fieldHelper->isFieldEmpty( $content, 'limit' ) )
+                {
+                    /** @var \eZ\Publish\Core\FieldType\Integer\Value $limit */
+                    $limit = $this->translationHelper->getTranslatedField( $content, 'limit' )->value;
+                    if ( $limit->value > 0 )
+                    {
+                        $query->limit = $limit->value;
+                    }
+                }
+
+                $query->sortClauses = array(
+                    $this->sortClauseHelper->getSortClauseBySortField(
+                        $parentLocation->sortField,
+                        $parentLocation->sortOrder
+                    )
+                );
+
+                $searchResult = $this->repository->getSearchService()->findLocations( $query );
+                $foundLocations = array_map(
+                    function ( SearchHit $searchHit )
+                    {
+                        return $searchHit->valueObject;
+                    },
+                    $searchResult->searchHits
+                );
+
+                $this->addMenuItemsFromLocations( $childItem, $foundLocations );
+            }
+            catch ( NotFoundException $e )
+            {
+                // Do nothing
+            }
         }
         else if ( !$this->fieldHelper->isFieldEmpty( $content, 'menu_items' ) )
         {

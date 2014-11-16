@@ -10,6 +10,7 @@ services:
             - @ezpublish.field_helper
             - @ezpublish.translation_helper
             - @netgen_more.helper.site_info_helper
+            - @netgen_more.helper.sort_clause_helper
             - @router
 
     netgen_more.menu.main_menu:

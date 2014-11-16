@@ -77,6 +77,7 @@ class RelationListMenuBuilder
      * Creates the relation list menu
      *
      * @param string $fieldDefIdentifier
+     * @param mixed $contentId
      *
      * @return \Knp\Menu\ItemInterface
      */

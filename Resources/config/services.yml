@@ -1,95 +1,95 @@
 parameters:
-    netgen_more.persistence.legacy.search.gateway.sort_clause_handler.common.field_length.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler\FieldLength
+    ngmore.persistence.legacy.search.gateway.sort_clause_handler.common.field_length.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler\FieldLength
 
-    netgen_more.controller.full_view.class: Netgen\Bundle\MoreBundle\Controller\FullViewController
-    netgen_more.controller.embed_view.class: Netgen\Bundle\MoreBundle\Controller\EmbedViewController
-    netgen_more.controller.block_view.class: Netgen\Bundle\MoreBundle\Controller\BlockViewController
-    netgen_more.controller.page_layout.class: Netgen\Bundle\MoreBundle\Controller\PageLayoutController
-    netgen_more.controller.parts.class: Netgen\Bundle\MoreBundle\Controller\PartsController
+    ngmore.controller.full_view.class: Netgen\Bundle\MoreBundle\Controller\FullViewController
+    ngmore.controller.embed_view.class: Netgen\Bundle\MoreBundle\Controller\EmbedViewController
+    ngmore.controller.block_view.class: Netgen\Bundle\MoreBundle\Controller\BlockViewController
+    ngmore.controller.page_layout.class: Netgen\Bundle\MoreBundle\Controller\PageLayoutController
+    ngmore.controller.parts.class: Netgen\Bundle\MoreBundle\Controller\PartsController
 
-    netgen_more.helper.path_helper.class: Netgen\Bundle\MoreBundle\Helper\PathHelper
-    netgen_more.helper.site_info_helper.class: Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper
-    netgen_more.helper.sort_clause_helper.class: Netgen\Bundle\MoreBundle\Helper\SortClauseHelper
-    netgen_more.helper.layout_helper.class: Netgen\Bundle\MoreBundle\Helper\LayoutHelper
+    ngmore.helper.path_helper.class: Netgen\Bundle\MoreBundle\Helper\PathHelper
+    ngmore.helper.site_info_helper.class: Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper
+    ngmore.helper.sort_clause_helper.class: Netgen\Bundle\MoreBundle\Helper\SortClauseHelper
+    ngmore.helper.layout_helper.class: Netgen\Bundle\MoreBundle\Helper\LayoutHelper
 
-    netgen_more.data_collector.legacy_debug_data_collector.class: Netgen\Bundle\MoreBundle\DataCollector\LegacyDebugDataCollector
+    ngmore.data_collector.legacy_debug_data_collector.class: Netgen\Bundle\MoreBundle\DataCollector\LegacyDebugDataCollector
 
-    netgen_more.limitation_type.function_list.class: Netgen\Bundle\MoreBundle\Core\Limitation\FunctionListLimitationType
+    ngmore.limitation_type.function_list.class: Netgen\Bundle\MoreBundle\Core\Limitation\FunctionListLimitationType
 
-    netgen_more.legacy_mapper.configuration.class: Netgen\Bundle\MoreBundle\LegacyMapper\Configuration
+    ngmore.legacy_mapper.configuration.class: Netgen\Bundle\MoreBundle\LegacyMapper\Configuration
 
 services:
-    netgen_more.persistence.legacy.search.gateway.sort_clause_handler.common.field_length:
-        class: %netgen_more.persistence.legacy.search.gateway.sort_clause_handler.common.field_length.class%
+    ngmore.persistence.legacy.search.gateway.sort_clause_handler.common.field_length:
+        class: %ngmore.persistence.legacy.search.gateway.sort_clause_handler.common.field_length.class%
         parent: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common.field
         tags:
             - {name: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.content}
             - {name: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.location}
 
-    netgen_more.controller.full_view:
-        class: %netgen_more.controller.full_view.class%
+    ngmore.controller.full_view:
+        class: %ngmore.controller.full_view.class%
         parent: ezpublish.controller.base
 
-    netgen_more.controller.embed_view:
-        class: %netgen_more.controller.embed_view.class%
+    ngmore.controller.embed_view:
+        class: %ngmore.controller.embed_view.class%
         parent: ezpublish.controller.base
         arguments:
             - @?logger
 
-    netgen_more.controller.block_view:
-        class: %netgen_more.controller.block_view.class%
+    ngmore.controller.block_view:
+        class: %ngmore.controller.block_view.class%
         parent: ezpublish.controller.base
 
-    netgen_more.controller.page_layout:
-        class: %netgen_more.controller.page_layout.class%
+    ngmore.controller.page_layout:
+        class: %ngmore.controller.page_layout.class%
         parent: ezpublish.controller.base
 
-    netgen_more.controller.parts:
-        class: %netgen_more.controller.parts.class%
+    ngmore.controller.parts:
+        class: %ngmore.controller.parts.class%
         parent: ezpublish.controller.base
 
-    netgen_more.helper.path_helper:
-        class: %netgen_more.helper.path_helper.class%
+    ngmore.helper.path_helper:
+        class: %ngmore.helper.path_helper.class%
         arguments:
             - @ezpublish.api.service.location
             - @ezpublish.config.resolver
             - @ezpublish.translation_helper
             - @router
 
-    netgen_more.helper.site_info_helper:
-        class: %netgen_more.helper.site_info_helper.class%
+    ngmore.helper.site_info_helper:
+        class: %ngmore.helper.site_info_helper.class%
         arguments:
             - @ezpublish.api.service.location
             - @ezpublish.api.service.content
             - @ezpublish.config.resolver
 
-    netgen_more.helper.sort_clause_helper:
-        class: %netgen_more.helper.sort_clause_helper.class%
+    ngmore.helper.sort_clause_helper:
+        class: %ngmore.helper.sort_clause_helper.class%
 
-    netgen_more.helper.layout_helper:
-        class: %netgen_more.helper.layout_helper.class%
+    ngmore.helper.layout_helper:
+        class: %ngmore.helper.layout_helper.class%
         arguments:
             - @ezpublish.api.repository
-            - @netgen_more.helper.path_helper
+            - @ngmore.helper.path_helper
             - @ezpublish.translation_helper
             - @ezpublish.config.resolver
 
-    netgen_more.data_collector.legacy_debug_data_collector:
-        class: %netgen_more.data_collector.legacy_debug_data_collector.class%
+    ngmore.data_collector.legacy_debug_data_collector:
+        class: %ngmore.data_collector.legacy_debug_data_collector.class%
         arguments:
             - @ezpublish_legacy.kernel
             - @?fos_http_cache.user_context.request_matcher
         tags:
             - { name: data_collector, template: 'NetgenMoreBundle:Profiler:LegacyDebug.html.twig', id: 'ngmore_legacy_debug' }
 
-    netgen_more.limitation_type.function_list:
-        class: %netgen_more.limitation_type.function_list.class%
+    ngmore.limitation_type.function_list:
+        class: %ngmore.limitation_type.function_list.class%
         arguments: [@ezpublish.api.persistence_handler]
         tags:
             - {name: ezpublish.limitationType, alias: FunctionList}
 
-    netgen_more.legacy_mapper.configuration:
-        class: %netgen_more.legacy_mapper.configuration.class%
+    ngmore.legacy_mapper.configuration:
+        class: %ngmore.legacy_mapper.configuration.class%
         arguments:
             - @ezpublish.config.resolver.core
             - %ngmore.legacy_mapper.configuration.options%

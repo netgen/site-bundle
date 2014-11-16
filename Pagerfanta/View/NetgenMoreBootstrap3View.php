@@ -34,6 +34,6 @@ class NetgenMoreBootstrap3View extends TwitterBootstrap3View
      */
     public function getName()
     {
-        return 'netgen_more_bootstrap3';
+        return 'ngmore_bootstrap3';
     }
 }

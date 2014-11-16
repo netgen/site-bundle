@@ -3,9 +3,9 @@ parameters:
     twig.extension.array.class: Twig_Extensions_Extension_Array
     twig.extension.date.class: Twig_Extensions_Extension_Date
 
-    netgen_more.templating.converter.user.class: Netgen\Bundle\MoreBundle\Templating\Converter\UserConverter
-    netgen_more.templating.global_helper.class: Netgen\Bundle\MoreBundle\Templating\GlobalHelper
-    netgen_more.templating.twig.extension.class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\NetgenMoreExtension
+    ngmore.templating.converter.user.class: Netgen\Bundle\MoreBundle\Templating\Converter\UserConverter
+    ngmore.templating.global_helper.class: Netgen\Bundle\MoreBundle\Templating\GlobalHelper
+    ngmore.templating.twig.extension.class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\NetgenMoreExtension
 
 services:
     twig.extension.text:
@@ -23,29 +23,29 @@ services:
         tags:
             - { name: twig.extension }
 
-    netgen_more.templating.converter.user:
-        class: %netgen_more.templating.converter.user.class%
+    ngmore.templating.converter.user:
+        class: %ngmore.templating.converter.user.class%
         arguments:
             - @ezpublish_legacy.kernel
         tags:
             - {name: ezpublish_legacy.templating.converter, for: eZ\Publish\Core\Repository\Values\User\User}
 
-    netgen_more.templating.global_helper:
-        class: %netgen_more.templating.global_helper.class%
+    ngmore.templating.global_helper:
+        class: %ngmore.templating.global_helper.class%
         arguments:
-            - @netgen_more.helper.site_info_helper
-            - @netgen_more.helper.layout_helper
+            - @ngmore.helper.site_info_helper
+            - @ngmore.helper.layout_helper
             - @ezpublish.config.resolver
         calls:
             - [setRequest, [@?request=]]
 
-    netgen_more.templating.twig.extension:
-        class: %netgen_more.templating.twig.extension.class%
+    ngmore.templating.twig.extension:
+        class: %ngmore.templating.twig.extension.class%
         arguments:
             - @ezpublish.api.repository
             - @ezpublish.translation_helper
-            - @netgen_more.helper.path_helper
-            - @netgen_more.templating.global_helper
+            - @ngmore.helper.path_helper
+            - @ngmore.templating.global_helper
             - @ezpublish.locale.converter
         tags:
             - { name: twig.extension }

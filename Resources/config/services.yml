@@ -71,6 +71,7 @@ services:
         arguments:
             - @ezpublish.api.repository
             - @netgen_more.helper.path_helper
+            - @ezpublish.translation_helper
             - @ezpublish.config.resolver
 
     netgen_more.data_collector.legacy_debug_data_collector:

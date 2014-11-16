@@ -29,7 +29,7 @@ class PageLayoutController extends Controller
     /**
      * Returns rendered menu
      *
-     * @param mixed $activeLocationId
+     * @param mixed $activeItemId
      * @param string $menuName
      * @param string $ulClass
      * @param string $firstClass
@@ -38,15 +38,15 @@ class PageLayoutController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function menu( $activeLocationId, $menuName, $ulClass = 'nav navbar-nav', $firstClass = 'firstli', $currentClass = 'active', $lastClass = 'lastli' )
+    public function menu( $activeItemId, $menuName, $ulClass = 'nav navbar-nav', $firstClass = 'firstli', $currentClass = 'active', $lastClass = 'lastli' )
     {
         /** @var \Knp\Menu\ItemInterface $menu */
         $menu = $this->container->get( 'knp_menu.menu_provider' )->get( $menuName );
         $menu->setChildrenAttribute( 'class', $ulClass );
 
-        if ( !empty( $menu[$activeLocationId] ) && $menu[$activeLocationId] instanceof ItemInterface )
+        if ( !empty( $menu[$activeItemId] ) && $menu[$activeItemId] instanceof ItemInterface )
         {
-            $menu[$activeLocationId]->setCurrent( true );
+            $menu[$activeItemId]->setCurrent( true );
         }
 
         /** @var \Knp\Menu\Renderer\RendererInterface $menuRenderer */

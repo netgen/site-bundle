@@ -9,21 +9,6 @@ use Knp\Menu\ItemInterface;
 class PageLayoutController extends Controller
 {
     /**
-     * Returns rendered relation menu template
-     *
-     * @deprecated This method is deprecated in favor of PageLayoutController::menu
-     *             and will be removed in NetgenMoreBundle 2.1
-     *
-     * @param mixed $activeLocationId
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function relationMenu( $activeLocationId )
-    {
-        return $this->menu( 'ngmore_main_menu', $activeLocationId );
-    }
-
-    /**
      * Returns rendered menu
      *
      * @param string $menuName

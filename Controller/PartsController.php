@@ -28,10 +28,8 @@ class PartsController extends Controller
         $query = new LocationQuery();
 
         $criterions = array(
-            new Criterion\Subtree( $location->pathString ),
+            new Criterion\ParentLocationId( $location->id ),
             new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
-            new Criterion\LogicalNot( new Criterion\LocationId( $location->id ) ),
-            new Criterion\Location\Depth( Criterion\Operator::EQ, $location->depth + 1 ),
             new Criterion\ContentTypeIdentifier( 'image' )
         );
 

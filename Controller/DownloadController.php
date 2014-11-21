@@ -48,21 +48,21 @@ class DownloadController extends Controller
             );
         }
 
-        $binaryFileField = null;
+        $binaryField = null;
         foreach ( $content->getFields() as $field )
         {
             if ( $field->id == $fieldId )
             {
-                $binaryFileField = $field;
+                $binaryField = $field;
                 break;
             }
         }
 
         if (
-            !$binaryFileField instanceof Field ||
+            !$binaryField instanceof Field ||
             $this->container->get( 'ezpublish.field_helper' )->isFieldEmpty(
                 $content,
-                $binaryFileField->fieldDefIdentifier
+                $binaryField->fieldDefIdentifier
             )
         )
         {
@@ -73,15 +73,20 @@ class DownloadController extends Controller
             );
         }
 
-        if ( $binaryFileField->value instanceof BinaryBaseValue )
+        $binaryFieldValue = $this->container->get( 'ezpublish.translation_helper' )->getTranslatedField(
+            $content,
+            $binaryField->fieldDefIdentifier
+        )->value;
+
+        if ( $binaryFieldValue instanceof BinaryBaseValue )
         {
             $ioService = $this->container->get( 'ezpublish.fieldtype.ezbinaryfile.io_service' );
-            $binaryFile = $ioService->loadBinaryFileByUri( $binaryFileField->value->uri );
+            $binaryFile = $ioService->loadBinaryFileByUri( $binaryFieldValue->uri );
         }
-        else if ( $binaryFileField->value instanceof ImageValue )
+        else if ( $binaryFieldValue instanceof ImageValue )
         {
             $ioService = $this->container->get( 'ezpublish.fieldType.ezimage.io_service' );
-            $binaryFile = $ioService->loadBinaryFile( $binaryFileField->value->id );
+            $binaryFile = $ioService->loadBinaryFile( $binaryFieldValue->id );
         }
         else
         {
@@ -101,7 +106,7 @@ class DownloadController extends Controller
         $response = new BinaryStreamResponse( $binaryFile, $ioService );
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $binaryFileField->value->fileName,
+            $binaryFieldValue->fileName,
             $fallbackFileName
         );
 

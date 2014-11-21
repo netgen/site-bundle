@@ -38,7 +38,6 @@ class EmbedViewController extends Controller
     {
         $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
         $translationHelper = $this->container->get( 'ezpublish.translation_helper' );
-        $imageVariationService = $this->container->get( 'ezpublish.fieldtype.ezimage.variation_service' );
 
         $targetLink = !empty( $params['objectParameters']['href'] ) ? trim( $params['objectParameters']['href'] ) : null;
         if ( !empty( $targetLink ) )

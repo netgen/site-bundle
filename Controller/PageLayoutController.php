@@ -57,11 +57,12 @@ class PageLayoutController extends Controller
      * @param string $region
      * @param string|bool $cssClass
      * @param array $params
+     * @param array $blockSpecificParams
      * @param string $template
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function region( $layoutId, $region, $cssClass = false, $params = array(), $template = null )
+    public function region( $layoutId, $region, $cssClass = false, $params = array(), $blockSpecificParams = array(), $template = null )
     {
         $response = new Response();
         $response->setPublic()->setSharedMaxAge( 300 );
@@ -81,7 +82,8 @@ class PageLayoutController extends Controller
                         'zone' => $zone,
                         'region' => $region,
                         'css_class' => $cssClass,
-                        'params' => $params
+                        'params' => $params,
+                        'blockSpecificParams' => $blockSpecificParams
                     ),
                     $response
                 );

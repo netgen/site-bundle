@@ -1,11 +1,15 @@
-{% if openGraph is defined and openGraph|length > 0 %}
+{% if openGraph is defined %}
     {% for key, value in openGraph %}
-        {% if value is iterable %}
-            {% for valueKey, valueItem in value %}
-                <meta property="{{ valueKey }}" content="{{ valueItem }}">
-            {% endfor %}
-        {% else %}
-            <meta property="{{ key }}" content="{{ value }}">
+        <meta property="{{ key|trim }}" content="{{ value|trim }}" />
+    {% endfor %}
+{% endif %}
+
+{% if content is defined %}
+    {% set metaTags = get_netgen_open_graph( content ) %}
+
+    {% for metaTag in metaTags %}
+        {% if openGraph is not defined or openGraph[metaTag.tagName] is not defined %}
+            <meta property="{{ metaTag.tagName|trim }}" content="{{ metaTag.tagValue|trim }}" />
         {% endif %}
     {% endfor %}
 {% endif %}

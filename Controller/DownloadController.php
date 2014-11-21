@@ -5,6 +5,7 @@ namespace Netgen\Bundle\MoreBundle\Controller;
 use eZ\Bundle\EzPublishCoreBundle\Controller;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\FieldType\BinaryBase\Value as BinaryBaseValue;
+use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
@@ -72,7 +73,17 @@ class DownloadController extends Controller
             );
         }
 
-        if ( !$binaryFileField->value instanceof BinaryBaseValue )
+        if ( $binaryFileField->value instanceof BinaryBaseValue )
+        {
+            $ioService = $this->container->get( 'ezpublish.fieldtype.ezbinaryfile.io_service' );
+            $binaryFile = $ioService->loadBinaryFileByUri( $binaryFileField->value->uri );
+        }
+        else if ( $binaryFileField->value instanceof ImageValue )
+        {
+            $ioService = $this->container->get( 'ezpublish.fieldType.ezimage.io_service' );
+            $binaryFile = $ioService->loadBinaryFile( $binaryFileField->value->id );
+        }
+        else
         {
             throw new NotFoundHttpException(
                 $this->container->get( 'translator' )->trans(
@@ -81,19 +92,13 @@ class DownloadController extends Controller
             );
         }
 
-        $ioService = $this->container->get( 'ezpublish.fieldtype.ezbinaryfile.io_service' );
-
-        $response = new BinaryStreamResponse(
-            $ioService->loadBinaryFileByUri( $binaryFileField->value->uri ),
-            $ioService
-        );
-
-        $fallbackFileName = $binaryFileField->value->id;
+        $fallbackFileName = $binaryFile->id;
         if ( strpos( $fallbackFileName, '/' ) > 0 )
         {
             $fallbackFileName = substr( $fallbackFileName, strrpos( $fallbackFileName, '/' ) + 1 );
         }
 
+        $response = new BinaryStreamResponse( $binaryFile, $ioService );
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             $binaryFileField->value->fileName,

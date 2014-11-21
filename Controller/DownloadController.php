@@ -3,11 +3,13 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\FieldType\BinaryBase\Value as BinaryBaseValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DownloadController extends Controller
@@ -30,7 +32,19 @@ class DownloadController extends Controller
         }
         catch ( NotFoundException $e )
         {
-            throw new NotFoundHttpException( 'File not found' );
+            throw new NotFoundHttpException(
+                $this->container->get( 'translator' )->trans(
+                    'ngmore.download.file_not_found'
+                )
+            );
+        }
+        catch ( UnauthorizedException $e )
+        {
+            throw new AccessDeniedHttpException(
+                $this->container->get( 'translator' )->trans(
+                    'ngmore.download.access_denied'
+                )
+            );
         }
 
         $binaryFileField = null;
@@ -51,12 +65,20 @@ class DownloadController extends Controller
             )
         )
         {
-            throw new NotFoundHttpException( 'File not found' );
+            throw new NotFoundHttpException(
+                $this->container->get( 'translator' )->trans(
+                    'ngmore.download.file_not_found'
+                )
+            );
         }
 
         if ( !$binaryFileField->value instanceof BinaryBaseValue )
         {
-            throw new NotFoundHttpException( 'File not found' );
+            throw new NotFoundHttpException(
+                $this->container->get( 'translator' )->trans(
+                    'ngmore.download.file_not_found'
+                )
+            );
         }
 
         $ioService = $this->container->get( 'ezpublish.fieldtype.ezbinaryfile.io_service' );

@@ -1,0 +1,5 @@
+_netgenMoreDownload:
+    path: /download/{contentId}/{fieldId}
+    defaults:
+        _controller: ngmore.controller.download:downloadFile
+    methods: [GET]

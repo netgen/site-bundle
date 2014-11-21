@@ -30,7 +30,7 @@ class DownloadController extends Controller
         }
         catch ( NotFoundException $e )
         {
-            throw new NotFoundHttpException( 'File not found 1' );
+            throw new NotFoundHttpException( 'File not found' );
         }
 
         $binaryFileField = null;
@@ -51,12 +51,12 @@ class DownloadController extends Controller
             )
         )
         {
-            throw new NotFoundHttpException( 'File not found 2' );
+            throw new NotFoundHttpException( 'File not found' );
         }
 
         if ( !$binaryFileField->value instanceof BinaryBaseValue )
         {
-            throw new NotFoundHttpException( 'File not found 3' );
+            throw new NotFoundHttpException( 'File not found' );
         }
 
         $ioService = $this->container->get( 'ezpublish.fieldtype.ezbinaryfile.io_service' );

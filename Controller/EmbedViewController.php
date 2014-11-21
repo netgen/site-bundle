@@ -107,20 +107,26 @@ class EmbedViewController extends Controller
 
                 if ( !empty( $content ) )
                 {
+                    $fieldName = null;
                     if ( isset( $content->fields['file'] ) && !$fieldHelper->isFieldEmpty( $content, 'file' ) )
                     {
-                        /** @var \eZ\Publish\Core\FieldType\BinaryFile\Value $fieldValue */
-                        $fieldValue = $translationHelper->getTranslatedField( $content, 'file' )->value;
-                        $targetLink = $fieldValue->uri;
+                        $fieldName = 'file';
                     }
                     else if ( isset( $content->fields['image'] ) && !$fieldHelper->isFieldEmpty( $content, 'image' ) )
                     {
-                        $imageVariation = $imageVariationService->getVariation(
-                            $translationHelper->getTranslatedField( $content, 'image' ),
-                            $content->versionInfo,
-                            'original'
+                        $fieldName = 'image';
+                    }
+
+                    if ( $fieldName !== null )
+                    {
+                        $field = $translationHelper->getTranslatedField( $content, $fieldName );
+                        $targetLink = $this->generateUrl(
+                            'ngmore_download',
+                            array(
+                                'contentId' => $content->id,
+                                'fieldId' => $field->id
+                            )
                         );
-                        $targetLink = $imageVariation->uri;
                     }
                 }
             }

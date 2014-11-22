@@ -97,17 +97,11 @@ class DownloadController extends Controller
             );
         }
 
-        $fallbackFileName = $binaryFile->id;
-        if ( strpos( $fallbackFileName, '/' ) > 0 )
-        {
-            $fallbackFileName = substr( $fallbackFileName, strrpos( $fallbackFileName, '/' ) + 1 );
-        }
-
         $response = new BinaryStreamResponse( $binaryFile, $ioService );
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            $binaryFieldValue->fileName,
-            $fallbackFileName
+            str_replace( array( '/', '\\' ), '', $binaryFieldValue->fileName ),
+            'file'
         );
 
         return $response;

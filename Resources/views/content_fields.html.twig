@@ -13,6 +13,8 @@
         {% if parameters.link_href is defined and parameters.link_href is not empty %}
             </a>
         {% endif %}
+    {% elseif parameters.force_tag is defined and parameters.force_tag == true %}
+        <img src="//:0" alt="" />
     {% endif %}
 {% endspaceless %}
 {% endblock %}

@@ -98,6 +98,10 @@ class NetgenMoreExtension extends Twig_Extension
             new Twig_SimpleFunction(
                 'ngmore_owner_name',
                 array( $this, 'getOwnerName' )
+            ),
+            new Twig_SimpleFunction(
+                'ngmore_field',
+                array( $this, 'getTranslatedField' )
             )
         );
     }
@@ -170,6 +174,18 @@ class NetgenMoreExtension extends Twig_Extension
         );
 
         return $this->translationHelper->getTranslatedContentName( $ownerContent, $forcedLanguage );
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param string $fieldDefIdentifier Identifier for the field we want to get.
+     * @param string $forcedLanguage Locale we want the field in (e.g. "cro-HR"). Null by default (takes current locale).
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Field
+     */
+    public function getTranslatedField( Content $content, $fieldDefIdentifier, $forcedLanguage = null )
+    {
+        return $this->translationHelper->getTranslatedField( $content, $fieldDefIdentifier, $forcedLanguage );
     }
 
     /**

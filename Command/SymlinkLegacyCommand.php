@@ -162,13 +162,13 @@ class SymlinkLegacyCommand extends SymlinkCommand
         /** @var \DirectoryIterator[] $directories */
         $directories = array();
 
-        $path = $legacyExtensionPath . '/root/';
+        $path = $legacyExtensionPath . '/root_' . $this->environment . '/';
         if ( $this->fileSystem->exists( $path ) && is_dir( $path ) )
         {
             $directories[] = new DirectoryIterator( $path );
         }
 
-        $path = $legacyExtensionPath . '/root_' . $this->environment . '/';
+        $path = $legacyExtensionPath . '/root/';
         if ( $this->fileSystem->exists( $path ) && is_dir( $path ) )
         {
             $directories[] = new DirectoryIterator( $path );

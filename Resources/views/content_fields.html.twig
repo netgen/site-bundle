@@ -8,7 +8,7 @@
         {% endif %}
 
         {% set imageAlias = ez_image_alias( field, versionInfo, parameters.alias|default( 'original' ) ) %}
-        <img {% if attr is defined %}{% for key, value in attr %} {{ key }}="{{ value }}" {% endfor %}{% endif %} src="{% if imageAlias %}{{ asset( imageAlias.uri ) }}{% else %}//:0{% endif %}" {% if parameters.image_class is defined and parameters.image_class is not empty %} class="{{ parameters.image_class }}" {% endif %} {% if imageAlias.width is defined and imageAlias.width is not empty %} width="{{ imageAlias.width }}" {% endif %} {% if imageAlias.height is defined and imageAlias.height is not empty %} height="{{ imageAlias.height }}" {% endif %} alt="{% if parameters.alt_text is defined and parameters.alt_text is not empty %}{{ parameters.alt_text }}{% else %}{{ field.value.alternativeText }}{% endif %}" />
+        <img src="{% if imageAlias %}{{ asset( imageAlias.uri ) }}{% else %}//:0{% endif %}" {% if parameters.image_class is defined and parameters.image_class is not empty %} class="{{ parameters.image_class }}" {% endif %} {% if imageAlias.width is defined and imageAlias.width is not empty %} width="{{ imageAlias.width }}" {% endif %} {% if imageAlias.height is defined and imageAlias.height is not empty %} height="{{ imageAlias.height }}" {% endif %} alt="{% if parameters.alt_text is defined and parameters.alt_text is not empty %}{{ parameters.alt_text }}{% else %}{{ field.value.alternativeText }}{% endif %}" />
 
         {% if parameters.link_href is defined and parameters.link_href is not empty %}
             </a>
@@ -46,7 +46,7 @@
 {% spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
         <a href="{{ path( 'ngmore_download', { contentId: contentInfo.id, fieldId: field.id } ) }}"
-            {% if attr is defined %}{% for key, value in attr %} {{ key }}="{{ value }}" {% endfor %}{% endif %}>{{ field.value.fileName }}</a>&nbsp;({{ field.value.fileSize|ez_file_size( 1 ) }})
+            {{ block( 'field_attributes' ) }}>{{ field.value.fileName }}</a>&nbsp;({{ field.value.fileSize|ez_file_size( 1 ) }})
     {% endif %}
 {% endspaceless %}
 {% endblock %}

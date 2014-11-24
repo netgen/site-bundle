@@ -112,21 +112,43 @@ class SymlinkLegacyCommand extends SymlinkCommand
     {
         $legacyRootDir = $this->getContainer()->getParameter( 'ezpublish_legacy.root_dir' );
 
-        if ( !$this->fileSystem->exists( $legacyExtensionPath . '/root_' . $this->environment . '/settings/siteaccess/' ) )
+        /** @var \DirectoryIterator[] $directories */
+        $directories = array();
+
+        $path = $legacyExtensionPath . '/root_' . $this->environment . '/settings/siteaccess/';
+        if ( $this->fileSystem->exists( $path ) )
         {
-            return;
+            $directories[] = new DirectoryIterator( $path );
         }
 
-        foreach ( new DirectoryIterator( $legacyExtensionPath . '/root_' . $this->environment . '/settings/siteaccess/' ) as $item )
+        $path = $legacyExtensionPath . '/root/settings/siteaccess/';
+        if ( $this->fileSystem->exists( $path ) )
         {
-            if ( !$item->isDir() || $item->isDot() )
+            $directories[] = new DirectoryIterator( $path );
+        }
+
+        $processedSiteAccesses = array();
+        foreach ( $directories as $directory )
+        {
+            foreach ( $directory as $item )
             {
-                continue;
+                if ( !$item->isDir() || $item->isDot() )
+                {
+                    continue;
+                }
+
+                // We want root_* to have priority, so any siteaccess which we already "processed" will be skipped
+                if ( !in_array( $item->getBasename(), $processedSiteAccesses ) )
+                {
+                    $this->verifyAndSymlinkDirectory(
+                        $item->getPathname(),
+                        $legacyRootDir . '/settings/siteaccess/' . $item->getBasename(),
+                        $output
+                    );
+
+                    $processedSiteAccesses[] = $item->getBasename();
+                }
             }
-
-            $siteAccessDestination = $legacyRootDir . '/settings/siteaccess/' . $item->getBasename();
-
-            $this->verifyAndSymlinkDirectory( $item->getPathname(), $siteAccessDestination, $output );
         }
     }
 
@@ -141,10 +163,18 @@ class SymlinkLegacyCommand extends SymlinkCommand
     {
         $legacyRootDir = $this->getContainer()->getParameter( 'ezpublish_legacy.root_dir' );
 
+        // If settings/override folder exists in "root_*", obviously we cannot use the one in "root",
+        // even if it exists. Thus, we only do fallback to "root/settings/override" if the folder in
+        // "root_*" does not exist or is not a directory
+
         $sourceFolder = $legacyExtensionPath . '/root_' . $this->environment . '/settings/override';
         if ( !$this->fileSystem->exists( $sourceFolder ) || !is_dir( $sourceFolder ) )
         {
-            return;
+            $sourceFolder = $legacyExtensionPath . '/root/settings/override';
+            if ( !$this->fileSystem->exists( $sourceFolder ) || !is_dir( $sourceFolder ) )
+            {
+                return;
+            }
         }
 
         $this->verifyAndSymlinkDirectory( $sourceFolder, $legacyRootDir . '/settings/override', $output );

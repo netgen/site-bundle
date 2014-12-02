@@ -166,9 +166,8 @@ class NetgenMoreExtension extends Twig_Extension
     {
         $ownerContentId = $content->contentInfo->ownerId;
         $ownerContent = $this->repository->sudo(
-            function ( $repository ) use ( $ownerContentId )
+            function ( Repository $repository ) use ( $ownerContentId )
             {
-                /** @var \eZ\Publish\API\Repository\Repository $repository */
                 return $repository->getContentService()->loadContent( $ownerContentId );
             }
         );

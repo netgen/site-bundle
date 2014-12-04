@@ -356,6 +356,11 @@ class RelationListMenuBuilder
                 $destinationContent = $this->repository->getContentService()->loadContent( $fieldValue->destinationContentId );
                 $parentLocation = $this->repository->getLocationService()->loadLocation( $destinationContent->contentInfo->mainLocationId );
 
+                if ( $this->fieldHelper->isFieldEmpty( $content, 'item_url' ) && $this->fieldHelper->isFieldEmpty( $content, 'item_object' ) )
+                {
+                    $childItem->setName( $parentLocation->id );
+                }
+
                 $criterions = array(
                     new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
                     new Criterion\ParentLocationId( $parentLocation->id )

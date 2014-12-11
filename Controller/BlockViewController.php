@@ -77,11 +77,11 @@ class BlockViewController extends Controller
         $advancedSortField = !empty( $block->customAttributes['advanced_custom_order'] ) ?
             $block->customAttributes['advanced_custom_order'] : '';
 
-        $sortOrder = Query::SORT_ASC;
+        $sortOrder = Location::SORT_ORDER_ASC;
         if ( isset( $block->customAttributes['advanced_order_direction'] )
              && $block->customAttributes['advanced_order_direction'] == 'desc' )
         {
-            $sortOrder = Query::SORT_DESC;
+            $sortOrder = Location::SORT_ORDER_DESC;
         }
 
         $criterions = array(
@@ -177,7 +177,7 @@ class BlockViewController extends Controller
      *
      * @param string $sortField
      * @param string $advancedSortField
-     * @param string $sortOrder
+     * @param int $sortOrder
      * @param \eZ\Publish\API\Repository\Values\Content\Location $parentLocation
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If advanced sort field has an invalid value

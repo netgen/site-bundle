@@ -1,0 +1,7 @@
+{% set pagelayout = viewbaseLayout %}
+
+{% if not noLayout and ezpublish.configResolver.hasParameter( 'pagelayout', 'ngmore' ) %}
+    {% set pagelayout = ezpublish.configResolver.getParameter( 'pagelayout', 'ngmore' ) %}
+{% endif %}
+
+{% extends pagelayout %}

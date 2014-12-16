@@ -35,9 +35,7 @@ services:
         arguments:
             - @ngmore.helper.site_info_helper
             - @ngmore.helper.layout_helper
-            - @ezpublish.config.resolver
-        calls:
-            - [setRequest, [@?request=]]
+            - @request_stack
 
     ngmore.templating.twig.extension:
         class: %ngmore.templating.twig.extension.class%

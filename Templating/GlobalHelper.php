@@ -4,7 +4,7 @@ namespace Netgen\Bundle\MoreBundle\Templating;
 
 use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;
 use Netgen\Bundle\MoreBundle\Helper\LayoutHelper;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class GlobalHelper
 {
@@ -19,9 +19,9 @@ class GlobalHelper
     protected $layoutHelper;
 
     /**
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var \Symfony\Component\HttpFoundation\RequestStack
      */
-    protected $request;
+    protected $requestStack;
 
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Content
@@ -33,21 +33,13 @@ class GlobalHelper
      *
      * @param \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper $siteInfoHelper
      * @param \Netgen\Bundle\MoreBundle\Helper\LayoutHelper $layoutHelper
+     * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
      */
-    public function __construct( SiteInfoHelper $siteInfoHelper, LayoutHelper $layoutHelper )
+    public function __construct( SiteInfoHelper $siteInfoHelper, LayoutHelper $layoutHelper, RequestStack $requestStack )
     {
         $this->siteInfoHelper = $siteInfoHelper;
         $this->layoutHelper = $layoutHelper;
-    }
-
-    /**
-     * Sets the request
-     *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     */
-    public function setRequest( Request $request = null )
-    {
-        $this->request = $request;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -77,10 +69,11 @@ class GlobalHelper
      */
     public function getLayout()
     {
-        if ( $this->request !== null && $this->layout === null )
+        $request = $this->requestStack->getCurrentRequest();
+        if ( $request !== null && $this->layout === null )
         {
-            $locationId = $this->request->attributes->get( 'locationId' );
-            $pathInfo = $this->request->attributes->get( 'semanticPathinfo' ) . $this->request->attributes->get( 'viewParametersString' );
+            $locationId = $request->attributes->get( 'locationId' );
+            $pathInfo = $request->attributes->get( 'semanticPathinfo' ) . $request->attributes->get( 'viewParametersString' );
 
             $this->layout = $this->layoutHelper->getLayout( $locationId, $pathInfo );
         }

@@ -81,7 +81,7 @@ services:
         class: %ngmore.data_collector.legacy_debug_data_collector.class%
         arguments:
             - @ezpublish_legacy.kernel
-            - @?fos_http_cache.user_context.request_matcher
+            - @fos_http_cache.user_context.request_matcher
         tags:
             - { name: data_collector, template: 'NetgenMoreBundle:Profiler:LegacyDebug.html.twig', id: 'ngmore_legacy_debug' }
 

@@ -90,7 +90,7 @@ class FullViewController extends Controller
         $pager->setNormalizeOutOfRangePages( true );
 
         /** @var \eZ\Publish\Core\FieldType\Integer\Value $pageLimitValue */
-        $pageLimitValue = $translationHelper->getTranslatedField( $content, 'page_limit_value' )->value;
+        $pageLimitValue = $translationHelper->getTranslatedField( $content, 'page_limit' )->value;
 
         $defaultLimit = 12;
         if ( isset( $params['childrenLimit'] ) )

@@ -20,7 +20,7 @@ class PageLayoutController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function menu( $menuName, $activeItemId, $ulClass = 'nav navbar-nav', $firstClass = 'firstli', $currentClass = 'active', $lastClass = 'lastli' )
+    public function menu( $menuName, $activeItemId, $ulClass = 'nav navbar-nav', $firstClass = 'firstli', $currentClass = 'active', $lastClass = 'lastli', $template = null )
     {
         /** @var \Knp\Menu\ItemInterface $menu */
         $menu = $this->container->get( 'knp_menu.menu_provider' )->get( $menuName );
@@ -31,15 +31,22 @@ class PageLayoutController extends Controller
             $menu[$activeItemId]->setCurrent( true );
         }
 
+        $menuOptions = array(
+            'firstClass' => $firstClass,
+            'currentClass' => $currentClass,
+            'lastClass' => $lastClass,
+        );
+
+        if( $template )
+        {
+            $menuOptions['template'] = $template;
+        }
+
         /** @var \Knp\Menu\Renderer\RendererInterface $menuRenderer */
         $menuRenderer = $this->container->get( 'knp_menu.renderer_provider' )->get();
         $menuContent = $menuRenderer->render(
             $menu,
-            array(
-                'firstClass' => $firstClass,
-                'currentClass' => $currentClass,
-                'lastClass' => $lastClass
-            )
+            $menuOptions
         );
 
         $response = new Response();

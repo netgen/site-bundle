@@ -37,7 +37,7 @@ class PageLayoutController extends Controller
             'lastClass' => $lastClass,
         );
 
-        if( $template )
+        if ( $template !== null )
         {
             $menuOptions['template'] = $template;
         }

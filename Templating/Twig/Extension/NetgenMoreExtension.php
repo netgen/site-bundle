@@ -7,6 +7,8 @@ use Netgen\Bundle\MoreBundle\Helper\PathHelper;
 use Netgen\Bundle\MoreBundle\Templating\GlobalHelper;
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Repository;
 use Symfony\Component\Intl\Intl;
 use Twig_Extension;
@@ -96,12 +98,20 @@ class NetgenMoreExtension extends Twig_Extension
                 array( $this, 'getContentTypeIdentifier' )
             ),
             new Twig_SimpleFunction(
-                'ngmore_owner_name',
-                array( $this, 'getOwnerName' )
+                'ngmore_owner',
+                array( $this, 'getOwner' )
             ),
             new Twig_SimpleFunction(
                 'ngmore_field',
                 array( $this, 'getTranslatedField' )
+            ),
+            new Twig_SimpleFunction(
+                'ngmore_can_user',
+                array( $this, 'canUser' )
+            ),
+            new Twig_SimpleFunction(
+                'ngmore_has_access',
+                array( $this, 'hasAccess' )
             )
         );
     }
@@ -155,24 +165,23 @@ class NetgenMoreExtension extends Twig_Extension
     }
 
     /**
+     * Returns owner content for specified content
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content Must be a valid Content or ContentInfo object.
-     * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale)
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType When $content is not a valid Content or ContentInfo object.
      *
-     * @return string
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function getOwnerName( Content $content, $forcedLanguage = null )
+    public function getOwner( Content $content )
     {
-        $ownerContentId = $content->contentInfo->ownerId;
-        $ownerContent = $this->repository->sudo(
-            function ( Repository $repository ) use ( $ownerContentId )
+        $ownerId = $content->contentInfo->ownerId;
+        return $this->repository->sudo(
+            function ( Repository $repository ) use ( $ownerId )
             {
-                return $repository->getContentService()->loadContent( $ownerContentId );
+                return $repository->getContentService()->loadContent( $ownerId );
             }
         );
-
-        return $this->translationHelper->getTranslatedContentName( $ownerContent, $forcedLanguage );
     }
 
     /**
@@ -187,6 +196,36 @@ class NetgenMoreExtension extends Twig_Extension
     public function getTranslatedField( Content $content, $fieldDefIdentifier, $forcedLanguage = null )
     {
         return $this->translationHelper->getTranslatedField( $content, $fieldDefIdentifier, $forcedLanguage );
+    }
+
+    /**
+     * Indicates if the current user is allowed to perform an action given by the function on the given
+     * objects
+     *
+     * @param string $module The module, aka controller identifier to check permissions on
+     * @param string $function The function, aka the controller action to check permissions on
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
+     * @param mixed $targets The location, parent or "assignment" value object, or an array of the same
+     *
+     * @return boolean
+     */
+    public function canUser( $module, $function, ValueObject $object, $targets = null )
+    {
+        return $this->repository->canUser( $module, $function, $object, $targets );
+    }
+
+    /**
+     * Indicates if a user has access to specified module and function
+     *
+     * @param string $module The module, aka controller identifier to check permissions on
+     * @param string $function The function, aka the controller action to check permissions on
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
+     * @return boolean|array if limitations are on this function an array of limitations is returned
+     */
+    public function hasAccess( $module, $function, User $user = null )
+    {
+        return $this->repository->hasAccess( $module, $function, $user );
     }
 
     /**

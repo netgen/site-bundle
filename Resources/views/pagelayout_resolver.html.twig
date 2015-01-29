@@ -1,6 +1,6 @@
-{% set pagelayout = viewbaseLayout %}
+{% set pagelayout = viewbaseLayout is defined ? viewbaseLayout : 'NetgenMoreBundle::pagelayout_empty.html.twig' %}
 
-{% if not noLayout and ezpublish.configResolver.hasParameter( 'pagelayout', 'ngmore' ) %}
+{% if ( noLayout is not defined or not noLayout ) and ezpublish.configResolver.hasParameter( 'pagelayout', 'ngmore' ) %}
     {% set pagelayout = ezpublish.configResolver.getParameter( 'pagelayout', 'ngmore' ) %}
 {% endif %}
 

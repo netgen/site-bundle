@@ -17,6 +17,7 @@ class PageLayoutController extends Controller
      * @param string $firstClass
      * @param string $currentClass
      * @param string $lastClass
+     * @param string $template
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */

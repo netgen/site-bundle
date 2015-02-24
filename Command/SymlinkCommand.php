@@ -29,14 +29,11 @@ abstract class SymlinkCommand extends ContainerAwareCommand
     /**
      * Files/directories that will not be symlinked in root and root_* folders
      *
-     * P.S. "settings" folder has special handling anyways
-     *
      * @var array
      */
     protected $blacklistedItems = array(
         'offline_cro.html',
-        'offline_eng.html',
-        'settings'
+        'offline_eng.html'
     );
 
     /**

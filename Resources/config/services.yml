@@ -13,8 +13,6 @@ parameters:
     ngmore.helper.sort_clause_helper.class: Netgen\Bundle\MoreBundle\Helper\SortClauseHelper
     ngmore.helper.layout_helper.class: Netgen\Bundle\MoreBundle\Helper\LayoutHelper
 
-    ngmore.data_collector.legacy_debug_data_collector.class: Netgen\Bundle\MoreBundle\DataCollector\LegacyDebugDataCollector
-
     ngmore.legacy_mapper.configuration.class: Netgen\Bundle\MoreBundle\LegacyMapper\Configuration
 
 services:
@@ -76,14 +74,6 @@ services:
             - @ngmore.helper.path_helper
             - @ezpublish.translation_helper
             - @ezpublish.config.resolver
-
-    ngmore.data_collector.legacy_debug_data_collector:
-        class: %ngmore.data_collector.legacy_debug_data_collector.class%
-        arguments:
-            - @ezpublish_legacy.kernel
-            - @fos_http_cache.user_context.request_matcher
-        tags:
-            - { name: data_collector, template: 'NetgenMoreBundle:Profiler:LegacyDebug.html.twig', id: 'ngmore_legacy_debug' }
 
     ngmore.legacy_mapper.configuration:
         class: %ngmore.legacy_mapper.configuration.class%

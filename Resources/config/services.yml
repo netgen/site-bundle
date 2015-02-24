@@ -13,8 +13,6 @@ parameters:
     ngmore.helper.sort_clause_helper.class: Netgen\Bundle\MoreBundle\Helper\SortClauseHelper
     ngmore.helper.layout_helper.class: Netgen\Bundle\MoreBundle\Helper\LayoutHelper
 
-    ngmore.legacy_mapper.configuration.class: Netgen\Bundle\MoreBundle\LegacyMapper\Configuration
-
 services:
     ngmore.persistence.legacy.search.gateway.sort_clause_handler.common.field_length:
         class: %ngmore.persistence.legacy.search.gateway.sort_clause_handler.common.field_length.class%
@@ -74,13 +72,3 @@ services:
             - @ngmore.helper.path_helper
             - @ezpublish.translation_helper
             - @ezpublish.config.resolver
-
-    ngmore.legacy_mapper.configuration:
-        class: %ngmore.legacy_mapper.configuration.class%
-        arguments:
-            - @ezpublish.config.resolver.core
-            - %ngmore.legacy_mapper.configuration.options%
-        calls:
-            - [setContainer, [@service_container]]
-        tags:
-            - { name: kernel.event_subscriber }

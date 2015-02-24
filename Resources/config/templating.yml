@@ -3,7 +3,6 @@ parameters:
     twig.extension.array.class: Twig_Extensions_Extension_Array
     twig.extension.date.class: Twig_Extensions_Extension_Date
 
-    ngmore.templating.converter.user.class: Netgen\Bundle\MoreBundle\Templating\Converter\UserConverter
     ngmore.templating.global_helper.class: Netgen\Bundle\MoreBundle\Templating\GlobalHelper
     ngmore.templating.twig.extension.class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\NetgenMoreExtension
 
@@ -22,13 +21,6 @@ services:
         class: %twig.extension.date.class%
         tags:
             - { name: twig.extension }
-
-    ngmore.templating.converter.user:
-        class: %ngmore.templating.converter.user.class%
-        arguments:
-            - @ezpublish_legacy.kernel
-        tags:
-            - {name: ezpublish_legacy.templating.converter, for: eZ\Publish\Core\Repository\Values\User\User}
 
     ngmore.templating.global_helper:
         class: %ngmore.templating.global_helper.class%

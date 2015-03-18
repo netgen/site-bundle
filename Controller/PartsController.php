@@ -93,10 +93,13 @@ class PartsController extends Controller
                 {
                     try
                     {
-                        $location = $locationService->loadLocation( $locationId );
-                        if ( !$location->invisible )
+                        if ( !empty( $locationId ) )
                         {
-                            $relatedItems[] = $location;
+                            $location = $locationService->loadLocation( $locationId );
+                            if ( !$location->invisible )
+                            {
+                                $relatedItems[] = $location;
+                            }
                         }
                     }
                     catch ( NotFoundException $e )

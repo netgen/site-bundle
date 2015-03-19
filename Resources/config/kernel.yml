@@ -1,8 +1,8 @@
 parameters:
     ezpublish.controller.page.view.class: Netgen\Bundle\MoreBundle\Controller\PageController
 
-    ezpublish.persistence.legacy.search.gateway.criterion_handler.common.field.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\Field
-    ezpublish.persistence.legacy.search.gateway.criterion_field_value_handler.composite.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\FieldValue\Handler\Composite
+    ezpublish.search.legacy.gateway.criterion_handler.common.field.class: Netgen\Bundle\MoreBundle\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\Field
+    ezpublish.search.legacy.gateway.criterion_field_value_handler.composite.class: Netgen\Bundle\MoreBundle\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Composite
 
     ezpublish.fieldType.ezobjectrelationlist.class: Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Type
     ezpublish.fieldType.ezobjectrelationlist.converter.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\FieldValue\Converter\RelationList

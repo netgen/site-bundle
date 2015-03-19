@@ -1,8 +1,8 @@
 <?php
 
-namespace Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler;
+namespace Netgen\Bundle\MoreBundle\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\Field as BaseFieldCriterionHandler;
+use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\Field as BaseFieldCriterionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;

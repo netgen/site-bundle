@@ -1,10 +1,10 @@
 <?php
 
-namespace Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler;
+namespace Netgen\Bundle\MoreBundle\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler;
 
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler\Field;
+use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Field;
 use Netgen\Bundle\MoreBundle\API\Repository\Values\Content\Query\SortClause\FieldLength as APIFieldLength;
 
 class FieldLength extends Field

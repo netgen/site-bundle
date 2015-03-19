@@ -3,3 +3,9 @@ ngmore_download:
     defaults:
         _controller: ngmore.controller.download:downloadFile
     methods: [GET]
+
+ngmore_sitemap:
+    path: /sitemap
+    defaults:
+        _controller: ngmore.controller.sitemap:viewSitemap
+    methods: [GET]

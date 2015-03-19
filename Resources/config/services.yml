@@ -7,6 +7,7 @@ parameters:
     ngmore.controller.page_layout.class: Netgen\Bundle\MoreBundle\Controller\PageLayoutController
     ngmore.controller.parts.class: Netgen\Bundle\MoreBundle\Controller\PartsController
     ngmore.controller.download.class: Netgen\Bundle\MoreBundle\Controller\DownloadController
+    ngmore.controller.sitemap.class: Netgen\Bundle\MoreBundle\Controller\SitemapController
 
     ngmore.helper.path_helper.class: Netgen\Bundle\MoreBundle\Helper\PathHelper
     ngmore.helper.site_info_helper.class: Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper
@@ -45,6 +46,10 @@ services:
 
     ngmore.controller.download:
         class: %ngmore.controller.download.class%
+        parent: ezpublish.controller.base
+
+    ngmore.controller.sitemap:
+        class: %ngmore.controller.sitemap.class%
         parent: ezpublish.controller.base
 
     ngmore.helper.path_helper:

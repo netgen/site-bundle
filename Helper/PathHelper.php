@@ -81,7 +81,8 @@ class PathHelper
                 // If we reach the root location, we begin to add item to the path array from it
                 if ( $path[$i] == $rootLocationId )
                 {
-                    try{
+                    try
+                    {
                         $location = $this->locationService->loadLocation( $path[$i] );
                     }
                     catch ( UnauthorizedException $e )
@@ -101,7 +102,8 @@ class PathHelper
             // The root location has already been reached, so we can add items to the path array
             else
             {
-                try{
+                try
+                {
                     $location = $this->locationService->loadLocation( $path[$i] );
                 }
                 catch ( UnauthorizedException $e )
@@ -115,7 +117,6 @@ class PathHelper
                     'locationId' => $location->id,
                     'contentId' => $location->contentId
                 );
-
             }
         }
 

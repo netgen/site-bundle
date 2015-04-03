@@ -6,6 +6,7 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use Symfony\Component\Routing\RouterInterface;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 
 class PathHelper
 {
@@ -61,7 +62,6 @@ class PathHelper
         }
 
         $this->pathArray = array();
-
         $path = $this->locationService->loadLocation( $locationId )->path;
 
         // The root location can be defined at site access level
@@ -72,6 +72,7 @@ class PathHelper
         // Shift of location "1" from path as it is not a fully valid location and not readable by most users
         array_shift( $path );
 
+        $location = null;
         for ( $i = 0; $i < count( $path ); $i++ )
         {
             // if root location hasn't been found yet
@@ -80,7 +81,13 @@ class PathHelper
                 // If we reach the root location, we begin to add item to the path array from it
                 if ( $path[$i] == $rootLocationId )
                 {
-                    $location = $this->locationService->loadLocation( $path[$i] );
+                    try{
+                        $location = $this->locationService->loadLocation( $path[$i] );
+                    }
+                    catch ( UnauthorizedException $e )
+                    {
+                        return array();
+                    }
 
                     $isRootLocation = true;
                     $this->pathArray[] = array(
@@ -94,7 +101,13 @@ class PathHelper
             // The root location has already been reached, so we can add items to the path array
             else
             {
-                $location = $this->locationService->loadLocation( $path[$i] );
+                try{
+                    $location = $this->locationService->loadLocation( $path[$i] );
+                }
+                catch ( UnauthorizedException $e )
+                {
+                    return array();
+                }
 
                 $this->pathArray[] = array(
                     'text' => $this->translationHelper->getTranslatedContentNameByContentInfo( $location->contentInfo ),
@@ -102,6 +115,7 @@ class PathHelper
                     'locationId' => $location->id,
                     'contentId' => $location->contentId
                 );
+
             }
         }
 

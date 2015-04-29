@@ -191,12 +191,19 @@ class RelationListMenuBuilder
             }
             else
             {
-                $menuItemId = $uri = $this->router->generate(
-                    'ez_legacy',
-                    array(
-                        'module_uri' => $fieldValue->link
-                    )
-                );
+                try
+                {
+                    $menuItemId = $uri = $this->router->generate(
+                        'ez_legacy',
+                        array(
+                            'module_uri' => $fieldValue->link
+                        )
+                    );
+                }
+                catch( \InvalidArgumentException $ex )
+                {
+                    $menuItemId = $uri = $fieldValue->link;
+                }
 
                 if ( !empty( $fieldValue->text ) )
                 {
@@ -294,12 +301,19 @@ class RelationListMenuBuilder
             }
             else
             {
-                $menuItemId = $uri = $this->router->generate(
-                    'ez_legacy',
-                    array(
-                        'module_uri' => $fieldValue->link
-                    )
-                );
+                try
+                {
+                    $menuItemId = $uri = $this->router->generate(
+                        'ez_legacy',
+                        array(
+                            'module_uri' => $fieldValue->link
+                        )
+                    );
+                }
+                catch( \InvalidArgumentException $ex )
+                {
+                    $menuItemId = $uri = $fieldValue->link;
+                }
 
                 if ( !empty( $fieldValue->text ) )
                 {

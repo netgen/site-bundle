@@ -17,6 +17,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;
 use Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value as RelationListValue;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use InvalidArgumentException;
 
 class RelationListMenuBuilder
 {
@@ -200,7 +201,7 @@ class RelationListMenuBuilder
                         )
                     );
                 }
-                catch( \InvalidArgumentException $ex )
+                catch( InvalidArgumentException $e )
                 {
                     $menuItemId = $uri = $fieldValue->link;
                 }
@@ -237,9 +238,10 @@ class RelationListMenuBuilder
 
                 if ( $this->translationHelper->getTranslatedField( $content, 'use_shortcut_name' )->value->bool )
                 {
-                    $label = $this->translationHelper->getTranslatedContentName( $content );
+                    $shortcutName = $this->translationHelper->getTranslatedContentName( $content );
+                    $label = $shortcutName;
                     $linkAttributes = array(
-                        'title' =>  $this->translationHelper->getTranslatedContentName( $content )
+                        'title' => $shortcutName
                     );
                 }
                 else
@@ -315,7 +317,7 @@ class RelationListMenuBuilder
                         )
                     );
                 }
-                catch( \InvalidArgumentException $ex )
+                catch( InvalidArgumentException $e )
                 {
                     $menuItemId = $uri = $fieldValue->link;
                 }
@@ -326,7 +328,7 @@ class RelationListMenuBuilder
                 }
             }
 
-            if( $this->translationHelper->getTranslatedField( $content, 'target_blank' )->value->bool )
+            if ( $this->translationHelper->getTranslatedField( $content, 'target_blank' )->value->bool )
             {
                 $linkAttributes['target'] = '_blank';
             }
@@ -352,10 +354,10 @@ class RelationListMenuBuilder
 
                 if ( $this->translationHelper->getTranslatedField( $content, 'use_menu_item_name' )->value->bool )
                 {
-
-                    $label = $this->translationHelper->getTranslatedContentName( $content );
+                    $menuItemName = $this->translationHelper->getTranslatedContentName( $content );
+                    $label = $menuItemName;
                     $linkAttributes = array(
-                        'title' =>  $this->translationHelper->getTranslatedContentName( $content )
+                        'title' => $menuItemName
                     );
                 }
                 else

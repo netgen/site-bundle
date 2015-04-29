@@ -235,18 +235,18 @@ class RelationListMenuBuilder
                     )
                 ) . $this->translationHelper->getTranslatedField( $content, 'internal_url_suffix' )->value->text;
 
-                if ( $this->translationHelper->getTranslatedField( $content, 'use_object_name' )->value->bool )
-                {
-                    $label = $relatedContentName;
-                    $linkAttributes = array(
-                        'title' => $relatedContentName
-                    );
-                }
-                else
+                if ( $this->translationHelper->getTranslatedField( $content, 'use_shortcut_name' )->value->bool )
                 {
                     $label = $this->translationHelper->getTranslatedContentName( $content );
                     $linkAttributes = array(
                         'title' =>  $this->translationHelper->getTranslatedContentName( $content )
+                    );
+                }
+                else
+                {
+                    $label = $relatedContentName;
+                    $linkAttributes = array(
+                        'title' => $relatedContentName
                     );
                 }
 
@@ -350,18 +350,19 @@ class RelationListMenuBuilder
                     )
                 );
 
-                if ( $this->translationHelper->getTranslatedField( $content, 'use_object_name' )->value->bool )
+                if ( $this->translationHelper->getTranslatedField( $content, 'use_menu_item_name' )->value->bool )
                 {
-                    $label = $relatedContentName;
+
+                    $label = $this->translationHelper->getTranslatedContentName( $content );
                     $linkAttributes = array(
-                        'title' => $relatedContentName
+                        'title' =>  $this->translationHelper->getTranslatedContentName( $content )
                     );
                 }
                 else
                 {
-                    $label = $this->translationHelper->getTranslatedContentName( $content );
+                    $label = $relatedContentName;
                     $linkAttributes = array(
-                        'title' =>  $this->translationHelper->getTranslatedContentName( $content )
+                        'title' => $relatedContentName
                     );
                 }
 

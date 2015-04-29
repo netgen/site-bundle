@@ -253,6 +253,11 @@ class RelationListMenuBuilder
                 $attributes = array(
                     'id' => 'menu-item-location-id-' . $relatedContent->mainLocationId
                 );
+
+                if ( $this->translationHelper->getTranslatedField( $content, 'target_blank' )->value->bool )
+                {
+                    $linkAttributes['target'] = '_blank';
+                }
             }
             catch ( NotFoundException $e )
             {
@@ -363,6 +368,11 @@ class RelationListMenuBuilder
                 $attributes = array(
                     'id' => 'menu-item-location-id-' . $relatedContent->mainLocationId
                 );
+
+                if ( $this->translationHelper->getTranslatedField( $content, 'target_blank' )->value->bool )
+                {
+                    $linkAttributes['target'] = '_blank';
+                }
             }
             catch ( NotFoundException $e )
             {

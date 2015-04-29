@@ -184,10 +184,6 @@ class RelationListMenuBuilder
             {
                 $menuItemId = $uri = $fieldValue->link;
 
-                $linkAttributes = array(
-                    'target' => '_blank'
-                );
-
                 if ( !empty( $fieldValue->text ) )
                 {
                     $linkAttributes['title'] = $fieldValue->text;
@@ -206,6 +202,11 @@ class RelationListMenuBuilder
                 {
                     $linkAttributes['title'] = $fieldValue->text;
                 }
+            }
+
+            if ( $this->translationHelper->getTranslatedField( $content, 'target_blank' )->value->bool )
+            {
+                $linkAttributes['target'] = '_blank';
             }
         }
         else if ( !$this->fieldHelper->isFieldEmpty( $content, 'related_object' ) )
@@ -277,10 +278,6 @@ class RelationListMenuBuilder
             {
                 $menuItemId = $uri = $fieldValue->link;
 
-                $linkAttributes = array(
-                    'target' => '_blank'
-                );
-
                 if ( !empty( $fieldValue->text ) )
                 {
                     $linkAttributes['title'] = $fieldValue->text;
@@ -299,6 +296,11 @@ class RelationListMenuBuilder
                 {
                     $linkAttributes['title'] = $fieldValue->text;
                 }
+            }
+
+            if( $this->translationHelper->getTranslatedField( $content, 'target_blank' )->value->bool )
+            {
+                $linkAttributes['target'] = '_blank';
             }
         }
         else if ( !$this->fieldHelper->isFieldEmpty( $content, 'item_object' ) )

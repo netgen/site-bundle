@@ -45,11 +45,17 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
      */
     public function onBuildKernel( PreBuildKernelEvent $event )
     {
-        $settings = array();
+        $injectedSettings = array();
+        $injectedMergeSettings = array();
 
         $enabledLegacySettings = isset( $this->options['enabled_legacy_settings'] ) &&
             is_array( $this->options['enabled_legacy_settings'] ) ?
                 $this->options['enabled_legacy_settings'] :
+                array();
+
+        $replaceArrayValues = isset( $this->options['replace_array_values'] ) &&
+            is_array( $this->options['replace_array_values'] ) ?
+                $this->options['replace_array_values'] :
                 array();
 
         foreach ( $enabledLegacySettings as $legacyIniName )
@@ -79,14 +85,39 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
                         continue;
                     }
 
-                    $settings[$legacyIniName . '.ini/' . $legacyIniSection . '/' . $legacyIniValueName] = $legacyIniValue;
+                    if ( is_array( $legacyIniValue ) && empty( $replaceArrayValues[$legacyIniName][$legacyIniSection][$legacyIniValueName] ) )
+                    {
+                        $injectedMergeSettings[$legacyIniName . '.ini/' . $legacyIniSection . '/' . $legacyIniValueName] = $legacyIniValue;
+                    }
+                    else
+                    {
+                        // We need to manipulate the array config to conform to the format eZINI expects
+                        if ( is_array( $legacyIniValue ) )
+                        {
+                            if ( isset( $legacyIniValue[0] ) )
+                            {
+                                $legacyIniValue = array( '' ) + array_combine( range( 1, count( $legacyIniValue ) ), $legacyIniValue );
+                            }
+                            else
+                            {
+                                $legacyIniValue = array( '' ) + $legacyIniValue;
+                            }
+                        }
+
+                        $injectedSettings[$legacyIniName . '.ini/' . $legacyIniSection . '/' . $legacyIniValueName] = $legacyIniValue;
+                    }
                 }
             }
         }
 
         $event->getParameters()->set(
             'injected-settings',
-            $settings + (array)$event->getParameters()->get( 'injected-settings' )
+            $injectedSettings + (array)$event->getParameters()->get( 'injected-settings' )
+        );
+
+        $event->getParameters()->set(
+            'injected-merge-settings',
+            $injectedMergeSettings + (array)$event->getParameters()->get( 'injected-merge-settings' )
         );
     }
 }

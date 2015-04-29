@@ -228,14 +228,23 @@ class RelationListMenuBuilder
                     )
                 ) . $this->translationHelper->getTranslatedField( $content, 'internal_url_suffix' )->value->text;
 
-                $label = $relatedContentName;
+                if ( $this->translationHelper->getTranslatedField( $content, 'use_object_name' )->value->bool )
+                {
+                    $label = $relatedContentName;
+                    $linkAttributes = array(
+                        'title' => $relatedContentName
+                    );
+                }
+                else
+                {
+                    $label = $this->translationHelper->getTranslatedContentName( $content );
+                    $linkAttributes = array(
+                        'title' =>  $this->translationHelper->getTranslatedContentName( $content )
+                    );
+                }
 
                 $attributes = array(
                     'id' => 'menu-item-location-id-' . $relatedContent->mainLocationId
-                );
-
-                $linkAttributes = array(
-                    'title' => $relatedContentName
                 );
             }
             catch ( NotFoundException $e )
@@ -322,14 +331,23 @@ class RelationListMenuBuilder
                     )
                 );
 
-                $label = $relatedContentName;
+                if ( $this->translationHelper->getTranslatedField( $content, 'use_object_name' )->value->bool )
+                {
+                    $label = $relatedContentName;
+                    $linkAttributes = array(
+                        'title' => $relatedContentName
+                    );
+                }
+                else
+                {
+                    $label = $this->translationHelper->getTranslatedContentName( $content );
+                    $linkAttributes = array(
+                        'title' =>  $this->translationHelper->getTranslatedContentName( $content )
+                    );
+                }
 
                 $attributes = array(
                     'id' => 'menu-item-location-id-' . $relatedContent->mainLocationId
-                );
-
-                $linkAttributes = array(
-                    'title' => $relatedContentName
                 );
             }
             catch ( NotFoundException $e )

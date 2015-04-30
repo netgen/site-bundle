@@ -1,2 +1,19 @@
 parameters:
     ngmore.default.locale.conversion_map: %ezpublish.locale.conversion_map%
+
+    ngmore.default.pagelayout: ~
+
+    ngmore.default.locations.site_info.id: ~
+    ngmore.default.locations.sidebars_parent.id: ~
+
+    ngmore.default.google_maps.latitude: ~
+    ngmore.default.google_maps.longitude: ~
+    ngmore.default.google_maps.zoom: ~
+    ngmore.default.google_maps.map_type: ~
+
+    ngmore.default.site_settings.google_analytics_code: ~
+    ngmore.default.site_settings.google_analytics_universal: ~
+    ngmore.default.site_settings.add_this_code: ~
+    ngmore.default.site_settings.typekit_code: ~
+    ngmore.default.site_settings.sublime_video_code: ~
+    ngmore.default.site_settings.facebook_api: ~

@@ -186,7 +186,7 @@ class LayoutHelper
             array(
                 new Query\Criterion\ContentTypeIdentifier( "ng_layout" ),
                 new Query\Criterion\ParentLocationId(
-                    (int)$this->configResolver->getParameter( 'SpecialNodes.SidebarsParentNode', 'ngmore' )
+                    (int)$this->configResolver->getParameter( 'locations.sidebars_parent.id', 'ngmore' )
                 ),
                 new Field( "apply_layout_to_uri", Field::REVERSE_LIKE, $uri )
             )

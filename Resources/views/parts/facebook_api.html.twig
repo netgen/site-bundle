@@ -1,6 +1,6 @@
-{% if ezpublish.configResolver.hasParameter( 'SiteSettings.FacebookApi', 'ngmore' )
+{% if ezpublish.configResolver.hasParameter( 'site_settings.facebook_api', 'ngmore' )
     and ezpublish.configResolver.hasParameter( 'facebook_app_id', 'netgen_open_graph' ) %}
-    {% set facebookApi = ezpublish.configResolver.getParameter( 'SiteSettings.FacebookApi', 'ngmore' ) %}
+    {% set facebookApi = ezpublish.configResolver.getParameter( 'site_settings.facebook_api', 'ngmore' ) %}
 
     {# We check for 'enabled' for compatibility with legacy config #}
     {% if facebookApi == 'enabled' or facebookApi == true %}

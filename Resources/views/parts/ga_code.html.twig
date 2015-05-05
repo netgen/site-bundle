@@ -1,8 +1,8 @@
-{% if ezpublish.configResolver.hasParameter( 'SiteSettings.GoogleAnalyticsCode', 'ngmore' ) %}
-    {% set googleAnalyticsCode = ezpublish.configResolver.getParameter( 'SiteSettings.GoogleAnalyticsCode', 'ngmore' ) %}
+{% if ezpublish.configResolver.hasParameter( 'site_settings.google_analytics_code', 'ngmore' ) %}
+    {% set googleAnalyticsCode = ezpublish.configResolver.getParameter( 'site_settings.google_analytics_code', 'ngmore' ) %}
 
     {% if googleAnalyticsCode is not empty %}
-        {% set universalGoogleAnalytics = ezpublish.configResolver.getParameter( 'SiteSettings.GoogleAnalyticsUniversal', 'ngmore' ) %}
+        {% set universalGoogleAnalytics = ezpublish.configResolver.getParameter( 'site_settings.google_analytics_universal', 'ngmore' ) %}
 
         {# We check for 'enabled' for compatibility with legacy config #}
         {% if universalGoogleAnalytics == 'enabled' or universalGoogleAnalytics == true %}

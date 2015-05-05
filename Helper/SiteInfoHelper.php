@@ -61,7 +61,7 @@ class SiteInfoHelper
         if ( $this->siteInfoLocation === null )
         {
             $this->siteInfoLocation = $this->locationService->loadLocation(
-                $this->configResolver->getParameter( 'SpecialNodes.SiteInfoNode', 'ngmore' )
+                $this->configResolver->getParameter( 'locations.site_info.id', 'ngmore' )
             );
         }
 

@@ -3,10 +3,10 @@
     function initializeGoogleMaps( options ) {
         var defaults = {
             containerId: "0",
-            latitude: {{ ezpublish.configResolver.parameter( 'GoogleMapsSettings.DefaultLatitude', 'ngmore' )|raw|escape( 'js' ) }},
-            longitude: {{ ezpublish.configResolver.parameter( 'GoogleMapsSettings.DefaultLongitude', 'ngmore' )|raw|escape( 'js' ) }},
-            zoom: {{ ezpublish.configResolver.parameter( 'GoogleMapsSettings.DefaultZoom', 'ngmore' )|raw|escape( 'js' ) }},
-            mapType: "{{ ezpublish.configResolver.parameter( 'GoogleMapsSettings.DefaultMapType', 'ngmore' )|raw|escape( 'js' ) }}"
+            latitude: {{ ezpublish.configResolver.parameter( 'google_maps.latitude', 'ngmore' )|raw|escape( 'js' ) }},
+            longitude: {{ ezpublish.configResolver.parameter( 'google_maps.longitude', 'ngmore' )|raw|escape( 'js' ) }},
+            zoom: {{ ezpublish.configResolver.parameter( 'google_maps.zoom', 'ngmore' )|raw|escape( 'js' ) }},
+            mapType: "{{ ezpublish.configResolver.parameter( 'google_maps.map_type', 'ngmore' )|raw|escape( 'js' ) }}"
         };
 
         options = $.extend({}, defaults, options || {});

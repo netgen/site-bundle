@@ -1,6 +1,7 @@
 parameters:
     ngmore.field_type.childrenindexer.class: %ezpublish.fieldType.eznull.class%
     ngmore.field_type.childrenindexer.converter.class: %ezpublish.fieldType.eznull.converter.class%
+    ngmore.field_type.childrenindexer.indexable.class: %ezpublish.fieldType.indexable.unindexed.class%
     ngmore.field_type.ezxmltext.converter.direct_download.class: Netgen\Bundle\MoreBundle\XmlText\Converter\EzLinkDirectDownload
 
 services:
@@ -15,6 +16,11 @@ services:
         class: %ngmore.field_type.childrenindexer.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: childrenindexer, lazy: true, callback: '::create'}
+
+    ngmore.field_type.childrenindexer.indexable:
+        class: %ngmore.field_type.childrenindexer.indexable.class%
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: childrenindexer}
 
     ngmore.field_type.ezxmltext.converter.direct_download:
         class: %ngmore.field_type.ezxmltext.converter.direct_download.class%

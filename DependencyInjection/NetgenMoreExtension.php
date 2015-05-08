@@ -25,7 +25,6 @@ class NetgenMoreExtension extends Extension implements PrependExtensionInterface
 
         $loader = new Loader\YamlFileLoader( $container, new FileLocator( __DIR__ . '/../Resources/config' ) );
 
-        $loader->load( 'parameters.yml' );
         $loader->load( 'field_types.yml' );
         $loader->load( 'pagerfanta.yml' );
         $loader->load( 'templating.yml' );

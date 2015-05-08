@@ -1,3 +1,4 @@
 imports:
+    - { resource: parameters.yml }
     - { resource: ezpage.yml }
     - { resource: override.yml }

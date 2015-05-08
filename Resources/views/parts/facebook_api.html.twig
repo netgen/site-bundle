@@ -6,8 +6,8 @@
     {% if facebookApi == 'enabled' or facebookApi == true %}
         {% set facebookAppId = ezpublish.configResolver.getParameter( 'facebook_app_id', 'netgen_open_graph' ) %}
         {% set facebookLocale = 'en_US' %}
-        {% if ezpublish.configResolver.hasParameter( 'SiteSettings.FacebookLocale', 'ngmore' ) %}
-            {% set facebookLocale = ezpublish.configResolver.parameter( 'SiteSettings.FacebookLocale', 'ngmore' ) %}
+        {% if ezpublish.configResolver.hasParameter( 'site_settings.facebook_locale', 'ngmore' ) %}
+            {% set facebookLocale = ezpublish.configResolver.parameter( 'site_settings.facebook_locale', 'ngmore' ) %}
         {% endif %}
 
         {% if facebookAppId is not empty and facebookLocale is not empty %}

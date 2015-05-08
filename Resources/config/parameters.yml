@@ -8,10 +8,11 @@ parameters:
     ngmore.default.locations.site_info.id: ~
     ngmore.default.locations.sidebars_parent.id: ~
 
-    ngmore.default.google_maps.latitude: ~
-    ngmore.default.google_maps.longitude: ~
-    ngmore.default.google_maps.zoom: ~
-    ngmore.default.google_maps.map_type: ~
+    ngmore.default.google_maps.latitude: 45.79849
+    ngmore.default.google_maps.longitude: 15.90777
+    ngmore.default.google_maps.zoom: 13
+    # Valid options for map type are ROADMAP, SATELLITE, HYBRID, TERRAIN
+    ngmore.default.google_maps.map_type: ROADMAP
 
     ngmore.default.site_settings.google_analytics_code: ~
     ngmore.default.site_settings.google_analytics_universal: ~

@@ -3,6 +3,8 @@ parameters:
 
     ngmore.default.pagelayout: NetgenMoreBundle::pagelayout_empty.html.twig
 
+    ngmore.default.site_domain: localhost
+
     ngmore.default.locations.site_info.id: ~
     ngmore.default.locations.sidebars_parent.id: ~
 

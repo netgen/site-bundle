@@ -1,0 +1,15 @@
+# BC FIX: Added for compatibility with eZ Publish Enterprise 5.4.2
+# Loaded conditionally in DI extension
+parameters:
+    ezpublish.search.legacy.gateway.criterion_handler.common.field.class: Netgen\Bundle\MoreBundle\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\Field
+    ezpublish.search.legacy.gateway.criterion_field_value_handler.composite.class: Netgen\Bundle\MoreBundle\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Composite
+
+    ngmore.search.legacy.gateway.sort_clause_handler.common.field_length.class: Netgen\Bundle\MoreBundle\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\FieldLength
+
+services:
+    ngmore.search.legacy.gateway.sort_clause_handler.common.field_length:
+        class: %ngmore.search.legacy.gateway.sort_clause_handler.common.field_length.class%
+        parent: ezpublish.search.legacy.gateway.sort_clause_handler.common.field
+        tags:
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}

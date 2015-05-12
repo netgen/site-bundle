@@ -1,0 +1,13 @@
+parameters:
+    ezpublish.persistence.legacy.search.gateway.criterion_handler.common.field.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\Field
+    ezpublish.persistence.legacy.search.gateway.criterion_field_value_handler.composite.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\FieldValue\Handler\Composite
+
+    ngmore.persistence.legacy.search.gateway.sort_clause_handler.common.field_length.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler\FieldLength
+
+services:
+    ngmore.persistence.legacy.search.gateway.sort_clause_handler.common.field_length:
+        class: %ngmore.persistence.legacy.search.gateway.sort_clause_handler.common.field_length.class%
+        parent: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common.field
+        tags:
+            - {name: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.content}
+            - {name: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.location}

@@ -1,6 +1,4 @@
 parameters:
-    ngmore.persistence.legacy.search.gateway.sort_clause_handler.common.field_length.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler\FieldLength
-
     ngmore.controller.full_view.class: Netgen\Bundle\MoreBundle\Controller\FullViewController
     ngmore.controller.embed_view.class: Netgen\Bundle\MoreBundle\Controller\EmbedViewController
     ngmore.controller.block_view.class: Netgen\Bundle\MoreBundle\Controller\BlockViewController
@@ -19,13 +17,6 @@ parameters:
     ngmore.legacy_mapper.configuration.class: Netgen\Bundle\MoreBundle\LegacyMapper\Configuration
 
 services:
-    ngmore.persistence.legacy.search.gateway.sort_clause_handler.common.field_length:
-        class: %ngmore.persistence.legacy.search.gateway.sort_clause_handler.common.field_length.class%
-        parent: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common.field
-        tags:
-            - {name: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.content}
-            - {name: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.location}
-
     ngmore.controller.full_view:
         class: %ngmore.controller.full_view.class%
         parent: ezpublish.controller.base

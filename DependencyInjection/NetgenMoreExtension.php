@@ -4,6 +4,7 @@ namespace Netgen\Bundle\MoreBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
@@ -33,13 +34,16 @@ class NetgenMoreExtension extends Extension
         $loader->load( 'menu.yml' );
         $loader->load( 'services.yml' );
 
-        if ( $container->hasDefinition( 'ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common.field' ) )
+        $oldSearchNamespaces = true;
+        try
         {
-            $loader->load( 'search.yml' );
+            $container->getParameter( 'ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common.field.class' );
         }
-        else if ( $container->hasDefinition( 'ezpublish.search.legacy.gateway.sort_clause_handler.common.field' ) )
+        catch ( ParameterNotFoundException $e )
         {
-            $loader->load( 'search_ez54.yml' );
+            $oldSearchNamespaces = false;
         }
+
+        $loader->load( $oldSearchNamespaces ? 'search.yml' : 'search_ez54.yml' );
     }
 }

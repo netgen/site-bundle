@@ -34,7 +34,6 @@ class NetgenMoreExtension extends Extension implements PrependExtensionInterface
         $loader->load( 'services.yml' );
     }
 
-
     /**
      * Allow an extension to prepend the extension configurations.
      *

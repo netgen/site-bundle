@@ -1,48 +1,50 @@
 ezpublish:
-    ezpage:
-        layouts:
-            1ZonesA:
-                name: 1 zone A
-                template: ~
-            4ZonesA:
-                name: 4 zones A
-                template: ~
-            4ZonesB:
-                name: 4 zones B
-                template: ~
-            4ZonesC:
-                name: 4 zones C
-                template: ~
-            6ZonesA:
-                name: 6 zones A
-                template: ~
-            NGRegionLayout:
-                name: Region layout
-                template: ~
+    system:
+        default:
+            ezpage:
+                layouts:
+                    1ZonesA:
+                        name: 1 zone A
+                        template: ~
+                    4ZonesA:
+                        name: 4 zones A
+                        template: ~
+                    4ZonesB:
+                        name: 4 zones B
+                        template: ~
+                    4ZonesC:
+                        name: 4 zones C
+                        template: ~
+                    6ZonesA:
+                        name: 6 zones A
+                        template: ~
+                    NGRegionLayout:
+                        name: Region layout
+                        template: ~
 
-        enabledLayouts:
-            - 1ZonesA
-            - 4ZonesA
-            - 4ZonesB
-            - 4ZonesC
-            - 6ZonesA
-            - NGRegionLayout
+                enabledLayouts:
+                    - 1ZonesA
+                    - 4ZonesA
+                    - 4ZonesB
+                    - 4ZonesC
+                    - 6ZonesA
+                    - NGRegionLayout
 
-        blocks:
-            PageTitle:
-                name: Page title
-            ContentGrid:
-                name: Content grid
-            ContentGridDynamic:
-                name: Content grid (dynamic)
-            MenuDynamic:
-                name: Menu (dynamic)
-            TagsCloud:
-                name: Tags cloud
+                blocks:
+                    PageTitle:
+                        name: Page title
+                    ContentGrid:
+                        name: Content grid
+                    ContentGridDynamic:
+                        name: Content grid (dynamic)
+                    MenuDynamic:
+                        name: Menu (dynamic)
+                    TagsCloud:
+                        name: Tags cloud
 
-        enabledBlocks:
-            - PageTitle
-            - ContentGrid
-            - ContentGridDynamic
-            - MenuDynamic
-            - TagsCloud
+                enabledBlocks:
+                    - PageTitle
+                    - ContentGrid
+                    - ContentGridDynamic
+                    - MenuDynamic
+                    - TagsCloud

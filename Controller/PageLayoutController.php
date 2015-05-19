@@ -73,8 +73,6 @@ class PageLayoutController extends Controller
     public function region( $layoutId, $region, $cssClass = false, $params = array(), $blockSpecificParams = array(), $template = null )
     {
         $response = new Response();
-        $response->setPublic()->setSharedMaxAge( 300 );
-
         $layout = $this->getRepository()->getContentService()->loadContent( $layoutId );
 
         /** @var $pageValue \eZ\Publish\Core\FieldType\Page\Value */
@@ -98,6 +96,7 @@ class PageLayoutController extends Controller
             }
         }
 
+        $response->headers->set( 'X-Location-Id', $layout->contentInfo->mainLocationId );
         return $response;
     }
 }

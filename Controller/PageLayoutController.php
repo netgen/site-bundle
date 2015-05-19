@@ -52,7 +52,12 @@ class PageLayoutController extends Controller
 
         $response = new Response();
 
-        $response->setPublic()->setSharedMaxAge( 86400 );
+        $menuLocationId = $menu->getAttribute( 'location-id' );
+        if ( !empty( $menuLocationId ) )
+        {
+            $response->headers->set( 'X-Location-Id', $menuLocationId );
+        }
+
         $response->setContent( $menuContent );
 
         return $response;

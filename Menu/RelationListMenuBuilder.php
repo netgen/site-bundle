@@ -106,6 +106,7 @@ class RelationListMenuBuilder
             $content = $this->siteInfoHelper->getSiteInfoContent();
         }
 
+        $menu->setAttribute( 'location-id', $content->contentInfo->mainLocationId );
         $this->generateFromRelationList( $menu, $content, $fieldDefIdentifier );
 
         return $menu;

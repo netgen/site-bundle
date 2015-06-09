@@ -17,6 +17,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;
 use Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value as RelationListValue;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Field;
 use InvalidArgumentException;
 
 class RelationListMenuBuilder
@@ -212,7 +213,8 @@ class RelationListMenuBuilder
                 }
             }
 
-            if ( $this->translationHelper->getTranslatedField( $content, 'target_blank' )->value->bool )
+            $targetBlankField = $this->translationHelper->getTranslatedField( $content, 'target_blank' );
+            if ( $targetBlankField instanceof Field && $targetBlankField->value->bool )
             {
                 $linkAttributes['target'] = '_blank';
             }
@@ -236,7 +238,8 @@ class RelationListMenuBuilder
                     )
                 ) . $this->translationHelper->getTranslatedField( $content, 'internal_url_suffix' )->value->text;
 
-                if ( $this->translationHelper->getTranslatedField( $content, 'use_shortcut_name' )->value->bool )
+                $useShortcutNameField = $this->translationHelper->getTranslatedField( $content, 'use_shortcut_name' );
+                if ( $useShortcutNameField instanceof Field && $useShortcutNameField->value->bool )
                 {
                     $shortcutName = $this->translationHelper->getTranslatedContentName( $content );
                     $label = $shortcutName;
@@ -256,7 +259,8 @@ class RelationListMenuBuilder
                     'id' => 'menu-item-location-id-' . $relatedContent->mainLocationId
                 );
 
-                if ( $this->translationHelper->getTranslatedField( $content, 'target_blank' )->value->bool )
+                $targetBlankField = $this->translationHelper->getTranslatedField( $content, 'target_blank' );
+                if ( $targetBlankField instanceof Field && $targetBlankField->value->bool )
                 {
                     $linkAttributes['target'] = '_blank';
                 }
@@ -328,7 +332,8 @@ class RelationListMenuBuilder
                 }
             }
 
-            if ( $this->translationHelper->getTranslatedField( $content, 'target_blank' )->value->bool )
+            $targetBlankField = $this->translationHelper->getTranslatedField( $content, 'target_blank' );
+            if ( $targetBlankField instanceof Field && $targetBlankField->value->bool )
             {
                 $linkAttributes['target'] = '_blank';
             }
@@ -352,7 +357,8 @@ class RelationListMenuBuilder
                     )
                 );
 
-                if ( $this->translationHelper->getTranslatedField( $content, 'use_menu_item_name' )->value->bool )
+                $useMenuItemNameField = $this->translationHelper->getTranslatedField( $content, 'use_menu_item_name' );
+                if ( $useMenuItemNameField instanceof Field && $useMenuItemNameField->value->bool )
                 {
                     $menuItemName = $this->translationHelper->getTranslatedContentName( $content );
                     $label = $menuItemName;
@@ -372,7 +378,8 @@ class RelationListMenuBuilder
                     'id' => 'menu-item-location-id-' . $relatedContent->mainLocationId
                 );
 
-                if ( $this->translationHelper->getTranslatedField( $content, 'target_blank' )->value->bool )
+                $targetBlankField = $this->translationHelper->getTranslatedField( $content, 'target_blank' );
+                if ( $targetBlankField instanceof Field && $targetBlankField->value->bool )
                 {
                     $linkAttributes['target'] = '_blank';
                 }

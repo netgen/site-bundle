@@ -17,6 +17,8 @@ use Symfony\Component\Routing\RouterInterface;
 use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;
 use Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value as RelationListValue;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Field;
+use InvalidArgumentException;
 
 class RelationListMenuBuilder
 {
@@ -185,10 +187,6 @@ class RelationListMenuBuilder
             {
                 $menuItemId = $uri = $fieldValue->link;
 
-                $linkAttributes = array(
-                    'target' => '_blank'
-                );
-
                 if ( !empty( $fieldValue->text ) )
                 {
                     $linkAttributes['title'] = $fieldValue->text;
@@ -196,17 +194,30 @@ class RelationListMenuBuilder
             }
             else
             {
-                $menuItemId = $uri = $this->router->generate(
-                    'ez_legacy',
-                    array(
-                        'module_uri' => $fieldValue->link
-                    )
-                );
+                try
+                {
+                    $menuItemId = $uri = $this->router->generate(
+                        'ez_legacy',
+                        array(
+                            'module_uri' => $fieldValue->link
+                        )
+                    );
+                }
+                catch( InvalidArgumentException $e )
+                {
+                    $menuItemId = $uri = $fieldValue->link;
+                }
 
                 if ( !empty( $fieldValue->text ) )
                 {
                     $linkAttributes['title'] = $fieldValue->text;
                 }
+            }
+
+            $targetBlankField = $this->translationHelper->getTranslatedField( $content, 'target_blank' );
+            if ( $targetBlankField instanceof Field && $targetBlankField->value->bool )
+            {
+                $linkAttributes['target'] = '_blank';
             }
         }
         else if ( !$this->fieldHelper->isFieldEmpty( $content, 'related_object' ) )
@@ -228,15 +239,32 @@ class RelationListMenuBuilder
                     )
                 ) . $this->translationHelper->getTranslatedField( $content, 'internal_url_suffix' )->value->text;
 
-                $label = $relatedContentName;
+                $useShortcutNameField = $this->translationHelper->getTranslatedField( $content, 'use_shortcut_name' );
+                if ( $useShortcutNameField instanceof Field && $useShortcutNameField->value->bool )
+                {
+                    $shortcutName = $this->translationHelper->getTranslatedContentName( $content );
+                    $label = $shortcutName;
+                    $linkAttributes = array(
+                        'title' => $shortcutName
+                    );
+                }
+                else
+                {
+                    $label = $relatedContentName;
+                    $linkAttributes = array(
+                        'title' => $relatedContentName
+                    );
+                }
 
                 $attributes = array(
                     'id' => 'menu-item-location-id-' . $relatedContent->mainLocationId
                 );
 
-                $linkAttributes = array(
-                    'title' => $relatedContentName
-                );
+                $targetBlankField = $this->translationHelper->getTranslatedField( $content, 'target_blank' );
+                if ( $targetBlankField instanceof Field && $targetBlankField->value->bool )
+                {
+                    $linkAttributes['target'] = '_blank';
+                }
             }
             catch ( NotFoundException $e )
             {
@@ -278,10 +306,6 @@ class RelationListMenuBuilder
             {
                 $menuItemId = $uri = $fieldValue->link;
 
-                $linkAttributes = array(
-                    'target' => '_blank'
-                );
-
                 if ( !empty( $fieldValue->text ) )
                 {
                     $linkAttributes['title'] = $fieldValue->text;
@@ -289,17 +313,30 @@ class RelationListMenuBuilder
             }
             else
             {
-                $menuItemId = $uri = $this->router->generate(
-                    'ez_legacy',
-                    array(
-                        'module_uri' => $fieldValue->link
-                    )
-                );
+                try
+                {
+                    $menuItemId = $uri = $this->router->generate(
+                        'ez_legacy',
+                        array(
+                            'module_uri' => $fieldValue->link
+                        )
+                    );
+                }
+                catch( InvalidArgumentException $e )
+                {
+                    $menuItemId = $uri = $fieldValue->link;
+                }
 
                 if ( !empty( $fieldValue->text ) )
                 {
                     $linkAttributes['title'] = $fieldValue->text;
                 }
+            }
+
+            $targetBlankField = $this->translationHelper->getTranslatedField( $content, 'target_blank' );
+            if ( $targetBlankField instanceof Field && $targetBlankField->value->bool )
+            {
+                $linkAttributes['target'] = '_blank';
             }
         }
         else if ( !$this->fieldHelper->isFieldEmpty( $content, 'item_object' ) )
@@ -321,15 +358,32 @@ class RelationListMenuBuilder
                     )
                 );
 
-                $label = $relatedContentName;
+                $useMenuItemNameField = $this->translationHelper->getTranslatedField( $content, 'use_menu_item_name' );
+                if ( $useMenuItemNameField instanceof Field && $useMenuItemNameField->value->bool )
+                {
+                    $menuItemName = $this->translationHelper->getTranslatedContentName( $content );
+                    $label = $menuItemName;
+                    $linkAttributes = array(
+                        'title' => $menuItemName
+                    );
+                }
+                else
+                {
+                    $label = $relatedContentName;
+                    $linkAttributes = array(
+                        'title' => $relatedContentName
+                    );
+                }
 
                 $attributes = array(
                     'id' => 'menu-item-location-id-' . $relatedContent->mainLocationId
                 );
 
-                $linkAttributes = array(
-                    'title' => $relatedContentName
-                );
+                $targetBlankField = $this->translationHelper->getTranslatedField( $content, 'target_blank' );
+                if ( $targetBlankField instanceof Field && $targetBlankField->value->bool )
+                {
+                    $linkAttributes['target'] = '_blank';
+                }
             }
             catch ( NotFoundException $e )
             {

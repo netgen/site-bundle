@@ -242,10 +242,9 @@ class RelationListMenuBuilder
                 $useShortcutNameField = $this->translationHelper->getTranslatedField( $content, 'use_shortcut_name' );
                 if ( $useShortcutNameField instanceof Field && $useShortcutNameField->value->bool )
                 {
-                    $shortcutName = $this->translationHelper->getTranslatedContentName( $content );
-                    $label = $shortcutName;
+                    $label = $this->translationHelper->getTranslatedContentName( $content );
                     $linkAttributes = array(
-                        'title' => $shortcutName
+                        'title' => $label
                     );
                 }
                 else
@@ -361,10 +360,9 @@ class RelationListMenuBuilder
                 $useMenuItemNameField = $this->translationHelper->getTranslatedField( $content, 'use_menu_item_name' );
                 if ( $useMenuItemNameField instanceof Field && $useMenuItemNameField->value->bool )
                 {
-                    $menuItemName = $this->translationHelper->getTranslatedContentName( $content );
-                    $label = $menuItemName;
+                    $label = $this->translationHelper->getTranslatedContentName( $content );
                     $linkAttributes = array(
-                        'title' => $menuItemName
+                        'title' => $label
                     );
                 }
                 else

@@ -12,6 +12,7 @@
         "netgen/metadata-bundle": "~0.3",
         "netgen/content-type-list-bundle": "~1.0",
         "netgen/enhanced-selection-bundle": "~1.0",
+        "netgen/birthday-bundle": "~1.0",
         "netgen/open-graph-bundle": "~1.0",
         "twig/extensions": "~1.2",
         "liip/imagine-bundle": "~1.0",

@@ -5,7 +5,7 @@ namespace Netgen\Bundle\MoreBundle\XmlText\Converter;
 use eZ\Publish\Core\FieldType\XmlText\Converter;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\LocationService;
-use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
+use Symfony\Component\Routing\RouterInterface;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\Helper\FieldHelper;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
@@ -26,9 +26,9 @@ class EzLinkDirectDownload implements Converter
     protected $contentService;
 
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter
+     * @var \Symfony\Component\Routing\RouterInterface
      */
-    protected $urlAliasRouter;
+    protected $router;
 
     /**
      * @var \eZ\Publish\Core\Helper\TranslationHelper
@@ -48,7 +48,7 @@ class EzLinkDirectDownload implements Converter
     /**
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
-     * @param \eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter $urlAliasRouter
+     * @param \Symfony\Component\Routing\RouterInterface $router
      * @param \eZ\Publish\Core\Helper\TranslationHelper $translationHelper
      * @param \eZ\Publish\Core\Helper\FieldHelper $fieldHelper
      * @param \Psr\Log\LoggerInterface $logger
@@ -56,7 +56,7 @@ class EzLinkDirectDownload implements Converter
     public function __construct(
         LocationService $locationService,
         ContentService $contentService,
-        UrlAliasRouter $urlAliasRouter,
+        RouterInterface $router,
         TranslationHelper $translationHelper,
         FieldHelper $fieldHelper,
         LoggerInterface $logger = null
@@ -64,7 +64,7 @@ class EzLinkDirectDownload implements Converter
     {
         $this->locationService = $locationService;
         $this->contentService = $contentService;
-        $this->urlAliasRouter = $urlAliasRouter;
+        $this->router = $router;
         $this->translationHelper = $translationHelper;
         $this->fieldHelper = $fieldHelper;
         $this->logger = $logger;
@@ -152,15 +152,14 @@ class EzLinkDirectDownload implements Converter
                 $content = $this->contentService->loadContent( $location->contentId );
                 if ( isset( $content->fields['file'] ) && !$this->fieldHelper->isFieldEmpty( $content, 'file' ) )
                 {
-                    /** @var \eZ\Publish\Core\FieldType\BinaryFile\Value $fieldValue */
-                    $fieldValue = $this->translationHelper->getTranslatedField( $content, 'file' )->value;
-                    $url = $fieldValue->uri;
+                    $field = $this->translationHelper->getTranslatedField( $content, 'file' );
+                    $url = $this->router->generate( 'ngmore_download', array( 'contentId' => $content->id, 'fieldId' => $field->id ) );
                 }
             }
 
             if ( empty( $url ) && $location !== null )
             {
-                $link->setAttribute( 'url', $this->urlAliasRouter->generate( $location ) );
+                 $link->setAttribute( 'url', $this->router->generate( $location ) );
             }
             else
             {

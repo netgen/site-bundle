@@ -7,7 +7,7 @@ services:
         arguments:
             - @ezpublish.api.service.location
             - @ezpublish.api.service.content
-            - @ezpublish.urlalias_router
+            - @router
             - @ezpublish.translation_helper
             - @ezpublish.field_helper
             - @?logger

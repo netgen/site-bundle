@@ -95,7 +95,8 @@ class PathHelper
                         'text' => $this->translationHelper->getTranslatedContentNameByContentInfo( $location->contentInfo ),
                         'url' => $location->id != $locationId ? $this->router->generate( $location ) : false,
                         'locationId' => $location->id,
-                        'contentId' => $location->contentId
+                        'contentId' => $location->contentId,
+                        'contentTypeId' => $location->contentInfo->contentTypeId
                     );
                 }
             }
@@ -115,7 +116,8 @@ class PathHelper
                     'text' => $this->translationHelper->getTranslatedContentNameByContentInfo( $location->contentInfo ),
                     'url' => $location->id != $locationId ? $this->router->generate( $location ) : false,
                     'locationId' => $location->id,
-                    'contentId' => $location->contentId
+                    'contentId' => $location->contentId,
+                    'contentTypeId' => $location->contentInfo->contentTypeId
                 );
             }
         }

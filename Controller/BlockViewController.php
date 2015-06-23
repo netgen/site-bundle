@@ -219,6 +219,6 @@ class BlockViewController extends Controller
             );
         }
 
-        return $sortClauseHelper->getSortClauseBySortField( $sortField );
+        return $sortClauseHelper->getSortClauseBySortField( $sortField, $sortOrder );
     }
 }

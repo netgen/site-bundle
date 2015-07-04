@@ -18,6 +18,7 @@ use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;
 use Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value as RelationListValue;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use Psr\Log\LoggerInterface;
 use InvalidArgumentException;
 
 class RelationListMenuBuilder
@@ -58,6 +59,11 @@ class RelationListMenuBuilder
     protected $router;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * Constructor
      *
      * @param \Knp\Menu\FactoryInterface $factory
@@ -67,6 +73,7 @@ class RelationListMenuBuilder
      * @param \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper $siteInfoHelper
      * @param \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper $sortClauseHelper
      * @param \Symfony\Component\Routing\RouterInterface $router
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         FactoryInterface $factory,
@@ -75,7 +82,8 @@ class RelationListMenuBuilder
         TranslationHelper $translationHelper,
         SiteInfoHelper $siteInfoHelper,
         SortClauseHelper $sortClauseHelper,
-        RouterInterface $router
+        RouterInterface $router,
+        LoggerInterface $logger = null
     )
     {
         $this->factory = $factory;
@@ -85,6 +93,7 @@ class RelationListMenuBuilder
         $this->siteInfoHelper = $siteInfoHelper;
         $this->sortClauseHelper = $sortClauseHelper;
         $this->router = $router;
+        $this->logger = $logger;
     }
 
     /**
@@ -140,12 +149,20 @@ class RelationListMenuBuilder
             {
                 if ( empty( $locationId ) )
                 {
+                    if ( $this->logger instanceof LoggerInterface )
+                    {
+                        $this->logger->error( '[Relation Menu] Empty location id in relation list' );
+                    }
                     continue;
                 }
                 $location = $this->repository->getLocationService()->loadLocation( $locationId );
             }
             catch ( NotFoundException $e )
             {
+                if ( $this->logger instanceof LoggerInterface )
+                {
+                    $this->logger->error( $e->getMessage() );
+                }
                 continue;
             }
 
@@ -273,9 +290,20 @@ class RelationListMenuBuilder
                         $linkAttributes[ 'target' ] = '_blank';
                     }
                 }
+                else
+                {
+                    if ( $this->logger instanceof LoggerInterface )
+                    {
+                        $this->logger->error( '[Relation menu] Shortcut has related object that is not published.' );
+                    }
+                }
             }
             catch ( NotFoundException $e )
             {
+                if ( $this->logger instanceof LoggerInterface )
+                {
+                    $this->logger->error( $e->getMessage() );
+                }
                 // do nothing
             }
         }
@@ -395,9 +423,20 @@ class RelationListMenuBuilder
                         $linkAttributes['target'] = '_blank';
                     }
                 }
+                else
+                {
+                    if ( $this->logger instanceof LoggerInterface )
+                    {
+                        $this->logger->error( '[Relation menu] Menu item has related object that is not published.' );
+                    }
+                }
             }
             catch ( NotFoundException $e )
             {
+                if ( $this->logger instanceof LoggerInterface )
+                {
+                    $this->logger->error( $e->getMessage() );
+                }
                 // do nothing
             }
         }
@@ -489,9 +528,20 @@ class RelationListMenuBuilder
 
                     $this->addMenuItemsFromLocations( $childItem, $foundLocations );
                 }
+                else
+                {
+                    if ( $this->logger instanceof LoggerInterface )
+                    {
+                        $this->logger->error( '[Relation menu] Menu item has related object that is not published.' );
+                    }
+                }
             }
             catch ( NotFoundException $e )
             {
+                if ( $this->logger instanceof LoggerInterface )
+                {
+                    $this->logger->error( $e->getMessage() );
+                }
                 // Do nothing
             }
         }

@@ -12,6 +12,7 @@ services:
             - @ngmore.helper.site_info_helper
             - @ngmore.helper.sort_clause_helper
             - @router
+            - @?logger
 
     ngmore.menu.main_menu:
         class: Knp\Menu\MenuItem

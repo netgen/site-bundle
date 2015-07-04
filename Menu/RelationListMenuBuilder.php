@@ -138,6 +138,10 @@ class RelationListMenuBuilder
         {
             try
             {
+                if ( empty( $locationId ) )
+                {
+                    continue;
+                }
                 $location = $this->repository->getLocationService()->loadLocation( $locationId );
             }
             catch ( NotFoundException $e )
@@ -228,42 +232,46 @@ class RelationListMenuBuilder
             try
             {
                 $relatedContent = $this->repository->getContentService()->loadContentInfo( $fieldValue->destinationContentId );
-                $relatedContentName = $this->translationHelper->getTranslatedContentNameByContentInfo( $relatedContent );
 
-                $menuItemId = $relatedContent->mainLocationId;
-
-                $uri = $this->router->generate(
-                    'ez_urlalias',
-                    array(
-                        'contentId' => $relatedContent->id
-                    )
-                ) . $this->translationHelper->getTranslatedField( $content, 'internal_url_suffix' )->value->text;
-
-                $useShortcutNameField = $this->translationHelper->getTranslatedField( $content, 'use_shortcut_name' );
-                if ( $useShortcutNameField instanceof Field && $useShortcutNameField->value->bool )
+                if ( $relatedContent->published )
                 {
-                    $shortcutName = $this->translationHelper->getTranslatedContentName( $content );
-                    $label = $shortcutName;
-                    $linkAttributes = array(
-                        'title' => $shortcutName
+                    $relatedContentName = $this->translationHelper->getTranslatedContentNameByContentInfo( $relatedContent );
+
+                    $menuItemId = $relatedContent->mainLocationId;
+
+                    $uri = $this->router->generate(
+                            'ez_urlalias',
+                            array(
+                                'contentId' => $relatedContent->id
+                            )
+                        ) . $this->translationHelper->getTranslatedField( $content, 'internal_url_suffix' )->value->text;
+
+                    $useShortcutNameField = $this->translationHelper->getTranslatedField( $content, 'use_shortcut_name' );
+                    if ( $useShortcutNameField instanceof Field && $useShortcutNameField->value->bool )
+                    {
+                        $shortcutName = $this->translationHelper->getTranslatedContentName( $content );
+                        $label = $shortcutName;
+                        $linkAttributes = array(
+                            'title' => $shortcutName
+                        );
+                    }
+                    else
+                    {
+                        $label = $relatedContentName;
+                        $linkAttributes = array(
+                            'title' => $relatedContentName
+                        );
+                    }
+
+                    $attributes = array(
+                        'id' => 'menu-item-location-id-' . $relatedContent->mainLocationId
                     );
-                }
-                else
-                {
-                    $label = $relatedContentName;
-                    $linkAttributes = array(
-                        'title' => $relatedContentName
-                    );
-                }
 
-                $attributes = array(
-                    'id' => 'menu-item-location-id-' . $relatedContent->mainLocationId
-                );
-
-                $targetBlankField = $this->translationHelper->getTranslatedField( $content, 'target_blank' );
-                if ( $targetBlankField instanceof Field && $targetBlankField->value->bool )
-                {
-                    $linkAttributes['target'] = '_blank';
+                    $targetBlankField = $this->translationHelper->getTranslatedField( $content, 'target_blank' );
+                    if ( $targetBlankField instanceof Field && $targetBlankField->value->bool )
+                    {
+                        $linkAttributes[ 'target' ] = '_blank';
+                    }
                 }
             }
             catch ( NotFoundException $e )
@@ -347,42 +355,45 @@ class RelationListMenuBuilder
             try
             {
                 $relatedContent = $this->repository->getContentService()->loadContentInfo( $fieldValue->destinationContentId );
-                $relatedContentName = $this->translationHelper->getTranslatedContentNameByContentInfo( $relatedContent );
 
-                $menuItemId = $relatedContent->mainLocationId;
-
-                $uri = $this->router->generate(
-                    'ez_urlalias',
-                    array(
-                        'contentId' => $relatedContent->id
-                    )
-                );
-
-                $useMenuItemNameField = $this->translationHelper->getTranslatedField( $content, 'use_menu_item_name' );
-                if ( $useMenuItemNameField instanceof Field && $useMenuItemNameField->value->bool )
+                if ( $relatedContent->published )
                 {
-                    $menuItemName = $this->translationHelper->getTranslatedContentName( $content );
-                    $label = $menuItemName;
-                    $linkAttributes = array(
-                        'title' => $menuItemName
+                    $relatedContentName = $this->translationHelper->getTranslatedContentNameByContentInfo( $relatedContent );
+                    $menuItemId = $relatedContent->mainLocationId;
+
+                    $uri = $this->router->generate(
+                        'ez_urlalias',
+                        array(
+                            'contentId' => $relatedContent->id
+                        )
                     );
-                }
-                else
-                {
-                    $label = $relatedContentName;
-                    $linkAttributes = array(
-                        'title' => $relatedContentName
+
+                    $useMenuItemNameField = $this->translationHelper->getTranslatedField( $content, 'use_menu_item_name' );
+                    if ( $useMenuItemNameField instanceof Field && $useMenuItemNameField->value->bool )
+                    {
+                        $menuItemName = $this->translationHelper->getTranslatedContentName( $content );
+                        $label = $menuItemName;
+                        $linkAttributes = array(
+                            'title' => $menuItemName
+                        );
+                    }
+                    else
+                    {
+                        $label = $relatedContentName;
+                        $linkAttributes = array(
+                            'title' => $relatedContentName
+                        );
+                    }
+
+                    $attributes = array(
+                        'id' => 'menu-item-location-id-' . $relatedContent->mainLocationId
                     );
-                }
 
-                $attributes = array(
-                    'id' => 'menu-item-location-id-' . $relatedContent->mainLocationId
-                );
-
-                $targetBlankField = $this->translationHelper->getTranslatedField( $content, 'target_blank' );
-                if ( $targetBlankField instanceof Field && $targetBlankField->value->bool )
-                {
-                    $linkAttributes['target'] = '_blank';
+                    $targetBlankField = $this->translationHelper->getTranslatedField( $content, 'target_blank' );
+                    if ( $targetBlankField instanceof Field && $targetBlankField->value->bool )
+                    {
+                        $linkAttributes['target'] = '_blank';
+                    }
                 }
             }
             catch ( NotFoundException $e )
@@ -409,68 +420,75 @@ class RelationListMenuBuilder
             try
             {
                 $destinationContent = $this->repository->getContentService()->loadContent( $fieldValue->destinationContentId );
-                $parentLocation = $this->repository->getLocationService()->loadLocation( $destinationContent->contentInfo->mainLocationId );
 
-                if ( $this->fieldHelper->isFieldEmpty( $content, 'item_url' ) && $this->fieldHelper->isFieldEmpty( $content, 'item_object' ) )
+                if ( $destinationContent->contentInfo->published )
                 {
-                    $childItem->setName( $parentLocation->id );
-                }
+                    $parentLocation = $this->repository->getLocationService()->loadLocation( $destinationContent->contentInfo->mainLocationId );
 
-                $criterions = array(
-                    new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
-                    new Criterion\ParentLocationId( $parentLocation->id )
-                );
-
-                if ( !$this->fieldHelper->isFieldEmpty( $content, 'class_filter' ) && !$this->fieldHelper->isFieldEmpty( $content, 'class_filter_type' ) )
-                {
-                    /** @var \Netgen\Bundle\ContentTypeListBundle\Core\FieldType\ContentTypeList\Value $contentTypeFilter */
-                    $contentTypeFilter = $this->translationHelper->getTranslatedField( $content, 'class_filter' )->value;
-
-                    /** @var \Netgen\Bundle\EnhancedSelectionBundle\Core\FieldType\EnhancedSelection\Value $filterType */
-                    $filterType = $this->translationHelper->getTranslatedField( $content, 'class_filter_type' )->value;
-
-                    if ( $filterType->identifiers[0] === 'include' )
+                    if ( $this->fieldHelper->isFieldEmpty( $content, 'item_url' ) && $this->fieldHelper->isFieldEmpty( $content, 'item_object' ) )
                     {
-                        $criterions[] = new Criterion\ContentTypeIdentifier( $contentTypeFilter->identifiers );
+                        $childItem->setName( $parentLocation->id );
                     }
-                    else if ( $filterType->identifiers[0] === 'exclude' )
+
+                    $criterions = array(
+                        new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
+                        new Criterion\ParentLocationId( $parentLocation->id )
+                    );
+
+                    if ( !$this->fieldHelper->isFieldEmpty( $content, 'class_filter' ) && !$this->fieldHelper->isFieldEmpty( $content, 'class_filter_type' ) )
                     {
-                        $criterions[] = new Criterion\LogicalNot(
-                            new Criterion\ContentTypeIdentifier( $contentTypeFilter->identifiers )
-                        );
+                        /** @var \Netgen\Bundle\ContentTypeListBundle\Core\FieldType\ContentTypeList\Value $contentTypeFilter */
+                        $contentTypeFilter = $this->translationHelper->getTranslatedField( $content, 'class_filter' )->value;
+
+                        /** @var \Netgen\Bundle\EnhancedSelectionBundle\Core\FieldType\EnhancedSelection\Value $filterType */
+                        $filterType = $this->translationHelper->getTranslatedField( $content, 'class_filter_type' )->value;
+
+                        if ( $filterType->identifiers[ 0 ] === 'include' )
+                        {
+                            $criterions[ ] = new Criterion\ContentTypeIdentifier( $contentTypeFilter->identifiers );
+                        }
+                        else
+                        {
+                            if ( $filterType->identifiers[ 0 ] === 'exclude' )
+                            {
+                                $criterions[ ] = new Criterion\LogicalNot(
+                                    new Criterion\ContentTypeIdentifier( $contentTypeFilter->identifiers )
+                                );
+                            }
+                        }
                     }
-                }
 
-                $query = new LocationQuery();
-                $query->criterion = new Criterion\LogicalAnd( $criterions );
+                    $query = new LocationQuery();
+                    $query->criterion = new Criterion\LogicalAnd( $criterions );
 
-                if ( !$this->fieldHelper->isFieldEmpty( $content, 'limit' ) )
-                {
-                    /** @var \eZ\Publish\Core\FieldType\Integer\Value $limit */
-                    $limit = $this->translationHelper->getTranslatedField( $content, 'limit' )->value;
-                    if ( $limit->value > 0 )
+                    if ( !$this->fieldHelper->isFieldEmpty( $content, 'limit' ) )
                     {
-                        $query->limit = $limit->value;
+                        /** @var \eZ\Publish\Core\FieldType\Integer\Value $limit */
+                        $limit = $this->translationHelper->getTranslatedField( $content, 'limit' )->value;
+                        if ( $limit->value > 0 )
+                        {
+                            $query->limit = $limit->value;
+                        }
                     }
+
+                    $query->sortClauses = array(
+                        $this->sortClauseHelper->getSortClauseBySortField(
+                            $parentLocation->sortField,
+                            $parentLocation->sortOrder
+                        )
+                    );
+
+                    $searchResult = $this->repository->getSearchService()->findLocations( $query );
+                    $foundLocations = array_map(
+                        function ( SearchHit $searchHit )
+                        {
+                            return $searchHit->valueObject;
+                        },
+                        $searchResult->searchHits
+                    );
+
+                    $this->addMenuItemsFromLocations( $childItem, $foundLocations );
                 }
-
-                $query->sortClauses = array(
-                    $this->sortClauseHelper->getSortClauseBySortField(
-                        $parentLocation->sortField,
-                        $parentLocation->sortOrder
-                    )
-                );
-
-                $searchResult = $this->repository->getSearchService()->findLocations( $query );
-                $foundLocations = array_map(
-                    function ( SearchHit $searchHit )
-                    {
-                        return $searchHit->valueObject;
-                    },
-                    $searchResult->searchHits
-                );
-
-                $this->addMenuItemsFromLocations( $childItem, $foundLocations );
             }
             catch ( NotFoundException $e )
             {

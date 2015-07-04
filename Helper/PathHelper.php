@@ -6,6 +6,7 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use Symfony\Component\Routing\RouterInterface;
+use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 
 class PathHelper
@@ -31,6 +32,11 @@ class PathHelper
     protected $router;
 
     /**
+     * @var  \eZ\Publish\API\Repository\ContentTypeService
+     */
+    protected $contentTypeService;
+
+    /**
      * @var array
      */
     protected $pathArray;
@@ -39,13 +45,15 @@ class PathHelper
         LocationService $locationService,
         ConfigResolverInterface $configResolver,
         TranslationHelper $translationHelper,
-        RouterInterface $router
+        RouterInterface $router,
+        ContentTypeService $contentTypeService
     )
     {
         $this->locationService = $locationService;
         $this->configResolver = $configResolver;
         $this->translationHelper = $translationHelper;
         $this->router = $router;
+        $this->contentTypeService = $contentTypeService;
     }
 
     /**
@@ -59,6 +67,16 @@ class PathHelper
         if ( $this->pathArray !== null )
         {
             return $this->pathArray;
+        }
+
+        $excludeContentTypes = array();
+        if ( $this->configResolver->hasParameter( 'path_helper.exclude_content_types', 'ngmore' ) )
+        {
+            $excludeContentTypes = $this->configResolver->getParameter( 'path_helper.exclude_content_types', 'ngmore' );
+            if ( !is_array( $excludeContentTypes ) )
+            {
+                $excludeContentTypes = array();
+            }
         }
 
         $this->pathArray = array();
@@ -112,13 +130,17 @@ class PathHelper
                     return array();
                 }
 
-                $this->pathArray[] = array(
-                    'text' => $this->translationHelper->getTranslatedContentNameByContentInfo( $location->contentInfo ),
-                    'url' => $location->id != $locationId ? $this->router->generate( $location ) : false,
-                    'locationId' => $location->id,
-                    'contentId' => $location->contentId,
-                    'contentTypeId' => $location->contentInfo->contentTypeId
-                );
+                $contentType = $this->contentTypeService->loadContentType( $location->contentInfo->contentTypeId );
+                if ( !in_array( $contentType->identifier, $excludeContentTypes ) )
+                {
+                    $this->pathArray[ ] = array(
+                        'text' => $this->translationHelper->getTranslatedContentNameByContentInfo( $location->contentInfo ),
+                        'url' => $location->id != $locationId ? $this->router->generate( $location ) : false,
+                        'locationId' => $location->id,
+                        'contentId' => $location->contentId,
+                        'contentTypeId' => $location->contentInfo->contentTypeId
+                    );
+                }
             }
         }
 

@@ -9,3 +9,7 @@ ngmore_sitemap:
     defaults:
         _controller: ngmore.controller.sitemap:viewSitemap
     methods: [GET]
+
+ngmore_user_register:
+    path:   /register
+    defaults:   { _controller: ngmore.controller.user:register }

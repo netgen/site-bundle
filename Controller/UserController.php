@@ -3,11 +3,13 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
+use eZ\Publish\API\Repository\Values\User\User;
 use Symfony\Component\HttpFoundation\Request;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use Symfony\Component\Validator\Constraints;
 
 class UserController extends Controller
 {
@@ -149,5 +151,130 @@ class UserController extends Controller
                 "already_active" => $alreadyActive
             )
         );
+    }
+
+    public function forgotPassword()
+    {
+        $form = $this->createForgotPassForm();
+
+        return $this->render(
+            $this->getConfigResolver()->getParameter( 'user_register.forgotten_password_template', 'ngmore' ),
+            array(
+                'form' => $form->createView()
+            )
+        );
+    }
+
+    public function forgotPasswordCreateAction( Request $request )
+    {
+        $registerHelperService = $this->get("ngmore.helper.user_helper");
+
+        $form = $this->createForgotPassForm();
+        $form->handleRequest($request);
+
+        $email = '';
+        if ( $form->isValid() ) {
+            $email = $form->get('email')->getData();
+            $registerHelperService->setNewPassword( $email );
+            $form = false;
+        }
+
+        return $this->render(
+            $this->getConfigResolver()->getParameter( 'user_register.forgotten_password_template', 'ngmore' ),
+            array(
+                'form' => $form,
+                'email' => $email
+            )
+        );
+    }
+
+    public function resetPassword( Request $request, $hash )
+    {
+        $registerHelper = $this->get( "ngmore.helper.user_helper" );
+        $template = $this->getConfigResolver()->getParameter( "user_register.reset_password_template", "ngmore" );
+
+        if ( $registerHelper->validateResetPassword( $hash ) )
+        {
+            $user = $registerHelper->loadUserByHash( $hash );
+
+            $form = $this->createResetPasswordForm( $user );
+            $form->handleRequest( $request );
+
+            if ( $form->isValid() )
+            {
+                $data = $form->getData();
+                $user = $this->getRepository()->getUserService()->loadUser( $data["user_id"] );
+
+                $userUpdateStruct = $this->getRepository()->getUserService()->newUserUpdateStruct();
+                $userUpdateStruct->password = $data["password"];
+
+                $this->getRepository()->setCurrentUser( $this->getRepository()->getUserService()->loadUser( 14 ) );
+                $this->getRepository()->getUserService()->updateUser( $user, $userUpdateStruct );
+                $this->getRepository()->setCurrentUser( $user );
+
+                return $this->redirect( $this->generateUrl( "login" ) );
+            }
+
+            return $this->render(
+                $template,
+                array(
+                    'form' => $form->createView()
+                )
+            );
+        }
+        else
+        {
+            $errorMessage = $this->translator->trans( "ngmore.user.forgotten_password.wrong_hash" );
+
+            return $this->render(
+                $template,
+                array(
+                    "errorMessage" => $errorMessage,
+                )
+            );
+        }
+    }
+
+    protected function createForgotPassForm()
+    {
+        return $this->createFormBuilder()
+                    ->setAction( $this->generateUrl( 'ngmore_user_forgot_password' ) )
+                    ->add( 'email', 'email', array(
+                        "label" => "ngmore.user.forgotten_password.email"
+                    ))
+                    ->add( 'generate_new_password', 'submit', array(
+                        "label" => "ngmore.user.forgotten_password.submit"
+                    ))
+                    ->getForm();
+    }
+
+    protected function createResetPasswordForm( $user )
+    {
+        $passwordOptions = array(
+            "type" => "password",
+            "required" => false,
+            "invalid_message" => "Both passwords must match.",
+            "options" => array(
+                "constraints" => array(
+                    new Constraints\Length(
+                        array(
+                            "min" => $this->container->getParameter( "netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length" ),
+                        )
+                    ),
+                ),
+            ),
+            "first_options" => array(
+                "label" => "New password",
+            ),
+            "second_options" => array(
+                "label" => "Repeat new password",
+            ),
+        );
+
+        return $this->createFormBuilder()
+            ->add( 'user_id', 'hidden', array( 'data' => $user->id ) )
+            ->add( 'password', 'repeated', $passwordOptions )
+            ->add( 'save', 'submit', array( 'label' => "ngmore.user.reset_password.submit_label") )
+            ->getForm();
     }
 }

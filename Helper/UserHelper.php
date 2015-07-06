@@ -47,6 +47,8 @@ class UserHelper
     /** @var  string */
     protected $activationMailTemplate;
 
+    protected $forgottenPasswordMailTemplate;
+
     public function __construct(
         \Swift_Mailer $mailer,
         \Twig_Environment $twig,
@@ -67,6 +69,7 @@ class UserHelper
         $this->configResolver = $configResolver;
         $this->fieldHelper = $fieldHelper;
         $this->activationMailTemplate = $configResolver->getParameter( 'user_register.activation_mail_template', 'ngmore' );
+        $this->forgottenPasswordMailTemplate = $configResolver->getParameter( 'user_register.forgotten_password_mail_template', 'ngmore' );
     }
 
     public function setRepositoryUser( $userId = 14 )
@@ -90,6 +93,18 @@ class UserHelper
         $userCreateStruct->enabled = $enable;
 
         return new DataWrapper( $userCreateStruct, $userCreateStruct->contentType );
+    }
+
+    public function userUpdateDataWrapper( $user )
+    {
+        $languages = $this->configResolver->getParameter( "languages" );
+        $contentType = $this->repository->getContentTypeService()->loadContentTypeByIdentifier( "user" );
+        $contentUpdateStruct = $this->repository->getContentService()->newContentUpdateStruct();
+        $contentUpdateStruct->initialLanguageCode = $languages[0];
+        $userUpdateStruct = $this->userService->newUserUpdateStruct();
+        $userUpdateStruct->contentUpdateStruct = $contentUpdateStruct;
+
+        return new DataWrapper( $userUpdateStruct, $contentType, $user );
     }
 
     public function userEmailExists( $email )
@@ -166,55 +181,61 @@ class UserHelper
 
     public function setNewPassword( $email )
     {
-        $userService = $this->userService;
-        /** @var \eZ\Publish\API\Repository\Values\User\User $user */
-        $userArray = $userService->loadUsersByEmail( $email );
+        $userArray = $this->userService->loadUsersByEmail( $email );
         if( empty($userArray) )
         {
             return;
         }
         $user = $userArray[0];
 
-        //login admin so we can change password
         $this->repository->setCurrentUser(
-            $userService->loadUserByLogin( "admin" )
+            $this->userService->loadUser( 14 )
         );
-        $newPass = $this->generatePassword( 8 );
-        $userUpdateStruct = $userService->newUserUpdateStruct();
-        $userUpdateStruct->password = $newPass;
-        $userUpdateStruct->enabled = true;
-        //update user
-        $user = $userService->updateUser( $user, $userUpdateStruct );
-        //send user a notification mail
-        $this->sendChangePasswordMail( $user, $newPass );
+
+        $hash = $this->setVerificationHash( $user );
+
+        $this->sendChangePasswordMail( $user, $hash );
     }
 
-    public function sendChangePasswordMail( \eZ\Publish\API\Repository\Values\User\User $user, $password )
+    public function sendChangePasswordMail( User $user, $hash )
     {
-        $emailTo = $user->email;
-        // get template
-        $templateFile = "GenericBundle:mails:change_password.html.twig";
-        $templateContent = $this->twig->loadTemplate( $templateFile );
-        // Render the whole template including any layouts etc
+        $templateContent = $this->twig->loadTemplate( $this->forgottenPasswordMailTemplate );
         $body = $templateContent->render(
             array(
                 'user' => $user,
                 'root_location' => $this->getRootLocation(),
-                'password' => $password
+                'hash' => $hash
             )
         );
-        // Get the subject from template block subject
-        $subject = trim( $templateContent->hasBlock( "subject" )
-                             ? $templateContent->renderBlock( "subject", array() )
-                             : "Default change password mail subject" );
-        // Send email
+
+        $subject = "Password has been changed";
         $message = Swift_Message::newInstance()
                                 ->setSubject( $subject )
                                 ->setFrom( $this->fromMail )
-                                ->setTo( $emailTo )
+                                ->setTo( $user->email )
                                 ->setBody( $body, 'text/html' )
         ;
         return $this->mailer->send( $message );
+    }
+
+    public function validateResetPassword( $hash )
+    {
+        $result = $this->getEzUserAccountKeyByHash( $hash );
+
+        if ( time() - $result['time'] > 3600 )
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function loadUserByHash( $hash )
+    {
+        $user_account = $this->getEzUserAccountKeyByHash( $hash );
+        $userId = $user_account['user_id'];
+
+        return $this->userService->loadUser( $userId );
     }
 
     /**
@@ -235,49 +256,6 @@ class UserHelper
         $statement->bindValue( "user_id", $userID );
         $statement->execute();
         return $hash;
-    }
-
-
-    private function generatePassword( $passwordLength, $seed = false )
-    {
-        $chars = 0;
-        $password = '';
-        if ( $passwordLength < 1 )
-            $passwordLength = 1;
-        $decimal = 0;
-        while ( $chars < $passwordLength )
-        {
-            if ( $seed == false )
-                $seed = time() . ":" . mt_rand();
-            $text = md5( $seed );
-            $characterTable = self::passwordCharacterTable();
-            $tableCount = count( $characterTable );
-            for ( $i = 0; ( $chars < $passwordLength ) and $i < 32; ++$chars, $i += 2 )
-            {
-                $decimal += hexdec( substr( $text, $i, 2 ) );
-                $index = ( $decimal % $tableCount );
-                $character = $characterTable[$index];
-                $password .= $character;
-            }
-            $seed = false;
-        }
-        return $password;
-    }
-
-    static function passwordCharacterTable()
-    {
-        $table = array_merge( range( 'a', 'z' ), range( 'A', 'Z' ), range( 0, 9 ) );
-        $specialCharacters = '!#%&{[]}+?;:*';
-        $table = array_merge( $table, preg_split( '//', $specialCharacters, -1, PREG_SPLIT_NO_EMPTY ) );
-        // Remove some characters that are too similar visually
-        $table = array_diff( $table, array( 'I', 'l', 'o', 'O', '0' ) );
-        $tableTmp = $table;
-        $table = array();
-        foreach ( $tableTmp as $item )
-        {
-            $table[] = $item;
-        }
-        return $table;
     }
 
     private function getEzUserAccountKeyByHash( $hash )

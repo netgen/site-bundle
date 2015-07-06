@@ -17,3 +17,17 @@ ngmore_user_register:
 ngmore_user_activate:
     path: /activate/{hash}
     defaults: { _controller: ngmore.controller.user:activate }
+
+ngmore_user_forgot_password:
+    path: /new_password
+    defaults: { _controller: ngmore.controller.user:forgotPassword }
+    methods: [GET]
+
+ngmore_user_create_password:
+    path: /new_password
+    defaults: { _controller: ngmore.controller.user:forgotPasswordCreateAction }
+    methods: [POST]
+
+ngmore_user_reset_password:
+    path: /reset_password/{hash}
+    defaults: { _controller: ngmore.controller.user:resetPassword }

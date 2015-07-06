@@ -13,3 +13,7 @@ ngmore_sitemap:
 ngmore_user_register:
     path:   /register
     defaults:   { _controller: ngmore.controller.user:register }
+
+ngmore_user_activate:
+    path: /activate/{hash}
+    defaults: { _controller: ngmore.controller.user:activate }

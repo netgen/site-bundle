@@ -34,8 +34,12 @@ class UserController extends Controller
     public function register( Request $request )
     {
         $errorMessage = null;
+        $auto_enable = false;
+        if ( $this->configResolver->hasParameter( 'user_register.auto_enable', 'ngmore' ) )
+        {
+            $auto_enable = $this->configResolver->getParameter( 'user_register.auto_enable', 'ngmore' );
+        }
 
-        //check that user really is anonymous, otherwise it does not make sense to allow registration
         if ( $this->configResolver->getParameter( "anonymous_user_id" ) != $this->getRepository()->getCurrentUser()->id )
         {
             $errorMessage = $this->translator->trans(
@@ -55,7 +59,7 @@ class UserController extends Controller
         $registerHelper = $this->get( "ngmore.helper.user_helper" );
 
         $registerHelper->setRepositoryUser();
-        $data = $registerHelper->userCreateDataWrapper();
+        $data = $registerHelper->userCreateDataWrapper( $auto_enable );
 
         $formBuilder = $this->container->get( "form.factory" )->createBuilder( "ezforms_create_user", $data );
         $formBuilder->add( "save", "submit", array( "label" => "ngmore.user.register.submit_label" ) );
@@ -65,39 +69,53 @@ class UserController extends Controller
 
         if ( $form->isValid() )
         {
-            try
+            if ( !$registerHelper->userEmailExists( $form->getData()->payload->email ) )
             {
-                $registerHelper->createUser( $data );
-                return $this->redirect( "login" );
-            }
-            catch( NotFoundException $e )
-            {
-                $errorMessage = $this->translator->trans(
-                    "ngmore.user.register.general_error",
-                    array(
-                        '%logout%' => $this->generateUrl( "logout" )
-                    )
-                );
-                return $this->render(
-                    $this->getConfigResolver()->getParameter( "user_register.template", "ngmore" ),
-                    array(
-                        "errorMessage" => $errorMessage,
-                    )
-                );
-            }
-            catch ( InvalidArgumentException $e )
-            {
-                // There is no better way to do this ATM...
-                $existingUsernameMessage = "Argument 'userCreateStruct' is invalid: User with provided login already exists";
-                if ( $e->getMessage() === $existingUsernameMessage )
+                try
+                {
+                    $user = $registerHelper->createUser( $data );
+
+                    if ( !$auto_enable )
+                    {
+                        $subject = $this->translator->trans( "ngmore.user.mail.activation.subject" );
+                        $registerHelper->sendActivationCode( $user, $subject );
+                    }
+
+                    return $this->redirect( "login" );
+                }
+                catch ( NotFoundException $e )
                 {
                     $errorMessage = $this->translator->trans(
-                        "ngmore.user.register.already_exists",
+                        "ngmore.user.register.general_error"
+                    );
+
+                    return $this->render(
+                        $this->getConfigResolver()->getParameter( "user_register.template", "ngmore" ),
                         array(
-                            '%logout%' => $this->generateUrl( "logout" )
+                            "errorMessage" => $errorMessage,
                         )
                     );
                 }
+                catch ( InvalidArgumentException $e )
+                {
+                    // There is no better way to do this ATM...
+                    $existingUsernameMessage = "Argument 'userCreateStruct' is invalid: User with provided login already exists";
+                    if ( $e->getMessage() === $existingUsernameMessage )
+                    {
+                        $errorMessage = $this->translator->trans(
+                            "ngmore.user.register.already_exists",
+                            array(
+                                '%logout%' => $this->generateUrl( "logout" )
+                            )
+                        );
+                    }
+                }
+            }
+            else
+            {
+                $errorMessage = $this->translator->trans(
+                    "ngmore.user.register.email_already_in_use"
+                );
             }
         }
 
@@ -106,6 +124,29 @@ class UserController extends Controller
             array(
                 "form" => $form->createView(),
                 "errorMessage" => $errorMessage
+            )
+        );
+    }
+
+    public function activate( $hash )
+    {
+        $registerHelperService = $this->get( "ngmore.helper.user_helper" );
+
+        $alreadyActive = false;
+        $accountActivated = $registerHelperService->verifyUserByHash( $hash );
+
+        if ( !$accountActivated )
+        {
+            $alreadyActive = $registerHelperService->isUserActive( $hash );
+        }
+
+        $template = $this->configResolver->getParameter( "user_activate.template", "ngmore" );
+
+        return $this->render(
+            $template,
+            array(
+                "account_activated" => $accountActivated,
+                "already_active" => $alreadyActive
             )
         );
     }

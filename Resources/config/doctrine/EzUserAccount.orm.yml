@@ -1,0 +1,19 @@
+Netgen\Bundle\MoreBundle\Entity\EzUserAccount:
+    type: entity
+    table: ezuser_accountkey
+    id:
+        id:
+            type: integer
+            column: id
+            id: true
+            generator: { strategy: AUTO }
+    fields:
+        hash:
+            type: string
+            column: hash_key
+        time:
+            type: string
+            column: time
+        user_id:
+            type: integer
+            column: user_id

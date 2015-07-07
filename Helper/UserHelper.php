@@ -2,11 +2,11 @@
 
 namespace Netgen\Bundle\MoreBundle\Helper;
 
+use Netgen\Bundle\MoreBundle\Entity\EzUserAccount;
 use Swift_Message;
 use Swift_SendmailTransport;
 use Doctrine\ORM\EntityManager;
 use eZ\Publish\API\Repository\UserService;
-use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
@@ -27,19 +27,13 @@ class UserHelper
     /** @var  \Doctrine\ORM\EntityManager */
     protected $em;
 
-    /** @var  \eZ\Publish\API\Repository\ContentService */
-    protected $contentService;
-
-    /** @var  \eZ\Publish\API\Repository\LocationService */
-    protected $locationService;
-
     /** @var  \eZ\Publish\API\Repository\Repository */
     protected $repository;
 
     /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     protected $configResolver;
 
-    private $fromMail;
+    protected $fromMail;
 
     /** @var  \eZ\Publish\Core\Helper\FieldHelper */
     protected $fieldHelper;
@@ -48,6 +42,9 @@ class UserHelper
     protected $activationMailTemplate;
 
     protected $forgottenPasswordMailTemplate;
+
+    /** @var \Doctrine\ORM\EntityRepository  */
+    protected $accountRepository;
 
     public function __construct(
         \Swift_Mailer $mailer,
@@ -61,10 +58,9 @@ class UserHelper
         $this->mailer = $mailer;
         $this->twig = $twig;
         $this->em = $em;
+        $this->accountRepository = $em->getRepository( 'NetgenMoreBundle:EzUserAccount' );
         $this->repository = $repository;
         $this->userService = $repository->getUserService();
-        $this->contentService = $repository->getContentService();
-        $this->locationService = $repository->getLocationService();
         $this->fromMail = $configResolver->getParameter( 'user_register.mail_sender', 'ngmore' );
         $this->configResolver = $configResolver;
         $this->fieldHelper = $fieldHelper;
@@ -118,7 +114,7 @@ class UserHelper
         return false;
     }
 
-    public function createUser( $data )
+    public function createUserFromData( $data )
     {
         $userGroup = $this->userService->loadUserGroup(
             $this->configResolver->getParameter( "user_register.user_group", "ngmore" )
@@ -128,6 +124,20 @@ class UserHelper
             $data->payload,
             array( $userGroup )
         );
+    }
+
+    public function updateUserPassword( $userId, $password )
+    {
+        $user = $this->userService->loadUser( $userId );
+
+        $userUpdateStruct = $this->userService->newUserUpdateStruct();
+        $userUpdateStruct->password = $password;
+
+        $this->repository->setCurrentUser( $this->userService->loadUser( 14 ) );
+        $this->repository->getUserService()->updateUser( $user, $userUpdateStruct );
+        $this->repository->setCurrentUser( $this->userService->loadUser( $this->configResolver->getParameter( "anonymous_user_id" ) ) );
+
+        $this->removeEzUserAccountKeyByUser( $user );
     }
 
     public function sendActivationCode( User $user, $subject = null )
@@ -171,15 +181,16 @@ class UserHelper
             return false;
         }
 
+        /** @var EzUserAccount $result */
         $result = $this->getEzUserAccountKeyByHash( $hash );
-        $userID = $result['user_id'];
+        $userID = $result->getUserId();
         $user = $this->userService->loadUser( $userID );
         $this->enableUser( $user );
 
         return true;
     }
 
-    public function setNewPassword( $email )
+    public function prepareResetPassword( $email )
     {
         $userArray = $this->userService->loadUsersByEmail( $email );
         if( empty($userArray) )
@@ -193,7 +204,6 @@ class UserHelper
         );
 
         $hash = $this->setVerificationHash( $user );
-
         $this->sendChangePasswordMail( $user, $hash );
     }
 
@@ -220,9 +230,10 @@ class UserHelper
 
     public function validateResetPassword( $hash )
     {
+        /** @var EzUserAccount $result */
         $result = $this->getEzUserAccountKeyByHash( $hash );
 
-        if ( time() - $result['time'] > 3600 )
+        if ( time() - $result->getTime() > 3600 )
         {
             return false;
         }
@@ -232,66 +243,86 @@ class UserHelper
 
     public function loadUserByHash( $hash )
     {
+        /** @var EzUserAccount $user_account */
         $user_account = $this->getEzUserAccountKeyByHash( $hash );
-        $userId = $user_account['user_id'];
+        $userId = $user_account->getUserId();
 
         return $this->userService->loadUser( $userId );
     }
 
     /**
      * @param $user
-     * @return string
+     *
+     * @return string|bool
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     private function setVerificationHash( $user )
     {
         $userID = $user->id;
-        $hash = md5( mt_rand() . time() . $userID );
-        $sql = "INSERT INTO ezuser_accountkey ( hash_key, id, time, user_id ) VALUES ( :hash, :_id, :cur_time, :user_id ) ";
-        $connection = $this->em->getConnection();
-        $statement = $connection->prepare($sql);
-        $statement->bindValue( "hash", $hash );
-        $statement->bindValue( "_id", NULL );
-        $statement->bindValue( "cur_time", time() );
-        $statement->bindValue( "user_id", $userID );
-        $statement->execute();
+        $hash = md5(
+            ( function_exists( "openssl_random_pseudo_bytes" ) ? openssl_random_pseudo_bytes( 32 ) : mt_rand() ) .
+            microtime() .
+            $userID
+        );
+
+        $userAccount = new EzUserAccount();
+        $userAccount->setHash( $hash );
+        $userAccount->setTime( time() );
+        $userAccount->setUserId( $user->id );
+
+        $this->em->persist( $userAccount );
+        $this->em->flush();
+
         return $hash;
     }
 
     private function getEzUserAccountKeyByHash( $hash )
     {
-        //@todo wrap in try catch block
-        if ( !$hash ) return null;
-        $sql = "SELECT * FROM ezuser_accountkey WHERE hash_key=:hash ";
-        $connection = $this->em->getConnection();
-        $statement = $connection->prepare( $sql );
-        $statement->bindValue( "hash", $hash );
-        $statement->execute();
-        return $statement->fetch();
+        $results = $this->accountRepository->findBy(
+            array(
+                'hash' => $hash
+            ) // @todo: sort by time
+        );
+
+        if ( !is_array( $results ) || empty( $results ) )
+        {
+            return null;
+        }
+
+        return $results[0];
     }
 
     private function enableUser( $user )
     {
-        $sql = "UPDATE ezuser_setting SET is_enabled=1 WHERE user_id=:user_id ";
-        $connection = $this->em->getConnection();
-        $statement = $connection->prepare( $sql );
-        $statement->bindValue( "user_id", $user->id );
-        $statement->execute();
+        $userUpdateStruct = $this->userService->newUserUpdateStruct();
+        $userUpdateStruct->enabled = true;
+
+        $this->repository->setCurrentUser( $this->userService->loadUser( 14 ) );
+        $this->repository->getUserService()->updateUser( $user, $userUpdateStruct );
+        $this->repository->setCurrentUser( $this->userService->loadUser( $this->configResolver->getParameter( "anonymous_user_id" ) ) );
+
         $this->removeEzUserAccountKeyByUser( $user );
     }
 
     private function removeEzUserAccountKeyByUser( $user )
     {
-        $sql = "DELETE FROM ezuser_accountkey WHERE user_id=:user_id";
-        $connection = $this->em->getConnection();
-        $statement = $connection->prepare( $sql );
-        $statement->bindValue( "user_id", $user->id );
-        $statement->execute();
+        $result = $this->accountRepository->findOneBy(
+            array(
+                'user_id' => $user->id
+            )
+        );
+
+        if ( $result )
+        {
+            $this->em->remove( $result );
+            $this->em->flush();
+        }
     }
 
     private function getRootLocation()
     {
-        return $this->locationService->loadLocation(
+        return $this->repository->getLocationService()->loadLocation(
             $this->configResolver->getParameter( 'content.tree_root.location_id' ));
     }
 }

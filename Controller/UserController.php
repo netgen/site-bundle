@@ -51,7 +51,7 @@ class UserController extends Controller
                 )
             );
             return $this->render(
-                $this->getConfigResolver()->getParameter( "user_register.template", "ngmore" ),
+                $this->getConfigResolver()->getParameter( "user_register.template.register", "ngmore" ),
                 array(
                     "errorMessage" => $errorMessage,
                 )
@@ -92,7 +92,7 @@ class UserController extends Controller
                     );
 
                     return $this->render(
-                        $this->getConfigResolver()->getParameter( "user_register.template", "ngmore" ),
+                        $this->getConfigResolver()->getParameter( "user_register.template.register", "ngmore" ),
                         array(
                             "errorMessage" => $errorMessage,
                         )
@@ -122,7 +122,7 @@ class UserController extends Controller
         }
 
         return $this->render(
-            $this->getConfigResolver()->getParameter( "user_register.template", "ngmore" ),
+            $this->getConfigResolver()->getParameter( "user_register.template.register", "ngmore" ),
             array(
                 "form" => $form->createView(),
                 "errorMessage" => $errorMessage
@@ -133,7 +133,7 @@ class UserController extends Controller
     public function activateUser( $hash )
     {
         $registerHelperService = $this->get( "ngmore.helper.user_helper" );
-        $template = $this->configResolver->getParameter( "user_activate.template", "ngmore" );
+        $template = $this->configResolver->getParameter( "user_register.template.activate", "ngmore" );
 
         $alreadyActive = false;
         $accountActivated = $registerHelperService->verifyUserByHash( $hash );
@@ -167,7 +167,7 @@ class UserController extends Controller
         }
 
         return $this->render(
-            $this->getConfigResolver()->getParameter( 'user_register.forgotten_password_template', 'ngmore' ),
+            $this->getConfigResolver()->getParameter( 'user_register.template.forgotten_password', 'ngmore' ),
             array(
                 'form' => $form ? $form->createView() : false,
                 'email' => $email
@@ -178,7 +178,7 @@ class UserController extends Controller
     public function resetPassword( Request $request, $hash )
     {
         $registerHelper = $this->get( "ngmore.helper.user_helper" );
-        $template = $this->getConfigResolver()->getParameter( "user_register.reset_password_template", "ngmore" );
+        $template = $this->getConfigResolver()->getParameter( "user_register.template.reset_password", "ngmore" );
 
         if ( $registerHelper->validateResetPassword( $hash ) )
         {

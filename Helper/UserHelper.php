@@ -64,8 +64,8 @@ class UserHelper
         $this->fromMail = $configResolver->getParameter( 'user_register.mail_sender', 'ngmore' );
         $this->configResolver = $configResolver;
         $this->fieldHelper = $fieldHelper;
-        $this->activationMailTemplate = $configResolver->getParameter( 'user_register.activation_mail_template', 'ngmore' );
-        $this->forgottenPasswordMailTemplate = $configResolver->getParameter( 'user_register.forgotten_password_mail_template', 'ngmore' );
+        $this->activationMailTemplate = $configResolver->getParameter( 'user_register.template.activation_mail', 'ngmore' );
+        $this->forgottenPasswordMailTemplate = $configResolver->getParameter( 'user_register.template.forgotten_password_mail', 'ngmore' );
     }
 
     public function setRepositoryUser( $userId = 14 )

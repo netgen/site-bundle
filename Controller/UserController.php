@@ -75,7 +75,7 @@ class UserController extends Controller
             {
                 try
                 {
-                    $user = $registerHelper->createUser( $data );
+                    $user = $registerHelper->createUserFromData( $data );
 
                     if ( !$auto_enable )
                     {
@@ -130,19 +130,17 @@ class UserController extends Controller
         );
     }
 
-    public function activate( $hash )
+    public function activateUser( $hash )
     {
         $registerHelperService = $this->get( "ngmore.helper.user_helper" );
+        $template = $this->configResolver->getParameter( "user_activate.template", "ngmore" );
 
         $alreadyActive = false;
         $accountActivated = $registerHelperService->verifyUserByHash( $hash );
-
         if ( !$accountActivated )
         {
             $alreadyActive = $registerHelperService->isUserActive( $hash );
         }
-
-        $template = $this->configResolver->getParameter( "user_activate.template", "ngmore" );
 
         return $this->render(
             $template,
@@ -153,36 +151,25 @@ class UserController extends Controller
         );
     }
 
-    public function forgotPassword()
+    public function forgotPassword( Request $request )
     {
-        $form = $this->createForgotPassForm();
-
-        return $this->render(
-            $this->getConfigResolver()->getParameter( 'user_register.forgotten_password_template', 'ngmore' ),
-            array(
-                'form' => $form->createView()
-            )
-        );
-    }
-
-    public function forgotPasswordCreateAction( Request $request )
-    {
-        $registerHelperService = $this->get("ngmore.helper.user_helper");
-
-        $form = $this->createForgotPassForm();
-        $form->handleRequest($request);
-
         $email = '';
-        if ( $form->isValid() ) {
-            $email = $form->get('email')->getData();
-            $registerHelperService->setNewPassword( $email );
+        $registerHelperService = $this->get( "ngmore.helper.user_helper" );
+
+        $form = $this->createForgotPassForm();
+        $form->handleRequest( $request );
+
+        if ( $form->isValid() )
+        {
+            $email = $form->get( 'email' )->getData();
+            $registerHelperService->prepareResetPassword( $email );
             $form = false;
         }
 
         return $this->render(
             $this->getConfigResolver()->getParameter( 'user_register.forgotten_password_template', 'ngmore' ),
             array(
-                'form' => $form,
+                'form' => $form ? $form->createView() : false,
                 'email' => $email
             )
         );
@@ -203,14 +190,7 @@ class UserController extends Controller
             if ( $form->isValid() )
             {
                 $data = $form->getData();
-                $user = $this->getRepository()->getUserService()->loadUser( $data["user_id"] );
-
-                $userUpdateStruct = $this->getRepository()->getUserService()->newUserUpdateStruct();
-                $userUpdateStruct->password = $data["password"];
-
-                $this->getRepository()->setCurrentUser( $this->getRepository()->getUserService()->loadUser( 14 ) );
-                $this->getRepository()->getUserService()->updateUser( $user, $userUpdateStruct );
-                $this->getRepository()->setCurrentUser( $user );
+                $registerHelper->updateUserPassword(  $data["user_id"], $data["password"] );
 
                 return $this->redirect( $this->generateUrl( "login" ) );
             }
@@ -238,7 +218,6 @@ class UserController extends Controller
     protected function createForgotPassForm()
     {
         return $this->createFormBuilder()
-                    ->setAction( $this->generateUrl( 'ngmore_user_forgot_password' ) )
                     ->add( 'email', 'email', array(
                         "label" => "ngmore.user.forgotten_password.email"
                     ))

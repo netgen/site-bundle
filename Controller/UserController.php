@@ -5,6 +5,7 @@ namespace Netgen\Bundle\MoreBundle\Controller;
 use eZ\Bundle\EzPublishCoreBundle\Controller;
 use eZ\Publish\API\Repository\Values\User\User;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
@@ -33,6 +34,14 @@ class UserController extends Controller
         $this->translator = $translator;
     }
 
+    /**
+     * Displays and validates register form.
+     * If form is valid, sends activation hash key to the user email
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
     public function register( Request $request )
     {
         $errorMessage = null;
@@ -130,6 +139,13 @@ class UserController extends Controller
         );
     }
 
+    /**
+     * Activates the user by hash key
+     *
+     * @param $hash
+     *
+     * @return Response
+     */
     public function activateUser( $hash )
     {
         $registerHelperService = $this->get( "ngmore.helper.user_helper" );
@@ -151,6 +167,14 @@ class UserController extends Controller
         );
     }
 
+    /**
+     * Displays and validates forgotten password form.
+     * If form is valid, sends mail to the user with hash key
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
     public function forgotPassword( Request $request )
     {
         $email = '';
@@ -175,6 +199,15 @@ class UserController extends Controller
         );
     }
 
+    /**
+     * Displays and validates reset password form if the
+     * hash key is valid
+     *
+     * @param Request $request
+     * @param $hash
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     */
     public function resetPassword( Request $request, $hash )
     {
         $registerHelper = $this->get( "ngmore.helper.user_helper" );
@@ -215,6 +248,11 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * Creates Forgotten Password form
+     *
+     * @return \Symfony\Component\Form\Form
+     */
     protected function createForgotPassForm()
     {
         return $this->createFormBuilder()
@@ -227,6 +265,13 @@ class UserController extends Controller
                     ->getForm();
     }
 
+    /**
+     * Creates Reset Password form
+     *
+     * @param $user
+     *
+     * @return \Symfony\Component\Form\Form
+     */
     protected function createResetPasswordForm( $user )
     {
         $passwordOptions = array(

@@ -46,6 +46,14 @@ class UserHelper
     /** @var \Doctrine\ORM\EntityRepository  */
     protected $accountRepository;
 
+    /**
+     * @param \Swift_Mailer $mailer
+     * @param \Twig_Environment $twig
+     * @param EntityManager $em
+     * @param Repository $repository
+     * @param ConfigResolverInterface $configResolver
+     * @param FieldHelper $fieldHelper
+     */
     public function __construct(
         \Swift_Mailer $mailer,
         \Twig_Environment $twig,
@@ -68,6 +76,11 @@ class UserHelper
         $this->forgottenPasswordMailTemplate = $configResolver->getParameter( 'user_register.template.forgotten_password_mail', 'ngmore' );
     }
 
+    /**
+     * Sets repository user (default admin)
+     *
+     * @param int $userId
+     */
     public function setRepositoryUser( $userId = 14 )
     {
         $this->repository->setCurrentUser(
@@ -75,6 +88,13 @@ class UserHelper
         );
     }
 
+    /**
+     * Creates data wrapper for user create form
+     *
+     * @param bool $enable
+     *
+     * @return DataWrapper
+     */
     public function userCreateDataWrapper( $enable = false )
     {
         $contentType = $this->repository->getContentTypeService()->loadContentTypeByIdentifier( "user" );
@@ -91,6 +111,13 @@ class UserHelper
         return new DataWrapper( $userCreateStruct, $userCreateStruct->contentType );
     }
 
+    /**
+     * Creates data wrapper for user update form
+     *
+     * @param $user
+     *
+     * @return DataWrapper
+     */
     public function userUpdateDataWrapper( $user )
     {
         $languages = $this->configResolver->getParameter( "languages" );
@@ -103,6 +130,13 @@ class UserHelper
         return new DataWrapper( $userUpdateStruct, $contentType, $user );
     }
 
+    /**
+     * Checks whether email is already registered
+     *
+     * @param $email
+     *
+     * @return bool
+     */
     public function userEmailExists( $email )
     {
         $users = $this->userService->loadUsersByEmail( $email );
@@ -114,6 +148,13 @@ class UserHelper
         return false;
     }
 
+    /**
+     * Creates user content type from matching form data
+     *
+     * @param $data
+     *
+     * @return User
+     */
     public function createUserFromData( $data )
     {
         $userGroup = $this->userService->loadUserGroup(
@@ -126,6 +167,13 @@ class UserHelper
         );
     }
 
+    /**
+     * Updates password of the user with userId
+     * Also removes the hash key form ezuser_accountkey table
+     *
+     * @param $userId
+     * @param $password
+     */
     public function updateUserPassword( $userId, $password )
     {
         $user = $this->userService->loadUser( $userId );
@@ -140,13 +188,30 @@ class UserHelper
         $this->removeEzUserAccountKeyByUser( $user );
     }
 
+    /**
+     * Sets activation hash key and sends it to the user
+     *
+     * @param User $user
+     * @param null|string $subject
+     *
+     * @return int
+     */
     public function sendActivationCode( User $user, $subject = null )
     {
         $hash = $this->setVerificationHash( $user );
         return $this->sendActivationMail( $user, $hash, $subject );
     }
 
-    public function sendActivationMail( User $user, $hash, $subject = null )
+    /**
+     * Sends activation mail
+     *
+     * @param User $user
+     * @param $hash
+     * @param null|string $subject
+     *
+     * @return int
+     */
+    protected function sendActivationMail( User $user, $hash, $subject = null )
     {
         $emailTo = $user->email;
         $templateContent = $this->twig->loadTemplate( $this->activationMailTemplate );
@@ -168,12 +233,25 @@ class UserHelper
         return $this->mailer->send( $message );
     }
 
-
+    /**
+     * Checks by hash key if the user is already activated
+     *
+     * @param $hash
+     *
+     * @return bool
+     */
     public function isUserActive( $hash )
     {
         return $this->getEzUserAccountKeyByHash( $hash ) ? false : true;
     }
 
+    /**
+     * validates hash key, loads the user, and starts it activation
+     *
+     * @param $hash
+     *
+     * @return bool
+     */
     public function verifyUserByHash( $hash )
     {
         if ( $this->isUserActive( $hash ) )
@@ -190,6 +268,11 @@ class UserHelper
         return true;
     }
 
+    /**
+     * Creates hash key and sends the forgotten password mail to the user
+     *
+     * @param $email
+     */
     public function prepareResetPassword( $email )
     {
         $userArray = $this->userService->loadUsersByEmail( $email );
@@ -207,6 +290,14 @@ class UserHelper
         $this->sendChangePasswordMail( $user, $hash );
     }
 
+    /**
+     * Sends forgotten password mail
+     *
+     * @param User $user
+     * @param $hash
+     *
+     * @return int
+     */
     public function sendChangePasswordMail( User $user, $hash )
     {
         $templateContent = $this->twig->loadTemplate( $this->forgottenPasswordMailTemplate );
@@ -228,6 +319,13 @@ class UserHelper
         return $this->mailer->send( $message );
     }
 
+    /**
+     * Validates forgotten password hash key
+     *
+     * @param $hash
+     *
+     * @return bool
+     */
     public function validateResetPassword( $hash )
     {
         /** @var EzUserAccount $result */
@@ -241,6 +339,13 @@ class UserHelper
         return true;
     }
 
+    /**
+     * Loads user by hash key
+     *
+     * @param $hash
+     *
+     * @return User
+     */
     public function loadUserByHash( $hash )
     {
         /** @var EzUserAccount $user_account */
@@ -251,6 +356,8 @@ class UserHelper
     }
 
     /**
+     * Creates verification hash key
+     *
      * @param $user
      *
      * @return string|bool
@@ -277,6 +384,13 @@ class UserHelper
         return $hash;
     }
 
+    /**
+     * Gets ezuser_accountkey by hash
+     *
+     * @param $hash
+     *
+     * @return EzUserAccount|null
+     */
     private function getEzUserAccountKeyByHash( $hash )
     {
         $result = $this->accountRepository->findOneBy(
@@ -293,6 +407,11 @@ class UserHelper
         return null;
     }
 
+    /**
+     * Enables the user
+     *
+     * @param $user
+     */
     private function enableUser( $user )
     {
         $userUpdateStruct = $this->userService->newUserUpdateStruct();
@@ -305,6 +424,11 @@ class UserHelper
         $this->removeEzUserAccountKeyByUser( $user );
     }
 
+    /**
+     * Removes row from ezuser_accountkey table by user
+     *
+     * @param $user
+     */
     private function removeEzUserAccountKeyByUser( $user )
     {
         $result = $this->accountRepository->findBy(
@@ -323,6 +447,11 @@ class UserHelper
         }
     }
 
+    /**
+     * Returns root location
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     */
     private function getRootLocation()
     {
         return $this->repository->getLocationService()->loadLocation(

@@ -364,7 +364,7 @@ class UserHelper
      *
      * @throws \Doctrine\DBAL\DBALException
      */
-    private function setVerificationHash( $user )
+    protected function setVerificationHash( $user )
     {
         $userID = $user->id;
         $hash = md5(
@@ -391,7 +391,7 @@ class UserHelper
      *
      * @return EzUserAccount|null
      */
-    private function getEzUserAccountKeyByHash( $hash )
+    protected function getEzUserAccountKeyByHash( $hash )
     {
         $result = $this->accountRepository->findOneBy(
             array(
@@ -412,7 +412,7 @@ class UserHelper
      *
      * @param $user
      */
-    private function enableUser( $user )
+    protected function enableUser( $user )
     {
         $userUpdateStruct = $this->userService->newUserUpdateStruct();
         $userUpdateStruct->enabled = true;
@@ -429,7 +429,7 @@ class UserHelper
      *
      * @param $user
      */
-    private function removeEzUserAccountKeyByUser( $user )
+    protected function removeEzUserAccountKeyByUser( $user )
     {
         $result = $this->accountRepository->findBy(
             array(
@@ -452,7 +452,7 @@ class UserHelper
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    private function getRootLocation()
+    protected function getRootLocation()
     {
         return $this->repository->getLocationService()->loadLocation(
             $this->configResolver->getParameter( 'content.tree_root.location_id' ));

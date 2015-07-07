@@ -279,18 +279,18 @@ class UserHelper
 
     private function getEzUserAccountKeyByHash( $hash )
     {
-        $results = $this->accountRepository->findBy(
+        $result = $this->accountRepository->findOneBy(
             array(
                 'hash' => $hash
-            ) // @todo: sort by time
+            )
         );
 
-        if ( !is_array( $results ) || empty( $results ) )
+        if ( $result instanceof EzUserAccount )
         {
-            return null;
+            return $result;
         }
 
-        return $results[0];
+        return null;
     }
 
     private function enableUser( $user )
@@ -307,9 +307,12 @@ class UserHelper
 
     private function removeEzUserAccountKeyByUser( $user )
     {
-        $result = $this->accountRepository->findOneBy(
+        $result = $this->accountRepository->findBy(
             array(
                 'user_id' => $user->id
+            ),
+            array(
+                'time' => 'DESC'
             )
         );
 

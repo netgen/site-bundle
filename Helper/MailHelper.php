@@ -84,7 +84,7 @@ class MailHelper
                  'return_url' => $returnUrl
             )
         );
-        $subject = $subject ?: $this->translator->trans( "ngmore.user.mail.password_changed.subject" );
+        $subject = $subject ?: $this->translator->trans( "ngmore.user.mail.subject.password_changed" );
 
         $message = Swift_Message::newInstance()
                                 ->setSubject( $subject )
@@ -116,7 +116,7 @@ class MailHelper
                 'hash' => $hash
             )
         );
-        $subject = $subject ?: $this->translator->trans( "ngmore.user.mail.activation.subject" );
+        $subject = $subject ?: $this->translator->trans( "ngmore.user.mail.subject.activation" );
 
         $message = Swift_Message::newInstance()
                                 ->setSubject( $subject )
@@ -146,7 +146,7 @@ class MailHelper
             )
         );
 
-        $subject = $subject ?: $this->translator->trans( "ngmore.user.mail.forgotten_password.subject" );;
+        $subject = $subject ?: $this->translator->trans( "ngmore.user.mail.subject.forgotten_password" );
         $message = Swift_Message::newInstance()
                                 ->setSubject( $subject )
                                 ->setFrom( $this->fromMailAddress, $this->siteName )
@@ -167,7 +167,7 @@ class MailHelper
             )
         );
 
-        $subject = $subject ?: $this->translator->trans( "ngmore.user.mail.email_not_registered.subject" );
+        $subject = $subject ?: $this->translator->trans( "ngmore.user.mail.subject.email_not_registered" );
         $message = Swift_Message::newInstance()
                                 ->setSubject( $subject )
                                 ->setFrom( $this->fromMailAddress, $this->siteName )

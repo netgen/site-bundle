@@ -56,16 +56,16 @@ class MailHelper
         $this->fromMailAddress = $configResolver->getParameter( 'user_register.mail_sender', 'ngmore' );
 
         $this->activationMailTemplate =
-            $configResolver->getParameter( 'user_register.template.activation_mail', 'ngmore' );
+            $configResolver->getParameter( 'user_register.template.mail.activation', 'ngmore' );
 
         $this->forgottenPasswordMailTemplate =
-            $configResolver->getParameter( 'user_register.template.forgotten_password_mail', 'ngmore' );
+            $configResolver->getParameter( 'user_register.template.mail.forgotten_password', 'ngmore' );
 
         $this->mailNotRegisteredMailTemplate =
-            $configResolver->getParameter( 'user_register.template.mail_not_registered_mail', 'ngmore' );
+            $configResolver->getParameter( 'user_register.template.mail.email_not_registered', 'ngmore' );
 
         $this->passwordChangedMailTemplate =
-            $configResolver->getParameter( 'user_register.template.password_changed_mail', 'ngmore' );
+            $configResolver->getParameter( 'user_register.template.mail.password_changed', 'ngmore' );
 
         $rootLocationId = $configResolver->getParameter( 'content.tree_root.location_id' );
         $this->baseUrl = $this->router->generate( 'ez_urlalias', array( "locationId" => $rootLocationId ) );

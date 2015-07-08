@@ -13,6 +13,7 @@ parameters:
     ngmore.helper.sort_clause_helper.class: Netgen\Bundle\MoreBundle\Helper\SortClauseHelper
     ngmore.helper.layout_helper.class: Netgen\Bundle\MoreBundle\Helper\LayoutHelper
     ngmore.helper.user_helper.class: Netgen\Bundle\MoreBundle\Helper\UserHelper
+    ngmore.helper.mail_helper.class: Netgen\Bundle\MoreBundle\Helper\MailHelper
 
     ngmore.data_collector.legacy_debug_data_collector.class: Netgen\Bundle\MoreBundle\DataCollector\LegacyDebugDataCollector
 
@@ -86,12 +87,20 @@ services:
     ngmore.helper.user_helper:
         class: %ngmore.helper.user_helper.class%
         arguments:
-            - @mailer
-            - @twig
+            - @ngmore.helper.mail_helper
             - @doctrine.orm.entity_manager
             - @ezpublish.api.repository
             - @ezpublish.config.resolver
             - @ezpublish.field_helper
+
+    ngmore.helper.mail_helper:
+        class: %ngmore.helper.mail_helper.class%
+        arguments:
+            - @mailer
+            - @twig
+            - @router
+            - @translator
+            - @ezpublish.config.resolver
 
     ngmore.data_collector.legacy_debug_data_collector:
         class: %ngmore.data_collector.legacy_debug_data_collector.class%

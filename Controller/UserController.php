@@ -88,8 +88,7 @@ class UserController extends Controller
 
                     if ( !$auto_enable )
                     {
-                        $subject = $this->translator->trans( "ngmore.user.mail.activation.subject" );
-                        $registerHelper->sendActivationCode( $user, $subject );
+                        $registerHelper->sendActivationCode( $user );
                     }
 
                     return $this->redirect( "login" );

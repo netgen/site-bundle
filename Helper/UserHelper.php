@@ -43,6 +43,10 @@ class UserHelper
 
     protected $forgottenPasswordMailTemplate;
 
+    protected $mailNotRegisteredMailTemplate;
+
+    protected $passwordChangedMailTemplate;
+
     /** @var \Doctrine\ORM\EntityRepository  */
     protected $accountRepository;
 
@@ -74,6 +78,8 @@ class UserHelper
         $this->fieldHelper = $fieldHelper;
         $this->activationMailTemplate = $configResolver->getParameter( 'user_register.template.activation_mail', 'ngmore' );
         $this->forgottenPasswordMailTemplate = $configResolver->getParameter( 'user_register.template.forgotten_password_mail', 'ngmore' );
+        $this->mailNotRegisteredMailTemplate = $configResolver->getParameter( 'user_register.template.mail_not_registered_mail', 'ngmore' );
+        $this->passwordChangedMailTemplate = $configResolver->getParameter( 'user_register.template.password_changed_mail', 'ngmore' );
     }
 
     /**
@@ -185,6 +191,8 @@ class UserHelper
         $this->repository->getUserService()->updateUser( $user, $userUpdateStruct );
         $this->repository->setCurrentUser( $this->userService->loadUser( $this->configResolver->getParameter( "anonymous_user_id" ) ) );
 
+        $this->sendPasswordChangedMail( $user );
+
         $this->removeEzUserAccountKeyByUser( $user );
     }
 
@@ -200,6 +208,27 @@ class UserHelper
     {
         $hash = $this->setVerificationHash( $user );
         return $this->sendActivationMail( $user, $hash, $subject );
+    }
+
+    protected function sendPasswordChangedMail( $user, $subject = null )
+    {
+        $emailTo = $user->email;
+        $templateContent = $this->twig->loadTemplate( $this->passwordChangedMailTemplate );
+        $body = $templateContent->render(
+            array(
+                'user' => $user,
+                'root_location' => $this->getRootLocation(),
+            )
+        );
+        $subject = $subject ?: 'Password change!';
+
+        $message = Swift_Message::newInstance()
+                                ->setSubject( $subject )
+                                ->setFrom( $this->fromMail )
+                                ->setTo( $emailTo )
+                                ->setBody( $body, 'text/html' )
+        ;
+        return $this->mailer->send( $message );
     }
 
     /**
@@ -276,8 +305,9 @@ class UserHelper
     public function prepareResetPassword( $email )
     {
         $userArray = $this->userService->loadUsersByEmail( $email );
-        if( empty($userArray) )
+        if( empty( $userArray ) )
         {
+            $this->sendEmailNotRegisteredMail( $email );
             return;
         }
         $user = $userArray[0];
@@ -353,6 +383,25 @@ class UserHelper
         $userId = $user_account->getUserId();
 
         return $this->userService->loadUser( $userId );
+    }
+
+    protected function sendEmailNotRegisteredMail( $email )
+    {
+        $templateContent = $this->twig->loadTemplate( $this->mailNotRegisteredMailTemplate );
+        $body = $templateContent->render(
+            array(
+                'root_location' => $this->getRootLocation()
+            )
+        );
+
+        $subject = "Account access attempted";
+        $message = Swift_Message::newInstance()
+                                ->setSubject( $subject )
+                                ->setFrom( $this->fromMail )
+                                ->setTo( $email )
+                                ->setBody( $body, 'text/html' )
+        ;
+        return $this->mailer->send( $message );
     }
 
     /**

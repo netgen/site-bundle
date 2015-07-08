@@ -91,7 +91,6 @@ services:
             - @doctrine.orm.entity_manager
             - @ezpublish.api.repository
             - @ezpublish.config.resolver
-            - @ezpublish.field_helper
 
     ngmore.helper.mail_helper:
         class: %ngmore.helper.mail_helper.class%

@@ -4,6 +4,7 @@ namespace Netgen\Bundle\MoreBundle\Helper;
 
 use Swift_Mailer;
 use Swift_Message;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
@@ -36,6 +37,8 @@ class MailHelper
 
     protected $passwordChangedMailTemplate;
 
+    protected $welcomeMailTemplate;
+
     protected $baseUrl;
 
     protected $siteName;
@@ -67,9 +70,34 @@ class MailHelper
         $this->passwordChangedMailTemplate =
             $configResolver->getParameter( 'user_register.template.mail.password_changed', 'ngmore' );
 
+        $this->welcomeMailTemplate =
+            $configResolver->getParameter( 'user_register.template.mail.welcome', 'ngmore' );
+
         $rootLocationId = $configResolver->getParameter( 'content.tree_root.location_id' );
-        $this->baseUrl = $this->router->generate( 'ez_urlalias', array( "locationId" => $rootLocationId ) );
+        $this->baseUrl = $this->router->generate( 'ez_urlalias', array( "locationId" => $rootLocationId ), UrlGeneratorInterface::ABSOLUTE_URL );
         $this->siteName = $configResolver->getParameter( 'SiteSettings.SiteName' );
+    }
+
+    public function sendWelcomeMail( $user, $subject = null )
+    {
+        $emailTo = $user->email;
+        $templateContent = $this->twig->loadTemplate( $this->welcomeMailTemplate );
+        $body = $templateContent->render(
+            array(
+                'user' => $user,
+                'base_url' => $this->baseUrl,
+                'site_name' => $this->siteName,
+            )
+        );
+        $subject = $subject ?: $this->translator->trans( "ngmore.user.mail.subject.welcome" );
+
+        $message = Swift_Message::newInstance()
+                                ->setSubject( $subject )
+                                ->setFrom( $this->fromMailAddress, $this->siteName )
+                                ->setTo( $emailTo )
+                                ->setBody( $body, 'text/html' )
+        ;
+        return $this->mailer->send( $message );
     }
 
     public function sendPasswordChangedMail( $user, $returnUrl = null, $subject = null )

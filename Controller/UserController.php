@@ -3,7 +3,6 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
-use eZ\Publish\API\Repository\Values\User\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
@@ -45,13 +44,9 @@ class UserController extends Controller
     public function register( Request $request )
     {
         $errorMessage = null;
-        $auto_enable = false;
-        if ( $this->configResolver->hasParameter( 'user_register.auto_enable', 'ngmore' ) )
-        {
-            $auto_enable = $this->configResolver->getParameter( 'user_register.auto_enable', 'ngmore' );
-        }
+        $anonymousId = $this->configResolver->getParameter( "anonymous_user_id" );
 
-        if ( $this->configResolver->getParameter( "anonymous_user_id" ) != $this->getRepository()->getCurrentUser()->id )
+        if ( $this->getRepository()->getCurrentUser()->id != $anonymousId )
         {
             $errorMessage = $this->translator->trans(
                 "ngmore.user.register.already_logged_in",
@@ -69,8 +64,7 @@ class UserController extends Controller
 
         $registerHelper = $this->get( "ngmore.helper.user_helper" );
 
-        $registerHelper->setRepositoryUser();
-        $data = $registerHelper->userCreateDataWrapper( $auto_enable );
+        $data = $registerHelper->userCreateDataWrapper();
 
         $formBuilder = $this->container->get( "form.factory" )->createBuilder( "ezforms_create_user", $data );
         $formBuilder->add( "save", "submit", array( "label" => "ngmore.user.register.submit_label" ) );
@@ -85,11 +79,7 @@ class UserController extends Controller
                 try
                 {
                     $user = $registerHelper->createUserFromData( $data );
-
-                    if ( !$auto_enable )
-                    {
-                        $registerHelper->sendActivationCode( $user );
-                    }
+                    $registerHelper->activateUser( $user );
 
                     return $this->redirect( "login" );
                 }
@@ -97,13 +87,6 @@ class UserController extends Controller
                 {
                     $errorMessage = $this->translator->trans(
                         "ngmore.user.register.general_error"
-                    );
-
-                    return $this->render(
-                        $this->getConfigResolver()->getParameter( "user_register.template.register", "ngmore" ),
-                        array(
-                            "errorMessage" => $errorMessage,
-                        )
                     );
                 }
                 catch ( InvalidArgumentException $e )
@@ -236,12 +219,10 @@ class UserController extends Controller
         }
         else
         {
-            $errorMessage = $this->translator->trans( "ngmore.user.forgotten_password.wrong_hash" );
-
             return $this->render(
                 $template,
                 array(
-                    "errorMessage" => $errorMessage,
+                    "errorMessage" => $this->translator->trans( "ngmore.user.forgotten_password.wrong_hash" ),
                 )
             );
         }

@@ -7,7 +7,6 @@ use Netgen\Bundle\MoreBundle\Helper\MailHelper;
 use Doctrine\ORM\EntityManager;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\Core\Helper\FieldHelper;
 use eZ\Publish\API\Repository\Values\User\User;
 use Netgen\Bundle\EzFormsBundle\Form\DataWrapper;
 
@@ -28,27 +27,23 @@ class UserHelper
     /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     protected $configResolver;
 
-
-    /** @var  \eZ\Publish\Core\Helper\FieldHelper */
-    protected $fieldHelper;
-
-
     /** @var \Doctrine\ORM\EntityRepository  */
     protected $accountRepository;
+
+    /** @var  bool */
+    protected $auto_enable;
 
     /**
      * @param MailHelper $mailHelper
      * @param EntityManager $em
      * @param Repository $repository
      * @param ConfigResolverInterface $configResolver
-     * @param FieldHelper $fieldHelper
      */
     public function __construct(
         MailHelper $mailHelper,
         EntityManager $em,
         Repository $repository,
-        ConfigResolverInterface $configResolver,
-        FieldHelper $fieldHelper
+        ConfigResolverInterface $configResolver
     )
     {
         $this->mailHelper = $mailHelper;
@@ -57,29 +52,18 @@ class UserHelper
         $this->userService = $repository->getUserService();
         $this->accountRepository = $em->getRepository( 'NetgenMoreBundle:EzUserAccount' );
         $this->configResolver = $configResolver;
-        $this->fieldHelper = $fieldHelper;
-    }
-
-    /**
-     * Sets repository user (default admin)
-     *
-     * @param int $userId
-     */
-    public function setRepositoryUser( $userId = 14 )
-    {
-        $this->repository->setCurrentUser(
-            $this->userService->loadUser( $userId )
-        );
+        if ( $configResolver->hasParameter( 'user_register.auto_enable', 'ngmore' ) )
+        {
+            $this->auto_enable = $configResolver->getParameter( 'user_register.auto_enable', 'ngmore' );
+        }
     }
 
     /**
      * Creates data wrapper for user create form
      *
-     * @param bool $enable
-     *
      * @return DataWrapper
      */
-    public function userCreateDataWrapper( $enable = false )
+    public function userCreateDataWrapper()
     {
         $contentType = $this->repository->getContentTypeService()->loadContentTypeByIdentifier( "user" );
         $languages = $this->configResolver->getParameter( "languages" );
@@ -90,7 +74,7 @@ class UserHelper
             $languages[0],
             $contentType
         );
-        $userCreateStruct->enabled = $enable;
+        $userCreateStruct->enabled = $this->auto_enable;
 
         return new DataWrapper( $userCreateStruct, $userCreateStruct->contentType );
     }
@@ -124,6 +108,7 @@ class UserHelper
     public function userEmailExists( $email )
     {
         $users = $this->userService->loadUsersByEmail( $email );
+
         if ( count( $users ) > 0 )
         {
             return true;
@@ -141,14 +126,21 @@ class UserHelper
      */
     public function createUserFromData( $data )
     {
+        $currentUser = $this->repository->getCurrentUser();
+        $this->repository->setCurrentUser( $this->userService->loadUser( 14 ) );
+
         $userGroup = $this->userService->loadUserGroup(
             $this->configResolver->getParameter( "user_register.user_group", "ngmore" )
         );
 
-        return $this->userService->createUser(
+        $newUser = $this->userService->createUser(
             $data->payload,
             array( $userGroup )
         );
+
+        $this->repository->setCurrentUser( $currentUser );
+
+        return $newUser;
     }
 
     /**
@@ -160,18 +152,31 @@ class UserHelper
      */
     public function updateUserPassword( $userId, $password )
     {
+        $currentUser = $this->repository->getCurrentUser();
+        $this->repository->setCurrentUser( $this->userService->loadUser( 14 ) );
+
         $user = $this->userService->loadUser( $userId );
 
         $userUpdateStruct = $this->userService->newUserUpdateStruct();
         $userUpdateStruct->password = $password;
-
-        $this->repository->setCurrentUser( $this->userService->loadUser( 14 ) );
         $this->repository->getUserService()->updateUser( $user, $userUpdateStruct );
-        $this->repository->setCurrentUser( $this->userService->loadUser( $this->configResolver->getParameter( "anonymous_user_id" ) ) );
 
         $this->mailHelper->sendPasswordChangedMail( $user );
-
         $this->removeEzUserAccountKeyByUser( $user );
+
+        $this->repository->setCurrentUser( $currentUser );
+    }
+
+    public function activateUser( $user )
+    {
+        if ( !$this->auto_enable )
+        {
+            $this->sendActivationCode( $user );
+        }
+        else
+        {
+            $this->mailHelper->sendWelcomeMail( $user );
+        }
     }
 
     /**
@@ -239,10 +244,6 @@ class UserHelper
         }
         $user = $userArray[0];
 
-        $this->repository->setCurrentUser(
-            $this->userService->loadUser( 14 )
-        );
-
         $hash = $this->setVerificationHash( $user );
         $this->mailHelper->sendChangePasswordMail( $user, $hash );
     }
@@ -259,7 +260,7 @@ class UserHelper
         /** @var EzUserAccount $result */
         $result = $this->getEzUserAccountKeyByHash( $hash );
 
-        if ( time() - $result->getTime() > 3600 )
+        if ( empty( $result ) || time() - $result->getTime() > 3600 )
         {
             return false;
         }
@@ -342,14 +343,17 @@ class UserHelper
      */
     protected function enableUser( $user )
     {
+        $currentUser = $this->repository->getCurrentUser();
+        $this->repository->setCurrentUser( $this->userService->loadUser( 14 ) );
+
         $userUpdateStruct = $this->userService->newUserUpdateStruct();
         $userUpdateStruct->enabled = true;
-
-        $this->repository->setCurrentUser( $this->userService->loadUser( 14 ) );
         $this->repository->getUserService()->updateUser( $user, $userUpdateStruct );
-        $this->repository->setCurrentUser( $this->userService->loadUser( $this->configResolver->getParameter( "anonymous_user_id" ) ) );
+
+        $this->repository->setCurrentUser( $currentUser );
 
         $this->removeEzUserAccountKeyByUser( $user );
+        $this->mailHelper->sendWelcomeMail( $user );
     }
 
     /**

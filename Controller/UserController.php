@@ -205,6 +205,25 @@ class UserController extends Controller
             if ( $form->isValid() )
             {
                 $data = $form->getData();
+
+                try
+                {
+                    $this->getRepository()->getUserService()->loadUserByCredentials(
+                        $user->login,
+                        $data['original_password']
+                    );
+                }
+                catch( NotFoundException $e )
+                {
+                    return $this->render(
+                        $template,
+                        array(
+                            "errorMessage" => $this->translator->trans( "ngmore.user.forgotten_password.wrong_password" ),
+                            "form" => $form->createView()
+                        )
+                    );
+                }
+
                 $registerHelper->updateUserPassword(  $data["user_id"], $data["password"] );
 
                 return $this->redirect( $this->generateUrl( "login" ) );
@@ -254,6 +273,17 @@ class UserController extends Controller
      */
     protected function createResetPasswordForm( $user )
     {
+        $originalPasswordOptions = array(
+            "required" => true,
+            "constraints" => array(
+                new Constraints\Length(
+                    array(
+                        "min" => $this->container->getParameter( "netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length" ),
+                    )
+                ),
+            )
+        );
+
         $passwordOptions = array(
             "type" => "password",
             "required" => false,
@@ -277,6 +307,7 @@ class UserController extends Controller
 
         return $this->createFormBuilder()
             ->add( 'user_id', 'hidden', array( 'data' => $user->id ) )
+            ->add( 'original_password', 'password', $originalPasswordOptions )
             ->add( 'password', 'repeated', $passwordOptions )
             ->add( 'save', 'submit', array( 'label' => "ngmore.user.reset_password.submit_label") )
             ->getForm();

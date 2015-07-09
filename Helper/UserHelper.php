@@ -161,7 +161,7 @@ class UserHelper
         $userUpdateStruct->password = $password;
         $this->repository->getUserService()->updateUser( $user, $userUpdateStruct );
 
-        $this->mailHelper->sendPasswordChangedMail( $user );
+        $this->mailHelper->sendMail( $user->email, MailHelper::PASSWORDCHANGED, array( 'user' => $user ) );
         $this->removeEzUserAccountKeyByUser( $user );
 
         $this->repository->setCurrentUser( $currentUser );
@@ -175,7 +175,7 @@ class UserHelper
         }
         else
         {
-            $this->mailHelper->sendWelcomeMail( $user );
+            $this->mailHelper->sendMail( $user->email, MailHelper::WELCOME, array( 'user' => $user ) );
         }
     }
 
@@ -190,7 +190,7 @@ class UserHelper
     public function sendActivationCode( User $user )
     {
         $hash = $this->setVerificationHash( $user );
-        return $this->mailHelper->sendActivationMail( $user, $hash );
+        return $this->mailHelper->sendMail( $user->email, MailHelper::ACTIVATION, array( 'user' => $user, 'hash' => $hash ) );
     }
 
 
@@ -239,13 +239,13 @@ class UserHelper
         $userArray = $this->userService->loadUsersByEmail( $email );
         if( empty( $userArray ) )
         {
-            $this->mailHelper->sendEmailNotRegisteredMail( $email );
+            $this->mailHelper->sendMail( $email, MailHelper::MAILNOTREGISTERED ); // mail not registered
             return;
         }
         $user = $userArray[0];
 
         $hash = $this->setVerificationHash( $user );
-        $this->mailHelper->sendChangePasswordMail( $user, $hash );
+        $this->mailHelper->sendMail( $user->email, MailHelper::FORGOTTENPASSWORD, array( 'user' => $user, 'hash' => $hash ) );
     }
 
     /**
@@ -353,7 +353,7 @@ class UserHelper
         $this->repository->setCurrentUser( $currentUser );
 
         $this->removeEzUserAccountKeyByUser( $user );
-        $this->mailHelper->sendWelcomeMail( $user );
+        $this->mailHelper->sendMail( $user->email, MailHelper::WELCOME, array( 'user' => $user ) );
     }
 
     /**

@@ -12,6 +12,12 @@ use eZ\Publish\API\Repository\Values\User\User;
 
 class MailHelper
 {
+    const WELCOME = "welcome";
+    const FORGOTTENPASSWORD= "forgottenPassword";
+    const MAILNOTREGISTERED = "mailNotRegistered";
+    const PASSWORDCHANGED = "passwordChanged";
+    const ACTIVATION = "activation";
+
     /** @var \Swift_Mailer  */
     protected $mailer;
 
@@ -29,15 +35,9 @@ class MailHelper
 
     protected $fromMailAddress;
 
-    protected $activationMailTemplate;
+    protected $templates = array();
 
-    protected $forgottenPasswordMailTemplate;
-
-    protected $mailNotRegisteredMailTemplate;
-
-    protected $passwordChangedMailTemplate;
-
-    protected $welcomeMailTemplate;
+    protected $subject = array();
 
     protected $baseUrl;
 
@@ -58,150 +58,50 @@ class MailHelper
         $this->configResolver = $configResolver;
         $this->fromMailAddress = $configResolver->getParameter( 'user_register.mail_sender', 'ngmore' );
 
-        $this->activationMailTemplate =
-            $configResolver->getParameter( 'user_register.template.mail.activation', 'ngmore' );
+        $this->templates = array(
+            $this::ACTIVATION => $configResolver->getParameter( 'user_register.template.mail.activation', 'ngmore' ),
+            $this::FORGOTTENPASSWORD => $configResolver->getParameter( 'user_register.template.mail.forgotten_password', 'ngmore' ),
+            $this::MAILNOTREGISTERED => $configResolver->getParameter( 'user_register.template.mail.email_not_registered', 'ngmore' ),
+            $this::PASSWORDCHANGED => $configResolver->getParameter( 'user_register.template.mail.password_changed', 'ngmore' ),
+            $this::WELCOME => $configResolver->getParameter( 'user_register.template.mail.welcome', 'ngmore' )
+        );
 
-        $this->forgottenPasswordMailTemplate =
-            $configResolver->getParameter( 'user_register.template.mail.forgotten_password', 'ngmore' );
-
-        $this->mailNotRegisteredMailTemplate =
-            $configResolver->getParameter( 'user_register.template.mail.email_not_registered', 'ngmore' );
-
-        $this->passwordChangedMailTemplate =
-            $configResolver->getParameter( 'user_register.template.mail.password_changed', 'ngmore' );
-
-        $this->welcomeMailTemplate =
-            $configResolver->getParameter( 'user_register.template.mail.welcome', 'ngmore' );
+        $this->subject = array(
+            $this::ACTIVATION => $this->translator->trans( "ngmore.user.mail.subject.activation" ),
+            $this::FORGOTTENPASSWORD => $this->translator->trans( "ngmore.user.mail.subject.forgotten_password" ),
+            $this::MAILNOTREGISTERED => $this->translator->trans( "ngmore.user.mail.subject.email_not_registered" ),
+            $this::PASSWORDCHANGED => $this->translator->trans( "ngmore.user.mail.subject.password_changed" ),
+            $this::WELCOME => $this->translator->trans( "ngmore.user.mail.subject.welcome" )
+        );
 
         $rootLocationId = $configResolver->getParameter( 'content.tree_root.location_id' );
         $this->baseUrl = $this->router->generate( 'ez_urlalias', array( "locationId" => $rootLocationId ), UrlGeneratorInterface::ABSOLUTE_URL );
         $this->siteName = $configResolver->getParameter( 'SiteSettings.SiteName' );
     }
 
-    public function sendWelcomeMail( $user, $subject = null )
+    public function sendMail( $email, $type, $templateParameters = array() )
     {
-        $emailTo = $user->email;
-        $templateContent = $this->twig->loadTemplate( $this->welcomeMailTemplate );
-        $body = $templateContent->render(
-            array(
-                'user' => $user,
-                'base_url' => $this->baseUrl,
-                'site_name' => $this->siteName,
-            )
-        );
-        $subject = $subject ?: $this->translator->trans( "ngmore.user.mail.subject.welcome" );
+        if ( !array_key_exists( $type, $this->templates ) )
+        {
+            $allowedTypes = explode( ', ', array_keys( $this->templates ) );
+
+            throw new \InvalidArgumentException( "{$type} is not supported. Mail type has to be one of the following: {$allowedTypes}" );
+        }
+
+        $templateParameters['base_url'] = $this->baseUrl;
+        $templateParameters['site_name'] = $this->siteName;
+
+        $templateContent = $this->twig->loadTemplate( $this->templates[$type] );
+        $body = $templateContent->render( $templateParameters );
+
+        $subject = $templateParameters['subject'] ?: $this->subject[$type];
 
         $message = Swift_Message::newInstance()
-                                ->setSubject( $subject )
-                                ->setFrom( $this->fromMailAddress, $this->siteName )
-                                ->setTo( $emailTo )
-                                ->setBody( $body, 'text/html' )
-        ;
-        return $this->mailer->send( $message );
-    }
+            ->setFrom( $this->fromMailAddress, $this->siteName )
+            ->setTo( $email )
+            ->setSubject( $subject )
+            ->setBody( $body, 'text/html' );
 
-    public function sendPasswordChangedMail( $user, $returnUrl = null, $subject = null )
-    {
-        $emailTo = $user->email;
-        $templateContent = $this->twig->loadTemplate( $this->passwordChangedMailTemplate );
-        $body = $templateContent->render(
-            array(
-                'user' => $user,
-                'base_url' => $this->baseUrl,
-                'site_name' => $this->siteName,
-                 'return_url' => $returnUrl
-            )
-        );
-        $subject = $subject ?: $this->translator->trans( "ngmore.user.mail.subject.password_changed" );
-
-        $message = Swift_Message::newInstance()
-                                ->setSubject( $subject )
-                                ->setFrom( $this->fromMailAddress, $this->siteName )
-                                ->setTo( $emailTo )
-                                ->setBody( $body, 'text/html' )
-        ;
-        return $this->mailer->send( $message );
-    }
-
-    /**
-     * Sends activation mail
-     *
-     * @param User $user
-     * @param $hash
-     * @param null|string $subject
-     *
-     * @return int
-     */
-    public function sendActivationMail( User $user, $hash, $subject = null )
-    {
-        $emailTo = $user->email;
-        $templateContent = $this->twig->loadTemplate( $this->activationMailTemplate );
-        $body = $templateContent->render(
-            array(
-                'user' => $user,
-                'base_url' => $this->baseUrl,
-                'site_name' => $this->siteName,
-                'hash' => $hash
-            )
-        );
-        $subject = $subject ?: $this->translator->trans( "ngmore.user.mail.subject.activation" );
-
-        $message = Swift_Message::newInstance()
-                                ->setSubject( $subject )
-                                ->setFrom( $this->fromMailAddress, $this->siteName )
-                                ->setTo( $emailTo )
-                                ->setBody( $body, 'text/html' )
-        ;
-        return $this->mailer->send( $message );
-    }
-
-    /**
-     * Sends forgotten password mail
-     *
-     * @param User $user
-     * @param string $hash
-     * @param string $subject
-     *
-     * @return int
-     */
-    public function sendChangePasswordMail( User $user, $hash, $subject = null )
-    {
-        $templateContent = $this->twig->loadTemplate( $this->forgottenPasswordMailTemplate );
-        $body = $templateContent->render(
-            array(
-                'user' => $user,
-                'hash' => $hash
-            )
-        );
-
-        $subject = $subject ?: $this->translator->trans( "ngmore.user.mail.subject.forgotten_password" );
-        $message = Swift_Message::newInstance()
-                                ->setSubject( $subject )
-                                ->setFrom( $this->fromMailAddress, $this->siteName )
-                                ->setTo( $user->email )
-                                ->setBody( $body, 'text/html' )
-        ;
-        return $this->mailer->send( $message );
-    }
-
-    public function sendEmailNotRegisteredMail( $email, $returnUrl = null, $subject = null )
-    {
-        $templateContent = $this->twig->loadTemplate( $this->mailNotRegisteredMailTemplate );
-        $body = $templateContent->render(
-            array(
-                'base_url' => $this->baseUrl,
-                'site_name' => $this->siteName,
-                'returnUrl' => $returnUrl
-            )
-        );
-
-        $subject = $subject ?: $this->translator->trans( "ngmore.user.mail.subject.email_not_registered" );
-        $message = Swift_Message::newInstance()
-                                ->setSubject( $subject )
-                                ->setFrom( $this->fromMailAddress, $this->siteName )
-                                ->setTo( $email )
-                                ->setBody( $body, 'text/html' )
-        ;
         return $this->mailer->send( $message );
     }
 }

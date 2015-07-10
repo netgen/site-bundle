@@ -2,7 +2,7 @@
 
 namespace Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RelationList as BaseRelationListConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RelationListConverter as BaseRelationListConverter;
 
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
@@ -10,7 +10,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use DOMDocument;
 
-class RelationList extends BaseRelationListConverter
+class RelationListConverter extends BaseRelationListConverter
 {
     /**
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler

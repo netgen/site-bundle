@@ -4,3 +4,4 @@ parameters:
         enabled_legacy_settings: []
     ngmore.default.site_settings.google_tag_manager_code: ~
     ngmore.default.path_helper.excluded_content_types: ['ng_container', 'folder']
+    ngmore.default.site_settings.jwplayer_key: ~

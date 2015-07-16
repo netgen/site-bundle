@@ -120,7 +120,7 @@ class EmbedViewController extends Controller
                     {
                         $field = $translationHelper->getTranslatedField( $content, $fieldName );
                         $targetLink = $this->generateUrl(
-                            'ngmore_download',
+                            'ez_content_download_field_id',
                             array(
                                 'contentId' => $content->id,
                                 'fieldId' => $field->id

@@ -153,7 +153,7 @@ class EzLinkDirectDownload implements Converter
                 if ( isset( $content->fields['file'] ) && !$this->fieldHelper->isFieldEmpty( $content, 'file' ) )
                 {
                     $field = $this->translationHelper->getTranslatedField( $content, 'file' );
-                    $url = $this->router->generate( 'ngmore_download', array( 'contentId' => $content->id, 'fieldId' => $field->id ) );
+                    $url = $this->router->generate( 'ez_content_download_field_id', array( 'contentId' => $content->id, 'fieldId' => $field->id ) );
                 }
             }
 

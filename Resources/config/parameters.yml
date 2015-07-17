@@ -16,6 +16,7 @@ parameters:
 
     ngmore.default.site_settings.google_analytics_code: ~
     ngmore.default.site_settings.google_analytics_universal: true
+    ngmore.default.site_settings.google_tag_manager_code: ~
     ngmore.default.site_settings.add_this_code: ~
     ngmore.default.site_settings.typekit_code: ~
     ngmore.default.site_settings.sublime_video_code: ~

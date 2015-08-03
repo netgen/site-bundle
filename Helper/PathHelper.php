@@ -41,6 +41,15 @@ class PathHelper
      */
     protected $pathArray;
 
+    /**
+     * Constructor
+     *
+     * @param \eZ\Publish\API\Repository\LocationService $locationService
+     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
+     * @param \eZ\Publish\Core\Helper\TranslationHelper $translationHelper
+     * @param \Symfony\Component\Routing\RouterInterface $router
+     * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
+     */
     public function __construct(
         LocationService $locationService,
         ConfigResolverInterface $configResolver,
@@ -60,22 +69,27 @@ class PathHelper
      * Returns the path array for location ID
      *
      * @param mixed $locationId
+     * @param bool $doExcludeContentTypes
+     *
      * @return array
      */
-    public function getPath( $locationId )
+    public function getPath( $locationId, $doExcludeContentTypes = false )
     {
         if ( $this->pathArray !== null )
         {
             return $this->pathArray;
         }
 
-        $excludeContentTypes = array();
-        if ( $this->configResolver->hasParameter( 'path_helper.exclude_content_types', 'ngmore' ) )
+        $excludedContentTypes = array();
+        if (
+            $this->configResolver->hasParameter( 'path_helper.excluded_content_types', 'ngmore' ) &&
+            $doExcludeContentTypes
+        )
         {
-            $excludeContentTypes = $this->configResolver->getParameter( 'path_helper.exclude_content_types', 'ngmore' );
-            if ( !is_array( $excludeContentTypes ) )
+            $excludedContentTypes = $this->configResolver->getParameter( 'path_helper.excluded_content_types', 'ngmore' );
+            if ( !is_array( $excludedContentTypes ) )
             {
-                $excludeContentTypes = array();
+                $excludedContentTypes = array();
             }
         }
 
@@ -131,7 +145,7 @@ class PathHelper
                 }
 
                 $contentType = $this->contentTypeService->loadContentType( $location->contentInfo->contentTypeId );
-                if ( !in_array( $contentType->identifier, $excludeContentTypes ) )
+                if ( !in_array( $contentType->identifier, $excludedContentTypes ) )
                 {
                     $this->pathArray[ ] = array(
                         'text' => $this->translationHelper->getTranslatedContentNameByContentInfo( $location->contentInfo ),

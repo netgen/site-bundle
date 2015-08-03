@@ -22,3 +22,5 @@ parameters:
     ngmore.default.site_settings.sublime_video_code: ~
     ngmore.default.site_settings.facebook_api: false
     ngmore.default.site_settings.facebook_locale: en_US
+
+    ngmore.default.path_helper.excluded_content_types: ['ng_container', 'folder']

@@ -125,7 +125,7 @@ class NetgenMoreExtension extends Twig_Extension
      */
     public function getLocationPath( $locationId )
     {
-        return $this->pathHelper->getPath( $locationId );
+        return $this->pathHelper->getPath( $locationId, true );
     }
 
     /**

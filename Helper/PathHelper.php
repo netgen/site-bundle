@@ -6,6 +6,7 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use Symfony\Component\Routing\RouterInterface;
+use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 
 class PathHelper
@@ -31,34 +32,65 @@ class PathHelper
     protected $router;
 
     /**
+     * @var  \eZ\Publish\API\Repository\ContentTypeService
+     */
+    protected $contentTypeService;
+
+    /**
      * @var array
      */
     protected $pathArray;
 
+    /**
+     * Constructor
+     *
+     * @param \eZ\Publish\API\Repository\LocationService $locationService
+     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
+     * @param \eZ\Publish\Core\Helper\TranslationHelper $translationHelper
+     * @param \Symfony\Component\Routing\RouterInterface $router
+     * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
+     */
     public function __construct(
         LocationService $locationService,
         ConfigResolverInterface $configResolver,
         TranslationHelper $translationHelper,
-        RouterInterface $router
+        RouterInterface $router,
+        ContentTypeService $contentTypeService
     )
     {
         $this->locationService = $locationService;
         $this->configResolver = $configResolver;
         $this->translationHelper = $translationHelper;
         $this->router = $router;
+        $this->contentTypeService = $contentTypeService;
     }
 
     /**
      * Returns the path array for location ID
      *
      * @param mixed $locationId
+     * @param bool $doExcludeContentTypes
+     *
      * @return array
      */
-    public function getPath( $locationId )
+    public function getPath( $locationId, $doExcludeContentTypes = false )
     {
         if ( $this->pathArray !== null )
         {
             return $this->pathArray;
+        }
+
+        $excludedContentTypes = array();
+        if (
+            $this->configResolver->hasParameter( 'path_helper.excluded_content_types', 'ngmore' ) &&
+            $doExcludeContentTypes
+        )
+        {
+            $excludedContentTypes = $this->configResolver->getParameter( 'path_helper.excluded_content_types', 'ngmore' );
+            if ( !is_array( $excludedContentTypes ) )
+            {
+                $excludedContentTypes = array();
+            }
         }
 
         $this->pathArray = array();
@@ -112,13 +144,18 @@ class PathHelper
                     return array();
                 }
 
-                $this->pathArray[] = array(
-                    'text' => $this->translationHelper->getTranslatedContentNameByContentInfo( $location->contentInfo ),
-                    'url' => $location->id != $locationId ? $this->router->generate( $location ) : false,
-                    'locationId' => $location->id,
-                    'contentId' => $location->contentId,
-                    'contentTypeId' => $location->contentInfo->contentTypeId
-                );
+                $contentType = $this->contentTypeService->loadContentType( $location->contentInfo->contentTypeId );
+                if ( !in_array( $contentType->identifier, $excludedContentTypes ) )
+                {
+                    $this->pathArray[ ] = array(
+                        'text' => $this->translationHelper->getTranslatedContentNameByContentInfo( $location->contentInfo ),
+                        'url' => $location->id != $locationId ? $this->router->generate( $location ) : false,
+                        'locationId' => $location->id,
+                        'contentId' => $location->contentId,
+                        'contentTypeId' => $location->contentInfo->contentTypeId,
+                        'contentTypeIdentifier' => $contentType->identifier
+                    );
+                }
             }
         }
 

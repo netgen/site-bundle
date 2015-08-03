@@ -37,11 +37,6 @@ class PathHelper
     protected $contentTypeService;
 
     /**
-     * @var array
-     */
-    protected $pathArray;
-
-    /**
      * Constructor
      *
      * @param \eZ\Publish\API\Repository\LocationService $locationService
@@ -75,11 +70,6 @@ class PathHelper
      */
     public function getPath( $locationId, $doExcludeContentTypes = false )
     {
-        if ( $this->pathArray !== null )
-        {
-            return $this->pathArray;
-        }
-
         $excludedContentTypes = array();
         if (
             $this->configResolver->hasParameter( 'path_helper.excluded_content_types', 'ngmore' ) &&
@@ -93,7 +83,7 @@ class PathHelper
             }
         }
 
-        $this->pathArray = array();
+        $pathArray = array();
         $path = $this->locationService->loadLocation( $locationId )->path;
 
         // The root location can be defined at site access level
@@ -123,13 +113,18 @@ class PathHelper
                     }
 
                     $isRootLocation = true;
-                    $this->pathArray[] = array(
-                        'text' => $this->translationHelper->getTranslatedContentNameByContentInfo( $location->contentInfo ),
-                        'url' => $location->id != $locationId ? $this->router->generate( $location ) : false,
-                        'locationId' => $location->id,
-                        'contentId' => $location->contentId,
-                        'contentTypeId' => $location->contentInfo->contentTypeId
-                    );
+                    $contentType = $this->contentTypeService->loadContentType( $location->contentInfo->contentTypeId );
+                    if ( !in_array( $contentType->identifier, $excludedContentTypes ) )
+                    {
+                        $pathArray[] = array(
+                            'text' => $this->translationHelper->getTranslatedContentNameByContentInfo( $location->contentInfo ),
+                            'url' => $location->id != $locationId ? $this->router->generate( $location ) : false,
+                            'locationId' => $location->id,
+                            'contentId' => $location->contentId,
+                            'contentTypeId' => $location->contentInfo->contentTypeId,
+                            'contentTypeIdentifier' => $contentType->identifier
+                        );
+                    }
                 }
             }
             // The root location has already been reached, so we can add items to the path array
@@ -147,7 +142,7 @@ class PathHelper
                 $contentType = $this->contentTypeService->loadContentType( $location->contentInfo->contentTypeId );
                 if ( !in_array( $contentType->identifier, $excludedContentTypes ) )
                 {
-                    $this->pathArray[ ] = array(
+                    $pathArray[] = array(
                         'text' => $this->translationHelper->getTranslatedContentNameByContentInfo( $location->contentInfo ),
                         'url' => $location->id != $locationId ? $this->router->generate( $location ) : false,
                         'locationId' => $location->id,
@@ -159,6 +154,6 @@ class PathHelper
             }
         }
 
-        return $this->pathArray;
+        return $pathArray;
     }
 }

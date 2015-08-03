@@ -138,7 +138,8 @@ class PathHelper
                         'url' => $location->id != $locationId ? $this->router->generate( $location ) : false,
                         'locationId' => $location->id,
                         'contentId' => $location->contentId,
-                        'contentTypeId' => $location->contentInfo->contentTypeId
+                        'contentTypeId' => $location->contentInfo->contentTypeId,
+                        'contentTypeIdentifier' => $contentType->identifier
                     );
                 }
             }

@@ -18,6 +18,7 @@ use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;
 use Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value as RelationListValue;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use Psr\Log\LoggerInterface;
 use InvalidArgumentException;
 
 class RelationListMenuBuilder
@@ -58,6 +59,11 @@ class RelationListMenuBuilder
     protected $router;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * Constructor
      *
      * @param \Knp\Menu\FactoryInterface $factory
@@ -67,6 +73,7 @@ class RelationListMenuBuilder
      * @param \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper $siteInfoHelper
      * @param \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper $sortClauseHelper
      * @param \Symfony\Component\Routing\RouterInterface $router
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         FactoryInterface $factory,
@@ -75,7 +82,8 @@ class RelationListMenuBuilder
         TranslationHelper $translationHelper,
         SiteInfoHelper $siteInfoHelper,
         SortClauseHelper $sortClauseHelper,
-        RouterInterface $router
+        RouterInterface $router,
+        LoggerInterface $logger = null
     )
     {
         $this->factory = $factory;
@@ -85,6 +93,7 @@ class RelationListMenuBuilder
         $this->siteInfoHelper = $siteInfoHelper;
         $this->sortClauseHelper = $sortClauseHelper;
         $this->router = $router;
+        $this->logger = $logger;
     }
 
     /**
@@ -138,10 +147,25 @@ class RelationListMenuBuilder
         {
             try
             {
+                if ( empty( $locationId ) )
+                {
+                    if ( $this->logger instanceof LoggerInterface )
+                    {
+                        $this->logger->error( '[Relation Menu] Empty location id in relation list' );
+                    }
+
+                    continue;
+                }
+
                 $location = $this->repository->getLocationService()->loadLocation( $locationId );
             }
             catch ( NotFoundException $e )
             {
+                if ( $this->logger instanceof LoggerInterface )
+                {
+                    $this->logger->error( $e->getMessage() );
+                }
+
                 continue;
             }
 
@@ -228,46 +252,60 @@ class RelationListMenuBuilder
             try
             {
                 $relatedContent = $this->repository->getContentService()->loadContentInfo( $fieldValue->destinationContentId );
-                $relatedContentName = $this->translationHelper->getTranslatedContentNameByContentInfo( $relatedContent );
 
-                $menuItemId = $relatedContent->mainLocationId;
-
-                $uri = $this->router->generate(
-                    'ez_urlalias',
-                    array(
-                        'contentId' => $relatedContent->id
-                    )
-                ) . $this->translationHelper->getTranslatedField( $content, 'internal_url_suffix' )->value->text;
-
-                $useShortcutNameField = $this->translationHelper->getTranslatedField( $content, 'use_shortcut_name' );
-                if ( $useShortcutNameField instanceof Field && $useShortcutNameField->value->bool )
+                if ( $relatedContent->published )
                 {
-                    $label = $this->translationHelper->getTranslatedContentName( $content );
-                    $linkAttributes = array(
-                        'title' => $label
+                    $relatedContentName = $this->translationHelper->getTranslatedContentNameByContentInfo( $relatedContent );
+
+                    $menuItemId = $relatedContent->mainLocationId;
+
+                    $uri = $this->router->generate(
+                        'ez_urlalias',
+                        array(
+                            'contentId' => $relatedContent->id
+                        )
+                    ) . $this->translationHelper->getTranslatedField( $content, 'internal_url_suffix' )->value->text;
+
+                    $useShortcutNameField = $this->translationHelper->getTranslatedField( $content, 'use_shortcut_name' );
+                    if ( $useShortcutNameField instanceof Field && $useShortcutNameField->value->bool )
+                    {
+                        $label = $this->translationHelper->getTranslatedContentName( $content );
+                        $linkAttributes = array(
+                            'title' => $label
+                        );
+                    }
+                    else
+                    {
+                        $label = $relatedContentName;
+                        $linkAttributes = array(
+                            'title' => $relatedContentName
+                        );
+                    }
+
+                    $attributes = array(
+                        'id' => 'menu-item-location-id-' . $relatedContent->mainLocationId
                     );
+
+                    $targetBlankField = $this->translationHelper->getTranslatedField( $content, 'target_blank' );
+                    if ( $targetBlankField instanceof Field && $targetBlankField->value->bool )
+                    {
+                        $linkAttributes['target'] = '_blank';
+                    }
                 }
                 else
                 {
-                    $label = $relatedContentName;
-                    $linkAttributes = array(
-                        'title' => $relatedContentName
-                    );
-                }
-
-                $attributes = array(
-                    'id' => 'menu-item-location-id-' . $relatedContent->mainLocationId
-                );
-
-                $targetBlankField = $this->translationHelper->getTranslatedField( $content, 'target_blank' );
-                if ( $targetBlankField instanceof Field && $targetBlankField->value->bool )
-                {
-                    $linkAttributes['target'] = '_blank';
+                    if ( $this->logger instanceof LoggerInterface )
+                    {
+                        $this->logger->error( '[Relation menu] Shortcut has related object that is not published.' );
+                    }
                 }
             }
             catch ( NotFoundException $e )
             {
-                // do nothing
+                if ( $this->logger instanceof LoggerInterface )
+                {
+                    $this->logger->error( $e->getMessage() );
+                }
             }
         }
 
@@ -346,46 +384,60 @@ class RelationListMenuBuilder
             try
             {
                 $relatedContent = $this->repository->getContentService()->loadContentInfo( $fieldValue->destinationContentId );
-                $relatedContentName = $this->translationHelper->getTranslatedContentNameByContentInfo( $relatedContent );
 
-                $menuItemId = $relatedContent->mainLocationId;
-
-                $uri = $this->router->generate(
-                    'ez_urlalias',
-                    array(
-                        'contentId' => $relatedContent->id
-                    )
-                );
-
-                $useMenuItemNameField = $this->translationHelper->getTranslatedField( $content, 'use_menu_item_name' );
-                if ( $useMenuItemNameField instanceof Field && $useMenuItemNameField->value->bool )
+                if ( $relatedContent->published )
                 {
-                    $label = $this->translationHelper->getTranslatedContentName( $content );
-                    $linkAttributes = array(
-                        'title' => $label
+                    $relatedContentName = $this->translationHelper->getTranslatedContentNameByContentInfo( $relatedContent );
+
+                    $menuItemId = $relatedContent->mainLocationId;
+
+                    $uri = $this->router->generate(
+                        'ez_urlalias',
+                        array(
+                            'contentId' => $relatedContent->id
+                        )
                     );
+
+                    $useMenuItemNameField = $this->translationHelper->getTranslatedField( $content, 'use_menu_item_name' );
+                    if ( $useMenuItemNameField instanceof Field && $useMenuItemNameField->value->bool )
+                    {
+                        $label = $this->translationHelper->getTranslatedContentName( $content );
+                        $linkAttributes = array(
+                            'title' => $label
+                        );
+                    }
+                    else
+                    {
+                        $label = $relatedContentName;
+                        $linkAttributes = array(
+                            'title' => $relatedContentName
+                        );
+                    }
+
+                    $attributes = array(
+                        'id' => 'menu-item-location-id-' . $relatedContent->mainLocationId
+                    );
+
+                    $targetBlankField = $this->translationHelper->getTranslatedField( $content, 'target_blank' );
+                    if ( $targetBlankField instanceof Field && $targetBlankField->value->bool )
+                    {
+                        $linkAttributes['target'] = '_blank';
+                    }
                 }
                 else
                 {
-                    $label = $relatedContentName;
-                    $linkAttributes = array(
-                        'title' => $relatedContentName
-                    );
-                }
-
-                $attributes = array(
-                    'id' => 'menu-item-location-id-' . $relatedContent->mainLocationId
-                );
-
-                $targetBlankField = $this->translationHelper->getTranslatedField( $content, 'target_blank' );
-                if ( $targetBlankField instanceof Field && $targetBlankField->value->bool )
-                {
-                    $linkAttributes['target'] = '_blank';
+                    if ( $this->logger instanceof LoggerInterface )
+                    {
+                        $this->logger->error( '[Relation menu] Menu item has related object that is not published.' );
+                    }
                 }
             }
             catch ( NotFoundException $e )
             {
-                // do nothing
+                if ( $this->logger instanceof LoggerInterface )
+                {
+                    $this->logger->error( $e->getMessage() );
+                }
             }
         }
 
@@ -407,72 +459,86 @@ class RelationListMenuBuilder
             try
             {
                 $destinationContent = $this->repository->getContentService()->loadContent( $fieldValue->destinationContentId );
-                $parentLocation = $this->repository->getLocationService()->loadLocation( $destinationContent->contentInfo->mainLocationId );
 
-                if ( $this->fieldHelper->isFieldEmpty( $content, 'item_url' ) && $this->fieldHelper->isFieldEmpty( $content, 'item_object' ) )
+                if ( $destinationContent->contentInfo->published )
                 {
-                    $childItem->setName( $parentLocation->id );
+                    $parentLocation = $this->repository->getLocationService()->loadLocation( $destinationContent->contentInfo->mainLocationId );
+
+                    if ( $this->fieldHelper->isFieldEmpty( $content, 'item_url' ) && $this->fieldHelper->isFieldEmpty( $content, 'item_object' ) )
+                    {
+                        $childItem->setName( $parentLocation->id );
+                    }
+
+                    $criterions = array(
+                        new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
+                        new Criterion\ParentLocationId( $parentLocation->id )
+                    );
+
+                    if ( !$this->fieldHelper->isFieldEmpty( $content, 'class_filter' ) && !$this->fieldHelper->isFieldEmpty( $content, 'class_filter_type' ) )
+                    {
+                        /** @var \Netgen\Bundle\ContentTypeListBundle\Core\FieldType\ContentTypeList\Value $contentTypeFilter */
+                        $contentTypeFilter = $this->translationHelper->getTranslatedField( $content, 'class_filter' )->value;
+
+                        /** @var \Netgen\Bundle\EnhancedSelectionBundle\Core\FieldType\EnhancedSelection\Value $filterType */
+                        $filterType = $this->translationHelper->getTranslatedField( $content, 'class_filter_type' )->value;
+
+                        if ( $filterType->identifiers[0] === 'include' )
+                        {
+                            $criterions[] = new Criterion\ContentTypeIdentifier( $contentTypeFilter->identifiers );
+                        }
+                        else if ( $filterType->identifiers[0] === 'exclude' )
+                        {
+                            $criterions[] = new Criterion\LogicalNot(
+                                new Criterion\ContentTypeIdentifier( $contentTypeFilter->identifiers )
+                            );
+                        }
+                    }
+
+                    $query = new LocationQuery();
+                    $query->criterion = new Criterion\LogicalAnd( $criterions );
+
+                    if ( !$this->fieldHelper->isFieldEmpty( $content, 'limit' ) )
+                    {
+                        /** @var \eZ\Publish\Core\FieldType\Integer\Value $limit */
+                        $limit = $this->translationHelper->getTranslatedField( $content, 'limit' )->value;
+                        if ( $limit->value > 0 )
+                        {
+                            $query->limit = $limit->value;
+                        }
+                    }
+
+                    $query->sortClauses = array(
+                        $this->sortClauseHelper->getSortClauseBySortField(
+                            $parentLocation->sortField,
+                            $parentLocation->sortOrder
+                        )
+                    );
+
+                    $searchResult = $this->repository->getSearchService()->findLocations( $query );
+                    $foundLocations = array_map(
+                        function ( SearchHit $searchHit )
+                        {
+                            return $searchHit->valueObject;
+                        },
+                        $searchResult->searchHits
+                    );
+
+                    $this->addMenuItemsFromLocations( $childItem, $foundLocations );
                 }
-
-                $criterions = array(
-                    new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
-                    new Criterion\ParentLocationId( $parentLocation->id )
-                );
-
-                if ( !$this->fieldHelper->isFieldEmpty( $content, 'class_filter' ) && !$this->fieldHelper->isFieldEmpty( $content, 'class_filter_type' ) )
+                else
                 {
-                    /** @var \Netgen\Bundle\ContentTypeListBundle\Core\FieldType\ContentTypeList\Value $contentTypeFilter */
-                    $contentTypeFilter = $this->translationHelper->getTranslatedField( $content, 'class_filter' )->value;
-
-                    /** @var \Netgen\Bundle\EnhancedSelectionBundle\Core\FieldType\EnhancedSelection\Value $filterType */
-                    $filterType = $this->translationHelper->getTranslatedField( $content, 'class_filter_type' )->value;
-
-                    if ( $filterType->identifiers[0] === 'include' )
+                    if ( $this->logger instanceof LoggerInterface )
                     {
-                        $criterions[] = new Criterion\ContentTypeIdentifier( $contentTypeFilter->identifiers );
-                    }
-                    else if ( $filterType->identifiers[0] === 'exclude' )
-                    {
-                        $criterions[] = new Criterion\LogicalNot(
-                            new Criterion\ContentTypeIdentifier( $contentTypeFilter->identifiers )
-                        );
+                        $this->logger->error( '[Relation menu] Menu item has related object that is not published.' );
                     }
                 }
-
-                $query = new LocationQuery();
-                $query->criterion = new Criterion\LogicalAnd( $criterions );
-
-                if ( !$this->fieldHelper->isFieldEmpty( $content, 'limit' ) )
-                {
-                    /** @var \eZ\Publish\Core\FieldType\Integer\Value $limit */
-                    $limit = $this->translationHelper->getTranslatedField( $content, 'limit' )->value;
-                    if ( $limit->value > 0 )
-                    {
-                        $query->limit = $limit->value;
-                    }
-                }
-
-                $query->sortClauses = array(
-                    $this->sortClauseHelper->getSortClauseBySortField(
-                        $parentLocation->sortField,
-                        $parentLocation->sortOrder
-                    )
-                );
-
-                $searchResult = $this->repository->getSearchService()->findLocations( $query );
-                $foundLocations = array_map(
-                    function ( SearchHit $searchHit )
-                    {
-                        return $searchHit->valueObject;
-                    },
-                    $searchResult->searchHits
-                );
-
-                $this->addMenuItemsFromLocations( $childItem, $foundLocations );
             }
             catch ( NotFoundException $e )
             {
-                // Do nothing
+                if ( $this->logger instanceof LoggerInterface )
+                {
+                    $this->logger->error( $e->getMessage() );
+                }
             }
         }
         else if ( !$this->fieldHelper->isFieldEmpty( $content, 'menu_items' ) )

@@ -153,6 +153,7 @@ class RelationListMenuBuilder
                     {
                         $this->logger->error( '[Relation Menu] Empty location id in relation list' );
                     }
+
                     continue;
                 }
                 $location = $this->repository->getLocationService()->loadLocation( $locationId );
@@ -163,6 +164,7 @@ class RelationListMenuBuilder
                 {
                     $this->logger->error( $e->getMessage() );
                 }
+
                 continue;
             }
 
@@ -257,11 +259,11 @@ class RelationListMenuBuilder
                     $menuItemId = $relatedContent->mainLocationId;
 
                     $uri = $this->router->generate(
-                            'ez_urlalias',
-                            array(
-                                'contentId' => $relatedContent->id
-                            )
-                        ) . $this->translationHelper->getTranslatedField( $content, 'internal_url_suffix' )->value->text;
+                        'ez_urlalias',
+                        array(
+                            'contentId' => $relatedContent->id
+                        )
+                    ) . $this->translationHelper->getTranslatedField( $content, 'internal_url_suffix' )->value->text;
 
                     $useShortcutNameField = $this->translationHelper->getTranslatedField( $content, 'use_shortcut_name' );
                     if ( $useShortcutNameField instanceof Field && $useShortcutNameField->value->bool )
@@ -287,7 +289,7 @@ class RelationListMenuBuilder
                     $targetBlankField = $this->translationHelper->getTranslatedField( $content, 'target_blank' );
                     if ( $targetBlankField instanceof Field && $targetBlankField->value->bool )
                     {
-                        $linkAttributes[ 'target' ] = '_blank';
+                        $linkAttributes['target'] = '_blank';
                     }
                 }
                 else
@@ -304,7 +306,6 @@ class RelationListMenuBuilder
                 {
                     $this->logger->error( $e->getMessage() );
                 }
-                // do nothing
             }
         }
 
@@ -437,7 +438,6 @@ class RelationListMenuBuilder
                 {
                     $this->logger->error( $e->getMessage() );
                 }
-                // do nothing
             }
         }
 
@@ -482,18 +482,15 @@ class RelationListMenuBuilder
                         /** @var \Netgen\Bundle\EnhancedSelectionBundle\Core\FieldType\EnhancedSelection\Value $filterType */
                         $filterType = $this->translationHelper->getTranslatedField( $content, 'class_filter_type' )->value;
 
-                        if ( $filterType->identifiers[ 0 ] === 'include' )
+                        if ( $filterType->identifiers[0] === 'include' )
                         {
-                            $criterions[ ] = new Criterion\ContentTypeIdentifier( $contentTypeFilter->identifiers );
+                            $criterions[] = new Criterion\ContentTypeIdentifier( $contentTypeFilter->identifiers );
                         }
-                        else
+                        else if ( $filterType->identifiers[0] === 'exclude' )
                         {
-                            if ( $filterType->identifiers[ 0 ] === 'exclude' )
-                            {
-                                $criterions[ ] = new Criterion\LogicalNot(
-                                    new Criterion\ContentTypeIdentifier( $contentTypeFilter->identifiers )
-                                );
-                            }
+                            $criterions[] = new Criterion\LogicalNot(
+                                new Criterion\ContentTypeIdentifier( $contentTypeFilter->identifiers )
+                            );
                         }
                     }
 
@@ -542,7 +539,6 @@ class RelationListMenuBuilder
                 {
                     $this->logger->error( $e->getMessage() );
                 }
-                // Do nothing
             }
         }
         else if ( !$this->fieldHelper->isFieldEmpty( $content, 'menu_items' ) )

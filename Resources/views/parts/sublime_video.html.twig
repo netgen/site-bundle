@@ -1,6 +1,0 @@
-{% if ezpublish.configResolver.hasParameter( 'SiteSettings.SublimeVideoCode', 'ngmore' ) %}
-    {% set sublimeVideoCode = ezpublish.configResolver.getParameter( 'SiteSettings.SublimeVideoCode', 'ngmore' ) %}
-    {% if sublimeVideoCode is not empty %}
-        <script type="text/javascript" src="//cdn.sublimevideo.net/js/{{ sublimeVideoCode|raw|escape( 'js' ) }}.js"></script>
-    {% endif %}
-{% endif %}

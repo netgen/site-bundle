@@ -1,0 +1,6 @@
+{% if ezpublish.configResolver.hasParameter( 'site_settings.jwplayer_key', 'ngmore' ) %}
+    {% set jwplayer_key = ezpublish.configResolver.getParameter( 'site_settings.jwplayer_key', 'ngmore' ) %}
+    {% if jwplayer_key is not empty %}
+        <script type="text/javascript">jwplayer.key="{{ jwplayer_key|raw|escape( 'js' ) }}";</script>
+    {% endif %}
+{% endif %}

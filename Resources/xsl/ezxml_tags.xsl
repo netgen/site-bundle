@@ -57,15 +57,33 @@
                     <xsl:text>ct-video youtube</xsl:text>
                 </xsl:attribute>
 
-                <video>
+                <div>
                     <xsl:attribute name="style"><xsl:text>display:none;</xsl:text></xsl:attribute>
-                    <xsl:attribute name="class"><xsl:text>sublime</xsl:text></xsl:attribute>
-                    <xsl:attribute name="data-youtube-id"><xsl:value-of select="@custom:video_code" /></xsl:attribute>
+                    <xsl:attribute name="class">
+                        <xsl:text>video-config video-external-</xsl:text>
+                        <xsl:value-of select="@custom:video_code" />
+                    </xsl:attribute>
+                    <xsl:attribute name="data-video_player_id">
+                        <xsl:text>video-config video-external-</xsl:text>
+                        <xsl:value-of select="@custom:video_code" />
+                    </xsl:attribute>
+                    <xsl:attribute name="autostart"><xsl:text>false</xsl:text></xsl:attribute>
                     <xsl:attribute name="width"><xsl:text>640</xsl:text></xsl:attribute>
                     <xsl:attribute name="height"><xsl:text>360</xsl:text></xsl:attribute>
-                    <xsl:attribute name="preload"><xsl:text>none</xsl:text></xsl:attribute>
-                    <xsl:attribute name="data-autoresize"><xsl:value-of select="@custom:autoresize" /></xsl:attribute>
-                </video>
+                    <xsl:attribute name="data-videotype"><xsl:text>youtube</xsl:text></xsl:attribute>
+                    <xsl:attribute name="data-file">
+                        <xsl:text>https://www.youtube.com/watch?v=</xsl:text>
+                        <xsl:value-of select="@custom:video_code" />
+                    </xsl:attribute>
+                </div>
+
+                <div>
+                    <xsl:attribute name="class"><xsl:text>video-container</xsl:text></xsl:attribute>
+                    <xsl:attribute name="id">
+                        <xsl:text>video-external-</xsl:text>
+                        <xsl:value-of select="@custom:video_code" />
+                    </xsl:attribute>
+                </div>
             </xsl:if>
 
             <xsl:if test="@custom:video_service='vimeo'">
@@ -73,16 +91,14 @@
                     <xsl:text>ct-video vimeo</xsl:text>
                 </xsl:attribute>
 
-                <video>
-                    <xsl:attribute name="style"><xsl:text>border:none;</xsl:text></xsl:attribute>
+                <iframe>
+                    <xsl:attribute name="width"><xsl:text>640</xsl:text></xsl:attribute>
+                    <xsl:attribute name="height"><xsl:text>360</xsl:text></xsl:attribute>
                     <xsl:attribute name="src">
                         <xsl:text>//player.vimeo.com/video/</xsl:text>
                         <xsl:value-of select="@custom:video_code" />
                     </xsl:attribute>
-                    <xsl:attribute name="width"><xsl:text>640</xsl:text></xsl:attribute>
-                    <xsl:attribute name="height"><xsl:text>360</xsl:text></xsl:attribute>
-                    <xsl:attribute name="allowfullscreen" />
-                </video>
+                </iframe>
             </xsl:if>
         </div>
     </xsl:template>

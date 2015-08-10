@@ -64,7 +64,7 @@
                         <xsl:value-of select="@custom:video_code" />
                     </xsl:attribute>
                     <xsl:attribute name="data-video_player_id">
-                        <xsl:text>video-config video-external-</xsl:text>
+                        <xsl:text>video-external-</xsl:text>
                         <xsl:value-of select="@custom:video_code" />
                     </xsl:attribute>
                     <xsl:attribute name="autostart"><xsl:text>false</xsl:text></xsl:attribute>

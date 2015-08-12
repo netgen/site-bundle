@@ -148,18 +148,12 @@ class PartsController extends Controller
         $contentInfo = $location->getContentInfo();
         $contentTypeIdentifier = $contentTypeService->loadContentType( $contentInfo->contentTypeId )->identifier;
         $content = $contentService->loadContentByContentInfo( $contentInfo );
+        $contentFields = $content->fields;
 
         $multimediaItems = array();
 
-        /** first check current location, add image field in multimedia items list, if exists and has content */
-        $contentFields = $content->fields;
-        if ( array_key_exists( 'image', $contentFields ) )
-        {
-            if ( !$fieldHelper->isFieldEmpty( $content, 'image' ) )
-            {
-                $multimediaItems[] = array( 'type' => $contentTypeIdentifier, 'content' => $content );
-            }
-        }
+        /** add current location in the multimedia item list */
+        $multimediaItems[] = array( 'type' => $contentTypeIdentifier, 'content' => $content );
 
         /** get children image objects and add them in multimedia item list */
         if ( $includeChildrenImages )

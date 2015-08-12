@@ -227,7 +227,7 @@ class RelationListMenuBuilder
                         )
                     );
                 }
-                catch( InvalidArgumentException $e )
+                catch ( InvalidArgumentException $e )
                 {
                     $menuItemId = $uri = $fieldValue->link;
                 }
@@ -359,7 +359,7 @@ class RelationListMenuBuilder
                         )
                     );
                 }
-                catch( InvalidArgumentException $e )
+                catch ( InvalidArgumentException $e )
                 {
                     $menuItemId = $uri = $fieldValue->link;
                 }

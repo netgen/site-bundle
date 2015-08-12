@@ -105,6 +105,7 @@ class PartsController extends Controller
                     catch ( NotFoundException $e )
                     {
                         // Do nothing if there's no location
+                        continue;
                     }
                 }
             }
@@ -191,7 +192,7 @@ class PartsController extends Controller
             {
                 try
                 {
-                    $relatedMultimediaLocation = $locationService->loadLocation($relatedMultimediaLocationId);
+                    $relatedMultimediaLocation = $locationService->loadLocation( $relatedMultimediaLocationId );
                 }
                 catch ( NotFoundException $e )
                 {
@@ -217,7 +218,7 @@ class PartsController extends Controller
                     {
                         foreach ( $galleryImages as $galleryImage )
                         {
-                            $multimediaItems[] = array('type' => 'image', 'content' => $galleryImage );
+                            $multimediaItems[] = array( 'type' => 'image', 'content' => $galleryImage );
                         }
                     }
                 }
@@ -237,7 +238,6 @@ class PartsController extends Controller
             )
         );
     }
-
 
     /**
      * Helper method for fetching images from specified location

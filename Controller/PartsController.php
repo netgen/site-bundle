@@ -4,6 +4,7 @@ namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
@@ -19,36 +20,12 @@ class PartsController extends Controller
      */
     public function viewGallery( $locationId, $template )
     {
-        $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
-
-        $contentService = $this->getRepository()->getContentService();
-        $content = $contentService->loadContent( $location->contentId );
         $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
 
-        $query = new LocationQuery();
+        $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
+        $content = $this->getRepository()->getContentService()->loadContent( $location->contentId );
 
-        $query->criterion = new Criterion\LogicalAnd(
-            array(
-                new Criterion\ParentLocationId( $location->id ),
-                new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
-                new Criterion\ContentTypeIdentifier( 'image' )
-            )
-        );
-
-        $query->sortClauses = array(
-            $this->container->get( 'ngmore.helper.sort_clause_helper' )->getSortClauseBySortField(
-                $location->sortField,
-                $location->sortOrder
-            )
-        );
-
-        $result = $this->getRepository()->getSearchService()->findLocations( $query );
-
-        $contentList = array();
-        foreach ( $result->searchHits as $searchHit )
-        {
-            $contentList[] = $contentService->loadContent( $searchHit->valueObject->contentId );
-        }
+        $contentList = $this->getChildrenImages( $location );
 
         if ( !$fieldHelper->isFieldEmpty( $content, 'image' ) )
         {
@@ -153,13 +130,13 @@ class PartsController extends Controller
 
         $multimediaItems = array();
 
-        /** add current location in the multimedia item list */
+        // Add current location in the multimedia item list
         $multimediaItems[] = array( 'type' => $contentTypeIdentifier, 'content' => $content );
 
-        /** get children image objects and add them in multimedia item list */
+        // Get children image objects and add them in multimedia item list
         if ( $includeChildrenImages )
         {
-            $galleryImages = $this->getChildrenImages( $locationId );
+            $galleryImages = $this->getChildrenImages( $location );
             if ( !empty( $galleryImages ) )
             {
                 foreach ( $galleryImages as $galleryImage )
@@ -169,23 +146,22 @@ class PartsController extends Controller
             }
         }
 
-        /** finally, check if related_multimedia field exists and has content */
+        // Finally, check if related_multimedia field exists and has content
         $relatedMultimediaLocationIds = array();
         if ( array_key_exists( 'related_multimedia', $contentFields ) )
         {
             if ( !$fieldHelper->isFieldEmpty( $content, 'related_multimedia' ) )
             {
                 $relatedMultimediaField = $translationHelper->getTranslatedField( $content, 'related_multimedia' )->value;
-                /**
-                    we need to work with location IDs, because we need to check if related object has location, to prevent
-                    possible problems with related items in trash.
-                    Also, we need location IDs for fetching images from related ng_gallery objects
-                */
+
+                // we need to work with location IDs, because we need to check if related object has location,
+                // to prevent possible problems with related items in trash.
+                // Also, we need location IDs for fetching images from related ng_gallery objects
                 $relatedMultimediaLocationIds = !empty( $relatedMultimediaField->destinationLocationIds ) ? $relatedMultimediaField->destinationLocationIds : array();
             }
         }
 
-        /** if there are related multimedia objects */
+        // If there are related multimedia objects
         if ( !empty( $relatedMultimediaLocationIds ) )
         {
             foreach ( $relatedMultimediaLocationIds as $relatedMultimediaLocationId )
@@ -196,7 +172,7 @@ class PartsController extends Controller
                 }
                 catch ( NotFoundException $e )
                 {
-                    /** skip non-existing locations (item in trash or missing location due to some other reason) */
+                    // Skip non-existing locations (item in trash or missing location due to some other reason)
                     continue;
                 }
 
@@ -210,10 +186,10 @@ class PartsController extends Controller
 
                 $relatedMultimediaContentTypeIdentifier = $contentTypeService->loadContentType( $relatedMultimediaContentInfo->contentTypeId )->identifier;
 
-                /** ng_gallery - find children ng_image objects and add them in multimedia item list */
+                // ng_gallery - Find children ng_image objects and add them in multimedia item list
                 if ( $relatedMultimediaContentTypeIdentifier == 'ng_gallery' )
                 {
-                    $galleryImages = $this->getChildrenImages( $relatedMultimediaLocationId );
+                    $galleryImages = $this->getChildrenImages( $relatedMultimediaLocation );
                     if ( !empty( $galleryImages ) )
                     {
                         foreach ( $galleryImages as $galleryImage )
@@ -242,16 +218,15 @@ class PartsController extends Controller
     /**
      * Helper method for fetching images from specified location
      *
-     * @param mixed $locationId
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content[]
      */
-    protected function getChildrenImages( $locationId )
+    protected function getChildrenImages( Location $location )
     {
-        $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
         $contentService = $this->getRepository()->getContentService();
         $query = new LocationQuery();
-        $galleryImages = array();
+        $images = array();
 
         $query->criterion = new Criterion\LogicalAnd(
             array(
@@ -272,10 +247,9 @@ class PartsController extends Controller
 
         foreach ( $result->searchHits as $searchHit )
         {
-            $searchHitContent = $contentService->loadContent( $searchHit->valueObject->contentId );
-            $galleryImages[] = $searchHitContent;
+            $images[] = $contentService->loadContent( $searchHit->valueObject->contentId );
         }
 
-        return $galleryImages;
+        return $images;
     }
 }

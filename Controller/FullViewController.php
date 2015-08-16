@@ -39,7 +39,7 @@ class FullViewController extends Controller
         $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
         $translationHelper = $this->container->get( 'ezpublish.translation_helper' );
 
-        $criterions = array(
+        $criteria = array(
             new Criterion\Subtree( $location->pathString ),
             new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
             new Criterion\LogicalNot( new Criterion\LocationId( $location->id ) )
@@ -48,13 +48,13 @@ class FullViewController extends Controller
         $fetchSubtreeValue = $translationHelper->getTranslatedField( $content, 'fetch_subtree' )->value;
         if ( !$fetchSubtreeValue->bool )
         {
-            $criterions[] = new Criterion\Location\Depth( Criterion\Operator::EQ, $location->depth + 1 );
+            $criteria[] = new Criterion\Location\Depth( Criterion\Operator::EQ, $location->depth + 1 );
         }
 
         if ( !$fieldHelper->isFieldEmpty( $content, 'children_class_filter_include' ) )
         {
             $contentTypeFilter = $translationHelper->getTranslatedField( $content, 'children_class_filter_include' )->value;
-            $criterions[] = new Criterion\ContentTypeIdentifier(
+            $criteria[] = new Criterion\ContentTypeIdentifier(
                 array_map(
                     'trim',
                     explode( ',', $contentTypeFilter )
@@ -66,14 +66,14 @@ class FullViewController extends Controller
             $excludedContentTypes = $this->getConfigResolver()->getParameter( 'ChildrenNodeList.ExcludedClasses', 'content' );
             if ( !empty( $excludedContentTypes ) )
             {
-                $criterions[] = new Criterion\LogicalNot(
+                $criteria[] = new Criterion\LogicalNot(
                     new Criterion\ContentTypeIdentifier( $excludedContentTypes )
                 );
             }
         }
 
         $query = new LocationQuery();
-        $query->criterion = new Criterion\LogicalAnd( $criterions );
+        $query->criterion = new Criterion\LogicalAnd( $criteria );
 
         $query->sortClauses = array(
             $this->container->get( 'ngmore.helper.sort_clause_helper' )->getSortClauseBySortField(

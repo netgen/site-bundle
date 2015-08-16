@@ -84,7 +84,7 @@ class BlockViewController extends Controller
             $sortOrder = Location::SORT_ORDER_DESC;
         }
 
-        $criterions = array(
+        $criteria = array(
             new Criterion\Subtree( $parentLocation->pathString ),
             new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
             new Criterion\LogicalNot( new Criterion\LocationId( $parentLocation->id ) )
@@ -93,7 +93,7 @@ class BlockViewController extends Controller
         if ( !isset( $block->customAttributes['advanced_fetch_type'] )
             || $block->customAttributes['advanced_fetch_type'] == 'list' )
         {
-            $criterions[] = new Criterion\Location\Depth( Criterion\Operator::EQ, $parentLocation->depth + 1 );
+            $criteria[] = new Criterion\Location\Depth( Criterion\Operator::EQ, $parentLocation->depth + 1 );
         }
 
         if ( !empty( $block->customAttributes['advanced_class_filter_array'] ) )
@@ -105,11 +105,11 @@ class BlockViewController extends Controller
                     'include'
             );
 
-            $criterions[] = $contentTypeFilterCriterion;
+            $criteria[] = $contentTypeFilterCriterion;
         }
 
         $query = new LocationQuery();
-        $query->filter = new Criterion\LogicalAnd( $criterions );
+        $query->filter = new Criterion\LogicalAnd( $criteria );
         $query->sortClauses = array(
             $this->getSortClause( $sortField, $advancedSortField, $sortOrder, $parentLocation )
         );
@@ -146,7 +146,7 @@ class BlockViewController extends Controller
     }
 
     /**
-     * Returns content type criterions for block, generated from 'advanced_class_filter_type'
+     * Returns content type criteria for block, generated from 'advanced_class_filter_type'
      * and 'advanced_class_filter_array' custom attributes
      *
      * @param array $contentTypeIdentifiers

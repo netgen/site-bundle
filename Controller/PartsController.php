@@ -27,13 +27,13 @@ class PartsController extends Controller
 
         $query = new LocationQuery();
 
-        $criterions = array(
-            new Criterion\ParentLocationId( $location->id ),
-            new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
-            new Criterion\ContentTypeIdentifier( 'image' )
+        $query->criterion = new Criterion\LogicalAnd(
+            array(
+                new Criterion\ParentLocationId( $location->id ),
+                new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
+                new Criterion\ContentTypeIdentifier( 'image' )
+            )
         );
-
-        $query->criterion = new Criterion\LogicalAnd( $criterions );
 
         $query->sortClauses = array(
             $this->container->get( 'ngmore.helper.sort_clause_helper' )->getSortClauseBySortField(

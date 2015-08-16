@@ -469,7 +469,7 @@ class RelationListMenuBuilder
                         $childItem->setName( $parentLocation->id );
                     }
 
-                    $criterions = array(
+                    $criteria = array(
                         new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
                         new Criterion\ParentLocationId( $parentLocation->id )
                     );
@@ -484,18 +484,18 @@ class RelationListMenuBuilder
 
                         if ( $filterType->identifiers[0] === 'include' )
                         {
-                            $criterions[] = new Criterion\ContentTypeIdentifier( $contentTypeFilter->identifiers );
+                            $criteria[] = new Criterion\ContentTypeIdentifier( $contentTypeFilter->identifiers );
                         }
                         else if ( $filterType->identifiers[0] === 'exclude' )
                         {
-                            $criterions[] = new Criterion\LogicalNot(
+                            $criteria[] = new Criterion\LogicalNot(
                                 new Criterion\ContentTypeIdentifier( $contentTypeFilter->identifiers )
                             );
                         }
                     }
 
                     $query = new LocationQuery();
-                    $query->criterion = new Criterion\LogicalAnd( $criterions );
+                    $query->criterion = new Criterion\LogicalAnd( $criteria );
 
                     if ( !$this->fieldHelper->isFieldEmpty( $content, 'limit' ) )
                     {

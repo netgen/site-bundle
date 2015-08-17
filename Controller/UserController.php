@@ -6,6 +6,7 @@ use eZ\Bundle\EzPublishCoreBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Translation\TranslatorInterface;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Symfony\Component\Validator\Constraints;
@@ -58,24 +59,9 @@ class UserController extends Controller
      */
     public function register( Request $request )
     {
-        $anonymousId = $this->configResolver->getParameter( "anonymous_user_id" );
-
-        if ( $this->getRepository()->getCurrentUser()->id != $anonymousId )
+        if ( $this->getRepository()->hasAccess( 'user', 'register' ) !== true )
         {
-            $errorMessage = $this->translator->trans(
-                "ngmore.user.register.already_logged_in",
-                array(
-                    '%logout%' => $this->generateUrl( "logout" )
-                ),
-                "ngmore_user"
-            );
-
-            return $this->render(
-                $this->getConfigResolver()->getParameter( "user_register.template.register", "ngmore" ),
-                array(
-                    "errorMessage" => $errorMessage,
-                )
-            );
+            throw new AccessDeniedHttpException();
         }
 
         $contentType = $this->getRepository()->getContentTypeService()->loadContentTypeByIdentifier( "user" );

@@ -138,11 +138,10 @@ class UserController extends Controller
         $registerHelperService = $this->get( "ngmore.helper.user_helper" );
         $template = $this->configResolver->getParameter( "user_register.template.activate", "ngmore" );
 
-        $alreadyActive = false;
-        $accountActivated = $registerHelperService->verifyUserByHash( $hash );
-        if ( !$accountActivated )
+        $accountActivated = false;
+        if ( !$alreadyActive = $registerHelperService->isUserActive( $hash ) )
         {
-            $alreadyActive = $registerHelperService->isUserActive( $hash );
+            $accountActivated = $registerHelperService->verifyUserByHash( $hash );
         }
 
         return $this->render(

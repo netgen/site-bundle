@@ -368,20 +368,20 @@ class UserHelper
 
         $this->repository->setCurrentUser( $currentUser );
 
-        $this->removeEzUserAccountKeyByUser( $user );
+        $this->removeEzUserAccountKeyByUserId( $user->id );
         $this->mailHelper->sendMail( $user->email, MailHelper::WELCOME, array( 'user' => $user ) );
     }
 
     /**
      * Removes all data for $user from ezuser_accountkey table
      *
-     * @param $user
+     * @param $userId
      */
-    protected function removeEzUserAccountKeyByUser( $user )
+    protected function removeEzUserAccountKeyByUserId( $userId )
     {
         $results = $this->accountRepository->findBy(
             array(
-                'user_id' => $user->id
+                'user_id' => $userId
             ),
             array(
                 'time' => 'DESC'

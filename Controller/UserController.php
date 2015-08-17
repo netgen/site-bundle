@@ -7,9 +7,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\Translation\TranslatorInterface;
-use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Symfony\Component\Validator\Constraints;
+use Netgen\Bundle\EzFormsBundle\Form\DataWrapper;
+use Netgen\Bundle\MoreBundle\Helper\MailHelper;
+use Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey;
 
 class UserController extends Controller
 {
@@ -43,7 +45,6 @@ class UserController extends Controller
      */
     public function register( Request $request )
     {
-        $errorMessage = null;
         $anonymousId = $this->configResolver->getParameter( "anonymous_user_id" );
 
         if ( $this->getRepository()->getCurrentUser()->id != $anonymousId )
@@ -55,6 +56,7 @@ class UserController extends Controller
                 ),
                 "ngmore_user"
             );
+
             return $this->render(
                 $this->getConfigResolver()->getParameter( "user_register.template.register", "ngmore" ),
                 array(
@@ -63,9 +65,21 @@ class UserController extends Controller
             );
         }
 
-        $registerHelper = $this->get( "ngmore.helper.user_helper" );
+        $contentType = $this->getRepository()->getContentTypeService()->loadContentTypeByIdentifier( "user" );
+        $languages = $this->configResolver->getParameter( "languages" );
+        $userCreateStruct = $this->getRepository()->getUserService()->newUserCreateStruct(
+            null,
+            null,
+            null,
+            $languages[0],
+            $contentType
+        );
+        if ( $this->configResolver->hasParameter( 'user_register.auto_enable', 'ngmore' ) )
+        {
+            $userCreateStruct->enabled = $this->configResolver->getParameter( 'user_register.auto_enable', 'ngmore' );
+        }
 
-        $data = $registerHelper->userCreateDataWrapper();
+        $data = new DataWrapper( $userCreateStruct, $userCreateStruct->contentType );
 
         $formBuilder = $this->container->get( "form.factory" )->createBuilder(
             "ezforms_create_user",
@@ -81,47 +95,107 @@ class UserController extends Controller
 
         if ( $form->isValid() )
         {
-            if ( $registerHelper->userEmailExists( $form->getData()->payload->email ) )
+            $users = $this->getRepository()->getUserService()->loadUsersByEmail( $form->getData()->payload->email );
+
+            if ( count( $users ) > 0 )
             {
                 $errorMessage = $this->translator->trans(
                     "ngmore.user.register.email_already_in_use",
                     array(),
                     "ngmore_user"
                 );
+
+                return $this->render(
+                    $this->getConfigResolver()->getParameter( "user_register.template.register", "ngmore" ),
+                    array(
+                        "form" => $form->createView(),
+                        "errorMessage" => $errorMessage
+                    )
+                );
             }
-            elseif ( $registerHelper->userLoginExists( $form->getData()->payload ) )
+
+            try
             {
+                $this->getRepository()->getUserService()->loadUserByLogin( $form->getData()->payload->login );
+
                 $errorMessage = $this->translator->trans(
                     "ngmore.user.register.username_taken",
                     array(),
                     "ngmore_user"
                 );
-            }
-            else
-            {
-                try
-                {
-                    $user = $registerHelper->createUserFromData( $data );
-                    $registerHelper->activateUser( $user );
 
-                    return $this->redirect( "login" );
-                }
-                catch ( NotFoundException $e )
+                return $this->render(
+                    $this->getConfigResolver()->getParameter( "user_register.template.register", "ngmore" ),
+                    array(
+                        "form" => $form->createView(),
+                        "errorMessage" => $errorMessage
+                    )
+                );
+            }
+            catch( NotFoundException $e )
+            {
+                // do nothing
+            }
+
+            try
+            {
+                $currentUser = $this->getRepository()->getCurrentUser();
+                $this->getRepository()->setCurrentUser( $this->getRepository()->getUserService()->loadUser( 14 ) );
+
+                $userGroup = $this->getRepository()->getUserService()->loadUserGroup(
+                    $this->configResolver->getParameter( "user_register.user_group_content_id", "ngmore" )
+                );
+
+                $newUser = $this->getRepository()->getUserService()->createUser(
+                    $data->payload,
+                    array( $userGroup )
+                );
+
+                $this->getRepository()->setCurrentUser( $currentUser );
+
+                $autoEnable = false;
+                if ( $this->configResolver->hasParameter( 'user_register.auto_enable', 'ngmore' ) )
                 {
-                    $errorMessage = $this->translator->trans(
-                        "ngmore.user.register.general_error",
-                        array(),
-                        "ngmore_user"
-                    );
+                    $autoEnable = $this->configResolver->getParameter( 'user_register.auto_enable', 'ngmore' );
                 }
+                if ( !$autoEnable )
+                {
+                    $hash =
+                        $this
+                            ->getDoctrine()
+                            ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
+                            ->setVerificationHash( $newUser->id );
+                    $this->container->get( 'ngmore.helper.mail_helper' )->sendMail( $newUser->email, MailHelper::ACTIVATION, array( 'user' => $newUser, 'hash' => $hash ) );
+                }
+                else
+                {
+                    $this->container->get( 'ngmore.helper.mail_helper' )->sendMail( $newUser->email, MailHelper::WELCOME, array( 'user' => $newUser ) );
+                }
+
+                return $this->redirect( "login" );
+            }
+            catch ( NotFoundException $e )
+            {
+                $errorMessage = $this->translator->trans(
+                    "ngmore.user.register.general_error",
+                    array(),
+                    "ngmore_user"
+                );
+
+                return $this->render(
+                    $this->getConfigResolver()->getParameter( "user_register.template.register", "ngmore" ),
+                    array(
+                        "form" => $form->createView(),
+                        "errorMessage" => $errorMessage
+                    )
+                );
             }
         }
 
         return $this->render(
             $this->getConfigResolver()->getParameter( "user_register.template.register", "ngmore" ),
             array(
-                "form" => $form->createView(),
-                "errorMessage" => $errorMessage
+                "form" => $form->createView()
             )
         );
     }
@@ -135,13 +209,29 @@ class UserController extends Controller
      */
     public function activateUser( $hash )
     {
-        $registerHelperService = $this->get( "ngmore.helper.user_helper" );
         $template = $this->configResolver->getParameter( "user_register.template.activate", "ngmore" );
 
         $accountActivated = false;
-        if ( !$alreadyActive = $registerHelperService->isUserActive( $hash ) )
+        if ( !$alreadyActive = $this->isUserActive( $hash ) )
         {
-            $accountActivated = $registerHelperService->verifyUserByHash( $hash );
+            if ( $this->isUserActive( $hash ) )
+            {
+                $accountActivated = false;
+            }
+            else
+            {
+                /** @var EzUserAccountKey $result */
+                $result = $this
+                    ->getDoctrine()
+                    ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
+                    ->getEzUserAccountKeyByHash( $hash );
+                $userId = $result->getUserId();
+                $user = $this->getRepository()->getUserService()->loadUser( $userId );
+
+                $this->enableUser( $user );
+
+                $accountActivated = true;
+            }
         }
 
         return $this->render(
@@ -163,16 +253,26 @@ class UserController extends Controller
      */
     public function forgotPassword( Request $request )
     {
-        $registerHelperService = $this->get( "ngmore.helper.user_helper" );
-
         $form = $this->createForgotPassForm();
         $form->handleRequest( $request );
 
         if ( $form->isValid() )
         {
-            $registerHelperService->prepareResetPassword(
-                $form->get( 'email' )->getData()
-            );
+            $userArray = $this->getRepository()->getUserService()->loadUsersByEmail( $form->get( 'email' )->getData() );
+            if( empty( $userArray ) )
+            {
+                $this->container->get( 'ngmore.helper.mail_helper' )->sendMail( $form->get( 'email' )->getData(), MailHelper::MAILNOTREGISTERED );
+            }
+            else
+            {
+                $user = $userArray[ 0 ];
+
+                $hash = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->setVerificationHash( $user->id );
+                $this
+                    ->container
+                    ->get( 'ngmore.helper.mail_helper' )
+                    ->sendMail( $user->email, MailHelper::FORGOTTENPASSWORD, array( 'user' => $user, 'hash' => $hash ) );
+            }
 
             return $this->render(
                 $this->getConfigResolver()->getParameter( 'user_register.template.forgotten_password', 'ngmore' )
@@ -198,12 +298,33 @@ class UserController extends Controller
      */
     public function resetPassword( Request $request, $hash )
     {
-        $registerHelper = $this->get( "ngmore.helper.user_helper" );
         $template = $this->getConfigResolver()->getParameter( "user_register.template.reset_password", "ngmore" );
 
-        if ( $registerHelper->validateResetPassword( $hash ) )
+        /** @var EzUserAccountKey $result */
+        $result = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->getEzUserAccountKeyByHash( $hash );
+
+        if ( empty( $result ) || time() - $result->getTime() > 3600 )
         {
-            $user = $registerHelper->loadUserByHash( $hash );
+            $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->removeEzUserAccountKeyByHash( $hash );
+
+            return $this->render(
+                $template,
+                array(
+                    "errorMessage" => $this->translator->trans(
+                        "ngmore.user.forgotten_password.wrong_hash",
+                        array(),
+                        "ngmore_user"
+                    ),
+                )
+            );
+        }
+        else
+        {
+            /** @var EzUserAccountKey $user_account */
+            $user_account = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->getEzUserAccountKeyByHash( $hash );
+            $userId = $user_account->getUserId();
+
+            $user = $this->getRepository()->getUserService()->loadUser( $userId );
 
             $form = $this->createResetPasswordForm( $user );
             $form->handleRequest( $request );
@@ -234,7 +355,25 @@ class UserController extends Controller
                     );
                 }
 
-                $registerHelper->updateUserPassword(  $data["user_id"], $data["password"] );
+                $currentUser = $this->getRepository()->getCurrentUser();
+                $this->getRepository()->setCurrentUser( $this->getRepository()->getUserService()->loadUser( 14 ) );
+
+                $user = $this->getRepository()->getUserService()->loadUser( $data["user_id"] );
+
+                $userUpdateStruct = $this->getRepository()->getUserService()->newUserUpdateStruct();
+                $userUpdateStruct->password = $data["password"];
+                $this->getRepository()->getUserService()->updateUser( $user, $userUpdateStruct );
+
+                $this
+                    ->container
+                    ->get( 'ngmore.helper.mail_helper' )
+                    ->sendMail( $user->email, MailHelper::PASSWORDCHANGED, array( 'user' => $user ) );
+                $this
+                    ->getDoctrine()
+                    ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
+                    ->removeEzUserAccountKeyByUserId( $user->id );
+
+                $this->getRepository()->setCurrentUser( $currentUser );
 
                 return $this->redirect( $this->generateUrl( "login" ) );
             }
@@ -243,19 +382,6 @@ class UserController extends Controller
                 $template,
                 array(
                     'form' => $form->createView()
-                )
-            );
-        }
-        else
-        {
-            return $this->render(
-                $template,
-                array(
-                    "errorMessage" => $this->translator->trans(
-                        "ngmore.user.forgotten_password.wrong_hash",
-                        array(),
-                        "ngmore_user"
-                    ),
                 )
             );
         }
@@ -325,5 +451,44 @@ class UserController extends Controller
             ->add( 'password', 'repeated', $passwordOptions )
             ->add( 'save', 'submit', array( 'label' => "ngmore.user.reset_password.submit_label") )
             ->getForm();
+    }
+
+    /**
+     * Checks by hash key if the user is already activated
+     *
+     * @param $hash
+     *
+     * @return bool
+     */
+    protected function isUserActive( $hash )
+    {
+        return $this
+            ->getDoctrine()
+            ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
+            ->getEzUserAccountKeyByHash( $hash ) ? false : true;
+    }
+
+    /**
+     * Enables the user
+     *
+     * @param $user
+     */
+    protected function enableUser( $user )
+    {
+        $currentUser = $this->getRepository()->getCurrentUser();
+        $this->getRepository()->setCurrentUser( $this->getRepository()->getUserService()->loadUser( 14 ) );
+
+        $userUpdateStruct = $this->getRepository()->getUserService()->newUserUpdateStruct();
+        $userUpdateStruct->enabled = true;
+        $this->getRepository()->getUserService()->updateUser( $user, $userUpdateStruct );
+
+        $this->getRepository()->setCurrentUser( $currentUser );
+
+        $this
+            ->getDoctrine()
+            ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
+            ->removeEzUserAccountKeyByUserId( $user->id );
+
+        $this->container->get( 'ngmore.helper.mail_helper' )->sendMail( $user->email, MailHelper::WELCOME, array( 'user' => $user ) );
     }
 }

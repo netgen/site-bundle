@@ -179,7 +179,7 @@ class UserController extends Controller
         return $this->render(
             $this->getConfigResolver()->getParameter( 'user_register.template.forgotten_password', 'ngmore' ),
             array(
-                'form' => $form ? $form->createView() : false,
+                'form' => $form->createView(),
                 'email' => $email
             )
         );

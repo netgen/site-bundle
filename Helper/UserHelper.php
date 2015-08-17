@@ -4,7 +4,7 @@ namespace Netgen\Bundle\MoreBundle\Helper;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
-use Netgen\Bundle\MoreBundle\Entity\EzUserAccount;
+use Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey;
 use Netgen\Bundle\MoreBundle\Helper\MailHelper;
 use Doctrine\ORM\EntityManager;
 use eZ\Publish\API\Repository\Repository;
@@ -52,7 +52,7 @@ class UserHelper
         $this->em = $em;
         $this->repository = $repository;
         $this->userService = $repository->getUserService();
-        $this->accountRepository = $em->getRepository( 'NetgenMoreBundle:EzUserAccount' );
+        $this->accountRepository = $em->getRepository( 'NetgenMoreBundle:EzUserAccountKey' );
         $this->configResolver = $configResolver;
         if ( $configResolver->hasParameter( 'user_register.auto_enable', 'ngmore' ) )
         {
@@ -178,7 +178,7 @@ class UserHelper
         $this->repository->getUserService()->updateUser( $user, $userUpdateStruct );
 
         $this->mailHelper->sendMail( $user->email, MailHelper::PASSWORDCHANGED, array( 'user' => $user ) );
-        $this->removeEzUserAccountKeyByUser( $user );
+        $this->removeEzUserAccountKeyByUserId( $user->id );
 
         $this->repository->setCurrentUser( $currentUser );
     }
@@ -236,7 +236,7 @@ class UserHelper
             return false;
         }
 
-        /** @var EzUserAccount $result */
+        /** @var EzUserAccountKey $result */
         $result = $this->getEzUserAccountKeyByHash( $hash );
         $userID = $result->getUserId();
         $user = $this->userService->loadUser( $userID );
@@ -273,11 +273,12 @@ class UserHelper
      */
     public function validateResetPassword( $hash )
     {
-        /** @var EzUserAccount $result */
+        /** @var EzUserAccountKey $result */
         $result = $this->getEzUserAccountKeyByHash( $hash );
 
         if ( empty( $result ) || time() - $result->getTime() > 3600 )
         {
+            $this->removeEzUserAccountKeyByHash( $hash );
             return false;
         }
 
@@ -293,7 +294,7 @@ class UserHelper
      */
     public function loadUserByHash( $hash )
     {
-        /** @var EzUserAccount $user_account */
+        /** @var EzUserAccountKey $user_account */
         $user_account = $this->getEzUserAccountKeyByHash( $hash );
         $userId = $user_account->getUserId();
 
@@ -318,7 +319,7 @@ class UserHelper
             $userID
         );
 
-        $userAccount = new EzUserAccount();
+        $userAccount = new EzUserAccountKey();
         $userAccount->setHash( $hash );
         $userAccount->setTime( time() );
         $userAccount->setUserId( $user->id );
@@ -334,17 +335,17 @@ class UserHelper
      *
      * @param $hash
      *
-     * @return EzUserAccount|null
+     * @return EzUserAccountKey|null
      */
     protected function getEzUserAccountKeyByHash( $hash )
     {
         $result = $this->accountRepository->findOneBy(
             array(
-                'hash' => $hash
+                'hashKey' => $hash
             )
         );
 
-        if ( $result instanceof EzUserAccount )
+        if ( $result instanceof EzUserAccountKey )
         {
             return $result;
         }
@@ -373,7 +374,7 @@ class UserHelper
     }
 
     /**
-     * Removes all data for $user from ezuser_accountkey table
+     * Removes all data for $userId from ezuser_accountkey table
      *
      * @param $userId
      */
@@ -381,7 +382,30 @@ class UserHelper
     {
         $results = $this->accountRepository->findBy(
             array(
-                'user_id' => $userId
+                'userId' => $userId
+            ),
+            array(
+                'time' => 'DESC'
+            )
+        );
+
+        foreach( $results as $result )
+        {
+            $this->em->remove( $result );
+            $this->em->flush();
+        }
+    }
+
+    /**
+     * Removes hash key from ezuser_accountkey table
+     *
+     * @param $hash
+     */
+    protected function removeEzUserAccountKeyByHash( $hash )
+    {
+        $results = $this->accountRepository->findBy(
+            array(
+                'hashKey' => $hash
             ),
             array(
                 'time' => 'DESC'

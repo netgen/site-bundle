@@ -2,38 +2,38 @@
 
 namespace Netgen\Bundle\MoreBundle\Entity;
 
-class EzUserAccount
+class EzUserAccountKey
 {
     /**
      * @var string
      */
-    private $hash;
+    protected $hashKey;
+
+    /**
+     * @var mixed
+     */
+    protected $id;
 
     /**
      * @var int
      */
-    private $id;
+    protected $time;
 
     /**
-     * @var string
+     * @var mixed
      */
-    private $time;
-
-    /**
-     * @var int
-     */
-    private $user_id;
+    protected $userId;
 
     /**
      * Set hash key
      *
      * @param string $hash
      *
-     * @return EzUserAccount
+     * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
      */
     public function setHash( $hash )
     {
-        $this->hash = $hash;
+        $this->hashKey = $hash;
 
         return $this;
     }
@@ -45,19 +45,19 @@ class EzUserAccount
      */
     public function getHash()
     {
-        return $this->hash;
+        return $this->hashKey;
     }
 
     /**
      * Set user ID
      *
-     * @param int $user_id
+     * @param int $userId
      *
-     * @return EzUserAccount
+     * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
      */
-    public function setUserId( $user_id )
+    public function setUserId( $userId )
     {
-        $this->user_id = $user_id;
+        $this->userId = $userId;
 
         return $this;
     }
@@ -69,7 +69,7 @@ class EzUserAccount
      */
     public function getUserId()
     {
-        return $this->user_id;
+        return $this->userId;
     }
 
     /**
@@ -77,7 +77,7 @@ class EzUserAccount
      *
      * @param string $timestamp
      *
-     * @return EzUserAccount
+     * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
      */
     public function setTime( $timestamp )
     {
@@ -96,6 +96,11 @@ class EzUserAccount
         return $this->time;
     }
 
+    /**
+     * Returns EzUserAccountKey id
+     *
+     * @return int
+     */
     public function getId()
     {
         return $this->id;

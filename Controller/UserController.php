@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints;
 use Netgen\Bundle\EzFormsBundle\Form\DataWrapper;
 use Netgen\Bundle\MoreBundle\Helper\MailHelper;
 use Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey;
+use eZ\Publish\API\Repository\UserService;
 
 class UserController extends Controller
 {
@@ -26,13 +27,25 @@ class UserController extends Controller
     protected $translator;
 
     /**
+     * @var \eZ\Publish\API\Repository\UserService
+     */
+    protected $userService;
+
+    /**
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      * @param $translator
+     * @param \eZ\Publish\API\Repository\UserService $userService
      */
-    public function __construct( ConfigResolverInterface $configResolver, TranslatorInterface $translator )
+    public function __construct
+    (
+        ConfigResolverInterface $configResolver,
+        TranslatorInterface $translator,
+        UserService $userService
+    )
     {
         $this->configResolver = $configResolver;
         $this->translator = $translator;
+        $this->userService = $userService;
     }
 
     /**
@@ -67,7 +80,7 @@ class UserController extends Controller
 
         $contentType = $this->getRepository()->getContentTypeService()->loadContentTypeByIdentifier( "user" );
         $languages = $this->configResolver->getParameter( "languages" );
-        $userCreateStruct = $this->getRepository()->getUserService()->newUserCreateStruct(
+        $userCreateStruct = $this->userService->newUserCreateStruct(
             null,
             null,
             null,
@@ -95,7 +108,7 @@ class UserController extends Controller
 
         if ( $form->isValid() )
         {
-            $users = $this->getRepository()->getUserService()->loadUsersByEmail( $form->getData()->payload->email );
+            $users = $this->userService->loadUsersByEmail( $form->getData()->payload->email );
 
             if ( count( $users ) > 0 )
             {
@@ -116,7 +129,7 @@ class UserController extends Controller
 
             try
             {
-                $this->getRepository()->getUserService()->loadUserByLogin( $form->getData()->payload->login );
+                $this->userService->loadUserByLogin( $form->getData()->payload->login );
 
                 $errorMessage = $this->translator->trans(
                     "ngmore.user.register.username_taken",
@@ -140,13 +153,13 @@ class UserController extends Controller
             try
             {
                 $currentUser = $this->getRepository()->getCurrentUser();
-                $this->getRepository()->setCurrentUser( $this->getRepository()->getUserService()->loadUser( 14 ) );
+                $this->getRepository()->setCurrentUser( $this->userService->loadUser( 14 ) );
 
-                $userGroup = $this->getRepository()->getUserService()->loadUserGroup(
+                $userGroup = $this->userService->loadUserGroup(
                     $this->configResolver->getParameter( "user_register.user_group_content_id", "ngmore" )
                 );
 
-                $newUser = $this->getRepository()->getUserService()->createUser(
+                $newUser = $this->userService->createUser(
                     $data->payload,
                     array( $userGroup )
                 );
@@ -226,7 +239,7 @@ class UserController extends Controller
                     ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
                     ->getEzUserAccountKeyByHash( $hash );
                 $userId = $result->getUserId();
-                $user = $this->getRepository()->getUserService()->loadUser( $userId );
+                $user = $this->userService->loadUser( $userId );
 
                 $this->enableUser( $user );
 
@@ -258,7 +271,7 @@ class UserController extends Controller
 
         if ( $form->isValid() )
         {
-            $userArray = $this->getRepository()->getUserService()->loadUsersByEmail( $form->get( 'email' )->getData() );
+            $userArray = $this->userService->loadUsersByEmail( $form->get( 'email' )->getData() );
             if( empty( $userArray ) )
             {
                 $this->container->get( 'ngmore.helper.mail_helper' )->sendMail( $form->get( 'email' )->getData(), MailHelper::MAILNOTREGISTERED );
@@ -324,7 +337,7 @@ class UserController extends Controller
             $user_account = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->getEzUserAccountKeyByHash( $hash );
             $userId = $user_account->getUserId();
 
-            $user = $this->getRepository()->getUserService()->loadUser( $userId );
+            $user = $this->userService->loadUser( $userId );
 
             $form = $this->createResetPasswordForm( $user );
             $form->handleRequest( $request );
@@ -335,7 +348,7 @@ class UserController extends Controller
 
                 try
                 {
-                    $this->getRepository()->getUserService()->loadUserByCredentials(
+                    $this->userService->loadUserByCredentials(
                         $user->login,
                         $data['original_password']
                     );
@@ -356,13 +369,13 @@ class UserController extends Controller
                 }
 
                 $currentUser = $this->getRepository()->getCurrentUser();
-                $this->getRepository()->setCurrentUser( $this->getRepository()->getUserService()->loadUser( 14 ) );
+                $this->getRepository()->setCurrentUser( $this->userService->loadUser( 14 ) );
 
-                $user = $this->getRepository()->getUserService()->loadUser( $data["user_id"] );
+                $user = $this->userService->loadUser( $data["user_id"] );
 
-                $userUpdateStruct = $this->getRepository()->getUserService()->newUserUpdateStruct();
+                $userUpdateStruct = $this->userService->newUserUpdateStruct();
                 $userUpdateStruct->password = $data["password"];
-                $this->getRepository()->getUserService()->updateUser( $user, $userUpdateStruct );
+                $this->userService->updateUser( $user, $userUpdateStruct );
 
                 $this
                     ->container
@@ -476,11 +489,11 @@ class UserController extends Controller
     protected function enableUser( $user )
     {
         $currentUser = $this->getRepository()->getCurrentUser();
-        $this->getRepository()->setCurrentUser( $this->getRepository()->getUserService()->loadUser( 14 ) );
+        $this->getRepository()->setCurrentUser( $this->userService->loadUser( 14 ) );
 
-        $userUpdateStruct = $this->getRepository()->getUserService()->newUserUpdateStruct();
+        $userUpdateStruct = $this->userService->newUserUpdateStruct();
         $userUpdateStruct->enabled = true;
-        $this->getRepository()->getUserService()->updateUser( $user, $userUpdateStruct );
+        $this->userService->updateUser( $user, $userUpdateStruct );
 
         $this->getRepository()->setCurrentUser( $currentUser );
 

@@ -55,6 +55,7 @@ services:
         arguments:
             - @ezpublish.config.resolver
             - @translator
+            - @ezpublish.api.service.user
 
     ngmore.helper.path_helper:
         class: %ngmore.helper.path_helper.class%

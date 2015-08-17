@@ -11,8 +11,8 @@ ngmore_sitemap:
     methods: [GET]
 
 ngmore_user_register:
-    path:   /user/register
-    defaults:   { _controller: ngmore.controller.user:register }
+    path: /user/register
+    defaults: { _controller: ngmore.controller.user:register }
 
 ngmore_user_activate:
     path: /user/activate/{hash}
@@ -21,7 +21,6 @@ ngmore_user_activate:
 ngmore_user_forgot_password:
     path: /user/forgotpassword
     defaults: { _controller: ngmore.controller.user:forgotPassword }
-    methods: [GET, POST]
 
 ngmore_user_reset_password:
     path: /user/forgotpassword/{hash}

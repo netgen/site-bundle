@@ -130,7 +130,7 @@ class UserHelper
         $this->repository->setCurrentUser( $this->userService->loadUser( 14 ) );
 
         $userGroup = $this->userService->loadUserGroup(
-            $this->configResolver->getParameter( "user_register.user_group", "ngmore" )
+            $this->configResolver->getParameter( "user_register.user_group_content_id", "ngmore" )
         );
 
         $newUser = $this->userService->createUser(

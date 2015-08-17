@@ -52,7 +52,8 @@ class UserController extends Controller
                 "ngmore.user.register.already_logged_in",
                 array(
                     '%logout%' => $this->generateUrl( "logout" )
-                )
+                ),
+                "ngmore_user"
             );
             return $this->render(
                 $this->getConfigResolver()->getParameter( "user_register.template.register", "ngmore" ),
@@ -66,7 +67,13 @@ class UserController extends Controller
 
         $data = $registerHelper->userCreateDataWrapper();
 
-        $formBuilder = $this->container->get( "form.factory" )->createBuilder( "ezforms_create_user", $data );
+        $formBuilder = $this->container->get( "form.factory" )->createBuilder(
+            "ezforms_create_user",
+            $data,
+            array(
+                "translation_domain" => "ngmore_user"
+            )
+        );
         $formBuilder->add( "save", "submit", array( "label" => "ngmore.user.register.submit_label" ) );
 
         $form = $formBuilder->getForm();
@@ -86,7 +93,9 @@ class UserController extends Controller
                 catch ( NotFoundException $e )
                 {
                     $errorMessage = $this->translator->trans(
-                        "ngmore.user.register.general_error"
+                        "ngmore.user.register.general_error",
+                        array(),
+                        "ngmore_user"
                     );
                 }
                 catch ( InvalidArgumentException $e )
@@ -99,7 +108,8 @@ class UserController extends Controller
                             "ngmore.user.register.already_exists",
                             array(
                                 '%logout%' => $this->generateUrl( "logout" )
-                            )
+                            ),
+                            "ngmore_user"
                         );
                     }
                 }
@@ -107,7 +117,9 @@ class UserController extends Controller
             else
             {
                 $errorMessage = $this->translator->trans(
-                    "ngmore.user.register.email_already_in_use"
+                    "ngmore.user.register.email_already_in_use",
+                    array(),
+                    "ngmore_user"
                 );
             }
         }
@@ -218,7 +230,11 @@ class UserController extends Controller
                     return $this->render(
                         $template,
                         array(
-                            "errorMessage" => $this->translator->trans( "ngmore.user.forgotten_password.wrong_password" ),
+                            "errorMessage" => $this->translator->trans(
+                                "ngmore.user.forgotten_password.wrong_password",
+                                array(),
+                                "ngmore_user"
+                            ),
                             "form" => $form->createView()
                         )
                     );
@@ -241,7 +257,11 @@ class UserController extends Controller
             return $this->render(
                 $template,
                 array(
-                    "errorMessage" => $this->translator->trans( "ngmore.user.forgotten_password.wrong_hash" ),
+                    "errorMessage" => $this->translator->trans(
+                        "ngmore.user.forgotten_password.wrong_hash",
+                        array(),
+                        "ngmore_user"
+                    ),
                 )
             );
         }
@@ -254,7 +274,7 @@ class UserController extends Controller
      */
     protected function createForgotPassForm()
     {
-        return $this->createFormBuilder()
+        return $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
                     ->add( 'email', 'email', array(
                         "label" => "ngmore.user.forgotten_password.email"
                     ))
@@ -305,7 +325,7 @@ class UserController extends Controller
             ),
         );
 
-        return $this->createFormBuilder()
+        return $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
             ->add( 'user_id', 'hidden', array( 'data' => $user->id ) )
             ->add( 'original_password', 'password', $originalPasswordOptions )
             ->add( 'password', 'repeated', $passwordOptions )

@@ -67,11 +67,21 @@ class MailHelper
         );
 
         $this->subject = array(
-            $this::ACTIVATION => $this->translator->trans( "ngmore.user.mail.subject.activation" ),
-            $this::FORGOTTENPASSWORD => $this->translator->trans( "ngmore.user.mail.subject.forgotten_password" ),
-            $this::MAILNOTREGISTERED => $this->translator->trans( "ngmore.user.mail.subject.email_not_registered" ),
-            $this::PASSWORDCHANGED => $this->translator->trans( "ngmore.user.mail.subject.password_changed" ),
-            $this::WELCOME => $this->translator->trans( "ngmore.user.mail.subject.welcome" )
+            $this::ACTIVATION => $this->translator->trans(
+                "ngmore.user.activate.mail.subject", array(), "ngmore_user"
+            ),
+            $this::FORGOTTENPASSWORD => $this->translator->trans(
+                "ngmore.user.forgotten_password.mail.change_requested.subject", array(), "ngmore_user"
+            ),
+            $this::MAILNOTREGISTERED => $this->translator->trans(
+                "ngmore.user.forgotten_password.mail.email_not_registered.subject", array(), "ngmore_user"
+            ),
+            $this::PASSWORDCHANGED => $this->translator->trans(
+                "ngmore.user.forgotten_password.mail.password_changed.subject", array(), "ngmore_user"
+            ),
+            $this::WELCOME => $this->translator->trans(
+                "ngmore.user.register.mail.subject", array(), "ngmore_user"
+            )
         );
 
         $rootLocationId = $configResolver->getParameter( 'content.tree_root.location_id' );

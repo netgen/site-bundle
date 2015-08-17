@@ -29,7 +29,7 @@ class UserHelper
     /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     protected $configResolver;
 
-    /** @var \Doctrine\ORM\EntityRepository  */
+    /** @var \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository  */
     protected $accountRepository;
 
     /** @var  bool */
@@ -178,7 +178,7 @@ class UserHelper
         $this->repository->getUserService()->updateUser( $user, $userUpdateStruct );
 
         $this->mailHelper->sendMail( $user->email, MailHelper::PASSWORDCHANGED, array( 'user' => $user ) );
-        $this->removeEzUserAccountKeyByUserId( $user->id );
+        $this->accountRepository->removeEzUserAccountKeyByUserId( $user->id );
 
         $this->repository->setCurrentUser( $currentUser );
     }
@@ -199,13 +199,12 @@ class UserHelper
      * Sets activation hash key and sends it to the user
      *
      * @param User $user
-     * @param null|string $subject
      *
      * @return int
      */
     public function sendActivationCode( User $user )
     {
-        $hash = $this->setVerificationHash( $user );
+        $hash = $this->accountRepository->setVerificationHash( $user->id );
         return $this->mailHelper->sendMail( $user->email, MailHelper::ACTIVATION, array( 'user' => $user, 'hash' => $hash ) );
     }
 
@@ -219,7 +218,7 @@ class UserHelper
      */
     public function isUserActive( $hash )
     {
-        return $this->getEzUserAccountKeyByHash( $hash ) ? false : true;
+        return $this->accountRepository->getEzUserAccountKeyByHash( $hash ) ? false : true;
     }
 
     /**
@@ -237,7 +236,7 @@ class UserHelper
         }
 
         /** @var EzUserAccountKey $result */
-        $result = $this->getEzUserAccountKeyByHash( $hash );
+        $result = $this->accountRepository->getEzUserAccountKeyByHash( $hash );
         $userID = $result->getUserId();
         $user = $this->userService->loadUser( $userID );
         $this->enableUser( $user );
@@ -260,7 +259,7 @@ class UserHelper
         }
         $user = $userArray[0];
 
-        $hash = $this->setVerificationHash( $user );
+        $hash = $this->accountRepository->setVerificationHash( $user->id );
         $this->mailHelper->sendMail( $user->email, MailHelper::FORGOTTENPASSWORD, array( 'user' => $user, 'hash' => $hash ) );
     }
 
@@ -274,11 +273,11 @@ class UserHelper
     public function validateResetPassword( $hash )
     {
         /** @var EzUserAccountKey $result */
-        $result = $this->getEzUserAccountKeyByHash( $hash );
+        $result = $this->accountRepository->getEzUserAccountKeyByHash( $hash );
 
         if ( empty( $result ) || time() - $result->getTime() > 3600 )
         {
-            $this->removeEzUserAccountKeyByHash( $hash );
+            $this->accountRepository->removeEzUserAccountKeyByHash( $hash );
             return false;
         }
 
@@ -295,62 +294,10 @@ class UserHelper
     public function loadUserByHash( $hash )
     {
         /** @var EzUserAccountKey $user_account */
-        $user_account = $this->getEzUserAccountKeyByHash( $hash );
+        $user_account = $this->accountRepository->getEzUserAccountKeyByHash( $hash );
         $userId = $user_account->getUserId();
 
         return $this->userService->loadUser( $userId );
-    }
-
-    /**
-     * Creates verification hash key
-     *
-     * @param $user
-     *
-     * @return string|bool
-     *
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    protected function setVerificationHash( $user )
-    {
-        $userID = $user->id;
-        $hash = md5(
-            ( function_exists( "openssl_random_pseudo_bytes" ) ? openssl_random_pseudo_bytes( 32 ) : mt_rand() ) .
-            microtime() .
-            $userID
-        );
-
-        $userAccount = new EzUserAccountKey();
-        $userAccount->setHash( $hash );
-        $userAccount->setTime( time() );
-        $userAccount->setUserId( $user->id );
-
-        $this->em->persist( $userAccount );
-        $this->em->flush();
-
-        return $hash;
-    }
-
-    /**
-     * Gets ezuser_accountkey by hash
-     *
-     * @param $hash
-     *
-     * @return EzUserAccountKey|null
-     */
-    protected function getEzUserAccountKeyByHash( $hash )
-    {
-        $result = $this->accountRepository->findOneBy(
-            array(
-                'hashKey' => $hash
-            )
-        );
-
-        if ( $result instanceof EzUserAccountKey )
-        {
-            return $result;
-        }
-
-        return null;
     }
 
     /**
@@ -369,53 +316,7 @@ class UserHelper
 
         $this->repository->setCurrentUser( $currentUser );
 
-        $this->removeEzUserAccountKeyByUserId( $user->id );
+        $this->accountRepository->removeEzUserAccountKeyByUserId( $user->id );
         $this->mailHelper->sendMail( $user->email, MailHelper::WELCOME, array( 'user' => $user ) );
-    }
-
-    /**
-     * Removes all data for $userId from ezuser_accountkey table
-     *
-     * @param $userId
-     */
-    protected function removeEzUserAccountKeyByUserId( $userId )
-    {
-        $results = $this->accountRepository->findBy(
-            array(
-                'userId' => $userId
-            ),
-            array(
-                'time' => 'DESC'
-            )
-        );
-
-        foreach( $results as $result )
-        {
-            $this->em->remove( $result );
-            $this->em->flush();
-        }
-    }
-
-    /**
-     * Removes hash key from ezuser_accountkey table
-     *
-     * @param $hash
-     */
-    protected function removeEzUserAccountKeyByHash( $hash )
-    {
-        $results = $this->accountRepository->findBy(
-            array(
-                'hashKey' => $hash
-            ),
-            array(
-                'time' => 'DESC'
-            )
-        );
-
-        foreach( $results as $result )
-        {
-            $this->em->remove( $result );
-            $this->em->flush();
-        }
     }
 }

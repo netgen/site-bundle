@@ -5,7 +5,7 @@ namespace Netgen\Bundle\MoreBundle\Entity;
 class EzUserAccountKey
 {
     /**
-     * @var string
+     * @var mixed
      */
     protected $hashKey;
 

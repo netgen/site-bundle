@@ -81,7 +81,23 @@ class UserController extends Controller
 
         if ( $form->isValid() )
         {
-            if ( !$registerHelper->userEmailExists( $form->getData()->payload->email ) )
+            if ( $registerHelper->userEmailExists( $form->getData()->payload->email ) )
+            {
+                $errorMessage = $this->translator->trans(
+                    "ngmore.user.register.email_already_in_use",
+                    array(),
+                    "ngmore_user"
+                );
+            }
+            elseif ( $registerHelper->userLoginExists( $form->getData()->payload ) )
+            {
+                $errorMessage = $this->translator->trans(
+                    "ngmore.user.register.username_taken",
+                    array(),
+                    "ngmore_user"
+                );
+            }
+            else
             {
                 try
                 {
@@ -98,29 +114,6 @@ class UserController extends Controller
                         "ngmore_user"
                     );
                 }
-                catch ( InvalidArgumentException $e )
-                {
-                    // There is no better way to do this ATM...
-                    $existingUsernameMessage = "Argument 'userCreateStruct' is invalid: User with provided login already exists";
-                    if ( $e->getMessage() === $existingUsernameMessage )
-                    {
-                        $errorMessage = $this->translator->trans(
-                            "ngmore.user.register.already_exists",
-                            array(
-                                '%logout%' => $this->generateUrl( "logout" )
-                            ),
-                            "ngmore_user"
-                        );
-                    }
-                }
-            }
-            else
-            {
-                $errorMessage = $this->translator->trans(
-                    "ngmore.user.register.email_already_in_use",
-                    array(),
-                    "ngmore_user"
-                );
             }
         }
 

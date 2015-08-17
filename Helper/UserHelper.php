@@ -2,6 +2,8 @@
 
 namespace Netgen\Bundle\MoreBundle\Helper;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
 use Netgen\Bundle\MoreBundle\Entity\EzUserAccount;
 use Netgen\Bundle\MoreBundle\Helper\MailHelper;
 use Doctrine\ORM\EntityManager;
@@ -115,6 +117,20 @@ class UserHelper
         }
 
         return false;
+    }
+
+    public function userLoginExists( UserCreateStruct $user )
+    {
+        try
+        {
+            $this->userService->loadUserByLogin( $user->login );
+
+            return true;
+        }
+        catch( NotFoundException $e )
+        {
+            return false;
+        }
     }
 
     /**

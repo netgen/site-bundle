@@ -96,7 +96,7 @@ services:
         class: %ngmore.helper.mail_helper.class%
         arguments:
             - @mailer
-            - @twig
+            - @templating
             - @router
             - @translator
             - @ezpublish.config.resolver

@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Symfony\Component\Templating\EngineInterface;
 use eZ\Publish\API\Repository\Values\User\User;
 
 class MailHelper
@@ -21,8 +22,8 @@ class MailHelper
     /** @var \Swift_Mailer  */
     protected $mailer;
 
-    /** @var \Twig_Environment  */
-    protected $twig;
+    /** @var \Symfony\Component\Templating\EngineInterface  */
+    protected $templating;
 
     /** @var  RouterInterface */
     protected $router;
@@ -45,14 +46,14 @@ class MailHelper
 
     public function __construct(
         \Swift_Mailer $mailer,
-        \Twig_Environment $twig,
+        EngineInterface $templating,
         RouterInterface $router,
         TranslatorInterface $translator,
         ConfigResolverInterface $configResolver
     )
     {
         $this->mailer = $mailer;
-        $this->twig = $twig;
+        $this->templating = $templating;
         $this->router = $router;
         $this->translator = $translator;
         $this->configResolver = $configResolver;
@@ -101,8 +102,7 @@ class MailHelper
         $templateParameters['base_url'] = $this->baseUrl;
         $templateParameters['site_name'] = $this->siteName;
 
-        $templateContent = $this->twig->loadTemplate( $this->templates[$type] );
-        $body = $templateContent->render( $templateParameters );
+        $body = $this->templating->render( $this->templates[$type], $templateParameters );
 
         $subject = $templateParameters['subject'] ?: $this->subject[$type];
 

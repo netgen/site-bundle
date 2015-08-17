@@ -163,7 +163,6 @@ class UserController extends Controller
      */
     public function forgotPassword( Request $request )
     {
-        $email = '';
         $registerHelperService = $this->get( "ngmore.helper.user_helper" );
 
         $form = $this->createForgotPassForm();
@@ -171,16 +170,19 @@ class UserController extends Controller
 
         if ( $form->isValid() )
         {
-            $email = $form->get( 'email' )->getData();
-            $registerHelperService->prepareResetPassword( $email );
-            $form = false;
+            $registerHelperService->prepareResetPassword(
+                $form->get( 'email' )->getData()
+            );
+
+            return $this->render(
+                $this->getConfigResolver()->getParameter( 'user_register.template.forgotten_password', 'ngmore' )
+            );
         }
 
         return $this->render(
             $this->getConfigResolver()->getParameter( 'user_register.template.forgotten_password', 'ngmore' ),
             array(
-                'form' => $form->createView(),
-                'email' => $email
+                'form' => $form->createView()
             )
         );
     }

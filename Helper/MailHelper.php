@@ -61,14 +61,13 @@ class MailHelper
      * Sends mail
      *
      * @param string $receiverEmail     receiver mail
-     * @param array $sender             sender
      * @param string $template          mail template
      * @param string $subject           mail subject
      * @param array $templateParameters parameters passed to the template
      *
      * @return int
      */
-    public function sendMail( $receiverEmail, array $sender, $template, $subject, $templateParameters = array() )
+    public function sendMail( $receiverEmail, $template, $subject, $templateParameters = array() )
     {
         $templateParameters['base_url'] = $this->baseUrl;
         $templateParameters['site_name'] = $this->siteName;
@@ -76,7 +75,6 @@ class MailHelper
         $body = $this->templating->render( $template, $templateParameters );
 
         $message = Swift_Message::newInstance()
-            ->setFrom( $sender['email'], $sender['name'] )
             ->setTo( $receiverEmail )
             ->setSubject( $subject )
             ->setBody( $body, 'text/html' );

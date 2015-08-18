@@ -76,7 +76,7 @@ class MailHelper
 
         $message = Swift_Message::newInstance()
             ->setTo( $receiverEmail )
-            ->setSubject( $subject )
+            ->setSubject( "[$this->siteName] " . $subject )
             ->setBody( $body, 'text/html' );
 
         return $this->mailer->send( $message );

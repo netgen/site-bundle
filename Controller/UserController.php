@@ -247,9 +247,7 @@ class UserController extends Controller
         $accountRepository = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' );
 
         $form =  $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
-                      ->add( 'email', 'email', array(
-                          "label" => "ngmore.user.register.resend_activation.email"
-                      ))
+                      ->add( 'email', 'email' )
                       ->getForm();
 
         $form->handleRequest( $request );
@@ -499,9 +497,7 @@ class UserController extends Controller
     protected function createForgotPassForm()
     {
         return $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
-                    ->add( 'email', 'email', array(
-                        "label" => "ngmore.user.forgotten_password.email"
-                    ))
+                    ->add( 'email', 'email' )
                     ->getForm();
     }
 
@@ -517,7 +513,7 @@ class UserController extends Controller
         $passwordOptions = array(
             "type" => "password",
             "required" => false,
-            "invalid_message" => "Both passwords must match.",
+            "invalid_message" => "ngmore.user.reset_password.validation_error",
             "options" => array(
                 "constraints" => array(
                     new Constraints\Length(
@@ -526,13 +522,7 @@ class UserController extends Controller
                         )
                     ),
                 ),
-            ),
-            "first_options" => array(
-                "label" => "New password",
-            ),
-            "second_options" => array(
-                "label" => "Repeat new password",
-            ),
+            )
         );
 
         return $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )

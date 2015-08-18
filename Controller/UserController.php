@@ -182,7 +182,9 @@ class UserController extends Controller
                             )
                         );
 
-                    return $this->redirect( $this->generateUrl( 'ngmore_activation_mail_sent' ) );
+                    return $this->render(
+                        $this->getConfigResolver()->getParameter( 'user_register.template.activation_mail_sent', 'ngmore' )
+                    );
                 }
                 else
                 {
@@ -222,13 +224,6 @@ class UserController extends Controller
             array(
                 "form" => $form->createView()
             )
-        );
-    }
-
-    public function activationMailSent()
-    {
-        return $this->render(
-            $this->getConfigResolver()->getParameter( 'user_register.template.activation_mail_sent', 'ngmore' )
         );
     }
 
@@ -282,7 +277,9 @@ class UserController extends Controller
                     );
             }
 
-            return $this->redirect( $this->generateUrl( 'ngmore_activation_mail_sent' ) );
+            return $this->render(
+                $this->getConfigResolver()->getParameter( 'user_register.template.activation_mail_sent', 'ngmore' )
+            );
         }
 
         return $this->render(

@@ -9,41 +9,32 @@ use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\Templating\EngineInterface;
-use eZ\Publish\API\Repository\Values\User\User;
 
 class MailHelper
 {
-    const WELCOME = "welcome";
-    const FORGOTTENPASSWORD= "forgottenPassword";
-    const MAILNOTREGISTERED = "mailNotRegistered";
-    const PASSWORDCHANGED = "passwordChanged";
-    const ACTIVATION = "activation";
-
     /** @var \Swift_Mailer  */
     protected $mailer;
 
     /** @var \Symfony\Component\Templating\EngineInterface  */
     protected $templating;
 
-    /** @var  RouterInterface */
+    /** @var  \Symfony\Component\Routing\RouterInterface */
     protected $router;
 
     /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     protected $configResolver;
 
-    /** @var \Symfony\Component\Translation\TranslatorInterface */
-    protected $translator;
-
-    protected $fromMailAddress;
-
-    protected $templates = array();
-
-    protected $subject = array();
-
     protected $baseUrl;
 
     protected $siteName;
 
+    /**
+     * @param Swift_Mailer $mailer
+     * @param \Symfony\Component\Templating\EngineInterface $templating
+     * @param \Symfony\Component\Routing\RouterInterface $router
+     * @param \Symfony\Component\Translation\TranslatorInterface $translator
+     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
+     */
     public function __construct(
         \Swift_Mailer $mailer,
         EngineInterface $templating,
@@ -55,60 +46,38 @@ class MailHelper
         $this->mailer = $mailer;
         $this->templating = $templating;
         $this->router = $router;
-        $this->translator = $translator;
         $this->configResolver = $configResolver;
-        $this->fromMailAddress = $configResolver->getParameter( 'user_register.mail_sender', 'ngmore' );
 
-        $this->templates = array(
-            $this::ACTIVATION => $configResolver->getParameter( 'user_register.template.mail.activation', 'ngmore' ),
-            $this::FORGOTTENPASSWORD => $configResolver->getParameter( 'user_register.template.mail.forgotten_password', 'ngmore' ),
-            $this::MAILNOTREGISTERED => $configResolver->getParameter( 'user_register.template.mail.email_not_registered', 'ngmore' ),
-            $this::PASSWORDCHANGED => $configResolver->getParameter( 'user_register.template.mail.password_changed', 'ngmore' ),
-            $this::WELCOME => $configResolver->getParameter( 'user_register.template.mail.welcome', 'ngmore' )
-        );
-
-        $this->subject = array(
-            $this::ACTIVATION => $this->translator->trans(
-                "ngmore.user.activate.mail.subject", array(), "ngmore_user"
+        $this->baseUrl = $this->router->generate(
+            'ez_urlalias',
+            array(
+                "locationId" => $configResolver->getParameter( 'content.tree_root.location_id' )
             ),
-            $this::FORGOTTENPASSWORD => $this->translator->trans(
-                "ngmore.user.forgotten_password.mail.change_requested.subject", array(), "ngmore_user"
-            ),
-            $this::MAILNOTREGISTERED => $this->translator->trans(
-                "ngmore.user.forgotten_password.mail.email_not_registered.subject", array(), "ngmore_user"
-            ),
-            $this::PASSWORDCHANGED => $this->translator->trans(
-                "ngmore.user.forgotten_password.mail.password_changed.subject", array(), "ngmore_user"
-            ),
-            $this::WELCOME => $this->translator->trans(
-                "ngmore.user.register.mail.subject", array(), "ngmore_user"
-            )
-        );
-
-        $rootLocationId = $configResolver->getParameter( 'content.tree_root.location_id' );
-        $this->baseUrl = $this->router->generate( 'ez_urlalias', array( "locationId" => $rootLocationId ), UrlGeneratorInterface::ABSOLUTE_URL );
+            UrlGeneratorInterface::ABSOLUTE_URL );
         $this->siteName = $configResolver->getParameter( 'SiteSettings.SiteName' );
     }
 
-    public function sendMail( $email, $type, $templateParameters = array() )
+    /**
+     * Sends mail
+     *
+     * @param string $receiverEmail     receiver mail
+     * @param array $sender             sender
+     * @param string $template          mail template
+     * @param string $subject           mail subject
+     * @param array $templateParameters parameters passed to the template
+     *
+     * @return int
+     */
+    public function sendMail( $receiverEmail, array $sender, $template, $subject, $templateParameters = array() )
     {
-        if ( !array_key_exists( $type, $this->templates ) )
-        {
-            $allowedTypes = explode( ', ', array_keys( $this->templates ) );
-
-            throw new \InvalidArgumentException( "{$type} is not supported. Mail type has to be one of the following: {$allowedTypes}" );
-        }
-
         $templateParameters['base_url'] = $this->baseUrl;
         $templateParameters['site_name'] = $this->siteName;
 
-        $body = $this->templating->render( $this->templates[$type], $templateParameters );
-
-        $subject = $templateParameters['subject'] ?: $this->subject[$type];
+        $body = $this->templating->render( $template, $templateParameters );
 
         $message = Swift_Message::newInstance()
-            ->setFrom( $this->fromMailAddress, $this->siteName )
-            ->setTo( $email )
+            ->setFrom( $sender['email'], $sender['name'] )
+            ->setTo( $receiverEmail )
             ->setSubject( $subject )
             ->setBody( $body, 'text/html' );
 

@@ -25,3 +25,11 @@ ngmore_user_forgot_password:
 ngmore_user_reset_password:
     path: /user/forgotpassword/{hash}
     defaults: { _controller: ngmore.controller.user:resetPassword }
+
+ngmore_activation_mail_sent:
+    path: /user/activation_mail
+    defaults: { _controller: ngmore.controller.user:activationMailSent }
+
+ngmore_resend_activation_mail:
+    path: /user/resend_activation
+    defaults: { _controller: ngmore.controller.user:resendActivationMail }

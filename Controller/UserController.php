@@ -165,13 +165,15 @@ class UserController extends Controller
                             ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
                             ->setVerificationHash( $newUser->id );
                     $this->container->get( 'ngmore.helper.mail_helper' )->sendMail( $newUser->email, MailHelper::ACTIVATION, array( 'user' => $newUser, 'hash' => $hash ) );
+
+                    return $this->redirect( $this->generateUrl( 'ngmore_activation_mail_sent' ) );
                 }
                 else
                 {
                     $this->container->get( 'ngmore.helper.mail_helper' )->sendMail( $newUser->email, MailHelper::WELCOME, array( 'user' => $newUser ) );
-                }
 
-                return $this->redirect( "login" );
+                    return $this->redirect( $this->generateUrl( "login" ) );
+                }
             }
             catch ( NotFoundException $e )
             {
@@ -196,6 +198,59 @@ class UserController extends Controller
             array(
                 "form" => $form->createView()
             )
+        );
+    }
+
+    public function activationMailSent()
+    {
+        return $this->render(
+            $this->getConfigResolver()->getParameter( 'user_register.template.activation_mail_sent', 'ngmore' )
+        );
+    }
+
+    public function resendActivationMail( Request $request )
+    {
+        $accountRepository = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' );
+
+        $form =  $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
+                      ->add( 'email', 'email', array(
+                          "label" => "ngmore.user.register.resend_activation.email"
+                      ))
+                      ->add( 'resend', 'submit', array(
+                          "label" => "ngmore.user.register.resend_activation.submit"
+                      ))
+                      ->getForm();
+
+        $form->handleRequest( $request );
+
+        if ( $form->isValid() )
+        {
+            $userArray = $this->userService->loadUsersByEmail( $form->get( 'email' )->getData() );
+            if( empty( $userArray ) )
+            {
+                // @todo: create different mail for this (after mail logic refractoring)
+                $this->container->get( 'ngmore.helper.mail_helper' )->sendMail( $form->get( 'email' )->getData(), MailHelper::MAILNOTREGISTERED );
+            }
+            elseif( $userArray[0]->enabled )
+            {
+                // @todo: create different mail for this (after mail logic refractoring)
+                $this->container->get( 'ngmore.helper.mail_helper' )->sendMail( $form->get( 'email' )->getData(), MailHelper::MAILNOTREGISTERED );
+            }
+            else
+            {
+                $user = $userArray[0];
+
+                $newHash = $accountRepository->setVerificationHash( $user->id );
+
+                $this->container->get( 'ngmore.helper.mail_helper' )->sendMail( $user->email, MailHelper::ACTIVATION, array( 'user' => $user, 'hash' => $newHash ) );
+            }
+
+            return $this->redirect( $this->generateUrl( 'ngmore_activation_mail_sent' ) );
+        }
+
+        return $this->render(
+            $this->getConfigResolver()->getParameter( 'user_register.template.activation_mail_sent', 'ngmore' ),
+            array( 'form' => $form->createView() )
         );
     }
 

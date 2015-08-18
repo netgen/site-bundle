@@ -87,7 +87,6 @@ class UserController extends Controller
                 "translation_domain" => "ngmore_user"
             )
         );
-        $formBuilder->add( "save", "submit", array( "label" => "ngmore.user.register.submit_label" ) );
 
         $form = $formBuilder->getForm();
         $form->handleRequest( $request );
@@ -215,9 +214,6 @@ class UserController extends Controller
         $form =  $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
                       ->add( 'email', 'email', array(
                           "label" => "ngmore.user.register.resend_activation.email"
-                      ))
-                      ->add( 'resend', 'submit', array(
-                          "label" => "ngmore.user.register.resend_activation.submit"
                       ))
                       ->getForm();
 
@@ -430,9 +426,6 @@ class UserController extends Controller
                     ->add( 'email', 'email', array(
                         "label" => "ngmore.user.forgotten_password.email"
                     ))
-                    ->add( 'generate_new_password', 'submit', array(
-                        "label" => "ngmore.user.forgotten_password.submit"
-                    ))
                     ->getForm();
     }
 
@@ -469,7 +462,6 @@ class UserController extends Controller
         return $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
             ->add( 'user_id', 'hidden', array( 'data' => $user->id ) )
             ->add( 'password', 'repeated', $passwordOptions )
-            ->add( 'save', 'submit', array( 'label' => "ngmore.user.reset_password.submit_label") )
             ->getForm();
     }
 

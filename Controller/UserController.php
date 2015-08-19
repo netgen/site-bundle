@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Translation\TranslatorInterface;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Symfony\Component\Validator\Constraints;
@@ -229,6 +230,15 @@ class UserController extends Controller
 
     public function resendActivationMail( Request $request )
     {
+        // if we're automatically enabling users, resend activation mail feature does not exist
+        if ( $this->configResolver->hasParameter( 'user_register.auto_enable', 'ngmore' ) )
+        {
+            if ( $this->configResolver->getParameter( 'user_register.auto_enable', 'ngmore' ) )
+            {
+                throw new NotFoundHttpException();
+            }
+        }
+
         $accountRepository = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' );
 
         $form =  $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
@@ -297,6 +307,15 @@ class UserController extends Controller
      */
     public function activateUser( $hash )
     {
+        // if we're automatically enabling users, activation feature does not exist
+        if ( $this->configResolver->hasParameter( 'user_register.auto_enable', 'ngmore' ) )
+        {
+            if ( $this->configResolver->getParameter( 'user_register.auto_enable', 'ngmore' ) )
+            {
+                throw new NotFoundHttpException();
+            }
+        }
+
         $template = $this->configResolver->getParameter( "user_register.template.activate", "ngmore" );
 
         $accountActivated = false;

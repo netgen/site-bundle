@@ -542,8 +542,7 @@ class UserController extends Controller
     {
         $passwordOptions = array(
             "type" => "password",
-            "required" => false,
-            "invalid_message" => "ngmore.user.reset_password.validation_error",
+            "required" => true,
             "options" => array(
                 "constraints" => array(
                     new Constraints\Length(

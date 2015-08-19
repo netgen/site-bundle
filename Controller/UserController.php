@@ -174,11 +174,6 @@ class UserController extends Controller
                             ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
                             ->setVerificationHash( $newUser->id );
 
-                    $this
-                        ->getDoctrine()
-                        ->getRepository( 'NetgenMoreBundle:NgUserSetting' )
-                        ->createNgUserSetting( $newUser->id );
-
                     $this->mailHelper
                         ->sendMail(
                             $newUser->email,
@@ -271,7 +266,8 @@ class UserController extends Controller
                 );
             }
 
-            if ( $userArray[0]->enabled || $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->isUserIdActivated( $userArray[0]->id ) )
+            if ( $userArray[0]->enabled ||
+                $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->isUserIdActivated( $userArray[0]->id ) )
             {
                 $this->mailHelper->sendMail(
                     $form->get( 'email' )->getData(),

@@ -59,7 +59,14 @@ class NgUserSettingRepository extends EntityRepository
     {
         $ngUserSetting = $this->findOneBy( array( 'userId' => $userId ) );
 
-        $ngUserSetting->setIsActivated( true );
+        if ( $ngUserSetting )
+        {
+            $ngUserSetting->setIsActivated( true );
+        }
+        else
+        {
+            $ngUserSetting = new NgUserSetting( $userId, true );
+        }
 
         $this->getEntityManager()->persist( $ngUserSetting );
         $this->getEntityManager()->flush();

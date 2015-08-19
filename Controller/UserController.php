@@ -393,6 +393,18 @@ class UserController extends Controller
                         $this->translator->trans( "ngmore.user.forgotten_password.mail.email_not_registered.subject", array(), "ngmore_user" )
                     );
             }
+            elseif( !$userArray[0]->enabled )
+            {
+                $this->mailHelper
+                    ->sendMail(
+                        $form->get( 'email' )->getData(),
+                        $this->configResolver->getParameter( 'user_register.template.mail.user_disabled', 'ngmore' ),
+                        $this->translator->trans( "ngmore.user.forgotten_password.mail.user_disabled.subject", array(), "ngmore_user" ),
+                        array(
+                            'user' => $userArray[0],
+                        )
+                    );
+            }
             else
             {
                 $user = $userArray[ 0 ];

@@ -248,7 +248,16 @@ class UserController extends Controller
         $accountRepository = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' );
 
         $form =  $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
-                      ->add( 'email', 'email', array( 'constraints' => array( new Constraints\Email() ) ) )
+                      ->add(
+                          'email',
+                          'email',
+                          array(
+                              'constraints' => array(
+                                  new Constraints\Email(),
+                                  new Constraints\NotBlank()
+                              )
+                          )
+                      )
                       ->getForm();
 
         $form->handleRequest( $request );
@@ -531,7 +540,16 @@ class UserController extends Controller
     protected function createForgotPassForm()
     {
         return $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
-                    ->add( 'email', 'email', array( 'constraints' => array( new Constraints\Email() ) ) )
+                    ->add(
+                        'email',
+                        'email',
+                        array(
+                            'constraints' => array(
+                                new Constraints\Email(),
+                                new Constraints\NotBlank()
+                            )
+                        )
+                    )
                     ->getForm();
     }
 
@@ -554,6 +572,7 @@ class UserController extends Controller
                             "min" => $this->container->getParameter( "netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length" ),
                         )
                     ),
+                    new Constraints\NotBlank()
                 ),
             )
         );

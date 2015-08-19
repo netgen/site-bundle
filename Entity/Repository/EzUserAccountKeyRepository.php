@@ -18,6 +18,8 @@ class EzUserAccountKeyRepository extends EntityRepository
      */
     public function setVerificationHash( $userId )
     {
+        $this->removeEzUserAccountKeyByUserId( $userId );
+
         $hash = md5(
             ( function_exists( "openssl_random_pseudo_bytes" ) ? openssl_random_pseudo_bytes( 32 ) : mt_rand() ) .
             microtime() .
@@ -102,5 +104,10 @@ class EzUserAccountKeyRepository extends EntityRepository
             $this->getEntityManager()->remove( $result );
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function hashExists( $hash )
+    {
+        return $this->getEzUserAccountKeyByHash( $hash ) ? true : false;
     }
 }

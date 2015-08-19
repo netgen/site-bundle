@@ -272,7 +272,6 @@ class UserController extends Controller
             else
             {
                 $user = $userArray[0];
-
                 $newHash = $accountRepository->setVerificationHash( $user->id );
 
                 $this->mailHelper
@@ -316,29 +315,32 @@ class UserController extends Controller
             }
         }
 
-        $template = $this->configResolver->getParameter( "user_register.template.activate", "ngmore" );
-
-        $accountActivated = false;
-        if ( !$alreadyActive = $this->isUserActive( $hash ) )
+        if ( !$this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->hashExists( $hash ) )
         {
-            if ( $this->isUserActive( $hash ) )
-            {
-                $accountActivated = false;
-            }
-            else
-            {
-                /** @var EzUserAccountKey $result */
-                $result = $this
-                    ->getDoctrine()
-                    ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-                    ->getEzUserAccountKeyByHash( $hash );
-                $userId = $result->getUserId();
-                $user = $this->userService->loadUser( $userId );
+            throw new NotFoundHttpException();
+        }
 
-                $this->enableUser( $user );
+        $template = $this->configResolver->getParameter( "user_register.template.activate", "ngmore" );
+        $accountActivated = false;
+        $alreadyActive = false;
 
-                $accountActivated = true;
-            }
+        /** @var EzUserAccountKey $result */
+        $result = $this
+            ->getDoctrine()
+            ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
+            ->getEzUserAccountKeyByHash( $hash );
+        $userId = $result->getUserId();
+        $user = $this->userService->loadUser( $userId );
+
+        if ( $user->enabled )
+        {
+            $alreadyActive = true;
+        }
+        else
+        {
+            $this->enableUser( $user );
+
+            $accountActivated = true;
         }
 
         return $this->render(

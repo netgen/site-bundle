@@ -1,0 +1,12 @@
+Netgen\Bundle\MoreBundle\Entity\NgUserSetting:
+    type: entity
+    table: nguser_setting
+    id:
+        userId:
+            type: integer
+            column: user_id
+            id: true
+    fields:
+        isActivated:
+            type: integer
+            column: is_activated

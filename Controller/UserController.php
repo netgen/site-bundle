@@ -165,6 +165,10 @@ class UserController extends Controller
                 if ( $this->configResolver->hasParameter( 'user_register.auto_enable', 'ngmore' ) )
                 {
                     $autoEnable = $this->configResolver->getParameter( 'user_register.auto_enable', 'ngmore' );
+
+                    return $this->render(
+                        $this->getConfigResolver()->getParameter( 'user_register.template.register_success', 'ngmore' )
+                    );
                 }
                 if ( !$autoEnable )
                 {

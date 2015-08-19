@@ -150,14 +150,24 @@ class UserController extends Controller
                 $currentUser = $this->getRepository()->getCurrentUser();
                 $this->getRepository()->setCurrentUser( $this->userService->loadUser( 14 ) );
 
-                $userGroup = $this->userService->loadUserGroup(
-                    $this->configResolver->getParameter( "user_register.user_group_content_id", "ngmore" )
-                );
+                try
+                {
+                    $userGroup = $this->userService->loadUserGroup(
+                        $this->configResolver->getParameter( "user_register.user_group_content_id", "ngmore" )
+                    );
 
-                $newUser = $this->userService->createUser(
-                    $data->payload,
-                    array( $userGroup )
-                );
+                    $newUser = $this->userService->createUser(
+                        $data->payload,
+                        array( $userGroup )
+                    );
+                }
+                catch( \Exception $e )
+                {
+                    // unexpected exception occured, but admin is still logged in the repository
+                    $this->getRepository()->setCurrentUser( $currentUser );
+
+                    throw $e;
+                }
 
                 $this->getRepository()->setCurrentUser( $currentUser );
 
@@ -497,11 +507,24 @@ class UserController extends Controller
                 $currentUser = $this->getRepository()->getCurrentUser();
                 $this->getRepository()->setCurrentUser( $this->userService->loadUser( 14 ) );
 
-                $user = $this->userService->loadUser( $data["user_id"] );
-
                 $userUpdateStruct = $this->userService->newUserUpdateStruct();
-                $userUpdateStruct->password = $data["password"];
-                $this->userService->updateUser( $user, $userUpdateStruct );
+                $userUpdateStruct->password = $data[ "password" ];
+
+                try
+                {
+                    $user = $this->userService->loadUser( $data[ "user_id" ] );
+
+                    $this->userService->updateUser( $user, $userUpdateStruct );
+                }
+                catch( \Exception $e )
+                {
+                    // unexpected exception occured, but admin is still logged in the repository
+                    $this->getRepository()->setCurrentUser( $currentUser );
+
+                    throw $e;
+                }
+
+                $this->getRepository()->setCurrentUser( $currentUser );
 
                 $this->mailHelper
                     ->sendMail(
@@ -517,8 +540,6 @@ class UserController extends Controller
                     ->getDoctrine()
                     ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
                     ->removeEzUserAccountKeyByUserId( $user->id );
-
-                $this->getRepository()->setCurrentUser( $currentUser );
 
                 return $this->redirect( $this->generateUrl( "login" ) );
             }
@@ -610,7 +631,18 @@ class UserController extends Controller
 
         $userUpdateStruct = $this->userService->newUserUpdateStruct();
         $userUpdateStruct->enabled = true;
-        $this->userService->updateUser( $user, $userUpdateStruct );
+
+        try
+        {
+            $this->userService->updateUser( $user, $userUpdateStruct );
+        }
+        catch( \Exception $e )
+        {
+            // unexpected exception occured, but admin is still logged in the repository
+            $this->getRepository()->setCurrentUser( $currentUser );
+
+            throw $e;
+        }
 
         $this->getRepository()->setCurrentUser( $currentUser );
 

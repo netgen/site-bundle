@@ -3,6 +3,7 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
+use Netgen\Bundle\MoreBundle\Entity\NgUserSetting;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
@@ -172,6 +173,12 @@ class UserController extends Controller
                             ->getDoctrine()
                             ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
                             ->setVerificationHash( $newUser->id );
+
+                    $this
+                        ->getDoctrine()
+                        ->getRepository( 'NetgenMoreBundle:NgUserSetting' )
+                        ->createNgUserSetting( $newUser->id );
+
                     $this->mailHelper
                         ->sendMail(
                             $newUser->email,
@@ -250,15 +257,21 @@ class UserController extends Controller
         if ( $form->isValid() )
         {
             $userArray = $this->userService->loadUsersByEmail( $form->get( 'email' )->getData() );
-            if( empty( $userArray ) )
+
+            if ( empty( $userArray ) )
             {
                 $this->mailHelper->sendMail(
                     $form->get( 'email' )->getData(),
                     $this->configResolver->getParameter( 'user_register.template.mail.activation_mail_not_registered', 'ngmore' ),
                     $this->translator->trans( "ngmore.user.activate.mail.activation_mail_not_registered.subject", array(), "ngmore_user" )
                 );
+
+                return $this->render(
+                    $this->getConfigResolver()->getParameter( 'user_register.template.activation_mail_sent', 'ngmore' )
+                );
             }
-            elseif( $userArray[0]->enabled )
+
+            if ( $userArray[0]->enabled || $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->isUserIdActivated( $userArray[0]->id ) )
             {
                 $this->mailHelper->sendMail(
                     $form->get( 'email' )->getData(),
@@ -320,18 +333,25 @@ class UserController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $template = $this->configResolver->getParameter( "user_register.template.activate", "ngmore" );
-        $accountActivated = false;
-        $alreadyActive = false;
-
         /** @var EzUserAccountKey $result */
         $result = $this
             ->getDoctrine()
             ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
             ->getEzUserAccountKeyByHash( $hash );
+
+        if ( time() - $result->getTime() > 3600 )
+        {
+            $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->removeEzUserAccountKeyByHash( $hash );
+
+            // @todo: better message?
+            throw new NotFoundHttpException();
+        }
+
         $userId = $result->getUserId();
         $user = $this->userService->loadUser( $userId );
 
+        $accountActivated = false;
+        $alreadyActive = false;
         if ( $user->enabled )
         {
             $alreadyActive = true;
@@ -344,7 +364,7 @@ class UserController extends Controller
         }
 
         return $this->render(
-            $template,
+            $this->configResolver->getParameter( "user_register.template.activate", "ngmore" ),
             array(
                 "account_activated" => $accountActivated,
                 "already_active" => $alreadyActive
@@ -568,6 +588,8 @@ class UserController extends Controller
             ->getDoctrine()
             ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
             ->removeEzUserAccountKeyByUserId( $user->id );
+
+        $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->activateUserId( $user->id );
 
         $this->mailHelper
             ->sendMail(

@@ -1,5 +1,6 @@
 Netgen\Bundle\MoreBundle\Entity\NgUserSetting:
     type: entity
+    repositoryClass: Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository
     table: nguser_setting
     id:
         userId:

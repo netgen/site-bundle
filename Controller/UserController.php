@@ -248,12 +248,6 @@ class UserController extends Controller
 
     public function resendActivationMail( Request $request )
     {
-        // if we're automatically enabling users, resend activation mail feature does not exist
-        if ( $this->autoEnable )
-        {
-            throw new NotFoundHttpException();
-        }
-
         $accountRepository = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' );
 
         $form =  $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
@@ -337,13 +331,6 @@ class UserController extends Controller
      */
     public function activateUser( $hash )
     {
-        // if we're automatically enabling users, activation feature does not exist
-        // if we're automatically enabling users, resend activation mail feature does not exist
-        if ( $this->autoEnable )
-        {
-            throw new NotFoundHttpException();
-        }
-
         if ( !$this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->hashExists( $hash ) )
         {
             throw new NotFoundHttpException();

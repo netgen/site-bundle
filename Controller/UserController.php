@@ -72,7 +72,7 @@ class UserController extends Controller
 
         if ( $this->configResolver->hasParameter( 'user_register.auto_enable', 'ngmore' ) )
         {
-            $this->autoEnable= $this->configResolver->getParameter( 'user_register.auto_enable', 'ngmore' );
+            $this->autoEnable = $this->configResolver->getParameter( 'user_register.auto_enable', 'ngmore' );
         }
     }
 
@@ -80,11 +80,11 @@ class UserController extends Controller
      * Displays and validates register form.
      * If form is valid, sends activation hash key to the user email
      *
-     * @param Request $request
+     * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @throws \Exception
+     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException if user does not have permission
      *
-     * @return Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function register( Request $request )
     {
@@ -246,22 +246,29 @@ class UserController extends Controller
         );
     }
 
+    /**
+     * Creates new hash key and sends activation mail
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function resendActivationMail( Request $request )
     {
         $accountRepository = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' );
 
         $form =  $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
-                      ->add(
-                          'email',
-                          'email',
-                          array(
-                              'constraints' => array(
-                                  new Constraints\Email(),
-                                  new Constraints\NotBlank()
-                              )
-                          )
-                      )
-                      ->getForm();
+            ->add(
+                'email',
+                'email',
+                array(
+                    'constraints' => array(
+                        new Constraints\Email(),
+                        new Constraints\NotBlank()
+                    )
+                )
+            )
+            ->getForm();
 
         $form->handleRequest( $request );
 
@@ -327,7 +334,9 @@ class UserController extends Controller
      *
      * @param $hash
      *
-     * @return Response
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if hash does not exist or is invalid
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function activateUser( $hash )
     {
@@ -389,9 +398,9 @@ class UserController extends Controller
      * Displays and validates forgotten password form.
      * If form is valid, sends mail to the user with hash key
      *
-     * @param Request $request
+     * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function forgotPassword( Request $request )
     {
@@ -471,12 +480,12 @@ class UserController extends Controller
      * Displays and validates reset password form if the
      * hash key is valid
      *
-     * @param Request $request
+     * @param \Symfony\Component\HttpFoundation\Request $request
      * @param $hash
      *
      * @throws \Exception
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function resetPassword( Request $request, $hash )
     {
@@ -509,7 +518,7 @@ class UserController extends Controller
 
             $user = $this->userService->loadUser( $userId );
 
-            $form = $this->createResetPasswordForm( $user );
+            $form = $this->createResetPasswordForm();
             $form->handleRequest( $request );
 
             if ( $form->isValid() )
@@ -579,11 +588,9 @@ class UserController extends Controller
     /**
      * Creates Reset Password form
      *
-     * @param $user
-     *
      * @return \Symfony\Component\Form\Form
      */
-    protected function createResetPasswordForm( $user )
+    protected function createResetPasswordForm()
     {
         $passwordOptions = array(
             "type" => "password",
@@ -609,8 +616,6 @@ class UserController extends Controller
      * Enables the user
      *
      * @param $user
-     *
-     * @throws \Exception
      */
     protected function enableUser( $user )
     {

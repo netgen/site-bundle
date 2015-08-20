@@ -525,10 +525,8 @@ class UserController extends Controller
                 $userUpdateStruct->password = $data[ "password" ];
 
                 $user = $repository->sudo(
-                    function( Repository $repository ) use ( $data, $userUpdateStruct )
+                    function( Repository $repository ) use ( $user, $userUpdateStruct )
                     {
-                        $user = $repository->getUserService()->loadUser( $data[ "user_id" ] );
-
                         return $repository->getUserService()->updateUser( $user, $userUpdateStruct );
                     }
                 );
@@ -606,7 +604,6 @@ class UserController extends Controller
         );
 
         return $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
-            ->add( 'user_id', 'hidden', array( 'data' => $user->id ) )
             ->add( 'password', 'repeated', $passwordOptions )
             ->getForm();
     }

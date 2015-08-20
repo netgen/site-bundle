@@ -7,3 +7,4 @@ parameters:
     ngmore.default.path_helper.excluded_content_types: ['ng_container', 'folder']
     ngmore.default.user_register.user_group_content_id: 11
     ngmore.default.user_register.auto_enable: false
+    ngmore.default.user_register.user_content_type_identifier: 'user'

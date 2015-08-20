@@ -93,14 +93,15 @@ class UserController extends Controller
             throw new AccessDeniedHttpException();
         }
 
-        $contentType = $this->repository->getContentTypeService()->loadContentTypeByIdentifier( "user" );
+        $userContentTypeIdentifier = $this->configResolver->getParameter( 'user_register.user_content_type_identifier', 'ngmore' );
+        $userContentType = $this->repository->getContentTypeService()->loadContentTypeByIdentifier( $userContentTypeIdentifier );
         $languages = $this->configResolver->getParameter( "languages" );
         $userCreateStruct = $this->userService->newUserCreateStruct(
             null,
             null,
             null,
             $languages[0],
-            $contentType
+            $userContentType
         );
 
         $userCreateStruct->enabled = $this->autoEnable;

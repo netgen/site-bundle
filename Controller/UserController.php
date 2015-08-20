@@ -3,6 +3,7 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
+use eZ\Publish\API\Repository\Repository;
 use Netgen\Bundle\MoreBundle\Entity\NgUserSetting;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +20,11 @@ use eZ\Publish\API\Repository\UserService;
 
 class UserController extends Controller
 {
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    protected $repository;
+
     /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
@@ -45,22 +51,23 @@ class UserController extends Controller
     protected $autoEnable = false;
 
     /**
+     * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      * @param \Symfony\Component\Translation\TranslatorInterface $translator
-     * @param \eZ\Publish\API\Repository\UserService $userService
      * @param \Netgen\Bundle\MoreBundle\Helper\MailHelper $mailHelper
      */
     public function __construct
     (
+        Repository $repository,
         ConfigResolverInterface $configResolver,
         TranslatorInterface $translator,
-        UserService $userService,
         MailHelper $mailHelper
     )
     {
+        $this->repository = $repository;
         $this->configResolver = $configResolver;
         $this->translator = $translator;
-        $this->userService = $userService;
+        $this->userService = $repository->getUserService();
         $this->mailHelper = $mailHelper;
 
         if ( $this->configResolver->hasParameter( 'user_register.auto_enable', 'ngmore' ) )
@@ -75,16 +82,18 @@ class UserController extends Controller
      *
      * @param Request $request
      *
+     * @throws \Exception
+     *
      * @return Response
      */
     public function register( Request $request )
     {
-        if ( $this->getRepository()->hasAccess( 'user', 'register' ) !== true )
+        if ( $this->repository->hasAccess( 'user', 'register' ) !== true )
         {
             throw new AccessDeniedHttpException();
         }
 
-        $contentType = $this->getRepository()->getContentTypeService()->loadContentTypeByIdentifier( "user" );
+        $contentType = $this->repository->getContentTypeService()->loadContentTypeByIdentifier( "user" );
         $languages = $this->configResolver->getParameter( "languages" );
         $userCreateStruct = $this->userService->newUserCreateStruct(
             null,
@@ -155,29 +164,20 @@ class UserController extends Controller
 
             try
             {
-                $currentUser = $this->getRepository()->getCurrentUser();
-                $this->getRepository()->setCurrentUser( $this->userService->loadUser( 14 ) );
+                $repository = $this->repository;
+                $userGroupId = $this->configResolver->getParameter( 'user_register.user_group_content_id', 'ngmore' );
 
-                try
-                {
-                    $userGroup = $this->userService->loadUserGroup(
-                        $this->configResolver->getParameter( "user_register.user_group_content_id", "ngmore" )
-                    );
+                $newUser = $this->repository->sudo(
+                    function( Repository $repository ) use ( $data, $userGroupId )
+                    {
+                        $userGroup = $repository->getUserService()->loadUserGroup( $userGroupId );
 
-                    $newUser = $this->userService->createUser(
-                        $data->payload,
-                        array( $userGroup )
-                    );
-                }
-                catch( \Exception $e )
-                {
-                    // unexpected exception occured, but admin is still logged in the repository
-                    $this->getRepository()->setCurrentUser( $currentUser );
-
-                    throw $e;
-                }
-
-                $this->getRepository()->setCurrentUser( $currentUser );
+                        return $repository->getUserService()->createUser(
+                            $data->payload,
+                            array( $userGroup )
+                        );
+                    }
+                );
 
                 if ( $this->autoEnable )
                 {
@@ -461,6 +461,8 @@ class UserController extends Controller
      * @param Request $request
      * @param $hash
      *
+     * @throws \Exception
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function resetPassword( Request $request, $hash )
@@ -500,27 +502,19 @@ class UserController extends Controller
             {
                 $data = $form->getData();
 
-                $currentUser = $this->getRepository()->getCurrentUser();
-                $this->getRepository()->setCurrentUser( $this->userService->loadUser( 14 ) );
+                $repository = $this->getRepository();
 
                 $userUpdateStruct = $this->userService->newUserUpdateStruct();
                 $userUpdateStruct->password = $data[ "password" ];
 
-                try
-                {
-                    $user = $this->userService->loadUser( $data[ "user_id" ] );
+                $user = $repository->sudo(
+                    function( Repository $repository ) use ( $data, $userUpdateStruct )
+                    {
+                        $user = $repository->getUserService()->loadUser( $data[ "user_id" ] );
 
-                    $this->userService->updateUser( $user, $userUpdateStruct );
-                }
-                catch( \Exception $e )
-                {
-                    // unexpected exception occured, but admin is still logged in the repository
-                    $this->getRepository()->setCurrentUser( $currentUser );
-
-                    throw $e;
-                }
-
-                $this->getRepository()->setCurrentUser( $currentUser );
+                        return $repository->getUserService()->updateUser( $user, $userUpdateStruct );
+                    }
+                );
 
                 $this->mailHelper
                     ->sendMail(
@@ -619,28 +613,22 @@ class UserController extends Controller
      * Enables the user
      *
      * @param $user
+     *
+     * @throws \Exception
      */
     protected function enableUser( $user )
     {
-        $currentUser = $this->getRepository()->getCurrentUser();
-        $this->getRepository()->setCurrentUser( $this->userService->loadUser( 14 ) );
-
         $userUpdateStruct = $this->userService->newUserUpdateStruct();
         $userUpdateStruct->enabled = true;
 
-        try
-        {
-            $this->userService->updateUser( $user, $userUpdateStruct );
-        }
-        catch( \Exception $e )
-        {
-            // unexpected exception occured, but admin is still logged in the repository
-            $this->getRepository()->setCurrentUser( $currentUser );
+        $repository = $this->getRepository();
 
-            throw $e;
-        }
-
-        $this->getRepository()->setCurrentUser( $currentUser );
+        $user = $repository->sudo(
+            function( Repository $repository ) use ( $user, $userUpdateStruct )
+            {
+                return $repository->getUserService()->updateUser( $user, $userUpdateStruct );
+            }
+        );
 
         $this
             ->getDoctrine()

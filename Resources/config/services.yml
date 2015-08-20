@@ -56,9 +56,9 @@ services:
         class: %ngmore.controller.user.class%
         parent: ezpublish.controller.base
         arguments:
+            - @ezpublish.api.repository
             - @ezpublish.config.resolver
             - @translator
-            - @ezpublish.api.service.user
             - @ngmore.helper.mail_helper
 
     ngmore.helper.path_helper:

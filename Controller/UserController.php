@@ -414,19 +414,34 @@ class UserController extends Controller
             }
             elseif( !$userArray[0]->enabled )
             {
-                $this->mailHelper
-                    ->sendMail(
-                        $form->get( 'email' )->getData(),
-                        $this->configResolver->getParameter( 'user_register.template.mail.user_disabled', 'ngmore' ),
-                        $this->translator->trans( "ngmore.user.forgotten_password.mail.user_disabled.subject", array(), "ngmore_user" ),
-                        array(
-                            'user' => $userArray[0],
-                        )
-                    );
+                if ( $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->isUserIdActivated( $userArray[0]->id ) )
+                {
+                    $this->mailHelper
+                        ->sendMail(
+                            $form->get( 'email' )->getData(),
+                            $this->configResolver->getParameter( 'user_register.template.mail.user_disabled', 'ngmore' ),
+                            $this->translator->trans( "ngmore.user.forgotten_password.mail.user_disabled.subject", array(), "ngmore_user" ),
+                            array(
+                                'user' => $userArray[0],
+                            )
+                        );
+                }
+                else
+                {
+                    $this->mailHelper
+                        ->sendMail(
+                            $form->get( 'email' )->getData(),
+                            $this->configResolver->getParameter( 'user_register.template.mail.user_not_activated', 'ngmore' ),
+                            $this->translator->trans( "ngmore.user.forgotten_password.mail.user_not_activated.subject", array(), "ngmore_user" ),
+                            array(
+                                'user' => $userArray[0],
+                            )
+                        );
+                }
             }
             else
             {
-                $user = $userArray[ 0 ];
+                $user = $userArray[0];
 
                 $hash = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->setVerificationHash( $user->id );
                 $this->mailHelper

@@ -40,6 +40,11 @@ class UserController extends Controller
     protected $mailHelper;
 
     /**
+     * @var bool
+     */
+    protected $autoEnable = false;
+
+    /**
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      * @param \Symfony\Component\Translation\TranslatorInterface $translator
      * @param \eZ\Publish\API\Repository\UserService $userService
@@ -57,6 +62,11 @@ class UserController extends Controller
         $this->translator = $translator;
         $this->userService = $userService;
         $this->mailHelper = $mailHelper;
+
+        if ( $this->configResolver->hasParameter( 'user_register.auto_enable', 'ngmore' ) )
+        {
+            $this->autoEnable= $this->configResolver->getParameter( 'user_register.auto_enable', 'ngmore' );
+        }
     }
 
     /**
@@ -83,10 +93,8 @@ class UserController extends Controller
             $languages[0],
             $contentType
         );
-        if ( $this->configResolver->hasParameter( 'user_register.auto_enable', 'ngmore' ) )
-        {
-            $userCreateStruct->enabled = $this->configResolver->getParameter( 'user_register.auto_enable', 'ngmore' );
-        }
+
+        $userCreateStruct->enabled = $this->autoEnable;
 
         $data = new DataWrapper( $userCreateStruct, $userCreateStruct->contentType );
 
@@ -171,16 +179,23 @@ class UserController extends Controller
 
                 $this->getRepository()->setCurrentUser( $currentUser );
 
-                $autoEnable = false;
-                if ( $this->configResolver->hasParameter( 'user_register.auto_enable', 'ngmore' ) )
+                if ( $this->autoEnable )
                 {
-                    $autoEnable = $this->configResolver->getParameter( 'user_register.auto_enable', 'ngmore' );
+                    $this->mailHelper
+                        ->sendMail(
+                            $newUser->email,
+                            $this->configResolver->getParameter( 'user_register.template.mail.welcome', 'ngmore' ),
+                            $this->translator->trans( "ngmore.user.register.mail.subject", array(), "ngmore_user" ),
+                            array(
+                                'user' => $newUser
+                            )
+                        );
 
                     return $this->render(
                         $this->getConfigResolver()->getParameter( 'user_register.template.register_success', 'ngmore' )
                     );
                 }
-                if ( !$autoEnable )
+                else
                 {
                     $hash =
                         $this
@@ -202,20 +217,6 @@ class UserController extends Controller
                     return $this->render(
                         $this->getConfigResolver()->getParameter( 'user_register.template.activation_mail_sent', 'ngmore' )
                     );
-                }
-                else
-                {
-                    $this->mailHelper
-                        ->sendMail(
-                            $newUser->email,
-                            $this->configResolver->getParameter( 'user_register.template.mail.welcome', 'ngmore' ),
-                            $this->translator->trans( "ngmore.user.register.mail.subject", array(), "ngmore_user" ),
-                            array(
-                                'user' => $newUser
-                            )
-                        );
-
-                    return $this->redirect( $this->generateUrl( "login" ) );
                 }
             }
             catch ( NotFoundException $e )
@@ -247,12 +248,9 @@ class UserController extends Controller
     public function resendActivationMail( Request $request )
     {
         // if we're automatically enabling users, resend activation mail feature does not exist
-        if ( $this->configResolver->hasParameter( 'user_register.auto_enable', 'ngmore' ) )
+        if ( $this->autoEnable )
         {
-            if ( $this->configResolver->getParameter( 'user_register.auto_enable', 'ngmore' ) )
-            {
-                throw new NotFoundHttpException();
-            }
+            throw new NotFoundHttpException();
         }
 
         $accountRepository = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' );
@@ -339,12 +337,10 @@ class UserController extends Controller
     public function activateUser( $hash )
     {
         // if we're automatically enabling users, activation feature does not exist
-        if ( $this->configResolver->hasParameter( 'user_register.auto_enable', 'ngmore' ) )
+        // if we're automatically enabling users, resend activation mail feature does not exist
+        if ( $this->autoEnable )
         {
-            if ( $this->configResolver->getParameter( 'user_register.auto_enable', 'ngmore' ) )
-            {
-                throw new NotFoundHttpException();
-            }
+            throw new NotFoundHttpException();
         }
 
         if ( !$this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->hashExists( $hash ) )

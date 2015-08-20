@@ -376,6 +376,16 @@ class UserController extends Controller
         {
             $this->enableUser( $user );
 
+            $this->mailHelper
+                ->sendMail(
+                    $user->email,
+                    $this->configResolver->getParameter( 'user_register.template.mail.welcome', 'ngmore' ),
+                    $this->translator->trans( "ngmore.user.register.mail.subject", array(), "ngmore_user" ),
+                    array(
+                        'user' => $user
+                    )
+                );
+
             $accountActivated = true;
         }
 
@@ -635,15 +645,5 @@ class UserController extends Controller
             ->removeEzUserAccountKeyByUserId( $user->id );
 
         $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->activateUserId( $user->id );
-
-        $this->mailHelper
-            ->sendMail(
-                $user->email,
-                $this->configResolver->getParameter( 'user_register.template.mail.welcome', 'ngmore' ),
-                $this->translator->trans( "ngmore.user.register.mail.subject", array(), "ngmore_user" ),
-                array(
-                    'user' => $user
-                )
-            );
     }
 }

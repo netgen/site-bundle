@@ -16,7 +16,7 @@ class EzUserAccountKeyRepository extends EntityRepository
      *
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function setVerificationHash( $userId )
+    public function createVerificationHash( $userId )
     {
         $this->removeEzUserAccountKeyByUserId( $userId );
 

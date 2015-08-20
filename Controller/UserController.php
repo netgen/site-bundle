@@ -202,7 +202,7 @@ class UserController extends Controller
                         $this
                             ->getDoctrine()
                             ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-                            ->setVerificationHash( $newUser->id );
+                            ->createVerificationHash( $newUser->id );
 
                     $this->mailHelper
                         ->sendMail(
@@ -303,7 +303,7 @@ class UserController extends Controller
             else
             {
                 $user = $userArray[0];
-                $newHash = $accountRepository->setVerificationHash( $user->id );
+                $newHash = $accountRepository->createVerificationHash( $user->id );
 
                 $this->mailHelper
                     ->sendMail(
@@ -454,7 +454,7 @@ class UserController extends Controller
             {
                 $user = $userArray[0];
 
-                $hash = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->setVerificationHash( $user->id );
+                $hash = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->createVerificationHash( $user->id );
                 $this->mailHelper
                     ->sendMail(
                         $user->email,

@@ -52,7 +52,7 @@ class NgUserSettingRepository extends EntityRepository
             return $ngUserSetting->getIsActivated();
         }
 
-        throw new \InvalidArgumentException();
+        return false;
     }
 
     public function activateUserId( $userId )

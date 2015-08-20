@@ -8,3 +8,5 @@ parameters:
     ngmore.default.user_register.user_group_content_id: 11
     ngmore.default.user_register.auto_enable: false
     ngmore.default.user_register.user_content_type_identifier: 'user'
+    ngmore.default.user_register.activate_hash_validity_time: 3600
+    ngmore.default.user_register.forgotpassword_hash_validity_time: 3600

@@ -355,7 +355,7 @@ class UserController extends Controller
             ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
             ->getEzUserAccountKeyByHash( $hash );
 
-        if ( time() - $result->getTime() > 3600 )
+        if ( time() - $result->getTime() > $this->configResolver->getParameter( 'user_register.activate_hash_validity_time', 'ngmore' ) )
         {
             $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->removeEzUserAccountKeyByHash( $hash );
 
@@ -488,7 +488,8 @@ class UserController extends Controller
         /** @var EzUserAccountKey $result */
         $result = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->getEzUserAccountKeyByHash( $hash );
 
-        if ( empty( $result ) || time() - $result->getTime() > 3600 )
+        if ( empty( $result ) ||
+            time() - $result->getTime() > $this->configResolver->getParameter( 'user_register.forgotpassword_hash_validity_time', 'ngmore' ) )
         {
             $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->removeEzUserAccountKeyByHash( $hash );
 

@@ -609,21 +609,6 @@ class UserController extends Controller
     }
 
     /**
-     * Checks by hash key if the user is already activated
-     *
-     * @param $hash
-     *
-     * @return bool
-     */
-    protected function isUserActive( $hash )
-    {
-        return $this
-            ->getDoctrine()
-            ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-            ->getEzUserAccountKeyByHash( $hash ) ? false : true;
-    }
-
-    /**
      * Enables the user
      *
      * @param $user

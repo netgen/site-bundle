@@ -257,18 +257,7 @@ class UserController extends Controller
     {
         $accountRepository = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' );
 
-        $form =  $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
-            ->add(
-                'email',
-                'email',
-                array(
-                    'constraints' => array(
-                        new Constraints\Email(),
-                        new Constraints\NotBlank()
-                    )
-                )
-            )
-            ->getForm();
+        $form =  $this->createResendActivationForm();
 
         $form->handleRequest( $request );
 
@@ -564,6 +553,22 @@ class UserController extends Controller
         }
     }
 
+    protected function createResendActivationForm()
+    {
+        return $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
+            ->add(
+                'email',
+                'email',
+                array(
+                    'constraints' => array(
+                        new Constraints\Email(),
+                        new Constraints\NotBlank()
+                    )
+                )
+            )
+        ->getForm();
+    }
+
     /**
      * Creates Forgotten Password form
      *
@@ -572,17 +577,17 @@ class UserController extends Controller
     protected function createForgotPassForm()
     {
         return $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
-                    ->add(
-                        'email',
-                        'email',
-                        array(
-                            'constraints' => array(
-                                new Constraints\Email(),
-                                new Constraints\NotBlank()
-                            )
-                        )
+            ->add(
+                'email',
+                'email',
+                array(
+                    'constraints' => array(
+                        new Constraints\Email(),
+                        new Constraints\NotBlank()
                     )
-                    ->getForm();
+                )
+            )
+            ->getForm();
     }
 
     /**

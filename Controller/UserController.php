@@ -158,7 +158,7 @@ class UserController extends Controller
                     )
                 );
             }
-            catch( NotFoundException $e )
+            catch ( NotFoundException $e )
             {
                 // do nothing
             }
@@ -349,7 +349,15 @@ class UserController extends Controller
         }
 
         $userId = $result->getUserId();
-        $user = $this->userService->loadUser( $userId );
+
+        try
+        {
+            $user = $this->userService->loadUser( $userId );
+        }
+        catch ( NotFoundException $e )
+        {
+            throw new NotFoundHttpException();
+        }
 
         $accountActivated = false;
         $alreadyActive = false;
@@ -505,7 +513,14 @@ class UserController extends Controller
             $user_account = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->getEzUserAccountKeyByHash( $hash );
             $userId = $user_account->getUserId();
 
-            $user = $this->userService->loadUser( $userId );
+            try
+            {
+                $user = $this->userService->loadUser( $userId );
+            }
+            catch ( NotFoundException $e )
+            {
+                throw new NotFoundHttpException();
+            }
 
             $form = $this->createResetPasswordForm();
             $form->handleRequest( $request );

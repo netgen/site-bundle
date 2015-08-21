@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Translation\TranslatorInterface;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Symfony\Component\Validator\Constraints;
 use Netgen\Bundle\EzFormsBundle\Form\DataWrapper;
@@ -31,11 +30,6 @@ class UserController extends Controller
     protected $configResolver;
 
     /**
-     * @var \Symfony\Component\Translation\TranslatorInterface
-     */
-    protected $translator;
-
-    /**
      * @var \eZ\Publish\API\Repository\UserService
      */
     protected $userService;
@@ -53,20 +47,17 @@ class UserController extends Controller
     /**
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
-     * @param \Symfony\Component\Translation\TranslatorInterface $translator
      * @param \Netgen\Bundle\MoreBundle\Helper\MailHelper $mailHelper
      */
     public function __construct
     (
         Repository $repository,
         ConfigResolverInterface $configResolver,
-        TranslatorInterface $translator,
         MailHelper $mailHelper
     )
     {
         $this->repository = $repository;
         $this->configResolver = $configResolver;
-        $this->translator = $translator;
         $this->userService = $repository->getUserService();
         $this->mailHelper = $mailHelper;
 
@@ -125,17 +116,11 @@ class UserController extends Controller
 
             if ( count( $users ) > 0 )
             {
-                $errorMessage = $this->translator->trans(
-                    "ngmore.user.register.email_already_in_use",
-                    array(),
-                    "ngmore_user"
-                );
-
                 return $this->render(
                     $this->getConfigResolver()->getParameter( "user_register.template.register", "ngmore" ),
                     array(
                         "form" => $form->createView(),
-                        "errorMessage" => $errorMessage
+                        "error" => 'email_in_use'
                     )
                 );
             }
@@ -144,17 +129,11 @@ class UserController extends Controller
             {
                 $this->userService->loadUserByLogin( $form->getData()->payload->login );
 
-                $errorMessage = $this->translator->trans(
-                    "ngmore.user.register.username_taken",
-                    array(),
-                    "ngmore_user"
-                );
-
                 return $this->render(
                     $this->getConfigResolver()->getParameter( "user_register.template.register", "ngmore" ),
                     array(
                         "form" => $form->createView(),
-                        "errorMessage" => $errorMessage
+                        "error" => 'username_taken'
                     )
                 );
             }
@@ -184,7 +163,7 @@ class UserController extends Controller
                     ->sendMail(
                         $newUser->email,
                         $this->configResolver->getParameter( 'user_register.template.mail.welcome', 'ngmore' ),
-                        $this->translator->trans( "ngmore.user.register.mail.subject", array(), "ngmore_user" ),
+                        'ngmore.user.register.mail.subject',
                         array(
                             'user' => $newUser
                         )
@@ -206,7 +185,7 @@ class UserController extends Controller
                     ->sendMail(
                         $newUser->email,
                         $this->configResolver->getParameter( 'user_register.template.mail.activation', 'ngmore' ),
-                        $this->translator->trans( "ngmore.user.activate.mail.subject", array(), "ngmore_user" ),
+                        'ngmore.user.activate.mail.subject',
                         array(
                             'user' => $newUser,
                             'hash' => $hash
@@ -251,7 +230,7 @@ class UserController extends Controller
                 $this->mailHelper->sendMail(
                     $form->get( 'email' )->getData(),
                     $this->configResolver->getParameter( 'user_register.template.mail.activation_mail_not_registered', 'ngmore' ),
-                    $this->translator->trans( "ngmore.user.activate.mail.activation_mail_not_registered.subject", array(), "ngmore_user" )
+                    'ngmore.user.activate.mail.activation_mail_not_registered.subject'
                 );
 
                 return $this->render(
@@ -264,7 +243,7 @@ class UserController extends Controller
                 $this->mailHelper->sendMail(
                     $form->get( 'email' )->getData(),
                     $this->configResolver->getParameter( 'user_register.template.mail.user_already_active', 'ngmore' ),
-                    $this->translator->trans( "ngmore.user.activate.mail.user_already_active.subject", array(), "ngmore_user" ),
+                    'ngmore.user.activate.mail.user_already_active.subject',
                     array(
                         'user' => $userArray[0]
                     )
@@ -286,7 +265,7 @@ class UserController extends Controller
                     ->sendMail(
                         $user->email,
                         $this->configResolver->getParameter( 'user_register.template.mail.activation', 'ngmore' ),
-                        $this->translator->trans( "ngmore.user.activate.mail.subject", array(), "ngmore_user" ),
+                        'ngmore.user.activate.mail.subject',
                         array(
                             'user' => $user,
                             'hash' => $newHash
@@ -362,7 +341,7 @@ class UserController extends Controller
                 ->sendMail(
                     $user->email,
                     $this->configResolver->getParameter( 'user_register.template.mail.welcome', 'ngmore' ),
-                    $this->translator->trans( "ngmore.user.register.mail.subject", array(), "ngmore_user" ),
+                    'ngmore.user.register.mail.subject',
                     array(
                         'user' => $user
                     )
@@ -401,7 +380,7 @@ class UserController extends Controller
                     ->sendMail(
                         $form->get( 'email' )->getData(),
                         $this->configResolver->getParameter( 'user_register.template.mail.email_not_registered', 'ngmore' ),
-                        $this->translator->trans( "ngmore.user.forgotten_password.mail.email_not_registered.subject", array(), "ngmore_user" )
+                        'ngmore.user.forgotten_password.mail.email_not_registered.subject'
                     );
             }
             elseif( !$userArray[0]->enabled )
@@ -412,7 +391,7 @@ class UserController extends Controller
                         ->sendMail(
                             $form->get( 'email' )->getData(),
                             $this->configResolver->getParameter( 'user_register.template.mail.user_disabled', 'ngmore' ),
-                            $this->translator->trans( "ngmore.user.forgotten_password.mail.user_disabled.subject", array(), "ngmore_user" ),
+                            'ngmore.user.forgotten_password.mail.user_disabled.subject',
                             array(
                                 'user' => $userArray[0],
                             )
@@ -424,7 +403,7 @@ class UserController extends Controller
                         ->sendMail(
                             $form->get( 'email' )->getData(),
                             $this->configResolver->getParameter( 'user_register.template.mail.user_not_activated', 'ngmore' ),
-                            $this->translator->trans( "ngmore.user.forgotten_password.mail.user_not_activated.subject", array(), "ngmore_user" ),
+                            'ngmore.user.forgotten_password.mail.user_not_activated.subject',
                             array(
                                 'user' => $userArray[0],
                             )
@@ -440,7 +419,7 @@ class UserController extends Controller
                     ->sendMail(
                         $user->email,
                         $this->configResolver->getParameter( 'user_register.template.mail.forgotten_password', 'ngmore' ),
-                        $this->translator->trans( "ngmore.user.forgotten_password.mail.change_requested.subject", array(), "ngmore_user" ),
+                        'ngmore.user.forgotten_password.mail.change_requested.subject',
                         array(
                             'user' => $user,
                             'hash' => $hash
@@ -530,7 +509,7 @@ class UserController extends Controller
                     ->sendMail(
                         $user->email,
                         $this->configResolver->getParameter( 'user_register.template.mail.password_changed', 'ngmore' ),
-                        $this->translator->trans( "ngmore.user.forgotten_password.mail.password_changed.subject", array(), "ngmore_user" ),
+                        'ngmore.user.forgotten_password.mail.password_changed.subject',
                         array(
                             'user' => $user
                         )

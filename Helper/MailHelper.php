@@ -12,17 +12,30 @@ use Symfony\Component\Templating\EngineInterface;
 
 class MailHelper
 {
-    /** @var \Swift_Mailer  */
+    /**
+     * @var \Swift_Mailer
+     */
     protected $mailer;
 
-    /** @var \Symfony\Component\Templating\EngineInterface  */
+    /**
+     * @var \Symfony\Component\Templating\EngineInterface
+     */
     protected $templating;
 
-    /** @var  \Symfony\Component\Routing\RouterInterface */
+    /**
+     * @var  \Symfony\Component\Routing\RouterInterface
+     */
     protected $router;
 
-    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
     protected $configResolver;
+
+    /**
+     * @var \Symfony\Component\Translation\TranslatorInterface
+     */
+    protected $translator;
 
     protected $siteUrl;
 
@@ -47,6 +60,7 @@ class MailHelper
         $this->templating = $templating;
         $this->router = $router;
         $this->configResolver = $configResolver;
+        $this->translator = $translator;
 
         $this->siteUrl = $this->router->generate(
             'ez_urlalias',
@@ -73,6 +87,8 @@ class MailHelper
         $templateParameters['site_name'] = $this->siteName;
 
         $body = $this->templating->render( $template, $templateParameters );
+
+        $subject = $this->translator->trans( $subject, array(), 'ngmore_user' );
 
         $message = Swift_Message::newInstance()
             ->setTo( $receiverEmail )

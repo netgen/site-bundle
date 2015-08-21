@@ -543,7 +543,18 @@ class UserController extends Controller
                     ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
                     ->removeEzUserAccountKeyByUserId( $user->id );
 
-                return $this->redirect( $this->generateUrl( "login" ) );
+                return $this->render(
+                    $template,
+                    array(
+                        "successMessage" => $this->translator->trans(
+                            "ngmore.user.forgotten_password.success",
+                            array(
+                                '%path%' => $this->generateUrl( 'login' )
+                            ),
+                            "ngmore_user"
+                        ),
+                    )
+                );
             }
 
             return $this->render(

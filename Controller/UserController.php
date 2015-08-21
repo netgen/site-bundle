@@ -473,8 +473,11 @@ class UserController extends Controller
         /** @var EzUserAccountKey $result */
         $result = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->getEzUserAccountKeyByHash( $hash );
 
-        if ( empty( $result ) ||
-            time() - $result->getTime() > $this->configResolver->getParameter( 'user_register.forgotpassword_hash_validity_time', 'ngmore' ) )
+        if ( empty( $result ) )
+        {
+            throw new NotFoundHttpException();
+        }
+        elseif ( time() - $result->getTime() > $this->configResolver->getParameter( 'user_register.forgotpassword_hash_validity_time', 'ngmore' ) )
         {
             $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->removeEzUserAccountKeyByHash( $hash );
 
@@ -483,7 +486,9 @@ class UserController extends Controller
                 array(
                     "errorMessage" => $this->translator->trans(
                         "ngmore.user.forgotten_password.wrong_hash",
-                        array(),
+                        array(
+                            '%path%' => $this->generateUrl( 'ngmore_user_forgot_password' )
+                        ),
                         "ngmore_user"
                     ),
                 )

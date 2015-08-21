@@ -33,7 +33,7 @@ class PartsController extends Controller
             new Criterion\ContentTypeIdentifier( 'image' )
         );
 
-        $query->criterion = new Criterion\LogicalAnd( $criterions );
+        $query->filter = new Criterion\LogicalAnd( $criterions );
 
         $query->sortClauses = array(
             $this->container->get( 'ngmore.helper.sort_clause_helper' )->getSortClauseBySortField(
@@ -259,7 +259,7 @@ class PartsController extends Controller
             new Criterion\ContentTypeIdentifier( 'image' )
         );
 
-        $query->criterion = new Criterion\LogicalAnd( $criteria );
+        $query->filter = new Criterion\LogicalAnd( $criteria );
 
         $query->sortClauses = array(
             $this->container->get( 'ngmore.helper.sort_clause_helper' )->getSortClauseBySortField(

@@ -488,13 +488,7 @@ class UserController extends Controller
             return $this->render(
                 $this->getConfigResolver()->getParameter( "user_register.template.resetpassword_done", "ngmore" ),
                 array(
-                    "errorMessage" => $this->translator->trans(
-                        "ngmore.user.forgotten_password.wrong_hash",
-                        array(
-                            '%path%' => $this->generateUrl( 'ngmore_user_forgot_password' )
-                        ),
-                        "ngmore_user"
-                    ),
+                    'error' => 'hash_expired'
                 )
             );
         }
@@ -550,13 +544,7 @@ class UserController extends Controller
                 return $this->render(
                     $this->getConfigResolver()->getParameter( "user_register.template.resetpassword_done", "ngmore" ),
                     array(
-                        "successMessage" => $this->translator->trans(
-                            "ngmore.user.forgotten_password.success",
-                            array(
-                                '%path%' => $this->generateUrl( 'login' )
-                            ),
-                            "ngmore_user"
-                        ),
+                        'success' => true
                     )
                 );
             }

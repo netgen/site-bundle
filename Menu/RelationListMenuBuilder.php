@@ -495,7 +495,7 @@ class RelationListMenuBuilder
                     }
 
                     $query = new LocationQuery();
-                    $query->criterion = new Criterion\LogicalAnd( $criteria );
+                    $query->filter = new Criterion\LogicalAnd( $criteria );
 
                     if ( !$this->fieldHelper->isFieldEmpty( $content, 'limit' ) )
                     {

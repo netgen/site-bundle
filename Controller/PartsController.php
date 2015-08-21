@@ -228,7 +228,7 @@ class PartsController extends Controller
         $query = new LocationQuery();
         $images = array();
 
-        $query->criterion = new Criterion\LogicalAnd(
+        $query->filter = new Criterion\LogicalAnd(
             array(
                 new Criterion\ParentLocationId( $location->id ),
                 new Criterion\Visibility( Criterion\Visibility::VISIBLE ),

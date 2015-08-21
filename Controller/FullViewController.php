@@ -73,7 +73,7 @@ class FullViewController extends Controller
         }
 
         $query = new LocationQuery();
-        $query->criterion = new Criterion\LogicalAnd( $criteria );
+        $query->filter = new Criterion\LogicalAnd( $criteria );
 
         $query->sortClauses = array(
             $this->container->get( 'ngmore.helper.sort_clause_helper' )->getSortClauseBySortField(

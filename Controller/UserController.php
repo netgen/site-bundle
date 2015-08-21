@@ -610,20 +610,29 @@ class UserController extends Controller
      */
     protected function createResetPasswordForm()
     {
+        $minLength = (int)$this->container->getParameter( "netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length" );
+
+        $passwordConstraints = array(
+            new Constraints\NotBlank()
+        );
+
+        if ( $minLength > 0 )
+        {
+            $passwordConstraints[] = new Constraints\Length(
+                array(
+                    "min" => $minLength,
+                )
+            );
+        }
+
         $passwordOptions = array(
             "type" => "password",
             "required" => true,
             "options" => array(
-                "constraints" => array(
-                    new Constraints\Length(
-                        array(
-                            "min" => $this->container->getParameter( "netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length" ),
-                        )
-                    ),
-                    new Constraints\NotBlank()
-                ),
+                "constraints" => $passwordConstraints,
             )
         );
+
 
         return $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
             ->add( 'password', 'repeated', $passwordOptions )

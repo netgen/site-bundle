@@ -163,77 +163,58 @@ class UserController extends Controller
                 // do nothing
             }
 
-            try
-            {
-                $repository = $this->repository;
-                $userGroupId = $this->configResolver->getParameter( 'user_register.user_group_content_id', 'ngmore' );
+            $repository = $this->repository;
+            $userGroupId = $this->configResolver->getParameter( 'user_register.user_group_content_id', 'ngmore' );
 
-                $newUser = $this->repository->sudo(
-                    function( Repository $repository ) use ( $data, $userGroupId )
-                    {
-                        $userGroup = $repository->getUserService()->loadUserGroup( $userGroupId );
-
-                        return $repository->getUserService()->createUser(
-                            $data->payload,
-                            array( $userGroup )
-                        );
-                    }
-                );
-
-                if ( $this->autoEnable )
+            $newUser = $this->repository->sudo(
+                function( Repository $repository ) use ( $data, $userGroupId )
                 {
-                    $this->mailHelper
-                        ->sendMail(
-                            $newUser->email,
-                            $this->configResolver->getParameter( 'user_register.template.mail.welcome', 'ngmore' ),
-                            $this->translator->trans( "ngmore.user.register.mail.subject", array(), "ngmore_user" ),
-                            array(
-                                'user' => $newUser
-                            )
-                        );
+                    $userGroup = $repository->getUserService()->loadUserGroup( $userGroupId );
 
-                    return $this->render(
-                        $this->getConfigResolver()->getParameter( 'user_register.template.register_success', 'ngmore' )
+                    return $repository->getUserService()->createUser(
+                        $data->payload,
+                        array( $userGroup )
                     );
                 }
-                else
-                {
-                    $hash =
-                        $this
-                            ->getDoctrine()
-                            ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-                            ->createVerificationHash( $newUser->id );
+            );
 
-                    $this->mailHelper
-                        ->sendMail(
-                            $newUser->email,
-                            $this->configResolver->getParameter( 'user_register.template.mail.activation', 'ngmore' ),
-                            $this->translator->trans( "ngmore.user.activate.mail.subject", array(), "ngmore_user" ),
-                            array(
-                                'user' => $newUser,
-                                'hash' => $hash
-                            )
-                        );
-
-                    return $this->render(
-                        $this->getConfigResolver()->getParameter( 'user_register.template.activation_mail_sent', 'ngmore' )
-                    );
-                }
-            }
-            catch ( NotFoundException $e )
+            if ( $this->autoEnable )
             {
-                $errorMessage = $this->translator->trans(
-                    "ngmore.user.register.general_error",
-                    array(),
-                    "ngmore_user"
-                );
+                $this->mailHelper
+                    ->sendMail(
+                        $newUser->email,
+                        $this->configResolver->getParameter( 'user_register.template.mail.welcome', 'ngmore' ),
+                        $this->translator->trans( "ngmore.user.register.mail.subject", array(), "ngmore_user" ),
+                        array(
+                            'user' => $newUser
+                        )
+                    );
 
                 return $this->render(
-                    $this->getConfigResolver()->getParameter( "user_register.template.register", "ngmore" ),
-                    array(
-                        "form" => $form->createView(),
-                        "errorMessage" => $errorMessage
-                    )
+                    $this->getConfigResolver()->getParameter( 'user_register.template.register_success', 'ngmore' )
+                );
+            }
+            else
+            {
+                $hash =
+                    $this
+                        ->getDoctrine()
+                        ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
+                        ->createVerificationHash( $newUser->id );
+
+                $this->mailHelper
+                    ->sendMail(
+                        $newUser->email,
+                        $this->configResolver->getParameter( 'user_register.template.mail.activation', 'ngmore' ),
+                        $this->translator->trans( "ngmore.user.activate.mail.subject", array(), "ngmore_user" ),
+                        array(
+                            'user' => $newUser,
+                            'hash' => $hash
+                        )
+                    );
+
+                return $this->render(
+                    $this->getConfigResolver()->getParameter( 'user_register.template.activation_mail_sent', 'ngmore' )
                 );
             }
         }

@@ -24,7 +24,7 @@ class MailHelper
     /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     protected $configResolver;
 
-    protected $baseUrl;
+    protected $siteUrl;
 
     protected $siteName;
 
@@ -48,7 +48,7 @@ class MailHelper
         $this->router = $router;
         $this->configResolver = $configResolver;
 
-        $this->baseUrl = $this->router->generate(
+        $this->siteUrl = $this->router->generate(
             'ez_urlalias',
             array(
                 "locationId" => $configResolver->getParameter( 'content.tree_root.location_id' )
@@ -69,7 +69,7 @@ class MailHelper
      */
     public function sendMail( $receiverEmail, $template, $subject, $templateParameters = array() )
     {
-        $templateParameters['base_url'] = $this->baseUrl;
+        $templateParameters['site_url'] = $this->siteUrl;
         $templateParameters['site_name'] = $this->siteName;
 
         $body = $this->templating->render( $template, $templateParameters );

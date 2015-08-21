@@ -259,8 +259,7 @@ class UserController extends Controller
                 );
             }
 
-            if ( $userArray[0]->enabled ||
-                $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->isUserIdActivated( $userArray[0]->id ) )
+            if ( $userArray[0]->enabled )
             {
                 $this->mailHelper->sendMail(
                     $form->get( 'email' )->getData(),
@@ -269,6 +268,13 @@ class UserController extends Controller
                     array(
                         'user' => $userArray[0]
                     )
+                );
+            }
+            elseif( $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->isUserIdActivated( $userArray[0]->id ) )
+            {
+                return $this->render(
+                    $this->getConfigResolver()->getParameter( 'user_register.template.activation_mail_sent', 'ngmore' ),
+                    array( 'disabled' => true )
                 );
             }
             else

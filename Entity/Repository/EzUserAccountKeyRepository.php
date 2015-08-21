@@ -79,8 +79,9 @@ class EzUserAccountKeyRepository extends EntityRepository
         foreach( $results as $result )
         {
             $this->getEntityManager()->remove( $result );
-            $this->getEntityManager()->flush();
         }
+
+        $this->getEntityManager()->flush();
     }
 
     /**
@@ -102,8 +103,9 @@ class EzUserAccountKeyRepository extends EntityRepository
         foreach( $results as $result )
         {
             $this->getEntityManager()->remove( $result );
-            $this->getEntityManager()->flush();
         }
+
+        $this->getEntityManager()->flush();
     }
 
     public function hashExists( $hash )

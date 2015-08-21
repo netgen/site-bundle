@@ -344,8 +344,12 @@ class UserController extends Controller
         {
             $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->removeEzUserAccountKeyByHash( $hash );
 
-            // @todo: better message?
-            throw new NotFoundHttpException();
+            return $this->render(
+                $this->configResolver->getParameter( "user_register.template.activate", "ngmore" ),
+                array(
+                    'status' => 'hash_expired'
+                )
+            );
         }
 
         $userId = $result->getUserId();
@@ -359,11 +363,9 @@ class UserController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $accountActivated = false;
-        $alreadyActive = false;
         if ( $user->enabled )
         {
-            $alreadyActive = true;
+            $status = 'already_active';
         }
         else
         {
@@ -379,14 +381,13 @@ class UserController extends Controller
                     )
                 );
 
-            $accountActivated = true;
+            $status = 'account_activated';
         }
 
         return $this->render(
             $this->configResolver->getParameter( "user_register.template.activate", "ngmore" ),
             array(
-                "account_activated" => $accountActivated,
-                "already_active" => $alreadyActive
+                "status" => $status
             )
         );
     }

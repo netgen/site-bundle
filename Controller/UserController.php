@@ -2,33 +2,21 @@
 
 namespace Netgen\Bundle\MoreBundle\Controller;
 
-use eZ\Bundle\EzPublishCoreBundle\Controller;
-use eZ\Publish\API\Repository\Repository;
-use Netgen\Bundle\MoreBundle\Entity\NgUserSetting;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints;
+use eZ\Bundle\EzPublishCoreBundle\Controller;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\UserService;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Netgen\Bundle\EzFormsBundle\Form\DataWrapper;
 use Netgen\Bundle\MoreBundle\Helper\MailHelper;
-use Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey;
-use eZ\Publish\API\Repository\UserService;
 
 class UserController extends Controller
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    protected $repository;
-
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
-
     /**
      * @var \eZ\Publish\API\Repository\UserService
      */
@@ -45,31 +33,27 @@ class UserController extends Controller
     protected $autoEnable = false;
 
     /**
-     * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
+     * Constructor
+     *
+     * @param \eZ\Publish\API\Repository\UserService $userService
      * @param \Netgen\Bundle\MoreBundle\Helper\MailHelper $mailHelper
      */
-    public function __construct
-    (
-        Repository $repository,
-        ConfigResolverInterface $configResolver,
+    public function __construct(
+        UserService $userService,
         MailHelper $mailHelper
     )
     {
-        $this->repository = $repository;
-        $this->configResolver = $configResolver;
-        $this->userService = $repository->getUserService();
+        $this->userService = $userService;
         $this->mailHelper = $mailHelper;
 
-        if ( $this->configResolver->hasParameter( 'user_register.auto_enable', 'ngmore' ) )
+        if ( $this->getConfigResolver()->hasParameter( 'user.auto_enable', 'ngmore' ) )
         {
-            $this->autoEnable = $this->configResolver->getParameter( 'user_register.auto_enable', 'ngmore' );
+            $this->autoEnable = $this->getConfigResolver()->getParameter( 'user.auto_enable', 'ngmore' );
         }
     }
 
     /**
-     * Displays and validates register form.
-     * If form is valid, sends activation hash key to the user email
+     * Registers user on the site
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
@@ -79,20 +63,20 @@ class UserController extends Controller
      */
     public function register( Request $request )
     {
-        if ( $this->repository->hasAccess( 'user', 'register' ) !== true )
+        if ( $this->getRepository()->hasAccess( 'user', 'register' ) !== true )
         {
             throw new AccessDeniedHttpException();
         }
 
-        $userContentTypeIdentifier = $this->configResolver->getParameter( 'user_register.user_content_type_identifier', 'ngmore' );
-        $userContentType = $this->repository->getContentTypeService()->loadContentTypeByIdentifier( $userContentTypeIdentifier );
-        $languages = $this->configResolver->getParameter( "languages" );
+        $contentTypeIdentifier = $this->getConfigResolver()->getParameter( 'user.content_type_identifier', 'ngmore' );
+        $contentType = $this->getRepository()->getContentTypeService()->loadContentTypeByIdentifier( $contentTypeIdentifier );
+        $languages = $this->getConfigResolver()->getParameter( "languages" );
         $userCreateStruct = $this->userService->newUserCreateStruct(
             null,
             null,
             null,
             $languages[0],
-            $userContentType
+            $contentType
         );
 
         $userCreateStruct->enabled = $this->autoEnable;
@@ -142,10 +126,9 @@ class UserController extends Controller
                 // do nothing
             }
 
-            $repository = $this->repository;
-            $userGroupId = $this->configResolver->getParameter( 'user_register.user_group_content_id', 'ngmore' );
+            $userGroupId = $this->getConfigResolver()->getParameter( 'user.user_group_content_id', 'ngmore' );
 
-            $newUser = $this->repository->sudo(
+            $newUser = $this->getRepository()->sudo(
                 function( Repository $repository ) use ( $data, $userGroupId )
                 {
                     $userGroup = $repository->getUserService()->loadUserGroup( $userGroupId );
@@ -162,7 +145,7 @@ class UserController extends Controller
                 $this->mailHelper
                     ->sendMail(
                         $newUser->email,
-                        $this->configResolver->getParameter( 'template.user.mail.welcome', 'ngmore' ),
+                        $this->getConfigResolver()->getParameter( 'template.user.mail.welcome', 'ngmore' ),
                         'ngmore.user.register.mail.subject',
                         array(
                             'user' => $newUser
@@ -173,29 +156,25 @@ class UserController extends Controller
                     $this->getConfigResolver()->getParameter( 'template.user.register_success', 'ngmore' )
                 );
             }
-            else
-            {
-                $hash =
-                    $this
-                        ->getDoctrine()
-                        ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-                        ->createVerificationHash( $newUser->id );
 
-                $this->mailHelper
-                    ->sendMail(
-                        $newUser->email,
-                        $this->configResolver->getParameter( 'template.user.mail.activation', 'ngmore' ),
-                        'ngmore.user.activate.mail.subject',
-                        array(
-                            'user' => $newUser,
-                            'hash' => $hash
-                        )
-                    );
+            $accountKey = $this->getDoctrine()
+                ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
+                ->create( $newUser->id );
 
-                return $this->render(
-                    $this->getConfigResolver()->getParameter( 'template.user.activate_sent', 'ngmore' )
+            $this->mailHelper
+                ->sendMail(
+                    $newUser->email,
+                    $this->getConfigResolver()->getParameter( 'template.user.mail.activation', 'ngmore' ),
+                    'ngmore.user.activate.mail.subject',
+                    array(
+                        'user' => $newUser,
+                        'hash' => $accountKey->getHash()
+                    )
                 );
-            }
+
+            return $this->render(
+                $this->getConfigResolver()->getParameter( 'template.user.activate_sent', 'ngmore' )
+            );
         }
 
         return $this->render(
@@ -207,7 +186,7 @@ class UserController extends Controller
     }
 
     /**
-     * Creates new hash key and sends activation mail
+     * Displays and validates the form for sending an activation mail
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
@@ -215,21 +194,18 @@ class UserController extends Controller
      */
     public function resendActivationMail( Request $request )
     {
-        $accountRepository = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' );
-
-        $form =  $this->createResendActivationForm();
-
+        $form = $this->createActivationForm();
         $form->handleRequest( $request );
 
         if ( $form->isValid() )
         {
-            $userArray = $this->userService->loadUsersByEmail( $form->get( 'email' )->getData() );
+            $users = $this->userService->loadUsersByEmail( $form->get( 'email' )->getData() );
 
-            if ( empty( $userArray ) )
+            if ( empty( $users ) )
             {
                 $this->mailHelper->sendMail(
                     $form->get( 'email' )->getData(),
-                    $this->configResolver->getParameter( 'template.user.mail.activation_not_registered', 'ngmore' ),
+                    $this->getConfigResolver()->getParameter( 'template.user.mail.activation_not_registered', 'ngmore' ),
                     'ngmore.user.activate.mail.activation_mail_not_registered.subject'
                 );
 
@@ -238,41 +214,42 @@ class UserController extends Controller
                 );
             }
 
-            if ( $userArray[0]->enabled )
+            if ( $users[0]->enabled )
             {
                 $this->mailHelper->sendMail(
                     $form->get( 'email' )->getData(),
-                    $this->configResolver->getParameter( 'template.user.mail.activation_already_active', 'ngmore' ),
+                    $this->getConfigResolver()->getParameter( 'template.user.mail.activation_already_active', 'ngmore' ),
                     'ngmore.user.activate.mail.user_already_active.subject',
                     array(
-                        'user' => $userArray[0]
+                        'user' => $users[0]
                     )
                 );
             }
-            elseif( $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->isUserIdActivated( $userArray[0]->id ) )
+            else if( $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->isUserActivated( $users[0]->id ) )
             {
                 $this->mailHelper->sendMail(
                     $form->get( 'email' )->getData(),
-                    $this->configResolver->getParameter( 'template.user.mail.activation_disabled', 'ngmore' ),
+                    $this->getConfigResolver()->getParameter( 'template.user.mail.activation_disabled', 'ngmore' ),
                     'ngmore.user.activate.mail.user_disabled.subject',
                     array(
-                        'user' => $userArray[0]
+                        'user' => $users[0]
                     )
                 );
             }
             else
             {
-                $user = $userArray[0];
-                $newHash = $accountRepository->createVerificationHash( $user->id );
+                $accountKey = $this->getDoctrine()
+                    ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
+                    ->create( $users[0]->id );
 
                 $this->mailHelper
                     ->sendMail(
-                        $user->email,
-                        $this->configResolver->getParameter( 'template.user.mail.activation', 'ngmore' ),
+                        $users[0]->email,
+                        $this->getConfigResolver()->getParameter( 'template.user.mail.activation', 'ngmore' ),
                         'ngmore.user.activate.mail.subject',
                         array(
-                            'user' => $user,
-                            'hash' => $newHash
+                            'user' => $users[0],
+                            'hash' => $accountKey->getHash()
                         )
                     );
             }
@@ -284,49 +261,49 @@ class UserController extends Controller
 
         return $this->render(
             $this->getConfigResolver()->getParameter( 'template.user.activate', 'ngmore' ),
-            array( 'form' => $form->createView() )
+            array(
+                'form' => $form->createView()
+            )
         );
     }
 
     /**
      * Activates the user by hash key
      *
-     * @param $hash
+     * @param string $hash
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if hash does not exist or is invalid
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException If hash key does not exist
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function activateUser( $hash )
     {
-        if ( !$this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->hashExists( $hash ) )
+        $accountKey = $this->getDoctrine()
+            ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
+            ->getByHash( $hash );
+
+        if ( !$accountKey instanceof EzUserAccountKey )
         {
             throw new NotFoundHttpException();
         }
 
-        /** @var EzUserAccountKey $result */
-        $result = $this
-            ->getDoctrine()
-            ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-            ->getEzUserAccountKeyByHash( $hash );
-
-        if ( time() - $result->getTime() > $this->configResolver->getParameter( 'user_register.activate_hash_validity_time', 'ngmore' ) )
+        if ( time() - $accountKey->getTime() > $this->getConfigResolver()->getParameter( 'user.activate_hash_validity_time', 'ngmore' ) )
         {
-            $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->removeEzUserAccountKeyByHash( $hash );
+            $this->getDoctrine()
+                ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
+                ->removeByHash( $hash );
 
             return $this->render(
-                $this->configResolver->getParameter( "template.user.activate_done", "ngmore" ),
+                $this->getConfigResolver()->getParameter( "template.user.activate_done", "ngmore" ),
                 array(
                     'error' => 'hash_expired'
                 )
             );
         }
 
-        $userId = $result->getUserId();
-
         try
         {
-            $user = $this->userService->loadUser( $userId );
+            $user = $this->userService->loadUser( $accountKey->getUserId() );
         }
         catch ( NotFoundException $e )
         {
@@ -336,35 +313,32 @@ class UserController extends Controller
         if ( $user->enabled )
         {
             return $this->render(
-                $this->configResolver->getParameter( "template.user.activate_done", "ngmore" ),
+                $this->getConfigResolver()->getParameter( "template.user.activate_done", "ngmore" ),
                 array(
                     'error' => 'already_active'
                 )
             );
         }
-        else
-        {
-            $this->enableUser( $user );
 
-            $this->mailHelper
-                ->sendMail(
-                    $user->email,
-                    $this->configResolver->getParameter( 'template.user.mail.welcome', 'ngmore' ),
-                    'ngmore.user.register.mail.subject',
-                    array(
-                        'user' => $user
-                    )
-                );
+        $this->enableUser( $user );
 
-            return $this->render(
-                $this->configResolver->getParameter( "template.user.activate_done", "ngmore" )
+        $this->mailHelper
+            ->sendMail(
+                $user->email,
+                $this->getConfigResolver()->getParameter( 'template.user.mail.welcome', 'ngmore' ),
+                'ngmore.user.register.mail.subject',
+                array(
+                    'user' => $user
+                )
             );
-        }
+
+        return $this->render(
+            $this->getConfigResolver()->getParameter( "template.user.activate_done", "ngmore" )
+        );
     }
 
     /**
-     * Displays and validates forgotten password form.
-     * If form is valid, sends mail to the user with hash key
+     * Displays and validates the forgot password form
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
@@ -372,32 +346,32 @@ class UserController extends Controller
      */
     public function forgotPassword( Request $request )
     {
-        $form = $this->createForgotPassForm();
+        $form = $this->createForgotPasswordForm();
         $form->handleRequest( $request );
 
         if ( $form->isValid() )
         {
-            $userArray = $this->userService->loadUsersByEmail( $form->get( 'email' )->getData() );
-            if( empty( $userArray ) )
+            $users = $this->userService->loadUsersByEmail( $form->get( 'email' )->getData() );
+            if( empty( $users ) )
             {
                 $this->mailHelper
                     ->sendMail(
                         $form->get( 'email' )->getData(),
-                        $this->configResolver->getParameter( 'template.user.mail.forgot_password_not_registered', 'ngmore' ),
+                        $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_not_registered', 'ngmore' ),
                         'ngmore.user.forgotten_password.mail.email_not_registered.subject'
                     );
             }
-            elseif( !$userArray[0]->enabled )
+            else if( !$users[0]->enabled )
             {
-                if ( $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->isUserIdActivated( $userArray[0]->id ) )
+                if ( $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->isUserActivated( $users[0]->id ) )
                 {
                     $this->mailHelper
                         ->sendMail(
                             $form->get( 'email' )->getData(),
-                            $this->configResolver->getParameter( 'template.user.mail.forgot_password_disabled', 'ngmore' ),
+                            $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_disabled', 'ngmore' ),
                             'ngmore.user.forgotten_password.mail.user_disabled.subject',
                             array(
-                                'user' => $userArray[0],
+                                'user' => $users[0],
                             )
                         );
                 }
@@ -406,27 +380,28 @@ class UserController extends Controller
                     $this->mailHelper
                         ->sendMail(
                             $form->get( 'email' )->getData(),
-                            $this->configResolver->getParameter( 'template.user.mail.forgot_password_not_activated', 'ngmore' ),
+                            $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_not_activated', 'ngmore' ),
                             'ngmore.user.forgotten_password.mail.user_not_activated.subject',
                             array(
-                                'user' => $userArray[0],
+                                'user' => $users[0],
                             )
                         );
                 }
             }
             else
             {
-                $user = $userArray[0];
+                $accountKey = $this->getDoctrine()
+                    ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
+                    ->create( $users[0]->id );
 
-                $hash = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->createVerificationHash( $user->id );
                 $this->mailHelper
                     ->sendMail(
-                        $user->email,
-                        $this->configResolver->getParameter( 'template.user.mail.forgot_password', 'ngmore' ),
+                        $users[0]->email,
+                        $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password', 'ngmore' ),
                         'ngmore.user.forgotten_password.mail.change_requested.subject',
                         array(
-                            'user' => $user,
-                            'hash' => $hash
+                            'user' => $users[0],
+                            'hash' => $accountKey->getHash()
                         )
                     );
             }
@@ -445,28 +420,31 @@ class UserController extends Controller
     }
 
     /**
-     * Displays and validates reset password form if the
-     * hash key is valid
+     * Displays and validates the reset password form
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param $hash
+     * @param string $hash
      *
-     * @throws \Exception
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException If hash key does not exist
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function resetPassword( Request $request, $hash )
     {
-        /** @var EzUserAccountKey $result */
-        $result = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->getEzUserAccountKeyByHash( $hash );
+        $accountKey = $this->getDoctrine()
+            ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
+            ->getByHash( $hash );
 
-        if ( empty( $result ) )
+        if ( !$accountKey instanceof EzUserAccountKey )
         {
             throw new NotFoundHttpException();
         }
-        elseif ( time() - $result->getTime() > $this->configResolver->getParameter( 'user_register.forgotpassword_hash_validity_time', 'ngmore' ) )
+
+        if ( time() - $accountKey->getTime() > $this->getConfigResolver()->getParameter( 'user.forgot_password_hash_validity_time', 'ngmore' ) )
         {
-            $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->removeEzUserAccountKeyByHash( $hash );
+            $this->getDoctrine()
+                ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
+                ->removeByHash( $hash );
 
             return $this->render(
                 $this->getConfigResolver()->getParameter( "template.user.reset_password_done", "ngmore" ),
@@ -475,91 +453,66 @@ class UserController extends Controller
                 )
             );
         }
-        else
+
+        try
         {
-            /** @var EzUserAccountKey $user_account */
-            $user_account = $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->getEzUserAccountKeyByHash( $hash );
-            $userId = $user_account->getUserId();
+            $user = $this->userService->loadUser( $accountKey->getUserId() );
+        }
+        catch ( NotFoundException $e )
+        {
+            throw new NotFoundHttpException();
+        }
 
-            try
-            {
-                $user = $this->userService->loadUser( $userId );
-            }
-            catch ( NotFoundException $e )
-            {
-                throw new NotFoundHttpException();
-            }
+        $form = $this->createResetPasswordForm();
+        $form->handleRequest( $request );
 
-            $form = $this->createResetPasswordForm();
-            $form->handleRequest( $request );
+        if ( $form->isValid() )
+        {
+            $data = $form->getData();
 
-            if ( $form->isValid() )
-            {
-                $data = $form->getData();
+            $userUpdateStruct = $this->userService->newUserUpdateStruct();
+            $userUpdateStruct->password = $data[ "password" ];
 
-                $repository = $this->getRepository();
+            $user = $this->getRepository()->sudo(
+                function( Repository $repository ) use ( $user, $userUpdateStruct )
+                {
+                    return $repository->getUserService()->updateUser( $user, $userUpdateStruct );
+                }
+            );
 
-                $userUpdateStruct = $this->userService->newUserUpdateStruct();
-                $userUpdateStruct->password = $data[ "password" ];
-
-                $user = $repository->sudo(
-                    function( Repository $repository ) use ( $user, $userUpdateStruct )
-                    {
-                        return $repository->getUserService()->updateUser( $user, $userUpdateStruct );
-                    }
+            $this->mailHelper
+                ->sendMail(
+                    $user->email,
+                    $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_password_changed', 'ngmore' ),
+                    'ngmore.user.forgotten_password.mail.password_changed.subject',
+                    array(
+                        'user' => $user
+                    )
                 );
 
-                $this->mailHelper
-                    ->sendMail(
-                        $user->email,
-                        $this->configResolver->getParameter( 'template.user.mail.forgot_password_password_changed', 'ngmore' ),
-                        'ngmore.user.forgotten_password.mail.password_changed.subject',
-                        array(
-                            'user' => $user
-                        )
-                    );
-
-                $this
-                    ->getDoctrine()
-                    ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-                    ->removeEzUserAccountKeyByUserId( $user->id );
-
-                return $this->render(
-                    $this->getConfigResolver()->getParameter( "template.user.reset_password_done", "ngmore" )
-                );
-            }
+            $this->getDoctrine()
+                ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
+                ->removeByUserId( $user->id );
 
             return $this->render(
-                $this->getConfigResolver()->getParameter( "template.user.reset_password", "ngmore" ),
-                array(
-                    'form' => $form->createView()
-                )
+                $this->getConfigResolver()->getParameter( "template.user.reset_password_done", "ngmore" )
             );
         }
-    }
 
-    protected function createResendActivationForm()
-    {
-        return $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
-            ->add(
-                'email',
-                'email',
-                array(
-                    'constraints' => array(
-                        new Constraints\Email(),
-                        new Constraints\NotBlank()
-                    )
-                )
+        return $this->render(
+            $this->getConfigResolver()->getParameter( "template.user.reset_password", "ngmore" ),
+            array(
+                'form' => $form->createView()
             )
-        ->getForm();
+        );
     }
 
     /**
-     * Creates Forgotten Password form
+     * Creates activation form
      *
-     * @return \Symfony\Component\Form\Form
+     * @return \Symfony\Component\Form\FormInterface
      */
-    protected function createForgotPassForm()
+    protected function createActivationForm()
     {
         return $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
             ->add(
@@ -571,14 +524,33 @@ class UserController extends Controller
                         new Constraints\NotBlank()
                     )
                 )
-            )
-            ->getForm();
+            )->getForm();
     }
 
     /**
-     * Creates Reset Password form
+     * Creates forgot password form
      *
-     * @return \Symfony\Component\Form\Form
+     * @return \Symfony\Component\Form\FormInterface
+     */
+    protected function createForgotPasswordForm()
+    {
+        return $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
+            ->add(
+                'email',
+                'email',
+                array(
+                    'constraints' => array(
+                        new Constraints\Email(),
+                        new Constraints\NotBlank()
+                    )
+                )
+            )->getForm();
+    }
+
+    /**
+     * Creates reset password form
+     *
+     * @return \Symfony\Component\Form\FormInterface
      */
     protected function createResetPasswordForm()
     {
@@ -605,7 +577,6 @@ class UserController extends Controller
             )
         );
 
-
         return $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
             ->add( 'password', 'repeated', $passwordOptions )
             ->getForm();
@@ -614,27 +585,26 @@ class UserController extends Controller
     /**
      * Enables the user
      *
-     * @param $user
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
      */
-    protected function enableUser( $user )
+    protected function enableUser( User $user )
     {
         $userUpdateStruct = $this->userService->newUserUpdateStruct();
         $userUpdateStruct->enabled = true;
 
-        $repository = $this->getRepository();
-
-        $user = $repository->sudo(
+        $user = $this->getRepository()->sudo(
             function( Repository $repository ) use ( $user, $userUpdateStruct )
             {
                 return $repository->getUserService()->updateUser( $user, $userUpdateStruct );
             }
         );
 
-        $this
-            ->getDoctrine()
+        $this->getDoctrine()
             ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-            ->removeEzUserAccountKeyByUserId( $user->id );
+            ->removeByUserId( $user->id );
 
-        $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->activateUserId( $user->id );
+        $this->getDoctrine()
+            ->getRepository( 'NetgenMoreBundle:NgUserSetting' )
+            ->activateUser( $user->id );
     }
 }

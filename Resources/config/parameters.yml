@@ -2,11 +2,16 @@ parameters:
     ngmore.default.locale.conversion_map: %ezpublish.locale.conversion_map%
     ngmore.legacy_mapper.configuration.options:
         enabled_legacy_settings: []
+
     ngmore.default.site_settings.google_tag_manager_code: ~
     ngmore.default.site_settings.jwplayer_key: ~
+
     ngmore.default.path_helper.excluded_content_types: ['ng_container', 'folder']
-    ngmore.default.user_register.user_group_content_id: 11
-    ngmore.default.user_register.auto_enable: false
-    ngmore.default.user_register.user_content_type_identifier: 'user'
-    ngmore.default.user_register.activate_hash_validity_time: 3600
-    ngmore.default.user_register.forgotpassword_hash_validity_time: 3600
+
+    ngmore.default.user.content_type_identifier: 'user'
+    ngmore.default.user.user_group_content_id: 11
+    ngmore.default.user.auto_enable: false
+    ngmore.default.user.activate_hash_validity_time: 3600
+    ngmore.default.user.forgot_password_hash_validity_time: 3600
+
+    netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length: 0

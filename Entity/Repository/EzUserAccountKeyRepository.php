@@ -8,22 +8,20 @@ use Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey;
 class EzUserAccountKeyRepository extends EntityRepository
 {
     /**
-     * Creates verification hash key
+     * Creates a user account key
      *
      * @param mixed $userId
      *
-     * @return string|bool
-     *
-     * @throws \Doctrine\DBAL\DBALException
+     * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
      */
-    public function createVerificationHash( $userId )
+    public function create( $userId )
     {
-        $this->removeEzUserAccountKeyByUserId( $userId );
+        $this->removeByUserId( $userId );
 
         $hash = md5(
-            ( function_exists( "openssl_random_pseudo_bytes" ) ? openssl_random_pseudo_bytes( 32 ) : mt_rand() ) .
-            microtime() .
-            $userId
+            $userId . ':' . microtime() . ':' .
+            ( function_exists( "openssl_random_pseudo_bytes" ) ?
+                openssl_random_pseudo_bytes( 32 ) : mt_rand() )
         );
 
         $userAccount = new EzUserAccountKey();
@@ -34,47 +32,29 @@ class EzUserAccountKeyRepository extends EntityRepository
         $this->getEntityManager()->persist( $userAccount );
         $this->getEntityManager()->flush();
 
-        return $hash;
+        return $userAccount;
     }
 
     /**
-     * Gets ezuser_accountkey by hash
+     * Returns user account key by hash
      *
-     * @param mixed $hash
+     * @param string $hash
      *
-     * @return EzUserAccountKey|null
+     * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
      */
-    public function getEzUserAccountKeyByHash( $hash )
+    public function getByHash( $hash )
     {
-        $result = $this->findOneBy(
-            array(
-                'hashKey' => $hash
-            )
-        );
-
-        if ( $result instanceof EzUserAccountKey )
-        {
-            return $result;
-        }
-
-        return null;
+        return $this->findOneBy( array( 'hashKey' => $hash ) );
     }
 
     /**
-     * Removes all data for $userId from ezuser_accountkey table
+     * Removes user account key for user specified by $userId
      *
-     * @param $userId
+     * @param mixed $userId
      */
-    public function removeEzUserAccountKeyByUserId( $userId )
+    public function removeByUserId( $userId )
     {
-        $results = $this->findBy(
-            array(
-                'userId' => $userId
-            ),
-            array(
-                'time' => 'DESC'
-            )
-        );
+        $results = $this->findBy( array( 'userId' => $userId ) );
 
         foreach( $results as $result )
         {
@@ -85,20 +65,13 @@ class EzUserAccountKeyRepository extends EntityRepository
     }
 
     /**
-     * Removes hash key from ezuser_accountkey table
+     * Removes user account key by user hash
      *
-     * @param $hash
+     * @param string $hash
      */
-    public function removeEzUserAccountKeyByHash( $hash )
+    public function removeByHash( $hash )
     {
-        $results = $this->findBy(
-            array(
-                'hashKey' => $hash
-            ),
-            array(
-                'time' => 'DESC'
-            )
-        );
+        $results = $this->findBy( array( 'hashKey' => $hash ) );
 
         foreach( $results as $result )
         {
@@ -106,10 +79,5 @@ class EzUserAccountKeyRepository extends EntityRepository
         }
 
         $this->getEntityManager()->flush();
-    }
-
-    public function hashExists( $hash )
-    {
-        return $this->getEzUserAccountKeyByHash( $hash ) ? true : false;
     }
 }

@@ -10,20 +10,26 @@ class NgUserSetting
     protected $userId;
 
     /**
-     * @var int
+     * @var bool
      */
     protected $isActivated;
 
-    public function __construct( $userId, $isActivated = false )
+    /**
+     * Constructor
+     *
+     * @param mixed $userId
+     * @param bool $isActivated
+     */
+    public function __construct( $userId, $isActivated )
     {
         $this->userId = $userId;
-        $this->isActivated = (int)$isActivated;
+        $this->isActivated = $isActivated;
     }
 
     /**
-     * Sets user id
+     * Set user ID
      *
-     * @param $userId
+     * @param mixed $userId
      *
      * @return \Netgen\Bundle\MoreBundle\Entity\NgUserSetting
      */
@@ -35,7 +41,7 @@ class NgUserSetting
     }
 
     /**
-     * Returns user id
+     * Get user ID
      *
      * @return mixed
      */
@@ -45,27 +51,26 @@ class NgUserSetting
     }
 
     /**
-     * Sets isActivated
+     * Sets if user has been activated at least once
      *
-     * @param boolean|int $isActivated
+     * @param bool $isActivated
      *
      * @return \Netgen\Bundle\MoreBundle\Entity\NgUserSetting
      */
     public function setIsActivated( $isActivated )
     {
-        $this->isActivated = (int)$isActivated;
+        $this->isActivated = $isActivated;
 
         return $this;
     }
 
     /**
-     * Returns isActivated (true once the user has been first activated, false before that)
+     * Returns true once the user has been first activated, false before that
      *
      * @return boolean
      */
     public function getIsActivated()
     {
-        return $this->isActivated ? true : false;
+        return $this->isActivated;
     }
-
 }

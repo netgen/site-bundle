@@ -7,12 +7,12 @@ class EzUserAccountKey
     /**
      * @var mixed
      */
-    protected $hashKey;
+    protected $id;
 
     /**
-     * @var mixed
+     * @var string
      */
-    protected $id;
+    protected $hashKey;
 
     /**
      * @var int
@@ -25,15 +25,25 @@ class EzUserAccountKey
     protected $userId;
 
     /**
+     * Get ID
+     *
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Set hash key
      *
-     * @param string $hash
+     * @param string $hashKey
      *
      * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
      */
-    public function setHash( $hash )
+    public function setHash( $hashKey )
     {
-        $this->hashKey = $hash;
+        $this->hashKey = $hashKey;
 
         return $this;
     }
@@ -51,7 +61,7 @@ class EzUserAccountKey
     /**
      * Set user ID
      *
-     * @param int $userId
+     * @param mixed $userId
      *
      * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
      */
@@ -65,7 +75,7 @@ class EzUserAccountKey
     /**
      * Get user ID
      *
-     * @return int
+     * @return mixed
      */
     public function getUserId()
     {
@@ -75,13 +85,13 @@ class EzUserAccountKey
     /**
      * Set time
      *
-     * @param string $timestamp
+     * @param int $time
      *
      * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
      */
-    public function setTime( $timestamp )
+    public function setTime( $time )
     {
-        $this->time = $timestamp;
+        $this->time = $time;
 
         return $this;
     }
@@ -89,20 +99,10 @@ class EzUserAccountKey
     /**
      * Get time
      *
-     * @return string
+     * @return int
      */
     public function getTime()
     {
         return $this->time;
-    }
-
-    /**
-     * Returns EzUserAccountKey id
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 }

@@ -8,46 +8,17 @@ use Netgen\Bundle\MoreBundle\Entity\NgUserSetting;
 class NgUserSettingRepository extends EntityRepository
 {
     /**
-     * Creates and stores to db new NgUserSetting (not activated by default)
+     * Returns if user specified by $userId is activated
      *
-     * @param int   $userId
-     * @param bool  $isActivated
+     * @param mixed $userId
      *
-     * @return \Netgen\Bundle\MoreBundle\Entity\NgUserSetting
+     * @return bool
      */
-    public function createNgUserSetting( $userId, $isActivated = false )
-    {
-        $ngUserSetting = new NgUserSetting( $userId, $isActivated );
-        $this->getEntityManager()->persist( $ngUserSetting );
-        $this->getEntityManager()->flush();
-
-        return $ngUserSetting;
-    }
-
-    /**
-     * Returns NgUserSetting for userId
-     *
-     * @param int   $userId
-     *
-     * @return \Netgen\Bundle\MoreBundle\Entity\NgUserSetting|null
-     */
-    public function getByUserId( $userId )
+    public function isUserActivated( $userId )
     {
         $ngUserSetting = $this->findOneBy( array( 'userId' => $userId ) );
 
         if ( $ngUserSetting instanceof NgUserSetting )
-        {
-            return $ngUserSetting;
-        }
-
-        return null;
-    }
-
-    public function isUserIdActivated( $userId )
-    {
-        $ngUserSetting = $this->getByUserId( $userId );
-
-        if ( $ngUserSetting )
         {
             return $ngUserSetting->getIsActivated();
         }
@@ -55,11 +26,18 @@ class NgUserSettingRepository extends EntityRepository
         return false;
     }
 
-    public function activateUserId( $userId )
+    /**
+     * Activates the user specified by $userId
+     *
+     * @param mixed $userId
+     *
+     * @return \Netgen\Bundle\MoreBundle\Entity\NgUserSetting
+     */
+    public function activateUser( $userId )
     {
         $ngUserSetting = $this->findOneBy( array( 'userId' => $userId ) );
 
-        if ( $ngUserSetting )
+        if ( $ngUserSetting instanceof NgUserSetting )
         {
             $ngUserSetting->setIsActivated( true );
         }

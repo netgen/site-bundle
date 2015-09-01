@@ -48,6 +48,8 @@ class MailHelper
     protected $siteName;
 
     /**
+     * Constructor
+     *
      * @param \Swift_Mailer $mailer
      * @param \Symfony\Component\Templating\EngineInterface $templating
      * @param \Symfony\Component\Routing\RouterInterface $router
@@ -96,7 +98,7 @@ class MailHelper
 
         $body = $this->templating->render( $template, $templateParameters );
 
-        $subject = $this->translator->trans( $subject, array(), 'ngmore_user' );
+        $subject = $this->translator->trans( $subject, array(), 'ngmore_mail' );
 
         $message = Swift_Message::newInstance()
             ->setTo( $receiverEmail )

@@ -164,7 +164,7 @@ class UserController extends Controller
             $this->mailHelper
                 ->sendMail(
                     $newUser->email,
-                    $this->getConfigResolver()->getParameter( 'template.user.mail.activation', 'ngmore' ),
+                    $this->getConfigResolver()->getParameter( 'template.user.mail.activate', 'ngmore' ),
                     'ngmore.user.activate.mail.subject',
                     array(
                         'user' => $newUser,
@@ -205,7 +205,7 @@ class UserController extends Controller
             {
                 $this->mailHelper->sendMail(
                     $form->get( 'email' )->getData(),
-                    $this->getConfigResolver()->getParameter( 'template.user.mail.activation_not_registered', 'ngmore' ),
+                    $this->getConfigResolver()->getParameter( 'template.user.mail.activate_not_registered', 'ngmore' ),
                     'ngmore.user.activate.mail.activation_mail_not_registered.subject'
                 );
 
@@ -218,7 +218,7 @@ class UserController extends Controller
             {
                 $this->mailHelper->sendMail(
                     $form->get( 'email' )->getData(),
-                    $this->getConfigResolver()->getParameter( 'template.user.mail.activation_already_active', 'ngmore' ),
+                    $this->getConfigResolver()->getParameter( 'template.user.mail.activate_already_active', 'ngmore' ),
                     'ngmore.user.activate.mail.user_already_active.subject',
                     array(
                         'user' => $users[0]
@@ -229,7 +229,7 @@ class UserController extends Controller
             {
                 $this->mailHelper->sendMail(
                     $form->get( 'email' )->getData(),
-                    $this->getConfigResolver()->getParameter( 'template.user.mail.activation_disabled', 'ngmore' ),
+                    $this->getConfigResolver()->getParameter( 'template.user.mail.activate_disabled', 'ngmore' ),
                     'ngmore.user.activate.mail.user_disabled.subject',
                     array(
                         'user' => $users[0]
@@ -245,7 +245,7 @@ class UserController extends Controller
                 $this->mailHelper
                     ->sendMail(
                         $users[0]->email,
-                        $this->getConfigResolver()->getParameter( 'template.user.mail.activation', 'ngmore' ),
+                        $this->getConfigResolver()->getParameter( 'template.user.mail.activate', 'ngmore' ),
                         'ngmore.user.activate.mail.subject',
                         array(
                             'user' => $users[0],

@@ -225,7 +225,7 @@ class UserController extends Controller
                     )
                 );
             }
-            else if( $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->isUserActivated( $users[0]->id ) )
+            else if ( $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->isUserActivated( $users[0]->id ) )
             {
                 $this->mailHelper->sendMail(
                     $form->get( 'email' )->getData(),
@@ -352,7 +352,7 @@ class UserController extends Controller
         if ( $form->isValid() )
         {
             $users = $this->userService->loadUsersByEmail( $form->get( 'email' )->getData() );
-            if( empty( $users ) )
+            if ( empty( $users ) )
             {
                 $this->mailHelper
                     ->sendMail(
@@ -361,7 +361,7 @@ class UserController extends Controller
                         'ngmore.user.forgotten_password.mail.email_not_registered.subject'
                     );
             }
-            else if( !$users[0]->enabled )
+            else if ( !$users[0]->enabled )
             {
                 if ( $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->isUserActivated( $users[0]->id ) )
                 {

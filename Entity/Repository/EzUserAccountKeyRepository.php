@@ -56,7 +56,7 @@ class EzUserAccountKeyRepository extends EntityRepository
     {
         $results = $this->findBy( array( 'userId' => $userId ) );
 
-        foreach( $results as $result )
+        foreach ( $results as $result )
         {
             $this->getEntityManager()->remove( $result );
         }
@@ -73,7 +73,7 @@ class EzUserAccountKeyRepository extends EntityRepository
     {
         $results = $this->findBy( array( 'hashKey' => $hash ) );
 
-        foreach( $results as $result )
+        foreach ( $results as $result )
         {
             $this->getEntityManager()->remove( $result );
         }

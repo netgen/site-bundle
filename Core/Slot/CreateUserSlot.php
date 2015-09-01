@@ -29,7 +29,7 @@ class CreateUserSlot extends Slot
     public function __construct( UserService $userService, NgUserSettingRepository $ngUserSettingRepository )
     {
         $this->userService = $userService;
-        $this->ngUserSettingRepository= $ngUserSettingRepository;
+        $this->ngUserSettingRepository = $ngUserSettingRepository;
     }
 
     /**

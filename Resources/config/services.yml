@@ -6,15 +6,20 @@ parameters:
     ngmore.controller.parts.class: Netgen\Bundle\MoreBundle\Controller\PartsController
     ngmore.controller.download.class: Netgen\Bundle\MoreBundle\Controller\DownloadController
     ngmore.controller.sitemap.class: Netgen\Bundle\MoreBundle\Controller\SitemapController
+    ngmore.controller.user.class: Netgen\Bundle\MoreBundle\Controller\UserController
 
     ngmore.helper.path_helper.class: Netgen\Bundle\MoreBundle\Helper\PathHelper
     ngmore.helper.site_info_helper.class: Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper
     ngmore.helper.sort_clause_helper.class: Netgen\Bundle\MoreBundle\Helper\SortClauseHelper
     ngmore.helper.layout_helper.class: Netgen\Bundle\MoreBundle\Helper\LayoutHelper
+    ngmore.helper.mail_helper.class: Netgen\Bundle\MoreBundle\Helper\MailHelper
 
     ngmore.data_collector.legacy_debug_data_collector.class: Netgen\Bundle\MoreBundle\DataCollector\LegacyDebugDataCollector
 
     ngmore.legacy_mapper.configuration.class: Netgen\Bundle\MoreBundle\LegacyMapper\Configuration
+
+    ngmore.nguser_setting.class: Netgen\Bundle\MoreBundle\Entity\NgUserSetting
+    ngmore.slot.create_user.class: Netgen\Bundle\MoreBundle\Core\Slot\CreateUserSlot
 
 services:
     ngmore.controller.full_view:
@@ -47,6 +52,15 @@ services:
         class: %ngmore.controller.sitemap.class%
         parent: ezpublish.controller.base
 
+    ngmore.controller.user:
+        class: %ngmore.controller.user.class%
+        parent: ezpublish.controller.base
+        arguments:
+            - @ezpublish.api.repository
+            - @ezpublish.config.resolver
+            - @translator
+            - @ngmore.helper.mail_helper
+
     ngmore.helper.path_helper:
         class: %ngmore.helper.path_helper.class%
         arguments:
@@ -74,6 +88,15 @@ services:
             - @ezpublish.translation_helper
             - @ezpublish.config.resolver
 
+    ngmore.helper.mail_helper:
+        class: %ngmore.helper.mail_helper.class%
+        arguments:
+            - @mailer
+            - @templating
+            - @router
+            - @translator
+            - @ezpublish.config.resolver
+
     ngmore.data_collector.legacy_debug_data_collector:
         class: %ngmore.data_collector.legacy_debug_data_collector.class%
         arguments:
@@ -91,3 +114,18 @@ services:
             - [setContainer, [@service_container]]
         tags:
             - { name: kernel.event_subscriber }
+
+    ngmore.nguser_setting_repository:
+        class: Doctrine\ORM\EntityRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments:
+            - %ngmore.nguser_setting.class%
+
+    ngmore.slot.create_user:
+        class: %ngmore.slot.create_user.class%
+        arguments:
+            - @ezpublish.api.service.user
+            - @ngmore.nguser_setting_repository
+        tags:
+            - { name: ezpublish.api.slot, signal: UserService\CreateUserSignal }

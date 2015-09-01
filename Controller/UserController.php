@@ -428,12 +428,12 @@ class UserController extends Controller
             }
 
             return $this->render(
-                $this->getConfigResolver()->getParameter( 'user_register.template.forgotpassword_sent', 'ngmore' )
+                $this->getConfigResolver()->getParameter( 'user_register.template.forgot_password_sent', 'ngmore' )
             );
         }
 
         return $this->render(
-            $this->getConfigResolver()->getParameter( 'user_register.template.forgotpassword', 'ngmore' ),
+            $this->getConfigResolver()->getParameter( 'user_register.template.forgot_password', 'ngmore' ),
             array(
                 'form' => $form->createView()
             )
@@ -465,7 +465,7 @@ class UserController extends Controller
             $this->getDoctrine()->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )->removeEzUserAccountKeyByHash( $hash );
 
             return $this->render(
-                $this->getConfigResolver()->getParameter( "user_register.template.resetpassword_done", "ngmore" ),
+                $this->getConfigResolver()->getParameter( "user_register.template.reset_password_done", "ngmore" ),
                 array(
                     'error' => 'hash_expired'
                 )
@@ -521,7 +521,7 @@ class UserController extends Controller
                     ->removeEzUserAccountKeyByUserId( $user->id );
 
                 return $this->render(
-                    $this->getConfigResolver()->getParameter( "user_register.template.resetpassword_done", "ngmore" ),
+                    $this->getConfigResolver()->getParameter( "user_register.template.reset_password_done", "ngmore" ),
                     array(
                         'success' => true
                     )
@@ -529,7 +529,7 @@ class UserController extends Controller
             }
 
             return $this->render(
-                $this->getConfigResolver()->getParameter( "user_register.template.resetpassword", "ngmore" ),
+                $this->getConfigResolver()->getParameter( "user_register.template.reset_password", "ngmore" ),
                 array(
                     'form' => $form->createView()
                 )

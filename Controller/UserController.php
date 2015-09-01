@@ -28,11 +28,6 @@ class UserController extends Controller
     protected $mailHelper;
 
     /**
-     * @var bool
-     */
-    protected $autoEnable = false;
-
-    /**
      * Constructor
      *
      * @param \eZ\Publish\API\Repository\UserService $userService
@@ -42,11 +37,6 @@ class UserController extends Controller
     {
         $this->userService = $userService;
         $this->mailHelper = $mailHelper;
-
-        if ( $this->getConfigResolver()->hasParameter( 'user.auto_enable', 'ngmore' ) )
-        {
-            $this->autoEnable = $this->getConfigResolver()->getParameter( 'user.auto_enable', 'ngmore' );
-        }
     }
 
     /**
@@ -76,7 +66,7 @@ class UserController extends Controller
             $contentType
         );
 
-        $userCreateStruct->enabled = $this->autoEnable;
+        $userCreateStruct->enabled = $this->getConfigResolver()->getParameter( 'user.auto_enable', 'ngmore' );
 
         $data = new DataWrapper( $userCreateStruct, $userCreateStruct->contentType );
 
@@ -137,7 +127,7 @@ class UserController extends Controller
                 }
             );
 
-            if ( $this->autoEnable )
+            if ( $this->getConfigResolver()->getParameter( 'user.auto_enable', 'ngmore' ) )
             {
                 $this->mailHelper
                     ->sendMail(

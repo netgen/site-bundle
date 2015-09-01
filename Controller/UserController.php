@@ -458,7 +458,7 @@ class UserController extends Controller
             $data = $form->getData();
 
             $userUpdateStruct = $this->userService->newUserUpdateStruct();
-            $userUpdateStruct->password = $data[ "password" ];
+            $userUpdateStruct->password = $data["password"];
 
             $user = $this->getRepository()->sudo(
                 function( Repository $repository ) use ( $user, $userUpdateStruct )

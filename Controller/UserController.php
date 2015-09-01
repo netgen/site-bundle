@@ -229,7 +229,7 @@ class UserController extends Controller
             {
                 $this->mailHelper->sendMail(
                     $form->get( 'email' )->getData(),
-                    $this->configResolver->getParameter( 'template.user.mail.activation_mail_not_registered', 'ngmore' ),
+                    $this->configResolver->getParameter( 'template.user.mail.activation_not_registered', 'ngmore' ),
                     'ngmore.user.activate.mail.activation_mail_not_registered.subject'
                 );
 
@@ -242,7 +242,7 @@ class UserController extends Controller
             {
                 $this->mailHelper->sendMail(
                     $form->get( 'email' )->getData(),
-                    $this->configResolver->getParameter( 'template.user.mail.user_already_active', 'ngmore' ),
+                    $this->configResolver->getParameter( 'template.user.mail.activation_already_active', 'ngmore' ),
                     'ngmore.user.activate.mail.user_already_active.subject',
                     array(
                         'user' => $userArray[0]
@@ -251,9 +251,13 @@ class UserController extends Controller
             }
             elseif( $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->isUserIdActivated( $userArray[0]->id ) )
             {
-                return $this->render(
-                    $this->getConfigResolver()->getParameter( 'template.user.activate_sent', 'ngmore' ),
-                    array( 'disabled' => true )
+                $this->mailHelper->sendMail(
+                    $form->get( 'email' )->getData(),
+                    $this->configResolver->getParameter( 'template.user.mail.activation_disabled', 'ngmore' ),
+                    'ngmore.user.activate.mail.user_disabled.subject',
+                    array(
+                        'user' => $userArray[0]
+                    )
                 );
             }
             else
@@ -313,7 +317,7 @@ class UserController extends Controller
             return $this->render(
                 $this->configResolver->getParameter( "template.user.activate_done", "ngmore" ),
                 array(
-                    'status' => 'hash_expired'
+                    'error' => 'hash_expired'
                 )
             );
         }
@@ -331,7 +335,12 @@ class UserController extends Controller
 
         if ( $user->enabled )
         {
-            $status = 'already_active';
+            return $this->render(
+                $this->configResolver->getParameter( "template.user.activate_done", "ngmore" ),
+                array(
+                    'error' => 'already_active'
+                )
+            );
         }
         else
         {
@@ -347,15 +356,10 @@ class UserController extends Controller
                     )
                 );
 
-            $status = 'account_activated';
+            return $this->render(
+                $this->configResolver->getParameter( "template.user.activate_done", "ngmore" )
+            );
         }
-
-        return $this->render(
-            $this->configResolver->getParameter( "template.user.activate_done", "ngmore" ),
-            array(
-                "status" => $status
-            )
-        );
     }
 
     /**
@@ -379,7 +383,7 @@ class UserController extends Controller
                 $this->mailHelper
                     ->sendMail(
                         $form->get( 'email' )->getData(),
-                        $this->configResolver->getParameter( 'template.user.mail.email_not_registered', 'ngmore' ),
+                        $this->configResolver->getParameter( 'template.user.mail.forgot_password_not_registered', 'ngmore' ),
                         'ngmore.user.forgotten_password.mail.email_not_registered.subject'
                     );
             }
@@ -390,7 +394,7 @@ class UserController extends Controller
                     $this->mailHelper
                         ->sendMail(
                             $form->get( 'email' )->getData(),
-                            $this->configResolver->getParameter( 'template.user.mail.user_disabled', 'ngmore' ),
+                            $this->configResolver->getParameter( 'template.user.mail.forgot_password_disabled', 'ngmore' ),
                             'ngmore.user.forgotten_password.mail.user_disabled.subject',
                             array(
                                 'user' => $userArray[0],
@@ -402,7 +406,7 @@ class UserController extends Controller
                     $this->mailHelper
                         ->sendMail(
                             $form->get( 'email' )->getData(),
-                            $this->configResolver->getParameter( 'template.user.mail.user_not_activated', 'ngmore' ),
+                            $this->configResolver->getParameter( 'template.user.mail.forgot_password_not_activated', 'ngmore' ),
                             'ngmore.user.forgotten_password.mail.user_not_activated.subject',
                             array(
                                 'user' => $userArray[0],
@@ -418,7 +422,7 @@ class UserController extends Controller
                 $this->mailHelper
                     ->sendMail(
                         $user->email,
-                        $this->configResolver->getParameter( 'template.user.mail.forgotten_password', 'ngmore' ),
+                        $this->configResolver->getParameter( 'template.user.mail.forgot_password', 'ngmore' ),
                         'ngmore.user.forgotten_password.mail.change_requested.subject',
                         array(
                             'user' => $user,
@@ -508,7 +512,7 @@ class UserController extends Controller
                 $this->mailHelper
                     ->sendMail(
                         $user->email,
-                        $this->configResolver->getParameter( 'template.user.mail.password_changed', 'ngmore' ),
+                        $this->configResolver->getParameter( 'template.user.mail.forgot_password_password_changed', 'ngmore' ),
                         'ngmore.user.forgotten_password.mail.password_changed.subject',
                         array(
                             'user' => $user
@@ -521,10 +525,7 @@ class UserController extends Controller
                     ->removeEzUserAccountKeyByUserId( $user->id );
 
                 return $this->render(
-                    $this->getConfigResolver()->getParameter( "template.user.reset_password_done", "ngmore" ),
-                    array(
-                        'success' => true
-                    )
+                    $this->getConfigResolver()->getParameter( "template.user.reset_password_done", "ngmore" )
                 );
             }
 

@@ -358,7 +358,7 @@ class UserController extends Controller
                     ->sendMail(
                         $form->get( 'email' )->getData(),
                         $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_not_registered', 'ngmore' ),
-                        'ngmore.user.forgotten_password.mail.email_not_registered.subject'
+                        'ngmore.user.forgot_password.mail.email_not_registered.subject'
                     );
             }
             else if ( !$users[0]->enabled )
@@ -369,7 +369,7 @@ class UserController extends Controller
                         ->sendMail(
                             $form->get( 'email' )->getData(),
                             $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_disabled', 'ngmore' ),
-                            'ngmore.user.forgotten_password.mail.user_disabled.subject',
+                            'ngmore.user.forgot_password.mail.user_disabled.subject',
                             array(
                                 'user' => $users[0],
                             )
@@ -381,7 +381,7 @@ class UserController extends Controller
                         ->sendMail(
                             $form->get( 'email' )->getData(),
                             $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_not_activated', 'ngmore' ),
-                            'ngmore.user.forgotten_password.mail.user_not_activated.subject',
+                            'ngmore.user.forgot_password.mail.user_not_activated.subject',
                             array(
                                 'user' => $users[0],
                             )
@@ -398,7 +398,7 @@ class UserController extends Controller
                     ->sendMail(
                         $users[0]->email,
                         $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password', 'ngmore' ),
-                        'ngmore.user.forgotten_password.mail.change_requested.subject',
+                        'ngmore.user.forgot_password.mail.change_requested.subject',
                         array(
                             'user' => $users[0],
                             'hash' => $accountKey->getHash()
@@ -484,7 +484,7 @@ class UserController extends Controller
                 ->sendMail(
                     $user->email,
                     $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_password_changed', 'ngmore' ),
-                    'ngmore.user.forgotten_password.mail.password_changed.subject',
+                    'ngmore.user.forgot_password.mail.password_changed.subject',
                     array(
                         'user' => $user
                     )

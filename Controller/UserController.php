@@ -187,7 +187,6 @@ class UserController extends Controller
         if ( $form->isValid() )
         {
             $users = $this->userService->loadUsersByEmail( $form->get( 'email' )->getData() );
-
             if ( empty( $users ) )
             {
                 $this->mailHelper->sendMail(

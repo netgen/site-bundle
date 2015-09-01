@@ -58,7 +58,6 @@ services:
         arguments:
             - @ezpublish.api.repository
             - @ezpublish.config.resolver
-            - @translator
             - @ngmore.helper.mail_helper
 
     ngmore.helper.path_helper:

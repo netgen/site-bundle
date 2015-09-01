@@ -179,7 +179,7 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function resendActivationMail( Request $request )
+    public function activationForm( Request $request )
     {
         $form = $this->createActivationForm();
         $form->handleRequest( $request );
@@ -263,7 +263,7 @@ class UserController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function activateUser( $hash )
+    public function activate( $hash )
     {
         $accountKey = $this->getDoctrine()
             ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )

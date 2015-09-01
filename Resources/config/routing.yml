@@ -16,11 +16,11 @@ ngmore_user_register:
 
 ngmore_resend_activation_mail:
     path: /user/activate
-    defaults: { _controller: ngmore.controller.user:resendActivationMail }
+    defaults: { _controller: ngmore.controller.user:activationForm }
 
 ngmore_user_activate:
     path: /user/activate/{hash}
-    defaults: { _controller: ngmore.controller.user:activateUser }
+    defaults: { _controller: ngmore.controller.user:activate }
 
 ngmore_user_forgot_password:
     path: /user/forgotpassword

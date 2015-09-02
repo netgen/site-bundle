@@ -291,16 +291,6 @@ class UserController extends Controller
             throw new NotFoundHttpException();
         }
 
-        if ( $user->enabled )
-        {
-            return $this->render(
-                $this->getConfigResolver()->getParameter( "template.user.activate_done", "ngmore" ),
-                array(
-                    'error' => 'already_active'
-                )
-            );
-        }
-
         $this->enableUser( $user );
 
         $this->mailHelper

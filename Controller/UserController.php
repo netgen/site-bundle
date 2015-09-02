@@ -179,72 +179,72 @@ class UserController extends Controller
         $form = $this->createActivationForm();
         $form->handleRequest( $request );
 
-        if ( $form->isValid() )
+        if ( !$form->isValid() )
         {
-            $users = $this->userService->loadUsersByEmail( $form->get( 'email' )->getData() );
-            if ( empty( $users ) )
-            {
-                $this->mailHelper->sendMail(
-                    $form->get( 'email' )->getData(),
-                    $this->getConfigResolver()->getParameter( 'template.user.mail.activate_not_registered', 'ngmore' ),
-                    'ngmore.user.activate.not_registered.subject'
-                );
+            return $this->render(
+                $this->getConfigResolver()->getParameter( 'template.user.activate', 'ngmore' ),
+                array(
+                    'form' => $form->createView()
+                )
+            );
+        }
 
-                return $this->render(
-                    $this->getConfigResolver()->getParameter( 'template.user.activate_sent', 'ngmore' )
-                );
-            }
-
-            if ( $users[0]->enabled )
-            {
-                $this->mailHelper->sendMail(
-                    $form->get( 'email' )->getData(),
-                    $this->getConfigResolver()->getParameter( 'template.user.mail.activate_already_active', 'ngmore' ),
-                    'ngmore.user.activate.already_active.subject',
-                    array(
-                        'user' => $users[0]
-                    )
-                );
-            }
-            else if ( $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->isUserActivated( $users[0]->id ) )
-            {
-                $this->mailHelper->sendMail(
-                    $form->get( 'email' )->getData(),
-                    $this->getConfigResolver()->getParameter( 'template.user.mail.activate_disabled', 'ngmore' ),
-                    'ngmore.user.activate.disabled.subject',
-                    array(
-                        'user' => $users[0]
-                    )
-                );
-            }
-            else
-            {
-                $accountKey = $this->getDoctrine()
-                    ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-                    ->create( $users[0]->id );
-
-                $this->mailHelper
-                    ->sendMail(
-                        $users[0]->email,
-                        $this->getConfigResolver()->getParameter( 'template.user.mail.activate', 'ngmore' ),
-                        'ngmore.user.activate.subject',
-                        array(
-                            'user' => $users[0],
-                            'hash' => $accountKey->getHash()
-                        )
-                    );
-            }
+        $users = $this->userService->loadUsersByEmail( $form->get( 'email' )->getData() );
+        if ( empty( $users ) )
+        {
+            $this->mailHelper->sendMail(
+                $form->get( 'email' )->getData(),
+                $this->getConfigResolver()->getParameter( 'template.user.mail.activate_not_registered', 'ngmore' ),
+                'ngmore.user.activate.not_registered.subject'
+            );
 
             return $this->render(
                 $this->getConfigResolver()->getParameter( 'template.user.activate_sent', 'ngmore' )
             );
         }
 
+        if ( $users[0]->enabled )
+        {
+            $this->mailHelper->sendMail(
+                $form->get( 'email' )->getData(),
+                $this->getConfigResolver()->getParameter( 'template.user.mail.activate_already_active', 'ngmore' ),
+                'ngmore.user.activate.already_active.subject',
+                array(
+                    'user' => $users[0]
+                )
+            );
+        }
+        else if ( $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->isUserActivated( $users[0]->id ) )
+        {
+            $this->mailHelper->sendMail(
+                $form->get( 'email' )->getData(),
+                $this->getConfigResolver()->getParameter( 'template.user.mail.activate_disabled', 'ngmore' ),
+                'ngmore.user.activate.disabled.subject',
+                array(
+                    'user' => $users[0]
+                )
+            );
+        }
+        else
+        {
+            $accountKey = $this->getDoctrine()
+                ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
+                ->create( $users[0]->id );
+
+            $this->mailHelper
+                ->sendMail(
+                    $users[0]->email,
+                    $this->getConfigResolver()->getParameter( 'template.user.mail.activate', 'ngmore' ),
+                    'ngmore.user.activate.subject',
+                    array(
+                        'user' => $users[0],
+                        'hash' => $accountKey->getHash()
+                    )
+                );
+        }
+
         return $this->render(
-            $this->getConfigResolver()->getParameter( 'template.user.activate', 'ngmore' ),
-            array(
-                'form' => $form->createView()
-            )
+            $this->getConfigResolver()->getParameter( 'template.user.activate_sent', 'ngmore' )
         );
     }
 
@@ -320,73 +320,73 @@ class UserController extends Controller
         $form = $this->createForgotPasswordForm();
         $form->handleRequest( $request );
 
-        if ( $form->isValid() )
+        if ( !$form->isValid() )
         {
-            $users = $this->userService->loadUsersByEmail( $form->get( 'email' )->getData() );
-            if ( empty( $users ) )
+            return $this->render(
+                $this->getConfigResolver()->getParameter( 'template.user.forgot_password', 'ngmore' ),
+                array(
+                    'form' => $form->createView()
+                )
+            );
+        }
+
+        $users = $this->userService->loadUsersByEmail( $form->get( 'email' )->getData() );
+        if ( empty( $users ) )
+        {
+            $this->mailHelper
+                ->sendMail(
+                    $form->get( 'email' )->getData(),
+                    $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_not_registered', 'ngmore' ),
+                    'ngmore.user.forgot_password.not_registered.subject'
+                );
+        }
+        else if ( !$users[0]->enabled )
+        {
+            if ( $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->isUserActivated( $users[0]->id ) )
             {
                 $this->mailHelper
                     ->sendMail(
                         $form->get( 'email' )->getData(),
-                        $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_not_registered', 'ngmore' ),
-                        'ngmore.user.forgot_password.not_registered.subject'
-                    );
-            }
-            else if ( !$users[0]->enabled )
-            {
-                if ( $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->isUserActivated( $users[0]->id ) )
-                {
-                    $this->mailHelper
-                        ->sendMail(
-                            $form->get( 'email' )->getData(),
-                            $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_disabled', 'ngmore' ),
-                            'ngmore.user.forgot_password.disabled.subject',
-                            array(
-                                'user' => $users[0],
-                            )
-                        );
-                }
-                else
-                {
-                    $this->mailHelper
-                        ->sendMail(
-                            $form->get( 'email' )->getData(),
-                            $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_not_activated', 'ngmore' ),
-                            'ngmore.user.forgot_password.not_activated.subject',
-                            array(
-                                'user' => $users[0],
-                            )
-                        );
-                }
-            }
-            else
-            {
-                $accountKey = $this->getDoctrine()
-                    ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-                    ->create( $users[0]->id );
-
-                $this->mailHelper
-                    ->sendMail(
-                        $users[0]->email,
-                        $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password', 'ngmore' ),
-                        'ngmore.user.forgot_password.subject',
+                        $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_disabled', 'ngmore' ),
+                        'ngmore.user.forgot_password.disabled.subject',
                         array(
                             'user' => $users[0],
-                            'hash' => $accountKey->getHash()
                         )
                     );
             }
+            else
+            {
+                $this->mailHelper
+                    ->sendMail(
+                        $form->get( 'email' )->getData(),
+                        $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_not_activated', 'ngmore' ),
+                        'ngmore.user.forgot_password.not_activated.subject',
+                        array(
+                            'user' => $users[0],
+                        )
+                    );
+            }
+        }
+        else
+        {
+            $accountKey = $this->getDoctrine()
+                ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
+                ->create( $users[0]->id );
 
-            return $this->render(
-                $this->getConfigResolver()->getParameter( 'template.user.forgot_password_sent', 'ngmore' )
-            );
+            $this->mailHelper
+                ->sendMail(
+                    $users[0]->email,
+                    $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password', 'ngmore' ),
+                    'ngmore.user.forgot_password.subject',
+                    array(
+                        'user' => $users[0],
+                        'hash' => $accountKey->getHash()
+                    )
+                );
         }
 
         return $this->render(
-            $this->getConfigResolver()->getParameter( 'template.user.forgot_password', 'ngmore' ),
-            array(
-                'form' => $form->createView()
-            )
+            $this->getConfigResolver()->getParameter( 'template.user.forgot_password_sent', 'ngmore' )
         );
     }
 
@@ -437,44 +437,44 @@ class UserController extends Controller
         $form = $this->createResetPasswordForm();
         $form->handleRequest( $request );
 
-        if ( $form->isValid() )
+        if ( !$form->isValid() )
         {
-            $data = $form->getData();
-
-            $userUpdateStruct = $this->userService->newUserUpdateStruct();
-            $userUpdateStruct->password = $data["password"];
-
-            $user = $this->getRepository()->sudo(
-                function( Repository $repository ) use ( $user, $userUpdateStruct )
-                {
-                    return $repository->getUserService()->updateUser( $user, $userUpdateStruct );
-                }
-            );
-
-            $this->mailHelper
-                ->sendMail(
-                    $user->email,
-                    $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_password_changed', 'ngmore' ),
-                    'ngmore.user.forgot_password.password_changed.subject',
-                    array(
-                        'user' => $user
-                    )
-                );
-
-            $this->getDoctrine()
-                ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-                ->removeByUserId( $user->id );
-
             return $this->render(
-                $this->getConfigResolver()->getParameter( "template.user.reset_password_done", "ngmore" )
+                $this->getConfigResolver()->getParameter( "template.user.reset_password", "ngmore" ),
+                array(
+                    'form' => $form->createView()
+                )
             );
         }
 
+        $data = $form->getData();
+
+        $userUpdateStruct = $this->userService->newUserUpdateStruct();
+        $userUpdateStruct->password = $data["password"];
+
+        $user = $this->getRepository()->sudo(
+            function( Repository $repository ) use ( $user, $userUpdateStruct )
+            {
+                return $repository->getUserService()->updateUser( $user, $userUpdateStruct );
+            }
+        );
+
+        $this->mailHelper
+            ->sendMail(
+                $user->email,
+                $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_password_changed', 'ngmore' ),
+                'ngmore.user.forgot_password.password_changed.subject',
+                array(
+                    'user' => $user
+                )
+            );
+
+        $this->getDoctrine()
+            ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
+            ->removeByUserId( $user->id );
+
         return $this->render(
-            $this->getConfigResolver()->getParameter( "template.user.reset_password", "ngmore" ),
-            array(
-                'form' => $form->createView()
-            )
+            $this->getConfigResolver()->getParameter( "template.user.reset_password_done", "ngmore" )
         );
     }
 

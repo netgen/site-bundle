@@ -358,8 +358,8 @@ class UserController extends Controller
                 $this->mailHelper
                     ->sendMail(
                         $form->get( 'email' )->getData(),
-                        $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_not_activated', 'ngmore' ),
-                        'ngmore.user.forgot_password.not_activated.subject',
+                        $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_not_active', 'ngmore' ),
+                        'ngmore.user.forgot_password.not_active.subject',
                         array(
                             'user' => $users[0],
                         )

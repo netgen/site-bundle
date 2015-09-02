@@ -3,7 +3,6 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints;

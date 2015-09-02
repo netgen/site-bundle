@@ -9,6 +9,9 @@
     ],
     "require": {
         "ezsystems/ezpublish-kernel": "*",
+        "netgen/extendauthentication-bundle": "~0.1",
+        "netgen/ez-forms-bundle": "~1.0",
+        "doctrine/orm": "~2.4",
         "netgen/metadata-bundle": "~0.3",
         "netgen/content-type-list-bundle": "~1.0",
         "netgen/enhanced-selection-bundle": "~2.0",

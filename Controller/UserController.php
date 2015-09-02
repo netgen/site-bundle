@@ -50,11 +50,6 @@ class UserController extends Controller
      */
     public function register( Request $request )
     {
-        if ( $this->getRepository()->hasAccess( 'user', 'register' ) !== true )
-        {
-            throw new AccessDeniedHttpException();
-        }
-
         $contentTypeIdentifier = $this->getConfigResolver()->getParameter( 'user.content_type_identifier', 'ngmore' );
         $contentType = $this->getRepository()->getContentTypeService()->loadContentTypeByIdentifier( $contentTypeIdentifier );
         $languages = $this->getConfigResolver()->getParameter( "languages" );

@@ -2,23 +2,28 @@
 
 namespace Netgen\Bundle\MoreBundle\Command;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Helper\ProgressBar;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Repository;
+use RuntimeException;
 
 class UpdatePublishDateCommand extends ContainerAwareCommand
 {
+    /**
+     * Configures the current command.
+     */
     protected function configure()
     {
-        $this
-            ->setName( 'ngmore:content:update-publish-date' )
-            ->setDescription( 'Updates publish date on provided content type.' )
+        $this->setName( 'ngmore:content:update-publish-date' )
+            ->setDescription( 'Updates publish date of all content of specified content type' )
             ->addOption(
                 'content-type',
                 'c',
@@ -29,49 +34,64 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
                 'field-def-identifier',
                 'f',
                 InputOption::VALUE_REQUIRED,
-                'Field definition identifier containing publish date override'
+                'Field definition identifier containing publish date to read from'
             )
             ->addOption(
                 'use-main-translation',
-                '-m',
+                null,
                 InputOption::VALUE_NONE,
-                'Field definition identifier containing publish date override'
-            )
-        ;
+                'If specified, the script will use main translation instead of most prioritized one'
+            );
     }
 
+    /**
+     * Executes the current command.
+     *
+     * @param \Symfony\Component\Console\Input\InputInterface $input An InputInterface instance
+     * @param \Symfony\Component\Console\Output\OutputInterface $output An OutputInterface instance
+     *
+     * @throws \RuntimeException When an error occurs
+     *
+     * @return null|int null or 0 if everything went fine, or an error code
+     */
     protected function execute( InputInterface $input, OutputInterface $output )
     {
         $questionHelper = $this->getHelper( 'question' );
 
-        if ( !$contentTypeIdentifier = $input->getOption( 'content-type' ) )
+        $contentTypeIdentifier = $input->getOption( 'content-type' );
+        if ( empty( $contentTypeIdentifier ) )
         {
-            $output->writeln( "<error>Parameter 'content-type' ('-c') is required!</error>" );
-            return 1;
+            throw new RuntimeException( "Parameter '--content-type' ('-c') is required" );
         }
 
-        if ( !$fieldDefIdentifier = $input->getOption( 'field-def-identifier' ) )
+        $fieldDefIdentifier = $input->getOption( 'field-def-identifier' );
+        if ( empty( $fieldDefIdentifier ) )
         {
-            $output->writeln( "<error>Parameter 'field-definition-identifier' ('-f') is required!</error>" );
-            return 1;
+            throw new RuntimeException( "Parameter '--field-def-identifier' ('-f') is required" );
         }
 
         $contentTypeService = $this->getContainer()->get( 'ezpublish.api.service.content_type' );
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( $contentTypeIdentifier );
 
-        if ( !$fieldDefinition = $contentType->getFieldDefinition( $fieldDefIdentifier ) )
+        try
         {
-            $output->writeln( "<error>Field '{$fieldDefIdentifier}' does not exist in '{$contentTypeIdentifier}' content type'</error>" );
-            return 1;
+            $contentType = $contentTypeService->loadContentTypeByIdentifier( $contentTypeIdentifier );
+        }
+        catch ( NotFoundException $e )
+        {
+            throw new RuntimeException( "Content type '{$contentTypeIdentifier}' does not exist" );
+        }
+
+        $fieldDefinition = $contentType->getFieldDefinition( $fieldDefIdentifier );
+        if ( !$fieldDefinition instanceof FieldDefinition )
+        {
+            throw new RuntimeException( "Field definition '{$fieldDefIdentifier}' does not exist in '{$contentTypeIdentifier}' content type" );
         }
 
         if ( $fieldDefinition->fieldTypeIdentifier !== 'ezdatetime' && $fieldDefinition->fieldTypeIdentifier !== 'ezdate' )
         {
-            $output->writeln( "<error>Field '{$fieldDefIdentifier}' must be of 'ezdatetime' or 'ezdate' field type</error>" );
-            return 1;
+            throw new RuntimeException( "Field definition '{$fieldDefIdentifier}' must be of 'ezdatetime' or 'ezdate' field type" );
         }
 
-        /** @var \eZ\Publish\API\Repository\SearchService $searchService */
         $searchService = $this->getContainer()->get( 'ezpublish.api.service.search' );
 
         $query = new Query();
@@ -81,33 +101,27 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
         $searchResult = $searchService->findContent( $query, array(), false );
 
         $totalCount = $searchResult->totalCount;
-
-        if ( !$totalCount > 0 )
+        if ( $totalCount == 0 )
         {
-            $output->writeln( 'No content found with given parameters!' );
-            $output->writeln( 'Canceling...' );
+            $output->writeln( "No content found for <comment>{$contentTypeIdentifier}</comment> content type." );
             return 1;
         }
 
-        $output->writeln( "Found {$totalCount} content." );
-        $question = new ConfirmationQuestion( 'Proceed?[y/n] ', false );
-
+        $question = new ConfirmationQuestion( "Found <comment>{$totalCount}</comment> content items. Proceed? <info>[y/N]</info> ", false );
         if ( !$questionHelper->ask( $input, $output, $question ) )
         {
-            $output->writeln( 'Canceling...' );
             return 1;
         }
 
-        /** @var \eZ\Publish\Core\Helper\TranslationHelper $translationHelper */
+        $output->write( PHP_EOL );
+
         $translationHelper = $this->getContainer()->get( 'ezpublish.translation_helper' );
-        /** @var \eZ\Publish\Core\Helper\FieldHelper $fieldHelper */
         $fieldHelper = $this->getContainer()->get( 'ezpublish.field_helper' );
-        /** @var \eZ\Publish\API\Repository\Repository $repository */
         $repository = $this->getContainer()->get( 'ezpublish.api.repository' );
 
-        $progress=new ProgressBar( $output, $searchResult->totalCount );
+        $progress = new ProgressBar( $output, $searchResult->totalCount );
         $progress->start();
-        $updated = 0;
+        $updatedCount = 0;
 
         $query = new Query();
         $query->filter = new Criterion\ContentTypeIdentifier( $contentTypeIdentifier );
@@ -115,17 +129,18 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
         $query->offset = 0;
 
         $searchResult = $searchService->findContent( $query, array(), false );
+        $searchHitCount = count( $searchResult->searchHits );
 
-        while ( count( $searchResult->searchHits ) > 0 )
+        while ( $searchHitCount > 0 )
         {
-            foreach( $searchResult->searchHits as $hit )
+            foreach ( $searchResult->searchHits as $hit )
             {
                 /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
                 $content = $hit->valueObject;
 
                 if ( $input->getOption( 'use-main-translation' ) )
                 {
-                    /** @var \eZ\Publish\Core\FieldType\DateAndTime\Value $dateField */
+                    /** @var \eZ\Publish\Core\FieldType\DateAndTime\Value|\eZ\Publish\Core\FieldType\Date\Value $dateFieldValue */
                     $dateFieldValue = $content->getFieldValue( $fieldDefIdentifier );
                 }
                 else
@@ -135,10 +150,11 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
 
                 $dateValueData = $fieldDefinition->fieldTypeIdentifier === 'ezdatetime' ? $dateFieldValue->value : $dateFieldValue->date;
 
-                if ( !$fieldHelper->isFieldEmpty( $content, $fieldDefIdentifier ) &&
-                    $content->contentInfo->publishedDate->getTimestamp() !== $dateValueData->getTimestamp() )
+                if (
+                    !$fieldHelper->isFieldEmpty( $content, $fieldDefIdentifier )
+                    && $content->contentInfo->publishedDate->getTimestamp() !== $dateValueData->getTimestamp()
+                )
                 {
-
                     $metadataUpdateStruct = $repository->getContentService()->newContentMetadataUpdateStruct();
                     $metadataUpdateStruct->publishedDate = $dateValueData;
 
@@ -149,20 +165,20 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
                         }
                     );
 
-                    $updated++;
+                    $updatedCount++;
                 }
 
                 $progress->advance();
             }
 
-            $query->offset = $query->offset + 50;
+            $query->offset = $query->offset + $query->limit;
             $searchResult = $searchService->findContent( $query, array(), false );
+            $searchHitCount = count( $searchResult->searchHits );
         }
 
         $progress->finish();
 
-        $output->writeln( '' );
-        $output->writeln( "<info>Updated the total of {$updated} content</info>" );
+        $output->writeln( PHP_EOL . PHP_EOL . "Updated <comment>{$updatedCount}</comment> content items." );
 
         return 0;
     }

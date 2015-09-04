@@ -19,6 +19,18 @@ parameters:
 
     ngmore.slot.create_user.class: Netgen\Bundle\MoreBundle\Core\Slot\CreateUserSlot
 
+    ngmore.matcher.config_resolver.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased
+    ngmore.matcher.content.content_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Content
+    ngmore.matcher.content.content_type_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentType
+    ngmore.matcher.content.content_type_group_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentTypeGroup
+    ngmore.matcher.content.location_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Location
+    ngmore.matcher.content.parent_content_type_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentContentType
+    ngmore.matcher.content.parent_location_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentLocation
+    ngmore.matcher.content.remote_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Remote
+    ngmore.matcher.content.section_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Section
+    ngmore.matcher.block.block_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\Block\Id\Block
+    ngmore.matcher.block.zone_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\Block\Id\Zone
+
 services:
     ngmore.search.legacy.gateway.sort_clause_handler.common.field_length:
         class: %ngmore.search.legacy.gateway.sort_clause_handler.common.field_length.class%
@@ -110,3 +122,48 @@ services:
             - @ngmore.repository.nguser_setting
         tags:
             - { name: ezpublish.api.slot, signal: UserService\CreateUserSignal }
+
+    ngmore.matcher.config_resolver:
+        class: %ngmore.matcher.config_resolver.class%
+        abstract: true
+        arguments: [@ezpublish.config.resolver]
+
+    ngmore.matcher.content.content_id:
+        class: %ngmore.matcher.content.content_id.class%
+        parent: ngmore.matcher.config_resolver
+
+    ngmore.matcher.content.content_type_id:
+        class: %ngmore.matcher.content.content_type_id.class%
+        parent: ngmore.matcher.config_resolver
+
+    ngmore.matcher.content.content_type_group_id:
+        class: %ngmore.matcher.content.content_type_group_id.class%
+        parent: ngmore.matcher.config_resolver
+
+    ngmore.matcher.content.location_id:
+        class: %ngmore.matcher.content.location_id.class%
+        parent: ngmore.matcher.config_resolver
+
+    ngmore.matcher.content.parent_content_type_id:
+        class: %ngmore.matcher.content.parent_content_type_id.class%
+        parent: ngmore.matcher.config_resolver
+
+    ngmore.matcher.content.parent_location_id:
+        class: %ngmore.matcher.content.parent_location_id.class%
+        parent: ngmore.matcher.config_resolver
+
+    ngmore.matcher.content.remote_id:
+        class: %ngmore.matcher.content.remote_id.class%
+        parent: ngmore.matcher.config_resolver
+
+    ngmore.matcher.content.section_id:
+        class: %ngmore.matcher.content.section_id.class%
+        parent: ngmore.matcher.config_resolver
+
+    ngmore.matcher.block.block_id:
+        class: %ngmore.matcher.block.block_id.class%
+        parent: ngmore.matcher.config_resolver
+
+    ngmore.matcher.block.zone_id:
+        class: %ngmore.matcher.block.zone_id.class%
+        parent: ngmore.matcher.config_resolver

@@ -120,12 +120,13 @@ class NetgenMoreExtension extends Twig_Extension
      * Returns the path for specified location ID
      *
      * @param mixed $locationId
+     * @param bool $includeAllContentTypes
      *
      * @return array
      */
-    public function getLocationPath( $locationId )
+    public function getLocationPath( $locationId, $includeAllContentTypes = false )
     {
-        return $this->pathHelper->getPath( $locationId, true );
+        return $this->pathHelper->getPath( $locationId, !$includeAllContentTypes );
     }
 
     /**

@@ -19,6 +19,7 @@ parameters:
     ngmore.legacy_mapper.configuration.class: Netgen\Bundle\MoreBundle\LegacyMapper\Configuration
 
     ngmore.entity.nguser_setting.class: Netgen\Bundle\MoreBundle\Entity\NgUserSetting
+    ngmore.entity.ezuser_accountkey.class: Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
 
     ngmore.slot.create_user.class: Netgen\Bundle\MoreBundle\Core\Slot\CreateUserSlot
 
@@ -33,6 +34,12 @@ parameters:
     ngmore.matcher.content.section_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Section
     ngmore.matcher.block.block_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\Block\Id\Block
     ngmore.matcher.block.zone_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\Block\Id\Zone
+
+    ngmore.listener.user.post_register.class: Netgen\Bundle\MoreBundle\EventListener\User\PostRegisterEventListener
+    ngmore.listener.user.activation_request.class: Netgen\Bundle\MoreBundle\EventListener\User\ActivationRequestEventListener
+    ngmore.listener.user.post_activate.class: Netgen\Bundle\MoreBundle\EventListener\User\PostActivateEventListener
+    ngmore.listener.user.password_reset_request.class: Netgen\Bundle\MoreBundle\EventListener\User\PasswordResetRequestEventListener
+    ngmore.listener.user.post_password_reset.class: Netgen\Bundle\MoreBundle\EventListener\User\PostPasswordResetEventListener
 
 services:
     ngmore.controller.full_view:
@@ -70,7 +77,7 @@ services:
         parent: ezpublish.controller.base
         arguments:
             - @ezpublish.api.service.user
-            - @ngmore.helper.mail_helper
+            - @event_dispatcher
 
     ngmore.helper.path_helper:
         class: %ngmore.helper.path_helper.class%
@@ -133,6 +140,13 @@ services:
         arguments:
             - %ngmore.entity.nguser_setting.class%
 
+    ngmore.repository.ezuser_accountkey:
+        class: Doctrine\ORM\EntityRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments:
+            - %ngmore.entity.ezuser_accountkey.class%
+
     ngmore.slot.create_user:
         class: %ngmore.slot.create_user.class%
         arguments:
@@ -185,3 +199,51 @@ services:
     ngmore.matcher.block.zone_id:
         class: %ngmore.matcher.block.zone_id.class%
         parent: ngmore.matcher.config_resolver
+
+    ngmore.listener.user.post_register:
+        class: %ngmore.listener.user.post_register.class%
+        arguments:
+            - @ngmore.helper.mail_helper
+            - @ezpublish.config.resolver
+            - @ngmore.repository.ezuser_accountkey
+        tags:
+            - { name: kernel.event_listener, event: ngmore.events.user.post_register, method: onUserRegistered }
+
+    ngmore.listener.user.activation_request:
+        class: %ngmore.listener.user.activation_request.class%
+        arguments:
+            - @ngmore.helper.mail_helper
+            - @ezpublish.config.resolver
+            - @ngmore.repository.nguser_setting
+            - @ngmore.repository.ezuser_accountkey
+        tags:
+            - { name: kernel.event_listener, event: ngmore.events.user.activation_request, method: onActivationRequest }
+
+    ngmore.listener.user.post_activate:
+        class: %ngmore.listener.user.post_activate.class%
+        arguments:
+            - @ngmore.helper.mail_helper
+            - @ezpublish.config.resolver
+            - @ngmore.repository.nguser_setting
+            - @ngmore.repository.ezuser_accountkey
+        tags:
+            - { name: kernel.event_listener, event: ngmore.events.user.post_activate, method: onPostActivate }
+
+    ngmore.listener.user.password_reset_request:
+        class: %ngmore.listener.user.password_reset_request.class%
+        arguments:
+            - @ngmore.helper.mail_helper
+            - @ezpublish.config.resolver
+            - @ngmore.repository.nguser_setting
+            - @ngmore.repository.ezuser_accountkey
+        tags:
+            - { name: kernel.event_listener, event: ngmore.events.user.password_reset_request, method: onPasswordResetRequest }
+
+    ngmore.listener.user.post_password_reset:
+        class: %ngmore.listener.user.post_password_reset.class%
+        arguments:
+            - @ngmore.helper.mail_helper
+            - @ezpublish.config.resolver
+            - @ngmore.repository.ezuser_accountkey
+        tags:
+            - { name: kernel.event_listener, event: ngmore.events.user.post_password_reset, method: onPasswordReset }

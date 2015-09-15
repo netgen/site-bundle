@@ -3,7 +3,7 @@
 namespace Netgen\Bundle\MoreBundle\EventListener\User;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use Netgen\Bundle\MoreBundle\Event\User\PreActivateEvent;
+use Netgen\Bundle\MoreBundle\Event\User\PostActivateEvent;
 use Netgen\Bundle\MoreBundle\Helper\MailHelper;
 use Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository;
 use Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
@@ -49,7 +49,13 @@ class PostActivateEventListener
         $this->ezUserAccountKeyRepository = $ezUserAccountKeyRepository;
     }
 
-    public function onPostActivate( PreActivateEvent $event )
+    /**
+     * Listens to the event triggered after the user activation has been finished.
+     * Event contains information about activated user.
+     *
+     * @param \Netgen\Bundle\MoreBundle\Event\User\PostActivateEvent $event
+     */
+    public function onPostActivate( PostActivateEvent $event )
     {
         $user = $event->getUser();
 

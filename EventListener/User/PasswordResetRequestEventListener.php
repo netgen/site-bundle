@@ -3,7 +3,7 @@
 namespace Netgen\Bundle\MoreBundle\EventListener\User;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use Netgen\Bundle\MoreBundle\Event\User\PrePasswordResetEvent;
+use Netgen\Bundle\MoreBundle\Event\User\PasswordResetRequestEvent;
 use Netgen\Bundle\MoreBundle\Helper\MailHelper;
 use Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository;
 use Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
@@ -49,7 +49,13 @@ class PasswordResetRequestEventListener
         $this->ezUserAccountKeyRepository = $ezUserAccountKeyRepository;
     }
 
-    public function onPasswordResetRequest( PrePasswordResetEvent $event )
+    /**
+     * Listens for the start of forgotpassword procedure.
+     * Event contains information about the submitted email and the user, if found.
+     *
+     * @param \Netgen\Bundle\MoreBundle\Event\User\PasswordResetRequestEvent $event
+     */
+    public function onPasswordResetRequest( PasswordResetRequestEvent $event )
     {
         $user = $event->getUser();
         $email = $event->getEmail();

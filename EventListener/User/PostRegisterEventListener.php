@@ -40,6 +40,12 @@ class PostRegisterEventListener
         $this->ezUserAccountKeyRepository = $ezUserAccountKeyRepository;
     }
 
+    /**
+     * Listens to the event triggered after the user has been registered.
+     * The event contains information about registered user.
+     *
+     * @param \Netgen\Bundle\MoreBundle\Event\User\PostRegisterEvent $event
+     */
     public function onUserRegistered( PostRegisterEvent $event )
     {
         if ( $this->configResolver->getParameter( 'user.auto_enable', 'ngmore' ) )

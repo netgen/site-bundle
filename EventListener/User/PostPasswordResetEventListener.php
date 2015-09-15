@@ -40,6 +40,12 @@ class PostPasswordResetEventListener
         $this->ezUserAccountKeyRepository = $ezUserAccountKeyRepository;
     }
 
+    /**
+     * Listens to the event triggered after the password has been reset.
+     * Event contains the information about the user who has changed the password.
+     *
+     * @param \Netgen\Bundle\MoreBundle\Event\User\PostPasswordResetEvent $event
+     */
     public function onPasswordReset( PostPasswordResetEvent $event )
     {
         $this->mailHelper

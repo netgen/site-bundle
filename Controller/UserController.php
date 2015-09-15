@@ -219,9 +219,10 @@ class UserController extends Controller
      */
     public function activate( $hash )
     {
-        $accountKey = $this->getDoctrine()
-            ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-            ->getByHash( $hash );
+        /** @var \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository $ezUserAccountKeyRepository */
+        $ezUserAccountKeyRepository  = $this->get( 'ngmore.repository.ezuser_accountkey' );
+
+        $accountKey = $ezUserAccountKeyRepository->getByHash( $hash );
 
         if ( !$accountKey instanceof EzUserAccountKey )
         {
@@ -230,9 +231,7 @@ class UserController extends Controller
 
         if ( time() - $accountKey->getTime() > $this->getConfigResolver()->getParameter( 'user.activate_hash_validity_time', 'ngmore' ) )
         {
-            $this->getDoctrine()
-                ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-                ->removeByHash( $hash );
+            $ezUserAccountKeyRepository->removeByHash( $hash );
 
             return $this->render(
                 $this->getConfigResolver()->getParameter( "template.user.activate_done", "ngmore" ),
@@ -322,9 +321,10 @@ class UserController extends Controller
      */
     public function resetPassword( Request $request, $hash )
     {
-        $accountKey = $this->getDoctrine()
-            ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-            ->getByHash( $hash );
+        /** @var \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository $ezUserAccountKeyRepository */
+        $ezUserAccountKeyRepository = $this->get( 'ngmore.repository.ezuser_accountkey' );
+
+        $accountKey = $ezUserAccountKeyRepository->getByHash( $hash );
 
         if ( !$accountKey instanceof EzUserAccountKey )
         {
@@ -333,9 +333,7 @@ class UserController extends Controller
 
         if ( time() - $accountKey->getTime() > $this->getConfigResolver()->getParameter( 'user.forgot_password_hash_validity_time', 'ngmore' ) )
         {
-            $this->getDoctrine()
-                ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-                ->removeByHash( $hash );
+            $ezUserAccountKeyRepository->removeByHash( $hash );
 
             return $this->render(
                 $this->getConfigResolver()->getParameter( "template.user.reset_password_done", "ngmore" ),

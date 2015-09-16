@@ -122,11 +122,7 @@ class UserController extends Controller
 
             $preUserRegisterEvent = new PreRegisterEvent( $data->payload );
             $this->eventDispatcher->dispatch( MVCEvents::USER_PRE_REGISTER, $preUserRegisterEvent );
-
-            if ( $data->payload !== $preUserRegisterEvent->getUserCreateStruct() )
-            {
-                $data->payload = $preUserRegisterEvent->getUserCreateStruct();
-            }
+            $data->payload = $preUserRegisterEvent->getUserCreateStruct();
 
             // @TODO: There is a known issue in eZ Publish kernel where signal slot repository
             // is NOT used in sudo calls, preventing the "auto enable" functionality from working
@@ -253,11 +249,7 @@ class UserController extends Controller
 
         $preActivateEvent = new PreActivateEvent( $user );
         $this->eventDispatcher->dispatch( MVCEvents::USER_PRE_ACTIVATE, $preActivateEvent );
-
-        if ( $user !== $preActivateEvent->getUser() )
-        {
-            $user = $preActivateEvent->getUser();
-        }
+        $user = $preActivateEvent->getUser();
 
         $user = $this->enableUser( $user );
 
@@ -373,11 +365,7 @@ class UserController extends Controller
 
         $prePasswordResetEvent = new PrePasswordResetEvent( $userUpdateStruct );
         $this->eventDispatcher->dispatch( MVCEvents::USER_PRE_PASSWORD_RESET, $prePasswordResetEvent );
-
-        if ( $userUpdateStruct !== $prePasswordResetEvent->getUserUpdateStruct() )
-        {
-            $userUpdateStruct = $prePasswordResetEvent->getUserUpdateStruct();
-        }
+        $userUpdateStruct = $prePasswordResetEvent->getUserUpdateStruct();
 
         $user = $this->getRepository()->sudo(
             function( Repository $repository ) use ( $user, $userUpdateStruct )

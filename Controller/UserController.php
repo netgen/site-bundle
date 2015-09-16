@@ -3,16 +3,17 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey;
+use Netgen\Bundle\MoreBundle\Event\User as UserEvents;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints;
 use eZ\Bundle\EzPublishCoreBundle\Controller;
-use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Netgen\Bundle\EzFormsBundle\Form\DataWrapper;
-use Netgen\Bundle\MoreBundle\Helper\MailHelper;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Netgen\Bundle\MoreBundle\Event\MVCEvents;
 
 class UserController extends Controller
 {
@@ -22,20 +23,20 @@ class UserController extends Controller
     protected $userService;
 
     /**
-     * @var \Netgen\Bundle\MoreBundle\Helper\MailHelper
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    protected $mailHelper;
+    protected $eventDispatcher;
 
     /**
      * Constructor
      *
      * @param \eZ\Publish\API\Repository\UserService $userService
-     * @param \Netgen\Bundle\MoreBundle\Helper\MailHelper $mailHelper
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    public function __construct( UserService $userService, MailHelper $mailHelper )
+    public function __construct( UserService $userService, EventDispatcherInterface $eventDispatcher )
     {
         $this->userService = $userService;
-        $this->mailHelper = $mailHelper;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -49,6 +50,8 @@ class UserController extends Controller
      */
     public function register( Request $request )
     {
+        $autoEnable = (bool)$this->getConfigResolver()->getParameter( 'user.auto_enable', 'ngmore' );
+
         $contentTypeIdentifier = $this->getConfigResolver()->getParameter( 'user.content_type_identifier', 'ngmore' );
         $contentType = $this->getRepository()->getContentTypeService()->loadContentTypeByIdentifier( $contentTypeIdentifier );
         $languages = $this->getConfigResolver()->getParameter( "languages" );
@@ -60,7 +63,7 @@ class UserController extends Controller
             $contentType
         );
 
-        $userCreateStruct->enabled = $this->getConfigResolver()->getParameter( 'user.auto_enable', 'ngmore' );
+        $userCreateStruct->enabled = $autoEnable;
 
         $data = new DataWrapper( $userCreateStruct, $userCreateStruct->contentType );
 
@@ -75,97 +78,79 @@ class UserController extends Controller
         $form = $formBuilder->getForm();
         $form->handleRequest( $request );
 
-        if ( $form->isValid() )
+        if ( !$form->isValid() )
         {
-            $users = $this->userService->loadUsersByEmail( $form->getData()->payload->email );
-
-            if ( count( $users ) > 0 )
-            {
-                return $this->render(
-                    $this->getConfigResolver()->getParameter( "template.user.register", "ngmore" ),
-                    array(
-                        "form" => $form->createView(),
-                        "error" => 'email_in_use'
-                    )
-                );
-            }
-
-            try
-            {
-                $this->userService->loadUserByLogin( $form->getData()->payload->login );
-
-                return $this->render(
-                    $this->getConfigResolver()->getParameter( "template.user.register", "ngmore" ),
-                    array(
-                        "form" => $form->createView(),
-                        "error" => 'username_taken'
-                    )
-                );
-            }
-            catch ( NotFoundException $e )
-            {
-                // do nothing
-            }
-
-            $userGroupId = $this->getConfigResolver()->getParameter( 'user.user_group_content_id', 'ngmore' );
-
-            // @TODO: There is a known issue in eZ Publish kernel where signal slot repository
-            // is NOT used in sudo calls, preventing the "auto enable" functionality from working
-            // See: https://github.com/ezsystems/ezpublish-kernel/pull/1393
-            $newUser = $this->getRepository()->sudo(
-                function( Repository $repository ) use ( $data, $userGroupId )
-                {
-                    $userGroup = $repository->getUserService()->loadUserGroup( $userGroupId );
-
-                    return $repository->getUserService()->createUser(
-                        $data->payload,
-                        array( $userGroup )
-                    );
-                }
+            return $this->render(
+                $this->getConfigResolver()->getParameter( "template.user.register", "ngmore" ),
+                array(
+                    "form" => $form->createView()
+                )
             );
+        }
 
-            if ( $this->getConfigResolver()->getParameter( 'user.auto_enable', 'ngmore' ) )
-            {
-                $this->mailHelper
-                    ->sendMail(
-                        $newUser->email,
-                        $this->getConfigResolver()->getParameter( 'template.user.mail.welcome', 'ngmore' ),
-                        'ngmore.user.welcome.subject',
-                        array(
-                            'user' => $newUser
-                        )
-                    );
+        $users = $this->userService->loadUsersByEmail( $form->getData()->payload->email );
 
-                return $this->render(
-                    $this->getConfigResolver()->getParameter( 'template.user.register_success', 'ngmore' )
-                );
-            }
+        if ( count( $users ) > 0 )
+        {
+            return $this->render(
+                $this->getConfigResolver()->getParameter( "template.user.register", "ngmore" ),
+                array(
+                    "form" => $form->createView(),
+                    "error" => 'email_in_use'
+                )
+            );
+        }
 
-            $accountKey = $this->getDoctrine()
-                ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-                ->create( $newUser->id );
-
-            $this->mailHelper
-                ->sendMail(
-                    $newUser->email,
-                    $this->getConfigResolver()->getParameter( 'template.user.mail.activate', 'ngmore' ),
-                    'ngmore.user.activate.subject',
-                    array(
-                        'user' => $newUser,
-                        'hash' => $accountKey->getHash()
-                    )
-                );
+        try
+        {
+            $this->userService->loadUserByLogin( $form->getData()->payload->login );
 
             return $this->render(
-                $this->getConfigResolver()->getParameter( 'template.user.activate_sent', 'ngmore' )
+                $this->getConfigResolver()->getParameter( "template.user.register", "ngmore" ),
+                array(
+                    "form" => $form->createView(),
+                    "error" => 'username_taken'
+                )
+            );
+        }
+        catch ( NotFoundException $e )
+        {
+            // do nothing
+        }
+
+        $userGroupId = $this->getConfigResolver()->getParameter( 'user.user_group_content_id', 'ngmore' );
+
+        $preUserRegisterEvent = new UserEvents\PreRegisterEvent( $data->payload );
+        $this->eventDispatcher->dispatch( MVCEvents::USER_PRE_REGISTER, $preUserRegisterEvent );
+        $data->payload = $preUserRegisterEvent->getUserCreateStruct();
+
+        // @TODO: There is a known issue in eZ Publish kernel where signal slot repository
+        // is NOT used in sudo calls, preventing the "auto enable" functionality from working
+        // See: https://github.com/ezsystems/ezpublish-kernel/pull/1393
+        $newUser = $this->getRepository()->sudo(
+            function( Repository $repository ) use ( $data, $userGroupId )
+            {
+                $userGroup = $repository->getUserService()->loadUserGroup( $userGroupId );
+
+                return $repository->getUserService()->createUser(
+                    $data->payload,
+                    array( $userGroup )
+                );
+            }
+        );
+
+        $userRegisterEvent = new UserEvents\PostRegisterEvent( $newUser );
+        $this->eventDispatcher->dispatch( MVCEvents::USER_POST_REGISTER, $userRegisterEvent );
+
+        if ( $autoEnable )
+        {
+            return $this->render(
+                $this->getConfigResolver()->getParameter( 'template.user.register_success', 'ngmore' )
             );
         }
 
         return $this->render(
-            $this->getConfigResolver()->getParameter( "template.user.register", "ngmore" ),
-            array(
-                "form" => $form->createView()
-            )
+            $this->getConfigResolver()->getParameter( 'template.user.activate_sent', 'ngmore' )
         );
     }
 
@@ -192,58 +177,13 @@ class UserController extends Controller
         }
 
         $users = $this->userService->loadUsersByEmail( $form->get( 'email' )->getData() );
-        if ( empty( $users ) )
-        {
-            $this->mailHelper->sendMail(
-                $form->get( 'email' )->getData(),
-                $this->getConfigResolver()->getParameter( 'template.user.mail.activate_not_registered', 'ngmore' ),
-                'ngmore.user.activate.not_registered.subject'
-            );
 
-            return $this->render(
-                $this->getConfigResolver()->getParameter( 'template.user.activate_sent', 'ngmore' )
-            );
-        }
+        $activationRequestEvent = new UserEvents\ActivationRequestEvent(
+            $form->get( 'email' )->getData(),
+            !empty( $users ) ? $users[0] : null
+        );
 
-        if ( $users[0]->enabled )
-        {
-            $this->mailHelper->sendMail(
-                $form->get( 'email' )->getData(),
-                $this->getConfigResolver()->getParameter( 'template.user.mail.activate_already_active', 'ngmore' ),
-                'ngmore.user.activate.already_active.subject',
-                array(
-                    'user' => $users[0]
-                )
-            );
-        }
-        else if ( $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->isUserActivated( $users[0]->id ) )
-        {
-            $this->mailHelper->sendMail(
-                $form->get( 'email' )->getData(),
-                $this->getConfigResolver()->getParameter( 'template.user.mail.activate_disabled', 'ngmore' ),
-                'ngmore.user.activate.disabled.subject',
-                array(
-                    'user' => $users[0]
-                )
-            );
-        }
-        else
-        {
-            $accountKey = $this->getDoctrine()
-                ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-                ->create( $users[0]->id );
-
-            $this->mailHelper
-                ->sendMail(
-                    $users[0]->email,
-                    $this->getConfigResolver()->getParameter( 'template.user.mail.activate', 'ngmore' ),
-                    'ngmore.user.activate.subject',
-                    array(
-                        'user' => $users[0],
-                        'hash' => $accountKey->getHash()
-                    )
-                );
-        }
+        $this->eventDispatcher->dispatch( MVCEvents::USER_ACTIVATION_REQUEST, $activationRequestEvent );
 
         return $this->render(
             $this->getConfigResolver()->getParameter( 'template.user.activate_sent', 'ngmore' )
@@ -261,9 +201,9 @@ class UserController extends Controller
      */
     public function activate( $hash )
     {
-        $accountKey = $this->getDoctrine()
-            ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-            ->getByHash( $hash );
+        /** @var \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository $accountKeyRepository */
+        $accountKeyRepository = $this->get( 'ngmore.repository.ezuser_accountkey' );
+        $accountKey = $accountKeyRepository->getByHash( $hash );
 
         if ( !$accountKey instanceof EzUserAccountKey )
         {
@@ -272,9 +212,7 @@ class UserController extends Controller
 
         if ( time() - $accountKey->getTime() > $this->getConfigResolver()->getParameter( 'user.activate_hash_validity_time', 'ngmore' ) )
         {
-            $this->getDoctrine()
-                ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-                ->removeByHash( $hash );
+            $accountKeyRepository->removeByHash( $hash );
 
             return $this->render(
                 $this->getConfigResolver()->getParameter( "template.user.activate_done", "ngmore" ),
@@ -293,17 +231,22 @@ class UserController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $this->enableUser( $user );
+        $userUpdateStruct = $this->userService->newUserUpdateStruct();
+        $userUpdateStruct->enabled = true;
 
-        $this->mailHelper
-            ->sendMail(
-                $user->email,
-                $this->getConfigResolver()->getParameter( 'template.user.mail.welcome', 'ngmore' ),
-                'ngmore.user.welcome.subject',
-                array(
-                    'user' => $user
-                )
-            );
+        $preActivateEvent = new UserEvents\PreActivateEvent( $user, $userUpdateStruct );
+        $this->eventDispatcher->dispatch( MVCEvents::USER_PRE_ACTIVATE, $preActivateEvent );
+        $userUpdateStruct = $preActivateEvent->getUserUpdateStruct();
+
+        $user = $this->getRepository()->sudo(
+            function( Repository $repository ) use ( $user, $userUpdateStruct )
+            {
+                return $repository->getUserService()->updateUser( $user, $userUpdateStruct );
+            }
+        );
+
+        $postActivateEvent = new UserEvents\PostActivateEvent( $user );
+        $this->eventDispatcher->dispatch( MVCEvents::USER_POST_ACTIVATE, $postActivateEvent );
 
         return $this->render(
             $this->getConfigResolver()->getParameter( "template.user.activate_done", "ngmore" )
@@ -333,59 +276,13 @@ class UserController extends Controller
         }
 
         $users = $this->userService->loadUsersByEmail( $form->get( 'email' )->getData() );
-        if ( empty( $users ) )
-        {
-            $this->mailHelper
-                ->sendMail(
-                    $form->get( 'email' )->getData(),
-                    $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_not_registered', 'ngmore' ),
-                    'ngmore.user.forgot_password.not_registered.subject'
-                );
-        }
-        else if ( !$users[0]->enabled )
-        {
-            if ( $this->getDoctrine()->getRepository( 'NetgenMoreBundle:NgUserSetting' )->isUserActivated( $users[0]->id ) )
-            {
-                $this->mailHelper
-                    ->sendMail(
-                        $form->get( 'email' )->getData(),
-                        $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_disabled', 'ngmore' ),
-                        'ngmore.user.forgot_password.disabled.subject',
-                        array(
-                            'user' => $users[0],
-                        )
-                    );
-            }
-            else
-            {
-                $this->mailHelper
-                    ->sendMail(
-                        $form->get( 'email' )->getData(),
-                        $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_not_active', 'ngmore' ),
-                        'ngmore.user.forgot_password.not_active.subject',
-                        array(
-                            'user' => $users[0],
-                        )
-                    );
-            }
-        }
-        else
-        {
-            $accountKey = $this->getDoctrine()
-                ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-                ->create( $users[0]->id );
 
-            $this->mailHelper
-                ->sendMail(
-                    $users[0]->email,
-                    $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password', 'ngmore' ),
-                    'ngmore.user.forgot_password.subject',
-                    array(
-                        'user' => $users[0],
-                        'hash' => $accountKey->getHash()
-                    )
-                );
-        }
+        $passwordResetRequestEvent = new UserEvents\PasswordResetRequestEvent(
+            $form->get( 'email' )->getData(),
+            !empty( $users ) ? $users[0] : null
+        );
+
+        $this->eventDispatcher->dispatch( MVCEvents::USER_PASSWORD_RESET_REQUEST, $passwordResetRequestEvent );
 
         return $this->render(
             $this->getConfigResolver()->getParameter( 'template.user.forgot_password_sent', 'ngmore' )
@@ -404,9 +301,9 @@ class UserController extends Controller
      */
     public function resetPassword( Request $request, $hash )
     {
-        $accountKey = $this->getDoctrine()
-            ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-            ->getByHash( $hash );
+        /** @var \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository $accountKeyRepository */
+        $accountKeyRepository = $this->get( 'ngmore.repository.ezuser_accountkey' );
+        $accountKey = $accountKeyRepository->getByHash( $hash );
 
         if ( !$accountKey instanceof EzUserAccountKey )
         {
@@ -415,9 +312,7 @@ class UserController extends Controller
 
         if ( time() - $accountKey->getTime() > $this->getConfigResolver()->getParameter( 'user.forgot_password_hash_validity_time', 'ngmore' ) )
         {
-            $this->getDoctrine()
-                ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-                ->removeByHash( $hash );
+            $accountKeyRepository->removeByHash( $hash );
 
             return $this->render(
                 $this->getConfigResolver()->getParameter( "template.user.reset_password_done", "ngmore" ),
@@ -454,6 +349,10 @@ class UserController extends Controller
         $userUpdateStruct = $this->userService->newUserUpdateStruct();
         $userUpdateStruct->password = $data["password"];
 
+        $prePasswordResetEvent = new UserEvents\PrePasswordResetEvent( $user, $userUpdateStruct );
+        $this->eventDispatcher->dispatch( MVCEvents::USER_PRE_PASSWORD_RESET, $prePasswordResetEvent );
+        $userUpdateStruct = $prePasswordResetEvent->getUserUpdateStruct();
+
         $user = $this->getRepository()->sudo(
             function( Repository $repository ) use ( $user, $userUpdateStruct )
             {
@@ -461,19 +360,8 @@ class UserController extends Controller
             }
         );
 
-        $this->mailHelper
-            ->sendMail(
-                $user->email,
-                $this->getConfigResolver()->getParameter( 'template.user.mail.forgot_password_password_changed', 'ngmore' ),
-                'ngmore.user.forgot_password.password_changed.subject',
-                array(
-                    'user' => $user
-                )
-            );
-
-        $this->getDoctrine()
-            ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-            ->removeByUserId( $user->id );
+        $postPasswordResetEvent = new UserEvents\PostPasswordResetEvent( $user );
+        $this->eventDispatcher->dispatch( MVCEvents::USER_POST_PASSWORD_RESET, $postPasswordResetEvent );
 
         return $this->render(
             $this->getConfigResolver()->getParameter( "template.user.reset_password_done", "ngmore" )
@@ -553,31 +441,5 @@ class UserController extends Controller
         return $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
             ->add( 'password', 'repeated', $passwordOptions )
             ->getForm();
-    }
-
-    /**
-     * Enables the user
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     */
-    protected function enableUser( User $user )
-    {
-        $userUpdateStruct = $this->userService->newUserUpdateStruct();
-        $userUpdateStruct->enabled = true;
-
-        $user = $this->getRepository()->sudo(
-            function( Repository $repository ) use ( $user, $userUpdateStruct )
-            {
-                return $repository->getUserService()->updateUser( $user, $userUpdateStruct );
-            }
-        );
-
-        $this->getDoctrine()
-            ->getRepository( 'NetgenMoreBundle:EzUserAccountKey' )
-            ->removeByUserId( $user->id );
-
-        $this->getDoctrine()
-            ->getRepository( 'NetgenMoreBundle:NgUserSetting' )
-            ->activateUser( $user->id );
     }
 }

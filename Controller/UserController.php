@@ -196,7 +196,7 @@ class UserController extends Controller
             $user = $users[0];
         }
 
-        $activationRequestEvent = new ActivationRequestEvent( $user, $email );
+        $activationRequestEvent = new ActivationRequestEvent( $email, $user );
         $this->eventDispatcher->dispatch( MVCEvents::USER_ACTIVATION_REQUEST, $activationRequestEvent );
 
 

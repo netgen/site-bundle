@@ -30,8 +30,8 @@ abstract class UserEventListener
     protected $ezUserAccountKeyRepository;
 
     /**
-     * @param MailHelper $mailHelper
-     * @param ConfigResolverInterface $configResolver
+     * @param \Netgen\Bundle\MoreBundle\Helper\MailHelper $mailHelper
+     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      * @param \Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository $ngUserSettingRepository
      * @param \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository
      */

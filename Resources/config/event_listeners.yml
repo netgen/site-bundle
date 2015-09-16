@@ -8,8 +8,8 @@ parameters:
 
 services:
     ngmore.listener.user:
-        abstract: true
         class: %ngmore.listener.user.class%
+        abstract: true
         arguments:
             - @ngmore.helper.mail_helper
             - @ezpublish.config.resolver

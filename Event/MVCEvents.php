@@ -13,7 +13,7 @@ final class MVCEvents
 
     /**
      * The USER_PRE_ACTIVATE event occurs just before the user has been activated.
-     * It is possible to manipulate the User in the listener of this event.
+     * It is possible to manipulate the userUpdateStruct in the listener of this event.
      *
      * The event listener method receives a \Netgen\Bundle\MoreBundle\Event\User\PreActivateEvent
      */
@@ -37,7 +37,7 @@ final class MVCEvents
     /**
      * The USER_POST_REGISTER event occurs just after the user has been registered.
      *
-     * The event listener method receives a \Netgen\Bundle\MoreBundle\Event\User\PreRegisterEvent
+     * The event listener method receives a \Netgen\Bundle\MoreBundle\Event\User\PostRegisterEvent
      */
     const USER_POST_REGISTER = 'ngmore.events.user.post_register';
 

@@ -20,28 +20,28 @@ services:
         class: %ngmore.listener.user.post_register.class%
         parent: ngmore.listener.user
         tags:
-            - { name: kernel.event_listener, event: ngmore.events.user.post_register, method: onUserRegistered }
+            - { name: kernel.event_subscriber }
 
     ngmore.listener.user.activation_request:
         class: %ngmore.listener.user.activation_request.class%
         parent: ngmore.listener.user
         tags:
-            - { name: kernel.event_listener, event: ngmore.events.user.activation_request, method: onActivationRequest }
+            - { name: kernel.event_subscriber }
 
     ngmore.listener.user.post_activate:
         class: %ngmore.listener.user.post_activate.class%
         parent: ngmore.listener.user
         tags:
-            - { name: kernel.event_listener, event: ngmore.events.user.post_activate, method: onPostActivate }
+            - { name: kernel.event_subscriber }
 
     ngmore.listener.user.password_reset_request:
         class: %ngmore.listener.user.password_reset_request.class%
         parent: ngmore.listener.user
         tags:
-            - { name: kernel.event_listener, event: ngmore.events.user.password_reset_request, method: onPasswordResetRequest }
+            - { name: kernel.event_subscriber }
 
     ngmore.listener.user.post_password_reset:
         class: %ngmore.listener.user.post_password_reset.class%
         parent: ngmore.listener.user
         tags:
-            - { name: kernel.event_listener, event: ngmore.events.user.post_password_reset, method: onPasswordReset }
+            - { name: kernel.event_subscriber }

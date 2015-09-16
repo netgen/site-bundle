@@ -3,9 +3,11 @@
 namespace Netgen\Bundle\MoreBundle\EventListener\User;
 
 use Netgen\Bundle\MoreBundle\EventListener\UserEventListener;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Netgen\Bundle\MoreBundle\Event\MVCEvents;
 use Netgen\Bundle\MoreBundle\Event\User\PostRegisterEvent;
 
-class PostRegisterEventListener extends UserEventListener
+class PostRegisterEventListener extends UserEventListener implements EventSubscriberInterface
 {
     /**
      * Listens to the event triggered after the user has been registered.
@@ -42,5 +44,12 @@ class PostRegisterEventListener extends UserEventListener
                     'hash' => $accountKey->getHash()
                 )
             );
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return array(
+            MVCEvents::USER_POST_REGISTER => 'onUserRegistered'
+        );
     }
 }

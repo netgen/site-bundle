@@ -3,10 +3,12 @@
 namespace Netgen\Bundle\MoreBundle\EventListener\User;
 
 use Netgen\Bundle\MoreBundle\EventListener\UserEventListener;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Netgen\Bundle\MoreBundle\Event\MVCEvents;
 use Netgen\Bundle\MoreBundle\Event\User\PasswordResetRequestEvent;
 use eZ\Publish\API\Repository\Values\User\User;
 
-class PasswordResetRequestEventListener extends UserEventListener
+class PasswordResetRequestEventListener extends UserEventListener implements EventSubscriberInterface
 {
     /**
      * Listens for the start of forgotpassword procedure.
@@ -73,5 +75,12 @@ class PasswordResetRequestEventListener extends UserEventListener
                     'hash' => $accountKey->getHash()
                 )
             );
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return array(
+            MVCEvents::USER_PASSWORD_RESET_REQUEST => 'onPasswordResetRequest'
+        );
     }
 }

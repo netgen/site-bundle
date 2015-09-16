@@ -3,9 +3,11 @@
 namespace Netgen\Bundle\MoreBundle\EventListener\User;
 
 use Netgen\Bundle\MoreBundle\EventListener\UserEventListener;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Netgen\Bundle\MoreBundle\Event\MVCEvents;
 use Netgen\Bundle\MoreBundle\Event\User\PostPasswordResetEvent;
 
-class PostPasswordResetEventListener extends UserEventListener
+class PostPasswordResetEventListener extends UserEventListener implements EventSubscriberInterface
 {
     /**
      * Listens to the event triggered after the password has been reset.
@@ -27,5 +29,12 @@ class PostPasswordResetEventListener extends UserEventListener
 
         $this->ezUserAccountKeyRepository->removeByUserId( $event->getUser()->id );
 
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return array(
+            MVCEvents::USER_POST_PASSWORD_RESET => 'onPasswordReset'
+        );
     }
 }

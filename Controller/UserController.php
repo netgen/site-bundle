@@ -21,6 +21,7 @@ use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Netgen\Bundle\EzFormsBundle\Form\DataWrapper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Netgen\Bundle\MoreBundle\Event\MVCEvents;
 
 class UserController extends Controller
 {
@@ -120,7 +121,7 @@ class UserController extends Controller
             $userGroupId = $this->getConfigResolver()->getParameter( 'user.user_group_content_id', 'ngmore' );
 
             $preUserRegisterEvent = new PreRegisterEvent( $data->payload );
-            $this->eventDispatcher->dispatch( 'ngmore.events.user.pre_register', $preUserRegisterEvent );
+            $this->eventDispatcher->dispatch( MVCEvents::USER_PRE_REGISTER, $preUserRegisterEvent );
 
             if ( $data->payload !== $preUserRegisterEvent->getUserCreateStruct() )
             {
@@ -143,7 +144,7 @@ class UserController extends Controller
             );
 
             $userRegisterEvent = new PostRegisterEvent( $newUser, $autoEnable );
-            $this->eventDispatcher->dispatch( 'ngmore.events.user.post_register', $userRegisterEvent );
+            $this->eventDispatcher->dispatch( MVCEvents::USER_POST_REGISTER, $userRegisterEvent );
 
             if ( $autoEnable )
             {
@@ -200,7 +201,7 @@ class UserController extends Controller
         }
 
         $activationRequestEvent = new ActivationRequestEvent( $user, $email );
-        $this->eventDispatcher->dispatch( 'ngmore.events.user.activation_request', $activationRequestEvent );
+        $this->eventDispatcher->dispatch( MVCEvents::USER_ACTIVATION_REQUEST, $activationRequestEvent );
 
 
         return $this->render(
@@ -251,7 +252,7 @@ class UserController extends Controller
         }
 
         $preActivateEvent = new PreActivateEvent( $user );
-        $this->eventDispatcher->dispatch( 'ngmore.events.user.pre_activate', $preActivateEvent );
+        $this->eventDispatcher->dispatch( MVCEvents::USER_PRE_ACTIVATE, $preActivateEvent );
 
         if ( $user !== $preActivateEvent->getUser() )
         {
@@ -261,7 +262,7 @@ class UserController extends Controller
         $user = $this->enableUser( $user );
 
         $postActivateEvent = new PostActivateEvent( $user );
-        $this->eventDispatcher->dispatch( 'ngmore.events.user.post_activate', $postActivateEvent );
+        $this->eventDispatcher->dispatch( MVCEvents::USER_POST_ACTIVATE, $postActivateEvent );
 
         return $this->render(
             $this->getConfigResolver()->getParameter( "template.user.activate_done", "ngmore" )
@@ -302,7 +303,7 @@ class UserController extends Controller
             $passwordResetRequestEvent = new PasswordResetRequestEvent( $email, $users[0] );
         }
 
-        $this->eventDispatcher->dispatch( 'ngmore.events.user.password_reset_request', $passwordResetRequestEvent );
+        $this->eventDispatcher->dispatch( MVCEvents::USER_PASSWORD_RESET_REQUEST, $passwordResetRequestEvent );
 
         return $this->render(
             $this->getConfigResolver()->getParameter( 'template.user.forgot_password_sent', 'ngmore' )
@@ -371,7 +372,7 @@ class UserController extends Controller
         $userUpdateStruct->password = $data["password"];
 
         $prePasswordResetEvent = new PrePasswordResetEvent( $userUpdateStruct );
-        $this->eventDispatcher->dispatch( 'ngmore.events.user.pre_password_reset', $prePasswordResetEvent );
+        $this->eventDispatcher->dispatch( MVCEvents::USER_PRE_PASSWORD_RESET, $prePasswordResetEvent );
 
         if ( $userUpdateStruct !== $prePasswordResetEvent->getUserUpdateStruct() )
         {
@@ -386,7 +387,7 @@ class UserController extends Controller
         );
 
         $postPasswordResetEvent = new PostPasswordResetEvent( $user );
-        $this->eventDispatcher->dispatch( 'ngmore.events.user.post_password_reset', $postPasswordResetEvent );
+        $this->eventDispatcher->dispatch( MVCEvents::USER_POST_PASSWORD_RESET, $postPasswordResetEvent );
 
         return $this->render(
             $this->getConfigResolver()->getParameter( "template.user.reset_password_done", "ngmore" )

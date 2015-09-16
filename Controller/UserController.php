@@ -127,6 +127,8 @@ class UserController extends Controller
         // @TODO: There is a known issue in eZ Publish kernel where signal slot repository
         // is NOT used in sudo calls, preventing the "auto enable" functionality from working
         // See: https://github.com/ezsystems/ezpublish-kernel/pull/1393
+        // This PR is merged, but it will probably never be ported to eZ Publish kernel 2014.11
+        // hence, this comment and @todo still exist
         $newUser = $this->getRepository()->sudo(
             function( Repository $repository ) use ( $data, $userGroupId )
             {

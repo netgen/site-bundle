@@ -10,6 +10,18 @@ use Netgen\Bundle\MoreBundle\Event\User\PostRegisterEvent;
 class PostRegisterEventListener extends UserEventListener implements EventSubscriberInterface
 {
     /**
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * @return array
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            MVCEvents::USER_POST_REGISTER => 'onUserRegistered'
+        );
+    }
+
+    /**
      * Listens to the event triggered after the user has been registered.
      * The event contains information about registered user.
      *
@@ -46,12 +58,5 @@ class PostRegisterEventListener extends UserEventListener implements EventSubscr
                     'hash' => $accountKey->getHash()
                 )
             );
-    }
-
-    public static function getSubscribedEvents()
-    {
-        return array(
-            MVCEvents::USER_POST_REGISTER => 'onUserRegistered'
-        );
     }
 }

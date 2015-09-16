@@ -19,6 +19,7 @@ parameters:
     ngmore.legacy_mapper.configuration.class: Netgen\Bundle\MoreBundle\LegacyMapper\Configuration
 
     ngmore.entity.nguser_setting.class: Netgen\Bundle\MoreBundle\Entity\NgUserSetting
+    ngmore.entity.ezuser_accountkey.class: Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
 
     ngmore.slot.create_user.class: Netgen\Bundle\MoreBundle\Core\Slot\CreateUserSlot
 
@@ -73,7 +74,7 @@ services:
         parent: ezpublish.controller.base
         arguments:
             - @ezpublish.api.service.user
-            - @ngmore.helper.mail_helper
+            - @event_dispatcher
 
     ngmore.helper.path_helper:
         class: %ngmore.helper.path_helper.class%
@@ -135,6 +136,13 @@ services:
         factory_method: getRepository
         arguments:
             - %ngmore.entity.nguser_setting.class%
+
+    ngmore.repository.ezuser_accountkey:
+        class: Doctrine\ORM\EntityRepository
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+        arguments:
+            - %ngmore.entity.ezuser_accountkey.class%
 
     ngmore.slot.create_user:
         class: %ngmore.slot.create_user.class%

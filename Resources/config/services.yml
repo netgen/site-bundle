@@ -34,6 +34,9 @@ parameters:
     ngmore.matcher.block.block_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\Block\Id\Block
     ngmore.matcher.block.zone_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\Block\Id\Zone
 
+    ngmore.context_provider.session.class: Netgen\Bundle\MoreBundle\ContextProvider\SessionContextProvider
+    ngmore.context_provider.user.class: Netgen\Bundle\MoreBundle\ContextProvider\UserContextProvider
+
 services:
     ngmore.controller.full_view:
         class: %ngmore.controller.full_view.class%
@@ -185,3 +188,21 @@ services:
     ngmore.matcher.block.zone_id:
         class: %ngmore.matcher.block.zone_id.class%
         parent: ngmore.matcher.config_resolver
+
+#    Custom user context hash providers are disabled by default.
+#    Enable them in your project if needed by copying one of the
+#    following service definitions.
+#
+#    ngmore.context_provider.session:
+#        class: %ngmore.context_provider.session.class%
+#        arguments:
+#            - @session
+#    tags:
+#        - { name: fos_http_cache.user_context_provider }
+#
+#    ngmore.context_provider.user:
+#        class: %ngmore.context_provider.user.class%
+#        arguments:
+#            - @ezpublish.api.repository
+#    tags:
+#        - { name: fos_http_cache.user_context_provider }

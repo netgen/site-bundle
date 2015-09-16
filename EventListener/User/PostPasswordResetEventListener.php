@@ -10,6 +10,18 @@ use Netgen\Bundle\MoreBundle\Event\User\PostPasswordResetEvent;
 class PostPasswordResetEventListener extends UserEventListener implements EventSubscriberInterface
 {
     /**
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * @return array
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            MVCEvents::USER_POST_PASSWORD_RESET => 'onPasswordReset'
+        );
+    }
+
+    /**
      * Listens to the event triggered after the password has been reset.
      * Event contains the information about the user who has changed the password.
      *
@@ -30,12 +42,5 @@ class PostPasswordResetEventListener extends UserEventListener implements EventS
             );
 
         $this->ezUserAccountKeyRepository->removeByUserId( $user->id );
-    }
-
-    public static function getSubscribedEvents()
-    {
-        return array(
-            MVCEvents::USER_POST_PASSWORD_RESET => 'onPasswordReset'
-        );
     }
 }

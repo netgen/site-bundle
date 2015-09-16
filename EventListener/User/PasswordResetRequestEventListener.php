@@ -11,6 +11,18 @@ use eZ\Publish\API\Repository\Values\User\User;
 class PasswordResetRequestEventListener extends UserEventListener implements EventSubscriberInterface
 {
     /**
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * @return array
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            MVCEvents::USER_PASSWORD_RESET_REQUEST => 'onPasswordResetRequest'
+        );
+    }
+
+    /**
      * Listens for the start of forgotpassword procedure.
      * Event contains information about the submitted email and the user, if found.
      *
@@ -75,12 +87,5 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
                     'hash' => $accountKey->getHash()
                 )
             );
-    }
-
-    public static function getSubscribedEvents()
-    {
-        return array(
-            MVCEvents::USER_PASSWORD_RESET_REQUEST => 'onPasswordResetRequest'
-        );
     }
 }

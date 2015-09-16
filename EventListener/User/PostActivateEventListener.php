@@ -10,6 +10,18 @@ use Netgen\Bundle\MoreBundle\Event\User\PostActivateEvent;
 class PostActivateEventListener extends UserEventListener implements EventSubscriberInterface
 {
     /**
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * @return array
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            MVCEvents::USER_POST_ACTIVATE => 'onPostActivate'
+        );
+    }
+
+    /**
      * Listens to the event triggered after the user activation has been finished.
      * Event contains information about activated user.
      *
@@ -31,12 +43,5 @@ class PostActivateEventListener extends UserEventListener implements EventSubscr
                     'user' => $user
                 )
             );
-    }
-
-    public static function getSubscribedEvents()
-    {
-        return array(
-            MVCEvents::USER_POST_ACTIVATE => 'onPostActivate'
-        );
     }
 }

@@ -11,6 +11,18 @@ use eZ\Publish\API\Repository\Values\User\User;
 class ActivationRequestEventListener extends UserEventListener implements EventSubscriberInterface
 {
     /**
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * @return array
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            MVCEvents::USER_ACTIVATION_REQUEST => 'onActivationRequest'
+        );
+    }
+
+    /**
      * Listens for the start of the activation process.
      * Event contains information about the submitted email and the user, if found.
      *
@@ -72,12 +84,5 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
                     'hash' => $accountKey->getHash()
                 )
             );
-    }
-
-    public static function getSubscribedEvents()
-    {
-        return array(
-            MVCEvents::USER_ACTIVATION_REQUEST => 'onActivationRequest'
-        );
     }
 }

@@ -90,7 +90,7 @@ class UserController extends Controller
 
         $users = $this->userService->loadUsersByEmail( $form->getData()->payload->email );
 
-        if ( count( $users ) > 0 )
+        if ( !empty( $users ) )
         {
             return $this->render(
                 $this->getConfigResolver()->getParameter( "template.user.register", "ngmore" ),

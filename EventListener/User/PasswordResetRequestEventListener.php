@@ -46,19 +46,19 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
                             'user' => $user,
                         )
                     );
+
+                return;
             }
-            else
-            {
-                $this->mailHelper
-                    ->sendMail(
-                        $email,
-                        $this->configResolver->getParameter( 'template.user.mail.forgot_password_not_active', 'ngmore' ),
-                        'ngmore.user.forgot_password.not_active.subject',
-                        array(
-                            'user' => $user,
-                        )
-                    );
-            }
+
+            $this->mailHelper
+                ->sendMail(
+                    $email,
+                    $this->configResolver->getParameter( 'template.user.mail.forgot_password_not_active', 'ngmore' ),
+                    'ngmore.user.forgot_password.not_active.subject',
+                    array(
+                        'user' => $user,
+                    )
+                );
 
             return;
         }

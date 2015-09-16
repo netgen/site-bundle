@@ -17,30 +17,32 @@ class PostRegisterEventListener extends UserEventListener implements EventSubscr
      */
     public function onUserRegistered( PostRegisterEvent $event )
     {
+        $user = $event->getUser();
+
         if ( (bool)$this->configResolver->getParameter( 'user.auto_enable', 'ngmore' ) )
         {
             $this->mailHelper
                 ->sendMail(
-                    $event->getUser()->email,
+                    $user->email,
                     $this->configResolver->getParameter( 'template.user.mail.welcome', 'ngmore' ),
                     'ngmore.user.welcome.subject',
                     array(
-                        'user' => $event->getUser()
+                        'user' => $user
                     )
                 );
 
             return;
         }
 
-        $accountKey = $this->ezUserAccountKeyRepository->create( $event->getUser()->id );
+        $accountKey = $this->ezUserAccountKeyRepository->create( $user->id );
 
         $this->mailHelper
             ->sendMail(
-                $event->getUser()->email,
+                $user->email,
                 $this->configResolver->getParameter( 'template.user.mail.activate', 'ngmore' ),
                 'ngmore.user.activate.subject',
                 array(
-                    'user' => $event->getUser(),
+                    'user' => $user,
                     'hash' => $accountKey->getHash()
                 )
             );

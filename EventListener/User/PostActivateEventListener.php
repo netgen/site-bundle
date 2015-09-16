@@ -9,7 +9,6 @@ use Netgen\Bundle\MoreBundle\Event\User\PostActivateEvent;
 
 class PostActivateEventListener extends UserEventListener implements EventSubscriberInterface
 {
-
     /**
      * Listens to the event triggered after the user activation has been finished.
      * Event contains information about activated user.

@@ -7,6 +7,7 @@ use Netgen\Bundle\MoreBundle\Event\User\ActivationRequestEvent;
 use Netgen\Bundle\MoreBundle\Helper\MailHelper;
 use Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository;
 use Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
+use eZ\Publish\API\Repository\Values\User\User;
 
 class ActivationRequestEventListener
 {
@@ -60,13 +61,15 @@ class ActivationRequestEventListener
         $user = $event->getUser();
         $email = $event->getEmail();
 
-        if ( empty( $user ) )
+        if ( !$user instanceof User )
         {
             $this->mailHelper->sendMail(
                 $email,
                 $this->configResolver->getParameter( 'template.user.mail.activate_not_registered', 'ngmore' ),
                 'ngmore.user.activate.not_registered.subject'
             );
+
+            return;
         }
 
         if ( $user->enabled )
@@ -79,8 +82,11 @@ class ActivationRequestEventListener
                     'user' => $user
                 )
             );
+
+            return;
         }
-        else if ( $this->ngUserSettingRepository->isUserActivated( $user->id ) )
+
+        if ( $this->ngUserSettingRepository->isUserActivated( $user->id ) )
         {
             $this->mailHelper->sendMail(
                 $email,
@@ -90,21 +96,21 @@ class ActivationRequestEventListener
                     'user' => $user
                 )
             );
-        }
-        else
-        {
-            $accountKey = $this->ezUserAccountKeyRepository->create( $user->id );
 
-            $this->mailHelper
-                ->sendMail(
-                    $user->email,
-                    $this->configResolver->getParameter( 'template.user.mail.activate', 'ngmore' ),
-                    'ngmore.user.activate.subject',
-                    array(
-                        'user' => $user,
-                        'hash' => $accountKey->getHash()
-                    )
-                );
+            return;
         }
+
+        $accountKey = $this->ezUserAccountKeyRepository->create( $user->id );
+
+        $this->mailHelper
+            ->sendMail(
+                $user->email,
+                $this->configResolver->getParameter( 'template.user.mail.activate', 'ngmore' ),
+                'ngmore.user.activate.subject',
+                array(
+                    'user' => $user,
+                    'hash' => $accountKey->getHash()
+                )
+            );
     }
 }

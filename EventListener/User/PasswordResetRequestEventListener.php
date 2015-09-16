@@ -2,53 +2,12 @@
 
 namespace Netgen\Bundle\MoreBundle\EventListener\User;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Netgen\Bundle\MoreBundle\EventListener\UserEventListener;
 use Netgen\Bundle\MoreBundle\Event\User\PasswordResetRequestEvent;
-use Netgen\Bundle\MoreBundle\Helper\MailHelper;
-use Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository;
-use Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
+use eZ\Publish\API\Repository\Values\User\User;
 
-class PasswordResetRequestEventListener
+class PasswordResetRequestEventListener extends UserEventListener
 {
-    /**
-     * @var \Netgen\Bundle\MoreBundle\Helper\MailHelper
-     */
-    protected $mailHelper;
-
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
-
-    /**
-     * @var \Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository
-     */
-    protected $ngUserSettingRepository;
-
-    /**
-     * @var \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
-     */
-    protected $ezUserAccountKeyRepository;
-
-    /**
-     * @param MailHelper $mailHelper
-     * @param ConfigResolverInterface $configResolver
-     * @param \Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository
-     * @param \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository
-     */
-    public function __construct(
-        MailHelper $mailHelper,
-        ConfigResolverInterface $configResolver,
-        NgUserSettingRepository $ngUserSettingRepository,
-        EzUserAccountKeyRepository $ezUserAccountKeyRepository
-    )
-    {
-        $this->mailHelper = $mailHelper;
-        $this->configResolver = $configResolver;
-        $this->ngUserSettingRepository = $ngUserSettingRepository;
-        $this->ezUserAccountKeyRepository = $ezUserAccountKeyRepository;
-    }
-
     /**
      * Listens for the start of forgotpassword procedure.
      * Event contains information about the submitted email and the user, if found.
@@ -60,7 +19,7 @@ class PasswordResetRequestEventListener
         $user = $event->getUser();
         $email = $event->getEmail();
 
-        if ( empty( $user ) )
+        if ( !$user instanceof User )
         {
             $this->mailHelper
                 ->sendMail(
@@ -68,8 +27,11 @@ class PasswordResetRequestEventListener
                     $this->configResolver->getParameter( 'template.user.mail.forgot_password_not_registered', 'ngmore' ),
                     'ngmore.user.forgot_password.not_registered.subject'
                 );
+
+            return;
         }
-        else if ( !$user->enabled )
+
+        if ( !$user->enabled )
         {
             if ( $this->ngUserSettingRepository->isUserActivated( $user->id ) )
             {
@@ -95,22 +57,21 @@ class PasswordResetRequestEventListener
                         )
                     );
             }
-        }
-        else
-        {
-            $accountKey = $this->ezUserAccountKeyRepository->create( $user->id );
 
-            $this->mailHelper
-                ->sendMail(
-                    $user->email,
-                    $this->configResolver->getParameter( 'template.user.mail.forgot_password', 'ngmore' ),
-                    'ngmore.user.forgot_password.subject',
-                    array(
-                        'user' => $user,
-                        'hash' => $accountKey->getHash()
-                    )
-                );
+            return;
         }
 
+        $accountKey = $this->ezUserAccountKeyRepository->create( $user->id );
+
+        $this->mailHelper
+            ->sendMail(
+                $user->email,
+                $this->configResolver->getParameter( 'template.user.mail.forgot_password', 'ngmore' ),
+                'ngmore.user.forgot_password.subject',
+                array(
+                    'user' => $user,
+                    'hash' => $accountKey->getHash()
+                )
+            );
     }
 }

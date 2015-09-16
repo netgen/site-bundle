@@ -2,54 +2,12 @@
 
 namespace Netgen\Bundle\MoreBundle\EventListener\User;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Netgen\Bundle\MoreBundle\EventListener\UserEventListener;
 use Netgen\Bundle\MoreBundle\Event\User\ActivationRequestEvent;
-use Netgen\Bundle\MoreBundle\Helper\MailHelper;
-use Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository;
-use Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
 use eZ\Publish\API\Repository\Values\User\User;
 
-class ActivationRequestEventListener
+class ActivationRequestEventListener extends UserEventListener
 {
-    /**
-     * @var \Netgen\Bundle\MoreBundle\Helper\MailHelper
-     */
-    protected $mailHelper;
-
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
-
-    /**
-     * @var \Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository
-     */
-    protected $ngUserSettingRepository;
-
-    /**
-     * @var \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
-     */
-    protected $ezUserAccountKeyRepository;
-
-    /**
-     * @param MailHelper $mailHelper
-     * @param ConfigResolverInterface $configResolver
-     * @param \Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository $ngUserSettingRepository
-     * @param \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository
-     */
-    public function __construct(
-        MailHelper $mailHelper,
-        ConfigResolverInterface $configResolver,
-        NgUserSettingRepository $ngUserSettingRepository,
-        EzUserAccountKeyRepository $ezUserAccountKeyRepository
-    )
-    {
-        $this->mailHelper = $mailHelper;
-        $this->configResolver = $configResolver;
-        $this->ngUserSettingRepository = $ngUserSettingRepository;
-        $this->ezUserAccountKeyRepository = $ezUserAccountKeyRepository;
-    }
-
     /**
      * Listens for the start of the activation process.
      * Event contains information about the submitted email and the user, if found.

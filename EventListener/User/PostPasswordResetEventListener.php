@@ -2,44 +2,11 @@
 
 namespace Netgen\Bundle\MoreBundle\EventListener\User;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Netgen\Bundle\MoreBundle\EventListener\UserEventListener;
 use Netgen\Bundle\MoreBundle\Event\User\PostPasswordResetEvent;
-use Netgen\Bundle\MoreBundle\Helper\MailHelper;
-use Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
 
-class PostPasswordResetEventListener
+class PostPasswordResetEventListener extends UserEventListener
 {
-    /**
-     * @var \Netgen\Bundle\MoreBundle\Helper\MailHelper
-     */
-    protected $mailHelper;
-
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
-
-    /**
-     * @var \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
-     */
-    protected $ezUserAccountKeyRepository;
-
-    /**
-     * @param MailHelper $mailHelper
-     * @param ConfigResolverInterface $configResolver
-     * @param \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository
-     */
-    public function __construct(
-        MailHelper $mailHelper,
-        ConfigResolverInterface $configResolver,
-        EzUserAccountKeyRepository $ezUserAccountKeyRepository
-    )
-    {
-        $this->mailHelper = $mailHelper;
-        $this->configResolver = $configResolver;
-        $this->ezUserAccountKeyRepository = $ezUserAccountKeyRepository;
-    }
-
     /**
      * Listens to the event triggered after the password has been reset.
      * Event contains the information about the user who has changed the password.

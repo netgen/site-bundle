@@ -2,44 +2,11 @@
 
 namespace Netgen\Bundle\MoreBundle\EventListener\User;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Netgen\Bundle\MoreBundle\EventListener\UserEventListener;
 use Netgen\Bundle\MoreBundle\Event\User\PostRegisterEvent;
-use Netgen\Bundle\MoreBundle\Helper\MailHelper;
-use Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
 
-class PostRegisterEventListener
+class PostRegisterEventListener extends UserEventListener
 {
-    /**
-     * @var \Netgen\Bundle\MoreBundle\Helper\MailHelper
-     */
-    protected $mailHelper;
-
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
-
-    /**
-     * @var \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository
-     */
-    protected $ezUserAccountKeyRepository;
-
-    /**
-     * @param MailHelper $mailHelper
-     * @param ConfigResolverInterface $configResolver
-     * @param EzUserAccountKeyRepository $ezUserAccountKeyRepository
-     */
-    public function __construct(
-        MailHelper $mailHelper,
-        ConfigResolverInterface $configResolver,
-        EzUserAccountKeyRepository $ezUserAccountKeyRepository
-    )
-    {
-        $this->mailHelper = $mailHelper;
-        $this->configResolver = $configResolver;
-        $this->ezUserAccountKeyRepository = $ezUserAccountKeyRepository;
-    }
-
     /**
      * Listens to the event triggered after the user has been registered.
      * The event contains information about registered user.

@@ -13,18 +13,11 @@ class PostRegisterEvent extends Event
     protected $user;
 
     /**
-     * @var bool
-     */
-    protected $autoEnabled;
-
-    /**
      * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param bool $autoEnabled
      */
-    public function __construct( User $user, $autoEnabled )
+    public function __construct( User $user )
     {
         $this->user = $user;
-        $this->autoEnabled = $autoEnabled;
     }
 
     /**
@@ -33,13 +26,5 @@ class PostRegisterEvent extends Event
     public function getUser()
     {
         return $this->user;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isAutoEnabled()
-    {
-        return $this->autoEnabled;
     }
 }

@@ -17,7 +17,7 @@ class PostRegisterEventListener extends UserEventListener implements EventSubscr
      */
     public function onUserRegistered( PostRegisterEvent $event )
     {
-        if ( $this->configResolver->getParameter( 'user.auto_enable', 'ngmore' ) )
+        if ( (bool)$this->configResolver->getParameter( 'user.auto_enable', 'ngmore' ) )
         {
             $this->mailHelper
                 ->sendMail(

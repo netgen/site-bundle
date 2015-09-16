@@ -3,26 +3,17 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey;
-use Netgen\Bundle\MoreBundle\Event\User\ActivationRequestEvent;
-use Netgen\Bundle\MoreBundle\Event\User\PasswordResetRequestEvent;
-use Netgen\Bundle\MoreBundle\Event\User\PostPasswordResetEvent;
-use Netgen\Bundle\MoreBundle\Event\User\PreActivateEvent;
-use Netgen\Bundle\MoreBundle\Event\User\PostActivateEvent;
-use Netgen\Bundle\MoreBundle\Event\User\PostRegisterEvent;
-use Netgen\Bundle\MoreBundle\Event\User\PrePasswordResetEvent;
-use Netgen\Bundle\MoreBundle\Event\User\PreRegisterEvent;
+use Netgen\Bundle\MoreBundle\Event\User as UserEvents;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints;
 use eZ\Bundle\EzPublishCoreBundle\Controller;
-use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Netgen\Bundle\EzFormsBundle\Form\DataWrapper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Netgen\Bundle\MoreBundle\Event\MVCEvents;
-use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 
 class UserController extends Controller
 {
@@ -87,79 +78,79 @@ class UserController extends Controller
         $form = $formBuilder->getForm();
         $form->handleRequest( $request );
 
-        if ( $form->isValid() )
+        if ( !$form->isValid() )
         {
-            $users = $this->userService->loadUsersByEmail( $form->getData()->payload->email );
-
-            if ( count( $users ) > 0 )
-            {
-                return $this->render(
-                    $this->getConfigResolver()->getParameter( "template.user.register", "ngmore" ),
-                    array(
-                        "form" => $form->createView(),
-                        "error" => 'email_in_use'
-                    )
-                );
-            }
-
-            try
-            {
-                $this->userService->loadUserByLogin( $form->getData()->payload->login );
-
-                return $this->render(
-                    $this->getConfigResolver()->getParameter( "template.user.register", "ngmore" ),
-                    array(
-                        "form" => $form->createView(),
-                        "error" => 'username_taken'
-                    )
-                );
-            }
-            catch ( NotFoundException $e )
-            {
-                // do nothing
-            }
-
-            $userGroupId = $this->getConfigResolver()->getParameter( 'user.user_group_content_id', 'ngmore' );
-
-            $preUserRegisterEvent = new PreRegisterEvent( $data->payload );
-            $this->eventDispatcher->dispatch( MVCEvents::USER_PRE_REGISTER, $preUserRegisterEvent );
-            $data->payload = $preUserRegisterEvent->getUserCreateStruct();
-
-            // @TODO: There is a known issue in eZ Publish kernel where signal slot repository
-            // is NOT used in sudo calls, preventing the "auto enable" functionality from working
-            // See: https://github.com/ezsystems/ezpublish-kernel/pull/1393
-            $newUser = $this->getRepository()->sudo(
-                function( Repository $repository ) use ( $data, $userGroupId )
-                {
-                    $userGroup = $repository->getUserService()->loadUserGroup( $userGroupId );
-
-                    return $repository->getUserService()->createUser(
-                        $data->payload,
-                        array( $userGroup )
-                    );
-                }
+            return $this->render(
+                $this->getConfigResolver()->getParameter( "template.user.register", "ngmore" ),
+                array(
+                    "form" => $form->createView()
+                )
             );
+        }
 
-            $userRegisterEvent = new PostRegisterEvent( $newUser, $autoEnable );
-            $this->eventDispatcher->dispatch( MVCEvents::USER_POST_REGISTER, $userRegisterEvent );
+        $users = $this->userService->loadUsersByEmail( $form->getData()->payload->email );
 
-            if ( $autoEnable )
-            {
-                return $this->render(
-                    $this->getConfigResolver()->getParameter( 'template.user.register_success', 'ngmore' )
-                );
-            }
+        if ( count( $users ) > 0 )
+        {
+            return $this->render(
+                $this->getConfigResolver()->getParameter( "template.user.register", "ngmore" ),
+                array(
+                    "form" => $form->createView(),
+                    "error" => 'email_in_use'
+                )
+            );
+        }
+
+        try
+        {
+            $this->userService->loadUserByLogin( $form->getData()->payload->login );
 
             return $this->render(
-                $this->getConfigResolver()->getParameter( 'template.user.activate_sent', 'ngmore' )
+                $this->getConfigResolver()->getParameter( "template.user.register", "ngmore" ),
+                array(
+                    "form" => $form->createView(),
+                    "error" => 'username_taken'
+                )
+            );
+        }
+        catch ( NotFoundException $e )
+        {
+            // do nothing
+        }
+
+        $userGroupId = $this->getConfigResolver()->getParameter( 'user.user_group_content_id', 'ngmore' );
+
+        $preUserRegisterEvent = new UserEvents\PreRegisterEvent( $data->payload );
+        $this->eventDispatcher->dispatch( MVCEvents::USER_PRE_REGISTER, $preUserRegisterEvent );
+        $data->payload = $preUserRegisterEvent->getUserCreateStruct();
+
+        // @TODO: There is a known issue in eZ Publish kernel where signal slot repository
+        // is NOT used in sudo calls, preventing the "auto enable" functionality from working
+        // See: https://github.com/ezsystems/ezpublish-kernel/pull/1393
+        $newUser = $this->getRepository()->sudo(
+            function( Repository $repository ) use ( $data, $userGroupId )
+            {
+                $userGroup = $repository->getUserService()->loadUserGroup( $userGroupId );
+
+                return $repository->getUserService()->createUser(
+                    $data->payload,
+                    array( $userGroup )
+                );
+            }
+        );
+
+        $userRegisterEvent = new UserEvents\PostRegisterEvent( $newUser );
+        $this->eventDispatcher->dispatch( MVCEvents::USER_POST_REGISTER, $userRegisterEvent );
+
+        if ( $autoEnable )
+        {
+            return $this->render(
+                $this->getConfigResolver()->getParameter( 'template.user.register_success', 'ngmore' )
             );
         }
 
         return $this->render(
-            $this->getConfigResolver()->getParameter( "template.user.register", "ngmore" ),
-            array(
-                "form" => $form->createView()
-            )
+            $this->getConfigResolver()->getParameter( 'template.user.activate_sent', 'ngmore' )
         );
     }
 
@@ -185,21 +176,14 @@ class UserController extends Controller
             );
         }
 
-        $email = $form->get( 'email' )->getData();
         $users = $this->userService->loadUsersByEmail( $form->get( 'email' )->getData() );
 
-        if ( empty( $users ) )
-        {
-            $user = null;
-        }
-        else
-        {
-            $user = $users[0];
-        }
+        $activationRequestEvent = new UserEvents\ActivationRequestEvent(
+            $form->get( 'email' )->getData(),
+            !empty( $users ) ? $users[0] : null
+        );
 
-        $activationRequestEvent = new ActivationRequestEvent( $email, $user );
         $this->eventDispatcher->dispatch( MVCEvents::USER_ACTIVATION_REQUEST, $activationRequestEvent );
-
 
         return $this->render(
             $this->getConfigResolver()->getParameter( 'template.user.activate_sent', 'ngmore' )
@@ -217,10 +201,9 @@ class UserController extends Controller
      */
     public function activate( $hash )
     {
-        /** @var \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository $ezUserAccountKeyRepository */
-        $ezUserAccountKeyRepository  = $this->get( 'ngmore.repository.ezuser_accountkey' );
-
-        $accountKey = $ezUserAccountKeyRepository->getByHash( $hash );
+        /** @var \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository $accountKeyRepository */
+        $accountKeyRepository = $this->get( 'ngmore.repository.ezuser_accountkey' );
+        $accountKey = $accountKeyRepository->getByHash( $hash );
 
         if ( !$accountKey instanceof EzUserAccountKey )
         {
@@ -229,7 +212,7 @@ class UserController extends Controller
 
         if ( time() - $accountKey->getTime() > $this->getConfigResolver()->getParameter( 'user.activate_hash_validity_time', 'ngmore' ) )
         {
-            $ezUserAccountKeyRepository->removeByHash( $hash );
+            $accountKeyRepository->removeByHash( $hash );
 
             return $this->render(
                 $this->getConfigResolver()->getParameter( "template.user.activate_done", "ngmore" ),
@@ -251,7 +234,7 @@ class UserController extends Controller
         $userUpdateStruct = $this->userService->newUserUpdateStruct();
         $userUpdateStruct->enabled = true;
 
-        $preActivateEvent = new PreActivateEvent( $user, $userUpdateStruct );
+        $preActivateEvent = new UserEvents\PreActivateEvent( $user, $userUpdateStruct );
         $this->eventDispatcher->dispatch( MVCEvents::USER_PRE_ACTIVATE, $preActivateEvent );
         $userUpdateStruct = $preActivateEvent->getUserUpdateStruct();
 
@@ -262,7 +245,7 @@ class UserController extends Controller
             }
         );
 
-        $postActivateEvent = new PostActivateEvent( $user );
+        $postActivateEvent = new UserEvents\PostActivateEvent( $user );
         $this->eventDispatcher->dispatch( MVCEvents::USER_POST_ACTIVATE, $postActivateEvent );
 
         return $this->render(
@@ -293,16 +276,11 @@ class UserController extends Controller
         }
 
         $users = $this->userService->loadUsersByEmail( $form->get( 'email' )->getData() );
-        $email = $form->get( 'email' )->getData();
 
-        if ( empty( $users ) )
-        {
-            $passwordResetRequestEvent = new PasswordResetRequestEvent( $email );
-        }
-        else
-        {
-            $passwordResetRequestEvent = new PasswordResetRequestEvent( $email, $users[0] );
-        }
+        $passwordResetRequestEvent = new UserEvents\PasswordResetRequestEvent(
+            $form->get( 'email' )->getData(),
+            !empty( $users ) ? $users[0] : null
+        );
 
         $this->eventDispatcher->dispatch( MVCEvents::USER_PASSWORD_RESET_REQUEST, $passwordResetRequestEvent );
 
@@ -323,10 +301,9 @@ class UserController extends Controller
      */
     public function resetPassword( Request $request, $hash )
     {
-        /** @var \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository $ezUserAccountKeyRepository */
-        $ezUserAccountKeyRepository = $this->get( 'ngmore.repository.ezuser_accountkey' );
-
-        $accountKey = $ezUserAccountKeyRepository->getByHash( $hash );
+        /** @var \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository $accountKeyRepository */
+        $accountKeyRepository = $this->get( 'ngmore.repository.ezuser_accountkey' );
+        $accountKey = $accountKeyRepository->getByHash( $hash );
 
         if ( !$accountKey instanceof EzUserAccountKey )
         {
@@ -335,7 +312,7 @@ class UserController extends Controller
 
         if ( time() - $accountKey->getTime() > $this->getConfigResolver()->getParameter( 'user.forgot_password_hash_validity_time', 'ngmore' ) )
         {
-            $ezUserAccountKeyRepository->removeByHash( $hash );
+            $accountKeyRepository->removeByHash( $hash );
 
             return $this->render(
                 $this->getConfigResolver()->getParameter( "template.user.reset_password_done", "ngmore" ),
@@ -372,7 +349,7 @@ class UserController extends Controller
         $userUpdateStruct = $this->userService->newUserUpdateStruct();
         $userUpdateStruct->password = $data["password"];
 
-        $prePasswordResetEvent = new PrePasswordResetEvent( $user, $userUpdateStruct );
+        $prePasswordResetEvent = new UserEvents\PrePasswordResetEvent( $user, $userUpdateStruct );
         $this->eventDispatcher->dispatch( MVCEvents::USER_PRE_PASSWORD_RESET, $prePasswordResetEvent );
         $userUpdateStruct = $prePasswordResetEvent->getUserUpdateStruct();
 
@@ -383,7 +360,7 @@ class UserController extends Controller
             }
         );
 
-        $postPasswordResetEvent = new PostPasswordResetEvent( $user );
+        $postPasswordResetEvent = new UserEvents\PostPasswordResetEvent( $user );
         $this->eventDispatcher->dispatch( MVCEvents::USER_POST_PASSWORD_RESET, $postPasswordResetEvent );
 
         return $this->render(

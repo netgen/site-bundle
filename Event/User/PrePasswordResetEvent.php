@@ -4,6 +4,7 @@ namespace Netgen\Bundle\MoreBundle\Event\User;
 
 use Symfony\Component\EventDispatcher\Event;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\User;
 
 class PrePasswordResetEvent extends Event
 {
@@ -13,11 +14,25 @@ class PrePasswordResetEvent extends Event
     protected $userUpdateStruct;
 
     /**
+     * @var \eZ\Publish\API\Repository\Values\User\User
+     */
+    protected $user;
+
+    /**
      * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct
      */
-    public function __construct( UserUpdateStruct $userUpdateStruct )
+    public function __construct( User $user, UserUpdateStruct $userUpdateStruct )
     {
+        $this->user = $user;
         $this->userUpdateStruct = $userUpdateStruct;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**

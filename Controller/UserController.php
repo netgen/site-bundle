@@ -22,6 +22,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Netgen\Bundle\EzFormsBundle\Form\DataWrapper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Netgen\Bundle\MoreBundle\Event\MVCEvents;
+use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 
 class UserController extends Controller
 {
@@ -247,11 +248,19 @@ class UserController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $preActivateEvent = new PreActivateEvent( $user );
-        $this->eventDispatcher->dispatch( MVCEvents::USER_PRE_ACTIVATE, $preActivateEvent );
-        $user = $preActivateEvent->getUser();
+        $userUpdateStruct = $this->userService->newUserUpdateStruct();
+        $userUpdateStruct->enabled = true;
 
-        $user = $this->enableUser( $user );
+        $preActivateEvent = new PreActivateEvent( $user, $userUpdateStruct );
+        $this->eventDispatcher->dispatch( MVCEvents::USER_PRE_ACTIVATE, $preActivateEvent );
+        $userUpdateStruct = $preActivateEvent->getUserUpdateStruct();
+
+        $user = $this->getRepository()->sudo(
+            function( Repository $repository ) use ( $user, $userUpdateStruct )
+            {
+                return $repository->getUserService()->updateUser( $user, $userUpdateStruct );
+            }
+        );
 
         $postActivateEvent = new PostActivateEvent( $user );
         $this->eventDispatcher->dispatch( MVCEvents::USER_POST_ACTIVATE, $postActivateEvent );
@@ -363,7 +372,7 @@ class UserController extends Controller
         $userUpdateStruct = $this->userService->newUserUpdateStruct();
         $userUpdateStruct->password = $data["password"];
 
-        $prePasswordResetEvent = new PrePasswordResetEvent( $userUpdateStruct );
+        $prePasswordResetEvent = new PrePasswordResetEvent( $user, $userUpdateStruct );
         $this->eventDispatcher->dispatch( MVCEvents::USER_PRE_PASSWORD_RESET, $prePasswordResetEvent );
         $userUpdateStruct = $prePasswordResetEvent->getUserUpdateStruct();
 
@@ -455,27 +464,5 @@ class UserController extends Controller
         return $this->createFormBuilder( null, array( "translation_domain" => "ngmore_user" ) )
             ->add( 'password', 'repeated', $passwordOptions )
             ->getForm();
-    }
-
-    /**
-     * Enables the user
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     */
-    protected function enableUser( User $user )
-    {
-        $userUpdateStruct = $this->userService->newUserUpdateStruct();
-        $userUpdateStruct->enabled = true;
-
-        $user = $this->getRepository()->sudo(
-            function( Repository $repository ) use ( $user, $userUpdateStruct )
-            {
-                return $repository->getUserService()->updateUser( $user, $userUpdateStruct );
-            }
-        );
-
-        return $user;
     }
 }

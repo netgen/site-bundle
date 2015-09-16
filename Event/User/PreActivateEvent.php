@@ -4,6 +4,7 @@ namespace Netgen\Bundle\MoreBundle\Event\User;
 
 use Symfony\Component\EventDispatcher\Event;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 
 class PreActivateEvent extends Event
 {
@@ -13,11 +14,18 @@ class PreActivateEvent extends Event
     protected $user;
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @var \eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
      */
-    public function __construct( User $user )
+    protected $userUpdateStruct;
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct
+     */
+    public function __construct( User $user, UserUpdateStruct $userUpdateStruct )
     {
         $this->user = $user;
+        $this->userUpdateStruct = $userUpdateStruct;
     }
 
     /**
@@ -29,10 +37,18 @@ class PreActivateEvent extends Event
     }
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @return \eZ\Publish\API\Repository\Values\User\UserUpdateStruct
      */
-    public function setUser( User $user )
+    public function getUserUpdateStruct()
     {
-        $this->user = $user;
+        return $this->userUpdateStruct;
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct
+     */
+    public function setUserUpdateStruct( UserUpdateStruct $userUpdateStruct )
+    {
+        $this->userUpdateStruct = $userUpdateStruct;
     }
 }

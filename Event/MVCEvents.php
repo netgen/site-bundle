@@ -13,7 +13,7 @@ final class MVCEvents
 
     /**
      * The USER_PRE_ACTIVATE event occurs just before the user has been activated.
-     * It is possible to manipulate the userUpdateStruct in the listener of this event.
+     * It is possible to manipulate the user update struct in the listener of this event.
      *
      * The event listener method receives a \Netgen\Bundle\MoreBundle\Event\User\PreActivateEvent
      */
@@ -28,7 +28,7 @@ final class MVCEvents
 
     /**
      * The USER_PRE_REGISTER event occurs just before the user has been registered.
-     * It gives control over the userCreateStruct before actually creating the user.
+     * It is possible to manipulate the user create struct before actually creating the user.
      *
      * The event listener method receives a \Netgen\Bundle\MoreBundle\Event\User\PreRegisterEvent
      */
@@ -50,7 +50,7 @@ final class MVCEvents
 
     /**
      * The USER_PRE_PASSWORD_RESET event occurs just before the password on the user has been changed.
-     * It enables manipulating the userUpdateStruct which is used to change the password.
+     * It is possible to manipulate the user update struct in the listener of this event.
      *
      * The event listener method receives a \Netgen\Bundle\MoreBundle\Event\User\PrePasswordResetEvent
      */

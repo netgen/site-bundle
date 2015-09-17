@@ -1,7 +1,7 @@
 {% if ezpublish.configResolver.hasParameter( 'site_settings.add_this_code', 'ngmore' ) %}
-    {% set addThisCode = ezpublish.configResolver.getParameter( 'site_settings.add_this_code', 'ngmore' ) %}
+    {% set add_this_code = ezpublish.configResolver.getParameter( 'site_settings.add_this_code', 'ngmore' ) %}
 
-    {% if addThisCode is not empty %}
+    {% if add_this_code is not empty %}
         <div class="action clearfix">
             <div class="addthis_toolbox addthis_default_style">
                 <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
@@ -12,7 +12,7 @@
             </div>
 
             <script type="text/javascript">var addthis_config = { "data_track_addressbar": false };</script>
-            <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid={{ addThisCode|raw|escape( 'js' ) }}"></script>
+            <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid={{ add_this_code|raw|escape( 'js' ) }}"></script>
         </div>
     {% endif %}
 {% endif %}

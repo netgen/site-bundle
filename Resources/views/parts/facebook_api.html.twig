@@ -2,8 +2,7 @@
     and ezpublish.configResolver.hasParameter( 'facebook_app_id', 'netgen_open_graph' ) %}
     {% set facebook_api = ezpublish.configResolver.getParameter( 'site_settings.facebook_api', 'ngmore' ) %}
 
-    {# We check for 'enabled' for compatibility with legacy config #}
-    {% if facebook_api == 'enabled' or facebook_api == true %}
+    {% if facebook_api %}
         {% set facebook_app_id = ezpublish.configResolver.getParameter( 'facebook_app_id', 'netgen_open_graph' ) %}
         {% set facebook_locale = 'en_US' %}
         {% if ezpublish.configResolver.hasParameter( 'site_settings.facebook_locale', 'ngmore' ) %}

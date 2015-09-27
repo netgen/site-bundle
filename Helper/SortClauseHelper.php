@@ -35,28 +35,30 @@ class SortClauseHelper
      */
     public function getSortClauseBySortField( $sortField, $sortOrder = Location::SORT_ORDER_ASC )
     {
+        $querySortOrder = $this->getQuerySortOrder( $sortOrder );
+
         switch ( $sortField )
         {
             case 'path':
             case 'path_string':
             case Location::SORT_FIELD_PATH:
-                return new SortClause\Location\Path( $this->getQuerySortOrder( $sortOrder ) );
+                return new SortClause\Location\Path( $querySortOrder );
 
             case 'published':
             case Location::SORT_FIELD_PUBLISHED:
-                return new SortClause\DatePublished( $this->getQuerySortOrder( $sortOrder ) );
+                return new SortClause\DatePublished( $querySortOrder );
 
             case 'modified':
             case Location::SORT_FIELD_MODIFIED:
-                return new SortClause\DateModified( $this->getQuerySortOrder( $sortOrder ) );
+                return new SortClause\DateModified( $querySortOrder );
 
             case 'section':
             case Location::SORT_FIELD_SECTION:
-                return new SortClause\SectionIdentifier( $this->getQuerySortOrder( $sortOrder ) );
+                return new SortClause\SectionIdentifier( $querySortOrder );
 
             case 'depth':
             case Location::SORT_FIELD_DEPTH:
-                return new SortClause\Location\Depth( $this->getQuerySortOrder( $sortOrder ) );
+                return new SortClause\Location\Depth( $querySortOrder );
 
             //@todo: sort clause not yet implemented
             // case 'class_identifier'
@@ -68,23 +70,23 @@ class SortClauseHelper
 
             case 'priority':
             case Location::SORT_FIELD_PRIORITY:
-                return new SortClause\Location\Priority( $this->getQuerySortOrder( $sortOrder ) );
+                return new SortClause\Location\Priority( $querySortOrder );
 
             case 'name':
             case Location::SORT_FIELD_NAME:
-                return new SortClause\ContentName( $this->getQuerySortOrder( $sortOrder ) );
+                return new SortClause\ContentName( $querySortOrder );
 
             //@todo: sort clause not yet implemented
             // case Location::SORT_FIELD_MODIFIED_SUBNODE:
 
             case Location::SORT_FIELD_NODE_ID:
-                return new SortClause\Location\Id( $this->getQuerySortOrder( $sortOrder ) );
+                return new SortClause\Location\Id( $querySortOrder );
 
             case Location::SORT_FIELD_CONTENTOBJECT_ID:
-                return new SortClause\ContentId( $this->getQuerySortOrder( $sortOrder ) );
+                return new SortClause\ContentId( $querySortOrder );
 
             default:
-                return new SortClause\Location\Path( $this->getQuerySortOrder( $sortOrder ) );
+                return new SortClause\Location\Path( $querySortOrder );
         }
     }
 }

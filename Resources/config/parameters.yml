@@ -22,6 +22,9 @@ parameters:
     ngmore.default.site_settings.facebook_api: false
     ngmore.default.site_settings.facebook_locale: en_US
     ngmore.default.site_settings.jwplayer_key: ~
+    ngmore.default.site_settings.meta_data: []
+    ngmore.default.site_settings.show_path_in_title: false
+    ngmore.default.site_settings.site_name: 'NG More'
 
     ngmore.default.path_helper.excluded_content_types: ['ng_container', 'folder']
 

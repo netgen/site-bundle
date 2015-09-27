@@ -16,7 +16,6 @@ use Twig_SimpleFunction;
 
 class NetgenMoreExtension extends Twig_Extension
 {
-
     /**
      * @var \eZ\Publish\API\Repository\Repository
      */

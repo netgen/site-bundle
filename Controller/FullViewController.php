@@ -29,14 +29,25 @@ class FullViewController extends Controller
      */
     public function viewNgCategoryContent( Request $request, $contentId, $viewType, $layout = false, array $params = array() )
     {
-        $response = $this->checkCategoryRedirect( $params['location'] );
+        $content = $this->getRepository()->getContentService()->loadContent( $contentId );
+
+        if ( !isset( $params['location'] ) )
+        {
+            $location = $this->getRepository()->getLocationService()->loadLocation(
+                $content->contentInfo->mainLocationId
+            );
+        }
+        else
+        {
+            $location = $params['location'];
+        }
+
+        $response = $this->checkCategoryRedirect( $location );
         if ( $response instanceof Response )
         {
             return $response;
         }
 
-        $location = $params['location'];
-        $content = $this->getRepository()->getContentService()->loadContent( $location->contentId );
         $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
         $translationHelper = $this->container->get( 'ezpublish.translation_helper' );
 
@@ -132,10 +143,13 @@ class FullViewController extends Controller
      */
     public function viewNgLandingPageContent( $contentId, $viewType, $layout = false, array $params = array() )
     {
-        $response = $this->checkCategoryRedirect( $params['location'] );
-        if ( $response instanceof Response )
+        if ( isset( $params['location'] ) )
         {
-            return $response;
+            $response = $this->checkCategoryRedirect( $params['location'] );
+            if ( $response instanceof Response )
+            {
+                return $response;
+            }
         }
 
         return $this->get( 'ez_content' )->viewContent( $contentId, $viewType, $layout, $params );
@@ -153,10 +167,13 @@ class FullViewController extends Controller
      */
     public function viewNgCategoryPageContent( $contentId, $viewType, $layout = false, array $params = array() )
     {
-        $response = $this->checkCategoryRedirect( $params['location'] );
-        if ( $response instanceof Response )
+        if ( isset( $params['location'] ) )
         {
-            return $response;
+            $response = $this->checkCategoryRedirect( $params['location'] );
+            if ( $response instanceof Response )
+            {
+                return $response;
+            }
         }
 
         return $this->get( 'ez_content' )->viewContent( $contentId, $viewType, $layout, $params );

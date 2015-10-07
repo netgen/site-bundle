@@ -15,6 +15,6 @@ class IORepositoryResolver extends BaseIORepositoryResolver
      */
     protected function getBaseUrl()
     {
-        return "";
+        parent::getBaseUrl();
     }
 }

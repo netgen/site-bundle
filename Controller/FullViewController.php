@@ -3,6 +3,7 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -16,25 +17,25 @@ use Pagerfanta\Pagerfanta;
 class FullViewController extends Controller
 {
     /**
-     * Action for viewing location with ng_category content type identifier
+     * Action for viewing content with ng_category content type identifier
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param mixed $locationId
+     * @param mixed $contentId
      * @param string $viewType
      * @param boolean $layout
      * @param array $params
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewNgCategoryLocation( Request $request, $locationId, $viewType, $layout = false, array $params = array() )
+    public function viewNgCategoryContent( Request $request, $contentId, $viewType, $layout = false, array $params = array() )
     {
-        $response = $this->checkCategoryRedirect( $locationId );
+        $response = $this->checkCategoryRedirect( $params['location'] );
         if ( $response instanceof Response )
         {
             return $response;
         }
 
-        $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
+        $location = $params['location'];
         $content = $this->getRepository()->getContentService()->loadContent( $location->contentId );
         $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
         $translationHelper = $this->container->get( 'ezpublish.translation_helper' );
@@ -109,8 +110,8 @@ class FullViewController extends Controller
         $currentPage = (int)$request->get( 'page', 1 );
         $pager->setCurrentPage( $currentPage > 0 ? $currentPage : 1 );
 
-        return $this->get( 'ez_content' )->viewLocation(
-            $locationId,
+        return $this->get( 'ez_content' )->viewContent(
+            $contentId,
             $viewType,
             $layout,
             $params + array(
@@ -120,59 +121,58 @@ class FullViewController extends Controller
     }
 
     /**
-     * Action for viewing location with ng_landing_page content type identifier
+     * Action for viewing content with ng_landing_page content type identifier
      *
-     * @param mixed $locationId
+     * @param mixed $contentId
      * @param string $viewType
      * @param boolean $layout
      * @param array $params
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewNgLandingPageLocation( $locationId, $viewType, $layout = false, array $params = array() )
+    public function viewNgLandingPageContent( $contentId, $viewType, $layout = false, array $params = array() )
     {
-        $response = $this->checkCategoryRedirect( $locationId );
+        $response = $this->checkCategoryRedirect( $params['location'] );
         if ( $response instanceof Response )
         {
             return $response;
         }
 
-        return $this->get( 'ez_content' )->viewLocation( $locationId, $viewType, $layout, $params );
+        return $this->get( 'ez_content' )->viewContent( $contentId, $viewType, $layout, $params );
     }
 
     /**
-     * Action for viewing location with ng_category_page content type identifier
+     * Action for viewing content with ng_category_page content type identifier
      *
-     * @param mixed $locationId
+     * @param mixed $contentId
      * @param string $viewType
      * @param boolean $layout
      * @param array $params
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewNgCategoryPageLocation( $locationId, $viewType, $layout = false, array $params = array() )
+    public function viewNgCategoryPageContent( $contentId, $viewType, $layout = false, array $params = array() )
     {
-        $response = $this->checkCategoryRedirect( $locationId );
+        $response = $this->checkCategoryRedirect( $params['location'] );
         if ( $response instanceof Response )
         {
             return $response;
         }
 
-        return $this->get( 'ez_content' )->viewLocation( $locationId, $viewType, $layout, $params );
+        return $this->get( 'ez_content' )->viewContent( $contentId, $viewType, $layout, $params );
     }
 
     /**
      * Checks if content at location defined by it's ID contains
      * valid category redirect value and returns a redirect response if it does
      *
-     * @param mixed $locationId
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function checkCategoryRedirect( $locationId )
+    protected function checkCategoryRedirect( Location $location )
     {
         $contentService = $this->getRepository()->getContentService();
-        $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
         $content = $contentService->loadContent( $location->contentId );
 
         $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
@@ -183,7 +183,7 @@ class FullViewController extends Controller
         if ( $internalRedirectValue instanceof RelationValue && !$fieldHelper->isFieldEmpty( $content, 'internal_redirect' ) )
         {
             $internalRedirectContentInfo = $contentService->loadContentInfo( $internalRedirectValue->destinationContentId );
-            if ( $internalRedirectContentInfo->mainLocationId != $locationId )
+            if ( $internalRedirectContentInfo->mainLocationId != $location->id )
             {
                 return new RedirectResponse(
                     $this->container->get( 'router' )->generate(

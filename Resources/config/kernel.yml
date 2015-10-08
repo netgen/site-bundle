@@ -7,3 +7,5 @@ parameters:
     ezpublish.fieldType.ezobjectrelationlist.converter.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\FieldValue\Converter\RelationListConverter
 
     ezpublish.image_alias.imagine.cache_resolver.class: Netgen\Bundle\MoreBundle\Imagine\IORepositoryResolver
+
+    ezpublish.view_manager.class: Netgen\Bundle\MoreBundle\View\Manager

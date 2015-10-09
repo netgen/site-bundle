@@ -29,3 +29,11 @@ ngmore_user_forgot_password:
 ngmore_user_reset_password:
     path: /user/forgotpassword/{hash}
     defaults: { _controller: ngmore.controller.user:resetPassword }
+
+# Disable eZ Platform built in routes
+
+ez_content_download:
+    path: /_error/404
+
+ez_content_download_field_id:
+    path: /_error/404

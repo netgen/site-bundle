@@ -37,3 +37,9 @@ ez_content_download:
 
 ez_content_download_field_id:
     path: /_error/404
+
+ezpublishSetup:
+    path: /_error/404
+
+_ezpublishLegacyRest:
+    path: /_error/404

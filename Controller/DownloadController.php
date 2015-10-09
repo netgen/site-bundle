@@ -46,7 +46,8 @@ class DownloadController extends Controller
             !$binaryField instanceof Field ||
             $this->container->get( 'ezpublish.field_helper' )->isFieldEmpty(
                 $content,
-                $binaryField->fieldDefIdentifier
+                $binaryField->fieldDefIdentifier,
+                $request->query->has( 'inLanguage' ) ? $request->query->get( 'inLanguage' ) : null
             )
         )
         {

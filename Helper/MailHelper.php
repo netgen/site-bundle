@@ -84,14 +84,19 @@ class MailHelper
     /**
      * Sends an mail
      *
-     * @param string $receiverEmail
+     * Receivers can be a string: info@netgen.hr
+     * or an array:
+     * array( 'info@netgen.hr' => 'Netgen' ) or
+     * array( 'info@netgen.hr' => 'Netgen', 'example@netgen.hr' => 'Example' )
+     *
+     * @param mixed $receivers
      * @param string $template
      * @param string $subject
      * @param array $templateParameters
      *
      * @return int
      */
-    public function sendMail( $receiverEmail, $template, $subject, $templateParameters = array() )
+    public function sendMail( $receivers, $template, $subject, $templateParameters = array() )
     {
         $templateParameters['site_url'] = $this->siteUrl;
         $templateParameters['site_name'] = $this->siteName;
@@ -100,8 +105,11 @@ class MailHelper
 
         $subject = $this->translator->trans( $subject, array(), 'ngmore_mail' );
 
-        $message = Swift_Message::newInstance()
-            ->setTo( $receiverEmail )
+        /** @var \Swift_Mime_Message $message */
+        $message = Swift_Message::newInstance();
+
+        $message
+            ->setTo( $receivers )
             ->setSubject( $this->siteName . ': ' . $subject )
             ->setBody( $body, 'text/html' );
 

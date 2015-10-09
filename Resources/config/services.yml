@@ -6,6 +6,7 @@ parameters:
     ngmore.controller.block_view.class: Netgen\Bundle\MoreBundle\Controller\BlockViewController
     ngmore.controller.page_layout.class: Netgen\Bundle\MoreBundle\Controller\PageLayoutController
     ngmore.controller.parts.class: Netgen\Bundle\MoreBundle\Controller\PartsController
+    ngmore.controller.download.class: Netgen\Bundle\MoreBundle\Controller\DownloadController
     ngmore.controller.sitemap.class: Netgen\Bundle\MoreBundle\Controller\SitemapController
     ngmore.controller.user.class: Netgen\Bundle\MoreBundle\Controller\UserController
 
@@ -63,6 +64,10 @@ services:
 
     ngmore.controller.parts:
         class: %ngmore.controller.parts.class%
+        parent: ezpublish.controller.base
+
+    ngmore.controller.download:
+        class: %ngmore.controller.download.class%
         parent: ezpublish.controller.base
 
     ngmore.controller.sitemap:

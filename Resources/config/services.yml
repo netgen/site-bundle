@@ -99,6 +99,7 @@ services:
         class: %ngmore.helper.layout_helper.class%
         arguments:
             - @ezpublish.api.repository
+            - @ezpublish.spi.search.legacy
             - @ngmore.helper.path_helper
             - @ezpublish.translation_helper
             - @ezpublish.config.resolver

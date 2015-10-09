@@ -96,7 +96,7 @@ class MailHelper
      *
      * @return int
      */
-    public function sendMail( $receivers, $template, $subject, $templateParameters = array() )
+    public function sendMail( $receivers, $subject, $template, $templateParameters = array() )
     {
         $templateParameters['site_url'] = $this->siteUrl;
         $templateParameters['site_name'] = $this->siteName;

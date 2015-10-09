@@ -7,6 +7,8 @@ use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MatcherInterface;
 use Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased;
+use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use eZ\Publish\Core\MVC\Symfony\View\View;
 
 class ParentLocation extends ConfigResolverBased implements MatcherInterface
 {
@@ -39,5 +41,22 @@ class ParentLocation extends ConfigResolverBased implements MatcherInterface
         );
 
         return $this->doMatch( $location->parentLocationId );
+    }
+
+    /**
+     * Checks if View object matches.
+     *
+     * @param \eZ\Publish\Core\MVC\Symfony\View\View $view
+     *
+     * @return bool
+     */
+    public function match( View $view )
+    {
+        if ( !$view instanceof ContentView )
+        {
+            return false;
+        }
+
+        return $this->doMatch( $view->getLocation()->parentLocationId );
     }
 }

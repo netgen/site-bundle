@@ -6,6 +6,8 @@ use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MatcherInterface;
 use Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased;
+use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use eZ\Publish\Core\MVC\Symfony\View\View;
 
 class ContentTypeGroup extends ConfigResolverBased implements MatcherInterface
 {
@@ -18,7 +20,7 @@ class ContentTypeGroup extends ConfigResolverBased implements MatcherInterface
      */
     public function matchLocation( APILocation $location )
     {
-        return $this->matchContentInfo( $location->getContentInfo() );
+        return $this->matchContentTypeId( $location->getContentInfo()->contentTypeId );
     }
 
     /**
@@ -30,9 +32,38 @@ class ContentTypeGroup extends ConfigResolverBased implements MatcherInterface
      */
     public function matchContentInfo( ContentInfo $contentInfo )
     {
+        return $this->matchContentTypeId( $contentInfo->contentTypeId );
+    }
+
+    /**
+     * Checks if View object matches.
+     *
+     * @param \eZ\Publish\Core\MVC\Symfony\View\View $view
+     *
+     * @return bool
+     */
+    public function match( View $view )
+    {
+        if ( !$view instanceof ContentView )
+        {
+            return false;
+        }
+
+        return $this->matchContentTypeId( $view->getContent()->contentInfo->contentTypeId );
+    }
+
+    /**
+     * Checks if a content type ID matches.
+     *
+     * @param mixed $contentTypeId
+     *
+     * @return bool
+     */
+    protected function matchContentTypeId( $contentTypeId )
+    {
         $contentTypeGroups = $this->repository
             ->getContentTypeService()
-            ->loadContentType( $contentInfo->contentTypeId )
+            ->loadContentType( $contentTypeId )
             ->getContentTypeGroups();
 
         foreach ( $contentTypeGroups as $group )

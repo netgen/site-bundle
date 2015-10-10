@@ -1,4 +1,5 @@
 parameters:
+    ngmore.listener.block_cache.class: Netgen\Bundle\MoreBundle\EventListener\BlockCacheResponseListener
     ngmore.listener.user.class: Netgen\Bundle\MoreBundle\EventListener\UserEventListener
     ngmore.listener.user.post_register.class: Netgen\Bundle\MoreBundle\EventListener\User\PostRegisterEventListener
     ngmore.listener.user.activation_request.class: Netgen\Bundle\MoreBundle\EventListener\User\ActivationRequestEventListener
@@ -7,6 +8,15 @@ parameters:
     ngmore.listener.user.post_password_reset.class: Netgen\Bundle\MoreBundle\EventListener\User\PostPasswordResetEventListener
 
 services:
+    ngmore.listener.block_cache:
+        class: %ngmore.listener.block_cache.class%
+        calls:
+            - [setEnableViewCache, [$content.view_cache$]]
+        arguments:
+            - @ezpublish.config.resolver
+        tags:
+            - { name: kernel.event_subscriber }
+
     ngmore.listener.user:
         class: %ngmore.listener.user.class%
         abstract: true

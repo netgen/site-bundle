@@ -12,32 +12,31 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\FieldType\Page\Parts\Item;
+use eZ\Publish\Core\MVC\Symfony\View\BlockView;
+use Symfony\Component\HttpFoundation\Response;
 
 class BlockViewController extends Controller
 {
     /**
-     * Renders the ContentGridDynamic block with given $id.
+     * Renders the ContentGridDynamic block found within $view.
      *
      * This method can be used with ESI rendering strategy.
      *
-     * @param mixed $id Block id
-     * @param array $params
-     * @param array $cacheSettings settings for the HTTP cache, 'smax-age' and
-     *              'max-age' are checked.
+     * @param \eZ\Publish\Core\MVC\Symfony\View\BlockView $view
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If block has an invalid type or parent_node
      *         custom attribute is missing
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewContentGridDynamic( $id, array $params = array(), array $cacheSettings = array() )
+    public function viewContentGridDynamic( BlockView $view )
     {
-        $block = $this->container->get( 'ezpublish.fieldType.ezpage.pageService' )->loadBlock( $id );
+        $block = $view->getBlock();
         if ( $block->type !== 'ContentGridDynamic' )
         {
             throw new InvalidArgumentException(
                 'id',
-                'Block #' . $id . ' has an invalid type. Expected "ContentGridDynamic", got "' . $block->type . '"'
+                'Block #' . $block->id . ' has an invalid type. Expected "ContentGridDynamic", got "' . $block->type . '"'
             );
         }
 
@@ -45,7 +44,7 @@ class BlockViewController extends Controller
         {
             throw new InvalidArgumentException(
                 'parent_node',
-                'Block #' . $id . ' is missing "parent_node" custom attribute.'
+                'Block #' . $block->id . ' is missing "parent_node" custom attribute.'
             );
         }
 
@@ -132,17 +131,18 @@ class BlockViewController extends Controller
             $result->searchHits
         );
 
-        $response = $this->container->get( 'ez_page' )->viewBlock(
-            $block,
+        // We use set parameters here to overwrite valid_items parameter
+        $view->setParameters(
             array(
                 'valid_items' => $validItems
-            ) + $params,
-            $cacheSettings
+            ) + $view->getParameters()
         );
 
+        $response = new Response();
         $response->headers->set( 'X-Location-Id', $block->customAttributes['parent_node'] );
+        $view->setResponse( $response );
 
-        return $response;
+        return $view;
     }
 
     /**

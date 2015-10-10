@@ -1,6 +1,4 @@
 parameters:
-    ezpublish.controller.page.view.class: Netgen\Bundle\MoreBundle\Controller\PageController
-
     ezpublish.search.legacy.gateway.criterion_field_value_handler.composite.class: Netgen\Bundle\MoreBundle\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Composite
 
     ezpublish.fieldType.ezobjectrelationlist.class: Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Type

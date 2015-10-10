@@ -151,7 +151,7 @@ class EmbedViewController extends Controller
             }
         }
 
-        $view->setParameters(
+        $view->addParameters(
             array(
                 'link_href' => $targetLink
             )

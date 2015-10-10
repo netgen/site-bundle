@@ -20,20 +20,21 @@ class PageController extends BasePageController
     public function viewBlock( Block $block, array $params = array(), array $cacheSettings = array() )
     {
         $configResolver = $this->getConfigResolver();
+        $blockType = strtolower( $block->type );
 
         if ( !isset( $cacheSettings['smax-age'] ) )
         {
-            if ( $configResolver->hasParameter( 'BlockSettings.' . $block->type . '.SharedMaxAge', 'ngmore' ) )
+            if ( $configResolver->hasParameter( 'block_settings.' . $blockType . '.shared_max_age', 'ngmore' ) )
             {
-                $cacheSettings['smax-age'] = (int)$configResolver->getParameter( 'BlockSettings.' . $block->type . '.SharedMaxAge', 'ngmore' );
+                $cacheSettings['smax-age'] = (int)$configResolver->getParameter( 'block_settings.' . $blockType . '.shared_max_age', 'ngmore' );
             }
         }
 
         if ( !isset( $cacheSettings['max-age'] ) )
         {
-            if ( $configResolver->hasParameter( 'BlockSettings.' . $block->type . '.MaxAge', 'ngmore' ) )
+            if ( $configResolver->hasParameter( 'block_settings.' . $blockType . '.max_age', 'ngmore' ) )
             {
-                $cacheSettings['max-age'] = (int)$configResolver->getParameter( 'BlockSettings.' . $block->type . '.MaxAge', 'ngmore' );
+                $cacheSettings['max-age'] = (int)$configResolver->getParameter( 'block_settings.' . $blockType . '.max_age', 'ngmore' );
             }
         }
 

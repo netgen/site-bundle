@@ -3,9 +3,9 @@
 {% for block in zone.blocks %}
     {% set block_params = params|merge( block_specific_params[block.type]|default( [] ) ) %}
 
-    {% if ezpublish.configResolver.hasParameter( 'BlockSettings.' ~ block.type ~ '.SharedMaxAge', 'ngmore' ) %}
+    {% if ezpublish.configResolver.hasParameter( 'block_settings.' ~ block.type|lower ~ '.shared_max_age', 'ngmore' ) %}
         {{ render_esi( controller( 'ez_page:viewBlockById', { 'id': block.id, 'params': block_params } ) ) }}
-    {% elseif ezpublish.configResolver.hasParameter( 'BlockSettings.' ~ block.type ~ '.MaxAge', 'ngmore' ) %}
+    {% elseif ezpublish.configResolver.hasParameter( 'block_settings.' ~ block.type|lower ~ '.max_age', 'ngmore' ) %}
         {{ render_hinclude( controller( 'ez_page:viewBlockById', { 'id': block.id, 'params': block_params } ) ) }}
     {% else %}
         {{ render( controller( 'ez_page:viewBlockById', { 'id': block.id, 'params': block_params } ) ) }}

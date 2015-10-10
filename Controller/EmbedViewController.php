@@ -3,6 +3,7 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
+use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use Psr\Log\LoggerInterface;
@@ -27,22 +28,20 @@ class EmbedViewController extends Controller
     /**
      * Action for viewing embedded content with image content type identifier
      *
-     * @param mixed $contentId
-     * @param string $viewType
-     * @param boolean $layout
-     * @param array $params
+     * @param \eZ\Publish\Core\MVC\Symfony\View\ContentView $view
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function embedImageContent( $contentId, $viewType, $layout = false, array $params = array() )
+    public function embedImageContent( ContentView $view )
     {
         $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
         $translationHelper = $this->container->get( 'ezpublish.translation_helper' );
 
-        $targetLink = !empty( $params['objectParameters']['href'] ) ? trim( $params['objectParameters']['href'] ) : null;
+        $parameters = $view->getParameters();
+        $targetLink = !empty( $parameters['objectParameters']['href'] ) ? trim( $parameters['objectParameters']['href'] ) : null;
         if ( !empty( $targetLink ) )
         {
-            if ( !empty( $params['objectParameters']['link_direct_download'] ) )
+            if ( !empty( $parameters['objectParameters']['link_direct_download'] ) )
             {
                 if ( stripos( $targetLink, 'eznode://' ) === 0 )
                 {
@@ -98,7 +97,7 @@ class EmbedViewController extends Controller
                         if ( $this->logger )
                         {
                             $this->logger->error(
-                                'Tried to generate link to content #' . $contentId . ' without read rights'
+                                'Tried to generate link to content #' . $linkedContentId . ' without read rights'
                             );
                         }
                     }
@@ -152,13 +151,12 @@ class EmbedViewController extends Controller
             }
         }
 
-        return $this->get( 'ez_content' )->embedContent(
-            $contentId,
-            $viewType,
-            $layout,
-            $params + array(
+        $view->setParameters(
+            array(
                 'link_href' => $targetLink
             )
         );
+
+        return $view;
     }
 }

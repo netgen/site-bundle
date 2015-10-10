@@ -67,16 +67,6 @@ class FullViewController extends Controller
                 )
             );
         }
-        else if ( $this->getConfigResolver()->hasParameter( 'ChildrenNodeList.ExcludedClasses', 'content' ) )
-        {
-            $excludedContentTypes = $this->getConfigResolver()->getParameter( 'ChildrenNodeList.ExcludedClasses', 'content' );
-            if ( !empty( $excludedContentTypes ) )
-            {
-                $criteria[] = new Criterion\LogicalNot(
-                    new Criterion\ContentTypeIdentifier( $excludedContentTypes )
-                );
-            }
-        }
 
         $query = new LocationQuery();
         $query->filter = new Criterion\LogicalAnd( $criteria );

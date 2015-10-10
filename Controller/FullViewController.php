@@ -4,6 +4,7 @@ namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -20,26 +21,22 @@ class FullViewController extends Controller
      * Action for viewing content with ng_category content type identifier
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param mixed $contentId
-     * @param string $viewType
-     * @param boolean $layout
-     * @param array $params
+     * @param \eZ\Publish\Core\MVC\Symfony\View\ContentView $view
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\Response|\eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
-    public function viewNgCategoryContent( Request $request, $contentId, $viewType, $layout = false, array $params = array() )
+    public function viewNgCategoryContent( Request $request, ContentView $view )
     {
-        $content = $this->getRepository()->getContentService()->loadContent( $contentId );
+        $content = $this->getRepository()->getContentService()->loadContent(
+            $view->getContent()->id
+        );
 
-        if ( !isset( $params['location'] ) )
+        $location = $view->getLocation();
+        if ( !$location instanceof Location )
         {
             $location = $this->getRepository()->getLocationService()->loadLocation(
                 $content->contentInfo->mainLocationId
             );
-        }
-        else
-        {
-            $location = $params['location'];
         }
 
         $response = $this->checkCategoryRedirect( $location );
@@ -121,62 +118,57 @@ class FullViewController extends Controller
         $currentPage = (int)$request->get( 'page', 1 );
         $pager->setCurrentPage( $currentPage > 0 ? $currentPage : 1 );
 
-        return $this->get( 'ez_content' )->viewContent(
-            $contentId,
-            $viewType,
-            $layout,
-            $params + array(
+        $view->addParameters(
+            array(
                 'pager' => $pager
             )
         );
+
+        return $view;
     }
 
     /**
      * Action for viewing content with ng_landing_page content type identifier
      *
-     * @param mixed $contentId
-     * @param string $viewType
-     * @param boolean $layout
-     * @param array $params
+     * @param \eZ\Publish\Core\MVC\Symfony\View\ContentView $view
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\Response|\eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
-    public function viewNgLandingPageContent( $contentId, $viewType, $layout = false, array $params = array() )
+    public function viewNgLandingPageContent( ContentView $view )
     {
-        if ( isset( $params['location'] ) )
+        $location = $view->getLocation();
+        if ( $location instanceof Location )
         {
-            $response = $this->checkCategoryRedirect( $params['location'] );
+            $response = $this->checkCategoryRedirect( $location );
             if ( $response instanceof Response )
             {
                 return $response;
             }
         }
 
-        return $this->get( 'ez_content' )->viewContent( $contentId, $viewType, $layout, $params );
+        return $view;
     }
 
     /**
      * Action for viewing content with ng_category_page content type identifier
      *
-     * @param mixed $contentId
-     * @param string $viewType
-     * @param boolean $layout
-     * @param array $params
+     * @param \eZ\Publish\Core\MVC\Symfony\View\ContentView $view
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\Response|\eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
-    public function viewNgCategoryPageContent( $contentId, $viewType, $layout = false, array $params = array() )
+    public function viewNgCategoryPageContent( ContentView $view )
     {
-        if ( isset( $params['location'] ) )
+        $location = $view->getLocation();
+        if ( $location instanceof Location )
         {
-            $response = $this->checkCategoryRedirect( $params['location'] );
+            $response = $this->checkCategoryRedirect( $location );
             if ( $response instanceof Response )
             {
                 return $response;
             }
         }
 
-        return $this->get( 'ez_content' )->viewContent( $contentId, $viewType, $layout, $params );
+        return $view;
     }
 
     /**

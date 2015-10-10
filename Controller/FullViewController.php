@@ -27,10 +27,7 @@ class FullViewController extends Controller
      */
     public function viewNgCategoryContent( Request $request, ContentView $view )
     {
-        $content = $this->getRepository()->getContentService()->loadContent(
-            $view->getContent()->id
-        );
-
+        $content = $view->getContent();
         $location = $view->getLocation();
         if ( !$location instanceof Location )
         {

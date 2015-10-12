@@ -36,7 +36,7 @@ class PostActivateEventListener extends UserEventListener implements EventSubscr
 
         $this->mailHelper
             ->sendMail(
-                array( $user->email => $user->login ),
+                array( $user->email => $this->getUserContentName( $user ) ),
                 'ngmore.user.welcome.subject',
                 $this->configResolver->getParameter( 'template.user.mail.welcome', 'ngmore' ),
                 array(

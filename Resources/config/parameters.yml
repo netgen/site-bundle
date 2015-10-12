@@ -16,4 +16,5 @@ parameters:
 
     netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length: 0
 
-    ngmore.default.mail.sender: { 'info@netgen.hr': 'Netgen' }
+    ngmore.default.mail.sender_email: 'info@example.com'
+    ngmore.default.mail.sender_name: 'Netgen More'

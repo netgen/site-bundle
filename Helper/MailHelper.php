@@ -84,22 +84,26 @@ class MailHelper
     /**
      * Sends an mail
      *
-     * Receivers and fromAddresses can be a string: info@netgen.hr
-     * or an array:
-     * array( 'info@netgen.hr' => 'Netgen' ) or
+     * Receivers can be:
+     * a string: info@netgen.hr
+     * or:
+     * array( 'info@netgen.hr' => 'Netgen More' ) or
      * array( 'info@netgen.hr', 'example@netgen.hr' ) or
-     * array( 'info@netgen.hr' => 'Netgen', 'example@netgen.hr' => 'Example' )
+     * array( 'info@netgen.hr' => 'Netgen More', 'example@netgen.hr' => 'Example' )
+     *
+     * Sender can be:
+     * a string: info@netgen.hr
+     * an array: array( 'info@netgen.hr' => 'Netgen More' )
      *
      * @param mixed $receivers
      * @param string $template
      * @param string $subject
      * @param array $templateParameters
      * @param mixed $sender
-     * @param mixed $fromAddresses
      *
      * @return int
      */
-    public function sendMail( $receivers, $subject, $template, $templateParameters = array(), $fromAddresses = array(), $sender = false )
+    public function sendMail( $receivers, $subject, $template, $templateParameters = array(), $sender = null )
     {
         $templateParameters['site_url'] = $this->siteUrl;
         $templateParameters['site_name'] = $this->siteName;
@@ -121,16 +125,18 @@ class MailHelper
             if ( ( is_array( $sender ) && count( $sender ) == 1 ) || is_string( $sender ) )
             {
                 $message->setSender( $sender );
+                $message->setFrom( $sender );
             }
         }
-        elseif ( $this->configResolver->hasParameter( 'mail.sender', 'ngmore' ) )
+        elseif ( $this->configResolver->hasParameter( 'mail.sender_email', 'ngmore' )
+            && $this->configResolver->hasParameter( 'mail.sender_name', 'ngmore' ) )
         {
-            $message->setSender( $this->configResolver->getParameter( 'mail.sender', 'ngmore' ) );
-        }
-
-        if ( !empty( $fromAddresses ) )
-        {
-            $message->setFrom( $fromAddresses );
+            $sender = array(
+                $this->configResolver->getParameter( 'mail.sender_email', 'ngmore' ) =>
+                $this->configResolver->getParameter( 'mail.sender_name', 'ngmore' )
+            );
+            $message->setSender( $sender );
+            $message->setFrom( $sender );
         }
 
         return $this->mailer->send( $message );

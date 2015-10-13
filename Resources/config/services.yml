@@ -117,6 +117,7 @@ services:
             - @router
             - @translator
             - @ezpublish.config.resolver
+            - @?logger
 
     ngmore.repository.nguser_setting:
         class: Doctrine\ORM\EntityRepository

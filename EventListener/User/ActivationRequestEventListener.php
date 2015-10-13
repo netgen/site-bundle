@@ -37,8 +37,8 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
         {
             $this->mailHelper->sendMail(
                 $email,
-                $this->configResolver->getParameter( 'template.user.mail.activate_not_registered', 'ngmore' ),
-                'ngmore.user.activate.not_registered.subject'
+                'ngmore.user.activate.not_registered.subject',
+                $this->configResolver->getParameter( 'template.user.mail.activate_not_registered', 'ngmore' )
             );
 
             return;
@@ -47,9 +47,9 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
         if ( $user->enabled )
         {
             $this->mailHelper->sendMail(
-                $email,
-                $this->configResolver->getParameter( 'template.user.mail.activate_already_active', 'ngmore' ),
+                array( $user->email => $this->translationHelper->getTranslatedContentName( $user ) ),
                 'ngmore.user.activate.already_active.subject',
+                $this->configResolver->getParameter( 'template.user.mail.activate_already_active', 'ngmore' ),
                 array(
                     'user' => $user
                 )
@@ -61,9 +61,9 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
         if ( $this->ngUserSettingRepository->isUserActivated( $user->id ) )
         {
             $this->mailHelper->sendMail(
-                $email,
-                $this->configResolver->getParameter( 'template.user.mail.activate_disabled', 'ngmore' ),
+                array( $user->email => $this->translationHelper->getTranslatedContentName( $user ) ),
                 'ngmore.user.activate.disabled.subject',
+                $this->configResolver->getParameter( 'template.user.mail.activate_disabled', 'ngmore' ),
                 array(
                     'user' => $user
                 )
@@ -76,9 +76,9 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
 
         $this->mailHelper
             ->sendMail(
-                $user->email,
-                $this->configResolver->getParameter( 'template.user.mail.activate', 'ngmore' ),
+                array( $user->email => $this->translationHelper->getTranslatedContentName( $user ) ),
                 'ngmore.user.activate.subject',
+                $this->configResolver->getParameter( 'template.user.mail.activate', 'ngmore' ),
                 array(
                     'user' => $user,
                     'hash' => $accountKey->getHash()

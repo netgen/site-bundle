@@ -7,8 +7,10 @@ use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Templating\EngineInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Psr\Log\LoggerInterface;
 use Swift_Mailer;
 use Swift_Message;
+use InvalidArgumentException;
 
 class MailHelper
 {
@@ -48,6 +50,11 @@ class MailHelper
     protected $siteName;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * Constructor
      *
      * @param \Swift_Mailer $mailer
@@ -55,13 +62,15 @@ class MailHelper
      * @param \Symfony\Component\Routing\RouterInterface $router
      * @param \Symfony\Component\Translation\TranslatorInterface $translator
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         Swift_Mailer $mailer,
         EngineInterface $templating,
         RouterInterface $router,
         TranslatorInterface $translator,
-        ConfigResolverInterface $configResolver
+        ConfigResolverInterface $configResolver,
+        LoggerInterface $logger = null
     )
     {
         $this->mailer = $mailer;
@@ -69,6 +78,7 @@ class MailHelper
         $this->router = $router;
         $this->translator = $translator;
         $this->configResolver = $configResolver;
+        $this->logger = $logger;
 
         $this->siteUrl = $this->router->generate(
             'ez_urlalias',
@@ -84,27 +94,108 @@ class MailHelper
     /**
      * Sends an mail
      *
-     * @param string $receiverEmail
+     * Receivers can be:
+     * a string: info@netgen.hr
+     * or:
+     * array( 'info@netgen.hr' => 'Netgen More' ) or
+     * array( 'info@netgen.hr', 'example@netgen.hr' ) or
+     * array( 'info@netgen.hr' => 'Netgen More', 'example@netgen.hr' => 'Example' )
+     *
+     * Sender can be:
+     * a string: info@netgen.hr
+     * an array: array( 'info@netgen.hr' => 'Netgen More' )
+     *
+     * @param mixed $receivers
      * @param string $template
      * @param string $subject
      * @param array $templateParameters
+     * @param mixed $sender
      *
      * @return int
      */
-    public function sendMail( $receiverEmail, $template, $subject, $templateParameters = array() )
+    public function sendMail( $receivers, $subject, $template, $templateParameters = array(), $sender = null )
     {
-        $templateParameters['site_url'] = $this->siteUrl;
-        $templateParameters['site_name'] = $this->siteName;
+        try
+        {
+            $sender = $this->getSender( $sender );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            if ( $this->logger instanceof LoggerInterface )
+            {
+                $this->logger->error( $e->getMessage() );
+            }
 
-        $body = $this->templating->render( $template, $templateParameters );
+            return -1;
+        }
+
+        $body = $this->templating->render( $template, $templateParameters + $this->getDefaultTemplateParameters() );
 
         $subject = $this->translator->trans( $subject, array(), 'ngmore_mail' );
 
-        $message = Swift_Message::newInstance()
-            ->setTo( $receiverEmail )
+        /** @var \Swift_Mime_Message $message */
+        $message = Swift_Message::newInstance();
+
+        $message
+            ->setTo( $receivers )
             ->setSubject( $this->siteName . ': ' . $subject )
             ->setBody( $body, 'text/html' );
 
+        $message->setSender( $sender );
+        $message->setFrom( $sender );
+
         return $this->mailer->send( $message );
+    }
+
+    /**
+     * Returns an array of parameters that will be passed to every mail template
+     *
+     * @return array
+     */
+    protected function getDefaultTemplateParameters()
+    {
+        return array(
+            'site_url' => $this->siteUrl,
+            'site_name' => $this->siteName
+        );
+    }
+
+    /**
+     * Validates the sender parameter.
+     * If sender not provided, it attempts to get the sender from the parameters:
+     * ngmore.default.mail.sender_email
+     * ngmore.default.mail.sender_name (optional)
+     *
+     * @param mixed $sender
+     *
+     * @return array|string
+     */
+    protected function getSender( $sender )
+    {
+        if ( !empty( $sender ) )
+        {
+            if ( ( is_array( $sender ) && count( $sender ) == 1 && !isset( $sender[0] ) ) || is_string( $sender ) )
+            {
+                return $sender;
+            }
+
+            throw new InvalidArgumentException(
+                "Parameter 'sender' has to be either a string, or an associative array with one element (e.g. array( 'info@example.com' => 'Example name' )), {$sender} given."
+            );
+        }
+        else if ( $this->configResolver->hasParameter( 'mail.sender_email', 'ngmore' ) )
+        {
+            if ( $this->configResolver->hasParameter( 'mail.sender_name', 'ngmore' ) )
+            {
+                return array(
+                    $this->configResolver->getParameter( 'mail.sender_email', 'ngmore' ) =>
+                    $this->configResolver->getParameter( 'mail.sender_name', 'ngmore' )
+                );
+            }
+
+            return $this->configResolver->getParameter( 'mail.sender_email', 'ngmore' );
+        }
+
+        throw new InvalidArgumentException( "Parameter 'sender' has not been provided, nor it has been configured via parameters ('ngmore.default.mail.sender_email')!" );
     }
 }

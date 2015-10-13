@@ -126,7 +126,7 @@ class MailHelper
                 $this->logger->error( $e->getMessage() );
             }
 
-            return 0;
+            return -1;
         }
 
         $body = $this->templating->render( $template, $templateParameters + $this->getDefaultTemplateParameters() );

@@ -35,7 +35,7 @@ class PostRegisterEventListener extends UserEventListener implements EventSubscr
         {
             $this->mailHelper
                 ->sendMail(
-                    array( $user->email => $this->getUserContentName( $user ) ),
+                    array( $user->email => $this->translationHelper->getTranslatedContentName( $user ) ),
                     'ngmore.user.welcome.subject',
                     $this->configResolver->getParameter( 'template.user.mail.welcome', 'ngmore' ),
                     array(
@@ -50,7 +50,7 @@ class PostRegisterEventListener extends UserEventListener implements EventSubscr
 
         $this->mailHelper
             ->sendMail(
-                array( $user->email => $this->getUserContentName( $user ) ),
+                array( $user->email => $this->translationHelper->getTranslatedContentName( $user ) ),
                 'ngmore.user.activate.subject',
                 $this->configResolver->getParameter( 'template.user.mail.activate', 'ngmore' ),
                 array(

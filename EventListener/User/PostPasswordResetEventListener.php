@@ -33,7 +33,7 @@ class PostPasswordResetEventListener extends UserEventListener implements EventS
 
         $this->mailHelper
             ->sendMail(
-                array( $user->email => $this->getUserContentName( $user ) ),
+                array( $user->email => $this->translationHelper->getTranslatedContentName( $user ) ),
                 'ngmore.user.forgot_password.password_changed.subject',
                 $this->configResolver->getParameter( 'template.user.mail.forgot_password_password_changed', 'ngmore' ),
                 array(

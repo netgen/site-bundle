@@ -66,15 +66,4 @@ abstract class UserEventListener
         $this->translationHelper = $translationHelper;
         $this->repository = $repository;
     }
-
-    public function getUserContentName( User $user )
-    {
-        $translationHelper = $this->translationHelper;
-        return $userName = $this->repository->sudo(
-            function( Repository $repository ) use ( $user, $translationHelper )
-            {
-                return $translationHelper->getTranslatedContentNameByContentInfo( $user->contentInfo );
-            }
-        );
-    }
 }

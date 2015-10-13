@@ -105,10 +105,7 @@ class MailHelper
      */
     public function sendMail( $receivers, $subject, $template, $templateParameters = array(), $sender = null )
     {
-        $templateParameters['site_url'] = $this->siteUrl;
-        $templateParameters['site_name'] = $this->siteName;
-
-        $body = $this->templating->render( $template, $templateParameters );
+        $body = $this->templating->render( $template, $templateParameters + $this->getDefaultTemplateParameters() );
 
         $subject = $this->translator->trans( $subject, array(), 'ngmore_mail' );
 
@@ -120,25 +117,64 @@ class MailHelper
             ->setSubject( $this->siteName . ': ' . $subject )
             ->setBody( $body, 'text/html' );
 
-        if ( !empty( $sender ) )
+        if ( $sender = $this->getSender( $sender ) )
         {
-            if ( ( is_array( $sender ) && count( $sender ) == 1 ) || is_string( $sender ) )
-            {
-                $message->setSender( $sender );
-                $message->setFrom( $sender );
-            }
-        }
-        else if ( $this->configResolver->hasParameter( 'mail.sender_email', 'ngmore' )
-            && $this->configResolver->hasParameter( 'mail.sender_name', 'ngmore' ) )
-        {
-            $sender = array(
-                $this->configResolver->getParameter( 'mail.sender_email', 'ngmore' ) =>
-                $this->configResolver->getParameter( 'mail.sender_name', 'ngmore' )
-            );
             $message->setSender( $sender );
             $message->setFrom( $sender );
         }
 
         return $this->mailer->send( $message );
+    }
+
+    /**
+     * Returns an array of parameters that will be passed to every mail template
+     *
+     * @return array
+     */
+    protected function getDefaultTemplateParameters()
+    {
+        return array(
+            'site_url' => $this->siteUrl,
+            'site_name' => $this->siteName
+        );
+    }
+
+    /**
+     * Validates the sender parameter.
+     * If sender not provided, it attempts to get the sender from the parameters:
+     * ngmore.default.mail.sender_email
+     * ngmore.default.mail.sender_name (optional)
+     *
+     * @param mixed $sender
+     *
+     * @return array|string
+     */
+    protected function getSender( $sender )
+    {
+        if ( !empty( $sender ) )
+        {
+            if ( ( is_array( $sender ) && count( $sender ) == 1 && !isset( $sender[0] ) ) || is_string( $sender ) )
+            {
+                return $sender;
+            }
+
+            throw new \InvalidArgumentException(
+                "Parameter 'sender' has to be either a string, or an associative array with one element (e.g. array( 'info@example.com' => 'Example name' )), {$sender} given."
+            );
+        }
+        else if ( $this->configResolver->hasParameter( 'mail.sender_email', 'ngmore' ) )
+        {
+            if( $this->configResolver->hasParameter( 'mail.sender_name', 'ngmore' ) )
+            {
+                return array(
+                    $this->configResolver->getParameter( 'mail.sender_email', 'ngmore' ) =>
+                    $this->configResolver->getParameter( 'mail.sender_name', 'ngmore' )
+                );
+            }
+
+            return $this->configResolver->getParameter( 'mail.sender_email', 'ngmore' );
+        }
+
+        throw new \InvalidArgumentException( 'Parameter \'sender\' has not been provided, nor it has been configured via parameters (\'ngmore.default.mail.sender_email\')!' );
     }
 }

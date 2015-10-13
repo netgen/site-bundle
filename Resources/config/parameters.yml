@@ -14,7 +14,7 @@ parameters:
     ngmore.default.user.activate_hash_validity_time: 3600
     ngmore.default.user.forgot_password_hash_validity_time: 3600
 
-    netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length: 0
-
     ngmore.default.mail.sender_email: 'info@example.com'
     ngmore.default.mail.sender_name: 'Netgen More'
+
+    netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length: 0

@@ -111,6 +111,7 @@ services:
             - @router
             - @translator
             - @ezpublish.config.resolver
+            - @?logger
 
     ngmore.data_collector.legacy_debug_data_collector:
         class: %ngmore.data_collector.legacy_debug_data_collector.class%

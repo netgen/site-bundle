@@ -7,8 +7,10 @@ use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Templating\EngineInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Psr\Log\LoggerInterface;
 use Swift_Mailer;
 use Swift_Message;
+use InvalidArgumentException;
 
 class MailHelper
 {
@@ -48,6 +50,11 @@ class MailHelper
     protected $siteName;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * Constructor
      *
      * @param \Swift_Mailer $mailer
@@ -55,13 +62,15 @@ class MailHelper
      * @param \Symfony\Component\Routing\RouterInterface $router
      * @param \Symfony\Component\Translation\TranslatorInterface $translator
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         Swift_Mailer $mailer,
         EngineInterface $templating,
         RouterInterface $router,
         TranslatorInterface $translator,
-        ConfigResolverInterface $configResolver
+        ConfigResolverInterface $configResolver,
+        LoggerInterface $logger = null
     )
     {
         $this->mailer = $mailer;
@@ -69,6 +78,7 @@ class MailHelper
         $this->router = $router;
         $this->translator = $translator;
         $this->configResolver = $configResolver;
+        $this->logger = $logger;
 
         $this->siteUrl = $this->router->generate(
             'ez_urlalias',
@@ -105,6 +115,20 @@ class MailHelper
      */
     public function sendMail( $receivers, $subject, $template, $templateParameters = array(), $sender = null )
     {
+        try
+        {
+            $sender = $this->getSender( $sender );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            if ( $this->logger instanceof LoggerInterface )
+            {
+                $this->logger->error( $e->getMessage() );
+            }
+
+            return 0;
+        }
+
         $body = $this->templating->render( $template, $templateParameters + $this->getDefaultTemplateParameters() );
 
         $subject = $this->translator->trans( $subject, array(), 'ngmore_mail' );
@@ -117,11 +141,8 @@ class MailHelper
             ->setSubject( $this->siteName . ': ' . $subject )
             ->setBody( $body, 'text/html' );
 
-        if ( $sender = $this->getSender( $sender ) )
-        {
-            $message->setSender( $sender );
-            $message->setFrom( $sender );
-        }
+        $message->setSender( $sender );
+        $message->setFrom( $sender );
 
         return $this->mailer->send( $message );
     }
@@ -158,7 +179,7 @@ class MailHelper
                 return $sender;
             }
 
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 "Parameter 'sender' has to be either a string, or an associative array with one element (e.g. array( 'info@example.com' => 'Example name' )), {$sender} given."
             );
         }
@@ -175,6 +196,6 @@ class MailHelper
             return $this->configResolver->getParameter( 'mail.sender_email', 'ngmore' );
         }
 
-        throw new \InvalidArgumentException( 'Parameter \'sender\' has not been provided, nor it has been configured via parameters (\'ngmore.default.mail.sender_email\')!' );
+        throw new InvalidArgumentException( "Parameter 'sender' has not been provided, nor it has been configured via parameters ('ngmore.default.mail.sender_email')!" );
     }
 }

@@ -8,7 +8,6 @@ use Netgen\Bundle\MoreBundle\Helper\MailHelper;
 use Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository;
 use Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
 use eZ\Publish\Core\Helper\TranslationHelper;
-use eZ\Publish\API\Repository\Values\User\User;
 
 abstract class UserEventListener
 {

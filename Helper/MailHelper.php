@@ -185,7 +185,7 @@ class MailHelper
         }
         else if ( $this->configResolver->hasParameter( 'mail.sender_email', 'ngmore' ) )
         {
-            if( $this->configResolver->hasParameter( 'mail.sender_name', 'ngmore' ) )
+            if ( $this->configResolver->hasParameter( 'mail.sender_name', 'ngmore' ) )
             {
                 return array(
                     $this->configResolver->getParameter( 'mail.sender_email', 'ngmore' ) =>

@@ -30,7 +30,7 @@ class BlockViewController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewContentGridDynamicBlockById( $id, array $params = array(), array $cacheSettings = array() )
+    public function viewContentGridDynamic( $id, array $params = array(), array $cacheSettings = array() )
     {
         $block = $this->container->get( 'ezpublish.fieldType.ezpage.pageService' )->loadBlock( $id );
         if ( $block->type !== 'ContentGridDynamic' )
@@ -132,8 +132,8 @@ class BlockViewController extends Controller
             $result->searchHits
         );
 
-        $response = $this->container->get( 'ez_page' )->viewBlockById(
-            $id,
+        $response = $this->container->get( 'ez_page' )->viewBlock(
+            $block,
             array(
                 'valid_items' => $validItems
             ) + $params,

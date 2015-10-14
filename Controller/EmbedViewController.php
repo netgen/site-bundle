@@ -32,7 +32,7 @@ class EmbedViewController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function embedImageContent( ContentView $view )
+    public function embedImage( ContentView $view )
     {
         $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
         $translationHelper = $this->container->get( 'ezpublish.translation_helper' );

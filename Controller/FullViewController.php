@@ -25,7 +25,7 @@ class FullViewController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response|\eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
-    public function viewNgCategoryContent( Request $request, ContentView $view )
+    public function viewNgCategory( Request $request, ContentView $view )
     {
         $content = $view->getContent();
         $location = $view->getLocation();
@@ -121,7 +121,7 @@ class FullViewController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response|\eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
-    public function viewNgLandingPageContent( ContentView $view )
+    public function viewNgLandingPage( ContentView $view )
     {
         $location = $view->getLocation();
         if ( !$location instanceof Location )
@@ -146,7 +146,7 @@ class FullViewController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response|\eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
-    public function viewNgCategoryPageContent( ContentView $view )
+    public function viewNgCategoryPage( ContentView $view )
     {
         $location = $view->getLocation();
         if ( !$location instanceof Location )

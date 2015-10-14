@@ -124,15 +124,18 @@ class FullViewController extends Controller
     public function viewNgLandingPageContent( ContentView $view )
     {
         $location = $view->getLocation();
-        if ( $location instanceof Location )
+        if ( !$location instanceof Location )
         {
-            $response = $this->checkCategoryRedirect( $location );
-            if ( $response instanceof Response )
-            {
-                return $response;
-            }
+            $location = $this->getRepository()->getLocationService()->loadLocation(
+                $view->getContent()->contentInfo->mainLocationId
+            );
         }
 
+        $response = $this->checkCategoryRedirect( $location );
+        if ( $response instanceof Response )
+        {
+            return $response;
+        }
         return $view;
     }
 
@@ -146,13 +149,17 @@ class FullViewController extends Controller
     public function viewNgCategoryPageContent( ContentView $view )
     {
         $location = $view->getLocation();
-        if ( $location instanceof Location )
+        if ( !$location instanceof Location )
         {
-            $response = $this->checkCategoryRedirect( $location );
-            if ( $response instanceof Response )
-            {
-                return $response;
-            }
+            $location = $this->getRepository()->getLocationService()->loadLocation(
+                $view->getContent()->contentInfo->mainLocationId
+            );
+        }
+
+        $response = $this->checkCategoryRedirect( $location );
+        if ( $response instanceof Response )
+        {
+            return $response;
         }
 
         return $view;

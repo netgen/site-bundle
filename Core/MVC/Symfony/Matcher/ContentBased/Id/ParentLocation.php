@@ -2,9 +2,10 @@
 
 namespace Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id;
 
+use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ViewMatcherInterface;
+use eZ\Publish\Core\MVC\Symfony\View\LocationValueView;
 use Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased;
-use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\MVC\Symfony\View\View;
 
 class ParentLocation extends ConfigResolverBased implements ViewMatcherInterface
@@ -18,11 +19,17 @@ class ParentLocation extends ConfigResolverBased implements ViewMatcherInterface
      */
     public function match( View $view )
     {
-        if ( !$view instanceof ContentView )
+        if ( !$view instanceof LocationValueView )
         {
             return false;
         }
 
-        return $this->doMatch( $view->getLocation()->parentLocationId );
+        $location = $view->getLocation();
+        if ( !$location instanceof APILocation )
+        {
+            return false;
+        }
+
+        return $this->doMatch( $location->parentLocationId );
     }
 }

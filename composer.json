@@ -1,6 +1,6 @@
 {
     "name": "netgen/more-bundle",
-    "description": "Netgen More Bundle is an eZ Publish 5 bundle that implements common features that are used throughout Netgen's websites",
+    "description": "Netgen More Bundle is an eZ Platform bundle that implements common features that are used throughout Netgen's websites",
     "authors": [
         {
             "name": "Netgen",

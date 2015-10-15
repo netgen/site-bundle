@@ -3,6 +3,7 @@
 namespace Netgen\Bundle\MoreBundle\Templating\Twig\Extension;
 
 use eZ\Publish\Core\Helper\TranslationHelper;
+use eZ\Publish\Core\Repository\Values\User\UserReference;
 use Netgen\Bundle\MoreBundle\Helper\PathHelper;
 use Netgen\Bundle\MoreBundle\Templating\GlobalHelper;
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
@@ -225,7 +226,11 @@ class NetgenMoreExtension extends Twig_Extension
      */
     public function hasAccess( $module, $function, User $user = null )
     {
-        return $this->repository->hasAccess( $module, $function, $user );
+        return $this->repository->hasAccess(
+            $module,
+            $function,
+            new UserReference( $user->id )
+        );
     }
 
     /**

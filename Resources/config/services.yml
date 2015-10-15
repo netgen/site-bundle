@@ -29,6 +29,7 @@ parameters:
     ngmore.matcher.content.parent_content_type_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentContentType
     ngmore.matcher.content.parent_location_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentLocation
     ngmore.matcher.content.remote_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Remote
+    ngmore.matcher.content.location_remote_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\LocationRemote
     ngmore.matcher.content.section_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Section
     ngmore.matcher.block.block_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\Block\Id\Block
     ngmore.matcher.block.zone_id.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\Block\Id\Zone
@@ -172,6 +173,10 @@ services:
 
     ngmore.matcher.content.remote_id:
         class: %ngmore.matcher.content.remote_id.class%
+        parent: ngmore.matcher.config_resolver
+
+    ngmore.matcher.content.location_remote_id:
+        class: %ngmore.matcher.content.location_remote_id.class%
         parent: ngmore.matcher.config_resolver
 
     ngmore.matcher.content.section_id:

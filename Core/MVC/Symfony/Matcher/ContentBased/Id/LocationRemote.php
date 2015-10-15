@@ -1,0 +1,28 @@
+<?php
+
+namespace Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id;
+
+use eZ\Publish\Core\MVC\Symfony\Matcher\ViewMatcherInterface;
+use eZ\Publish\Core\MVC\Symfony\View\LocationValueView;
+use Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased;
+use eZ\Publish\Core\MVC\Symfony\View\View;
+
+class LocationRemote extends ConfigResolverBased implements ViewMatcherInterface
+{
+    /**
+     * Checks if View object matches.
+     *
+     * @param \eZ\Publish\Core\MVC\Symfony\View\View $view
+     *
+     * @return bool
+     */
+    public function match( View $view )
+    {
+        if ( !$view instanceof LocationValueView )
+        {
+            return false;
+        }
+
+        return $this->doMatch( $view->getLocation()->remoteId );
+    }
+}

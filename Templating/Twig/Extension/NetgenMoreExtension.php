@@ -98,6 +98,10 @@ class NetgenMoreExtension extends Twig_Extension
                 array( $this, 'getContentTypeIdentifier' )
             ),
             new Twig_SimpleFunction(
+                'ngmore_content_type_name',
+                array( $this, 'getContentTypeName' )
+            ),
+            new Twig_SimpleFunction(
                 'ngmore_owner',
                 array( $this, 'getOwner' )
             ),
@@ -158,11 +162,27 @@ class NetgenMoreExtension extends Twig_Extension
      * Returns content type identifier for specified content type ID
      *
      * @param mixed $contentTypeId
+     *
      * @return string
      */
     public function getContentTypeIdentifier( $contentTypeId )
     {
         return $this->repository->getContentTypeService()->loadContentType( $contentTypeId )->identifier;
+    }
+
+    /**
+     * Returns content type name for specified content type ID
+     *
+     * @param mixed $contentTypeId
+     *
+     * @return string
+     */
+    public function getContentTypeName( $contentTypeId )
+    {
+        return $this->translationHelper->getTranslatedByMethod(
+            $this->repository->getContentTypeService()->loadContentType( $contentTypeId ),
+            "getName"
+        );
     }
 
     /**

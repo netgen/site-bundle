@@ -53,7 +53,7 @@ class InvisibleLocationsListener implements EventSubscriberInterface
     }
 
     /**
-     * Injects the invisible location if configured so in parameters
+     * Injects the invisible location if configured so
      *
      * @param \eZ\Publish\Core\MVC\Symfony\View\Event\FilterViewBuilderParametersEvent $event
      */
@@ -70,6 +70,8 @@ class InvisibleLocationsListener implements EventSubscriberInterface
         );
 
         $parameters->set( 'location', $location );
+
+        // We remove 'locationId' parameter to disable original check for visibility
         $parameters->remove( 'locationId' );
     }
 }

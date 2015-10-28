@@ -51,18 +51,6 @@ class InvisibleContentViewBuilder extends ContentViewBuilder
     }
 
     /**
-     * Tests if the builder matches the given argument.
-     *
-     * @param mixed $argument Anything the builder can decide against. Example: a controller's request string.
-     *
-     * @return bool true if the ViewBuilder matches the argument, false otherwise.
-     */
-    public function matches( $argument )
-    {
-        return parent::matches( $argument );
-    }
-
-    /**
      * Builds the View based on $parameters.
      *
      * @param array $parameters

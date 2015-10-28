@@ -37,4 +37,6 @@ parameters:
     ngmore.default.mail.sender_email: 'info@example.com'
     ngmore.default.mail.sender_name: 'Netgen More'
 
+    ngmore.default.content_view.show_invisible_locations: false
+
     netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length: 0

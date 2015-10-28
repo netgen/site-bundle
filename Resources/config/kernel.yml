@@ -5,3 +5,15 @@ parameters:
     ezpublish.fieldType.ezobjectrelationlist.converter.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\FieldValue\Converter\RelationListConverter
 
     ezpublish.image_alias.imagine.cache_resolver.class: Netgen\Bundle\MoreBundle\Imagine\IORepositoryResolver
+
+    ezpublish.view_builder.content.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\View\Builder\InvisibleContentViewBuilder
+
+services:
+    ezpublish.view_builder.content:
+        class: %ezpublish.view_builder.content.class%
+        arguments:
+            - @ezpublish.api.repository
+            - @security.authorization_checker
+            - @ezpublish.view.configurator
+            - @ezpublish.view.view_parameters.injector.dispatcher
+            - @ezpublish.config.resolver

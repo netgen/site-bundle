@@ -3,3 +3,5 @@ parameters:
 
     ezpublish.fieldType.ezobjectrelationlist.class: Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Type
     ezpublish.fieldType.ezobjectrelationlist.converter.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\FieldValue\Converter\RelationList
+
+    ezpublish.controller.content.view.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Controller\Content\ViewController

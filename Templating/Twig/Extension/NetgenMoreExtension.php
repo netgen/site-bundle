@@ -249,7 +249,7 @@ class NetgenMoreExtension extends Twig_Extension
         return $this->repository->hasAccess(
             $module,
             $function,
-            new UserReference( $user->id )
+            $user !== null ? new UserReference( $user->id ) : null
         );
     }
 

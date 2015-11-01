@@ -4,7 +4,7 @@ Netgen More Bundle installation instructions
 Requirements
 ------------
 
-* eZ Publish 5.4+ / eZ Publish Community Project 2014.11+
+* eZ Platform 1.0+
 
 Installation steps
 ------------------
@@ -18,7 +18,7 @@ Add the following to your composer.json and run `php composer.phar update netgen
     { "type": "composer", "url": "http://packagist.netgen.biz" }
 ],
 "require": {
-    "netgen/more-bundle": "~2.0.0"
+    "netgen/more-bundle": "~2.1.0"
 }
 ```
 
@@ -31,11 +31,13 @@ public function registerBundles()
 {
    ...
 
-    $bundles[] = new \Netgen\Bundle\MetadataBundle\NetgenMetadataBundle();
-    $bundles[] = new \Netgen\Bundle\ContentTypeListBundle\NetgenContentTypeListBundle();
-    $bundles[] = new \Netgen\Bundle\EnhancedSelectionBundle\NetgenEnhancedSelectionBundle();
-    $bundles[] = new \Netgen\Bundle\MoreGeneratorBundle\NetgenMoreGeneratorBundle();
-    $bundles[] = new \Netgen\Bundle\MoreBundle\NetgenMoreBundle();
+    $bundles[] = new Netgen\Bundle\EzFormsBundle\NetgenEzFormsBundle();
+    $bundles[] = new Netgen\Bundle\OpenGraphBundle\NetgenOpenGraphBundle();
+    $bundles[] = new Netgen\Bundle\MetadataBundle\NetgenMetadataBundle();
+    $bundles[] = new Netgen\Bundle\ContentTypeListBundle\NetgenContentTypeListBundle();
+    $bundles[] = new Netgen\Bundle\EnhancedSelectionBundle\NetgenEnhancedSelectionBundle();
+    $bundles[] = new Netgen\TagsBundle\NetgenTagsBundle();
+    $bundles[] = new Netgen\Bundle\MoreBundle\NetgenMoreBundle();
 
     return $bundles;
 }
@@ -43,7 +45,7 @@ public function registerBundles()
 
 ### Clear the caches
 
-Clear eZ Publish 5 caches.
+Clear eZ Publish caches.
 
 ```bash
 php ezpublish/console cache:clear

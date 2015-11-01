@@ -20,7 +20,6 @@
         "knplabs/knp-menu-bundle": "~1.0"
     },
     "autoload": {
-        "psr-0": { "Netgen\\Bundle\\MoreBundle": "" }
-    },
-    "target-dir": "Netgen/Bundle/MoreBundle"
+        "psr-4": { "Netgen\\Bundle\\MoreBundle\\": "" }
+    }
 }

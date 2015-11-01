@@ -12,11 +12,10 @@ use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Repository;
 use Symfony\Component\Intl\Intl;
-use Twig_Extension_GlobalsInterface;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
-class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_GlobalsInterface
+class NetgenMoreExtension extends Twig_Extension
 {
     /**
      * @var \eZ\Publish\API\Repository\Repository

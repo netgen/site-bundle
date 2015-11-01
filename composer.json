@@ -10,7 +10,7 @@
     "require": {
         "ezsystems/ezpublish-kernel": "*",
         "netgen/ez-forms-bundle": "~1.0",
-        "doctrine/orm": "~2.4|~2.5",
+        "doctrine/orm": "~2.4",
         "netgen/metadata-bundle": "~0.5",
         "netgen/content-type-list-bundle": "~1.0",
         "netgen/enhanced-selection-bundle": "~2.0",

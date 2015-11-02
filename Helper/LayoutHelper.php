@@ -3,6 +3,7 @@
 namespace Netgen\Bundle\MoreBundle\Helper;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\SPI\Search\Handler;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
@@ -22,6 +23,11 @@ class LayoutHelper
     protected $repository;
 
     /**
+     * @var \eZ\Publish\SPI\Search\Handler
+     */
+    protected $searchHandler;
+
+    /**
      * @var \Netgen\Bundle\MoreBundle\Helper\PathHelper
      */
     protected $pathHelper;
@@ -38,13 +44,15 @@ class LayoutHelper
 
     /**
      * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\SPI\Search\Handler $searchHandler
      * @param \Netgen\Bundle\MoreBundle\Helper\PathHelper $pathHelper
      * @param \eZ\Publish\Core\Helper\TranslationHelper $translationHelper
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      */
-    public function __construct( Repository $repository, PathHelper $pathHelper, TranslationHelper $translationHelper, ConfigResolverInterface $configResolver )
+    public function __construct( Repository $repository, Handler $searchHandler, PathHelper $pathHelper, TranslationHelper $translationHelper, ConfigResolverInterface $configResolver )
     {
         $this->repository = $repository;
+        $this->searchHandler = $searchHandler;
         $this->pathHelper = $pathHelper;
         $this->translationHelper = $translationHelper;
         $this->configResolver = $configResolver;
@@ -196,19 +204,19 @@ class LayoutHelper
             new FieldLength( "ng_layout", "apply_layout_to_uri", Query::SORT_DESC )
         );
 
-        $searchResult = $this->repository->getSearchService()->findContent( $query );
+        $searchResult = $this->searchHandler->findContent( $query );
         if ( $searchResult->totalCount < 1 )
         {
             return array();
         }
 
-        $layouts = array_map(
-            function ( SearchHit $searchHit )
-            {
-                return $searchHit->valueObject;
-            },
-            $searchResult->searchHits
-        );
+        $layouts = array();
+        foreach ( $searchResult->searchHits as $hit )
+        {
+            $layouts[] = $this->repository->getContentService()->loadContent(
+                $hit->valueObject->id
+            );
+        }
 
         return $layouts;
     }

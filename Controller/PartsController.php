@@ -154,8 +154,8 @@ class PartsController extends Controller
             {
                 $relatedMultimediaField = $translationHelper->getTranslatedField( $content, 'related_multimedia' )->value;
 
-                // we need to work with location IDs, because we need to check if related object has location,
-                // to prevent possible problems with related items in trash.
+                // We need to work with location IDs, because we need to check if related object has location, to prevent
+                // possible problems with related items in trash.
                 // Also, we need location IDs for fetching images from related ng_gallery objects
                 $relatedMultimediaLocationIds = !empty( $relatedMultimediaField->destinationLocationIds ) ? $relatedMultimediaField->destinationLocationIds : array();
             }

@@ -98,7 +98,7 @@ class EmbedViewController extends Controller
                         if ( $this->logger )
                         {
                             $this->logger->error(
-                                'Tried to generate link to content #' . $contentId . ' without read rights'
+                                'Tried to generate link to content #' . $linkedContentId . ' without read rights'
                             );
                         }
                     }

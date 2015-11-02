@@ -184,7 +184,7 @@ class PartsController extends Controller
             }
         }
 
-        /** if there are related multimedia objects */
+        // If there are related multimedia objects
         if ( !empty( $relatedMultimediaLocationIds ) )
         {
             foreach ( $relatedMultimediaLocationIds as $relatedMultimediaLocationId )

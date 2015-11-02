@@ -8,7 +8,7 @@
         {% endif %}
 
         {% set image_alias = ez_image_alias( field, versionInfo, parameters.alias|default( 'original' ) ) %}
-        <img src="{% if image_alias %}{{ asset( image_alias.uri ) }}{% else %}//:0{% endif %}" {% if parameters.image_class is defined and parameters.image_class is not empty %} class="{{ parameters.image_class }}" {% endif %} {% if imageAlias.width is defined and imageAlias.width is not empty %} width="{{ imageAlias.width }}" {% endif %} {% if imageAlias.height is defined and imageAlias.height is not empty %} height="{{ imageAlias.height }}" {% endif %} alt="{% if parameters.alt_text is defined and parameters.alt_text is not empty %}{{ parameters.alt_text }}{% else %}{{ field.value.alternativeText }}{% endif %}" />
+        <img src="{% if image_alias %}{{ asset( image_alias.uri ) }}{% else %}//:0{% endif %}" {% if parameters.image_class is defined and parameters.image_class is not empty %} class="{{ parameters.image_class }}" {% endif %} {% if image_alias.width is defined and image_alias.width is not empty %} width="{{ image_alias.width }}" {% endif %} {% if image_alias.height is defined and image_alias.height is not empty %} height="{{ image_alias.height }}" {% endif %} alt="{% if parameters.alt_text is defined and parameters.alt_text is not empty %}{{ parameters.alt_text }}{% else %}{{ field.value.alternativeText }}{% endif %}" />
 
         {% if parameters.link_href is defined and parameters.link_href is not empty %}
             </a>

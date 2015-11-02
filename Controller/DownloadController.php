@@ -9,6 +9,7 @@ use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -20,16 +21,21 @@ class DownloadController extends Controller
      *
      * Assumes that the file is locally stored
      *
+     * @param \Symfony\Component\HttpFoundation\Request $request
      * @param mixed $contentId
      * @param mixed $fieldId
      *
      * @return \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse
      */
-    public function downloadFile( $contentId, $fieldId )
+    public function downloadFile( Request $request, $contentId, $fieldId )
     {
         try
         {
-            $content = $this->getRepository()->getContentService()->loadContent( $contentId );
+            $content = $this->getRepository()->getContentService()->loadContent(
+                $contentId,
+                null,
+                $request->query->has( 'version' ) ? $request->query->get( 'version' ) : null
+            );
         }
         catch ( NotFoundException $e )
         {
@@ -62,7 +68,8 @@ class DownloadController extends Controller
             !$binaryField instanceof Field ||
             $this->container->get( 'ezpublish.field_helper' )->isFieldEmpty(
                 $content,
-                $binaryField->fieldDefIdentifier
+                $binaryField->fieldDefIdentifier,
+                $request->query->has( 'inLanguage' ) ? $request->query->get( 'inLanguage' ) : null
             )
         )
         {
@@ -75,7 +82,8 @@ class DownloadController extends Controller
 
         $binaryFieldValue = $this->container->get( 'ezpublish.translation_helper' )->getTranslatedField(
             $content,
-            $binaryField->fieldDefIdentifier
+            $binaryField->fieldDefIdentifier,
+            $request->query->has( 'inLanguage' ) ? $request->query->get( 'inLanguage' ) : null
         )->value;
 
         if ( $binaryFieldValue instanceof BinaryBaseValue )
@@ -85,7 +93,7 @@ class DownloadController extends Controller
         }
         else if ( $binaryFieldValue instanceof ImageValue )
         {
-            $ioService = $this->container->get( 'ezpublish.fieldType.ezimage.io_service' );
+            $ioService = $this->container->get( 'ezpublish.fieldtype.ezimage.io_service' );
             $binaryFile = $ioService->loadBinaryFile( $binaryFieldValue->id );
         }
         else

@@ -16,7 +16,6 @@ use Twig_SimpleFunction;
 
 class NetgenMoreExtension extends Twig_Extension
 {
-
     /**
      * @var \eZ\Publish\API\Repository\Repository
      */
@@ -246,7 +245,11 @@ class NetgenMoreExtension extends Twig_Extension
      */
     public function hasAccess( $module, $function, User $user = null )
     {
-        return $this->repository->hasAccess( $module, $function, $user );
+        return $this->repository->hasAccess(
+            $module,
+            $function,
+            $user
+        );
     }
 
     /**

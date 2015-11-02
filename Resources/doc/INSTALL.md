@@ -31,11 +31,11 @@ public function registerBundles()
 {
    ...
 
-    $bundles[] = new \Netgen\Bundle\MetadataBundle\NetgenMetadataBundle();
-    $bundles[] = new \Netgen\Bundle\ContentTypeListBundle\NetgenContentTypeListBundle();
-    $bundles[] = new \Netgen\Bundle\EnhancedSelectionBundle\NetgenEnhancedSelectionBundle();
-    $bundles[] = new \Netgen\Bundle\MoreGeneratorBundle\NetgenMoreGeneratorBundle();
-    $bundles[] = new \Netgen\Bundle\MoreBundle\NetgenMoreBundle();
+    $bundles[] = new Netgen\Bundle\MetadataBundle\NetgenMetadataBundle();
+    $bundles[] = new Netgen\Bundle\ContentTypeListBundle\NetgenContentTypeListBundle();
+    $bundles[] = new Netgen\Bundle\EnhancedSelectionBundle\NetgenEnhancedSelectionBundle();
+    $bundles[] = new Netgen\Bundle\MoreGeneratorBundle\NetgenMoreGeneratorBundle();
+    $bundles[] = new Netgen\Bundle\MoreBundle\NetgenMoreBundle();
 
     return $bundles;
 }
@@ -43,7 +43,7 @@ public function registerBundles()
 
 ### Clear the caches
 
-Clear eZ Publish 5 caches.
+Clear eZ Publish caches.
 
 ```bash
 php ezpublish/console cache:clear

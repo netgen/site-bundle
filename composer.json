@@ -11,13 +11,13 @@
         "ezsystems/ezpublish-kernel": "*",
         "netgen/ez-forms-bundle": "~1.0",
         "doctrine/orm": "~2.4",
-        "netgen/metadata-bundle": "~0.3",
+        "netgen/metadata-bundle": "~0.5",
         "netgen/content-type-list-bundle": "~1.0",
         "netgen/enhanced-selection-bundle": "~1.0",
         "netgen/open-graph-bundle": "~1.0",
         "twig/extensions": "~1.2",
         "liip/imagine-bundle": "~1.0",
-        "knplabs/knp-menu-bundle": "~1.0"
+        "knplabs/knp-menu-bundle": "~1.0|~2.0"
     },
     "autoload": {
         "psr-4": { "Netgen\\Bundle\\MoreBundle\\": "" }

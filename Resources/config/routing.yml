@@ -1,13 +1,13 @@
-ngmore_download:
-    path: /download/{contentId}/{fieldId}
-    defaults:
-        _controller: ngmore.controller.download:downloadFile
-    methods: [GET]
-
 ngmore_sitemap:
     path: /sitemap
     defaults:
         _controller: ngmore.controller.sitemap:viewSitemap
+    methods: [GET]
+
+ngmore_download:
+    path: /download/{contentId}/{fieldId}
+    defaults:
+        _controller: ngmore.controller.download:downloadFile
     methods: [GET]
 
 ngmore_user_register:
@@ -29,3 +29,11 @@ ngmore_user_forgot_password:
 ngmore_user_reset_password:
     path: /user/forgotpassword/{hash}
     defaults: { _controller: ngmore.controller.user:resetPassword }
+
+# Disable eZ Platform built in routes
+
+ezpublishSetup:
+    path: /_error/404
+
+_ezpublishLegacyRest:
+    path: /_error/404

@@ -27,13 +27,13 @@ class PartsController extends Controller
 
         $query = new LocationQuery();
 
-        $criterions = array(
+        $criteria = array(
             new Criterion\ParentLocationId( $location->id ),
             new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
             new Criterion\ContentTypeIdentifier( 'image' )
         );
 
-        $query->filter = new Criterion\LogicalAnd( $criterions );
+        $query->filter = new Criterion\LogicalAnd( $criteria );
 
         $query->sortClauses = array(
             $this->container->get( 'ngmore.helper.sort_clause_helper' )->getSortClauseBySortField(
@@ -153,10 +153,10 @@ class PartsController extends Controller
 
         $multimediaItems = array();
 
-        /** add current location in the multimedia item list */
+        // Add current location in the multimedia item list
         $multimediaItems[] = array( 'type' => $contentTypeIdentifier, 'content' => $content );
 
-        /** get children image objects and add them in multimedia item list */
+        // Get children image objects and add them in multimedia item list
         if ( $includeChildrenImages )
         {
             $galleryImages = $this->getChildrenImages( $locationId );
@@ -169,18 +169,17 @@ class PartsController extends Controller
             }
         }
 
-        /** finally, check if related_multimedia field exists and has content */
+        // Finally, check if related_multimedia field exists and has content
         $relatedMultimediaLocationIds = array();
         if ( array_key_exists( 'related_multimedia', $contentFields ) )
         {
             if ( !$fieldHelper->isFieldEmpty( $content, 'related_multimedia' ) )
             {
                 $relatedMultimediaField = $translationHelper->getTranslatedField( $content, 'related_multimedia' )->value;
-                /**
-                    we need to work with location IDs, because we need to check if related object has location, to prevent
-                    possible problems with related items in trash.
-                    Also, we need location IDs for fetching images from related ng_gallery objects
-                */
+
+                // We need to work with location IDs, because we need to check if related object has location, to prevent
+                // possible problems with related items in trash.
+                // Also, we need location IDs for fetching images from related ng_gallery objects
                 $relatedMultimediaLocationIds = !empty( $relatedMultimediaField->destinationLocationIds ) ? $relatedMultimediaField->destinationLocationIds : array();
             }
         }
@@ -196,7 +195,7 @@ class PartsController extends Controller
                 }
                 catch ( NotFoundException $e )
                 {
-                    /** skip non-existing locations (item in trash or missing location due to some other reason) */
+                    // Skip non-existing locations (item in trash or missing location due to some other reason)
                     continue;
                 }
 
@@ -210,7 +209,7 @@ class PartsController extends Controller
 
                 $relatedMultimediaContentTypeIdentifier = $contentTypeService->loadContentType( $relatedMultimediaContentInfo->contentTypeId )->identifier;
 
-                /** ng_gallery - find children ng_image objects and add them in multimedia item list */
+                // ng_gallery - Find children ng_image objects and add them in multimedia item list
                 if ( $relatedMultimediaContentTypeIdentifier == 'ng_gallery' )
                 {
                     $galleryImages = $this->getChildrenImages( $relatedMultimediaLocationId );

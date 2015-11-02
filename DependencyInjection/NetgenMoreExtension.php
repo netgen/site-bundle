@@ -32,6 +32,7 @@ class NetgenMoreExtension extends Extension
         $loader->load( 'image.yml' );
         $loader->load( 'menu.yml' );
         $loader->load( 'event_listeners.yml' );
+        $loader->load( 'matchers.yml' );
         $loader->load( 'services.yml' );
 
         if ( $container->hasParameter( 'ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common.field.class' ) )

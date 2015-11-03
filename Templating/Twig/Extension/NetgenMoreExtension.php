@@ -16,7 +16,6 @@ use Twig_SimpleFunction;
 
 class NetgenMoreExtension extends Twig_Extension
 {
-
     /**
      * @var \eZ\Publish\API\Repository\Repository
      */
@@ -98,6 +97,10 @@ class NetgenMoreExtension extends Twig_Extension
                 array( $this, 'getContentTypeIdentifier' )
             ),
             new Twig_SimpleFunction(
+                'ngmore_content_type_name',
+                array( $this, 'getContentTypeName' )
+            ),
+            new Twig_SimpleFunction(
                 'ngmore_owner',
                 array( $this, 'getOwner' )
             ),
@@ -120,12 +123,13 @@ class NetgenMoreExtension extends Twig_Extension
      * Returns the path for specified location ID
      *
      * @param mixed $locationId
+     * @param bool $includeAllContentTypes
      *
      * @return array
      */
-    public function getLocationPath( $locationId )
+    public function getLocationPath( $locationId, $includeAllContentTypes = false )
     {
-        return $this->pathHelper->getPath( $locationId, true );
+        return $this->pathHelper->getPath( $locationId, !$includeAllContentTypes );
     }
 
     /**
@@ -157,11 +161,27 @@ class NetgenMoreExtension extends Twig_Extension
      * Returns content type identifier for specified content type ID
      *
      * @param mixed $contentTypeId
+     *
      * @return string
      */
     public function getContentTypeIdentifier( $contentTypeId )
     {
         return $this->repository->getContentTypeService()->loadContentType( $contentTypeId )->identifier;
+    }
+
+    /**
+     * Returns content type name for specified content type ID
+     *
+     * @param mixed $contentTypeId
+     *
+     * @return string
+     */
+    public function getContentTypeName( $contentTypeId )
+    {
+        return $this->translationHelper->getTranslatedByMethod(
+            $this->repository->getContentTypeService()->loadContentType( $contentTypeId ),
+            "getName"
+        );
     }
 
     /**
@@ -225,7 +245,11 @@ class NetgenMoreExtension extends Twig_Extension
      */
     public function hasAccess( $module, $function, User $user = null )
     {
-        return $this->repository->hasAccess( $module, $function, $user );
+        return $this->repository->hasAccess(
+            $module,
+            $function,
+            $user
+        );
     }
 
     /**

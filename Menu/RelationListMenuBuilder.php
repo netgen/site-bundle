@@ -156,6 +156,7 @@ class RelationListMenuBuilder
 
                     continue;
                 }
+
                 $location = $this->repository->getLocationService()->loadLocation( $locationId );
             }
             catch ( NotFoundException $e )
@@ -226,7 +227,7 @@ class RelationListMenuBuilder
                         )
                     );
                 }
-                catch( InvalidArgumentException $e )
+                catch ( InvalidArgumentException $e )
                 {
                     $menuItemId = $uri = $fieldValue->link;
                 }
@@ -268,10 +269,9 @@ class RelationListMenuBuilder
                     $useShortcutNameField = $this->translationHelper->getTranslatedField( $content, 'use_shortcut_name' );
                     if ( $useShortcutNameField instanceof Field && $useShortcutNameField->value->bool )
                     {
-                        $shortcutName = $this->translationHelper->getTranslatedContentName( $content );
-                        $label = $shortcutName;
+                        $label = $this->translationHelper->getTranslatedContentName( $content );
                         $linkAttributes = array(
-                            'title' => $shortcutName
+                            'title' => $label
                         );
                     }
                     else
@@ -359,7 +359,7 @@ class RelationListMenuBuilder
                         )
                     );
                 }
-                catch( InvalidArgumentException $e )
+                catch ( InvalidArgumentException $e )
                 {
                     $menuItemId = $uri = $fieldValue->link;
                 }
@@ -388,6 +388,7 @@ class RelationListMenuBuilder
                 if ( $relatedContent->published )
                 {
                     $relatedContentName = $this->translationHelper->getTranslatedContentNameByContentInfo( $relatedContent );
+
                     $menuItemId = $relatedContent->mainLocationId;
 
                     $uri = $this->router->generate(
@@ -400,10 +401,9 @@ class RelationListMenuBuilder
                     $useMenuItemNameField = $this->translationHelper->getTranslatedField( $content, 'use_menu_item_name' );
                     if ( $useMenuItemNameField instanceof Field && $useMenuItemNameField->value->bool )
                     {
-                        $menuItemName = $this->translationHelper->getTranslatedContentName( $content );
-                        $label = $menuItemName;
+                        $label = $this->translationHelper->getTranslatedContentName( $content );
                         $linkAttributes = array(
-                            'title' => $menuItemName
+                            'title' => $label
                         );
                     }
                     else
@@ -469,7 +469,7 @@ class RelationListMenuBuilder
                         $childItem->setName( $parentLocation->id );
                     }
 
-                    $criterions = array(
+                    $criteria = array(
                         new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
                         new Criterion\ParentLocationId( $parentLocation->id )
                     );
@@ -484,18 +484,18 @@ class RelationListMenuBuilder
 
                         if ( $filterType->identifiers[0] === 'include' )
                         {
-                            $criterions[] = new Criterion\ContentTypeIdentifier( $contentTypeFilter->identifiers );
+                            $criteria[] = new Criterion\ContentTypeIdentifier( $contentTypeFilter->identifiers );
                         }
                         else if ( $filterType->identifiers[0] === 'exclude' )
                         {
-                            $criterions[] = new Criterion\LogicalNot(
+                            $criteria[] = new Criterion\LogicalNot(
                                 new Criterion\ContentTypeIdentifier( $contentTypeFilter->identifiers )
                             );
                         }
                     }
 
                     $query = new LocationQuery();
-                    $query->criterion = new Criterion\LogicalAnd( $criterions );
+                    $query->filter = new Criterion\LogicalAnd( $criteria );
 
                     if ( !$this->fieldHelper->isFieldEmpty( $content, 'limit' ) )
                     {

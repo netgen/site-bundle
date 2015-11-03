@@ -1,0 +1,49 @@
+parameters:
+    ngmore.listener.user.class: Netgen\Bundle\MoreBundle\EventListener\UserEventListener
+    ngmore.listener.user.post_register.class: Netgen\Bundle\MoreBundle\EventListener\User\PostRegisterEventListener
+    ngmore.listener.user.activation_request.class: Netgen\Bundle\MoreBundle\EventListener\User\ActivationRequestEventListener
+    ngmore.listener.user.post_activate.class: Netgen\Bundle\MoreBundle\EventListener\User\PostActivateEventListener
+    ngmore.listener.user.password_reset_request.class: Netgen\Bundle\MoreBundle\EventListener\User\PasswordResetRequestEventListener
+    ngmore.listener.user.post_password_reset.class: Netgen\Bundle\MoreBundle\EventListener\User\PostPasswordResetEventListener
+
+services:
+    ngmore.listener.user:
+        class: %ngmore.listener.user.class%
+        abstract: true
+        arguments:
+            - @ngmore.helper.mail_helper
+            - @ezpublish.config.resolver
+            - @ngmore.repository.nguser_setting
+            - @ngmore.repository.ezuser_accountkey
+            - @ezpublish.translation_helper
+            - @ezpublish.api.repository
+
+    ngmore.listener.user.post_register:
+        class: %ngmore.listener.user.post_register.class%
+        parent: ngmore.listener.user
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ngmore.listener.user.activation_request:
+        class: %ngmore.listener.user.activation_request.class%
+        parent: ngmore.listener.user
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ngmore.listener.user.post_activate:
+        class: %ngmore.listener.user.post_activate.class%
+        parent: ngmore.listener.user
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ngmore.listener.user.password_reset_request:
+        class: %ngmore.listener.user.password_reset_request.class%
+        parent: ngmore.listener.user
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ngmore.listener.user.post_password_reset:
+        class: %ngmore.listener.user.post_password_reset.class%
+        parent: ngmore.listener.user
+        tags:
+            - { name: kernel.event_subscriber }

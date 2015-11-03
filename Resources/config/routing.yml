@@ -1,11 +1,39 @@
+ngmore_sitemap:
+    path: /sitemap
+    defaults:
+        _controller: ngmore.controller.sitemap:viewSitemap
+    methods: [GET]
+
 ngmore_download:
     path: /download/{contentId}/{fieldId}
     defaults:
         _controller: ngmore.controller.download:downloadFile
     methods: [GET]
 
-ngmore_sitemap:
-    path: /sitemap
-    defaults:
-        _controller: ngmore.controller.sitemap:viewSitemap
-    methods: [GET]
+ngmore_user_register:
+    path: /user/register
+    defaults: { _controller: ngmore.controller.user:register }
+
+ngmore_resend_activation_mail:
+    path: /user/activate
+    defaults: { _controller: ngmore.controller.user:activationForm }
+
+ngmore_user_activate:
+    path: /user/activate/{hash}
+    defaults: { _controller: ngmore.controller.user:activate }
+
+ngmore_user_forgot_password:
+    path: /user/forgotpassword
+    defaults: { _controller: ngmore.controller.user:forgotPassword }
+
+ngmore_user_reset_password:
+    path: /user/forgotpassword/{hash}
+    defaults: { _controller: ngmore.controller.user:resetPassword }
+
+# Disable eZ Platform built in routes
+
+ezpublishSetup:
+    path: /_error/404
+
+_ezpublishLegacyRest:
+    path: /_error/404

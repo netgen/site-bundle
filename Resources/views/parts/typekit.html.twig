@@ -1,8 +1,8 @@
 {% if ezpublish.configResolver.hasParameter( 'SiteSettings.TypeKitCode', 'ngmore' ) %}
-    {% set typekitCode = ezpublish.configResolver.getParameter( 'SiteSettings.TypeKitCode', 'ngmore' ) %}
+    {% set typekit_code = ezpublish.configResolver.getParameter( 'SiteSettings.TypeKitCode', 'ngmore' ) %}
 
-    {% if typekitCode is not empty %}
-        <script type="text/javascript" src="//use.typekit.com/{{ typekitCode|raw|escape( 'js' ) }}.js"></script>
+    {% if typekit_code is not empty %}
+        <script type="text/javascript" src="//use.typekit.com/{{ typekit_code|raw|escape( 'js' ) }}.js"></script>
         <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     {% endif %}
 {% endif %}

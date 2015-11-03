@@ -10,7 +10,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use DOMDocument;
 
-class RelationList extends BaseRelationListConverter
+class RelationListConverter extends BaseRelationListConverter
 {
     /**
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler

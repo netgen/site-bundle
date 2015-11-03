@@ -5,9 +5,10 @@ ngmore_sitemap:
     methods: [GET]
 
 ngmore_download:
-    path: /content/download/{contentId}/{fieldId}
+    path: /content/download/{contentId}/{fieldId}/{isInline}
     defaults:
         _controller: ngmore.controller.download:downloadFile
+        isInline: false
     methods: [GET]
 
 ngmore_user_register:

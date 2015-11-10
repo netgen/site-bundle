@@ -115,8 +115,6 @@ services:
         arguments:
             - @ezpublish.config.resolver.core
             - %ngmore.legacy_mapper.configuration.options%
-        calls:
-            - [setContainer, [@service_container]]
         tags:
             - { name: kernel.event_subscriber }
 

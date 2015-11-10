@@ -10,3 +10,8 @@ parameters:
     # Override to enable mulitbyte url alias to work correctly (fixed in EZP v6)
     # https://github.com/ezsystems/ezpublish-kernel/pull/1394
     ezpublish.spi.persistence.legacy.url_alias.handler.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\UrlAlias\Handler
+
+    # Override to fix a bug where repository sudo method does not use signal slot repo
+    # https://github.com/ezsystems/ezpublish-kernel/pull/1393
+    ezpublish.signalslot.repository.class: Netgen\Bundle\MoreBundle\Core\SignalSlot\Repository
+    ezpublish.api.inner_repository.class: Netgen\Bundle\MoreBundle\Core\Repository\Repository

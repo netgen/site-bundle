@@ -6,3 +6,5 @@ parameters:
 
     ezpublish.controller.content.view.class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Controller\Content\ViewController
     ezpublish.image_alias.imagine.cache_resolver.class: Netgen\Bundle\MoreBundle\Imagine\IORepositoryResolver
+
+    ezpublish.spi.persistence.legacy.url_alias.handler.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\UrlAlias\Handler

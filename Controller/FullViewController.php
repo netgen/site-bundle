@@ -67,9 +67,7 @@ class FullViewController extends Controller
             if ( !empty( $excludedClasses ) )
             {
                 $criteria[] = new Criterion\LogicalNot(
-                    new Criterion\ContentTypeIdentifier(
-                        $this->getConfigResolver()->getParameter( 'ChildrenNodeList.ExcludedClasses', 'content' )
-                    )
+                    new Criterion\ContentTypeIdentifier( $excludedClasses )
                 );
             }
         }

@@ -15,3 +15,5 @@ parameters:
     # https://github.com/ezsystems/ezpublish-kernel/pull/1393
     ezpublish.signalslot.repository.class: Netgen\Bundle\MoreBundle\Core\SignalSlot\Repository
     ezpublish.api.inner_repository.class: Netgen\Bundle\MoreBundle\Core\Repository\Repository
+
+    liip_imagine.filter.configuration.class: Netgen\Bundle\MoreBundle\Imagine\Filter\FilterConfiguration

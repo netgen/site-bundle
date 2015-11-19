@@ -109,15 +109,13 @@ services:
 
     ngmore.repository.nguser_setting:
         class: Doctrine\ORM\EntityRepository
-        factory_service: doctrine.orm.default_entity_manager
-        factory_method: getRepository
+        factory: [@doctrine.orm.default_entity_manager, getRepository]
         arguments:
             - %ngmore.entity.nguser_setting.class%
 
     ngmore.repository.ezuser_accountkey:
         class: Doctrine\ORM\EntityRepository
-        factory_service: doctrine.orm.default_entity_manager
-        factory_method: getRepository
+        factory: [@doctrine.orm.default_entity_manager, getRepository]
         arguments:
             - %ngmore.entity.ezuser_accountkey.class%
 

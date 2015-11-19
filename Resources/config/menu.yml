@@ -16,8 +16,7 @@ services:
 
     ngmore.menu.main_menu:
         class: Knp\Menu\MenuItem
-        factory_service: ngmore.menu.relation_list_menu_builder
-        factory_method: createRelationListMenu
+        factory: [@ngmore.menu.relation_list_menu_builder, createRelationListMenu]
         arguments:
             - main_menu
         tags:
@@ -25,8 +24,7 @@ services:
 
     ngmore.menu.additional_menu:
         class: Knp\Menu\MenuItem
-        factory_service: ngmore.menu.relation_list_menu_builder
-        factory_method: createRelationListMenu
+        factory: [@ngmore.menu.relation_list_menu_builder, createRelationListMenu]
         arguments:
             - additional_menu
         tags:

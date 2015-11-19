@@ -14,6 +14,8 @@ class FilterConfiguration extends BaseFilterConfiguration
     protected $configResolver;
 
     /**
+     * Sets the config resolver
+     *
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      */
     public function setConfigResolver( ConfigResolverInterface $configResolver )
@@ -22,9 +24,13 @@ class FilterConfiguration extends BaseFilterConfiguration
     }
 
     /**
-     * @inheritdoc
+     * Gets a previously configured filter.
      *
-     * @throws InvalidVariationException
+     * @param string $filter
+     *
+     * @return array
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidVariationException
      */
     public function get( $filter )
     {
@@ -45,7 +51,9 @@ class FilterConfiguration extends BaseFilterConfiguration
     }
 
     /**
-     * @inheritdoc
+     * Get all filters.
+     *
+     * @return array
      */
     public function all()
     {
@@ -61,11 +69,11 @@ class FilterConfiguration extends BaseFilterConfiguration
      * @param string $variationName
      * @param array $configuredVariations Variations set in eZ.
      *
-     * @throws InvalidVariationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidVariationException
      *
      * @return array
      */
-    private function getVariationFilters( $variationName, array $configuredVariations )
+    protected function getVariationFilters( $variationName, array $configuredVariations )
     {
         if ( !isset( $configuredVariations[$variationName]['filters'] ) && !isset( $this->filters[$variationName]['filters'] ) )
         {
@@ -77,7 +85,7 @@ class FilterConfiguration extends BaseFilterConfiguration
         {
             $filters = $configuredVariations[$variationName]['filters'];
         }
-        // Falback to variations configured in LiipImagineBundle.
+        // Fallback to variations configured in LiipImagineBundle.
         else
         {
             $filters = $this->filters[$variationName]['filters'];
@@ -97,7 +105,7 @@ class FilterConfiguration extends BaseFilterConfiguration
      *
      * @return array
      */
-    private function getVariationPostProcessors( $variationName, array $configuredVariations )
+    protected function getVariationPostProcessors( $variationName, array $configuredVariations )
     {
         if ( isset( $configuredVariations[$variationName]['post_processors'] ) )
         {

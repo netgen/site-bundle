@@ -25,17 +25,17 @@ services:
     ngmore.templating.global_helper:
         class: %ngmore.templating.global_helper.class%
         arguments:
-            - @ngmore.helper.site_info_helper
-            - @ngmore.helper.layout_helper
-            - @request_stack
+            - "@ngmore.helper.site_info_helper"
+            - "@ngmore.helper.layout_helper"
+            - "@request_stack"
 
     ngmore.templating.twig.extension:
         class: %ngmore.templating.twig.extension.class%
         arguments:
-            - @ezpublish.api.repository
-            - @ezpublish.translation_helper
-            - @ngmore.helper.path_helper
-            - @ngmore.templating.global_helper
-            - @ezpublish.locale.converter
+            - "@ezpublish.api.repository"
+            - "@ezpublish.translation_helper"
+            - "@ngmore.helper.path_helper"
+            - "@ngmore.templating.global_helper"
+            - "@ezpublish.locale.converter"
         tags:
             - { name: twig.extension }

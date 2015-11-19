@@ -15,14 +15,14 @@ services:
         calls:
             - [setEnableViewCache, [$content.view_cache$]]
         arguments:
-            - @ezpublish.config.resolver
+            - "@ezpublish.config.resolver"
         tags:
             - { name: kernel.event_subscriber }
 
     ngmore.listener.invisible_locations:
         class: %ngmore.listener.invisible_locations.class%
         arguments:
-            - @ezpublish.api.repository
+            - "@ezpublish.api.repository"
         calls:
             - [setShowInvisibleLocations, [$content_view.show_invisible_locations;ngmore$]]
         tags:
@@ -32,12 +32,12 @@ services:
         class: %ngmore.listener.user.class%
         abstract: true
         arguments:
-            - @ngmore.helper.mail_helper
-            - @ezpublish.config.resolver
-            - @ngmore.repository.nguser_setting
-            - @ngmore.repository.ezuser_accountkey
-            - @ezpublish.translation_helper
-            - @ezpublish.api.repository
+            - "@ngmore.helper.mail_helper"
+            - "@ezpublish.config.resolver"
+            - "@ngmore.repository.nguser_setting"
+            - "@ngmore.repository.ezuser_accountkey"
+            - "@ezpublish.translation_helper"
+            - "@ezpublish.api.repository"
 
     ngmore.listener.user.post_register:
         class: %ngmore.listener.user.post_register.class%

@@ -9,18 +9,23 @@ use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration as BaseFilterConfigura
 class FilterConfiguration extends BaseFilterConfiguration
 {
     /**
-     * @var ConfigResolverInterface
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
-    private $configResolver;
+    protected $configResolver;
 
     /**
-     * @param ConfigResolverInterface $configResolver
+     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      */
     public function setConfigResolver( ConfigResolverInterface $configResolver )
     {
         $this->configResolver = $configResolver;
     }
 
+    /**
+     * @inheritdoc
+     *
+     * @throws InvalidVariationException
+     */
     public function get( $filter )
     {
         $configuredVariations = $this->configResolver->getParameter( 'image_variations' );
@@ -39,6 +44,9 @@ class FilterConfiguration extends BaseFilterConfiguration
         ) + $filterConfig;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function all()
     {
         return $this->configResolver->getParameter( 'image_variations' ) + parent::all();

@@ -26,24 +26,24 @@ services:
     ngmore.templating.converter.user:
         class: %ngmore.templating.converter.user.class%
         arguments:
-            - @ezpublish_legacy.kernel
+            - "@ezpublish_legacy.kernel"
         tags:
             - {name: ezpublish_legacy.templating.converter, for: eZ\Publish\Core\Repository\Values\User\User}
 
     ngmore.templating.global_helper:
         class: %ngmore.templating.global_helper.class%
         arguments:
-            - @ngmore.helper.site_info_helper
-            - @ngmore.helper.layout_helper
-            - @request_stack
+            - "@ngmore.helper.site_info_helper"
+            - "@ngmore.helper.layout_helper"
+            - "@request_stack"
 
     ngmore.templating.twig.extension:
         class: %ngmore.templating.twig.extension.class%
         arguments:
-            - @ezpublish.api.repository
-            - @ezpublish.translation_helper
-            - @ngmore.helper.path_helper
-            - @ngmore.templating.global_helper
-            - @ezpublish.locale.converter
+            - "@ezpublish.api.repository"
+            - "@ezpublish.translation_helper"
+            - "@ngmore.helper.path_helper"
+            - "@ngmore.templating.global_helper"
+            - "@ezpublish.locale.converter"
         tags:
             - { name: twig.extension }

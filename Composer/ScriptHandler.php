@@ -76,7 +76,7 @@ class ScriptHandler extends DistributionBundleScriptHandler
      */
     protected static function generateLegacyAutoloadsArray(
         CommandEvent $event,
-        $generateKernelOverrideAutoloads
+        $generateKernelOverrideAutoloads = false
     )
     {
         $options = self::getOptions( $event );

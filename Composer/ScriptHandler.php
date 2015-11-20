@@ -53,6 +53,32 @@ class ScriptHandler extends DistributionBundleScriptHandler
      */
     public static function generateLegacyAutoloads( CommandEvent $event )
     {
+        return self::generateLegacyAutoloadsArray( $event );
+    }
+
+    /**
+     * Generates legacy autoloads for kernel overrides
+     *
+     * @param $event \Composer\Script\CommandEvent
+     */
+    public static function generateLegacyKernelOverrideAutoloads( CommandEvent $event )
+    {
+        return self::generateLegacyAutoloadsArray( $event, true );
+    }
+
+    /**
+     * Generates legacy autoloads
+     *
+     * @param $event \Composer\Script\CommandEvent
+     * @param bool $generateKernelOverrideAutoloads
+     *
+     * @param $event \Composer\Script\CommandEvent
+     */
+    protected static function generateLegacyAutoloadsArray(
+        CommandEvent $event,
+        $generateKernelOverrideAutoloads
+    )
+    {
         $options = self::getOptions( $event );
 
         $currentWorkingDirectory = getcwd();
@@ -66,12 +92,16 @@ class ScriptHandler extends DistributionBundleScriptHandler
 
         chdir( $legacyRootDir );
 
-        $processBuilder = new ProcessBuilder(
-            array(
-                'php',
-                'bin/php/ezpgenerateautoloads.php'
-            )
+        $processParameters = array(
+            'php',
+            'bin/php/ezpgenerateautoloads.php'
         );
+
+        if ( $generateKernelOverrideAutoloads ) {
+            $processParameters[] = '-o';
+        }
+
+        $processBuilder = new ProcessBuilder($processParameters);
 
         $process = $processBuilder->getProcess();
 

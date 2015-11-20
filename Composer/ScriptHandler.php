@@ -97,11 +97,12 @@ class ScriptHandler extends DistributionBundleScriptHandler
             'bin/php/ezpgenerateautoloads.php'
         );
 
-        if ( $generateKernelOverrideAutoloads ) {
+        if ( $generateKernelOverrideAutoloads )
+        {
             $processParameters[] = '-o';
         }
 
-        $processBuilder = new ProcessBuilder($processParameters);
+        $processBuilder = new ProcessBuilder( $processParameters );
 
         $process = $processBuilder->getProcess();
 

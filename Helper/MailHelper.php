@@ -189,7 +189,7 @@ class MailHelper
             {
                 return array(
                     $this->configResolver->getParameter( 'mail.sender_email', 'ngmore' ) =>
-                    $this->configResolver->getParameter( 'mail.sender_name', 'ngmore' )
+                        $this->configResolver->getParameter( 'mail.sender_name', 'ngmore' )
                 );
             }
 

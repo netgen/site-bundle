@@ -109,7 +109,7 @@ class DownloadController extends Controller
         $response = new BinaryStreamResponse( $binaryFile, $ioService );
         $response->setContentDisposition(
             (bool)$isInline ? ResponseHeaderBag::DISPOSITION_INLINE :
-                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             str_replace( array( '/', '\\' ), '', $binaryFieldValue->fileName ),
             'file'
         );

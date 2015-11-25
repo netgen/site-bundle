@@ -74,7 +74,7 @@ class SymlinkLegacyCommand extends SymlinkCommand
 
             if ( !$this->fileSystem->exists( $bundle->getPath() . '/ezpublish_legacy/' ) )
             {
-                return;
+                continue;
             }
 
             foreach ( new DirectoryIterator( $bundle->getPath() . '/ezpublish_legacy/' ) as $item )

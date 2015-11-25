@@ -47,7 +47,7 @@ class SymlinkProjectCommand extends SymlinkCommand
 
             if ( !$this->fileSystem->exists( $projectFilesPath ) || !is_dir( $projectFilesPath ) || is_link( $projectFilesPath ) )
             {
-                return;
+                continue;
             }
 
             $this->symlinkProjectFiles( $projectFilesPath, $input, $output );

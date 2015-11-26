@@ -25,7 +25,7 @@ class PartsController extends Controller
         $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
         $content = $this->getRepository()->getContentService()->loadContent( $location->contentId );
 
-        $contentList = $this->getChildrenImages( $location );
+        $contentList = $this->getChildren( $location );
 
         if ( !$fieldHelper->isFieldEmpty( $content, 'image' ) )
         {
@@ -109,10 +109,11 @@ class PartsController extends Controller
      * @param string $template
      * @param bool $includeChildrenImages
      * @param string $imageAliasName
+     * @param array $contentTypeIdentifiers
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewRelatedMultimedia( $locationId, $template, $includeChildrenImages = false, $imageAliasName = null )
+    public function viewRelatedMultimedia( $locationId, $template, $includeChildrenImages = false, $imageAliasName = null, $contentTypeIdentifiers = null )
     {
         $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
         $translationHelper = $this->container->get( 'ezpublish.translation_helper' );
@@ -136,12 +137,13 @@ class PartsController extends Controller
         // Get children image objects and add them in multimedia item list
         if ( $includeChildrenImages )
         {
-            $galleryImages = $this->getChildrenImages( $location );
-            if ( !empty( $galleryImages ) )
+            $galleryItems = $this->getChildren( $location, $contentTypeIdentifiers );
+            if ( !empty( $galleryItems ) )
             {
-                foreach ( $galleryImages as $galleryImage )
+                foreach ( $galleryItems as $galleryItemContent )
                 {
-                    $multimediaItems[] = array( 'type' => 'image', 'content' => $galleryImage );
+                    $galleryItemContentTypeIdentifier = $contentTypeService->loadContentType( $galleryItemContent->id )->identifier;
+                    $multimediaItems[] = array( 'type' => $galleryItemContentTypeIdentifier, 'content' => $galleryItemContent );
                 }
             }
         }
@@ -189,12 +191,13 @@ class PartsController extends Controller
                 // ng_gallery - Find children ng_image objects and add them in multimedia item list
                 if ( $relatedMultimediaContentTypeIdentifier == 'ng_gallery' )
                 {
-                    $galleryImages = $this->getChildrenImages( $relatedMultimediaLocation );
-                    if ( !empty( $galleryImages ) )
+                    $galleryItems = $this->getChildren( $relatedMultimediaLocation, $contentTypeIdentifiers );
+                    if ( !empty( $galleryItems ) )
                     {
-                        foreach ( $galleryImages as $galleryImage )
+                        foreach ( $galleryItems as $galleryItemContent )
                         {
-                            $multimediaItems[] = array( 'type' => 'image', 'content' => $galleryImage );
+                            $galleryItemContentTypeIdentifier = $contentTypeService->loadContentType( $galleryItemContent->id )->identifier;
+                            $multimediaItems[] = array( 'type' => $galleryItemContentTypeIdentifier, 'content' => $galleryItemContent );
                         }
                     }
                 }
@@ -216,25 +219,34 @@ class PartsController extends Controller
     }
 
     /**
-     * Helper method for fetching images from specified location
+     * Helper method for fetching children items from specified location
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param array $contentTypeIdentifiers
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content[]
      */
-    protected function getChildrenImages( Location $location )
+    protected function getChildren( Location $location, $contentTypeIdentifiers = null )
     {
         $contentService = $this->getRepository()->getContentService();
         $query = new LocationQuery();
-        $images = array();
+        $contentList = array();
 
-        $query->filter = new Criterion\LogicalAnd(
-            array(
-                new Criterion\ParentLocationId( $location->id ),
-                new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
-                new Criterion\ContentTypeIdentifier( 'image' )
-            )
+        $criterions = array(
+            new Criterion\ParentLocationId( $location->id ),
+            new Criterion\Visibility( Criterion\Visibility::VISIBLE )
         );
+
+        if ( !empty( $contentTypeIdentifiers ) && is_array( $contentTypeIdentifiers ) )
+        {
+            $criterions[] = new Criterion\ContentTypeIdentifier( $contentTypeIdentifiers );
+        }
+        else
+        {
+            $criterions[] = new Criterion\ContentTypeIdentifier( 'image' );
+        }
+
+        $query->filter = new Criterion\LogicalAnd( $criterions );
 
         $query->sortClauses = array(
             $this->container->get( 'ngmore.helper.sort_clause_helper' )->getSortClauseBySortField(
@@ -247,9 +259,10 @@ class PartsController extends Controller
 
         foreach ( $result->searchHits as $searchHit )
         {
-            $images[] = $contentService->loadContent( $searchHit->valueObject->contentId );
+            $contentList[] = $contentService->loadContent( $searchHit->valueObject->contentId );
         }
 
-        return $images;
+        return $contentList;
     }
+
 }

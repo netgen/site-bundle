@@ -35,7 +35,7 @@ services:
         class: %ngmore.controller.embed_view.class%
         parent: ezpublish.controller.base
         arguments:
-            - @?logger
+            - "@?logger"
 
     ngmore.controller.block_view:
         class: %ngmore.controller.block_view.class%
@@ -61,24 +61,24 @@ services:
         class: %ngmore.controller.user.class%
         parent: ezpublish.controller.base
         arguments:
-            - @ezpublish.api.service.user
-            - @event_dispatcher
+            - "@ezpublish.api.service.user"
+            - "@event_dispatcher"
 
     ngmore.helper.path_helper:
         class: %ngmore.helper.path_helper.class%
         arguments:
-            - @ezpublish.api.service.location
-            - @ezpublish.config.resolver
-            - @ezpublish.translation_helper
-            - @router
-            - @ezpublish.api.service.content_type
+            - "@ezpublish.api.service.location"
+            - "@ezpublish.config.resolver"
+            - "@ezpublish.translation_helper"
+            - "@router"
+            - "@ezpublish.api.service.content_type"
 
     ngmore.helper.site_info_helper:
         class: %ngmore.helper.site_info_helper.class%
         arguments:
-            - @ezpublish.api.service.location
-            - @ezpublish.api.service.content
-            - @ezpublish.config.resolver
+            - "@ezpublish.api.service.location"
+            - "@ezpublish.api.service.content"
+            - "@ezpublish.config.resolver"
 
     ngmore.helper.sort_clause_helper:
         class: %ngmore.helper.sort_clause_helper.class%
@@ -86,37 +86,35 @@ services:
     ngmore.helper.layout_helper:
         class: %ngmore.helper.layout_helper.class%
         arguments:
-            - @ezpublish.api.repository
-            - @ezpublish.spi.persistence.legacy.search.handler.content
-            - @ngmore.helper.path_helper
-            - @ezpublish.translation_helper
-            - @ezpublish.config.resolver
+            - "@ezpublish.api.repository"
+            - "@ezpublish.spi.persistence.legacy.search.handler.content"
+            - "@ngmore.helper.path_helper"
+            - "@ezpublish.translation_helper"
+            - "@ezpublish.config.resolver"
 
     ngmore.helper.mail_helper:
         class: %ngmore.helper.mail_helper.class%
         arguments:
-            - @mailer
-            - @templating
-            - @router
-            - @translator
-            - @ezpublish.config.resolver
-            - @?logger
+            - "@mailer"
+            - "@templating"
+            - "@router"
+            - "@translator"
+            - "@ezpublish.config.resolver"
+            - "@?logger"
 
     ngmore.data_collector.legacy_debug_data_collector:
         class: %ngmore.data_collector.legacy_debug_data_collector.class%
         arguments:
-            - @ezpublish_legacy.kernel
-            - @fos_http_cache.user_context.request_matcher
+            - "@ezpublish_legacy.kernel"
+            - "@fos_http_cache.user_context.request_matcher"
         tags:
             - { name: data_collector, template: 'NetgenMoreBundle:Profiler:LegacyDebug.html.twig', id: 'ngmore_legacy_debug' }
 
     ngmore.legacy_mapper.configuration:
         class: %ngmore.legacy_mapper.configuration.class%
         arguments:
-            - @ezpublish.config.resolver.core
+            - "@ezpublish.config.resolver.core"
             - %ngmore.legacy_mapper.configuration.options%
-        calls:
-            - [setContainer, [@service_container]]
         tags:
             - { name: kernel.event_subscriber }
 
@@ -137,8 +135,8 @@ services:
     ngmore.slot.create_user:
         class: %ngmore.slot.create_user.class%
         arguments:
-            - @ezpublish.api.service.user
-            - @ngmore.repository.nguser_setting
+            - "@ezpublish.api.service.user"
+            - "@ngmore.repository.nguser_setting"
         tags:
             - { name: ezpublish.api.slot, signal: UserService\CreateUserSignal }
 
@@ -149,13 +147,13 @@ services:
 #    ngmore.context_provider.session:
 #        class: %ngmore.context_provider.session.class%
 #        arguments:
-#            - @session
+#            - "@session"
 #    tags:
 #        - { name: fos_http_cache.user_context_provider }
 #
 #    ngmore.context_provider.user:
 #        class: %ngmore.context_provider.user.class%
 #        arguments:
-#            - @ezpublish.api.repository
+#            - "@ezpublish.api.repository"
 #    tags:
 #        - { name: fos_http_cache.user_context_provider }

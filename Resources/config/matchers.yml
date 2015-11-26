@@ -15,7 +15,7 @@ services:
     ngmore.matcher.config_resolver:
         class: %ngmore.matcher.config_resolver.class%
         abstract: true
-        arguments: [@ezpublish.config.resolver]
+        arguments: ["@ezpublish.config.resolver"]
 
     ngmore.matcher.content.content_id:
         class: %ngmore.matcher.content.content_id.class%

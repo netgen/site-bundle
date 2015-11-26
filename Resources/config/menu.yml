@@ -5,14 +5,14 @@ services:
     ngmore.menu.relation_list_menu_builder:
         class: %ngmore.menu.relation_list_menu_builder.class%
         arguments:
-            - @knp_menu.factory
-            - @ezpublish.api.repository
-            - @ezpublish.field_helper
-            - @ezpublish.translation_helper
-            - @ngmore.helper.site_info_helper
-            - @ngmore.helper.sort_clause_helper
-            - @router
-            - @?logger
+            - "@knp_menu.factory"
+            - "@ezpublish.api.repository"
+            - "@ezpublish.field_helper"
+            - "@ezpublish.translation_helper"
+            - "@ngmore.helper.site_info_helper"
+            - "@ngmore.helper.sort_clause_helper"
+            - "@router"
+            - "@?logger"
 
     ngmore.menu.main_menu:
         class: Knp\Menu\MenuItem

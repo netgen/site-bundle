@@ -5,10 +5,9 @@ namespace Netgen\Bundle\MoreBundle\LegacyMapper;
 use eZ\Publish\Core\MVC\Legacy\LegacyEvents;
 use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class Configuration extends ContainerAware implements EventSubscriberInterface
+class Configuration implements EventSubscriberInterface
 {
     /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface

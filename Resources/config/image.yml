@@ -5,6 +5,6 @@ services:
     ngmore.image_alias.imagine.filter.loader.thumbnail:
         class: %ngmore.image_alias.imagine.filter.loader.thumbnail.class%
         calls:
-            - [setInnerLoader, [@liip_imagine.filter.loader.thumbnail]]
+            - [setInnerLoader, ["@liip_imagine.filter.loader.thumbnail"]]
         tags:
             - { name: liip_imagine.filter.loader, loader: "ngmore/thumbnail" }

@@ -24,10 +24,11 @@ class DownloadController extends Controller
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param mixed $contentId
      * @param mixed $fieldId
+     * @param bool $isInline
      *
      * @return \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse
      */
-    public function downloadFile( Request $request, $contentId, $fieldId )
+    public function downloadFile( Request $request, $contentId, $fieldId, $isInline = false )
     {
         try
         {
@@ -107,6 +108,7 @@ class DownloadController extends Controller
 
         $response = new BinaryStreamResponse( $binaryFile, $ioService );
         $response->setContentDisposition(
+            (bool)$isInline ? ResponseHeaderBag::DISPOSITION_INLINE :
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             str_replace( array( '/', '\\' ), '', $binaryFieldValue->fileName ),
             'file'

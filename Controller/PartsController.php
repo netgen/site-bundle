@@ -98,6 +98,24 @@ class PartsController extends Controller
     }
 
     /**
+     *
+     * Action for rendering related multimedia items
+     * @deprecated DEPRECATED, use viewRelatedMultimediaItems() instead
+     *
+     * @param int $locationId
+     * @param string $template
+     * @param bool $includeChildrenImages
+     * @param string $imageAliasName
+     * @param array $contentTypeIdentifiers
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewRelatedMultimedia( $locationId, $template, $includeChildrenImages = false, $imageAliasName = null, $contentTypeIdentifiers = null )
+    {
+        return $this->viewRelatedMultimediaItems( $locationId, $template, $includeChildrenImages, $imageAliasName, array( 'image' ) );
+    }
+
+    /**
      * Action for rendering related multimedia items
      * If more than one multimedia item is found, it will display a slider
      * Items included:
@@ -117,7 +135,7 @@ class PartsController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewRelatedMultimedia( $locationId, $template, $includeChildren = false, $imageAliasName = null, array $contentTypeIdentifiers = array( 'image' ) )
+    public function viewRelatedMultimediaItems( $locationId, $template, $includeChildren = false, $imageAliasName = null, array $contentTypeIdentifiers = array( 'image' ) )
     {
         $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
         $translationHelper = $this->container->get( 'ezpublish.translation_helper' );

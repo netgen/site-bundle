@@ -117,7 +117,7 @@ class PartsController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewRelatedMultimedia( $locationId, $template, $includeChildren = false, $imageAliasName = null, array $contentTypeIdentifiers = array() )
+    public function viewRelatedMultimedia( $locationId, $template, $includeChildren = false, $imageAliasName = null, array $contentTypeIdentifiers = array( 'image' ) )
     {
         $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
         $translationHelper = $this->container->get( 'ezpublish.translation_helper' );
@@ -236,17 +236,17 @@ class PartsController extends Controller
         $query = new LocationQuery();
         $contentList = array();
 
-        $criterions = array(
+        $criteria = array(
             new Criterion\ParentLocationId( $location->id ),
             new Criterion\Visibility( Criterion\Visibility::VISIBLE )
         );
 
         if ( !empty( $contentTypeIdentifiers ) )
         {
-            $criterions[] = new Criterion\ContentTypeIdentifier( $contentTypeIdentifiers );
+            $criteria[] = new Criterion\ContentTypeIdentifier( $contentTypeIdentifiers );
         }
 
-        $query->filter = new Criterion\LogicalAnd( $criterions );
+        $query->filter = new Criterion\LogicalAnd( $criteria );
 
         $query->sortClauses = array(
             $this->container->get( 'ngmore.helper.sort_clause_helper' )->getSortClauseBySortField(

@@ -13,6 +13,8 @@ class PartsController extends Controller
     /**
      * Action for rendering the gallery
      *
+     * @deprecated Use viewRelatedMultimediaItems() instead
+     *
      * @param mixed $locationId
      * @param string $template
      *
@@ -25,7 +27,7 @@ class PartsController extends Controller
         $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
         $content = $this->getRepository()->getContentService()->loadContent( $location->contentId );
 
-        $contentList = $this->getChildrenImages( $location );
+        $contentList = $this->getChildren( $location );
 
         if ( !$fieldHelper->isFieldEmpty( $content, 'image' ) )
         {
@@ -99,11 +101,8 @@ class PartsController extends Controller
 
     /**
      * Action for rendering related multimedia items
-     * If more than one multimedia item is found, it will display a slider
-     * Items included:
-     * image field from the object ( if exists and has content ),
-     * children images ( only if the current location is a ng_gallery )
-     * any media items from related multimedia objects ( related images, images from related galleries, banners, videos )
+     *
+     * @deprecated Use viewRelatedMultimediaItems() instead
      *
      * @param int $locationId
      * @param string $template
@@ -113,6 +112,31 @@ class PartsController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function viewRelatedMultimedia( $locationId, $template, $includeChildrenImages = false, $imageAliasName = null )
+    {
+        return $this->viewRelatedMultimediaItems( $locationId, $template, $includeChildrenImages, $imageAliasName );
+    }
+
+    /**
+     * Action for rendering related multimedia items
+     * If more than one multimedia item is found, it will display a slider
+     * Items included:
+     * 1. current content object - if we want multimedia slider to include some field value from the object itself (like image or video that are not in related_multimedia field),
+     * we just need to add twig template to site bundle in /Resources/views/parts/related_multimedia_items/ with name pattern $contentTypeIdentifier.html.twig
+     * (i.e. for ng_article content type:  /Resources/views/parts/related_multimedia_items/ng_Article.html.twig). Check already implemented templates for other content types
+     * to see how the template logic for slider/non-slider is done
+     * 2. children objects - if $includeChildren parameter is set, all children content objects will be added in the multimedia items list
+     * 3. related objects from related_multimedia object relation field ( related images, images from related galleries, banners, videos )
+     * - to enable this feature for some content type, add object relations field with content type identifier 'related_multimedia'
+     *
+     * @param int $locationId
+     * @param string $template
+     * @param bool $includeChildren
+     * @param string $imageAliasName
+     * @param array $contentTypeIdentifiers
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewRelatedMultimediaItems( $locationId, $template, $includeChildren = false, $imageAliasName = null, array $contentTypeIdentifiers = array( 'image' ) )
     {
         $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
         $translationHelper = $this->container->get( 'ezpublish.translation_helper' );
@@ -133,15 +157,16 @@ class PartsController extends Controller
         // Add current location in the multimedia item list
         $multimediaItems[] = array( 'type' => $contentTypeIdentifier, 'content' => $content );
 
-        // Get children image objects and add them in multimedia item list
-        if ( $includeChildrenImages )
+        // Get children objects and add them in multimedia item list
+        if ( $includeChildren )
         {
-            $galleryImages = $this->getChildrenImages( $location );
-            if ( !empty( $galleryImages ) )
+            $galleryItems = $this->getChildren( $location, $contentTypeIdentifiers );
+            if ( !empty( $galleryItems ) )
             {
-                foreach ( $galleryImages as $galleryImage )
+                foreach ( $galleryItems as $galleryItemContent )
                 {
-                    $multimediaItems[] = array( 'type' => 'image', 'content' => $galleryImage );
+                    $galleryItemContentTypeIdentifier = $contentTypeService->loadContentType( $galleryItemContent->id )->identifier;
+                    $multimediaItems[] = array( 'type' => $galleryItemContentTypeIdentifier, 'content' => $galleryItemContent );
                 }
             }
         }
@@ -186,15 +211,16 @@ class PartsController extends Controller
 
                 $relatedMultimediaContentTypeIdentifier = $contentTypeService->loadContentType( $relatedMultimediaContentInfo->contentTypeId )->identifier;
 
-                // ng_gallery - Find children ng_image objects and add them in multimedia item list
+                // ng_gallery - Find children objects and add them in multimedia item list
                 if ( $relatedMultimediaContentTypeIdentifier == 'ng_gallery' )
                 {
-                    $galleryImages = $this->getChildrenImages( $relatedMultimediaLocation );
-                    if ( !empty( $galleryImages ) )
+                    $galleryItems = $this->getChildren( $relatedMultimediaLocation, $contentTypeIdentifiers );
+                    if ( !empty( $galleryItems ) )
                     {
-                        foreach ( $galleryImages as $galleryImage )
+                        foreach ( $galleryItems as $galleryItemContent )
                         {
-                            $multimediaItems[] = array( 'type' => 'image', 'content' => $galleryImage );
+                            $galleryItemContentTypeIdentifier = $contentTypeService->loadContentType( $galleryItemContent->id )->identifier;
+                            $multimediaItems[] = array( 'type' => $galleryItemContentTypeIdentifier, 'content' => $galleryItemContent );
                         }
                     }
                 }
@@ -216,25 +242,30 @@ class PartsController extends Controller
     }
 
     /**
-     * Helper method for fetching images from specified location
+     * Helper method for fetching children items from specified location
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param array $contentTypeIdentifiers
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content[]
      */
-    protected function getChildrenImages( Location $location )
+    protected function getChildren( Location $location, array $contentTypeIdentifiers = array( 'image' ) )
     {
         $contentService = $this->getRepository()->getContentService();
         $query = new LocationQuery();
-        $images = array();
+        $contentList = array();
 
-        $query->filter = new Criterion\LogicalAnd(
-            array(
-                new Criterion\ParentLocationId( $location->id ),
-                new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
-                new Criterion\ContentTypeIdentifier( 'image' )
-            )
+        $criteria = array(
+            new Criterion\ParentLocationId( $location->id ),
+            new Criterion\Visibility( Criterion\Visibility::VISIBLE )
         );
+
+        if ( !empty( $contentTypeIdentifiers ) )
+        {
+            $criteria[] = new Criterion\ContentTypeIdentifier( $contentTypeIdentifiers );
+        }
+
+        $query->filter = new Criterion\LogicalAnd( $criteria );
 
         $query->sortClauses = array(
             $this->container->get( 'ngmore.helper.sort_clause_helper' )->getSortClauseBySortField(
@@ -247,9 +278,10 @@ class PartsController extends Controller
 
         foreach ( $result->searchHits as $searchHit )
         {
-            $images[] = $contentService->loadContent( $searchHit->valueObject->contentId );
+            $contentList[] = $contentService->loadContent( $searchHit->valueObject->contentId );
         }
 
-        return $images;
+        return $contentList;
     }
+
 }

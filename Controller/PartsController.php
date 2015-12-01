@@ -283,5 +283,4 @@ class PartsController extends Controller
 
         return $contentList;
     }
-
 }

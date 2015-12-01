@@ -13,6 +13,8 @@ class PartsController extends Controller
     /**
      * Action for rendering the gallery
      *
+     * @deprecated Use viewRelatedMultimediaItems() instead
+     *
      * @param mixed $locationId
      * @param string $template
      *
@@ -98,9 +100,9 @@ class PartsController extends Controller
     }
 
     /**
-     *
      * Action for rendering related multimedia items
-     * @deprecated DEPRECATED, use viewRelatedMultimediaItems() instead
+     *
+     * @deprecated Use viewRelatedMultimediaItems() instead
      *
      * @param int $locationId
      * @param string $template

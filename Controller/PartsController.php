@@ -106,13 +106,12 @@ class PartsController extends Controller
      * @param string $template
      * @param bool $includeChildrenImages
      * @param string $imageAliasName
-     * @param array $contentTypeIdentifiers
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewRelatedMultimedia( $locationId, $template, $includeChildrenImages = false, $imageAliasName = null, $contentTypeIdentifiers = null )
+    public function viewRelatedMultimedia( $locationId, $template, $includeChildrenImages = false, $imageAliasName = null )
     {
-        return $this->viewRelatedMultimediaItems( $locationId, $template, $includeChildrenImages, $imageAliasName, array( 'image' ) );
+        return $this->viewRelatedMultimediaItems( $locationId, $template, $includeChildrenImages, $imageAliasName );
     }
 
     /**

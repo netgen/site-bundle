@@ -50,8 +50,6 @@ class UserController extends Controller
      */
     public function register( Request $request )
     {
-        $autoEnable = (bool)$this->getConfigResolver()->getParameter( 'user.auto_enable', 'ngmore' );
-
         $contentTypeIdentifier = $this->getConfigResolver()->getParameter( 'user.content_type_identifier', 'ngmore' );
         $contentType = $this->getRepository()->getContentTypeService()->loadContentTypeByIdentifier( $contentTypeIdentifier );
         $languages = $this->getConfigResolver()->getParameter( "languages" );
@@ -63,7 +61,7 @@ class UserController extends Controller
             $contentType
         );
 
-        $userCreateStruct->enabled = $autoEnable;
+        $userCreateStruct->enabled = (bool)$this->getConfigResolver()->getParameter( 'user.auto_enable', 'ngmore' );
 
         $data = new DataWrapper( $userCreateStruct, $userCreateStruct->contentType );
 

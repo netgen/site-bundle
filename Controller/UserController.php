@@ -124,6 +124,7 @@ class UserController extends Controller
         $this->eventDispatcher->dispatch( MVCEvents::USER_PRE_REGISTER, $preUserRegisterEvent );
         $data->payload = $preUserRegisterEvent->getUserCreateStruct();
 
+        /** @var \eZ\Publish\API\Repository\Values\User\User $newUser */
         $newUser = $this->getRepository()->sudo(
             function( Repository $repository ) use ( $data, $userGroupId )
             {
@@ -139,7 +140,7 @@ class UserController extends Controller
         $userRegisterEvent = new UserEvents\PostRegisterEvent( $newUser );
         $this->eventDispatcher->dispatch( MVCEvents::USER_POST_REGISTER, $userRegisterEvent );
 
-        if ( $autoEnable )
+        if ( $newUser->enabled )
         {
             return $this->render(
                 $this->getConfigResolver()->getParameter( 'template.user.register_success', 'ngmore' )

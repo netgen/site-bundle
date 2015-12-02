@@ -50,8 +50,6 @@ class UserController extends Controller
      */
     public function register( Request $request )
     {
-        $autoEnable = (bool)$this->getConfigResolver()->getParameter( 'user.auto_enable', 'ngmore' );
-
         $contentTypeIdentifier = $this->getConfigResolver()->getParameter( 'user.content_type_identifier', 'ngmore' );
         $contentType = $this->getRepository()->getContentTypeService()->loadContentTypeByIdentifier( $contentTypeIdentifier );
         $languages = $this->getConfigResolver()->getParameter( "languages" );
@@ -63,7 +61,7 @@ class UserController extends Controller
             $contentType
         );
 
-        $userCreateStruct->enabled = $autoEnable;
+        $userCreateStruct->enabled = (bool)$this->getConfigResolver()->getParameter( 'user.auto_enable', 'ngmore' );
 
         $data = new DataWrapper( $userCreateStruct, $userCreateStruct->contentType );
 
@@ -124,6 +122,7 @@ class UserController extends Controller
         $this->eventDispatcher->dispatch( MVCEvents::USER_PRE_REGISTER, $preUserRegisterEvent );
         $data->payload = $preUserRegisterEvent->getUserCreateStruct();
 
+        /** @var \eZ\Publish\API\Repository\Values\User\User $newUser */
         $newUser = $this->getRepository()->sudo(
             function( Repository $repository ) use ( $data, $userGroupId )
             {
@@ -139,7 +138,7 @@ class UserController extends Controller
         $userRegisterEvent = new UserEvents\PostRegisterEvent( $newUser );
         $this->eventDispatcher->dispatch( MVCEvents::USER_POST_REGISTER, $userRegisterEvent );
 
-        if ( $autoEnable )
+        if ( $newUser->enabled )
         {
             return $this->render(
                 $this->getConfigResolver()->getParameter( 'template.user.register_success', 'ngmore' )

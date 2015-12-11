@@ -165,7 +165,7 @@ class PartsController extends Controller
             {
                 foreach ( $galleryItems as $galleryItemContent )
                 {
-                    $galleryItemContentTypeIdentifier = $contentTypeService->loadContentType( $galleryItemContent->id )->identifier;
+                    $galleryItemContentTypeIdentifier = $contentTypeService->loadContentType( $galleryItemContent->contentInfo->contentTypeId )->identifier;
                     $multimediaItems[] = array( 'type' => $galleryItemContentTypeIdentifier, 'content' => $galleryItemContent );
                 }
             }
@@ -219,7 +219,7 @@ class PartsController extends Controller
                     {
                         foreach ( $galleryItems as $galleryItemContent )
                         {
-                            $galleryItemContentTypeIdentifier = $contentTypeService->loadContentType( $galleryItemContent->id )->identifier;
+                            $galleryItemContentTypeIdentifier = $contentTypeService->loadContentType( $galleryItemContent->contentInfo->contentTypeId )->identifier;
                             $multimediaItems[] = array( 'type' => $galleryItemContentTypeIdentifier, 'content' => $galleryItemContent );
                         }
                     }

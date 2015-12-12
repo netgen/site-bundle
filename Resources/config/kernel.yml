@@ -5,3 +5,7 @@ parameters:
     ezpublish.fieldType.ezobjectrelationlist.converter.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\FieldValue\Converter\RelationListConverter
 
     ezpublish.image_alias.imagine.cache_resolver.class: Netgen\Bundle\MoreBundle\Imagine\IORepositoryResolver
+
+    # Override to throw Symfony's NotFoundHttpException on 404 response from Legacy Stack
+    # See https://netgen.atlassian.net/browse/NGMOREPL-85
+    ezpublish_legacy.response_manager.class: Netgen\Bundle\MoreBundle\LegacyResponse\LegacyResponseManager

@@ -1,11 +1,4 @@
 <?php
-/**
- * File containing the LegacyResponseManager class.
- *
- * @copyright Copyright (C) eZ Systems AS. All rights reserved.
- * @license For full copyright and license information view LICENSE file distributed with this source code.
- * @version //autogentag//
- */
 
 namespace Netgen\Bundle\MoreBundle\LegacyResponse;
 
@@ -31,7 +24,7 @@ class LegacyResponseManager
     /**
      * @var \Symfony\Component\Templating\EngineInterface
      */
-    private $templateEngine;
+    protected $templateEngine;
 
     /**
      * Template declaration to wrap legacy responses in a Twig pagelayout (optional)
@@ -40,14 +33,14 @@ class LegacyResponseManager
      *
      * @var string|null
      */
-    private $legacyLayout;
+    protected $legacyLayout;
 
     /**
      * Flag indicating if we're running in legacy mode or not.
      *
      * @var bool
      */
-    private $legacyMode;
+    protected $legacyMode;
 
     public function __construct( EngineInterface $templateEngine, ConfigResolverInterface $configResolver )
     {
@@ -135,7 +128,7 @@ class LegacyResponseManager
      *
      * @return \eZ\Bundle\EzPublishLegacyBundle\LegacyResponse A LegacyResponse instance
      */
-    private function render( $view, array $parameters = array() )
+    protected function render( $view, array $parameters = array() )
     {
         $response = new LegacyResponse();
         $response->setContent( $this->templateEngine->render( $view, $parameters ) );

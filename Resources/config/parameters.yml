@@ -18,5 +18,7 @@ parameters:
     ngmore.default.mail.sender_name: 'Netgen More'
 
     ngmore.default.content_view.show_invisible_locations: false
+    # Controls handling Legacy Stack fallback error responses through Symfony exceptions (401, 403, 404...)
+    ngmore.default.content_view.handle_legacy_fallback_error_result: true
 
     netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length: 0

@@ -4,6 +4,9 @@ ezpublish:
             1ZonesA:
                 name: 1 zone A
                 template: ~
+            2ZonesSmart:
+                name: 2 zones (smart)
+                template: ~
             4ZonesA:
                 name: 4 zones A
                 template: ~
@@ -22,6 +25,7 @@ ezpublish:
 
         enabledLayouts:
             - 1ZonesA
+            - 2ZonesSmart
             - 4ZonesA
             - 4ZonesB
             - 4ZonesC

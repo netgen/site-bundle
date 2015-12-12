@@ -48,7 +48,7 @@ class LegacyResponseManager extends BaseLegacyResponseManager
      *
      * @var bool
      */
-    private $handleErrorResult;
+    protected $handleErrorResult;
 
     public function __construct( EngineInterface $templateEngine, ConfigResolverInterface $configResolver )
     {

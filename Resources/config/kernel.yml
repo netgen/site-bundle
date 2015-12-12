@@ -19,3 +19,7 @@ parameters:
     # Override to enable quality and jpeg_quality settings in liip_imagine configuration root
     # https://github.com/ezsystems/ezpublish-kernel/pull/1232
     liip_imagine.filter.configuration.class: Netgen\Bundle\MoreBundle\Imagine\Filter\FilterConfiguration
+
+    # Override to throw Symfony's NotFoundHttpException on 404 response from Legacy Stack
+    # See https://netgen.atlassian.net/browse/NGMOREPL-85
+    ezpublish_legacy.response_manager.class: Netgen\Bundle\MoreBundle\LegacyResponse\LegacyResponseManager

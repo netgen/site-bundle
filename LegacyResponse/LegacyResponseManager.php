@@ -16,7 +16,7 @@ use ezpKernelRedirect;
 
 /**
  * Note changes over original class:
- *  - added throwing Symfony exception on 404 response from Legacy Stack
+ *  - added optional handling of error responses through Symfony stack
  *
  * Utility class to manage Response from legacy controllers, map headers...
  */
@@ -43,11 +43,19 @@ class LegacyResponseManager extends BaseLegacyResponseManager
      */
     protected $legacyMode;
 
+    /**
+     * Flag indicating if we want to handle Legacy Stack error responses through Symfony exceptions
+     *
+     * @var bool
+     */
+    private $handleErrorResult;
+
     public function __construct( EngineInterface $templateEngine, ConfigResolverInterface $configResolver )
     {
         $this->templateEngine = $templateEngine;
         $this->legacyLayout = $configResolver->getParameter( 'module_default_layout', 'ezpublish_legacy' );
         $this->legacyMode = $configResolver->getParameter( 'legacy_mode' );
+        $this->handleErrorResult = $configResolver->getParameter( 'content_view.handle_legacy_fallback_error_result', 'ngmore' );
     }
 
     /**
@@ -56,11 +64,33 @@ class LegacyResponseManager extends BaseLegacyResponseManager
      * @param \ezpKernelResult $result
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     *
      * @return \eZ\Bundle\EzPublishLegacyBundle\LegacyResponse
      */
     public function generateResponseFromModuleResult( ezpKernelResult $result )
     {
         $moduleResult = $result->getAttribute( 'module_result' );
+
+        // Handling error codes sent by the legacy stack
+        if ( isset( $moduleResult['errorCode'] ) && $this->handleErrorResult && !$this->legacyMode )
+        {
+            // If having an "Unauthorized" or "Forbidden" error code in non-legacy mode,
+            // we send an AccessDeniedException to be able to trigger redirection to login in Symfony stack.
+            if ( $moduleResult['errorCode'] == 401 || $moduleResult['errorCode'] == 403 )
+            {
+                $errorMessage = isset( $moduleResult['errorMessage'] ) ? $moduleResult['errorMessage'] : 'Access denied';
+                throw new AccessDeniedException( $errorMessage );
+            }
+
+            // If having an "Not Found" error code in non-legacy mode,
+            // we send an NotFoundHttpException to be able to render 404 page in Symfony stack.
+            if ( $moduleResult['errorCode'] == 404 )
+            {
+                $errorMessage = isset( $moduleResult['errorMessage'] ) ? $moduleResult['errorMessage'] : 'Not Found';
+                throw new NotFoundHttpException( $errorMessage );
+            }
+        }
 
         if ( isset( $this->legacyLayout ) && !$this->legacyMode && !isset( $moduleResult['pagelayout'] ) )
         {
@@ -79,25 +109,9 @@ class LegacyResponseManager extends BaseLegacyResponseManager
             $response = new LegacyResponse( $result->getContent() );
         }
 
-        // Handling error codes sent by the legacy stack
+        // Map status code
         if ( isset( $moduleResult['errorCode'] ) )
         {
-            // If having an "Unauthorized" or "Forbidden" error code in non-legacy mode,
-            // we send an AccessDeniedException to be able to trigger redirection to login in Symfony stack.
-            if ( !$this->legacyMode && ( $moduleResult['errorCode'] == 401 || $moduleResult['errorCode'] == 403 ) )
-            {
-                $errorMessage = isset( $moduleResult['errorMessage'] ) ? $moduleResult['errorMessage'] : 'Access denied';
-                throw new AccessDeniedException( $errorMessage );
-            }
-
-            // If having an "Not Found" error code in non-legacy mode,
-            // we send an NotFoundHttpException to be able to handle it in Symfony stack.
-            if ( !$this->legacyMode && $moduleResult['errorCode'] == 404 )
-            {
-                $errorMessage = isset( $moduleResult['errorMessage'] ) ? $moduleResult['errorMessage'] : 'Not Found';
-                throw new NotFoundHttpException( $errorMessage );
-            }
-
             $response->setStatusCode(
                 $moduleResult['errorCode'],
                 isset( $moduleResult['errorMessage'] ) ? $moduleResult['errorMessage'] : null

@@ -22,3 +22,5 @@ parameters:
     ngmore.default.content_view.handle_legacy_fallback_error_result: true
 
     netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length: 0
+
+    ngmore.default.template.errors.404: 'NetgenMoreBundle::errors/404.html.twig'

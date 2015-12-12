@@ -2,6 +2,7 @@
 
 namespace Netgen\Bundle\MoreBundle\LegacyResponse;
 
+use eZ\Bundle\EzPublishLegacyBundle\LegacyResponse\LegacyResponseManager as BaseLegacyResponseManager;
 use eZ\Bundle\EzPublishLegacyBundle\LegacyResponse;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,7 +20,7 @@ use ezpKernelRedirect;
  *
  * Utility class to manage Response from legacy controllers, map headers...
  */
-class LegacyResponseManager
+class LegacyResponseManager extends BaseLegacyResponseManager
 {
     /**
      * @var \Symfony\Component\Templating\EngineInterface

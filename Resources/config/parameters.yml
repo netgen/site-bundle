@@ -21,6 +21,7 @@ parameters:
     ngmore.default.site_settings.typekit_code: ~
     ngmore.default.site_settings.facebook_api: false
     ngmore.default.site_settings.facebook_locale: en_US
+    ngmore.default.site_settings.jwplayer_id: 'gYe8hbFO'
     ngmore.default.site_settings.jwplayer_key: ~
     ngmore.default.site_settings.meta_data: []
     ngmore.default.site_settings.show_path_in_title: false

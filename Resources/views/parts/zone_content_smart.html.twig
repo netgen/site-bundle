@@ -3,14 +3,14 @@
 {% set block_column_count = 0 %}
 {% set block_class = "" %}
 
-{% set smart_zone_width = "12_cols" %}
-{% if block.customAttributes.advanced_smart_zone_width is defined and block.customAttributes.advanced_smart_zone_width is not empty %}
-    {% set smart_zone_width = block.customAttributes.advanced_smart_zone_width %}
-{% endif %}
-
 <div class="row">
 
     {% for block in zone.blocks %}
+        {% set smart_zone_width = "12_cols" %}
+        {% if block.customAttributes.advanced_smart_zone_width is defined and block.customAttributes.advanced_smart_zone_width is not empty %}
+            {% set smart_zone_width = block.customAttributes.advanced_smart_zone_width %}
+        {% endif %}
+
         {% if column_count == 12 %}
             </div><div class="row">
             {% set column_count = 0 %}

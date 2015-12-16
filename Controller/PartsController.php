@@ -11,6 +11,38 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 class PartsController extends Controller
 {
     /**
+     * Action for rendering the gallery
+     *
+     * @deprecated Use viewRelatedMultimediaItems() instead
+     *
+     * @param mixed $locationId
+     * @param string $template
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewGallery( $locationId, $template )
+    {
+        $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
+
+        $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
+        $content = $this->getRepository()->getContentService()->loadContent( $location->contentId );
+
+        $contentList = $this->getChildren( $location );
+
+        if ( !$fieldHelper->isFieldEmpty( $content, 'image' ) )
+        {
+            array_unshift( $contentList, $content );
+        }
+
+        return $this->render(
+            $template,
+            array(
+                'content_list' => $contentList
+            )
+        );
+    }
+
+    /**
      * Action for rendering related items
      *
      * @param mixed $contentId

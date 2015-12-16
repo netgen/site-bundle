@@ -26,3 +26,5 @@ parameters:
 
     ngmore.default.template.errors.404: 'NetgenMoreBundle::errors/404.html.twig'
     ngmore.default.template.errors.default: 'NetgenMoreBundle::errors/default.html.twig'
+
+    ngmore.default.template.pagerfanta.ngmore: 'NetgenMoreBundle:pagerfanta:ngmore.html.twig'

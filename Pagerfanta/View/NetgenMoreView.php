@@ -183,9 +183,8 @@ class NetgenMoreView implements ViewInterface
             $this->generateUrl( $this->pagerfanta->getPreviousPage() ) :
             false;
 
-        // We use trim here because Pagerfanta (or Symfony?) adds an extra '?'
-        // at the end of first page when there are no other query params
         $pages['first_page'] = $this->startPage > 1 ? $this->generateUrl( 1 ) : false;
+        $pages['mobile_first_page'] = $this->pagerfanta->getCurrentPage() > 2 ? $this->generateUrl( 1 ) : false;
 
         $pages['second_page'] = $this->startPage == 3 ? $this->generateUrl( 2 ) : false;
 
@@ -209,6 +208,10 @@ class NetgenMoreView implements ViewInterface
             $this->generateUrl( $this->pagerfanta->getNbPages() ) :
             false;
 
+        $pages['mobile_last_page'] = $this->pagerfanta->getCurrentPage() < $this->pagerfanta->getNbPages() - 1 ?
+            $this->generateUrl( $this->pagerfanta->getNbPages() ) :
+            false;
+
         $pages['next_page'] = $this->pagerfanta->hasNextPage() ?
             $this->generateUrl( $this->pagerfanta->getNextPage() ) :
             false;
@@ -226,6 +229,9 @@ class NetgenMoreView implements ViewInterface
     protected function generateUrl($page)
     {
         $routeGenerator = $this->routeGenerator;
+
+        // We use trim here because Pagerfanta (or Symfony?) adds an extra '?'
+        // at the end of page when there are no other query params
         return trim( $routeGenerator( $page ), '?' );
     }
 }

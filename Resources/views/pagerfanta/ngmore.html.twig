@@ -23,13 +23,13 @@
 
         {# Dots if start is over 3 #}
         {% if pages.separator_before %}
-            <li class="disabled hidden-xs"><a href="#">...</a></li>
+            <li class="disabled hidden-xs"><a>...</a></li>
         {% endif %}
 
         {# Middle pages #}
         {% for page, page_url in pages.middle_pages %}
             {% if page == pager.currentPage %}
-                <li class="active"><a href="#">{{ page }}<span class="visible-xs-inline"> of {{ pager.nbPages }}</span></a></li>
+                <li class="active"><a>{{ page }}<span class="visible-xs-inline"> of {{ pager.nbPages }}</span></a></li>
             {% else %}
                 <li class="hidden-xs"><a href="{{ page_url }}">{{ page }}</a></li>
             {% endif %}
@@ -37,7 +37,7 @@
 
         {# Dots if end is under 3 to last #}
         {% if pages.separator_after %}
-            <li class="disabled hidden-xs"><a href="#">...</a></li>
+            <li class="disabled hidden-xs"><a>...</a></li>
         {% endif %}
 
         {# Second to last page link #}

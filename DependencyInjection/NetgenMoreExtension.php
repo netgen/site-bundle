@@ -29,7 +29,6 @@ class NetgenMoreExtension extends Extension implements PrependExtensionInterface
         $loader->load( 'pagerfanta.yml' );
         $loader->load( 'templating.yml' );
         $loader->load( 'kernel.yml' );
-        $loader->load( 'image.yml' );
         $loader->load( 'menu.yml' );
         $loader->load( 'event_listeners.yml' );
         $loader->load( 'matchers.yml' );

@@ -1,6 +1,7 @@
 parameters:
     ngmore.listener.block_cache.class: Netgen\Bundle\MoreBundle\EventListener\BlockCacheResponseListener
     ngmore.listener.invisible_locations.class: Netgen\Bundle\MoreBundle\EventListener\InvisibleLocationsListener
+    ngmore.listener.add_view_type.class: Netgen\Bundle\MoreBundle\EventListener\AddViewTypeEventListener
 
     ngmore.listener.user.class: Netgen\Bundle\MoreBundle\EventListener\UserEventListener
     ngmore.listener.user.post_register.class: Netgen\Bundle\MoreBundle\EventListener\User\PostRegisterEventListener
@@ -27,6 +28,13 @@ services:
             - [setShowInvisibleLocations, [$content_view.show_invisible_locations;ngmore$]]
         tags:
             - {name: kernel.event_subscriber}
+
+    ngmore.listener.add_view_type:
+        class: %ngmore.listener.add_view_type.class%
+        arguments:
+            - "@request_stack"
+        tags:
+            - { name: kernel.event_subscriber }
 
     ngmore.listener.user:
         class: %ngmore.listener.user.class%

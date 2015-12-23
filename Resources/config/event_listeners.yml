@@ -1,4 +1,6 @@
 parameters:
+    ngmore.listener.add_view_type.class: Netgen\Bundle\MoreBundle\EventListener\AddViewTypeEventListener
+
     ngmore.listener.user.class: Netgen\Bundle\MoreBundle\EventListener\UserEventListener
     ngmore.listener.user.post_register.class: Netgen\Bundle\MoreBundle\EventListener\User\PostRegisterEventListener
     ngmore.listener.user.activation_request.class: Netgen\Bundle\MoreBundle\EventListener\User\ActivationRequestEventListener
@@ -7,6 +9,13 @@ parameters:
     ngmore.listener.user.post_password_reset.class: Netgen\Bundle\MoreBundle\EventListener\User\PostPasswordResetEventListener
 
 services:
+    ngmore.listener.add_view_type:
+        class: %ngmore.listener.add_view_type.class%
+        arguments:
+            - "@request_stack"
+        tags:
+            - { name: kernel.event_subscriber }
+
     ngmore.listener.user:
         class: %ngmore.listener.user.class%
         abstract: true

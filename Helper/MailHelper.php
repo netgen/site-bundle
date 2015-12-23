@@ -88,7 +88,14 @@ class MailHelper
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
-        $this->siteName = $configResolver->getParameter( 'SiteSettings.SiteName' );
+        if ( $configResolver->hasParameter( 'site_settings.site_name', 'ngmore' ) )
+        {
+            $this->siteName = $configResolver->getParameter( 'site_settings.site_name', 'ngmore' );
+        }
+        else
+        {
+            $this->siteName = $configResolver->getParameter( 'SiteSettings.SiteName' );
+        }
     }
 
     /**

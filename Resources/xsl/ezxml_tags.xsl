@@ -68,8 +68,8 @@
                         <xsl:value-of select="@custom:video_code" />
                     </xsl:attribute>
                     <xsl:attribute name="autostart"><xsl:text>false</xsl:text></xsl:attribute>
-                    <xsl:attribute name="width"><xsl:text>640</xsl:text></xsl:attribute>
-                    <xsl:attribute name="height"><xsl:text>360</xsl:text></xsl:attribute>
+                    <xsl:attribute name="data-width"><xsl:text>640</xsl:text></xsl:attribute>
+                    <xsl:attribute name="data-height"><xsl:text>360</xsl:text></xsl:attribute>
                     <xsl:attribute name="data-videotype"><xsl:text>youtube</xsl:text></xsl:attribute>
                     <xsl:attribute name="data-file">
                         <xsl:text>https://www.youtube.com/watch?v=</xsl:text>

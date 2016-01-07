@@ -82,12 +82,11 @@ class PartsController extends Controller
      * @param int $locationId
      * @param string $template
      * @param bool $includeChildren
-     * @param string $imageAliasName
      * @param array $contentTypeIdentifiers
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewRelatedMultimediaItems( $locationId, $template, $includeChildren = false, $imageAliasName = null, array $contentTypeIdentifiers = array( 'image' ) )
+    public function viewRelatedMultimediaItems( $locationId, $template, $includeChildren = false, array $contentTypeIdentifiers = array( 'image' ) )
     {
         $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
         $translationHelper = $this->container->get( 'ezpublish.translation_helper' );
@@ -185,9 +184,7 @@ class PartsController extends Controller
         return $this->render(
             $template,
             array(
-                'content_id' => $content->id,
-                'multimedia_items' => $multimediaItems,
-                'alias_name' => $imageAliasName
+                'multimedia_items' => $multimediaItems
             )
         );
     }

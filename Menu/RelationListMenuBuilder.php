@@ -260,10 +260,7 @@ class RelationListMenuBuilder
                     $menuItemId = $relatedContent->mainLocationId;
 
                     $uri = $this->router->generate(
-                        'ez_urlalias',
-                        array(
-                            'contentId' => $relatedContent->id
-                        )
+                        $relatedContent
                     ) . $this->translationHelper->getTranslatedField( $content, 'internal_url_suffix' )->value->text;
 
                     $useShortcutNameField = $this->translationHelper->getTranslatedField( $content, 'use_shortcut_name' );
@@ -391,12 +388,7 @@ class RelationListMenuBuilder
 
                     $menuItemId = $relatedContent->mainLocationId;
 
-                    $uri = $this->router->generate(
-                        'ez_urlalias',
-                        array(
-                            'contentId' => $relatedContent->id
-                        )
-                    );
+                    $uri = $this->router->generate( $relatedContent );
 
                     $useMenuItemNameField = $this->translationHelper->getTranslatedField( $content, 'use_menu_item_name' );
                     if ( $useMenuItemNameField instanceof Field && $useMenuItemNameField->value->bool )
@@ -572,12 +564,7 @@ class RelationListMenuBuilder
                     'label' => $this->translationHelper->getTranslatedContentNameByContentInfo(
                         $location->contentInfo
                     ),
-                    'uri' => $this->router->generate(
-                        'ez_urlalias',
-                        array(
-                            'locationId' => $location->id
-                        )
-                    ),
+                    'uri' => $this->router->generate( $location ),
                     'attributes' => array(
                         'id' => 'menu-item-location-id-' . $location->id
                     )

@@ -131,23 +131,11 @@ class EmbedViewController extends Controller
 
             if ( stripos( $targetLink, 'eznode://' ) === 0 )
             {
-                $targetLink = $this->container->get( 'router' )
-                    ->generate(
-                        'ez_urlalias',
-                        array(
-                            'locationId' => substr( $targetLink, 9 )
-                        )
-                    );
+                $targetLink = $this->container->get( 'router' )->generate( $location );
             }
             else if ( stripos( $targetLink, 'ezobject://' ) === 0 )
             {
-                $targetLink = $this->container->get( 'router' )
-                    ->generate(
-                        'ez_urlalias',
-                        array(
-                            'contentId' => substr( $targetLink, 11 )
-                        )
-                    );
+                $targetLink = $this->container->get( 'router' )->generate( $content );
             }
         }
 

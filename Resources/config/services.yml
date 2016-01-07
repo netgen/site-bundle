@@ -23,6 +23,8 @@ parameters:
 
     ngmore.slot.create_user.class: Netgen\Bundle\MoreBundle\Core\Slot\CreateUserSlot
 
+    ngmore.routing.content_url_alias_router.class: Netgen\Bundle\MoreBundle\Routing\ContentUrlAliasRouter
+
     ngmore.context_provider.session.class: Netgen\Bundle\MoreBundle\ContextProvider\SessionContextProvider
     ngmore.context_provider.user.class: Netgen\Bundle\MoreBundle\ContextProvider\UserContextProvider
 
@@ -139,6 +141,15 @@ services:
             - "@ngmore.repository.nguser_setting"
         tags:
             - { name: ezpublish.api.slot, signal: UserService\CreateUserSignal }
+
+    ngmore.routing.content_url_alias_router:
+        class: %ngmore.routing.content_url_alias_router.class%
+        arguments:
+            - "@ezpublish.api.service.location"
+            - "@ezpublish.urlalias_generator"
+            - "@?router.request_context"
+        tags:
+            - {name: router, priority: 200}
 
 #    Custom user context hash providers are disabled by default.
 #    Enable them in your project if needed by copying one of the

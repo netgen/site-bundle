@@ -186,12 +186,7 @@ class FullViewController extends Controller
             if ( $internalRedirectContentInfo->mainLocationId != $locationId )
             {
                 return new RedirectResponse(
-                    $this->container->get( 'router' )->generate(
-                        'ez_urlalias',
-                        array(
-                            'locationId' => $internalRedirectContentInfo->mainLocationId
-                        )
-                    ),
+                    $this->container->get( 'router' )->generate( $internalRedirectContentInfo ),
                     RedirectResponse::HTTP_MOVED_PERMANENTLY
                 );
             }

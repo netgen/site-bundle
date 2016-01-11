@@ -23,7 +23,6 @@ class RemoveDefaultImageAliasesPass implements CompilerPassInterface
             $container->getParameter( 'ezpublish.siteaccess.list' )
         );
 
-        // Adding ezxml_tags.xsl to all scopes
         foreach ( $scopes as $scope )
         {
             if ( !$container->hasParameter( "ezsettings.$scope.image_variations" ) )
@@ -36,7 +35,7 @@ class RemoveDefaultImageAliasesPass implements CompilerPassInterface
             unset($imageVariations["reference"]);
             foreach ( $imageVariations as $variationName => $variation )
             {
-                if ( $variation["reference"] == "reference" )
+                if ( $variation["reference"] === "reference" )
                 {
                     unset( $imageVariations[$variationName] );
                 }

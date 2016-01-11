@@ -16,9 +16,9 @@ class ContentType extends ConfigResolverBased implements MatcherInterface
      *
      * @return bool
      */
-    public function matchLocation( APILocation $location )
+    public function matchLocation(APILocation $location)
     {
-        return $this->doMatch( $location->getContentInfo()->contentTypeId );
+        return $this->doMatch($location->getContentInfo()->contentTypeId);
     }
 
     /**
@@ -28,8 +28,8 @@ class ContentType extends ConfigResolverBased implements MatcherInterface
      *
      * @return bool
      */
-    public function matchContentInfo( ContentInfo $contentInfo )
+    public function matchContentInfo(ContentInfo $contentInfo)
     {
-        return $this->doMatch( $contentInfo->contentTypeId );
+        return $this->doMatch($contentInfo->contentTypeId);
     }
 }

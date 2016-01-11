@@ -21,41 +21,36 @@ class CreateUserSlot extends Slot
     protected $ngUserSettingRepository;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param \eZ\Publish\API\Repository\UserService $userService
      * @param \Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository $ngUserSettingRepository
      */
-    public function __construct( UserService $userService, NgUserSettingRepository $ngUserSettingRepository )
+    public function __construct(UserService $userService, NgUserSettingRepository $ngUserSettingRepository)
     {
         $this->userService = $userService;
         $this->ngUserSettingRepository = $ngUserSettingRepository;
     }
 
     /**
-     * Receive the given $signal and react on it
+     * Receive the given $signal and react on it.
      *
      * @param \eZ\Publish\Core\SignalSlot\Signal $signal
      */
-    public function receive( Signal $signal )
+    public function receive(Signal $signal)
     {
-        if ( !$signal instanceof Signal\UserService\CreateUserSignal )
-        {
+        if (!$signal instanceof Signal\UserService\CreateUserSignal) {
             return;
         }
 
-        try
-        {
-            $user = $this->userService->loadUser( $signal->userId );
-        }
-        catch ( NotFoundException $e )
-        {
+        try {
+            $user = $this->userService->loadUser($signal->userId);
+        } catch (NotFoundException $e) {
             return;
         }
 
-        if ( $user->enabled )
-        {
-            $this->ngUserSettingRepository->activateUser( $signal->userId );
+        if ($user->enabled) {
+            $this->ngUserSettingRepository->activateUser($signal->userId);
         }
     }
 }

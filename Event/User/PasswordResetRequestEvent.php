@@ -21,7 +21,7 @@ class PasswordResetRequestEvent extends Event
      * @param string $email
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      */
-    public function __construct( $email, User $user = null )
+    public function __construct($email, User $user = null)
     {
         $this->user = $user;
         $this->email = $email;

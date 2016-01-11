@@ -29,13 +29,13 @@ class GlobalHelper
     protected $layout;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper $siteInfoHelper
      * @param \Netgen\Bundle\MoreBundle\Helper\LayoutHelper $layoutHelper
      * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
      */
-    public function __construct( SiteInfoHelper $siteInfoHelper, LayoutHelper $layoutHelper, RequestStack $requestStack )
+    public function __construct(SiteInfoHelper $siteInfoHelper, LayoutHelper $layoutHelper, RequestStack $requestStack)
     {
         $this->siteInfoHelper = $siteInfoHelper;
         $this->layoutHelper = $layoutHelper;
@@ -43,7 +43,7 @@ class GlobalHelper
     }
 
     /**
-     * Returns the SiteInfo location
+     * Returns the SiteInfo location.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
@@ -53,7 +53,7 @@ class GlobalHelper
     }
 
     /**
-     * Returns the SiteInfo content
+     * Returns the SiteInfo content.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
@@ -63,19 +63,18 @@ class GlobalHelper
     }
 
     /**
-     * Returns the current layout
+     * Returns the current layout.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
     public function getLayout()
     {
         $request = $this->requestStack->getCurrentRequest();
-        if ( $request !== null && $this->layout === null )
-        {
-            $locationId = $request->attributes->get( 'locationId' );
-            $pathInfo = $request->attributes->get( 'semanticPathinfo' ) . $request->attributes->get( 'viewParametersString' );
+        if ($request !== null && $this->layout === null) {
+            $locationId = $request->attributes->get('locationId');
+            $pathInfo = $request->attributes->get('semanticPathinfo') . $request->attributes->get('viewParametersString');
 
-            $this->layout = $this->layoutHelper->getLayout( $locationId, $pathInfo );
+            $this->layout = $this->layoutHelper->getLayout($locationId, $pathInfo);
         }
 
         return $this->layout;

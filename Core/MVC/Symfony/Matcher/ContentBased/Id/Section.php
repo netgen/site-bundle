@@ -16,9 +16,9 @@ class Section extends ConfigResolverBased implements MatcherInterface
      *
      * @return bool
      */
-    public function matchLocation( APILocation $location )
+    public function matchLocation(APILocation $location)
     {
-        return $this->doMatch( $location->getContentInfo()->sectionId );
+        return $this->doMatch($location->getContentInfo()->sectionId);
     }
 
     /**
@@ -28,8 +28,8 @@ class Section extends ConfigResolverBased implements MatcherInterface
      *
      * @return bool
      */
-    public function matchContentInfo( ContentInfo $contentInfo )
+    public function matchContentInfo(ContentInfo $contentInfo)
     {
-        return $this->doMatch( $contentInfo->sectionId );
+        return $this->doMatch($contentInfo->sectionId);
     }
 }

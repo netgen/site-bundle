@@ -16,11 +16,11 @@ class UserConverter implements ObjectConverter
     protected $legacyKernel;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param \Closure $legacyKernel
      */
-    public function __construct( Closure $legacyKernel )
+    public function __construct(Closure $legacyKernel)
     {
         $this->legacyKernel = $legacyKernel;
     }
@@ -34,18 +34,17 @@ class UserConverter implements ObjectConverter
      *
      * @return \eZUser
      */
-    public function convert( $object )
+    public function convert($object)
     {
-        if ( !$object instanceof User )
-        {
-            throw new InvalidArgumentException( '$object is not a User instance' );
+        if (!$object instanceof User) {
+            throw new InvalidArgumentException('$object is not a User instance');
         }
 
         $legacyKernel = $this->legacyKernel;
+
         return $legacyKernel()->runCallback(
-            function () use ( $object )
-            {
-                return eZUser::fetchByName( $object->login );
+            function () use ($object) {
+                return eZUser::fetchByName($object->login);
             },
             false,
             false

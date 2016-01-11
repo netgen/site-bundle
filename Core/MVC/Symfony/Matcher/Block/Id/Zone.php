@@ -15,8 +15,8 @@ class Zone extends ConfigResolverBased implements MatcherInterface
      *
      * @return bool
      */
-    public function matchBlock( PageBlock $block )
+    public function matchBlock(PageBlock $block)
     {
-        return $this->doMatch( $block->zoneId );
+        return $this->doMatch($block->zoneId);
     }
 }

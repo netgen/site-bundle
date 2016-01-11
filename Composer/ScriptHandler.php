@@ -9,65 +9,65 @@ use Symfony\Component\Process\ProcessBuilder;
 class ScriptHandler extends DistributionBundleScriptHandler
 {
     /**
-     * Symlinks legacy siteaccesses and various other legacy files to their proper locations
+     * Symlinks legacy siteaccesses and various other legacy files to their proper locations.
      *
      * @param $event \Composer\Script\CommandEvent
      */
-    public static function installLegacySymlinks( CommandEvent $event )
+    public static function installLegacySymlinks(CommandEvent $event)
     {
-        $options = self::getOptions( $event );
+        $options = self::getOptions($event);
         $appDir = $options['symfony-app-dir'];
 
-        if ( !is_dir( $appDir ) )
-        {
+        if (!is_dir($appDir)) {
             echo 'The symfony-app-dir (' . $appDir . ') specified in composer.json was not found in ' . getcwd() . ', can not install legacy symlinks.' . PHP_EOL;
+
             return;
         }
 
-        static::executeCommand( $event, $appDir, 'ngmore:symlink:legacy', $options['process-timeout'] );
+        static::executeCommand($event, $appDir, 'ngmore:symlink:legacy', $options['process-timeout']);
     }
 
     /**
-     * Symlinks various project files and folders to their proper locations
+     * Symlinks various project files and folders to their proper locations.
      *
      * @param $event \Composer\Script\CommandEvent
      */
-    public static function installProjectSymlinks( CommandEvent $event )
+    public static function installProjectSymlinks(CommandEvent $event)
     {
-        $options = self::getOptions( $event );
+        $options = self::getOptions($event);
         $appDir = $options['symfony-app-dir'];
 
-        if ( !is_dir( $appDir ) )
-        {
+        if (!is_dir($appDir)) {
             echo 'The symfony-app-dir (' . $appDir . ') specified in composer.json was not found in ' . getcwd() . ', can not install project symlinks.' . PHP_EOL;
+
             return;
         }
 
-        static::executeCommand( $event, $appDir, 'ngmore:symlink:project', $options['process-timeout'] );
+        static::executeCommand($event, $appDir, 'ngmore:symlink:project', $options['process-timeout']);
     }
 
     /**
-     * Generates legacy autoloads
+     * Generates legacy autoloads.
      *
      * @param $event \Composer\Script\CommandEvent
      */
-    public static function generateLegacyAutoloads( CommandEvent $event )
+    public static function generateLegacyAutoloads(CommandEvent $event)
     {
-        return self::generateLegacyAutoloadsArray( $event );
+        return self::generateLegacyAutoloadsArray($event);
     }
 
     /**
-     * Generates legacy autoloads for kernel overrides
+     * Generates legacy autoloads for kernel overrides.
      *
      * @param $event \Composer\Script\CommandEvent
      */
-    public static function generateLegacyKernelOverrideAutoloads( CommandEvent $event )
+    public static function generateLegacyKernelOverrideAutoloads(CommandEvent $event)
     {
-        return self::generateLegacyAutoloadsArray( $event, true );
+        return self::generateLegacyAutoloadsArray($event, true);
     }
 
     /**
-     * Generates legacy autoloads
+     * Generates legacy autoloads.
      *
      * @param $event \Composer\Script\CommandEvent
      * @param bool $generateKernelOverrideAutoloads
@@ -77,43 +77,40 @@ class ScriptHandler extends DistributionBundleScriptHandler
     protected static function generateLegacyAutoloadsArray(
         CommandEvent $event,
         $generateKernelOverrideAutoloads = false
-    )
-    {
-        $options = self::getOptions( $event );
+    ) {
+        $options = self::getOptions($event);
 
         $currentWorkingDirectory = getcwd();
         $legacyRootDir = $currentWorkingDirectory . '/' . $options['ezpublish-legacy-dir'];
 
-        if ( !is_dir( $legacyRootDir ) )
-        {
+        if (!is_dir($legacyRootDir)) {
             echo 'The ezpublish-legacy-dir (' . $options['ezpublish-legacy-dir'] . ') specified in composer.json was not found in ' . $currentWorkingDirectory . ', can not generate legacy autoloads.' . PHP_EOL;
+
             return;
         }
 
-        chdir( $legacyRootDir );
+        chdir($legacyRootDir);
 
         $processParameters = array(
             'php',
-            'bin/php/ezpgenerateautoloads.php'
+            'bin/php/ezpgenerateautoloads.php',
         );
 
-        if ( $generateKernelOverrideAutoloads )
-        {
+        if ($generateKernelOverrideAutoloads) {
             $processParameters[] = '-o';
         }
 
-        $processBuilder = new ProcessBuilder( $processParameters );
+        $processBuilder = new ProcessBuilder($processParameters);
 
         $process = $processBuilder->getProcess();
 
-        $process->setTimeout( 3600 );
+        $process->setTimeout(3600);
         $process->run(
-            function ( $type, $buffer )
-            {
+            function ($type, $buffer) {
                 echo $buffer;
             }
         );
 
-        chdir( $currentWorkingDirectory );
+        chdir($currentWorkingDirectory);
     }
 }

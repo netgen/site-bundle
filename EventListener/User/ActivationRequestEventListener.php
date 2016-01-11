@@ -18,7 +18,7 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
     public static function getSubscribedEvents()
     {
         return array(
-            MVCEvents::USER_ACTIVATION_REQUEST => 'onActivationRequest'
+            MVCEvents::USER_ACTIVATION_REQUEST => 'onActivationRequest',
         );
     }
 
@@ -28,60 +28,57 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
      *
      * @param \Netgen\Bundle\MoreBundle\Event\User\ActivationRequestEvent $event
      */
-    public function onActivationRequest( ActivationRequestEvent $event )
+    public function onActivationRequest(ActivationRequestEvent $event)
     {
         $user = $event->getUser();
         $email = $event->getEmail();
 
-        if ( !$user instanceof User )
-        {
+        if (!$user instanceof User) {
             $this->mailHelper->sendMail(
                 $email,
                 'ngmore.user.activate.not_registered.subject',
-                $this->configResolver->getParameter( 'template.user.mail.activate_not_registered', 'ngmore' )
+                $this->configResolver->getParameter('template.user.mail.activate_not_registered', 'ngmore')
             );
 
             return;
         }
 
-        if ( $user->enabled )
-        {
+        if ($user->enabled) {
             $this->mailHelper->sendMail(
-                array( $user->email => $this->translationHelper->getTranslatedContentName( $user ) ),
+                array($user->email => $this->translationHelper->getTranslatedContentName($user)),
                 'ngmore.user.activate.already_active.subject',
-                $this->configResolver->getParameter( 'template.user.mail.activate_already_active', 'ngmore' ),
+                $this->configResolver->getParameter('template.user.mail.activate_already_active', 'ngmore'),
                 array(
-                    'user' => $user
+                    'user' => $user,
                 )
             );
 
             return;
         }
 
-        if ( $this->ngUserSettingRepository->isUserActivated( $user->id ) )
-        {
+        if ($this->ngUserSettingRepository->isUserActivated($user->id)) {
             $this->mailHelper->sendMail(
-                array( $user->email => $this->translationHelper->getTranslatedContentName( $user ) ),
+                array($user->email => $this->translationHelper->getTranslatedContentName($user)),
                 'ngmore.user.activate.disabled.subject',
-                $this->configResolver->getParameter( 'template.user.mail.activate_disabled', 'ngmore' ),
+                $this->configResolver->getParameter('template.user.mail.activate_disabled', 'ngmore'),
                 array(
-                    'user' => $user
+                    'user' => $user,
                 )
             );
 
             return;
         }
 
-        $accountKey = $this->ezUserAccountKeyRepository->create( $user->id );
+        $accountKey = $this->ezUserAccountKeyRepository->create($user->id);
 
         $this->mailHelper
             ->sendMail(
-                array( $user->email => $this->translationHelper->getTranslatedContentName( $user ) ),
+                array($user->email => $this->translationHelper->getTranslatedContentName($user)),
                 'ngmore.user.activate.subject',
-                $this->configResolver->getParameter( 'template.user.mail.activate', 'ngmore' ),
+                $this->configResolver->getParameter('template.user.mail.activate', 'ngmore'),
                 array(
                     'user' => $user,
-                    'hash' => $accountKey->getHash()
+                    'hash' => $accountKey->getHash(),
                 )
             );
     }

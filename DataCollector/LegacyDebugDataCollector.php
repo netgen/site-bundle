@@ -19,19 +19,19 @@ class LegacyDebugDataCollector extends DataCollector
     protected $legacyKernel;
 
     /**
-     * Request matcher for user context hash requests
+     * Request matcher for user context hash requests.
      *
      * @var \Symfony\Component\HttpFoundation\RequestMatcherInterface
      */
     protected $userContextRequestMatcher;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param \Closure $legacyKernel
      * @param \Symfony\Component\HttpFoundation\RequestMatcherInterface $userContextRequestMatcher
      */
-    public function __construct( Closure $legacyKernel, RequestMatcherInterface $userContextRequestMatcher )
+    public function __construct(Closure $legacyKernel, RequestMatcherInterface $userContextRequestMatcher)
     {
         $this->legacyKernel = $legacyKernel;
         $this->userContextRequestMatcher = $userContextRequestMatcher;
@@ -44,11 +44,10 @@ class LegacyDebugDataCollector extends DataCollector
      * @param \Symfony\Component\HttpFoundation\Response $response A Response instance
      * @param \Exception $exception An Exception instance
      */
-    public function collect( Request $request, Response $response, Exception $exception = null )
+    public function collect(Request $request, Response $response, Exception $exception = null)
     {
         // Do not collect data if it's a user hash request
-        if ( $this->userContextRequestMatcher->matches( $request ) )
-        {
+        if ($this->userContextRequestMatcher->matches($request)) {
             return;
         }
 
@@ -56,7 +55,7 @@ class LegacyDebugDataCollector extends DataCollector
     }
 
     /**
-     * Returns the legacy debug output
+     * Returns the legacy debug output.
      *
      * @return string
      */
@@ -72,11 +71,11 @@ class LegacyDebugDataCollector extends DataCollector
      */
     public function getName()
     {
-        return "ngmore_legacy_debug";
+        return 'ngmore_legacy_debug';
     }
 
     /**
-     * Returns the legacy debug output
+     * Returns the legacy debug output.
      *
      * @return string
      */
@@ -84,18 +83,14 @@ class LegacyDebugDataCollector extends DataCollector
     {
         $legacyKernel = $this->legacyKernel;
 
-        try
-        {
+        try {
             return $legacyKernel()->runCallback(
-                function ()
-                {
+                function () {
                     return eZDebug::instance()->printReportInternal();
                 }
             );
-        }
-        catch ( RuntimeException $e )
-        {
-            return "";
+        } catch (RuntimeException $e) {
+            return '';
         }
     }
 }

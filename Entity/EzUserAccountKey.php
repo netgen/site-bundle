@@ -25,7 +25,7 @@ class EzUserAccountKey
     protected $userId;
 
     /**
-     * Get ID
+     * Get ID.
      *
      * @return mixed
      */
@@ -35,13 +35,13 @@ class EzUserAccountKey
     }
 
     /**
-     * Set hash key
+     * Set hash key.
      *
      * @param string $hashKey
      *
      * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
      */
-    public function setHash( $hashKey )
+    public function setHash($hashKey)
     {
         $this->hashKey = $hashKey;
 
@@ -49,7 +49,7 @@ class EzUserAccountKey
     }
 
     /**
-     * Get hash key
+     * Get hash key.
      *
      * @return string
      */
@@ -59,13 +59,13 @@ class EzUserAccountKey
     }
 
     /**
-     * Set user ID
+     * Set user ID.
      *
      * @param mixed $userId
      *
      * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
      */
-    public function setUserId( $userId )
+    public function setUserId($userId)
     {
         $this->userId = $userId;
 
@@ -73,7 +73,7 @@ class EzUserAccountKey
     }
 
     /**
-     * Get user ID
+     * Get user ID.
      *
      * @return mixed
      */
@@ -83,13 +83,13 @@ class EzUserAccountKey
     }
 
     /**
-     * Set time
+     * Set time.
      *
      * @param int $time
      *
      * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
      */
-    public function setTime( $time )
+    public function setTime($time)
     {
         $this->time = $time;
 
@@ -97,7 +97,7 @@ class EzUserAccountKey
     }
 
     /**
-     * Get time
+     * Get time.
      *
      * @return int
      */

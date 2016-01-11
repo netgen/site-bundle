@@ -56,8 +56,7 @@ abstract class UserEventListener
         EzUserAccountKeyRepository $ezUserAccountKeyRepository,
         TranslationHelper $translationHelper,
         Repository $repository
-    )
-    {
+    ) {
         $this->mailHelper = $mailHelper;
         $this->configResolver = $configResolver;
         $this->ngUserSettingRepository = $ngUserSettingRepository;

@@ -15,7 +15,6 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route as SymfonyRoute;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use InvalidArgumentException;
 use LogicException;
 use RuntimeException;
 
@@ -40,8 +39,7 @@ class ContentUrlAliasRouter implements ChainedRouterInterface, RequestMatcherInt
         LocationService $locationService,
         UrlAliasGenerator $generator,
         RequestContext $requestContext
-    )
-    {
+    ) {
         $this->locationService = $locationService;
         $this->generator = $generator;
         $this->requestContext = $requestContext !== null ? $requestContext : new RequestContext();
@@ -59,9 +57,9 @@ class ContentUrlAliasRouter implements ChainedRouterInterface, RequestMatcherInt
      *
      * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException If no matching resource could be found
      */
-    public function matchRequest( Request $request )
+    public function matchRequest(Request $request)
     {
-        throw new ResourceNotFoundException( "ContentUrlAliasRouter does not support matching requests." );
+        throw new ResourceNotFoundException('ContentUrlAliasRouter does not support matching requests.');
     }
 
     /**
@@ -79,21 +77,19 @@ class ContentUrlAliasRouter implements ChainedRouterInterface, RequestMatcherInt
      *
      * @return string The generated URL
      */
-    public function generate( $name, $parameters = array(), $absolute = false )
+    public function generate($name, $parameters = array(), $absolute = false)
     {
-        if ( !$name instanceof Content && !$name instanceof ContentInfo )
-        {
-            throw new RouteNotFoundException( 'Could not match route' );
+        if (!$name instanceof Content && !$name instanceof ContentInfo) {
+            throw new RouteNotFoundException('Could not match route');
         }
 
         $contentInfo = $name instanceof Content ? $name->contentInfo : $name;
-        if ( empty( $contentInfo->mainLocationId ) )
-        {
-            throw new LogicException( "Cannot generate an UrlAlias route for content without main location." );
+        if (empty($contentInfo->mainLocationId)) {
+            throw new LogicException('Cannot generate an UrlAlias route for content without main location.');
         }
 
         return $this->generator->generate(
-            $this->locationService->loadLocation( $contentInfo->mainLocationId ),
+            $this->locationService->loadLocation($contentInfo->mainLocationId),
             $parameters,
             $absolute
         );
@@ -114,10 +110,10 @@ class ContentUrlAliasRouter implements ChainedRouterInterface, RequestMatcherInt
      *
      * @param \Symfony\Component\Routing\RequestContext $context The context
      */
-    public function setContext( RequestContext $context )
+    public function setContext(RequestContext $context)
     {
         $this->requestContext = $context;
-        $this->generator->setRequestContext( $context );
+        $this->generator->setRequestContext($context);
     }
 
     /**
@@ -143,9 +139,9 @@ class ContentUrlAliasRouter implements ChainedRouterInterface, RequestMatcherInt
      * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException If the resource could not be found
      * @throws \Symfony\Component\Routing\Exception\MethodNotAllowedException If the resource was found but the request method is not allowed
      */
-    public function match( $pathinfo )
+    public function match($pathinfo)
     {
-        throw new RuntimeException( "The ContentUrlAliasRouter doesn't support the match() method." );
+        throw new RuntimeException("The ContentUrlAliasRouter doesn't support the match() method.");
     }
 
     /**
@@ -159,7 +155,7 @@ class ContentUrlAliasRouter implements ChainedRouterInterface, RequestMatcherInt
      *
      * @return bool
      */
-    public function supports( $name )
+    public function supports($name)
     {
         return $name instanceof Content || $name instanceof ContentInfo;
     }
@@ -173,15 +169,13 @@ class ContentUrlAliasRouter implements ChainedRouterInterface, RequestMatcherInt
      *
      * @return string
      */
-    public function getRouteDebugMessage( $name, array $parameters = array() )
+    public function getRouteDebugMessage($name, array $parameters = array())
     {
-        if ( $name instanceof RouteObjectInterface )
-        {
+        if ($name instanceof RouteObjectInterface) {
             return 'Route with key ' . $name->getRouteKey();
         }
 
-        if ( $name instanceof SymfonyRoute )
-        {
+        if ($name instanceof SymfonyRoute) {
             return 'Route with pattern ' . $name->getPath();
         }
 

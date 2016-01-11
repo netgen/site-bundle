@@ -9,40 +9,37 @@ use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
 
 /**
- * This is the class that loads and manages your bundle configuration
+ * This is the class that loads and manages your bundle configuration.
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
 class NetgenMoreExtension extends Extension implements PrependExtensionInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    public function load( array $configs, ContainerBuilder $container )
+    public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();
-        $config = $this->processConfiguration( $configuration, $configs );
+        $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\YamlFileLoader( $container, new FileLocator( __DIR__ . '/../Resources/config' ) );
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
-        $loader->load( 'parameters.yml' );
-        $loader->load( 'field_types.yml' );
-        $loader->load( 'pagerfanta.yml' );
-        $loader->load( 'templating.yml' );
-        $loader->load( 'kernel.yml' );
-        $loader->load( 'image.yml' );
-        $loader->load( 'menu.yml' );
-        $loader->load( 'event_listeners.yml' );
-        $loader->load( 'matchers.yml' );
-        $loader->load( 'services.yml' );
+        $loader->load('parameters.yml');
+        $loader->load('field_types.yml');
+        $loader->load('pagerfanta.yml');
+        $loader->load('templating.yml');
+        $loader->load('kernel.yml');
+        $loader->load('image.yml');
+        $loader->load('menu.yml');
+        $loader->load('event_listeners.yml');
+        $loader->load('matchers.yml');
+        $loader->load('services.yml');
 
-        if ( $container->hasParameter( 'ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common.field.class' ) )
-        {
-            $loader->load( 'search.yml' );
-        }
-        else
-        {
-            $loader->load( 'search_new_namespaces.yml' );
+        if ($container->hasParameter('ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common.field.class')) {
+            $loader->load('search.yml');
+        } else {
+            $loader->load('search_new_namespaces.yml');
         }
     }
 
@@ -51,14 +48,14 @@ class NetgenMoreExtension extends Extension implements PrependExtensionInterface
      *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function prepend( ContainerBuilder $container )
+    public function prepend(ContainerBuilder $container)
     {
         $container->prependExtensionConfig(
             'assetic',
             array(
                 'bundles' => array_keys(
-                    $container->getParameter( 'kernel.bundles' )
-                )
+                    $container->getParameter('kernel.bundles')
+                ),
             )
         );
     }

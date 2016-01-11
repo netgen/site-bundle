@@ -11,7 +11,7 @@ use RuntimeException;
 class Field extends BaseFieldCriterionHandler
 {
     /**
-     * This method is specifically overriden to disable the check if the field is searchable or not
+     * This method is specifically overriden to disable the check if the field is searchable or not.
      *
      * Returns relevant field information for the specified field
      *
@@ -25,46 +25,42 @@ class Field extends BaseFieldCriterionHandler
      *
      * @return array
      */
-    protected function getFieldsInformation( $fieldIdentifier )
+    protected function getFieldsInformation($fieldIdentifier)
     {
         $query = $this->dbHandler->createSelectQuery();
         $query
             ->select(
-                $this->dbHandler->quoteColumn( 'id', 'ezcontentclass_attribute' ),
-                $this->dbHandler->quoteColumn( 'data_type_string', 'ezcontentclass_attribute' )
+                $this->dbHandler->quoteColumn('id', 'ezcontentclass_attribute'),
+                $this->dbHandler->quoteColumn('data_type_string', 'ezcontentclass_attribute')
             )
             ->from(
-                $this->dbHandler->quoteTable( 'ezcontentclass_attribute' )
+                $this->dbHandler->quoteTable('ezcontentclass_attribute')
             )
             ->where(
                 $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'identifier', 'ezcontentclass_attribute' ),
-                    $query->bindValue( $fieldIdentifier )
+                    $this->dbHandler->quoteColumn('identifier', 'ezcontentclass_attribute'),
+                    $query->bindValue($fieldIdentifier)
                 )
             );
 
         $statement = $query->prepare();
         $statement->execute();
-        if ( !( $rows = $statement->fetchAll( \PDO::FETCH_ASSOC ) ) )
-        {
+        if (!($rows = $statement->fetchAll(\PDO::FETCH_ASSOC))) {
             throw new InvalidArgumentException(
-                "\$criterion->target",
+                '$criterion->target',
                 "No fields found for the given criterion target '{$fieldIdentifier}'."
             );
         }
 
         $fieldMapArray = array();
-        foreach ( $rows as $row )
-        {
-            if ( !isset( $fieldMapArray[ $row['data_type_string'] ] ) )
-            {
-                $converter = $this->fieldConverterRegistry->getConverter( $row['data_type_string'] );
+        foreach ($rows as $row) {
+            if (!isset($fieldMapArray[ $row['data_type_string'] ])) {
+                $converter = $this->fieldConverterRegistry->getConverter($row['data_type_string']);
 
-                if ( !$converter instanceof Converter )
-                {
+                if (!$converter instanceof Converter) {
                     throw new RuntimeException(
                         "getConverter({$row['data_type_string']}) did not return a converter, got: " .
-                        gettype( $converter )
+                        gettype($converter)
                     );
                 }
 

@@ -15,8 +15,8 @@ class Block extends ConfigResolverBased implements MatcherInterface
      *
      * @return bool
      */
-    public function matchBlock( PageBlock $block )
+    public function matchBlock(PageBlock $block)
     {
-        return $this->doMatch( $block->id );
+        return $this->doMatch($block->id);
     }
 }

@@ -17,7 +17,7 @@ class PostRegisterEventListener extends UserEventListener implements EventSubscr
     public static function getSubscribedEvents()
     {
         return array(
-            MVCEvents::USER_POST_REGISTER => 'onUserRegistered'
+            MVCEvents::USER_POST_REGISTER => 'onUserRegistered',
         );
     }
 
@@ -27,35 +27,34 @@ class PostRegisterEventListener extends UserEventListener implements EventSubscr
      *
      * @param \Netgen\Bundle\MoreBundle\Event\User\PostRegisterEvent $event
      */
-    public function onUserRegistered( PostRegisterEvent $event )
+    public function onUserRegistered(PostRegisterEvent $event)
     {
         $user = $event->getUser();
 
-        if ( $user->enabled )
-        {
+        if ($user->enabled) {
             $this->mailHelper
                 ->sendMail(
-                    array( $user->email => $this->translationHelper->getTranslatedContentName( $user ) ),
+                    array($user->email => $this->translationHelper->getTranslatedContentName($user)),
                     'ngmore.user.welcome.subject',
-                    $this->configResolver->getParameter( 'template.user.mail.welcome', 'ngmore' ),
+                    $this->configResolver->getParameter('template.user.mail.welcome', 'ngmore'),
                     array(
-                        'user' => $user
+                        'user' => $user,
                     )
                 );
 
             return;
         }
 
-        $accountKey = $this->ezUserAccountKeyRepository->create( $user->id );
+        $accountKey = $this->ezUserAccountKeyRepository->create($user->id);
 
         $this->mailHelper
             ->sendMail(
-                array( $user->email => $this->translationHelper->getTranslatedContentName( $user ) ),
+                array($user->email => $this->translationHelper->getTranslatedContentName($user)),
                 'ngmore.user.activate.subject',
-                $this->configResolver->getParameter( 'template.user.mail.activate', 'ngmore' ),
+                $this->configResolver->getParameter('template.user.mail.activate', 'ngmore'),
                 array(
                     'user' => $user,
-                    'hash' => $accountKey->getHash()
+                    'hash' => $accountKey->getHash(),
                 )
             );
     }

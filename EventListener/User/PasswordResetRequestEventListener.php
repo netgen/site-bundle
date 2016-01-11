@@ -18,7 +18,7 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
     public static function getSubscribedEvents()
     {
         return array(
-            MVCEvents::USER_PASSWORD_RESET_REQUEST => 'onPasswordResetRequest'
+            MVCEvents::USER_PASSWORD_RESET_REQUEST => 'onPasswordResetRequest',
         );
     }
 
@@ -28,32 +28,29 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
      *
      * @param \Netgen\Bundle\MoreBundle\Event\User\PasswordResetRequestEvent $event
      */
-    public function onPasswordResetRequest( PasswordResetRequestEvent $event )
+    public function onPasswordResetRequest(PasswordResetRequestEvent $event)
     {
         $user = $event->getUser();
         $email = $event->getEmail();
 
-        if ( !$user instanceof User )
-        {
+        if (!$user instanceof User) {
             $this->mailHelper
                 ->sendMail(
                     $email,
                     'ngmore.user.forgot_password.not_registered.subject',
-                    $this->configResolver->getParameter( 'template.user.mail.forgot_password_not_registered', 'ngmore' )
+                    $this->configResolver->getParameter('template.user.mail.forgot_password_not_registered', 'ngmore')
                 );
 
             return;
         }
 
-        if ( !$user->enabled )
-        {
-            if ( $this->ngUserSettingRepository->isUserActivated( $user->id ) )
-            {
+        if (!$user->enabled) {
+            if ($this->ngUserSettingRepository->isUserActivated($user->id)) {
                 $this->mailHelper
                     ->sendMail(
-                        array( $user->email => $this->translationHelper->getTranslatedContentName( $user ) ),
+                        array($user->email => $this->translationHelper->getTranslatedContentName($user)),
                         'ngmore.user.forgot_password.disabled.subject',
-                        $this->configResolver->getParameter( 'template.user.mail.forgot_password_disabled', 'ngmore' ),
+                        $this->configResolver->getParameter('template.user.mail.forgot_password_disabled', 'ngmore'),
                         array(
                             'user' => $user,
                         )
@@ -64,9 +61,9 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
 
             $this->mailHelper
                 ->sendMail(
-                    array( $user->email => $this->translationHelper->getTranslatedContentName( $user ) ),
+                    array($user->email => $this->translationHelper->getTranslatedContentName($user)),
                     'ngmore.user.forgot_password.not_active.subject',
-                    $this->configResolver->getParameter( 'template.user.mail.forgot_password_not_active', 'ngmore' ),
+                    $this->configResolver->getParameter('template.user.mail.forgot_password_not_active', 'ngmore'),
                     array(
                         'user' => $user,
                     )
@@ -75,16 +72,16 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
             return;
         }
 
-        $accountKey = $this->ezUserAccountKeyRepository->create( $user->id );
+        $accountKey = $this->ezUserAccountKeyRepository->create($user->id);
 
         $this->mailHelper
             ->sendMail(
-                array( $user->email => $this->translationHelper->getTranslatedContentName( $user ) ),
+                array($user->email => $this->translationHelper->getTranslatedContentName($user)),
                 'ngmore.user.forgot_password.subject',
-                $this->configResolver->getParameter( 'template.user.mail.forgot_password', 'ngmore' ),
+                $this->configResolver->getParameter('template.user.mail.forgot_password', 'ngmore'),
                 array(
                     'user' => $user,
-                    'hash' => $accountKey->getHash()
+                    'hash' => $accountKey->getHash(),
                 )
             );
     }

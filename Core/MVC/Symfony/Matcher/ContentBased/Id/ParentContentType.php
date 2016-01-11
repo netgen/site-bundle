@@ -17,16 +17,15 @@ class ParentContentType extends ConfigResolverBased implements MatcherInterface
      *
      * @return bool
      */
-    public function matchLocation( APILocation $location )
+    public function matchLocation(APILocation $location)
     {
         $parent = $this->repository->sudo(
-            function ( Repository $repository ) use ( $location )
-            {
-                return $repository->getLocationService()->loadLocation( $location->parentLocationId );
+            function (Repository $repository) use ($location) {
+                return $repository->getLocationService()->loadLocation($location->parentLocationId);
             }
         );
 
-        return $this->doMatch( $parent->getContentInfo()->contentTypeId );
+        return $this->doMatch($parent->getContentInfo()->contentTypeId);
     }
 
     /**
@@ -36,15 +35,14 @@ class ParentContentType extends ConfigResolverBased implements MatcherInterface
      *
      * @return bool
      */
-    public function matchContentInfo( ContentInfo $contentInfo )
+    public function matchContentInfo(ContentInfo $contentInfo)
     {
         $location = $this->repository->sudo(
-            function ( Repository $repository ) use ( $contentInfo )
-            {
-                return $repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
+            function (Repository $repository) use ($contentInfo) {
+                return $repository->getLocationService()->loadLocation($contentInfo->mainLocationId);
             }
         );
 
-        return $this->matchLocation( $location );
+        return $this->matchLocation($location);
     }
 }

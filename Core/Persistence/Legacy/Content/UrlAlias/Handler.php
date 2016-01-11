@@ -11,8 +11,8 @@ class Handler extends BaseHandler
      *
      * @return string
      */
-    protected function getHash( $text )
+    protected function getHash($text)
     {
-        return md5( mb_strtolower( $text, 'UTF-8' ) );
+        return md5(mb_strtolower($text, 'UTF-8'));
     }
 }

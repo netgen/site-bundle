@@ -17,9 +17,9 @@ class ParentLocation extends ConfigResolverBased implements MatcherInterface
      *
      * @return bool
      */
-    public function matchLocation( APILocation $location )
+    public function matchLocation(APILocation $location)
     {
-        return $this->doMatch( $location->parentLocationId );
+        return $this->doMatch($location->parentLocationId);
     }
 
     /**
@@ -29,15 +29,14 @@ class ParentLocation extends ConfigResolverBased implements MatcherInterface
      *
      * @return bool
      */
-    public function matchContentInfo( ContentInfo $contentInfo )
+    public function matchContentInfo(ContentInfo $contentInfo)
     {
         $location = $this->repository->sudo(
-            function ( Repository $repository ) use ( $contentInfo )
-            {
-                return $repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
+            function (Repository $repository) use ($contentInfo) {
+                return $repository->getLocationService()->loadLocation($contentInfo->mainLocationId);
             }
         );
 
-        return $this->doMatch( $location->parentLocationId );
+        return $this->doMatch($location->parentLocationId);
     }
 }

@@ -42,7 +42,7 @@ class NetgenMoreExtension extends Twig_Extension
     protected $localeConverter;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\Core\Helper\TranslationHelper $translationHelper
@@ -56,8 +56,7 @@ class NetgenMoreExtension extends Twig_Extension
         PathHelper $pathHelper,
         GlobalHelper $globalHelper,
         LocaleConverterInterface $localeConverter
-    )
-    {
+    ) {
         $this->repository = $repository;
         $this->translationHelper = $translationHelper;
         $this->pathHelper = $pathHelper;
@@ -85,107 +84,106 @@ class NetgenMoreExtension extends Twig_Extension
         return array(
             new Twig_SimpleFunction(
                 'ngmore_location_path',
-                array( $this, 'getLocationPath' ),
-                array( 'is_safe' => array( 'html' ) )
+                array($this, 'getLocationPath'),
+                array('is_safe' => array('html'))
             ),
             new Twig_SimpleFunction(
                 'ngmore_language_name',
-                array( $this, 'getLanguageName' )
+                array($this, 'getLanguageName')
             ),
             new Twig_SimpleFunction(
                 'ngmore_content_type_identifier',
-                array( $this, 'getContentTypeIdentifier' )
+                array($this, 'getContentTypeIdentifier')
             ),
             new Twig_SimpleFunction(
                 'ngmore_content_type_name',
-                array( $this, 'getContentTypeName' )
+                array($this, 'getContentTypeName')
             ),
             new Twig_SimpleFunction(
                 'ngmore_owner',
-                array( $this, 'getOwner' )
+                array($this, 'getOwner')
             ),
             new Twig_SimpleFunction(
                 'ngmore_field',
-                array( $this, 'getTranslatedField' )
+                array($this, 'getTranslatedField')
             ),
             new Twig_SimpleFunction(
                 'ngmore_can_user',
-                array( $this, 'canUser' )
+                array($this, 'canUser')
             ),
             new Twig_SimpleFunction(
                 'ngmore_has_access',
-                array( $this, 'hasAccess' )
-            )
+                array($this, 'hasAccess')
+            ),
         );
     }
 
     /**
-     * Returns the path for specified location ID
+     * Returns the path for specified location ID.
      *
      * @param mixed $locationId
      * @param bool $includeAllContentTypes
      *
      * @return array
      */
-    public function getLocationPath( $locationId, $includeAllContentTypes = false )
+    public function getLocationPath($locationId, $includeAllContentTypes = false)
     {
-        return $this->pathHelper->getPath( $locationId, !$includeAllContentTypes );
+        return $this->pathHelper->getPath($locationId, !$includeAllContentTypes);
     }
 
     /**
-     * Returns the language name for specified language code
+     * Returns the language name for specified language code.
      *
      * @param string $languageCode
      *
      * @return array
      */
-    public function getLanguageName( $languageCode )
+    public function getLanguageName($languageCode)
     {
-        if ( !is_string( $languageCode ) || strlen( $languageCode ) < 2 )
-        {
+        if (!is_string($languageCode) || strlen($languageCode) < 2) {
             return null;
         }
 
-        $posixLanguageCode = $this->localeConverter->convertToPOSIX( $languageCode );
-        if ( $posixLanguageCode === null )
-        {
+        $posixLanguageCode = $this->localeConverter->convertToPOSIX($languageCode);
+        if ($posixLanguageCode === null) {
             return null;
         }
 
-        $posixLanguageCode = substr( $posixLanguageCode, 0, 2 );
-        $languageName = Intl::getLanguageBundle()->getLanguageName( $posixLanguageCode, null, $posixLanguageCode );
-        return ucwords( $languageName );
+        $posixLanguageCode = substr($posixLanguageCode, 0, 2);
+        $languageName = Intl::getLanguageBundle()->getLanguageName($posixLanguageCode, null, $posixLanguageCode);
+
+        return ucwords($languageName);
     }
 
     /**
-     * Returns content type identifier for specified content type ID
+     * Returns content type identifier for specified content type ID.
      *
      * @param mixed $contentTypeId
      *
      * @return string
      */
-    public function getContentTypeIdentifier( $contentTypeId )
+    public function getContentTypeIdentifier($contentTypeId)
     {
-        return $this->repository->getContentTypeService()->loadContentType( $contentTypeId )->identifier;
+        return $this->repository->getContentTypeService()->loadContentType($contentTypeId)->identifier;
     }
 
     /**
-     * Returns content type name for specified content type ID
+     * Returns content type name for specified content type ID.
      *
      * @param mixed $contentTypeId
      *
      * @return string
      */
-    public function getContentTypeName( $contentTypeId )
+    public function getContentTypeName($contentTypeId)
     {
         return $this->translationHelper->getTranslatedByMethod(
-            $this->repository->getContentTypeService()->loadContentType( $contentTypeId ),
-            "getName"
+            $this->repository->getContentTypeService()->loadContentType($contentTypeId),
+            'getName'
         );
     }
 
     /**
-     * Returns owner content for specified content
+     * Returns owner content for specified content.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content Must be a valid Content or ContentInfo object.
      *
@@ -193,19 +191,19 @@ class NetgenMoreExtension extends Twig_Extension
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function getOwner( Content $content )
+    public function getOwner(Content $content)
     {
         $ownerId = $content->contentInfo->ownerId;
+
         return $this->repository->sudo(
-            function ( Repository $repository ) use ( $ownerId )
-            {
-                return $repository->getContentService()->loadContent( $ownerId );
+            function (Repository $repository) use ($ownerId) {
+                return $repository->getContentService()->loadContent($ownerId);
             }
         );
     }
 
     /**
-     * Returns the translated field
+     * Returns the translated field.
      *
      * @deprecated Replaced by ez_field as of 2014.12.2
      *
@@ -215,37 +213,37 @@ class NetgenMoreExtension extends Twig_Extension
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field
      */
-    public function getTranslatedField( Content $content, $fieldDefIdentifier, $forcedLanguage = null )
+    public function getTranslatedField(Content $content, $fieldDefIdentifier, $forcedLanguage = null)
     {
-        return $this->translationHelper->getTranslatedField( $content, $fieldDefIdentifier, $forcedLanguage );
+        return $this->translationHelper->getTranslatedField($content, $fieldDefIdentifier, $forcedLanguage);
     }
 
     /**
      * Indicates if the current user is allowed to perform an action given by the function on the given
-     * objects
+     * objects.
      *
      * @param string $module The module, aka controller identifier to check permissions on
      * @param string $function The function, aka the controller action to check permissions on
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
      * @param mixed $targets The location, parent or "assignment" value object, or an array of the same
      *
-     * @return boolean
+     * @return bool
      */
-    public function canUser( $module, $function, ValueObject $object, $targets = null )
+    public function canUser($module, $function, ValueObject $object, $targets = null)
     {
-        return $this->repository->canUser( $module, $function, $object, $targets );
+        return $this->repository->canUser($module, $function, $object, $targets);
     }
 
     /**
-     * Indicates if a user has access to specified module and function
+     * Indicates if a user has access to specified module and function.
      *
      * @param string $module The module, aka controller identifier to check permissions on
      * @param string $function The function, aka the controller action to check permissions on
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
-     * @return boolean|array if limitations are on this function an array of limitations is returned
+     * @return bool|array if limitations are on this function an array of limitations is returned
      */
-    public function hasAccess( $module, $function, User $user = null )
+    public function hasAccess($module, $function, User $user = null)
     {
         return $this->repository->hasAccess(
             $module,
@@ -261,6 +259,6 @@ class NetgenMoreExtension extends Twig_Extension
      */
     public function getGlobals()
     {
-        return array( 'ngmore' => $this->globalHelper );
+        return array('ngmore' => $this->globalHelper);
     }
 }

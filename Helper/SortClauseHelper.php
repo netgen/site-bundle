@@ -9,16 +9,15 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 class SortClauseHelper
 {
     /**
-     * Returns query sort order by location sort order
+     * Returns query sort order by location sort order.
      *
      * @param int $sortOrder
      *
      * @return string
      */
-    public function getQuerySortOrder( $sortOrder )
+    public function getQuerySortOrder($sortOrder)
     {
-        if ( $sortOrder === Location::SORT_ORDER_DESC )
-        {
+        if ($sortOrder === Location::SORT_ORDER_DESC) {
             return Query::SORT_DESC;
         }
 
@@ -26,39 +25,38 @@ class SortClauseHelper
     }
 
     /**
-     * Instantiates a correct sort clause object based on provided location sort field and sort order
+     * Instantiates a correct sort clause object based on provided location sort field and sort order.
      *
      * @param string $sortField
      * @param int $sortOrder
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\SortClause
      */
-    public function getSortClauseBySortField( $sortField, $sortOrder = Location::SORT_ORDER_ASC )
+    public function getSortClauseBySortField($sortField, $sortOrder = Location::SORT_ORDER_ASC)
     {
-        $querySortOrder = $this->getQuerySortOrder( $sortOrder );
+        $querySortOrder = $this->getQuerySortOrder($sortOrder);
 
-        switch ( $sortField )
-        {
+        switch ($sortField) {
             case 'path':
             case 'path_string':
             case Location::SORT_FIELD_PATH:
-                return new SortClause\Location\Path( $querySortOrder );
+                return new SortClause\Location\Path($querySortOrder);
 
             case 'published':
             case Location::SORT_FIELD_PUBLISHED:
-                return new SortClause\DatePublished( $querySortOrder );
+                return new SortClause\DatePublished($querySortOrder);
 
             case 'modified':
             case Location::SORT_FIELD_MODIFIED:
-                return new SortClause\DateModified( $querySortOrder );
+                return new SortClause\DateModified($querySortOrder);
 
             case 'section':
             case Location::SORT_FIELD_SECTION:
-                return new SortClause\SectionIdentifier( $querySortOrder );
+                return new SortClause\SectionIdentifier($querySortOrder);
 
             case 'depth':
             case Location::SORT_FIELD_DEPTH:
-                return new SortClause\Location\Depth( $querySortOrder );
+                return new SortClause\Location\Depth($querySortOrder);
 
             //@todo: sort clause not yet implemented
             // case 'class_identifier'
@@ -70,23 +68,23 @@ class SortClauseHelper
 
             case 'priority':
             case Location::SORT_FIELD_PRIORITY:
-                return new SortClause\Location\Priority( $querySortOrder );
+                return new SortClause\Location\Priority($querySortOrder);
 
             case 'name':
             case Location::SORT_FIELD_NAME:
-                return new SortClause\ContentName( $querySortOrder );
+                return new SortClause\ContentName($querySortOrder);
 
             //@todo: sort clause not yet implemented
             // case Location::SORT_FIELD_MODIFIED_SUBNODE:
 
             case Location::SORT_FIELD_NODE_ID:
-                return new SortClause\Location\Id( $querySortOrder );
+                return new SortClause\Location\Id($querySortOrder);
 
             case Location::SORT_FIELD_CONTENTOBJECT_ID:
-                return new SortClause\ContentId( $querySortOrder );
+                return new SortClause\ContentId($querySortOrder);
 
             default:
-                return new SortClause\Location\Path( $querySortOrder );
+                return new SortClause\Location\Path($querySortOrder);
         }
     }
 }

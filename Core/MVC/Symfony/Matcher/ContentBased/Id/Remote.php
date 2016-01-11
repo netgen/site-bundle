@@ -16,9 +16,9 @@ class Remote extends ConfigResolverBased implements MatcherInterface
      *
      * @return bool
      */
-    public function matchLocation( APILocation $location )
+    public function matchLocation(APILocation $location)
     {
-        return $this->doMatch( $location->remoteId );
+        return $this->doMatch($location->remoteId);
     }
 
     /**
@@ -28,8 +28,8 @@ class Remote extends ConfigResolverBased implements MatcherInterface
      *
      * @return bool
      */
-    public function matchContentInfo( ContentInfo $contentInfo )
+    public function matchContentInfo(ContentInfo $contentInfo)
     {
-        return $this->doMatch( $contentInfo->remoteId );
+        return $this->doMatch($contentInfo->remoteId);
     }
 }

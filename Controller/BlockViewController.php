@@ -10,7 +10,6 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\FieldType\Page\Parts\Item;
 
 class BlockViewController extends Controller
@@ -30,19 +29,17 @@ class BlockViewController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewContentGridDynamicBlockById( $id, array $params = array(), array $cacheSettings = array() )
+    public function viewContentGridDynamicBlockById($id, array $params = array(), array $cacheSettings = array())
     {
-        $block = $this->container->get( 'ezpublish.fieldType.ezpage.pageService' )->loadBlock( $id );
-        if ( $block->type !== 'ContentGridDynamic' )
-        {
+        $block = $this->container->get('ezpublish.fieldType.ezpage.pageService')->loadBlock($id);
+        if ($block->type !== 'ContentGridDynamic') {
             throw new InvalidArgumentException(
                 'id',
                 'Block #' . $block->id . ' has an invalid type. Expected "ContentGridDynamic", got "' . $block->type . '"'
             );
         }
 
-        if ( !isset( $block->customAttributes['parent_node'] ) )
-        {
+        if (!isset($block->customAttributes['parent_node'])) {
             throw new InvalidArgumentException(
                 'parent_node',
                 'Block #' . $block->id . ' is missing "parent_node" custom attribute.'
@@ -52,55 +49,49 @@ class BlockViewController extends Controller
         $parentLocationId = $block->customAttributes['parent_node'];
         $repository = $this->getRepository();
         $parentLocation = $repository->sudo(
-            function ( Repository $repository ) use ( $parentLocationId )
-            {
-                return $repository->getLocationService()->loadLocation( $parentLocationId );
+            function (Repository $repository) use ($parentLocationId) {
+                return $repository->getLocationService()->loadLocation($parentLocationId);
             }
         );
 
         $defaultLimit = 10;
-        if ( isset( $params['itemLimit'] ) )
-        {
+        if (isset($params['itemLimit'])) {
             $itemLimit = (int)$params['itemLimit'];
-            if ( $itemLimit > 0 )
-            {
+            if ($itemLimit > 0) {
                 $defaultLimit = $itemLimit;
             }
         }
 
-        $offset = !empty( $block->customAttributes['offset'] ) ? (int)$block->customAttributes['offset'] : 0;
-        $limit = !empty( $block->customAttributes['limit'] ) ? (int)$block->customAttributes['limit'] : $defaultLimit;
+        $offset = !empty($block->customAttributes['offset']) ? (int)$block->customAttributes['offset'] : 0;
+        $limit = !empty($block->customAttributes['limit']) ? (int)$block->customAttributes['limit'] : $defaultLimit;
 
-        $sortField = !empty( $block->customAttributes['advanced_order'] ) ?
+        $sortField = !empty($block->customAttributes['advanced_order']) ?
             $block->customAttributes['advanced_order'] : 'parent_node_sort_array';
 
-        $advancedSortField = !empty( $block->customAttributes['advanced_custom_order'] ) ?
+        $advancedSortField = !empty($block->customAttributes['advanced_custom_order']) ?
             $block->customAttributes['advanced_custom_order'] : '';
 
         $sortOrder = Location::SORT_ORDER_ASC;
-        if ( isset( $block->customAttributes['advanced_order_direction'] )
-             && $block->customAttributes['advanced_order_direction'] == 'desc' )
-        {
+        if (isset($block->customAttributes['advanced_order_direction'])
+             && $block->customAttributes['advanced_order_direction'] == 'desc') {
             $sortOrder = Location::SORT_ORDER_DESC;
         }
 
         $criteria = array(
-            new Criterion\Subtree( $parentLocation->pathString ),
-            new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
-            new Criterion\LogicalNot( new Criterion\LocationId( $parentLocation->id ) )
+            new Criterion\Subtree($parentLocation->pathString),
+            new Criterion\Visibility(Criterion\Visibility::VISIBLE),
+            new Criterion\LogicalNot(new Criterion\LocationId($parentLocation->id)),
         );
 
-        if ( !isset( $block->customAttributes['advanced_fetch_type'] )
-            || $block->customAttributes['advanced_fetch_type'] == 'list' )
-        {
-            $criteria[] = new Criterion\Location\Depth( Criterion\Operator::EQ, $parentLocation->depth + 1 );
+        if (!isset($block->customAttributes['advanced_fetch_type'])
+            || $block->customAttributes['advanced_fetch_type'] == 'list') {
+            $criteria[] = new Criterion\Location\Depth(Criterion\Operator::EQ, $parentLocation->depth + 1);
         }
 
-        if ( !empty( $block->customAttributes['advanced_class_filter_array'] ) )
-        {
+        if (!empty($block->customAttributes['advanced_class_filter_array'])) {
             $contentTypeFilterCriterion = $this->getContentTypeFilterCriterion(
-                explode( ',', $block->customAttributes['advanced_class_filter_array'] ),
-                !empty( $block->customAttributes['advanced_class_filter_type'] ) ?
+                explode(',', $block->customAttributes['advanced_class_filter_array']),
+                !empty($block->customAttributes['advanced_class_filter_type']) ?
                     $block->customAttributes['advanced_class_filter_type'] :
                     'include'
             );
@@ -109,52 +100,51 @@ class BlockViewController extends Controller
         }
 
         $query = new LocationQuery();
-        $query->filter = new Criterion\LogicalAnd( $criteria );
+        $query->filter = new Criterion\LogicalAnd($criteria);
         $query->sortClauses = array(
-            $this->getSortClause( $sortField, $advancedSortField, $sortOrder, $parentLocation )
+            $this->getSortClause($sortField, $advancedSortField, $sortOrder, $parentLocation),
         );
         $query->limit = $limit;
         $query->offset = $offset;
 
-        $result = $this->getRepository()->getSearchService()->findLocations( $query );
+        $result = $this->getRepository()->getSearchService()->findLocations($query);
 
         $validItems = array_map(
-            function ( SearchHit $searchHit ) use ( $block )
-            {
+            function (SearchHit $searchHit) use ($block) {
                 return new Item(
                     array(
                         'blockId' => $block->id,
                         'contentId' => $searchHit->valueObject->contentInfo->id,
-                        'locationId' => $searchHit->valueObject->id
+                        'locationId' => $searchHit->valueObject->id,
                     )
                 );
             },
             $result->searchHits
         );
 
-        $response = $this->container->get( 'ez_page' )->viewBlockById(
+        $response = $this->container->get('ez_page')->viewBlockById(
             $id,
             array(
-                'valid_items' => $validItems
+                'valid_items' => $validItems,
             ) + $params,
             $cacheSettings
         );
 
-        $response->headers->set( 'X-Location-Id', $block->customAttributes['parent_node'] );
+        $response->headers->set('X-Location-Id', $block->customAttributes['parent_node']);
 
         return $response;
     }
 
     /**
      * Returns content type criteria for block, generated from 'advanced_class_filter_type'
-     * and 'advanced_class_filter_array' custom attributes
+     * and 'advanced_class_filter_array' custom attributes.
      *
      * @param array $contentTypeIdentifiers
      * @param string $filterType
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
      */
-    protected function getContentTypeFilterCriterion( array $contentTypeIdentifiers, $filterType )
+    protected function getContentTypeFilterCriterion(array $contentTypeIdentifiers, $filterType)
     {
         $contentTypeCriterion = new Criterion\ContentTypeIdentifier(
             array_map(
@@ -163,9 +153,8 @@ class BlockViewController extends Controller
             )
         );
 
-        if ( $filterType == 'exclude' )
-        {
-            return new Criterion\LogicalNot( $contentTypeCriterion );
+        if ($filterType == 'exclude') {
+            return new Criterion\LogicalNot($contentTypeCriterion);
         }
 
         return $contentTypeCriterion;
@@ -173,7 +162,7 @@ class BlockViewController extends Controller
 
     /**
      * Returns the sort clause for block, collected from 'advanced_order', 'advanced_custom_order'
-     * and 'advanced_order_direction' custom attributes
+     * and 'advanced_order_direction' custom attributes.
      *
      * @param string $sortField
      * @param string $advancedSortField
@@ -184,41 +173,37 @@ class BlockViewController extends Controller
      *
      * @return array
      */
-    protected function getSortClause( $sortField, $advancedSortField, $sortOrder, Location $parentLocation )
+    protected function getSortClause($sortField, $advancedSortField, $sortOrder, Location $parentLocation)
     {
-        $sortClauseHelper = $this->container->get( 'ngmore.helper.sort_clause_helper' );
+        $sortClauseHelper = $this->container->get('ngmore.helper.sort_clause_helper');
 
-        if ( $sortField === 'parent_node_sort_array' )
-        {
+        if ($sortField === 'parent_node_sort_array') {
             return $sortClauseHelper->getSortClauseBySortField(
                 $parentLocation->sortField,
                 $parentLocation->sortOrder
             );
-        }
-        else if ( $sortField === 'attribute' )
-        {
-            $advancedSortFieldArray = explode( '/', $advancedSortField );
-            if ( empty( $advancedSortFieldArray[0] ) || empty( $advancedSortFieldArray[1] ) )
-            {
-                throw new InvalidArgumentException( 'advanced_custom_order', 'Custom sorting field value "' . $advancedSortField . '" is invalid.' );
+        } elseif ($sortField === 'attribute') {
+            $advancedSortFieldArray = explode('/', $advancedSortField);
+            if (empty($advancedSortFieldArray[0]) || empty($advancedSortFieldArray[1])) {
+                throw new InvalidArgumentException('advanced_custom_order', 'Custom sorting field value "' . $advancedSortField . '" is invalid.');
             }
 
             $contentType = $this->getRepository()->getContentTypeService()->loadContentTypeByIdentifier(
                 $advancedSortFieldArray[0]
             );
-            $fieldDefinition = $contentType->getFieldDefinition( $advancedSortFieldArray[1] );
+            $fieldDefinition = $contentType->getFieldDefinition($advancedSortFieldArray[1]);
 
-            $availableLanguages = $this->getConfigResolver()->getParameter( 'languages' );
+            $availableLanguages = $this->getConfigResolver()->getParameter('languages');
             $currentLanguage = $availableLanguages[0];
 
             return new SortClause\Field(
                 $advancedSortFieldArray[0],
                 $advancedSortFieldArray[1],
-                $sortClauseHelper->getQuerySortOrder( $sortOrder ),
+                $sortClauseHelper->getQuerySortOrder($sortOrder),
                 $fieldDefinition->isTranslatable ? $currentLanguage : null
             );
         }
 
-        return $sortClauseHelper->getSortClauseBySortField( $sortField, $sortOrder );
+        return $sortClauseHelper->getSortClauseBySortField($sortField, $sortOrder);
     }
 }

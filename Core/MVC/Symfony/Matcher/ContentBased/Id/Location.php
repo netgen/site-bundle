@@ -16,9 +16,9 @@ class Location extends ConfigResolverBased implements MatcherInterface
      *
      * @return bool
      */
-    public function matchLocation( APILocation $location )
+    public function matchLocation(APILocation $location)
     {
-        return $this->doMatch( $location->id );
+        return $this->doMatch($location->id);
     }
 
     /**
@@ -28,8 +28,8 @@ class Location extends ConfigResolverBased implements MatcherInterface
      *
      * @return bool
      */
-    public function matchContentInfo( ContentInfo $contentInfo )
+    public function matchContentInfo(ContentInfo $contentInfo)
     {
-        return $this->doMatch( $contentInfo->mainLocationId );
+        return $this->doMatch($contentInfo->mainLocationId);
     }
 }

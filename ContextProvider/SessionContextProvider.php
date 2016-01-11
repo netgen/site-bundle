@@ -14,11 +14,11 @@ class SessionContextProvider implements ContextProviderInterface
     protected $session;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
      */
-    public function __construct( SessionInterface $session )
+    public function __construct(SessionInterface $session)
     {
         $this->session = $session;
     }
@@ -30,11 +30,10 @@ class SessionContextProvider implements ContextProviderInterface
      *
      * @param \FOS\HttpCache\UserContext\UserContext $context
      */
-    public function updateUserContext( UserContext $context )
+    public function updateUserContext(UserContext $context)
     {
-        if ( $this->session->isStarted() )
-        {
-            $context->addParameter( 'sessionId', $this->session->getId() );
+        if ($this->session->isStarted()) {
+            $context->addParameter('sessionId', $this->session->getId());
         }
     }
 }

@@ -16,9 +16,9 @@ class ContentTypeGroup extends ConfigResolverBased implements MatcherInterface
      *
      * @return bool
      */
-    public function matchLocation( APILocation $location )
+    public function matchLocation(APILocation $location)
     {
-        return $this->matchContentInfo( $location->getContentInfo() );
+        return $this->matchContentInfo($location->getContentInfo());
     }
 
     /**
@@ -28,17 +28,15 @@ class ContentTypeGroup extends ConfigResolverBased implements MatcherInterface
      *
      * @return bool
      */
-    public function matchContentInfo( ContentInfo $contentInfo )
+    public function matchContentInfo(ContentInfo $contentInfo)
     {
         $contentTypeGroups = $this->repository
             ->getContentTypeService()
-            ->loadContentType( $contentInfo->contentTypeId )
+            ->loadContentType($contentInfo->contentTypeId)
             ->getContentTypeGroups();
 
-        foreach ( $contentTypeGroups as $group )
-        {
-            if ( $this->doMatch( $group->id ) )
-            {
+        foreach ($contentTypeGroups as $group) {
+            if ($this->doMatch($group->id)) {
                 return true;
             }
         }

@@ -19,8 +19,8 @@ abstract class MultipleValued extends RepositoryAware
      *
      * @throws \InvalidArgumentException Should be thrown if $matchingConfig is not valid.
      */
-    public function setMatchingConfig( $matchingConfig )
+    public function setMatchingConfig($matchingConfig)
     {
-        $this->values = !is_array( $matchingConfig ) ? array( $matchingConfig ) : $matchingConfig;
+        $this->values = !is_array($matchingConfig) ? array($matchingConfig) : $matchingConfig;
     }
 }

@@ -3,7 +3,6 @@
 namespace Netgen\Bundle\MoreBundle\Core\FieldType\RelationList;
 
 use eZ\Publish\Core\FieldType\RelationList\Type as BaseRelationListType;
-
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
@@ -28,33 +27,27 @@ class Type extends BaseRelationListType
      *
      * @return \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value The potentially converted and structurally plausible value.
      */
-    protected function createValueFromInput( $inputValue )
+    protected function createValueFromInput($inputValue)
     {
-        if ( is_array( $inputValue ) && isset( $inputValue['relation_list'] ) )
-        {
+        if (is_array($inputValue) && isset($inputValue['relation_list'])) {
             $relationList = $inputValue['relation_list'];
-            if ( !is_array( $relationList ) )
-            {
+            if (!is_array($relationList)) {
                 return $inputValue;
             }
 
             $destinationContentIds = array();
             $destinationLocationIds = array();
 
-            foreach ( $relationList as $relationListItem )
-            {
-                if ( !isset( $relationListItem['content_id'] ) || !isset( $relationListItem['location_id'] ) )
-                {
+            foreach ($relationList as $relationListItem) {
+                if (!isset($relationListItem['content_id']) || !isset($relationListItem['location_id'])) {
                     return $inputValue;
                 }
 
-                if ( is_integer( $relationListItem['content_id'] ) || is_string( $relationListItem['content_id'] ) )
-                {
+                if (is_integer($relationListItem['content_id']) || is_string($relationListItem['content_id'])) {
                     return $inputValue;
                 }
 
-                if ( is_integer( $relationListItem['location_id'] ) || is_string( $relationListItem['location_id'] ) )
-                {
+                if (is_integer($relationListItem['location_id']) || is_string($relationListItem['location_id'])) {
                     return $inputValue;
                 }
 
@@ -62,10 +55,10 @@ class Type extends BaseRelationListType
                 $destinationLocationIds[] = $relationListItem['location_id'];
             }
 
-            return new Value( $destinationContentIds, $destinationLocationIds );
+            return new Value($destinationContentIds, $destinationLocationIds);
         }
 
-        return parent::createValueFromInput( $inputValue );
+        return parent::createValueFromInput($inputValue);
     }
 
     /**
@@ -75,23 +68,20 @@ class Type extends BaseRelationListType
      *
      * @param \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value $value
      */
-    protected function checkValueStructure( BaseValue $value )
+    protected function checkValueStructure(BaseValue $value)
     {
-        parent::checkValueStructure( $value );
+        parent::checkValueStructure($value);
 
-        if ( !is_array( $value->destinationLocationIds ) )
-        {
+        if (!is_array($value->destinationLocationIds)) {
             throw new InvalidArgumentType(
-                "\$value->destinationLocationIds",
+                '$value->destinationLocationIds',
                 'array',
                 $value->destinationLocationIds
             );
         }
 
-        foreach ( $value->destinationLocationIds as $key => $destinationLocationId )
-        {
-            if ( !is_integer( $destinationLocationId ) && !is_string( $destinationLocationId ) )
-            {
+        foreach ($value->destinationLocationIds as $key => $destinationLocationId) {
+            if (!is_integer($destinationLocationId) && !is_string($destinationLocationId)) {
                 throw new InvalidArgumentType(
                     "\$value->destinationLocationIds[$key]",
                     'string|int',
@@ -102,29 +92,29 @@ class Type extends BaseRelationListType
     }
 
     /**
-     * Converts an $hash to the Value defined by the field type
+     * Converts an $hash to the Value defined by the field type.
      *
      * @param mixed $hash
      *
      * @return \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value $value
      */
-    public function fromHash( $hash )
+    public function fromHash($hash)
     {
-        return new Value( $hash['destinationContentIds'], $hash['destinationLocationIds'] );
+        return new Value($hash['destinationContentIds'], $hash['destinationLocationIds']);
     }
 
     /**
-     * Converts a $Value to a hash
+     * Converts a $Value to a hash.
      *
      * @param \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value $value
      *
      * @return mixed
      */
-    public function toHash( SPIValue $value )
+    public function toHash(SPIValue $value)
     {
         return array(
             'destinationContentIds' => $value->destinationContentIds,
-            'destinationLocationIds' => $value->destinationLocationIds
+            'destinationLocationIds' => $value->destinationLocationIds,
         );
     }
 }

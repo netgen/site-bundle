@@ -20,7 +20,7 @@ class AddViewTypeEventListener implements EventSubscriberInterface
      *
      * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
      */
-    public function __construct( RequestStack $requestStack )
+    public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
     }
@@ -33,28 +33,27 @@ class AddViewTypeEventListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            MVCEvents::PRE_CONTENT_VIEW => 'onPreContentView'
+            MVCEvents::PRE_CONTENT_VIEW => 'onPreContentView',
         );
     }
 
     /**
-     * Injects the used view type into the content view template
+     * Injects the used view type into the content view template.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent $event
      */
-    public function onPreContentView( PreContentViewEvent $event )
+    public function onPreContentView(PreContentViewEvent $event)
     {
         $currentRequest = $this->requestStack->getCurrentRequest();
-        if ( !$currentRequest instanceof Request )
-        {
+        if (!$currentRequest instanceof Request) {
             return;
         }
 
-        $viewType = $currentRequest->attributes->get( 'viewType' );
+        $viewType = $currentRequest->attributes->get('viewType');
 
         $event->getContentView()->addParameters(
             array(
-                'viewType' => !empty( $viewType ) ? $viewType : ''
+                'viewType' => !empty($viewType) ? $viewType : '',
             )
         );
     }

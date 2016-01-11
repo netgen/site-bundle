@@ -16,9 +16,9 @@ class Content extends ConfigResolverBased implements MatcherInterface
      *
      * @return bool
      */
-    public function matchLocation( APILocation $location )
+    public function matchLocation(APILocation $location)
     {
-        return $this->doMatch( $location->getContentInfo()->id );
+        return $this->doMatch($location->getContentInfo()->id);
     }
 
     /**
@@ -28,8 +28,8 @@ class Content extends ConfigResolverBased implements MatcherInterface
      *
      * @return bool
      */
-    public function matchContentInfo( ContentInfo $contentInfo )
+    public function matchContentInfo(ContentInfo $contentInfo)
     {
-        return $this->doMatch( $contentInfo->id );
+        return $this->doMatch($contentInfo->id);
     }
 }

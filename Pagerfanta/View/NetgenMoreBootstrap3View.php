@@ -8,7 +8,7 @@ use Pagerfanta\View\TwitterBootstrap3View;
 class NetgenMoreBootstrap3View extends TwitterBootstrap3View
 {
     /**
-     * Returns the default template to render with
+     * Returns the default template to render with.
      *
      * @return \Pagerfanta\View\Template\TemplateInterface
      */
@@ -18,7 +18,7 @@ class NetgenMoreBootstrap3View extends TwitterBootstrap3View
     }
 
     /**
-     * Sets the default proximity
+     * Sets the default proximity.
      *
      * @return int
      */

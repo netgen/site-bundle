@@ -14,15 +14,15 @@ class FieldLength extends Field
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
-     * @return boolean
+     * @return bool
      */
-    public function accept( SortClause $sortClause )
+    public function accept(SortClause $sortClause)
     {
         return $sortClause instanceof APIFieldLength;
     }
 
     /**
-     * Apply selects to the query
+     * Apply selects to the query.
      *
      * Returns the name of the (aliased) column, which information should be
      * used for sorting.
@@ -33,13 +33,12 @@ class FieldLength extends Field
      *
      * @return string
      */
-    public function applySelect( SelectQuery $query, SortClause $sortClause, $number )
+    public function applySelect(SelectQuery $query, SortClause $sortClause, $number)
     {
-        $columns = parent::applySelect( $query, $sortClause, $number );
+        $columns = parent::applySelect($query, $sortClause, $number);
 
         return array_map(
-            function( $column )
-            {
+            function ($column) {
                 return 'LENGTH( ' . $column . ' )';
             },
             $columns

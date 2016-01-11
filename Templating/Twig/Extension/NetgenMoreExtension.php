@@ -207,6 +207,8 @@ class NetgenMoreExtension extends Twig_Extension
     /**
      * Returns the translated field
      *
+     * @deprecated Replaced by ez_field as of 2014.12.2
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param string $fieldDefIdentifier Identifier for the field we want to get.
      * @param string $forcedLanguage Locale we want the field in (e.g. "cro-HR"). Null by default (takes current locale).

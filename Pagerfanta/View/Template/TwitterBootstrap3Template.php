@@ -7,7 +7,7 @@ use Pagerfanta\View\Template\TwitterBootstrap3Template as BaseTwitterBootstrap3T
 class TwitterBootstrap3Template extends BaseTwitterBootstrap3Template
 {
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -16,7 +16,7 @@ class TwitterBootstrap3Template extends BaseTwitterBootstrap3Template
         $this->setOptions(
             array(
                 'prev_message' => '&laquo;',
-                'next_message' => '&raquo;'
+                'next_message' => '&raquo;',
             )
         );
     }
@@ -34,7 +34,7 @@ class TwitterBootstrap3Template extends BaseTwitterBootstrap3Template
     }
 
     /**
-     * Returns HTML code for previous link when it is disabled
+     * Returns HTML code for previous link when it is disabled.
      *
      * @return string
      */
@@ -44,7 +44,7 @@ class TwitterBootstrap3Template extends BaseTwitterBootstrap3Template
     }
 
     /**
-     * Returns HTML code for next link when it is disabled
+     * Returns HTML code for next link when it is disabled.
      *
      * @return string
      */

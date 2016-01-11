@@ -20,21 +20,21 @@ class InvisibleLocationsListener implements EventSubscriberInterface
     protected $showInvisibleLocations = false;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      */
-    public function __construct( Repository $repository )
+    public function __construct(Repository $repository)
     {
         $this->repository = $repository;
     }
 
     /**
-     * Sets if invisible locations should be shown
+     * Sets if invisible locations should be shown.
      *
      * @param bool $showInvisibleLocations
      */
-    public function setShowInvisibleLocations( $showInvisibleLocations = false )
+    public function setShowInvisibleLocations($showInvisibleLocations = false)
     {
         $this->showInvisibleLocations = (bool)$showInvisibleLocations;
     }
@@ -48,30 +48,29 @@ class InvisibleLocationsListener implements EventSubscriberInterface
     {
         // Priority must be below zero to execute after the original RequestAttributes listener
         return array(
-            ViewEvents::FILTER_BUILDER_PARAMETERS => array( 'onFilterBuilderParameters', -10 )
+            ViewEvents::FILTER_BUILDER_PARAMETERS => array('onFilterBuilderParameters', -10),
         );
     }
 
     /**
-     * Injects the invisible location if configured so
+     * Injects the invisible location if configured so.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\View\Event\FilterViewBuilderParametersEvent $event
      */
-    public function onFilterBuilderParameters( FilterViewBuilderParametersEvent $event )
+    public function onFilterBuilderParameters(FilterViewBuilderParametersEvent $event)
     {
         $parameters = $event->getParameters();
-        if ( !$this->showInvisibleLocations || !$parameters->has( 'locationId' ) )
-        {
+        if (!$this->showInvisibleLocations || !$parameters->has('locationId')) {
             return;
         }
 
         $location = $this->repository->getLocationService()->loadLocation(
-            $parameters->get( 'locationId' )
+            $parameters->get('locationId')
         );
 
-        $parameters->set( 'location', $location );
+        $parameters->set('location', $location);
 
         // We remove 'locationId' parameter to disable original check for visibility
-        $parameters->remove( 'locationId' );
+        $parameters->remove('locationId');
     }
 }

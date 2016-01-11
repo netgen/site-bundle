@@ -48,7 +48,7 @@ class NetgenMoreView implements ViewInterface
      *
      * @param \Twig_Environment $twig
      */
-    public function __construct( Twig_Environment $twig )
+    public function __construct(Twig_Environment $twig)
     {
         $this->twig = $twig;
     }
@@ -58,7 +58,7 @@ class NetgenMoreView implements ViewInterface
      *
      * @param string $template
      */
-    public function setDefaultTemplate( $template )
+    public function setDefaultTemplate($template)
     {
         $this->template = $template;
     }
@@ -86,31 +86,31 @@ class NetgenMoreView implements ViewInterface
      *
      * @return string
      */
-    public function render( PagerfantaInterface $pagerfanta, $routeGenerator, array $options = array() )
+    public function render(PagerfantaInterface $pagerfanta, $routeGenerator, array $options = array())
     {
         $this->pagerfanta = $pagerfanta;
         $this->routeGenerator = $routeGenerator;
 
-        $this->initializeProximity( $options );
+        $this->initializeProximity($options);
         $this->calculateStartAndEndPage();
 
         return $this->twig->render(
-            isset( $options['template'] ) ? $options['template'] : $this->template,
+            isset($options['template']) ? $options['template'] : $this->template,
             array(
                 'pager' => $pagerfanta,
-                'pages' => $this->getPages()
+                'pages' => $this->getPages(),
             )
         );
     }
 
     /**
-     * Initializes the proximity
+     * Initializes the proximity.
      *
      * @param array $options
      */
-    protected function initializeProximity( $options )
+    protected function initializeProximity($options)
     {
-        $this->proximity = isset( $options['proximity'] ) ?
+        $this->proximity = isset($options['proximity']) ?
             (int)$options['proximity'] :
             2;
     }
@@ -126,15 +126,13 @@ class NetgenMoreView implements ViewInterface
         $startPage = $currentPage - $this->proximity;
         $endPage = $currentPage + $this->proximity;
 
-        if ( $startPage < 1 )
-        {
-            $endPage = $this->calculateEndPageForStartPageUnderflow( $startPage, $endPage, $nbPages );
+        if ($startPage < 1) {
+            $endPage = $this->calculateEndPageForStartPageUnderflow($startPage, $endPage, $nbPages);
             $startPage = 1;
         }
 
-        if ( $endPage > $nbPages )
-        {
-            $startPage = $this->calculateStartPageForEndPageOverflow( $startPage, $endPage, $nbPages );
+        if ($endPage > $nbPages) {
+            $startPage = $this->calculateStartPageForEndPageOverflow($startPage, $endPage, $nbPages);
             $endPage = $nbPages;
         }
 
@@ -151,9 +149,9 @@ class NetgenMoreView implements ViewInterface
      *
      * @return int
      */
-    protected function calculateEndPageForStartPageUnderflow( $startPage, $endPage, $nbPages )
+    protected function calculateEndPageForStartPageUnderflow($startPage, $endPage, $nbPages)
     {
-        return min( $endPage + ( 1 - $startPage ), $nbPages );
+        return min($endPage + (1 - $startPage), $nbPages);
     }
 
     /**
@@ -165,9 +163,9 @@ class NetgenMoreView implements ViewInterface
      *
      * @return int
      */
-    protected function calculateStartPageForEndPageOverflow( $startPage, $endPage, $nbPages )
+    protected function calculateStartPageForEndPageOverflow($startPage, $endPage, $nbPages)
     {
-        return max( $startPage - ( $endPage - $nbPages ), 1 );
+        return max($startPage - ($endPage - $nbPages), 1);
     }
 
     /**
@@ -180,20 +178,19 @@ class NetgenMoreView implements ViewInterface
         $pages = array();
 
         $pages['previous_page'] = $this->pagerfanta->hasPreviousPage() ?
-            $this->generateUrl( $this->pagerfanta->getPreviousPage() ) :
+            $this->generateUrl($this->pagerfanta->getPreviousPage()) :
             false;
 
-        $pages['first_page'] = $this->startPage > 1 ? $this->generateUrl( 1 ) : false;
-        $pages['mobile_first_page'] = $this->pagerfanta->getCurrentPage() > 2 ? $this->generateUrl( 1 ) : false;
+        $pages['first_page'] = $this->startPage > 1 ? $this->generateUrl(1) : false;
+        $pages['mobile_first_page'] = $this->pagerfanta->getCurrentPage() > 2 ? $this->generateUrl(1) : false;
 
-        $pages['second_page'] = $this->startPage == 3 ? $this->generateUrl( 2 ) : false;
+        $pages['second_page'] = $this->startPage == 3 ? $this->generateUrl(2) : false;
 
         $pages['separator_before'] = $this->startPage > 3 ? true : false;
 
         $middlePages = array();
-        for ( $i = $this->startPage, $end = $this->endPage; $i <= $end; $i++ )
-        {
-            $middlePages[$i] = $this->generateUrl( $i );
+        for ($i = $this->startPage, $end = $this->endPage; $i <= $end; ++$i) {
+            $middlePages[$i] = $this->generateUrl($i);
         }
 
         $pages['middle_pages'] = $middlePages;
@@ -201,26 +198,26 @@ class NetgenMoreView implements ViewInterface
         $pages['separator_after'] = $this->endPage < $this->pagerfanta->getNbPages() - 2 ? true : false;
 
         $pages['second_to_last_page'] = $this->endPage == $this->pagerfanta->getNbPages() - 2 ?
-            $this->generateUrl( $this->pagerfanta->getNbPages() - 1 ) :
+            $this->generateUrl($this->pagerfanta->getNbPages() - 1) :
             false;
 
         $pages['last_page'] = $this->pagerfanta->getNbPages() > $this->endPage ?
-            $this->generateUrl( $this->pagerfanta->getNbPages() ) :
+            $this->generateUrl($this->pagerfanta->getNbPages()) :
             false;
 
         $pages['mobile_last_page'] = $this->pagerfanta->getCurrentPage() < $this->pagerfanta->getNbPages() - 1 ?
-            $this->generateUrl( $this->pagerfanta->getNbPages() ) :
+            $this->generateUrl($this->pagerfanta->getNbPages()) :
             false;
 
         $pages['next_page'] = $this->pagerfanta->hasNextPage() ?
-            $this->generateUrl( $this->pagerfanta->getNextPage() ) :
+            $this->generateUrl($this->pagerfanta->getNextPage()) :
             false;
 
         return $pages;
     }
 
     /**
-     * Generates the URL based on provided page
+     * Generates the URL based on provided page.
      *
      * @param int $page
      *
@@ -232,6 +229,6 @@ class NetgenMoreView implements ViewInterface
 
         // We use trim here because Pagerfanta (or Symfony?) adds an extra '?'
         // at the end of page when there are no other query params
-        return trim( $routeGenerator( $page ), '?' );
+        return trim($routeGenerator($page), '?');
     }
 }

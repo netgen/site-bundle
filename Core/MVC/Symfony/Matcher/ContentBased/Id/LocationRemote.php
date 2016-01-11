@@ -17,19 +17,17 @@ class LocationRemote extends ConfigResolverBased implements ViewMatcherInterface
      *
      * @return bool
      */
-    public function match( View $view )
+    public function match(View $view)
     {
-        if ( !$view instanceof LocationValueView )
-        {
+        if (!$view instanceof LocationValueView) {
             return false;
         }
 
         $location = $view->getLocation();
-        if ( !$location instanceof APILocation )
-        {
+        if (!$location instanceof APILocation) {
             return false;
         }
 
-        return $this->doMatch( $location->remoteId );
+        return $this->doMatch($location->remoteId);
     }
 }

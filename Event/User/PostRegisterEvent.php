@@ -15,7 +15,7 @@ class PostRegisterEvent extends Event
     /**
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      */
-    public function __construct( User $user )
+    public function __construct(User $user)
     {
         $this->user = $user;
     }

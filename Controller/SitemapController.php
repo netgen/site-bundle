@@ -8,24 +8,24 @@ use Symfony\Component\HttpFoundation\Response;
 class SitemapController extends Controller
 {
     /**
-     * Fetches sitemap items and renders them
+     * Fetches sitemap items and renders them.
      *
      * @param string $template
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewSitemap( $template = null )
+    public function viewSitemap($template = null)
     {
         $sitemapItems = array();
 
         $response = new Response();
 
-        $response->setPublic()->setSharedMaxAge( 86400 );
+        $response->setPublic()->setSharedMaxAge(86400);
         $response->setContent(
             $this->render(
                 $template !== null ? $template : 'NetgenMoreBundle::sitemap.html.twig',
                 array(
-                    'items' => $sitemapItems
+                    'items' => $sitemapItems,
                 )
             )
         );

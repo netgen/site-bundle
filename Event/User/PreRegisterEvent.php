@@ -15,7 +15,7 @@ class PreRegisterEvent extends Event
     /**
      * @param \eZ\Publish\API\Repository\Values\User\UserCreateStruct $userCreateStruct
      */
-    public function __construct( UserCreateStruct $userCreateStruct )
+    public function __construct(UserCreateStruct $userCreateStruct)
     {
         $this->userCreateStruct = $userCreateStruct;
     }
@@ -23,7 +23,7 @@ class PreRegisterEvent extends Event
     /**
      * @param \eZ\Publish\API\Repository\Values\User\UserCreateStruct $userCreateStruct
      */
-    public function setUserCreateStruct( UserCreateStruct $userCreateStruct )
+    public function setUserCreateStruct(UserCreateStruct $userCreateStruct)
     {
         $this->userCreateStruct = $userCreateStruct;
     }

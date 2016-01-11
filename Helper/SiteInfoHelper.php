@@ -34,7 +34,7 @@ class SiteInfoHelper
     protected $siteInfoContent;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
@@ -44,24 +44,22 @@ class SiteInfoHelper
         LocationService $locationService,
         ContentService $contentService,
         ConfigResolverInterface $configResolver
-    )
-    {
+    ) {
         $this->locationService = $locationService;
         $this->contentService = $contentService;
         $this->configResolver = $configResolver;
     }
 
     /**
-     * Returns the SiteInfo location
+     * Returns the SiteInfo location.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
     public function getSiteInfoLocation()
     {
-        if ( $this->siteInfoLocation === null )
-        {
+        if ($this->siteInfoLocation === null) {
             $this->siteInfoLocation = $this->locationService->loadLocation(
-                $this->configResolver->getParameter( 'locations.site_info.id', 'ngmore' )
+                $this->configResolver->getParameter('locations.site_info.id', 'ngmore')
             );
         }
 
@@ -69,17 +67,15 @@ class SiteInfoHelper
     }
 
     /**
-     * Returns the SiteInfo content
+     * Returns the SiteInfo content.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
     public function getSiteInfoContent()
     {
-        if ( $this->siteInfoContent === null )
-        {
+        if ($this->siteInfoContent === null) {
             $siteInfoLocation = $this->getSiteInfoLocation();
-            if ( $siteInfoLocation !== null )
-            {
+            if ($siteInfoLocation !== null) {
                 $this->siteInfoContent = $this->contentService->loadContent(
                     $siteInfoLocation->contentId
                 );

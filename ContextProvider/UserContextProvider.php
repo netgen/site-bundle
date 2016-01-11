@@ -14,11 +14,11 @@ class UserContextProvider implements ContextProviderInterface
     protected $repository;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      */
-    public function __construct( Repository $repository )
+    public function __construct(Repository $repository)
     {
         $this->repository = $repository;
     }
@@ -30,8 +30,8 @@ class UserContextProvider implements ContextProviderInterface
      *
      * @param \FOS\HttpCache\UserContext\UserContext $context
      */
-    public function updateUserContext( UserContext $context )
+    public function updateUserContext(UserContext $context)
     {
-        $context->addParameter( 'userId', $this->repository->getCurrentUser()->id );
+        $context->addParameter('userId', $this->repository->getCurrentUser()->id);
     }
 }

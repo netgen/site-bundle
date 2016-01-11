@@ -16,13 +16,12 @@ class Zone extends ConfigResolverBased implements ViewMatcherInterface
      *
      * @return bool
      */
-    public function match( View $view )
+    public function match(View $view)
     {
-        if ( !$view instanceof BlockValueView )
-        {
+        if (!$view instanceof BlockValueView) {
             return false;
         }
 
-        return $this->doMatch( $view->getBlock()->zoneId );
+        return $this->doMatch($view->getBlock()->zoneId);
     }
 }

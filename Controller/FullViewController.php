@@ -18,64 +18,60 @@ use Pagerfanta\Pagerfanta;
 class FullViewController extends Controller
 {
     /**
-     * Action for viewing content with ng_category content type identifier
+     * Action for viewing content with ng_category content type identifier.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param \eZ\Publish\Core\MVC\Symfony\View\ContentView $view
      *
      * @return \Symfony\Component\HttpFoundation\Response|\eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
-    public function viewNgCategory( Request $request, ContentView $view )
+    public function viewNgCategory(Request $request, ContentView $view)
     {
         $content = $view->getContent();
         $location = $view->getLocation();
-        if ( !$location instanceof Location )
-        {
+        if (!$location instanceof Location) {
             $location = $this->getRepository()->getLocationService()->loadLocation(
                 $content->contentInfo->mainLocationId
             );
         }
 
-        $response = $this->checkCategoryRedirect( $location );
-        if ( $response instanceof Response )
-        {
+        $response = $this->checkCategoryRedirect($location);
+        if ($response instanceof Response) {
             return $response;
         }
 
-        $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
-        $translationHelper = $this->container->get( 'ezpublish.translation_helper' );
+        $fieldHelper = $this->container->get('ezpublish.field_helper');
+        $translationHelper = $this->container->get('ezpublish.translation_helper');
 
         $criteria = array(
-            new Criterion\Subtree( $location->pathString ),
-            new Criterion\Visibility( Criterion\Visibility::VISIBLE ),
-            new Criterion\LogicalNot( new Criterion\LocationId( $location->id ) )
+            new Criterion\Subtree($location->pathString),
+            new Criterion\Visibility(Criterion\Visibility::VISIBLE),
+            new Criterion\LogicalNot(new Criterion\LocationId($location->id)),
         );
 
-        $fetchSubtreeValue = $translationHelper->getTranslatedField( $content, 'fetch_subtree' )->value;
-        if ( !$fetchSubtreeValue->bool )
-        {
-            $criteria[] = new Criterion\Location\Depth( Criterion\Operator::EQ, $location->depth + 1 );
+        $fetchSubtreeValue = $translationHelper->getTranslatedField($content, 'fetch_subtree')->value;
+        if (!$fetchSubtreeValue->bool) {
+            $criteria[] = new Criterion\Location\Depth(Criterion\Operator::EQ, $location->depth + 1);
         }
 
-        if ( !$fieldHelper->isFieldEmpty( $content, 'children_class_filter_include' ) )
-        {
-            $contentTypeFilter = $translationHelper->getTranslatedField( $content, 'children_class_filter_include' )->value;
+        if (!$fieldHelper->isFieldEmpty($content, 'children_class_filter_include')) {
+            $contentTypeFilter = $translationHelper->getTranslatedField($content, 'children_class_filter_include')->value;
             $criteria[] = new Criterion\ContentTypeIdentifier(
                 array_map(
                     'trim',
-                    explode( ',', $contentTypeFilter )
+                    explode(',', $contentTypeFilter)
                 )
             );
         }
 
         $query = new LocationQuery();
-        $query->filter = new Criterion\LogicalAnd( $criteria );
+        $query->filter = new Criterion\LogicalAnd($criteria);
 
         $query->sortClauses = array(
-            $this->container->get( 'ngmore.helper.sort_clause_helper' )->getSortClauseBySortField(
+            $this->container->get('ngmore.helper.sort_clause_helper')->getSortClauseBySortField(
                 $location->sortField,
                 $location->sortOrder
-            )
+            ),
         );
 
         $pager = new Pagerfanta(
@@ -85,29 +81,27 @@ class FullViewController extends Controller
             )
         );
 
-        $pager->setNormalizeOutOfRangePages( true );
+        $pager->setNormalizeOutOfRangePages(true);
 
         /** @var \eZ\Publish\Core\FieldType\Integer\Value $pageLimitValue */
-        $pageLimitValue = $translationHelper->getTranslatedField( $content, 'page_limit' )->value;
+        $pageLimitValue = $translationHelper->getTranslatedField($content, 'page_limit')->value;
 
         $defaultLimit = 12;
-        if ( isset( $params['childrenLimit'] ) )
-        {
+        if (isset($params['childrenLimit'])) {
             $childrenLimit = (int)$params['childrenLimit'];
-            if ( $childrenLimit > 0 )
-            {
+            if ($childrenLimit > 0) {
                 $defaultLimit = $childrenLimit;
             }
         }
 
-        $pager->setMaxPerPage( $pageLimitValue->value > 0 ? (int)$pageLimitValue->value : $defaultLimit );
+        $pager->setMaxPerPage($pageLimitValue->value > 0 ? (int)$pageLimitValue->value : $defaultLimit);
 
-        $currentPage = (int)$request->get( 'page', 1 );
-        $pager->setCurrentPage( $currentPage > 0 ? $currentPage : 1 );
+        $currentPage = (int)$request->get('page', 1);
+        $pager->setCurrentPage($currentPage > 0 ? $currentPage : 1);
 
         $view->addParameters(
             array(
-                'pager' => $pager
+                'pager' => $pager,
             )
         );
 
@@ -115,50 +109,47 @@ class FullViewController extends Controller
     }
 
     /**
-     * Action for viewing content with ng_landing_page content type identifier
+     * Action for viewing content with ng_landing_page content type identifier.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\View\ContentView $view
      *
      * @return \Symfony\Component\HttpFoundation\Response|\eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
-    public function viewNgLandingPage( ContentView $view )
+    public function viewNgLandingPage(ContentView $view)
     {
         $location = $view->getLocation();
-        if ( !$location instanceof Location )
-        {
+        if (!$location instanceof Location) {
             $location = $this->getRepository()->getLocationService()->loadLocation(
                 $view->getContent()->contentInfo->mainLocationId
             );
         }
 
-        $response = $this->checkCategoryRedirect( $location );
-        if ( $response instanceof Response )
-        {
+        $response = $this->checkCategoryRedirect($location);
+        if ($response instanceof Response) {
             return $response;
         }
+
         return $view;
     }
 
     /**
-     * Action for viewing content with ng_category_page content type identifier
+     * Action for viewing content with ng_category_page content type identifier.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\View\ContentView $view
      *
      * @return \Symfony\Component\HttpFoundation\Response|\eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
-    public function viewNgCategoryPage( ContentView $view )
+    public function viewNgCategoryPage(ContentView $view)
     {
         $location = $view->getLocation();
-        if ( !$location instanceof Location )
-        {
+        if (!$location instanceof Location) {
             $location = $this->getRepository()->getLocationService()->loadLocation(
                 $view->getContent()->contentInfo->mainLocationId
             );
         }
 
-        $response = $this->checkCategoryRedirect( $location );
-        if ( $response instanceof Response )
-        {
+        $response = $this->checkCategoryRedirect($location);
+        if ($response instanceof Response) {
             return $response;
         }
 
@@ -167,47 +158,42 @@ class FullViewController extends Controller
 
     /**
      * Checks if content at location defined by it's ID contains
-     * valid category redirect value and returns a redirect response if it does
+     * valid category redirect value and returns a redirect response if it does.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function checkCategoryRedirect( Location $location )
+    protected function checkCategoryRedirect(Location $location)
     {
         $contentService = $this->getRepository()->getContentService();
-        $content = $contentService->loadContent( $location->contentId );
+        $content = $contentService->loadContent($location->contentId);
 
-        $fieldHelper = $this->container->get( 'ezpublish.field_helper' );
-        $translationHelper = $this->container->get( 'ezpublish.translation_helper' );
+        $fieldHelper = $this->container->get('ezpublish.field_helper');
+        $translationHelper = $this->container->get('ezpublish.translation_helper');
 
-        $internalRedirectValue = $translationHelper->getTranslatedField( $content, 'internal_redirect' )->value;
-        $externalRedirectValue = $translationHelper->getTranslatedField( $content, 'external_redirect' )->value;
-        if ( $internalRedirectValue instanceof RelationValue && !$fieldHelper->isFieldEmpty( $content, 'internal_redirect' ) )
-        {
-            $internalRedirectContentInfo = $contentService->loadContentInfo( $internalRedirectValue->destinationContentId );
-            if ( $internalRedirectContentInfo->mainLocationId != $location->id )
-            {
+        $internalRedirectValue = $translationHelper->getTranslatedField($content, 'internal_redirect')->value;
+        $externalRedirectValue = $translationHelper->getTranslatedField($content, 'external_redirect')->value;
+        if ($internalRedirectValue instanceof RelationValue && !$fieldHelper->isFieldEmpty($content, 'internal_redirect')) {
+            $internalRedirectContentInfo = $contentService->loadContentInfo($internalRedirectValue->destinationContentId);
+            if ($internalRedirectContentInfo->mainLocationId != $location->id) {
                 return new RedirectResponse(
-                    $this->container->get( 'router' )->generate( $internalRedirectContentInfo ),
+                    $this->container->get('router')->generate($internalRedirectContentInfo),
                     RedirectResponse::HTTP_MOVED_PERMANENTLY
                 );
             }
-        }
-        else if ( $externalRedirectValue instanceof UrlValue && !$fieldHelper->isFieldEmpty( $content, 'external_redirect' ) )
-        {
-            if ( stripos( $externalRedirectValue->link, 'http' ) === 0 )
-            {
-                return new RedirectResponse( $externalRedirectValue->link, RedirectResponse::HTTP_MOVED_PERMANENTLY );
+        } elseif ($externalRedirectValue instanceof UrlValue && !$fieldHelper->isFieldEmpty($content, 'external_redirect')) {
+            if (stripos($externalRedirectValue->link, 'http') === 0) {
+                return new RedirectResponse($externalRedirectValue->link, RedirectResponse::HTTP_MOVED_PERMANENTLY);
             }
 
             return new RedirectResponse(
-                $this->container->get( 'router' )->generate(
+                $this->container->get('router')->generate(
                     'ez_urlalias',
                     array(
-                        'locationId' => $this->getConfigResolver()->getParameter( 'content.tree_root.location_id' )
+                        'locationId' => $this->getConfigResolver()->getParameter('content.tree_root.location_id'),
                     )
-                ) . trim( $externalRedirectValue->link, '/' ),
+                ) . trim($externalRedirectValue->link, '/'),
                 RedirectResponse::HTTP_MOVED_PERMANENTLY
             );
         }

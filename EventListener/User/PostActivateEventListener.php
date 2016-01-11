@@ -17,7 +17,7 @@ class PostActivateEventListener extends UserEventListener implements EventSubscr
     public static function getSubscribedEvents()
     {
         return array(
-            MVCEvents::USER_POST_ACTIVATE => 'onPostActivate'
+            MVCEvents::USER_POST_ACTIVATE => 'onPostActivate',
         );
     }
 
@@ -27,20 +27,20 @@ class PostActivateEventListener extends UserEventListener implements EventSubscr
      *
      * @param \Netgen\Bundle\MoreBundle\Event\User\PostActivateEvent $event
      */
-    public function onPostActivate( PostActivateEvent $event )
+    public function onPostActivate(PostActivateEvent $event)
     {
         $user = $event->getUser();
 
-        $this->ezUserAccountKeyRepository->removeByUserId( $user->id );
-        $this->ngUserSettingRepository->activateUser( $user->id );
+        $this->ezUserAccountKeyRepository->removeByUserId($user->id);
+        $this->ngUserSettingRepository->activateUser($user->id);
 
         $this->mailHelper
             ->sendMail(
-                array( $user->email => $this->translationHelper->getTranslatedContentName( $user ) ),
+                array($user->email => $this->translationHelper->getTranslatedContentName($user)),
                 'ngmore.user.welcome.subject',
-                $this->configResolver->getParameter( 'template.user.mail.welcome', 'ngmore' ),
+                $this->configResolver->getParameter('template.user.mail.welcome', 'ngmore'),
                 array(
-                    'user' => $user
+                    'user' => $user,
                 )
             );
     }

@@ -8,16 +8,16 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specificat
 class Field extends BaseField
 {
     /**
-     * Constant designating the reverse like match: criterionValue LIKE CONCAT( fieldValue, '%' )
+     * Constant designating the reverse like match: criterionValue LIKE CONCAT( fieldValue, '%' ).
      *
      * @const string
      */
-    const REVERSE_LIKE = "reverse_like";
+    const REVERSE_LIKE = 'reverse_like';
 
     public function getSpecifications()
     {
         $specifications = parent::getSpecifications();
-        $specifications[] = new Specifications( self::REVERSE_LIKE, Specifications::FORMAT_SINGLE );
+        $specifications[] = new Specifications(self::REVERSE_LIKE, Specifications::FORMAT_SINGLE);
 
         return $specifications;
     }

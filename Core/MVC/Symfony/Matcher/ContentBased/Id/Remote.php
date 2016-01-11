@@ -16,13 +16,12 @@ class Remote extends ConfigResolverBased implements ViewMatcherInterface
      *
      * @return bool
      */
-    public function match( View $view )
+    public function match(View $view)
     {
-        if ( !$view instanceof ContentView )
-        {
+        if (!$view instanceof ContentView) {
             return false;
         }
 
-        return $this->doMatch( $view->getContent()->contentInfo->remoteId );
+        return $this->doMatch($view->getContent()->contentInfo->remoteId);
     }
 }

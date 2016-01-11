@@ -16,32 +16,28 @@ class RemoveDefaultImageAliasesPass implements CompilerPassInterface
      *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function process( ContainerBuilder $container )
+    public function process(ContainerBuilder $container)
     {
         $scopes = array_merge(
-            array( ConfigResolver::SCOPE_DEFAULT ),
-            $container->getParameter( 'ezpublish.siteaccess.list' )
+            array(ConfigResolver::SCOPE_DEFAULT),
+            $container->getParameter('ezpublish.siteaccess.list')
         );
 
-        foreach ( $scopes as $scope )
-        {
-            if ( !$container->hasParameter( "ezsettings.$scope.image_variations" ) )
-            {
+        foreach ($scopes as $scope) {
+            if (!$container->hasParameter("ezsettings.$scope.image_variations")) {
                 continue;
             }
 
-            $imageVariations = $container->getParameter( "ezsettings.$scope.image_variations" );
+            $imageVariations = $container->getParameter("ezsettings.$scope.image_variations");
 
-            unset($imageVariations["reference"]);
-            foreach ( $imageVariations as $variationName => $variation )
-            {
-                if ( $variation["reference"] === "reference" )
-                {
-                    unset( $imageVariations[$variationName] );
+            unset($imageVariations['reference']);
+            foreach ($imageVariations as $variationName => $variation) {
+                if ($variation['reference'] === 'reference') {
+                    unset($imageVariations[$variationName]);
                 }
             }
 
-            $container->setParameter( "ezsettings.$scope.image_variations", $imageVariations );
+            $container->setParameter("ezsettings.$scope.image_variations", $imageVariations);
         }
     }
 }

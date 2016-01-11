@@ -10,14 +10,14 @@ use Netgen\Bundle\MoreBundle\DependencyInjection\Compiler\RemoveDefaultImageAlia
 class NetgenMoreBundle extends Bundle
 {
     /**
-     * Builds the bundle
+     * Builds the bundle.
      *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function build( ContainerBuilder $container )
+    public function build(ContainerBuilder $container)
     {
-        parent::build( $container );
-        $container->addCompilerPass( new XslRegisterPass() );
-        $container->addCompilerPass( new RemoveDefaultImageAliasesPass() );
+        parent::build($container);
+        $container->addCompilerPass(new XslRegisterPass());
+        $container->addCompilerPass(new RemoveDefaultImageAliasesPass());
     }
 }

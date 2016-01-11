@@ -16,13 +16,12 @@ class Block extends ConfigResolverBased implements ViewMatcherInterface
      *
      * @return bool
      */
-    public function match( View $view )
+    public function match(View $view)
     {
-        if ( !$view instanceof BlockValueView )
-        {
+        if (!$view instanceof BlockValueView) {
             return false;
         }
 
-        return $this->doMatch( $view->getBlock()->id );
+        return $this->doMatch($view->getBlock()->id);
     }
 }

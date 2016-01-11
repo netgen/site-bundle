@@ -60,8 +60,7 @@ class EzLinkDirectDownload implements Converter
         TranslationHelper $translationHelper,
         FieldHelper $fieldHelper,
         LoggerInterface $logger = null
-    )
-    {
+    ) {
         $this->locationService = $locationService;
         $this->contentService = $contentService;
         $this->router = $router;
@@ -77,105 +76,81 @@ class EzLinkDirectDownload implements Converter
      *
      * @return string|null
      */
-    public function convert( DOMDocument $xmlDoc )
+    public function convert(DOMDocument $xmlDoc)
     {
-        foreach ( $xmlDoc->getElementsByTagName( "link" ) as $link )
-        {
-            if ( !$link->hasAttribute( 'custom:file' ) )
-            {
+        foreach ($xmlDoc->getElementsByTagName('link') as $link) {
+            if (!$link->hasAttribute('custom:file')) {
                 continue;
             }
 
             $content = null;
             $location = null;
 
-            if ( $link->hasAttribute( 'object_id' ) )
-            {
-                try
-                {
-                    $content = $this->contentService->loadContent( $link->getAttribute( 'object_id' ) );
-                    $location = $this->locationService->loadLocation( $content->contentInfo->mainLocationId );
-                }
-                catch ( NotFoundException $e )
-                {
-                    if ( $this->logger )
-                    {
+            if ($link->hasAttribute('object_id')) {
+                try {
+                    $content = $this->contentService->loadContent($link->getAttribute('object_id'));
+                    $location = $this->locationService->loadLocation($content->contentInfo->mainLocationId);
+                } catch (NotFoundException $e) {
+                    if ($this->logger) {
                         $this->logger->warning(
-                            "While generating links for xmltext, could not locate " .
-                            "Content object with ID " . $link->getAttribute( 'object_id' )
+                            'While generating links for xmltext, could not locate ' .
+                            'Content object with ID ' . $link->getAttribute('object_id')
                         );
                     }
-                }
-                catch ( UnauthorizedException $e )
-                {
-                    if ( $this->logger )
-                    {
+                } catch (UnauthorizedException $e) {
+                    if ($this->logger) {
                         $this->logger->notice(
-                            "While generating links for xmltext, unauthorized to load " .
-                            "Content object with ID " . $link->getAttribute( 'object_id' )
+                            'While generating links for xmltext, unauthorized to load ' .
+                            'Content object with ID ' . $link->getAttribute('object_id')
                         );
                     }
                 }
             }
 
-            if ( $link->hasAttribute( 'node_id' ) )
-            {
-                try
-                {
-                    $location = $this->locationService->loadLocation( $link->getAttribute( 'node_id' ) );
-                    $content = $this->contentService->loadContent( $location->contentId );
-                }
-                catch ( NotFoundException $e )
-                {
-                    if ( $this->logger )
-                    {
+            if ($link->hasAttribute('node_id')) {
+                try {
+                    $location = $this->locationService->loadLocation($link->getAttribute('node_id'));
+                    $content = $this->contentService->loadContent($location->contentId);
+                } catch (NotFoundException $e) {
+                    if ($this->logger) {
                         $this->logger->warning(
-                            "While generating links for xmltext, could not locate " .
-                            "Location with ID " . $link->getAttribute( 'node_id' )
+                            'While generating links for xmltext, could not locate ' .
+                            'Location with ID ' . $link->getAttribute('node_id')
                         );
                     }
-                }
-                catch ( UnauthorizedException $e )
-                {
-                    if ( $this->logger )
-                    {
+                } catch (UnauthorizedException $e) {
+                    if ($this->logger) {
                         $this->logger->notice(
-                            "While generating links for xmltext, unauthorized to load " .
-                            "Location with ID " . $link->getAttribute( 'node_id' )
+                            'While generating links for xmltext, unauthorized to load ' .
+                            'Location with ID ' . $link->getAttribute('node_id')
                         );
                     }
                 }
             }
 
-            if ( $content !== null )
-            {
-                $content = $this->contentService->loadContent( $location->contentId );
-                if ( isset( $content->fields['file'] ) && !$this->fieldHelper->isFieldEmpty( $content, 'file' ) )
-                {
-                    $field = $this->translationHelper->getTranslatedField( $content, 'file' );
-                    $url = $this->router->generate( 'ngmore_download', array( 'contentId' => $content->id, 'fieldId' => $field->id, 'isInline' => $link->hasAttribute( 'custom:inline' ) ) );
+            if ($content !== null) {
+                $content = $this->contentService->loadContent($location->contentId);
+                if (isset($content->fields['file']) && !$this->fieldHelper->isFieldEmpty($content, 'file')) {
+                    $field = $this->translationHelper->getTranslatedField($content, 'file');
+                    $url = $this->router->generate('ngmore_download', array('contentId' => $content->id, 'fieldId' => $field->id, 'isInline' => $link->hasAttribute('custom:inline')));
                 }
             }
 
-            if ( empty( $url ) && $location !== null )
-            {
-                 $link->setAttribute( 'url', $this->router->generate( $location ) );
-            }
-            else
-            {
-                $link->setAttribute( 'url', $url );
+            if (empty($url) && $location !== null) {
+                $link->setAttribute('url', $this->router->generate($location));
+            } else {
+                $link->setAttribute('url', $url);
             }
 
-            if ( $link->hasAttribute( 'anchor_name' ) )
-            {
-                $link->setAttribute( 'url', $link->getAttribute( 'url' ) . "#" . $link->getAttribute( 'anchor_name' ) );
+            if ($link->hasAttribute('anchor_name')) {
+                $link->setAttribute('url', $link->getAttribute('url') . '#' . $link->getAttribute('anchor_name'));
             }
 
             // With this we disable the original preconverter
             // (and hopefully all other that touch link element)
-            $link->removeAttribute( 'object_id' );
-            $link->removeAttribute( 'node_id' );
-            $link->removeAttribute( 'anchor_name' );
+            $link->removeAttribute('object_id');
+            $link->removeAttribute('node_id');
+            $link->removeAttribute('anchor_name');
         }
     }
 }

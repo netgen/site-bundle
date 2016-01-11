@@ -16,22 +16,19 @@ class ContentTypeGroup extends ConfigResolverBased implements ViewMatcherInterfa
      *
      * @return bool
      */
-    public function match( View $view )
+    public function match(View $view)
     {
-        if ( !$view instanceof ContentView )
-        {
+        if (!$view instanceof ContentView) {
             return false;
         }
 
         $contentTypeGroups = $this->repository
             ->getContentTypeService()
-            ->loadContentType( $view->getContent()->contentInfo->contentTypeId )
+            ->loadContentType($view->getContent()->contentInfo->contentTypeId)
             ->getContentTypeGroups();
 
-        foreach ( $contentTypeGroups as $group )
-        {
-            if ( $this->doMatch( $group->id ) )
-            {
+        foreach ($contentTypeGroups as $group) {
+            if ($this->doMatch($group->id)) {
                 return true;
             }
         }

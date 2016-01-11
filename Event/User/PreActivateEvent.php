@@ -22,7 +22,7 @@ class PreActivateEvent extends Event
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct
      */
-    public function __construct( User $user, UserUpdateStruct $userUpdateStruct )
+    public function __construct(User $user, UserUpdateStruct $userUpdateStruct)
     {
         $this->user = $user;
         $this->userUpdateStruct = $userUpdateStruct;
@@ -47,7 +47,7 @@ class PreActivateEvent extends Event
     /**
      * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct
      */
-    public function setUserUpdateStruct( UserUpdateStruct $userUpdateStruct )
+    public function setUserUpdateStruct(UserUpdateStruct $userUpdateStruct)
     {
         $this->userUpdateStruct = $userUpdateStruct;
     }

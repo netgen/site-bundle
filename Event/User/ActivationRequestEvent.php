@@ -21,7 +21,7 @@ class ActivationRequestEvent extends Event
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param string $email
      */
-    public function __construct( $email, User $user = null )
+    public function __construct($email, User $user = null)
     {
         $this->user = $user;
         $this->email = $email;

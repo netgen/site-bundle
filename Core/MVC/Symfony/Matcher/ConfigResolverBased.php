@@ -12,26 +12,25 @@ abstract class ConfigResolverBased extends MultipleValued
     protected $configResolver;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      */
-    public function __construct( ConfigResolverInterface $configResolver )
+    public function __construct(ConfigResolverInterface $configResolver)
     {
         $this->configResolver = $configResolver;
     }
 
-    public function doMatch( $value )
+    public function doMatch($value)
     {
         $config = $this->values[0];
-        $namespace = isset( $this->values[1] ) ? $this->values[1] : null;
+        $namespace = isset($this->values[1]) ? $this->values[1] : null;
 
-        if ( $this->configResolver->hasParameter( $config, $namespace ) )
-        {
-            $configValue = $this->configResolver->getParameter( $config, $namespace );
-            $configValue = !is_array( $configValue ) ? array( $configValue ) : $configValue;
+        if ($this->configResolver->hasParameter($config, $namespace)) {
+            $configValue = $this->configResolver->getParameter($config, $namespace);
+            $configValue = !is_array($configValue) ? array($configValue) : $configValue;
 
-            return in_array( $value, $configValue );
+            return in_array($value, $configValue);
         }
 
         return false;

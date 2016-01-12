@@ -31,6 +31,10 @@ ngmore_user_reset_password:
     path: /user/forgotpassword/{hash}
     defaults: { _controller: ngmore.controller.user:resetPassword }
 
+ngmore_ajax_content_grid_load_more:
+    path:  /ajax/block/contentgrid/load-more/{id}
+    defaults: { _controller: ngmore.controller.block_view:viewContentGridDynamicBlockById }
+
 # Disable eZ Platform built in routes
 
 ezpublishSetup:

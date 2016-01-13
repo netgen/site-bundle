@@ -31,6 +31,7 @@ public function registerBundles()
 {
    ...
 
+    $bundles[] = new Knp\Bundle\MenuBundle\KnpMenuBundle();
     $bundles[] = new Netgen\Bundle\EzFormsBundle\NetgenEzFormsBundle();
     $bundles[] = new Netgen\Bundle\OpenGraphBundle\NetgenOpenGraphBundle();
     $bundles[] = new Netgen\Bundle\MetadataBundle\NetgenMetadataBundle();

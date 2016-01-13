@@ -117,7 +117,7 @@ class BlockViewController extends Controller
             )
         );
 
-        $currentPage = (int)$request->get('page', 0);
+        $currentPage = (int)$request->query->get('page', 0);
         $pager->setNormalizeOutOfRangePages(true);
         $pager->setMaxPerPage($limit);
         $pager->setCurrentPage($currentPage > 0 ? $currentPage : 1);
@@ -128,7 +128,7 @@ class BlockViewController extends Controller
             $validItems[] = new Item(
                 array(
                     'blockId' => $block->id,
-                    'contentId' => $pageItem->getContentInfo()->id,
+                    'contentId' => $pageItem->contentInfo->id,
                     'locationId' => $pageItem->id,
                 )
             );

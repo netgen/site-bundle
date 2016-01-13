@@ -5,22 +5,25 @@ namespace Netgen\Bundle\MoreBundle\Controller;
 use eZ\Bundle\EzPublishCoreBundle\Controller;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\FieldType\Page\Parts\Item;
 use eZ\Publish\Core\MVC\Symfony\View\BlockView;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use eZ\Publish\Core\Pagination\Pagerfanta\LocationSearchAdapter;
+use Pagerfanta\Pagerfanta;
 
 class BlockViewController extends Controller
 {
     /**
-     * Renders the ContentGridDynamic block found within $view.
+     * Renders the ContentGridDynamic or AjaxContentGridDynamic block found within $view.
      *
      * This method can be used with ESI rendering strategy.
      *
+     * @param \Symfony\Component\HttpFoundation\Request $request
      * @param \eZ\Publish\Core\MVC\Symfony\View\BlockView $view
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If block has an invalid type or parent_node
@@ -28,13 +31,13 @@ class BlockViewController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewContentGridDynamic(BlockView $view)
+    public function viewContentGridDynamic(Request $request, BlockView $view)
     {
         $block = $view->getBlock();
-        if ($block->type !== 'ContentGridDynamic') {
+        if ($block->type !== 'ContentGridDynamic' && $block->type !== 'AjaxContentGridDynamic') {
             throw new InvalidArgumentException(
                 'id',
-                'Block #' . $block->id . ' has an invalid type. Expected "ContentGridDynamic", got "' . $block->type . '"'
+                'Block #' . $block->id . ' has an invalid type. Expected "ContentGridDynamic" or "AjaxContentGridDynamic", got "' . $block->type . '"'
             );
         }
 
@@ -106,25 +109,35 @@ class BlockViewController extends Controller
         $query->limit = $limit;
         $query->offset = $offset;
 
-        $result = $this->getRepository()->getSearchService()->findLocations($query);
-
-        $validItems = array_map(
-            function (SearchHit $searchHit) use ($block) {
-                return new Item(
-                    array(
-                        'blockId' => $block->id,
-                        'contentId' => $searchHit->valueObject->contentInfo->id,
-                        'locationId' => $searchHit->valueObject->id,
-                    )
-                );
-            },
-            $result->searchHits
+        $pager = new Pagerfanta(
+            new LocationSearchAdapter(
+                $query,
+                $this->getRepository()->getSearchService()
+            )
         );
+
+        $currentPage = (int)$request->get('page', 0);
+        $pager->setNormalizeOutOfRangePages(true);
+        $pager->setMaxPerPage($limit);
+        $pager->setCurrentPage($currentPage > 0 ? $currentPage : 1);
+
+        $validItems = array();
+        /** @var \eZ\Publish\API\Repository\Values\Content\Location $pageItem */
+        foreach ($pager as $pageItem) {
+            $validItems[] = new Item(
+                array(
+                    'blockId' => $block->id,
+                    'contentId' => $pageItem->getContentInfo()->id,
+                    'locationId' => $pageItem->id,
+                )
+            );
+        }
 
         // We use set parameters here to overwrite valid_items parameter
         $view->setParameters(
             array(
                 'valid_items' => $validItems,
+                'pager' => $pager,
             ) + $view->getParameters()
         );
 

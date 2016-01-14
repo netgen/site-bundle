@@ -57,10 +57,12 @@ class SiteInfoHelper
      */
     public function getSiteInfoLocation()
     {
+        $siteInfoLocationId = $this->configResolver->hasParameter('locations.site_info.id', 'ngmore') ?
+            $this->configResolver->getParameter('locations.site_info.id', 'ngmore') :
+            $this->configResolver->getParameter('SpecialNodes.SiteInfoNode', 'ngmore');
+
         if ($this->siteInfoLocation === null) {
-            $this->siteInfoLocation = $this->locationService->loadLocation(
-                $this->configResolver->getParameter('SpecialNodes.SiteInfoNode', 'ngmore')
-            );
+            $this->siteInfoLocation = $this->locationService->loadLocation($siteInfoLocationId);
         }
 
         return $this->siteInfoLocation;

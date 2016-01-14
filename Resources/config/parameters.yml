@@ -7,6 +7,7 @@ parameters:
 
     ngmore.default.site_domain: localhost
 
+    ngmore.default.locations.site_info.id: ~
     ngmore.default.locations.sidebars_parent.id: ~
 
     ngmore.default.site_settings.google_tag_manager_code: ~

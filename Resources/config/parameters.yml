@@ -7,6 +7,8 @@ parameters:
 
     ngmore.default.site_domain: localhost
 
+    ngmore.default.locations.sidebars_parent.id: ~
+
     ngmore.default.site_settings.google_tag_manager_code: ~
     ngmore.default.site_settings.jwplayer_id: 'gYe8hbFO'
     ngmore.default.site_settings.jwplayer_key: ~

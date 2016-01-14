@@ -170,12 +170,16 @@ class LayoutHelper
      */
     protected function getLayoutsByUriPrefix($uri)
     {
+        $sidebarsParentLocationId = $this->configResolver->hasParameter('locations.sidebars_parent.id', 'ngmore') ?
+            $this->configResolver->getParameter('locations.sidebars_parent.id', 'ngmore') :
+            $this->configResolver->getParameter('SpecialNodes.SidebarsParentNode', 'ngmore');
+
         $query = new Query();
         $query->filter = new Query\Criterion\LogicalAnd(
             array(
                 new Query\Criterion\ContentTypeIdentifier('ng_layout'),
                 new Query\Criterion\ParentLocationId(
-                    (int)$this->configResolver->getParameter('SpecialNodes.SidebarsParentNode', 'ngmore')
+                    (int)$sidebarsParentLocationId
                 ),
                 new Field('apply_layout_to_uri', Field::REVERSE_LIKE, $uri),
             )

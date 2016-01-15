@@ -88,7 +88,7 @@
                     <xsl:when test="@custom:align != ''">
                         <xsl:value-of select="concat( 'object-', @custom:align )" />
                     </xsl:when>
-                    <xsl:otherwise>left</xsl:otherwise>
+                    <xsl:otherwise>object-left</xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
 
@@ -104,6 +104,33 @@
                     </small>
                 </xsl:if>
             </blockquote>
+        </div>
+    </xsl:template>
+
+    <xsl:template match="custom[@name='factbox']">
+        <div>
+            <xsl:attribute name="class">
+                <xsl:choose>
+                    <xsl:when test="@custom:align != ''">
+                        <xsl:value-of select="concat( 'factbox object-', @custom:align )" />
+                    </xsl:when>
+                    <xsl:otherwise>factbox object-left</xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+
+            <xsl:if test="@custom:title != ''">
+                <div>
+                    <xsl:attribute name="class">factbox-header</xsl:attribute>
+                    <h2>
+                        <xsl:value-of select="@custom:title" />
+                    </h2>
+                </div>
+            </xsl:if>
+
+            <div>
+                <xsl:attribute name="class">factbox-content</xsl:attribute>
+                <xsl:apply-templates />
+            </div>
         </div>
     </xsl:template>
 

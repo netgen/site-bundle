@@ -5,3 +5,10 @@ parameters:
     ezpublish.fieldType.ezobjectrelationlist.converter.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\FieldValue\Converter\RelationListConverter
 
     ezpublish.image_alias.imagine.cache_resolver.class: Netgen\Bundle\MoreBundle\Imagine\IORepositoryResolver
+
+services:
+    ezpublish.image_alias.variation_purger:
+        alias: ezpublish.image_alias.variation_purger.legacy_storage_image_file
+
+    ezpublish.image_alias.variation_path_generator:
+        alias: ezpublish.image_alias.variation_path_generator.original_directory

@@ -33,7 +33,7 @@ ngmore_user_reset_password:
 
 ngmore_ajax_content_grid_load_more:
     path:  /ajax/block/contentgrid/load-more/{id}
-    defaults: { _controller: ngmore.controller.block_view:viewContentGridDynamicBlockById }
+    defaults: { _controller: ez_page:viewBlockById }
 
 # Disable eZ Platform built in routes
 

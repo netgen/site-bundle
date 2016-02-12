@@ -138,6 +138,12 @@ class UserController extends Controller
             );
         }
 
+        if ($this->getConfigResolver()->getParameter('user.require_admin_activation', 'ngmore')) {
+            return $this->render(
+                $this->getConfigResolver()->getParameter('template.user.activate_admin_activation_pending', 'ngmore')
+            );
+        }
+
         return $this->render(
             $this->getConfigResolver()->getParameter('template.user.activate_sent', 'ngmore')
         );

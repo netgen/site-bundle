@@ -47,6 +47,34 @@ class PostRegisterEventListener extends UserEventListener implements EventSubscr
 
         $accountKey = $this->ezUserAccountKeyRepository->create($user->id);
 
+        if ($this->configResolver->getParameter('user.require_admin_activation', 'ngmore')) {
+            $this->mailHelper
+                ->sendMail(
+                    array($user->email => $this->translationHelper->getTranslatedContentName($user)),
+                    'ngmore.user.activate.admin_activation_pending.subject',
+                    $this->configResolver->getParameter('template.user.mail.activate_admin_activation_pending', 'ngmore'),
+                    array(
+                        'user' => $user,
+                    )
+                );
+
+            $adminEmail = $this->configResolver->getParameter('user.mail.admin_email', 'ngmore');
+
+            if (!empty($adminEmail)) {
+                $this->mailHelper
+                    ->sendMail(
+                        array($adminEmail => $this->configResolver->getParameter('user.mail.admin_name', 'ngmore')),
+                        'ngmore.user.activate.admin_activation_required.subject',
+                        $this->configResolver->getParameter('template.user.mail.activate_admin_activation_required', 'ngmore'),
+                        array(
+                            'user' => $user,
+                        )
+                    );
+            }
+
+            return;
+        }
+
         $this->mailHelper
             ->sendMail(
                 array($user->email => $this->translationHelper->getTranslatedContentName($user)),

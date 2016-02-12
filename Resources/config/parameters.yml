@@ -29,14 +29,19 @@ parameters:
 
     ngmore.default.path_helper.excluded_content_types: ['ng_container', 'folder']
 
+    ngmore.default.mail.sender_email: 'info@example.com'
+    ngmore.default.mail.sender_name: 'Netgen More'
+    ngmore.default.mail.admin_email: ~
+    ngmore.default.mail.admin_name: ~
+
     ngmore.default.user.content_type_identifier: 'user'
     ngmore.default.user.user_group_content_id: 11
     ngmore.default.user.auto_enable: false
+    ngmore.default.user.require_admin_activation: false
     ngmore.default.user.activate_hash_validity_time: 3600
     ngmore.default.user.forgot_password_hash_validity_time: 3600
-
-    ngmore.default.mail.sender_email: 'info@example.com'
-    ngmore.default.mail.sender_name: 'Netgen More'
+    ngmore.default.user.mail.admin_email: %ngmore.default.mail.admin_email%
+    ngmore.default.user.mail.admin_name: %ngmore.default.mail.admin_name%
 
     ngmore.default.content_view.show_invisible_locations: false
 

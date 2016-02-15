@@ -8,6 +8,13 @@ use Assetic\Exception\FilterException;
 
 class UglifyJs2Filter extends BaseUglifyJs2Filter
 {
+    /**
+     * Filters an asset just before it's dumped.
+     *
+     * Overriden to disable setting the input to error output.
+     *
+     * @param \Assetic\Asset\AssetInterface $asset An asset
+     */
     public function filterDump(AssetInterface $asset)
     {
         try {

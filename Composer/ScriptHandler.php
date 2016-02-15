@@ -29,7 +29,7 @@ class ScriptHandler extends DistributionBundleScriptHandler
     }
 
     /**
-     * Dumps Assetic assets
+     * Dumps Assetic assets.
      *
      * Overriden to disable duplicate error output from the command.
      * Duplicate error message happens because Assetic already puts
@@ -42,7 +42,7 @@ class ScriptHandler extends DistributionBundleScriptHandler
         try {
             CoreBundleScriptHandler::dumpAssets($event);
         } catch (RuntimeException $e) {
-            throw new RuntimeException("An error occurred when executing \"assetic:dump\" command.");
+            throw new RuntimeException('An error occurred when executing "assetic:dump" command.');
         }
     }
 }

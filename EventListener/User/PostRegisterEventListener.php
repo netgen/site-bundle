@@ -59,11 +59,12 @@ class PostRegisterEventListener extends UserEventListener implements EventSubscr
                 );
 
             $adminEmail = $this->configResolver->getParameter('user.mail.admin_email', 'ngmore');
+            $adminName = $this->configResolver->getParameter('user.mail.admin_name', 'ngmore');
 
             if (!empty($adminEmail)) {
                 $this->mailHelper
                     ->sendMail(
-                        array($adminEmail => $this->configResolver->getParameter('user.mail.admin_name', 'ngmore')),
+                        !empty($adminName) ? array($adminEmail => $adminName) : array($adminEmail),
                         'ngmore.user.activate.admin_activation_required.subject',
                         $this->configResolver->getParameter('template.user.mail.activate_admin_activation_required', 'ngmore'),
                         array(

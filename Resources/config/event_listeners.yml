@@ -2,6 +2,7 @@ parameters:
     ngmore.listener.block_cache.class: Netgen\Bundle\MoreBundle\EventListener\BlockCacheResponseListener
     ngmore.listener.invisible_locations.class: Netgen\Bundle\MoreBundle\EventListener\InvisibleLocationsListener
     ngmore.listener.add_view_type.class: Netgen\Bundle\MoreBundle\EventListener\AddViewTypeEventListener
+    ngmore.listener.set_csrf_enabled.class: Netgen\Bundle\MoreBundle\EventListener\SetCsrfEnabledEventListener
 
     ngmore.listener.user.class: Netgen\Bundle\MoreBundle\EventListener\UserEventListener
     ngmore.listener.user.post_register.class: Netgen\Bundle\MoreBundle\EventListener\User\PostRegisterEventListener
@@ -33,6 +34,13 @@ services:
         class: %ngmore.listener.add_view_type.class%
         arguments:
             - "@request_stack"
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ngmore.listener.set_csrf_enabled:
+        class: %ngmore.listener.set_csrf_enabled.class%
+        arguments:
+            - "@?security.csrf.token_manager"
         tags:
             - { name: kernel.event_subscriber }
 

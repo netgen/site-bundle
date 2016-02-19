@@ -89,7 +89,7 @@ class PageLayoutController extends Controller
                         'region' => $region,
                         'css_class' => $cssClass,
                         'params' => $params,
-                        'blockSpecificParams' => $blockSpecificParams,
+                        'block_specific_params' => $blockSpecificParams,
                     ),
                     $response
                 );

@@ -8,7 +8,7 @@
         }
     ],
     "require": {
-        "ezsystems/ezpublish-kernel": "*",
+        "ezsystems/ezpublish-kernel": "^6.0",
         "netgen/ez-forms-bundle": "~1.0",
         "doctrine/common": "~2.5.0",
         "doctrine/orm": "~2.4",

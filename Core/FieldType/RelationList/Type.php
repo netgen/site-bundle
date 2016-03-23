@@ -100,7 +100,12 @@ class Type extends BaseRelationListType
      */
     public function fromHash($hash)
     {
-        return new Value($hash['destinationContentIds'], $hash['destinationLocationIds']);
+        return new Value(
+            $hash['destinationContentIds'],
+            isset($hash['destinationLocationIds']) ?
+                $hash['destinationLocationIds'] :
+                array()
+        );
     }
 
     /**

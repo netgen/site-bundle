@@ -14,7 +14,7 @@ class Value extends BaseRelationListValue
      *
      * @var mixed[]
      */
-    public $destinationLocationIds;
+    public $destinationLocationIds = array();
 
     /**
      * Construct a new Value object and initialize it $text.

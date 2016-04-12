@@ -3,6 +3,7 @@ parameters:
     ngmore.listener.invisible_locations.class: Netgen\Bundle\MoreBundle\EventListener\InvisibleLocationsListener
     ngmore.listener.add_view_type.class: Netgen\Bundle\MoreBundle\EventListener\AddViewTypeEventListener
     ngmore.listener.set_csrf_enabled.class: Netgen\Bundle\MoreBundle\EventListener\SetCsrfEnabledEventListener
+    ngmore.listener.disable_inmemory_stash_driver.class: Netgen\Bundle\MoreBundle\EventListener\DisableInMemoryStashDriverEventListener
 
     ngmore.listener.user.class: Netgen\Bundle\MoreBundle\EventListener\UserEventListener
     ngmore.listener.user.post_register.class: Netgen\Bundle\MoreBundle\EventListener\User\PostRegisterEventListener
@@ -41,6 +42,14 @@ services:
         class: %ngmore.listener.set_csrf_enabled.class%
         arguments:
             - "@?security.csrf.token_manager"
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ngmore.listener.disable_inmemory_stash_driver:
+        class: %ngmore.listener.disable_inmemory_stash_driver.class%
+        arguments:
+            - "@ezpublish.cache_pool"
+            - "@?stash.driver.script_cache"
         tags:
             - { name: kernel.event_subscriber }
 

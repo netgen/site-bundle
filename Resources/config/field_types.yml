@@ -3,7 +3,7 @@ parameters:
 
 services:
     ngmore.field_type.ezxmltext.converter.direct_download:
-        class: %ngmore.field_type.ezxmltext.converter.direct_download.class%
+        class: "%ngmore.field_type.ezxmltext.converter.direct_download.class%"
         arguments:
             - "@ezpublish.api.service.location"
             - "@ezpublish.api.service.content"

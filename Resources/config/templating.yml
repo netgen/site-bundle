@@ -8,29 +8,29 @@ parameters:
 
 services:
     twig.extension.text:
-        class: %twig.extension.text.class%
+        class: "%twig.extension.text.class%"
         tags:
             - { name: twig.extension }
 
     twig.extension.array:
-        class: %twig.extension.array.class%
+        class: "%twig.extension.array.class%"
         tags:
             - { name: twig.extension }
 
     twig.extension.date:
-        class: %twig.extension.date.class%
+        class: "%twig.extension.date.class%"
         tags:
             - { name: twig.extension }
 
     ngmore.templating.global_helper:
-        class: %ngmore.templating.global_helper.class%
+        class: "%ngmore.templating.global_helper.class%"
         arguments:
             - "@ngmore.helper.site_info_helper"
             - "@ngmore.helper.layout_helper"
             - "@request_stack"
 
     ngmore.templating.twig.extension:
-        class: %ngmore.templating.twig.extension.class%
+        class: "%ngmore.templating.twig.extension.class%"
         arguments:
             - "@ezpublish.api.repository"
             - "@ezpublish.translation_helper"

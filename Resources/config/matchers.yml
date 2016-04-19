@@ -14,50 +14,50 @@ parameters:
 
 services:
     ngmore.matcher.config_resolver:
-        class: %ngmore.matcher.config_resolver.class%
+        class: "%ngmore.matcher.config_resolver.class%"
         abstract: true
         arguments: ["@ezpublish.config.resolver"]
 
     ngmore.matcher.content.content_id:
-        class: %ngmore.matcher.content.content_id.class%
+        class: "%ngmore.matcher.content.content_id.class%"
         parent: ngmore.matcher.config_resolver
 
     ngmore.matcher.content.content_type_id:
-        class: %ngmore.matcher.content.content_type_id.class%
+        class: "%ngmore.matcher.content.content_type_id.class%"
         parent: ngmore.matcher.config_resolver
 
     ngmore.matcher.content.content_type_group_id:
-        class: %ngmore.matcher.content.content_type_group_id.class%
+        class: "%ngmore.matcher.content.content_type_group_id.class%"
         parent: ngmore.matcher.config_resolver
 
     ngmore.matcher.content.location_id:
-        class: %ngmore.matcher.content.location_id.class%
+        class: "%ngmore.matcher.content.location_id.class%"
         parent: ngmore.matcher.config_resolver
 
     ngmore.matcher.content.parent_content_type_id:
-        class: %ngmore.matcher.content.parent_content_type_id.class%
+        class: "%ngmore.matcher.content.parent_content_type_id.class%"
         parent: ngmore.matcher.config_resolver
 
     ngmore.matcher.content.parent_location_id:
-        class: %ngmore.matcher.content.parent_location_id.class%
+        class: "%ngmore.matcher.content.parent_location_id.class%"
         parent: ngmore.matcher.config_resolver
 
     ngmore.matcher.content.remote_id:
-        class: %ngmore.matcher.content.remote_id.class%
+        class: "%ngmore.matcher.content.remote_id.class%"
         parent: ngmore.matcher.config_resolver
 
     ngmore.matcher.content.location_remote_id:
-        class: %ngmore.matcher.content.location_remote_id.class%
+        class: "%ngmore.matcher.content.location_remote_id.class%"
         parent: ngmore.matcher.config_resolver
 
     ngmore.matcher.content.section_id:
-        class: %ngmore.matcher.content.section_id.class%
+        class: "%ngmore.matcher.content.section_id.class%"
         parent: ngmore.matcher.config_resolver
 
     ngmore.matcher.block.block_id:
-        class: %ngmore.matcher.block.block_id.class%
+        class: "%ngmore.matcher.block.block_id.class%"
         parent: ngmore.matcher.config_resolver
 
     ngmore.matcher.block.zone_id:
-        class: %ngmore.matcher.block.zone_id.class%
+        class: "%ngmore.matcher.block.zone_id.class%"
         parent: ngmore.matcher.config_resolver

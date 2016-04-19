@@ -3,7 +3,7 @@ parameters:
 
 services:
     ngmore.menu.relation_list_menu_builder:
-        class: %ngmore.menu.relation_list_menu_builder.class%
+        class: "%ngmore.menu.relation_list_menu_builder.class%"
         arguments:
             - "@knp_menu.factory"
             - "@ezpublish.api.repository"

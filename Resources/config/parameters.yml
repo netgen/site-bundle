@@ -1,5 +1,5 @@
 parameters:
-    ngmore.default.locale.conversion_map: %ezpublish.locale.conversion_map%
+    ngmore.default.locale.conversion_map: "%ezpublish.locale.conversion_map%"
 
     ngmore.default.pagelayout: NetgenMoreBundle::pagelayout_empty.html.twig
 
@@ -40,8 +40,8 @@ parameters:
     ngmore.default.user.require_admin_activation: false
     ngmore.default.user.activate_hash_validity_time: 3600
     ngmore.default.user.forgot_password_hash_validity_time: 3600
-    ngmore.default.user.mail.admin_email: %ngmore.default.mail.admin_email%
-    ngmore.default.user.mail.admin_name: %ngmore.default.mail.admin_name%
+    ngmore.default.user.mail.admin_email: "%ngmore.default.mail.admin_email%"
+    ngmore.default.user.mail.admin_name: "%ngmore.default.mail.admin_name%"
 
     ngmore.default.content_view.show_invisible_locations: false
 

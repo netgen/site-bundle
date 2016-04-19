@@ -4,13 +4,13 @@ parameters:
 
 services:
     ngmore.pagerfanta.view.ngmore_bootstrap3:
-        class: %ngmore.pagerfanta.view.ngmore_bootstrap3.class%
+        class: "%ngmore.pagerfanta.view.ngmore_bootstrap3.class%"
         parent: pagerfanta.view.twitter_bootstrap3
         tags:
             - {name: pagerfanta.view, alias: ngmore_bootstrap3}
 
     ngmore.pagerfanta.view.ngmore:
-        class: %ngmore.pagerfanta.view.ngmore.class%
+        class: "%ngmore.pagerfanta.view.ngmore.class%"
         arguments:
             - "@twig"
         calls:

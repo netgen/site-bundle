@@ -28,51 +28,51 @@ parameters:
 
 services:
     ngmore.search.legacy.gateway.sort_clause_handler.common.field_length:
-        class: %ngmore.search.legacy.gateway.sort_clause_handler.common.field_length.class%
+        class: "%ngmore.search.legacy.gateway.sort_clause_handler.common.field_length.class%"
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.common.field
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ngmore.controller.full_view:
-        class: %ngmore.controller.full_view.class%
+        class: "%ngmore.controller.full_view.class%"
         parent: ezpublish.controller.base
 
     ngmore.controller.embed_view:
-        class: %ngmore.controller.embed_view.class%
+        class: "%ngmore.controller.embed_view.class%"
         parent: ezpublish.controller.base
         arguments:
             - "@?logger"
 
     ngmore.controller.block_view:
-        class: %ngmore.controller.block_view.class%
+        class: "%ngmore.controller.block_view.class%"
         parent: ezpublish.controller.base
 
     ngmore.controller.page_layout:
-        class: %ngmore.controller.page_layout.class%
+        class: "%ngmore.controller.page_layout.class%"
         parent: ezpublish.controller.base
 
     ngmore.controller.parts:
-        class: %ngmore.controller.parts.class%
+        class: "%ngmore.controller.parts.class%"
         parent: ezpublish.controller.base
 
     ngmore.controller.download:
-        class: %ngmore.controller.download.class%
+        class: "%ngmore.controller.download.class%"
         parent: ezpublish.controller.base
 
     ngmore.controller.sitemap:
-        class: %ngmore.controller.sitemap.class%
+        class: "%ngmore.controller.sitemap.class%"
         parent: ezpublish.controller.base
 
     ngmore.controller.user:
-        class: %ngmore.controller.user.class%
+        class: "%ngmore.controller.user.class%"
         parent: ezpublish.controller.base
         arguments:
             - "@ezpublish.api.service.user"
             - "@event_dispatcher"
 
     ngmore.helper.path_helper:
-        class: %ngmore.helper.path_helper.class%
+        class: "%ngmore.helper.path_helper.class%"
         arguments:
             - "@ezpublish.api.service.location"
             - "@ezpublish.config.resolver"
@@ -81,17 +81,17 @@ services:
             - "@ezpublish.api.service.content_type"
 
     ngmore.helper.site_info_helper:
-        class: %ngmore.helper.site_info_helper.class%
+        class: "%ngmore.helper.site_info_helper.class%"
         arguments:
             - "@ezpublish.api.service.location"
             - "@ezpublish.api.service.content"
             - "@ezpublish.config.resolver"
 
     ngmore.helper.sort_clause_helper:
-        class: %ngmore.helper.sort_clause_helper.class%
+        class: "%ngmore.helper.sort_clause_helper.class%"
 
     ngmore.helper.layout_helper:
-        class: %ngmore.helper.layout_helper.class%
+        class: "%ngmore.helper.layout_helper.class%"
         arguments:
             - "@ezpublish.api.repository"
             - "@ezpublish.spi.search.legacy"
@@ -100,7 +100,7 @@ services:
             - "@ezpublish.config.resolver"
 
     ngmore.helper.mail_helper:
-        class: %ngmore.helper.mail_helper.class%
+        class: "%ngmore.helper.mail_helper.class%"
         arguments:
             - "@mailer"
             - "@templating"
@@ -113,16 +113,16 @@ services:
         class: Doctrine\ORM\EntityRepository
         factory: ["@doctrine.orm.default_entity_manager", getRepository]
         arguments:
-            - %ngmore.entity.nguser_setting.class%
+            - "%ngmore.entity.nguser_setting.class%"
 
     ngmore.repository.ezuser_accountkey:
         class: Doctrine\ORM\EntityRepository
         factory: ["@doctrine.orm.default_entity_manager", getRepository]
         arguments:
-            - %ngmore.entity.ezuser_accountkey.class%
+            - "%ngmore.entity.ezuser_accountkey.class%"
 
     ngmore.slot.create_user:
-        class: %ngmore.slot.create_user.class%
+        class: "%ngmore.slot.create_user.class%"
         arguments:
             - "@ezpublish.api.service.user"
             - "@ngmore.repository.nguser_setting"
@@ -130,7 +130,7 @@ services:
             - { name: ezpublish.api.slot, signal: UserService\CreateUserSignal }
 
     ngmore.routing.content_url_alias_router:
-        class: %ngmore.routing.content_url_alias_router.class%
+        class: "%ngmore.routing.content_url_alias_router.class%"
         arguments:
             - "@ezpublish.api.service.location"
             - "@ezpublish.urlalias_generator"
@@ -143,14 +143,14 @@ services:
 #    following service definitions.
 #
 #    ngmore.context_provider.session:
-#        class: %ngmore.context_provider.session.class%
+#        class: "%ngmore.context_provider.session.class%"
 #        arguments:
 #            - "@session"
 #    tags:
 #        - { name: fos_http_cache.user_context_provider }
 #
 #    ngmore.context_provider.user:
-#        class: %ngmore.context_provider.user.class%
+#        class: "%ngmore.context_provider.user.class%"
 #        arguments:
 #            - "@ezpublish.api.repository"
 #    tags:

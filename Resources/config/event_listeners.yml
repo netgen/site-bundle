@@ -14,7 +14,7 @@ parameters:
 
 services:
     ngmore.listener.block_cache:
-        class: %ngmore.listener.block_cache.class%
+        class: "%ngmore.listener.block_cache.class%"
         calls:
             - [setEnableViewCache, [$content.view_cache$]]
         arguments:
@@ -23,7 +23,7 @@ services:
             - { name: kernel.event_subscriber }
 
     ngmore.listener.invisible_locations:
-        class: %ngmore.listener.invisible_locations.class%
+        class: "%ngmore.listener.invisible_locations.class%"
         arguments:
             - "@ezpublish.api.repository"
         calls:
@@ -32,21 +32,21 @@ services:
             - {name: kernel.event_subscriber}
 
     ngmore.listener.add_view_type:
-        class: %ngmore.listener.add_view_type.class%
+        class: "%ngmore.listener.add_view_type.class%"
         arguments:
             - "@request_stack"
         tags:
             - { name: kernel.event_subscriber }
 
     ngmore.listener.set_csrf_enabled:
-        class: %ngmore.listener.set_csrf_enabled.class%
+        class: "%ngmore.listener.set_csrf_enabled.class%"
         arguments:
             - "@?security.csrf.token_manager"
         tags:
             - { name: kernel.event_subscriber }
 
     ngmore.listener.disable_inmemory_stash_driver:
-        class: %ngmore.listener.disable_inmemory_stash_driver.class%
+        class: "%ngmore.listener.disable_inmemory_stash_driver.class%"
         arguments:
             - "@ezpublish.cache_pool"
             - "@?stash.driver.script_cache"
@@ -54,7 +54,7 @@ services:
             - { name: kernel.event_subscriber }
 
     ngmore.listener.user:
-        class: %ngmore.listener.user.class%
+        class: "%ngmore.listener.user.class%"
         abstract: true
         arguments:
             - "@ngmore.helper.mail_helper"
@@ -65,31 +65,31 @@ services:
             - "@ezpublish.api.repository"
 
     ngmore.listener.user.post_register:
-        class: %ngmore.listener.user.post_register.class%
+        class: "%ngmore.listener.user.post_register.class%"
         parent: ngmore.listener.user
         tags:
             - { name: kernel.event_subscriber }
 
     ngmore.listener.user.activation_request:
-        class: %ngmore.listener.user.activation_request.class%
+        class: "%ngmore.listener.user.activation_request.class%"
         parent: ngmore.listener.user
         tags:
             - { name: kernel.event_subscriber }
 
     ngmore.listener.user.post_activate:
-        class: %ngmore.listener.user.post_activate.class%
+        class: "%ngmore.listener.user.post_activate.class%"
         parent: ngmore.listener.user
         tags:
             - { name: kernel.event_subscriber }
 
     ngmore.listener.user.password_reset_request:
-        class: %ngmore.listener.user.password_reset_request.class%
+        class: "%ngmore.listener.user.password_reset_request.class%"
         parent: ngmore.listener.user
         tags:
             - { name: kernel.event_subscriber }
 
     ngmore.listener.user.post_password_reset:
-        class: %ngmore.listener.user.post_password_reset.class%
+        class: "%ngmore.listener.user.post_password_reset.class%"
         parent: ngmore.listener.user
         tags:
             - { name: kernel.event_subscriber }

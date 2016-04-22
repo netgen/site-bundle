@@ -5,6 +5,7 @@
         {% set main_pagelayout = ezpublish.configResolver.getParameter( 'pagelayout', 'ngmore' ) %}
     {% elseif pagelayout is defined %}
         {% set main_pagelayout = pagelayout %}
+    {% endif %}
 {% endif %}
 
 {% extends main_pagelayout %}

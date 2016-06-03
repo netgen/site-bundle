@@ -1,39 +1,45 @@
 ngmore_sitemap:
     path: /sitemap
     defaults:
-        _controller: ngmore.controller.sitemap:viewSitemap
+        _controller: "ngmore.controller.sitemap:viewSitemap"
     methods: [GET]
 
 ngmore_download:
     path: /content/download/{contentId}/{fieldId}/{isInline}
     defaults:
-        _controller: ngmore.controller.download:downloadFile
+        _controller: "ngmore.controller.download:downloadFile"
         isInline: false
     methods: [GET]
 
 ngmore_user_register:
     path: /user/register
-    defaults: { _controller: ngmore.controller.user:register }
+    defaults:
+        _controller: "ngmore.controller.user:register"
 
 ngmore_resend_activation_mail:
     path: /user/activate
-    defaults: { _controller: ngmore.controller.user:activationForm }
+    defaults:
+        _controller: "ngmore.controller.user:activationForm"
 
 ngmore_user_activate:
     path: /user/activate/{hash}
-    defaults: { _controller: ngmore.controller.user:activate }
+    defaults:
+        _controller: "ngmore.controller.user:activate"
 
 ngmore_user_forgot_password:
     path: /user/forgotpassword
-    defaults: { _controller: ngmore.controller.user:forgotPassword }
+    defaults:
+        _controller: "ngmore.controller.user:forgotPassword"
 
 ngmore_user_reset_password:
     path: /user/forgotpassword/{hash}
-    defaults: { _controller: ngmore.controller.user:resetPassword }
+    defaults:
+        _controller: "ngmore.controller.user:resetPassword"
 
 ngmore_ajax_content_grid_load_more:
     path:  /ajax/block/contentgrid/load-more/{id}
-    defaults: { _controller: ez_page:viewBlockById }
+    defaults:
+        _controller: "ez_page:viewBlockById"
 
 # Disable eZ Platform built in routes
 

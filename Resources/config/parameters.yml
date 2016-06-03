@@ -1,7 +1,7 @@
 parameters:
     ngmore.default.locale.conversion_map: "%ezpublish.locale.conversion_map%"
 
-    ngmore.default.pagelayout: NetgenMoreBundle::pagelayout_empty.html.twig
+    ngmore.default.pagelayout: 'NetgenMoreBundle::pagelayout_empty.html.twig'
 
     ngmore.default.site_domain: localhost
 

@@ -28,3 +28,7 @@ services:
             - [setContainer, ["@service_container"]]
         tags:
             - { name: kernel.cache_warmer }
+    
+    # Disable original Twig cache warmer to avoid issues on Symfony 2.8
+    twig.template_cache_warmer:
+        synthetic: true

@@ -5,7 +5,6 @@ namespace Netgen\Bundle\MoreBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Netgen\Bundle\MoreBundle\DependencyInjection\Compiler\XslRegisterPass;
-use Netgen\Bundle\MoreBundle\DependencyInjection\Compiler\RemoveDefaultImageAliasesPass;
 
 class NetgenMoreBundle extends Bundle
 {
@@ -18,6 +17,5 @@ class NetgenMoreBundle extends Bundle
     {
         parent::build($container);
         $container->addCompilerPass(new XslRegisterPass());
-        $container->addCompilerPass(new RemoveDefaultImageAliasesPass());
     }
 }

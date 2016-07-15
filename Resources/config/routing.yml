@@ -43,12 +43,6 @@ ngmore_ajax_content_grid_load_more:
 
 # Disable eZ Platform built in routes
 
-ez_content_download:
-    path: /_error/404
-
-ez_content_download_field_id:
-    path: /_error/404
-
 ezpublishSetup:
     path: /_error/404
 

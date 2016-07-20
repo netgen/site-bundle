@@ -63,7 +63,7 @@ class UserController extends Controller
 
         $userCreateStruct->enabled = (bool)$this->getConfigResolver()->getParameter('user.auto_enable', 'ngmore');
         $userCreateStruct->alwaysAvailable = (bool)$contentType->defaultAlwaysAvailable;
-        
+
         $data = new DataWrapper($userCreateStruct, $userCreateStruct->contentType);
 
         $formBuilder = $this->container->get('form.factory')->createBuilder(

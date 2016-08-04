@@ -80,45 +80,4 @@ class PageLayoutController extends Controller
 
         return $response;
     }
-
-    /**
-     * Returns rendered region template.
-     *
-     * @param mixed $layoutId
-     * @param string $region
-     * @param string|bool $cssClass
-     * @param array $params
-     * @param array $blockSpecificParams
-     * @param string $template
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function region($layoutId, $region, $cssClass = false, $params = array(), $blockSpecificParams = array(), $template = null)
-    {
-        $response = new Response();
-        $layout = $this->getSite()->getLoadService()->loadContent($layoutId);
-
-        /** @var $pageValue \eZ\Publish\Core\FieldType\Page\Value */
-        $pageValue = $layout->getField('page')->value;
-
-        foreach ($pageValue->page->zones as $zone) {
-            if (strtolower($zone->identifier) == strtolower($region) && !empty($zone->blocks)) {
-                return $this->render(
-                    $template !== null ? $template : 'NetgenMoreBundle:parts:layout_region.html.twig',
-                    array(
-                        'zone' => $zone,
-                        'region' => $region,
-                        'css_class' => $cssClass,
-                        'params' => $params,
-                        'block_specific_params' => $blockSpecificParams,
-                    ),
-                    $response
-                );
-            }
-        }
-
-        $response->headers->set('X-Location-Id', $layout->contentInfo->mainLocationId);
-
-        return $response;
-    }
 }

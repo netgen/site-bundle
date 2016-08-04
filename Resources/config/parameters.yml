@@ -6,7 +6,6 @@ parameters:
     ngmore.default.site_domain: localhost
 
     ngmore.default.locations.site_info.id: ~
-    ngmore.default.locations.sidebars_parent.id: ~
 
     ngmore.default.google_maps.latitude: 45.79849
     ngmore.default.google_maps.longitude: 15.90777

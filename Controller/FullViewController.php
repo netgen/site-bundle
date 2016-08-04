@@ -153,30 +153,6 @@ class FullViewController extends Controller
     }
 
     /**
-     * Action for viewing content with ng_category_page content type identifier.
-     *
-     * @param \Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView $view
-     *
-     * @return \Symfony\Component\HttpFoundation\Response|\Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView
-     */
-    public function viewNgCategoryPage(ContentView $view)
-    {
-        $location = $view->getSiteLocation();
-        if (!$location instanceof Location) {
-            $location = $this->getSite()->getLoadService()->loadLocation(
-                $view->getSiteContent()->mainLocationId
-            );
-        }
-
-        $response = $this->checkCategoryRedirect($location);
-        if ($response instanceof Response) {
-            return $response;
-        }
-
-        return $view;
-    }
-
-    /**
      * Checks if content at location defined by it's ID contains
      * valid category redirect value and returns a redirect response if it does.
      *

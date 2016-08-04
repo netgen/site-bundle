@@ -26,8 +26,6 @@ services:
         class: "%ngmore.templating.global_variable.class%"
         arguments:
             - "@ngmore.helper.site_info_helper"
-            - "@ngmore.helper.layout_helper"
-            - "@request_stack"
 
     ngmore.templating.twig.extension:
         class: "%ngmore.templating.twig.extension.class%"

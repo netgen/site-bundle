@@ -1,5 +1,4 @@
 parameters:
-    ngmore.listener.block_cache.class: Netgen\Bundle\MoreBundle\EventListener\BlockCacheResponseListener
     ngmore.listener.add_view_type.class: Netgen\Bundle\MoreBundle\EventListener\AddViewTypeEventListener
     ngmore.listener.set_csrf_enabled.class: Netgen\Bundle\MoreBundle\EventListener\SetCsrfEnabledEventListener
     ngmore.listener.disable_inmemory_stash_driver.class: Netgen\Bundle\MoreBundle\EventListener\DisableInMemoryStashDriverEventListener
@@ -12,15 +11,6 @@ parameters:
     ngmore.listener.user.post_password_reset.class: Netgen\Bundle\MoreBundle\EventListener\User\PostPasswordResetEventListener
 
 services:
-    ngmore.listener.block_cache:
-        class: "%ngmore.listener.block_cache.class%"
-        calls:
-            - [setEnableViewCache, [$content.view_cache$]]
-        arguments:
-            - "@ezpublish.config.resolver"
-        tags:
-            - { name: kernel.event_subscriber }
-
     ngmore.listener.add_view_type:
         class: "%ngmore.listener.add_view_type.class%"
         arguments:

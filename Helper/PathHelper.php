@@ -80,62 +80,45 @@ class PathHelper
             }
         }
 
-        $pathArray = array();
-        $path = $this->locationService->loadLocation($locationId)->path;
-
         // The root location can be defined at site access level
         $rootLocationId = $this->configResolver->getParameter('content.tree_root.location_id');
 
-        $isRootLocation = false;
+        $path = $this->locationService->loadLocation($locationId)->path;
 
         // Shift of location "1" from path as it is not a fully valid location and not readable by most users
         array_shift($path);
 
-        $location = null;
-        for ($i = 0; $i < count($path); ++$i) {
-            // if root location hasn't been found yet
-            if (!$isRootLocation) {
-                // If we reach the root location, we begin to add item to the path array from it
-                if ($path[$i] == $rootLocationId) {
-                    try {
-                        $location = $this->locationService->loadLocation($path[$i]);
-                    } catch (UnauthorizedException $e) {
-                        return array();
-                    }
-
-                    $isRootLocation = true;
-                    $contentType = $this->contentTypeService->loadContentType($location->contentInfo->contentTypeId);
-                    if (!in_array($contentType->identifier, $excludedContentTypes)) {
-                        $pathArray[] = array(
-                            'text' => $this->translationHelper->getTranslatedContentNameByContentInfo($location->contentInfo),
-                            'url' => $location->id != $locationId ? $this->router->generate($location) : false,
-                            'locationId' => $location->id,
-                            'contentId' => $location->contentId,
-                            'contentTypeId' => $location->contentInfo->contentTypeId,
-                            'contentTypeIdentifier' => $contentType->identifier,
-                        );
-                    }
-                }
+        $pathArray = array();
+        $rootLocationFound = false;
+        foreach ($path as $index => $pathItem) {
+            if ($pathItem == $rootLocationId) {
+                $rootLocationFound = true;
             }
-            // The root location has already been reached, so we can add items to the path array
-            else {
-                try {
-                    $location = $this->locationService->loadLocation($path[$i]);
-                } catch (UnauthorizedException $e) {
-                    return array();
-                }
 
-                $contentType = $this->contentTypeService->loadContentType($location->contentInfo->contentTypeId);
-                if (!in_array($contentType->identifier, $excludedContentTypes)) {
-                    $pathArray[] = array(
-                        'text' => $this->translationHelper->getTranslatedContentNameByContentInfo($location->contentInfo),
-                        'url' => $location->id != $locationId ? $this->router->generate($location) : false,
-                        'locationId' => $location->id,
-                        'contentId' => $location->contentId,
-                        'contentTypeId' => $location->contentInfo->contentTypeId,
-                        'contentTypeIdentifier' => $contentType->identifier,
-                    );
-                }
+            if (!$rootLocationFound) {
+                continue;
+            }
+
+            try {
+                $location = $this->locationService->loadLocation($pathItem);
+            } catch (UnauthorizedException $e) {
+                return array();
+            }
+
+            $contentType = $this->contentTypeService->loadContentType($location->contentInfo->contentTypeId);
+            if (!in_array($contentType->identifier, $excludedContentTypes)) {
+                $pathArray[] = array(
+                    'text' => $this->translationHelper->getTranslatedContentNameByContentInfo(
+                        $location->contentInfo
+                    ),
+                    'url' => $location->id != $locationId ?
+                        $this->router->generate($location) :
+                        false,
+                    'locationId' => $location->id,
+                    'contentId' => $location->contentId,
+                    'contentTypeId' => $location->contentInfo->contentTypeId,
+                    'contentTypeIdentifier' => $contentType->identifier,
+                );
             }
         }
 

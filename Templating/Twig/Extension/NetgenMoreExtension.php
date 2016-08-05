@@ -4,7 +4,7 @@ namespace Netgen\Bundle\MoreBundle\Templating\Twig\Extension;
 
 use eZ\Publish\Core\Helper\TranslationHelper;
 use Netgen\Bundle\MoreBundle\Helper\PathHelper;
-use Netgen\Bundle\MoreBundle\Templating\GlobalHelper;
+use Netgen\Bundle\MoreBundle\Templating\GlobalVariable;
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
@@ -39,9 +39,9 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
     protected $pathHelper;
 
     /**
-     * @var \Netgen\Bundle\MoreBundle\Templating\GlobalHelper
+     * @var \Netgen\Bundle\MoreBundle\Templating\GlobalVariable
      */
-    protected $globalHelper;
+    protected $globalVariable;
 
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface
@@ -55,7 +55,7 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
      * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface $authorizationChecker
      * @param \eZ\Publish\Core\Helper\TranslationHelper $translationHelper
      * @param \Netgen\Bundle\MoreBundle\Helper\PathHelper $pathHelper
-     * @param \Netgen\Bundle\MoreBundle\Templating\GlobalHelper $globalHelper
+     * @param \Netgen\Bundle\MoreBundle\Templating\GlobalVariable $globalVariable
      * @param \eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface $localeConverter
      */
     public function __construct(
@@ -63,14 +63,14 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
         AuthorizationCheckerInterface $authorizationChecker,
         TranslationHelper $translationHelper,
         PathHelper $pathHelper,
-        GlobalHelper $globalHelper,
+        GlobalVariable $globalVariable,
         LocaleConverterInterface $localeConverter
     ) {
         $this->repository = $repository;
         $this->authorizationChecker = $authorizationChecker;
         $this->translationHelper = $translationHelper;
         $this->pathHelper = $pathHelper;
-        $this->globalHelper = $globalHelper;
+        $this->globalVariable = $globalVariable;
         $this->localeConverter = $localeConverter;
     }
 
@@ -235,6 +235,6 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
      */
     public function getGlobals()
     {
-        return array('ngmore' => $this->globalHelper);
+        return array('ngmore' => $this->globalVariable);
     }
 }

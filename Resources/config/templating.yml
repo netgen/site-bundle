@@ -3,7 +3,7 @@ parameters:
     twig.extension.array.class: Twig_Extensions_Extension_Array
     twig.extension.date.class: Twig_Extensions_Extension_Date
 
-    ngmore.templating.global_helper.class: Netgen\Bundle\MoreBundle\Templating\GlobalHelper
+    ngmore.templating.global_variable.class: Netgen\Bundle\MoreBundle\Templating\GlobalVariable
     ngmore.templating.twig.extension.class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\NetgenMoreExtension
 
 services:
@@ -22,8 +22,8 @@ services:
         tags:
             - { name: twig.extension }
 
-    ngmore.templating.global_helper:
-        class: "%ngmore.templating.global_helper.class%"
+    ngmore.templating.global_variable:
+        class: "%ngmore.templating.global_variable.class%"
         arguments:
             - "@ngmore.helper.site_info_helper"
             - "@ngmore.helper.layout_helper"
@@ -36,7 +36,7 @@ services:
             - "@security.authorization_checker"
             - "@ezpublish.translation_helper"
             - "@ngmore.helper.path_helper"
-            - "@ngmore.templating.global_helper"
+            - "@ngmore.templating.global_variable"
             - "@ezpublish.locale.converter"
         tags:
             - { name: twig.extension }

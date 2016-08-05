@@ -6,7 +6,7 @@ use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;
 use Netgen\Bundle\MoreBundle\Helper\LayoutHelper;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class GlobalHelper
+class GlobalVariable
 {
     /**
      * @var \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper

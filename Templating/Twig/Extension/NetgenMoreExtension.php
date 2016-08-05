@@ -3,14 +3,14 @@
 namespace Netgen\Bundle\MoreBundle\Templating\Twig\Extension;
 
 use eZ\Publish\Core\Helper\TranslationHelper;
-use eZ\Publish\Core\Repository\Values\User\UserReference;
 use Netgen\Bundle\MoreBundle\Helper\PathHelper;
 use Netgen\Bundle\MoreBundle\Templating\GlobalHelper;
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Repository;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Intl\Intl;
 use Twig_Extension_GlobalsInterface;
 use Twig_Extension;
@@ -22,6 +22,11 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
      * @var \eZ\Publish\API\Repository\Repository
      */
     protected $repository;
+
+    /**
+     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
+     */
+    protected $authorizationChecker;
 
     /**
      * @var \eZ\Publish\Core\Helper\TranslationHelper
@@ -47,6 +52,7 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
      * Constructor.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface $authorizationChecker
      * @param \eZ\Publish\Core\Helper\TranslationHelper $translationHelper
      * @param \Netgen\Bundle\MoreBundle\Helper\PathHelper $pathHelper
      * @param \Netgen\Bundle\MoreBundle\Templating\GlobalHelper $globalHelper
@@ -54,12 +60,14 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
      */
     public function __construct(
         Repository $repository,
+        AuthorizationCheckerInterface $authorizationChecker,
         TranslationHelper $translationHelper,
         PathHelper $pathHelper,
         GlobalHelper $globalHelper,
         LocaleConverterInterface $localeConverter
     ) {
         $this->repository = $repository;
+        $this->authorizationChecker = $authorizationChecker;
         $this->translationHelper = $translationHelper;
         $this->pathHelper = $pathHelper;
         $this->globalHelper = $globalHelper;
@@ -106,12 +114,8 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
                 array($this, 'getOwner')
             ),
             new Twig_SimpleFunction(
-                'ngmore_can_user',
-                array($this, 'canUser')
-            ),
-            new Twig_SimpleFunction(
-                'ngmore_has_access',
-                array($this, 'hasAccess')
+                'ngmore_is_granted',
+                array($this, 'isGranted')
             ),
         );
     }
@@ -211,27 +215,17 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
      *
      * @return bool
      */
-    public function canUser($module, $function, ValueObject $object, $targets = null)
+    public function isGranted($module, $function, ValueObject $object = null, $targets = null)
     {
-        return $this->repository->canUser($module, $function, $object, $targets);
-    }
+        $attribute = new Attribute($module, $function);
+        if ($object instanceof ValueObject) {
+            $attribute->limitations['valueObject'] = $object;
+            if ($targets !== null) {
+                $attribute->limitations['targets'] = $targets;
+            }
+        }
 
-    /**
-     * Indicates if a user has access to specified module and function.
-     *
-     * @param string $module The module, aka controller identifier to check permissions on
-     * @param string $function The function, aka the controller action to check permissions on
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     *
-     * @return bool|array if limitations are on this function an array of limitations is returned
-     */
-    public function hasAccess($module, $function, User $user = null)
-    {
-        return $this->repository->hasAccess(
-            $module,
-            $function,
-            $user !== null ? new UserReference($user->id) : null
-        );
+        return $this->authorizationChecker->isGranted($attribute);
     }
 
     /**

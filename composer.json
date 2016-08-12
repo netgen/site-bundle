@@ -11,6 +11,7 @@
         "ezsystems/ezpublish-kernel": "^6.0",
         "netgen/admin-ui-bundle": "^1.0",
         "netgen/ez-forms-bundle": "~1.0",
+        "netgen/siteaccess-routes-bundle": "^1.0",
         "doctrine/common": "~2.5.0",
         "doctrine/orm": "~2.4",
         "netgen/metadata-bundle": "~0.5",

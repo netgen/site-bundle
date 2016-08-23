@@ -4,6 +4,7 @@ parameters:
     ngmore.controller.full_view.class: Netgen\Bundle\MoreBundle\Controller\FullViewController
     ngmore.controller.embed_view.class: Netgen\Bundle\MoreBundle\Controller\EmbedViewController
     ngmore.controller.block_view.class: Netgen\Bundle\MoreBundle\Controller\BlockViewController
+    ngmore.controller.search.class: Netgen\Bundle\MoreBundle\Controller\SearchController
     ngmore.controller.page_layout.class: Netgen\Bundle\MoreBundle\Controller\PageLayoutController
     ngmore.controller.parts.class: Netgen\Bundle\MoreBundle\Controller\PartsController
     ngmore.controller.download.class: Netgen\Bundle\MoreBundle\Controller\DownloadController
@@ -47,6 +48,14 @@ services:
     ngmore.controller.block_view:
         class: "%ngmore.controller.block_view.class%"
         parent: ezpublish.controller.base
+
+    ngmore.controller.search:
+        class: "%ngmore.controller.search.class%"
+        parent: ezpublish.controller.base
+        arguments:
+            - "@ezpublish.api.service.search"
+            - "@ezpublish.api.service.location"
+            - "@ezpublish.config.resolver"
 
     ngmore.controller.page_layout:
         class: "%ngmore.controller.page_layout.class%"

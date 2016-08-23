@@ -43,8 +43,10 @@ parameters:
     ngmore.default.user.mail.admin_email: "%ngmore.default.mail.admin_email%"
     ngmore.default.user.mail.admin_name: "%ngmore.default.mail.admin_name%"
 
-    netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length: 0
+    ngmore.default.search.default_limit: 10
 
     ngmore.default.template.errors.default: 'NetgenMoreBundle:errors:default.html.twig'
-
     ngmore.default.template.pagerfanta.ngmore: 'NetgenMoreBundle:pagerfanta:ngmore.html.twig'
+    ngmore.default.template.search: 'NetgenMoreBundle:search:search.html.twig'
+
+    netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length: 0

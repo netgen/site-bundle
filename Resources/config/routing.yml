@@ -41,6 +41,11 @@ ngmore_ajax_content_grid_load_more:
     defaults:
         _controller: "ez_page:viewBlockById"
 
+ngmore_content_search:
+    path: /content/search
+    defaults:
+        _controller: "ngmore.controller.search:search"
+
 # Disable eZ Platform built in routes
 
 ezpublishSetup:

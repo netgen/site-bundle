@@ -187,9 +187,9 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
     /**
      * Returns owner content for specified content.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content Must be a valid Content or ContentInfo object.
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content Must be a valid Content or ContentInfo object
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType When $content is not a valid Content or ContentInfo object.
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType When $content is not a valid Content or ContentInfo object
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
@@ -210,8 +210,8 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
      * @deprecated Replaced by ez_field as of 2014.12.2
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     * @param string $fieldDefIdentifier Identifier for the field we want to get.
-     * @param string $forcedLanguage Locale we want the field in (e.g. "cro-HR"). Null by default (takes current locale).
+     * @param string $fieldDefIdentifier Identifier for the field we want to get
+     * @param string $forcedLanguage Locale we want the field in (e.g. "cro-HR"). Null by default (takes current locale)
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field
      */

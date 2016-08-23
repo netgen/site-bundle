@@ -30,7 +30,7 @@ class NetgenMoreBootstrap3View extends TwitterBootstrap3View
     /**
      * Returns the canonical name.
      *
-     * @return string The canonical name.
+     * @return string The canonical name
      */
     public function getName()
     {

@@ -25,7 +25,7 @@ class Type extends BaseRelationListType
      *
      * @param int|string|array|\eZ\Publish\API\Repository\Values\Content\ContentInfo|\eZ\Publish\Core\FieldType\RelationList\Value $inputValue
      *
-     * @return \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value The potentially converted and structurally plausible value.
+     * @return \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value The potentially converted and structurally plausible value
      */
     protected function createValueFromInput($inputValue)
     {
@@ -64,7 +64,7 @@ class Type extends BaseRelationListType
     /**
      * Throws an exception if value structure is not of expected format.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure.
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure
      *
      * @param \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value $value
      */

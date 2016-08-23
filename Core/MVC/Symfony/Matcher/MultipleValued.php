@@ -17,7 +17,7 @@ abstract class MultipleValued extends RepositoryAware
      *
      * @param mixed $matchingConfig
      *
-     * @throws \InvalidArgumentException Should be thrown if $matchingConfig is not valid.
+     * @throws \InvalidArgumentException Should be thrown if $matchingConfig is not valid
      */
     public function setMatchingConfig($matchingConfig)
     {

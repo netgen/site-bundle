@@ -12,7 +12,7 @@ class Composite extends BaseComposite
     /**
      * Generates query expression for operator and value of a Field Criterion.
      *
-     * @throws \RuntimeException If operator is not handled.
+     * @throws \RuntimeException If operator is not handled
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion

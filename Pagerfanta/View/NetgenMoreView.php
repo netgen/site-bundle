@@ -80,9 +80,9 @@ class NetgenMoreView implements ViewInterface
      * the routes receiving the page number as first and
      * unique argument.
      *
-     * @param \Pagerfanta\PagerfantaInterface $pagerfanta A pagerfanta.
-     * @param \Closure $routeGenerator A callable to generate the routes.
-     * @param array $options An array of options (optional).
+     * @param \Pagerfanta\PagerfantaInterface $pagerfanta A pagerfanta
+     * @param \Closure $routeGenerator A callable to generate the routes
+     * @param array $options An array of options (optional)
      *
      * @return string
      */

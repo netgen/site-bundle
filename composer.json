@@ -29,5 +29,10 @@
     },
     "autoload": {
         "psr-4": { "Netgen\\Bundle\\MoreBundle\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.0.x-dev"
+        }
     }
 }

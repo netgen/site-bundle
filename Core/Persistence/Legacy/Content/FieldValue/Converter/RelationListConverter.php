@@ -7,6 +7,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use RuntimeException;
 use DOMDocument;
 
 class RelationListConverter extends BaseRelationListConverter
@@ -21,6 +22,8 @@ class RelationListConverter extends BaseRelationListConverter
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $storageFieldValue
+     *
+     * @throws \RuntimeException If data is incomplete
      */
     public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue)
     {
@@ -45,7 +48,7 @@ class RelationListConverter extends BaseRelationListConverter
             $relationItem = $doc->createElement('relation-item');
             foreach (self::dbAttributeMap() as $domAttrKey => $propertyKey) {
                 if (!isset($row[$propertyKey])) {
-                    throw new \RuntimeException("Missing relation-item external data property: $propertyKey");
+                    throw new RuntimeException("Missing relation-item external data property: $propertyKey");
                 }
 
                 $relationItem->setAttribute($domAttrKey, $row[$propertyKey]);

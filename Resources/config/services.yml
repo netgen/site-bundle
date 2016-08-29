@@ -69,6 +69,8 @@ services:
     ngmore.controller.page_layout:
         class: "%ngmore.controller.page_layout.class%"
         parent: ezpublish.controller.base
+        arguments:
+            - "@netgen.ezplatform_site.load_service"
 
     ngmore.controller.parts:
         class: "%ngmore.controller.parts.class%"

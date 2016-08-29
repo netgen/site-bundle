@@ -3,11 +3,27 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
+use Netgen\EzPlatformSite\API\LoadService;
 use Symfony\Component\HttpFoundation\Response;
 use Knp\Menu\ItemInterface;
 
 class PageLayoutController extends Controller
 {
+    /**
+     * @var \Netgen\EzPlatformSite\API\LoadService
+     */
+    protected $loadService;
+
+    /**
+     * Constructor.
+     *
+     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
+     */
+    public function __construct(LoadService $loadService)
+    {
+        $this->loadService = $loadService;
+    }
+
     /**
      * Returns rendered menu.
      *
@@ -75,10 +91,10 @@ class PageLayoutController extends Controller
     public function region($layoutId, $region, $cssClass = false, $params = array(), $blockSpecificParams = array(), $template = null)
     {
         $response = new Response();
-        $layout = $this->getRepository()->getContentService()->loadContent($layoutId);
+        $layout = $this->loadService->loadContent($layoutId);
 
         /** @var $pageValue \eZ\Publish\Core\FieldType\Page\Value */
-        $pageValue = $this->get('ezpublish.translation_helper')->getTranslatedField($layout, 'page')->value;
+        $pageValue = $layout->getField('page')->value;
 
         foreach ($pageValue->page->zones as $zone) {
             if (strtolower($zone->identifier) == strtolower($region) && !empty($zone->blocks)) {

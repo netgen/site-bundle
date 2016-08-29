@@ -72,6 +72,11 @@ services:
     ngmore.controller.download:
         class: "%ngmore.controller.download.class%"
         parent: ezpublish.controller.base
+        arguments:
+            - "@netgen.ezplatform_site.load_service"
+            - "@ezpublish.fieldtype.ezbinaryfile.io_service"
+            - "@ezpublish.fieldtype.ezimage.io_service"
+            - "@translator"
 
     ngmore.controller.sitemap:
         class: "%ngmore.controller.sitemap.class%"

@@ -19,6 +19,7 @@ class PrePasswordResetEvent extends Event
     protected $user;
 
     /**
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct
      */
     public function __construct(User $user, UserUpdateStruct $userUpdateStruct)

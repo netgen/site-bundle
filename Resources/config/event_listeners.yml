@@ -52,7 +52,6 @@ services:
             - "@ngmore.repository.nguser_setting"
             - "@ngmore.repository.ezuser_accountkey"
             - "@ezpublish.translation_helper"
-            - "@ezpublish.api.repository"
 
     ngmore.listener.user.post_register:
         class: "%ngmore.listener.user.post_register.class%"

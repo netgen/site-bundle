@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Netgen\Bundle\MoreBundle\Helper\SortClauseHelper;
 use Netgen\EzPlatformSite\API\FindService;
 use Netgen\EzPlatformSite\API\LoadService;
+use Psr\Log\NullLogger;
 use Symfony\Component\Routing\RouterInterface;
 use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;
 use Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value as RelationListValue;
@@ -82,7 +83,7 @@ class RelationListMenuBuilder
         $this->siteInfoHelper = $siteInfoHelper;
         $this->sortClauseHelper = $sortClauseHelper;
         $this->router = $router;
-        $this->logger = $logger;
+        $this->logger = $logger ?: new NullLogger();
     }
 
     /**
@@ -134,18 +135,14 @@ class RelationListMenuBuilder
         foreach ($field->value->destinationLocationIds as $locationId) {
             try {
                 if (empty($locationId)) {
-                    if ($this->logger instanceof LoggerInterface) {
-                        $this->logger->error('[Relation Menu] Empty location id in relation list');
-                    }
+                    $this->logger->error('[Relation Menu] Empty location id in relation list');
 
                     continue;
                 }
 
                 $location = $this->loadService->loadLocation($locationId);
             } catch (NotFoundException $e) {
-                if ($this->logger instanceof LoggerInterface) {
-                    $this->logger->error($e->getMessage());
-                }
+                $this->logger->error($e->getMessage());
 
                 continue;
             }
@@ -239,14 +236,10 @@ class RelationListMenuBuilder
                         $linkAttributes['target'] = '_blank';
                     }
                 } else {
-                    if ($this->logger instanceof LoggerInterface) {
-                        $this->logger->error('[Relation menu] Shortcut has related object that is not published.');
-                    }
+                    $this->logger->error('[Relation menu] Shortcut has related object that is not published.');
                 }
             } catch (NotFoundException $e) {
-                if ($this->logger instanceof LoggerInterface) {
-                    $this->logger->error($e->getMessage());
-                }
+                $this->logger->error($e->getMessage());
             }
         }
 
@@ -339,14 +332,10 @@ class RelationListMenuBuilder
                         $linkAttributes['target'] = '_blank';
                     }
                 } else {
-                    if ($this->logger instanceof LoggerInterface) {
-                        $this->logger->error('[Relation menu] Menu item has related object that is not published.');
-                    }
+                    $this->logger->error('[Relation menu] Menu item has related object that is not published.');
                 }
             } catch (NotFoundException $e) {
-                if ($this->logger instanceof LoggerInterface) {
-                    $this->logger->error($e->getMessage());
-                }
+                $this->logger->error($e->getMessage());
             }
         }
 
@@ -423,14 +412,10 @@ class RelationListMenuBuilder
 
                     $this->addMenuItemsFromLocations($childItem, $foundLocations);
                 } else {
-                    if ($this->logger instanceof LoggerInterface) {
-                        $this->logger->error('[Relation menu] Menu item has related object that is not published.');
-                    }
+                    $this->logger->error('[Relation menu] Menu item has related object that is not published.');
                 }
             } catch (NotFoundException $e) {
-                if ($this->logger instanceof LoggerInterface) {
-                    $this->logger->error($e->getMessage());
-                }
+                $this->logger->error($e->getMessage());
             }
         } elseif (!$content->getField('menu_items')->isEmpty()) {
             $this->generateFromRelationList(

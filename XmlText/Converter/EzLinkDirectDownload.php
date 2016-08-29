@@ -4,6 +4,7 @@ namespace Netgen\Bundle\MoreBundle\XmlText\Converter;
 
 use Netgen\EzPlatformSite\API\LoadService;
 use eZ\Publish\Core\FieldType\XmlText\Converter;
+use Psr\Log\NullLogger;
 use Symfony\Component\Routing\RouterInterface;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
@@ -39,7 +40,7 @@ class EzLinkDirectDownload implements Converter
     ) {
         $this->loadService = $loadService;
         $this->router = $router;
-        $this->logger = $logger;
+        $this->logger = $logger ?: new NullLogger();
     }
 
     /**
@@ -65,19 +66,15 @@ class EzLinkDirectDownload implements Converter
                     $content = $this->loadService->loadContent($link->getAttribute('object_id'));
                     $location = $this->loadService->loadLocation($content->contentInfo->mainLocationId);
                 } catch (NotFoundException $e) {
-                    if ($this->logger) {
-                        $this->logger->warning(
-                            'While generating links for xmltext, could not locate ' .
-                            'Content object with ID ' . $link->getAttribute('object_id')
-                        );
-                    }
+                    $this->logger->warning(
+                        'While generating links for xmltext, could not locate ' .
+                        'Content object with ID ' . $link->getAttribute('object_id')
+                    );
                 } catch (UnauthorizedException $e) {
-                    if ($this->logger) {
-                        $this->logger->notice(
-                            'While generating links for xmltext, unauthorized to load ' .
-                            'Content object with ID ' . $link->getAttribute('object_id')
-                        );
-                    }
+                    $this->logger->notice(
+                        'While generating links for xmltext, unauthorized to load ' .
+                        'Content object with ID ' . $link->getAttribute('object_id')
+                    );
                 }
             }
 
@@ -86,19 +83,15 @@ class EzLinkDirectDownload implements Converter
                     $location = $this->loadService->loadLocation($link->getAttribute('node_id'));
                     $content = $this->loadService->loadContent($location->contentId);
                 } catch (NotFoundException $e) {
-                    if ($this->logger) {
-                        $this->logger->warning(
-                            'While generating links for xmltext, could not locate ' .
-                            'Location with ID ' . $link->getAttribute('node_id')
-                        );
-                    }
+                    $this->logger->warning(
+                        'While generating links for xmltext, could not locate ' .
+                        'Location with ID ' . $link->getAttribute('node_id')
+                    );
                 } catch (UnauthorizedException $e) {
-                    if ($this->logger) {
-                        $this->logger->notice(
-                            'While generating links for xmltext, unauthorized to load ' .
-                            'Location with ID ' . $link->getAttribute('node_id')
-                        );
-                    }
+                    $this->logger->notice(
+                        'While generating links for xmltext, unauthorized to load ' .
+                        'Location with ID ' . $link->getAttribute('node_id')
+                    );
                 }
             }
 

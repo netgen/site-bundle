@@ -2,6 +2,7 @@
 
 namespace Netgen\Bundle\MoreBundle\Helper;
 
+use Psr\Log\NullLogger;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -77,7 +78,7 @@ class MailHelper
         $this->router = $router;
         $this->translator = $translator;
         $this->configResolver = $configResolver;
-        $this->logger = $logger;
+        $this->logger = $logger ?: new NullLogger();
 
         $this->siteUrl = $this->router->generate(
             'ez_urlalias',
@@ -117,9 +118,7 @@ class MailHelper
         try {
             $sender = $this->getSender($sender);
         } catch (InvalidArgumentException $e) {
-            if ($this->logger instanceof LoggerInterface) {
-                $this->logger->error($e->getMessage());
-            }
+            $this->logger->error($e->getMessage());
 
             return -1;
         }

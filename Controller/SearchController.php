@@ -3,11 +3,11 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
-use eZ\Publish\API\Repository\LocationService;
-use eZ\Publish\API\Repository\SearchService;
+use Netgen\EzPlatformSite\API\LoadService;
+use Netgen\EzPlatformSite\API\FindService;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\HttpFoundation\Request;
-use eZ\Publish\Core\Pagination\Pagerfanta\LocationSearchAdapter;
+use Netgen\EzPlatformSite\Core\Site\Pagination\Pagerfanta\LocationSearchAdapter;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use Pagerfanta\Pagerfanta;
@@ -15,14 +15,14 @@ use Pagerfanta\Pagerfanta;
 class SearchController extends Controller
 {
     /**
-     * @var \eZ\Publish\API\Repository\SearchService
+     * @var \Netgen\EzPlatformSite\API\FindService
      */
-    protected $searchService;
+    protected $findService;
 
     /**
-     * @var \eZ\Publish\API\Repository\LocationService
+     * @var \Netgen\EzPlatformSite\API\LoadService
      */
-    protected $locationService;
+    protected $loadService;
 
     /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
@@ -42,17 +42,17 @@ class SearchController extends Controller
     /**
      * Constructor.
      *
-     * @param \eZ\Publish\API\Repository\SearchService $searchService
-     * @param \eZ\Publish\API\Repository\LocationService $locationService
+     * @param \Netgen\EzPlatformSite\API\FindService $findService
+     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      */
     public function __construct(
-        SearchService $searchService,
-        LocationService $locationService,
+        FindService $findService,
+        LoadService $loadService,
         ConfigResolverInterface $configResolver
     ) {
-        $this->searchService = $searchService;
-        $this->locationService = $locationService;
+        $this->findService = $findService;
+        $this->loadService = $loadService;
         $this->configResolver = $configResolver;
 
         $this->defaultLimit = (int)$this->configResolver->getParameter('search.default_limit', 'ngmore');
@@ -81,7 +81,7 @@ class SearchController extends Controller
         }
 
         $rootLocationId = $this->configResolver->getParameter('content.tree_root.location_id');
-        $rootLocation = $this->locationService->loadLocation($rootLocationId);
+        $rootLocation = $this->loadService->loadLocation($rootLocationId);
 
         $criteria = array(
             new Criterion\FullText($searchText),
@@ -95,10 +95,7 @@ class SearchController extends Controller
         $pager = new Pagerfanta(
             new LocationSearchAdapter(
                 $query,
-                $this->searchService,
-                array(
-                    'languages' => $this->configResolver->getParameter('languages'),
-                )
+                $this->findService
             )
         );
 

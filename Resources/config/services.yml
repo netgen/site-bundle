@@ -54,8 +54,8 @@ services:
         class: "%ngmore.controller.search.class%"
         parent: ezpublish.controller.base
         arguments:
-            - "@ezpublish.api.service.search"
-            - "@ezpublish.api.service.location"
+            - "@netgen.ezplatform_site.find_service"
+            - "@netgen.ezplatform_site.load_service"
             - "@ezpublish.config.resolver"
 
     ngmore.controller.page_layout:

@@ -51,7 +51,7 @@ services:
             - "@ezpublish.config.resolver"
             - "@ngmore.repository.nguser_setting"
             - "@ngmore.repository.ezuser_accountkey"
-            - "@ezpublish.translation_helper"
+            - "@netgen.ezplatform_site.load_service"
 
     ngmore.listener.user.post_register:
         class: "%ngmore.listener.user.post_register.class%"

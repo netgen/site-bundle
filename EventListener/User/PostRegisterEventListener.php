@@ -34,7 +34,7 @@ class PostRegisterEventListener extends UserEventListener implements EventSubscr
         if ($user->enabled) {
             $this->mailHelper
                 ->sendMail(
-                    array($user->email => $this->translationHelper->getTranslatedContentName($user)),
+                    array($user->email => $this->getUserName($user)),
                     'ngmore.user.welcome.subject',
                     $this->configResolver->getParameter('template.user.mail.welcome', 'ngmore'),
                     array(
@@ -50,7 +50,7 @@ class PostRegisterEventListener extends UserEventListener implements EventSubscr
         if ($this->configResolver->getParameter('user.require_admin_activation', 'ngmore')) {
             $this->mailHelper
                 ->sendMail(
-                    array($user->email => $this->translationHelper->getTranslatedContentName($user)),
+                    array($user->email => $this->getUserName($user)),
                     'ngmore.user.activate.admin_activation_pending.subject',
                     $this->configResolver->getParameter('template.user.mail.activate_admin_activation_pending', 'ngmore'),
                     array(
@@ -78,7 +78,7 @@ class PostRegisterEventListener extends UserEventListener implements EventSubscr
 
         $this->mailHelper
             ->sendMail(
-                array($user->email => $this->translationHelper->getTranslatedContentName($user)),
+                array($user->email => $this->getUserName($user)),
                 'ngmore.user.activate.subject',
                 $this->configResolver->getParameter('template.user.mail.activate', 'ngmore'),
                 array(

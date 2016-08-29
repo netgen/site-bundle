@@ -48,7 +48,7 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
             if ($this->ngUserSettingRepository->isUserActivated($user->id)) {
                 $this->mailHelper
                     ->sendMail(
-                        array($user->email => $this->translationHelper->getTranslatedContentName($user)),
+                        array($user->email => $this->getUserName($user)),
                         'ngmore.user.forgot_password.disabled.subject',
                         $this->configResolver->getParameter('template.user.mail.forgot_password_disabled', 'ngmore'),
                         array(
@@ -61,7 +61,7 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
 
             $this->mailHelper
                 ->sendMail(
-                    array($user->email => $this->translationHelper->getTranslatedContentName($user)),
+                    array($user->email => $this->getUserName($user)),
                     'ngmore.user.forgot_password.not_active.subject',
                     $this->configResolver->getParameter('template.user.mail.forgot_password_not_active', 'ngmore'),
                     array(
@@ -76,7 +76,7 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
 
         $this->mailHelper
             ->sendMail(
-                array($user->email => $this->translationHelper->getTranslatedContentName($user)),
+                array($user->email => $this->getUserName($user)),
                 'ngmore.user.forgot_password.subject',
                 $this->configResolver->getParameter('template.user.mail.forgot_password', 'ngmore'),
                 array(

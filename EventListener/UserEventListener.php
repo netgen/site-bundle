@@ -2,11 +2,12 @@
 
 namespace Netgen\Bundle\MoreBundle\EventListener;
 
+use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Netgen\Bundle\MoreBundle\Helper\MailHelper;
 use Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository;
 use Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
-use eZ\Publish\Core\Helper\TranslationHelper;
+use Netgen\EzPlatformSite\API\LoadService;
 
 abstract class UserEventListener
 {
@@ -31,28 +32,42 @@ abstract class UserEventListener
     protected $ezUserAccountKeyRepository;
 
     /**
-     * @var \eZ\Publish\Core\Helper\TranslationHelper
+     * @var \Netgen\EzPlatformSite\API\LoadService
      */
-    protected $translationHelper;
+    protected $loadService;
 
     /**
      * @param \Netgen\Bundle\MoreBundle\Helper\MailHelper $mailHelper
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      * @param \Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository $ngUserSettingRepository
-     * @param \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository
-     * @param \eZ\Publish\Core\Helper\TranslationHelper
+     * @param \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository $ezUserAccountKeyRepository
+     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
      */
     public function __construct(
         MailHelper $mailHelper,
         ConfigResolverInterface $configResolver,
         NgUserSettingRepository $ngUserSettingRepository,
         EzUserAccountKeyRepository $ezUserAccountKeyRepository,
-        TranslationHelper $translationHelper
+        LoadService $loadService
     ) {
         $this->mailHelper = $mailHelper;
         $this->configResolver = $configResolver;
         $this->ngUserSettingRepository = $ngUserSettingRepository;
         $this->ezUserAccountKeyRepository = $ezUserAccountKeyRepository;
-        $this->translationHelper = $translationHelper;
+        $this->loadService = $loadService;
+    }
+
+    /**
+     * Returns the translated user name.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     *
+     * @return string
+     */
+    protected function getUserName(User $user)
+    {
+        $contentInfo = $this->loadService->loadContentInfo($user->id);
+
+        return $contentInfo->name;
     }
 }

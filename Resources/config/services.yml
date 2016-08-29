@@ -44,6 +44,8 @@ services:
         class: "%ngmore.controller.embed_view.class%"
         parent: ezpublish.controller.base
         arguments:
+            - "@netgen.ezplatform_site.load_service"
+            - "@router"
             - "@?logger"
 
     ngmore.controller.block_view:

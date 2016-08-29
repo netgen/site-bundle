@@ -3,13 +3,26 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
-use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+use Netgen\EzPlatformSite\API\LoadService;
+use Symfony\Component\Routing\RouterInterface;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 class EmbedViewController extends Controller
 {
+    /**
+     * @var \Netgen\EzPlatformSite\API\LoadService
+     */
+    protected $loadService;
+
+    /**
+     * @var \Symfony\Component\Routing\RouterInterface
+     */
+    protected $router;
+
     /**
      * @var \Psr\Log\LoggerInterface
      */
@@ -18,25 +31,26 @@ class EmbedViewController extends Controller
     /**
      * Constructor.
      *
+     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
+     * @param \Symfony\Component\Routing\RouterInterface $router
      * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger = null)
+    public function __construct(LoadService $loadService, RouterInterface $router, LoggerInterface $logger = null)
     {
-        $this->logger = $logger;
+        $this->loadService = $loadService;
+        $this->router = $router;
+        $this->logger = $logger ?: new NullLogger();
     }
 
     /**
      * Action for viewing embedded content with image content type identifier.
      *
-     * @param \eZ\Publish\Core\MVC\Symfony\View\ContentView $view
+     * @param \Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView $view
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView
      */
     public function embedImage(ContentView $view)
     {
-        $fieldHelper = $this->container->get('ezpublish.field_helper');
-        $translationHelper = $this->container->get('ezpublish.translation_helper');
-
         $parameters = $view->getParameters();
         $targetLink = !empty($parameters['objectParameters']['href']) ? trim($parameters['objectParameters']['href']) : null;
         if (!empty($targetLink)) {
@@ -45,60 +59,51 @@ class EmbedViewController extends Controller
                     $locationId = (int)substr($targetLink, 9);
 
                     try {
-                        $location = $this->getRepository()->getLocationService()->loadLocation($locationId);
-                        $content = $this->getRepository()->getContentService()->loadContent($location->contentId);
+                        $location = $this->loadService->loadLocation($locationId);
+                        $content = $this->loadService->loadContent($location->contentId);
                     } catch (NotFoundException $e) {
                         $targetLink = null;
-                        if ($this->logger) {
-                            $this->logger->error(
-                                'Tried to generate link to non existing location #' . $locationId
-                            );
-                        }
+                        $this->logger->error(
+                            'Tried to generate link to non existing location #' . $locationId
+                        );
                     } catch (UnauthorizedException $e) {
                         $targetLink = null;
-                        if ($this->logger) {
-                            $this->logger->error(
-                                'Tried to generate link to location #' . $locationId . ' without read rights'
-                            );
-                        }
+                        $this->logger->error(
+                            'Tried to generate link to location #' . $locationId . ' without read rights'
+                        );
                     }
                 } elseif (stripos($targetLink, 'ezobject://') === 0) {
                     $linkedContentId = (int)substr($targetLink, 11);
 
                     try {
-                        $content = $this->getRepository()->getContentService()->loadContent($linkedContentId);
+                        $content = $this->loadService->loadContent($linkedContentId);
                     } catch (NotFoundException $e) {
                         $targetLink = null;
-                        if ($this->logger) {
-                            $this->logger->error(
-                                'Tried to generate link to non existing content #' . $linkedContentId
-                            );
-                        }
+                        $this->logger->error(
+                            'Tried to generate link to non existing content #' . $linkedContentId
+                        );
                     } catch (UnauthorizedException $e) {
                         $targetLink = null;
-                        if ($this->logger) {
-                            $this->logger->error(
-                                'Tried to generate link to content #' . $linkedContentId . ' without read rights'
-                            );
-                        }
+                        $this->logger->error(
+                            'Tried to generate link to content #' . $linkedContentId . ' without read rights'
+                        );
                     }
                 }
 
                 if (!empty($content)) {
                     $fieldName = null;
-                    if (isset($content->fields['file']) && !$fieldHelper->isFieldEmpty($content, 'file')) {
+                    if ($content->hasField('file') && !$content->getField('file')->isEmpty()) {
                         $fieldName = 'file';
-                    } elseif (isset($content->fields['image']) && !$fieldHelper->isFieldEmpty($content, 'image')) {
+                    } elseif ($content->hasField('image') && !$content->getField('image')->isEmpty()) {
                         $fieldName = 'image';
                     }
 
                     if ($fieldName !== null) {
-                        $field = $translationHelper->getTranslatedField($content, $fieldName);
                         $targetLink = $this->generateUrl(
                             'ngmore_download',
                             array(
                                 'contentId' => $content->id,
-                                'fieldId' => $field->id,
+                                'fieldId' => $content->getField($fieldName)->id,
                             )
                         );
                     }
@@ -106,9 +111,9 @@ class EmbedViewController extends Controller
             }
 
             if (stripos($targetLink, 'eznode://') === 0) {
-                $targetLink = $this->container->get('router')->generate($location);
+                $targetLink = $this->router->generate($location);
             } elseif (stripos($targetLink, 'ezobject://') === 0) {
-                $targetLink = $this->container->get('router')->generate($content);
+                $targetLink = $this->router->generate($content);
             }
         }
 

@@ -212,12 +212,7 @@ class FullViewController extends Controller
             }
 
             return new RedirectResponse(
-                $this->router->generate(
-                    'ez_urlalias',
-                    array(
-                        'locationId' => $this->getConfigResolver()->getParameter('content.tree_root.location_id'),
-                    )
-                ) . trim($externalRedirectValue->link, '/'),
+                $this->router->generate($this->getRootLocation()) . trim($externalRedirectValue->link, '/'),
                 RedirectResponse::HTTP_MOVED_PERMANENTLY
             );
         }

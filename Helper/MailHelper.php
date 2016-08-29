@@ -161,6 +161,8 @@ class MailHelper
      * ngmore.default.mail.sender_email
      * ngmore.default.mail.sender_name (optional).
      *
+     * @throws \InvalidArgumentException If sender was not provided
+     *
      * @param mixed $sender
      *
      * @return array|string

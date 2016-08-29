@@ -64,7 +64,7 @@ class EzLinkDirectDownload implements Converter
             if ($link->hasAttribute('object_id')) {
                 try {
                     $content = $this->loadService->loadContent($link->getAttribute('object_id'));
-                    $location = $this->loadService->loadLocation($content->contentInfo->mainLocationId);
+                    $location = $this->loadService->loadLocation($content->mainLocationId);
                 } catch (NotFoundException $e) {
                     $this->logger->warning(
                         'While generating links for xmltext, could not locate ' .

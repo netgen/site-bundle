@@ -90,12 +90,11 @@ class SiteContentUrlAliasRouter implements ChainedRouterInterface, RequestMatche
             throw new RouteNotFoundException('Could not match route');
         }
 
-        $contentInfo = $name instanceof Content ? $name->contentInfo : $name;
-        if (empty($contentInfo->mainLocationId)) {
+        if (empty($name->mainLocationId)) {
             throw new LogicException('Cannot generate an UrlAlias route for content without main location.');
         }
 
-        $mainLocation = $this->loadService->loadLocation($contentInfo->mainLocationId);
+        $mainLocation = $this->loadService->loadLocation($name->mainLocationId);
 
         return $this->generator->generate(
             $mainLocation->innerLocation,

@@ -168,7 +168,7 @@ class RelationListMenuBuilder
         $content = $this->loadService->loadContent($location->contentId);
 
         $uri = false;
-        $menuItemId = $label = $location->contentInfo->name;
+        $menuItemId = $label = $content->name;
         $attributes = array();
         $linkAttributes = array();
 

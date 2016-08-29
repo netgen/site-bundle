@@ -13,7 +13,7 @@ use Psr\Log\NullLogger;
 class EmbedViewController extends Controller
 {
     /**
-     * @var \Netgen\EzPlatformSite\API\LoadService
+     * @var \Netgen\EzPlatformSiteApi\API\LoadService
      */
     protected $loadService;
 

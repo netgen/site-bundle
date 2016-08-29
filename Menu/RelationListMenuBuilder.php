@@ -4,14 +4,14 @@ namespace Netgen\Bundle\MoreBundle\Menu;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
-use Netgen\EzPlatformSite\API\Values\Location;
-use Netgen\EzPlatformSite\API\Values\Content;
+use Netgen\EzPlatformSiteApi\API\Values\Location;
+use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\FactoryInterface;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Netgen\Bundle\MoreBundle\Helper\SortClauseHelper;
-use Netgen\EzPlatformSite\API\FindService;
-use Netgen\EzPlatformSite\API\LoadService;
+use Netgen\EzPlatformSiteApi\API\FindService;
+use Netgen\EzPlatformSiteApi\API\LoadService;
 use Psr\Log\NullLogger;
 use Symfony\Component\Routing\RouterInterface;
 use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;
@@ -28,12 +28,12 @@ class RelationListMenuBuilder
     protected $factory;
 
     /**
-     * @var \Netgen\EzPlatformSite\API\LoadService
+     * @var \Netgen\EzPlatformSiteApi\API\LoadService
      */
     protected $loadService;
 
     /**
-     * @var \Netgen\EzPlatformSite\API\FindService
+     * @var \Netgen\EzPlatformSiteApi\API\FindService
      */
     protected $findService;
 
@@ -61,8 +61,8 @@ class RelationListMenuBuilder
      * Constructor.
      *
      * @param \Knp\Menu\FactoryInterface $factory
-     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
-     * @param \Netgen\EzPlatformSite\API\FindService $findService
+     * @param \Netgen\EzPlatformSiteApi\API\LoadService $loadService
+     * @param \Netgen\EzPlatformSiteApi\API\FindService $findService
      * @param \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper $siteInfoHelper
      * @param \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper $sortClauseHelper
      * @param \Symfony\Component\Routing\RouterInterface $router
@@ -114,7 +114,7 @@ class RelationListMenuBuilder
      * Generates a menu item from a relation list in content.
      *
      * @param \Knp\Menu\ItemInterface $menuItem
-     * @param \Netgen\EzPlatformSite\API\Values\Content $content
+     * @param \Netgen\EzPlatformSiteApi\API\Values\Content $content
      * @param string $fieldDefIdentifier
      */
     protected function generateFromRelationList(ItemInterface $menuItem, Content $content, $fieldDefIdentifier)
@@ -161,7 +161,7 @@ class RelationListMenuBuilder
      * Generates a menu item from Location object of ng_shortcut content type.
      *
      * @param \Knp\Menu\ItemInterface $menuItem
-     * @param \Netgen\EzPlatformSite\API\Values\Location $location
+     * @param \Netgen\EzPlatformSiteApi\API\Values\Location $location
      */
     protected function generateFromNgShortcut(ItemInterface $menuItem, Location $location)
     {
@@ -258,7 +258,7 @@ class RelationListMenuBuilder
      * Generates a menu item and potential children from Location object of ng_menu_item content type.
      *
      * @param \Knp\Menu\ItemInterface $menuItem
-     * @param \Netgen\EzPlatformSite\API\Values\Location $location
+     * @param \Netgen\EzPlatformSiteApi\API\Values\Location $location
      */
     protected function generateFromNgMenuItem(ItemInterface $menuItem, Location $location)
     {
@@ -430,7 +430,7 @@ class RelationListMenuBuilder
      * Adds menu items from array of Location objects.
      *
      * @param \Knp\Menu\ItemInterface $menuItem
-     * @param \Netgen\EzPlatformSite\API\Values\Location[] $locations
+     * @param \Netgen\EzPlatformSiteApi\API\Values\Location[] $locations
      */
     protected function addMenuItemsFromLocations(ItemInterface $menuItem, array $locations = array())
     {

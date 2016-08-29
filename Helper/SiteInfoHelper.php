@@ -2,13 +2,13 @@
 
 namespace Netgen\Bundle\MoreBundle\Helper;
 
-use Netgen\EzPlatformSite\API\LoadService;
+use Netgen\EzPlatformSiteApi\API\LoadService;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 class SiteInfoHelper
 {
     /**
-     * @var \Netgen\EzPlatformSite\API\LoadService
+     * @var \Netgen\EzPlatformSiteApi\API\LoadService
      */
     protected $loadService;
 
@@ -18,19 +18,19 @@ class SiteInfoHelper
     protected $configResolver;
 
     /**
-     * @var \Netgen\EzPlatformSite\API\Values\Location
+     * @var \Netgen\EzPlatformSiteApi\API\Values\Location
      */
     protected $siteInfoLocation;
 
     /**
-     * @var \Netgen\EzPlatformSite\API\Values\Content
+     * @var \Netgen\EzPlatformSiteApi\API\Values\Content
      */
     protected $siteInfoContent;
 
     /**
      * Constructor.
      *
-     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
+     * @param \Netgen\EzPlatformSiteApi\API\LoadService $loadService
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      */
     public function __construct(
@@ -44,7 +44,7 @@ class SiteInfoHelper
     /**
      * Returns the SiteInfo location.
      *
-     * @return \Netgen\EzPlatformSite\API\Values\Location
+     * @return \Netgen\EzPlatformSiteApi\API\Values\Location
      */
     public function getSiteInfoLocation()
     {
@@ -60,7 +60,7 @@ class SiteInfoHelper
     /**
      * Returns the SiteInfo content.
      *
-     * @return \Netgen\EzPlatformSite\API\Values\Content
+     * @return \Netgen\EzPlatformSiteApi\API\Values\Content
      */
     public function getSiteInfoContent()
     {

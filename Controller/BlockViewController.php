@@ -14,7 +14,7 @@ use eZ\Publish\Core\MVC\Symfony\View\BlockView;
 use Netgen\Bundle\MoreBundle\Helper\SortClauseHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Netgen\EzPlatformSite\Core\Site\Pagination\Pagerfanta\LocationSearchAdapter;
+use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\LocationSearchAdapter;
 use Pagerfanta\Pagerfanta;
 
 class BlockViewController extends Controller

@@ -6,13 +6,13 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\SPI\Search\Handler;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use Netgen\EzPlatformSite\API\Values\Content;
-use Netgen\EzPlatformSite\API\Values\Location;
+use Netgen\EzPlatformSiteApi\API\Values\Content;
+use Netgen\EzPlatformSiteApi\API\Values\Location;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Netgen\Bundle\MoreBundle\API\Repository\Values\Content\Query\Criterion\Field;
 use Netgen\Bundle\MoreBundle\API\Repository\Values\Content\Query\SortClause\FieldLength;
-use Netgen\EzPlatformSite\API\LoadService;
+use Netgen\EzPlatformSiteApi\API\LoadService;
 
 class LayoutHelper
 {
@@ -22,7 +22,7 @@ class LayoutHelper
     protected $repository;
 
     /**
-     * @var \Netgen\EzPlatformSite\API\LoadService
+     * @var \Netgen\EzPlatformSiteApi\API\LoadService
      */
     protected $loadService;
 
@@ -43,7 +43,7 @@ class LayoutHelper
 
     /**
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
+     * @param \Netgen\EzPlatformSiteApi\API\LoadService $loadService
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
      * @param \Netgen\Bundle\MoreBundle\Helper\PathHelper $pathHelper
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
@@ -70,7 +70,7 @@ class LayoutHelper
      *                    For example: It can be extracted from current request object with
      *                    $this->request->attributes->get( 'semanticPathinfo' ) . $this->request->attributes->get( 'viewParametersString' )
      *
-     * @return \Netgen\EzPlatformSite\API\Values\Content
+     * @return \Netgen\EzPlatformSiteApi\API\Values\Content
      */
     public function getLayout($locationId, $uri)
     {
@@ -120,9 +120,9 @@ class LayoutHelper
     /**
      * Validates a layout according to data inside of it.
      *
-     * @param \Netgen\EzPlatformSite\API\Values\Location $originalLocation
+     * @param \Netgen\EzPlatformSiteApi\API\Values\Location $originalLocation
      * @param array $pathItem
-     * @param \Netgen\EzPlatformSite\API\Values\Content $layoutContent
+     * @param \Netgen\EzPlatformSiteApi\API\Values\Content $layoutContent
      *
      * @return bool
      */

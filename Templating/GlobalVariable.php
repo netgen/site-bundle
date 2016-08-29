@@ -45,7 +45,7 @@ class GlobalVariable
     /**
      * Returns the SiteInfo location.
      *
-     * @return \Netgen\EzPlatformSite\API\Values\Location
+     * @return \Netgen\EzPlatformSiteApi\API\Values\Location
      */
     public function getSiteInfoLocation()
     {
@@ -55,7 +55,7 @@ class GlobalVariable
     /**
      * Returns the SiteInfo content.
      *
-     * @return \Netgen\EzPlatformSite\API\Values\Content
+     * @return \Netgen\EzPlatformSiteApi\API\Values\Content
      */
     public function getSiteInfoContent()
     {
@@ -65,7 +65,7 @@ class GlobalVariable
     /**
      * Returns the current layout.
      *
-     * @return \Netgen\EzPlatformSite\API\Values\Content
+     * @return \Netgen\EzPlatformSiteApi\API\Values\Content
      */
     public function getLayout()
     {

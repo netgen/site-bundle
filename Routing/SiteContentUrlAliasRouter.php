@@ -2,10 +2,10 @@
 
 namespace Netgen\Bundle\MoreBundle\Routing;
 
-use Netgen\EzPlatformSite\API\Values\Content;
-use Netgen\EzPlatformSite\API\Values\ContentInfo;
+use Netgen\EzPlatformSiteApi\API\Values\Content;
+use Netgen\EzPlatformSiteApi\API\Values\ContentInfo;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
-use Netgen\EzPlatformSite\API\LoadService;
+use Netgen\EzPlatformSiteApi\API\LoadService;
 use Symfony\Cmf\Component\Routing\ChainedRouterInterface;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
@@ -21,7 +21,7 @@ use RuntimeException;
 class SiteContentUrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 {
     /**
-     * @var \Netgen\EzPlatformSite\API\LoadService
+     * @var \Netgen\EzPlatformSiteApi\API\LoadService
      */
     protected $loadService;
 
@@ -38,7 +38,7 @@ class SiteContentUrlAliasRouter implements ChainedRouterInterface, RequestMatche
     /**
      * Constructor.
      *
-     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
+     * @param \Netgen\EzPlatformSiteApi\API\LoadService $loadService
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator $generator
      * @param \Symfony\Component\Routing\RequestContext $requestContext
      */

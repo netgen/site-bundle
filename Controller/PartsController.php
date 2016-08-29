@@ -5,19 +5,19 @@ namespace Netgen\Bundle\MoreBundle\Controller;
 use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Netgen\Bundle\MoreBundle\Helper\SortClauseHelper;
-use Netgen\EzPlatformSite\API\Values\Location;
+use Netgen\EzPlatformSiteApi\API\Values\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 class PartsController extends Controller
 {
     /**
-     * @var \Netgen\EzPlatformSite\API\LoadService
+     * @var \Netgen\EzPlatformSiteApi\API\LoadService
      */
     protected $loadService;
 
     /**
-     * @var \Netgen\EzPlatformSite\API\FindService
+     * @var \Netgen\EzPlatformSiteApi\API\FindService
      */
     protected $findService;
 
@@ -166,10 +166,10 @@ class PartsController extends Controller
     /**
      * Helper method for fetching children items from specified location.
      *
-     * @param \Netgen\EzPlatformSite\API\Values\Location $location
+     * @param \Netgen\EzPlatformSiteApi\API\Values\Location $location
      * @param array $contentTypeIdentifiers
      *
-     * @return \Netgen\EzPlatformSite\API\Values\Content[]
+     * @return \Netgen\EzPlatformSiteApi\API\Values\Content[]
      */
     protected function getChildren(Location $location, array $contentTypeIdentifiers = array('image'))
     {

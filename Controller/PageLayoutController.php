@@ -11,7 +11,7 @@ use Knp\Menu\ItemInterface;
 class PageLayoutController extends Controller
 {
     /**
-     * @var \Netgen\EzPlatformSite\API\LoadService
+     * @var \Netgen\EzPlatformSiteApi\API\LoadService
      */
     protected $loadService;
 

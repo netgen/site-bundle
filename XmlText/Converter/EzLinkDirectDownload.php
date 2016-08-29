@@ -2,7 +2,7 @@
 
 namespace Netgen\Bundle\MoreBundle\XmlText\Converter;
 
-use Netgen\EzPlatformSite\API\LoadService;
+use Netgen\EzPlatformSiteApi\API\LoadService;
 use eZ\Publish\Core\FieldType\XmlText\Converter;
 use Psr\Log\NullLogger;
 use Symfony\Component\Routing\RouterInterface;
@@ -14,7 +14,7 @@ use DOMDocument;
 class EzLinkDirectDownload implements Converter
 {
     /**
-     * @var \Netgen\EzPlatformSite\API\LoadService
+     * @var \Netgen\EzPlatformSiteApi\API\LoadService
      */
     protected $loadService;
 
@@ -29,7 +29,7 @@ class EzLinkDirectDownload implements Converter
     protected $logger;
 
     /**
-     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
+     * @param \Netgen\EzPlatformSiteApi\API\LoadService $loadService
      * @param \Symfony\Component\Routing\RouterInterface $router
      * @param \Psr\Log\LoggerInterface $logger
      */

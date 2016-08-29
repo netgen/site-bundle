@@ -7,7 +7,7 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Netgen\Bundle\MoreBundle\Helper\MailHelper;
 use Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository;
 use Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
-use Netgen\EzPlatformSite\API\LoadService;
+use Netgen\EzPlatformSiteApi\API\LoadService;
 
 abstract class UserEventListener
 {
@@ -32,7 +32,7 @@ abstract class UserEventListener
     protected $ezUserAccountKeyRepository;
 
     /**
-     * @var \Netgen\EzPlatformSite\API\LoadService
+     * @var \Netgen\EzPlatformSiteApi\API\LoadService
      */
     protected $loadService;
 
@@ -41,7 +41,7 @@ abstract class UserEventListener
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      * @param \Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository $ngUserSettingRepository
      * @param \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository $ezUserAccountKeyRepository
-     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
+     * @param \Netgen\EzPlatformSiteApi\API\LoadService $loadService
      */
     public function __construct(
         MailHelper $mailHelper,

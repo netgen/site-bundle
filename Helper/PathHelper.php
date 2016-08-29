@@ -2,7 +2,7 @@
 
 namespace Netgen\Bundle\MoreBundle\Helper;
 
-use Netgen\EzPlatformSite\API\LoadService;
+use Netgen\EzPlatformSiteApi\API\LoadService;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\Routing\RouterInterface;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
@@ -10,7 +10,7 @@ use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 class PathHelper
 {
     /**
-     * @var \Netgen\EzPlatformSite\API\LoadService
+     * @var \Netgen\EzPlatformSiteApi\API\LoadService
      */
     protected $loadService;
 
@@ -27,7 +27,7 @@ class PathHelper
     /**
      * Constructor.
      *
-     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
+     * @param \Netgen\EzPlatformSiteApi\API\LoadService $loadService
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      * @param \Symfony\Component\Routing\RouterInterface $router
      */

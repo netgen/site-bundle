@@ -4,7 +4,7 @@ namespace Netgen\Bundle\MoreBundle\Controller;
 
 use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Netgen\EzPlatformSite\Core\Site\Pagination\Pagerfanta\LocationSearchAdapter;
+use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\LocationSearchAdapter;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use Pagerfanta\Pagerfanta;
@@ -12,12 +12,12 @@ use Pagerfanta\Pagerfanta;
 class SearchController extends Controller
 {
     /**
-     * @var \Netgen\EzPlatformSite\API\FindService
+     * @var \Netgen\EzPlatformSiteApi\API\FindService
      */
     protected $findService;
 
     /**
-     * @var \Netgen\EzPlatformSite\API\LoadService
+     * @var \Netgen\EzPlatformSiteApi\API\LoadService
      */
     protected $loadService;
 

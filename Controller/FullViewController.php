@@ -4,14 +4,14 @@ namespace Netgen\Bundle\MoreBundle\Controller;
 
 use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use Netgen\Bundle\MoreBundle\Helper\SortClauseHelper;
-use Netgen\EzPlatformSite\API\Values\Location;
+use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use eZ\Publish\Core\FieldType\Relation\Value as RelationValue;
 use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
-use Netgen\EzPlatformSite\Core\Site\Pagination\Pagerfanta\LocationSearchAdapter;
+use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\LocationSearchAdapter;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use Symfony\Component\Routing\RouterInterface;
@@ -20,12 +20,12 @@ use Pagerfanta\Pagerfanta;
 class FullViewController extends Controller
 {
     /**
-     * @var \Netgen\EzPlatformSite\API\LoadService
+     * @var \Netgen\EzPlatformSiteApi\API\LoadService
      */
     protected $loadService;
 
     /**
-     * @var \Netgen\EzPlatformSite\API\FindService
+     * @var \Netgen\EzPlatformSiteApi\API\FindService
      */
     protected $findService;
 
@@ -193,7 +193,7 @@ class FullViewController extends Controller
      * Checks if content at location defined by it's ID contains
      * valid category redirect value and returns a redirect response if it does.
      *
-     * @param \Netgen\EzPlatformSite\API\Values\Location $location
+     * @param \Netgen\EzPlatformSiteApi\API\Values\Location $location
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */

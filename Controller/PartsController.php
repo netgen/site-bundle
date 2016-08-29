@@ -4,12 +4,38 @@ namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Values\Content\Location;
+use Netgen\EzPlatformSite\API\Values\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use Netgen\EzPlatformSite\API\FindService;
+use Netgen\EzPlatformSite\API\LoadService;
 
 class PartsController extends Controller
 {
+    /**
+     * @var \Netgen\EzPlatformSite\API\LoadService
+     */
+    protected $loadService;
+
+    /**
+     * @var \Netgen\EzPlatformSite\API\FindService
+     */
+    protected $findService;
+
+    /**
+     * Constructor.
+     *
+     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
+     * @param \Netgen\EzPlatformSite\API\FindService $findService
+     */
+    public function __construct(
+        LoadService $loadService,
+        FindService $findService
+    ) {
+        $this->loadService = $loadService;
+        $this->findService = $findService;
+    }
+
     /**
      * Action for rendering related items.
      *
@@ -24,20 +50,16 @@ class PartsController extends Controller
     {
         $relatedItems = array();
 
-        $fieldHelper = $this->container->get('ezpublish.field_helper');
-        $translationHelper = $this->container->get('ezpublish.translation_helper');
-        $locationService = $this->getRepository()->getLocationService();
+        $content = $this->loadService->loadContent($contentId);
 
-        $content = $this->getRepository()->getContentService()->loadContent($contentId);
-
-        if (isset($content->fields[$fieldDefinitionIdentifier]) && !$fieldHelper->isFieldEmpty($content, $fieldDefinitionIdentifier)) {
+        if ($content->hasField($fieldDefinitionIdentifier) && !$content->getField($fieldDefinitionIdentifier)->isEmpty()) {
             /** @var \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value $fieldValue */
-            $fieldValue = $translationHelper->getTranslatedField($content, $fieldDefinitionIdentifier)->value;
+            $fieldValue = $content->getField($fieldDefinitionIdentifier)->value;
             if (!empty($fieldValue->destinationLocationIds)) {
                 foreach ($fieldValue->destinationLocationIds as $locationId) {
                     try {
                         if (!empty($locationId)) {
-                            $location = $locationService->loadLocation($locationId);
+                            $location = $this->loadService->loadLocation($locationId);
                             if (!$location->invisible) {
                                 $relatedItems[] = $location;
                             }
@@ -80,41 +102,27 @@ class PartsController extends Controller
      */
     public function viewRelatedMultimediaItems($locationId, $template, $includeChildren = false, array $contentTypeIdentifiers = array('image'))
     {
-        $fieldHelper = $this->container->get('ezpublish.field_helper');
-        $translationHelper = $this->container->get('ezpublish.translation_helper');
-
-        $repository = $this->getRepository();
-        $contentService = $repository->getContentService();
-        $locationService = $repository->getLocationService();
-        $contentTypeService = $repository->getContentTypeService();
-
-        $location = $locationService->loadLocation($locationId);
-        $contentInfo = $location->getContentInfo();
-        $contentTypeIdentifier = $contentTypeService->loadContentType($contentInfo->contentTypeId)->identifier;
-        $content = $contentService->loadContentByContentInfo($contentInfo);
-        $contentFields = $content->fields;
+        $location = $this->loadService->loadLocation($locationId);
+        $content = $this->loadService->loadContent($location->contentId);
 
         $multimediaItems = array();
 
         // Add current location in the multimedia item list
-        $multimediaItems[] = array('type' => $contentTypeIdentifier, 'content' => $content);
+        $multimediaItems[] = $content;
 
         // Get children objects and add them in multimedia item list
         if ($includeChildren) {
             $galleryItems = $this->getChildren($location, $contentTypeIdentifiers);
             if (!empty($galleryItems)) {
-                foreach ($galleryItems as $galleryItemContent) {
-                    $galleryItemContentTypeIdentifier = $contentTypeService->loadContentType($galleryItemContent->contentInfo->contentTypeId)->identifier;
-                    $multimediaItems[] = array('type' => $galleryItemContentTypeIdentifier, 'content' => $galleryItemContent);
-                }
+                $multimediaItems = array_merge($multimediaItems, $galleryItems);
             }
         }
 
         // Finally, check if related_multimedia field exists and has content
         $relatedMultimediaLocationIds = array();
-        if (array_key_exists('related_multimedia', $contentFields)) {
-            if (!$fieldHelper->isFieldEmpty($content, 'related_multimedia')) {
-                $relatedMultimediaField = $translationHelper->getTranslatedField($content, 'related_multimedia')->value;
+        if ($content->hasField('related_multimedia')) {
+            if (!$content->getField('related_multimedia')->isEmpty()) {
+                $relatedMultimediaField = $content->getField('related_multimedia')->value;
 
                 // We need to work with location IDs, because we need to check if related object has location, to prevent
                 // possible problems with related items in trash.
@@ -127,32 +135,24 @@ class PartsController extends Controller
         if (!empty($relatedMultimediaLocationIds)) {
             foreach ($relatedMultimediaLocationIds as $relatedMultimediaLocationId) {
                 try {
-                    $relatedMultimediaLocation = $locationService->loadLocation($relatedMultimediaLocationId);
+                    $relatedMultimediaLocation = $this->loadService->loadLocation($relatedMultimediaLocationId);
                 } catch (NotFoundException $e) {
                     // Skip non-existing locations (item in trash or missing location due to some other reason)
                     continue;
                 }
 
-                $relatedMultimediaContent = $contentService->loadContent($relatedMultimediaLocation->contentId);
-                $relatedMultimediaContentInfo = $relatedMultimediaLocation->getContentInfo();
-
-                if (!$relatedMultimediaContentInfo->published) {
+                if (!$relatedMultimediaLocation->contentInfo->published) {
                     continue;
                 }
 
-                $relatedMultimediaContentTypeIdentifier = $contentTypeService->loadContentType($relatedMultimediaContentInfo->contentTypeId)->identifier;
+                $relatedMultimediaContent = $this->loadService->loadContent($relatedMultimediaLocation->contentId);
 
                 // ng_gallery - Find children objects and add them in multimedia item list
-                if ($relatedMultimediaContentTypeIdentifier == 'ng_gallery') {
+                if ($relatedMultimediaLocation->contentInfo->contentTypeIdentifier == 'ng_gallery') {
                     $galleryItems = $this->getChildren($relatedMultimediaLocation, $contentTypeIdentifiers);
-                    if (!empty($galleryItems)) {
-                        foreach ($galleryItems as $galleryItemContent) {
-                            $galleryItemContentTypeIdentifier = $contentTypeService->loadContentType($galleryItemContent->contentInfo->contentTypeId)->identifier;
-                            $multimediaItems[] = array('type' => $galleryItemContentTypeIdentifier, 'content' => $galleryItemContent);
-                        }
-                    }
+                    $multimediaItems = array_merge($multimediaItems, $galleryItems);
                 } else {
-                    $multimediaItems[] = array('type' => $relatedMultimediaContentTypeIdentifier, 'content' => $relatedMultimediaContent);
+                    $multimediaItems[] = $relatedMultimediaContent;
                 }
             }
         }
@@ -168,14 +168,13 @@ class PartsController extends Controller
     /**
      * Helper method for fetching children items from specified location.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \Netgen\EzPlatformSite\API\Values\Location $location
      * @param array $contentTypeIdentifiers
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content[]
+     * @return \Netgen\EzPlatformSite\API\Values\Content[]
      */
     protected function getChildren(Location $location, array $contentTypeIdentifiers = array('image'))
     {
-        $contentService = $this->getRepository()->getContentService();
         $query = new LocationQuery();
         $contentList = array();
 
@@ -197,10 +196,10 @@ class PartsController extends Controller
             ),
         );
 
-        $result = $this->getRepository()->getSearchService()->findLocations($query);
+        $result = $this->findService->findNodes($query);
 
         foreach ($result->searchHits as $searchHit) {
-            $contentList[] = $contentService->loadContent($searchHit->valueObject->contentId);
+            $contentList[] = $searchHit->valueObject;
         }
 
         return $contentList;

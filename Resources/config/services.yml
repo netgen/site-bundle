@@ -65,6 +65,9 @@ services:
     ngmore.controller.parts:
         class: "%ngmore.controller.parts.class%"
         parent: ezpublish.controller.base
+        arguments:
+            - "@netgen.ezplatform_site.load_service"
+            - "@netgen.ezplatform_site.find_service"
 
     ngmore.controller.download:
         class: "%ngmore.controller.download.class%"

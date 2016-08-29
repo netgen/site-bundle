@@ -22,7 +22,8 @@ parameters:
 
     ngmore.slot.create_user.class: Netgen\Bundle\MoreBundle\Core\Slot\CreateUserSlot
 
-    ngmore.routing.content_url_alias_router.class: Netgen\Bundle\MoreBundle\Routing\ContentUrlAliasRouter
+    ngmore.routing.site_content_url_alias_router.class: Netgen\Bundle\MoreBundle\Routing\SiteContentUrlAliasRouter
+    ngmore.routing.site_location_url_alias_router.class: Netgen\Bundle\MoreBundle\Routing\SiteLocationUrlAliasRouter
 
     ngmore.context_provider.session.class: Netgen\Bundle\MoreBundle\ContextProvider\SessionContextProvider
     ngmore.context_provider.user.class: Netgen\Bundle\MoreBundle\ContextProvider\UserContextProvider
@@ -138,10 +139,19 @@ services:
         tags:
             - { name: ezpublish.api.slot, signal: UserService\CreateUserSignal }
 
-    ngmore.routing.content_url_alias_router:
-        class: "%ngmore.routing.content_url_alias_router.class%"
+    ngmore.routing.site_content_url_alias_router:
+        class: "%ngmore.routing.site_content_url_alias_router.class%"
         arguments:
-            - "@ezpublish.api.service.location"
+            - "@netgen.ezplatform_site.load_service"
+            - "@ezpublish.urlalias_generator"
+            - "@?router.request_context"
+        tags:
+            - {name: router, priority: 200}
+
+    ngmore.routing.site_location_url_alias_router:
+        class: "%ngmore.routing.site_location_url_alias_router.class%"
+        arguments:
+            - "@netgen.ezplatform_site.load_service"
             - "@ezpublish.urlalias_generator"
             - "@?router.request_context"
         tags:

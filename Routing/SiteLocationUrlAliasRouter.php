@@ -2,10 +2,9 @@
 
 namespace Netgen\Bundle\MoreBundle\Routing;
 
-use eZ\Publish\API\Repository\LocationService;
-use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use Netgen\EzPlatformSite\API\Values\Location;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
+use Netgen\EzPlatformSite\API\LoadService;
 use Symfony\Cmf\Component\Routing\ChainedRouterInterface;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
@@ -15,15 +14,14 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route as SymfonyRoute;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use LogicException;
 use RuntimeException;
 
-class ContentUrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
+class SiteLocationUrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 {
     /**
-     * @var \eZ\Publish\API\Repository\LocationService
+     * @var \Netgen\EzPlatformSite\API\LoadService
      */
-    protected $locationService;
+    protected $loadService;
 
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator
@@ -35,14 +33,21 @@ class ContentUrlAliasRouter implements ChainedRouterInterface, RequestMatcherInt
      */
     protected $requestContext;
 
+    /**
+     * Constructor.
+     *
+     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
+     * @param \eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator $generator
+     * @param \Symfony\Component\Routing\RequestContext $requestContext
+     */
     public function __construct(
-        LocationService $locationService,
+        LoadService $loadService,
         UrlAliasGenerator $generator,
         RequestContext $requestContext
     ) {
-        $this->locationService = $locationService;
+        $this->loadService = $loadService;
         $this->generator = $generator;
-        $this->requestContext = $requestContext !== null ? $requestContext : new RequestContext();
+        $this->requestContext = $requestContext ?: new RequestContext();
     }
 
     /**
@@ -79,17 +84,12 @@ class ContentUrlAliasRouter implements ChainedRouterInterface, RequestMatcherInt
      */
     public function generate($name, $parameters = array(), $absolute = false)
     {
-        if (!$name instanceof Content && !$name instanceof ContentInfo) {
+        if (!$name instanceof Location) {
             throw new RouteNotFoundException('Could not match route');
         }
 
-        $contentInfo = $name instanceof Content ? $name->contentInfo : $name;
-        if (empty($contentInfo->mainLocationId)) {
-            throw new LogicException('Cannot generate an UrlAlias route for content without main location.');
-        }
-
         return $this->generator->generate(
-            $this->locationService->loadLocation($contentInfo->mainLocationId),
+            $name->innerLocation,
             $parameters,
             $absolute
         );
@@ -157,7 +157,7 @@ class ContentUrlAliasRouter implements ChainedRouterInterface, RequestMatcherInt
      */
     public function supports($name)
     {
-        return $name instanceof Content || $name instanceof ContentInfo;
+        return $name instanceof Location;
     }
 
     /**

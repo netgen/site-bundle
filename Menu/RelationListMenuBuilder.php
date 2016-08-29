@@ -4,20 +4,18 @@ namespace Netgen\Bundle\MoreBundle\Menu;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use Netgen\EzPlatformSite\API\Values\Location;
+use Netgen\EzPlatformSite\API\Values\Content;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\FactoryInterface;
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\Core\Helper\FieldHelper;
-use eZ\Publish\Core\Helper\TranslationHelper;
-use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Netgen\Bundle\MoreBundle\Helper\SortClauseHelper;
+use Netgen\EzPlatformSite\API\FindService;
+use Netgen\EzPlatformSite\API\LoadService;
 use Symfony\Component\Routing\RouterInterface;
 use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;
 use Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value as RelationListValue;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Field;
 use Psr\Log\LoggerInterface;
 use InvalidArgumentException;
 
@@ -29,19 +27,14 @@ class RelationListMenuBuilder
     protected $factory;
 
     /**
-     * @var \eZ\Publish\API\Repository\Repository
+     * @var \Netgen\EzPlatformSite\API\LoadService
      */
-    protected $repository;
+    protected $loadService;
 
     /**
-     * @var \eZ\Publish\Core\Helper\FieldHelper
+     * @var \Netgen\EzPlatformSite\API\FindService
      */
-    protected $fieldHelper;
-
-    /**
-     * @var \eZ\Publish\Core\Helper\TranslationHelper
-     */
-    protected $translationHelper;
+    protected $findService;
 
     /**
      * @var \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper
@@ -67,9 +60,8 @@ class RelationListMenuBuilder
      * Constructor.
      *
      * @param \Knp\Menu\FactoryInterface $factory
-     * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \eZ\Publish\Core\Helper\FieldHelper $fieldHelper
-     * @param \eZ\Publish\Core\Helper\TranslationHelper $translationHelper
+     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
+     * @param \Netgen\EzPlatformSite\API\FindService $findService
      * @param \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper $siteInfoHelper
      * @param \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper $sortClauseHelper
      * @param \Symfony\Component\Routing\RouterInterface $router
@@ -77,18 +69,16 @@ class RelationListMenuBuilder
      */
     public function __construct(
         FactoryInterface $factory,
-        Repository $repository,
-        FieldHelper $fieldHelper,
-        TranslationHelper $translationHelper,
+        LoadService $loadService,
+        FindService $findService,
         SiteInfoHelper $siteInfoHelper,
         SortClauseHelper $sortClauseHelper,
         RouterInterface $router,
         LoggerInterface $logger = null
     ) {
         $this->factory = $factory;
-        $this->repository = $repository;
-        $this->fieldHelper = $fieldHelper;
-        $this->translationHelper = $translationHelper;
+        $this->loadService = $loadService;
+        $this->findService = $findService;
         $this->siteInfoHelper = $siteInfoHelper;
         $this->sortClauseHelper = $sortClauseHelper;
         $this->router = $router;
@@ -108,12 +98,12 @@ class RelationListMenuBuilder
         $menu = $this->factory->createItem('root');
 
         if ($contentId !== null) {
-            $content = $this->repository->getContentService()->loadContent($contentId);
+            $content = $this->loadService->loadContent($contentId);
         } else {
             $content = $this->siteInfoHelper->getSiteInfoContent();
         }
 
-        $menu->setAttribute('location-id', $content->contentInfo->mainLocationId);
+        $menu->setAttribute('location-id', $content->mainLocationId);
         $this->generateFromRelationList($menu, $content, $fieldDefIdentifier);
 
         return $menu;
@@ -123,21 +113,25 @@ class RelationListMenuBuilder
      * Generates a menu item from a relation list in content.
      *
      * @param \Knp\Menu\ItemInterface $menuItem
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param \Netgen\EzPlatformSite\API\Values\Content $content
      * @param string $fieldDefIdentifier
      */
     protected function generateFromRelationList(ItemInterface $menuItem, Content $content, $fieldDefIdentifier)
     {
-        if ($this->fieldHelper->isFieldEmpty($content, $fieldDefIdentifier)) {
+        if (!$content->hasField($fieldDefIdentifier)) {
             return;
         }
 
-        $fieldValue = $this->translationHelper->getTranslatedField($content, $fieldDefIdentifier)->value;
-        if (!$fieldValue instanceof RelationListValue) {
+        $field = $content->getField($fieldDefIdentifier);
+        if ($field->isEmpty()) {
             return;
         }
 
-        foreach ($fieldValue->destinationLocationIds as $locationId) {
+        if (!$field->value instanceof RelationListValue) {
+            return;
+        }
+
+        foreach ($field->value->destinationLocationIds as $locationId) {
             try {
                 if (empty($locationId)) {
                     if ($this->logger instanceof LoggerInterface) {
@@ -147,7 +141,7 @@ class RelationListMenuBuilder
                     continue;
                 }
 
-                $location = $this->repository->getLocationService()->loadLocation($locationId);
+                $location = $this->loadService->loadLocation($locationId);
             } catch (NotFoundException $e) {
                 if ($this->logger instanceof LoggerInterface) {
                     $this->logger->error($e->getMessage());
@@ -156,13 +150,9 @@ class RelationListMenuBuilder
                 continue;
             }
 
-            $contentTypeIdentifier = $this->repository
-                ->getContentTypeService()
-                ->loadContentType($location->contentInfo->contentTypeId)->identifier;
-
-            if ($contentTypeIdentifier == 'ng_shortcut') {
+            if ($content->contentInfo->contentTypeIdentifier == 'ng_shortcut') {
                 $this->generateFromNgShortcut($menuItem, $location);
-            } elseif ($contentTypeIdentifier == 'ng_menu_item') {
+            } elseif ($content->contentInfo->contentTypeIdentifier == 'ng_menu_item') {
                 $this->generateFromNgMenuItem($menuItem, $location);
             } else {
                 $this->addMenuItemsFromLocations($menuItem, array($location));
@@ -174,20 +164,20 @@ class RelationListMenuBuilder
      * Generates a menu item from Location object of ng_shortcut content type.
      *
      * @param \Knp\Menu\ItemInterface $menuItem
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \Netgen\EzPlatformSite\API\Values\Location $location
      */
     protected function generateFromNgShortcut(ItemInterface $menuItem, Location $location)
     {
-        $content = $this->repository->getContentService()->loadContent($location->contentId);
+        $content = $this->loadService->loadContent($location->contentId);
 
         $uri = false;
-        $menuItemId = $label = $this->translationHelper->getTranslatedContentName($content);
+        $menuItemId = $label = $location->contentInfo->name;
         $attributes = array();
         $linkAttributes = array();
 
-        if (!$this->fieldHelper->isFieldEmpty($content, 'url')) {
+        if (!$content->getField('url')->isEmpty()) {
             /** @var \eZ\Publish\Core\FieldType\Url\Value $fieldValue */
-            $fieldValue = $this->translationHelper->getTranslatedField($content, 'url')->value;
+            $fieldValue = $content->getField('url')->value;
             if (stripos($fieldValue->link, 'http') === 0) {
                 $menuItemId = $uri = $fieldValue->link;
 
@@ -211,29 +201,26 @@ class RelationListMenuBuilder
                 }
             }
 
-            $targetBlankField = $this->translationHelper->getTranslatedField($content, 'target_blank');
-            if ($targetBlankField instanceof Field && $targetBlankField->value->bool) {
+            if ($content->getField('target_blank')->value->bool) {
                 $linkAttributes['target'] = '_blank';
             }
-        } elseif (!$this->fieldHelper->isFieldEmpty($content, 'related_object')) {
+        } elseif (!$content->getField('related_object')->isEmpty()) {
             /** @var \eZ\Publish\Core\FieldType\Relation\Value $fieldValue */
-            $fieldValue = $this->translationHelper->getTranslatedField($content, 'related_object')->value;
+            $fieldValue = $content->getField('related_object')->value;
 
             try {
-                $relatedContent = $this->repository->getContentService()->loadContentInfo($fieldValue->destinationContentId);
+                $relatedContent = $this->loadService->loadContentInfo($fieldValue->destinationContentId);
 
                 if ($relatedContent->published) {
-                    $relatedContentName = $this->translationHelper->getTranslatedContentNameByContentInfo($relatedContent);
-
+                    $relatedContentName = $content->name;
                     $menuItemId = $relatedContent->mainLocationId;
 
                     $uri = $this->router->generate(
                         $relatedContent
-                    ) . $this->translationHelper->getTranslatedField($content, 'internal_url_suffix')->value->text;
+                    ) . $content->getField('internal_url_suffix')->value->text;
 
-                    $useShortcutNameField = $this->translationHelper->getTranslatedField($content, 'use_shortcut_name');
-                    if ($useShortcutNameField instanceof Field && $useShortcutNameField->value->bool) {
-                        $label = $this->translationHelper->getTranslatedContentName($content);
+                    if ($content->getField('use_shortcut_name')->value->bool) {
+                        $label = $content->name;
                         $linkAttributes = array(
                             'title' => $label,
                         );
@@ -248,8 +235,7 @@ class RelationListMenuBuilder
                         'id' => 'menu-item-location-id-' . $relatedContent->mainLocationId,
                     );
 
-                    $targetBlankField = $this->translationHelper->getTranslatedField($content, 'target_blank');
-                    if ($targetBlankField instanceof Field && $targetBlankField->value->bool) {
+                    if ($content->getField('target_blank')->value->bool) {
                         $linkAttributes['target'] = '_blank';
                     }
                 } else {
@@ -279,20 +265,20 @@ class RelationListMenuBuilder
      * Generates a menu item and potential children from Location object of ng_menu_item content type.
      *
      * @param \Knp\Menu\ItemInterface $menuItem
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \Netgen\EzPlatformSite\API\Values\Location $location
      */
     protected function generateFromNgMenuItem(ItemInterface $menuItem, Location $location)
     {
-        $content = $this->repository->getContentService()->loadContent($location->contentId);
+        $content = $this->loadService->loadContent($location->contentId);
 
         $uri = false;
-        $menuItemId = $label = $this->translationHelper->getTranslatedContentName($content);
+        $menuItemId = $label = $content->name;
         $attributes = array();
         $linkAttributes = array();
 
-        if (!$this->fieldHelper->isFieldEmpty($content, 'item_url')) {
+        if (!$content->getField('item_url')->isEmpty()) {
             /** @var \eZ\Publish\Core\FieldType\Url\Value $fieldValue */
-            $fieldValue = $this->translationHelper->getTranslatedField($content, 'item_url')->value;
+            $fieldValue = $content->getField('item_url')->value;
             if (stripos($fieldValue->link, 'http') === 0) {
                 $menuItemId = $uri = $fieldValue->link;
 
@@ -316,27 +302,25 @@ class RelationListMenuBuilder
                 }
             }
 
-            $targetBlankField = $this->translationHelper->getTranslatedField($content, 'target_blank');
-            if ($targetBlankField instanceof Field && $targetBlankField->value->bool) {
+            if ($content->getField('target_blank')->value->bool) {
                 $linkAttributes['target'] = '_blank';
             }
-        } elseif (!$this->fieldHelper->isFieldEmpty($content, 'item_object')) {
+        } elseif (!$content->getField('item_object')->isEmpty()) {
             /** @var \eZ\Publish\Core\FieldType\Relation\Value $fieldValue */
-            $fieldValue = $this->translationHelper->getTranslatedField($content, 'item_object')->value;
+            $fieldValue = $content->getField('item_object')->value;
 
             try {
-                $relatedContent = $this->repository->getContentService()->loadContentInfo($fieldValue->destinationContentId);
+                $relatedContent = $this->loadService->loadContentInfo($fieldValue->destinationContentId);
 
                 if ($relatedContent->published) {
-                    $relatedContentName = $this->translationHelper->getTranslatedContentNameByContentInfo($relatedContent);
+                    $relatedContentName = $relatedContent->name;
 
                     $menuItemId = $relatedContent->mainLocationId;
 
                     $uri = $this->router->generate($relatedContent);
 
-                    $useMenuItemNameField = $this->translationHelper->getTranslatedField($content, 'use_menu_item_name');
-                    if ($useMenuItemNameField instanceof Field && $useMenuItemNameField->value->bool) {
-                        $label = $this->translationHelper->getTranslatedContentName($content);
+                    if ($content->getField('use_menu_item_name')->value->bool) {
+                        $label = $content->name;
                         $linkAttributes = array(
                             'title' => $label,
                         );
@@ -351,8 +335,7 @@ class RelationListMenuBuilder
                         'id' => 'menu-item-location-id-' . $relatedContent->mainLocationId,
                     );
 
-                    $targetBlankField = $this->translationHelper->getTranslatedField($content, 'target_blank');
-                    if ($targetBlankField instanceof Field && $targetBlankField->value->bool) {
+                    if ($content->getField('target_blank')->value->bool) {
                         $linkAttributes['target'] = '_blank';
                     }
                 } else {
@@ -377,17 +360,17 @@ class RelationListMenuBuilder
             )
         );
 
-        if (!$this->fieldHelper->isFieldEmpty($content, 'parent_node')) {
+        if (!$content->getField('parent_node')->isEmpty()) {
             /** @var \eZ\Publish\Core\FieldType\Relation\Value $fieldValue */
-            $fieldValue = $this->translationHelper->getTranslatedField($content, 'parent_node')->value;
+            $fieldValue = $content->getField('parent_node')->value;
 
             try {
-                $destinationContent = $this->repository->getContentService()->loadContent($fieldValue->destinationContentId);
+                $destinationContent = $this->loadService->loadContent($fieldValue->destinationContentId);
 
                 if ($destinationContent->contentInfo->published) {
-                    $parentLocation = $this->repository->getLocationService()->loadLocation($destinationContent->contentInfo->mainLocationId);
+                    $parentLocation = $this->loadService->loadLocation($destinationContent->mainLocationId);
 
-                    if ($this->fieldHelper->isFieldEmpty($content, 'item_url') && $this->fieldHelper->isFieldEmpty($content, 'item_object')) {
+                    if ($content->getField('item_url')->isEmpty() && $content->getField('item_object')->isEmpty()) {
                         $childItem->setName($parentLocation->id);
                     }
 
@@ -396,12 +379,12 @@ class RelationListMenuBuilder
                         new Criterion\ParentLocationId($parentLocation->id),
                     );
 
-                    if (!$this->fieldHelper->isFieldEmpty($content, 'class_filter') && !$this->fieldHelper->isFieldEmpty($content, 'class_filter_type')) {
+                    if (!$content->getField('class_filter')->isEmpty() && !$content->getField('class_filter_type')->isEmpty()) {
                         /** @var \Netgen\Bundle\ContentTypeListBundle\Core\FieldType\ContentTypeList\Value $contentTypeFilter */
-                        $contentTypeFilter = $this->translationHelper->getTranslatedField($content, 'class_filter')->value;
+                        $contentTypeFilter = $content->getField('class_filter')->value;
 
                         /** @var \Netgen\Bundle\EnhancedSelectionBundle\Core\FieldType\EnhancedSelection\Value $filterType */
-                        $filterType = $this->translationHelper->getTranslatedField($content, 'class_filter_type')->value;
+                        $filterType = $content->getField('class_filter_type')->value;
 
                         if ($filterType->identifiers[0] === 'include') {
                             $criteria[] = new Criterion\ContentTypeIdentifier($contentTypeFilter->identifiers);
@@ -415,9 +398,9 @@ class RelationListMenuBuilder
                     $query = new LocationQuery();
                     $query->filter = new Criterion\LogicalAnd($criteria);
 
-                    if (!$this->fieldHelper->isFieldEmpty($content, 'limit')) {
+                    if (!$content->getField('limit')->isEmpty()) {
                         /** @var \eZ\Publish\Core\FieldType\Integer\Value $limit */
-                        $limit = $this->translationHelper->getTranslatedField($content, 'limit')->value;
+                        $limit = $content->getField('limit')->value;
                         if ($limit->value > 0) {
                             $query->limit = $limit->value;
                         }
@@ -430,7 +413,7 @@ class RelationListMenuBuilder
                         ),
                     );
 
-                    $searchResult = $this->repository->getSearchService()->findLocations($query);
+                    $searchResult = $this->findService->findLocations($query);
                     $foundLocations = array_map(
                         function (SearchHit $searchHit) {
                             return $searchHit->valueObject;
@@ -449,7 +432,7 @@ class RelationListMenuBuilder
                     $this->logger->error($e->getMessage());
                 }
             }
-        } elseif (!$this->fieldHelper->isFieldEmpty($content, 'menu_items')) {
+        } elseif (!$content->getField('menu_items')->isEmpty()) {
             $this->generateFromRelationList(
                 $childItem,
                 $content,
@@ -462,7 +445,7 @@ class RelationListMenuBuilder
      * Adds menu items from array of Location objects.
      *
      * @param \Knp\Menu\ItemInterface $menuItem
-     * @param \eZ\Publish\API\Repository\Values\Content\Location[] $locations
+     * @param \Netgen\EzPlatformSite\API\Values\Location[] $locations
      */
     protected function addMenuItemsFromLocations(ItemInterface $menuItem, array $locations = array())
     {
@@ -474,9 +457,7 @@ class RelationListMenuBuilder
             $menuItem->addChild(
                 $location->id,
                 array(
-                    'label' => $this->translationHelper->getTranslatedContentNameByContentInfo(
-                        $location->contentInfo
-                    ),
+                    'label' => $location->contentInfo->name,
                     'uri' => $this->router->generate($location),
                     'attributes' => array(
                         'id' => 'menu-item-location-id-' . $location->id,

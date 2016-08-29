@@ -6,9 +6,8 @@ services:
         class: "%ngmore.menu.relation_list_menu_builder.class%"
         arguments:
             - "@knp_menu.factory"
-            - "@ezpublish.api.repository"
-            - "@ezpublish.field_helper"
-            - "@ezpublish.translation_helper"
+            - "@netgen.ezplatform_site.load_service"
+            - "@netgen.ezplatform_site.find_service"
             - "@ngmore.helper.site_info_helper"
             - "@ngmore.helper.sort_clause_helper"
             - "@router"

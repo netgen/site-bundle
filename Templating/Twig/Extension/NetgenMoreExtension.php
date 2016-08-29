@@ -106,10 +106,6 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
                 array($this, 'getOwner')
             ),
             new Twig_SimpleFunction(
-                'ngmore_field',
-                array($this, 'getTranslatedField')
-            ),
-            new Twig_SimpleFunction(
                 'ngmore_can_user',
                 array($this, 'canUser')
             ),
@@ -202,22 +198,6 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
                 return $repository->getContentService()->loadContent($ownerId);
             }
         );
-    }
-
-    /**
-     * Returns the translated field.
-     *
-     * @deprecated Replaced by ez_field as of 2014.12.2
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     * @param string $fieldDefIdentifier Identifier for the field we want to get
-     * @param string $forcedLanguage Locale we want the field in (e.g. "cro-HR"). Null by default (takes current locale)
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Field
-     */
-    public function getTranslatedField(Content $content, $fieldDefIdentifier, $forcedLanguage = null)
-    {
-        return $this->translationHelper->getTranslatedField($content, $fieldDefIdentifier, $forcedLanguage);
     }
 
     /**

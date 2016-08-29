@@ -64,7 +64,6 @@ services:
         arguments:
             - "@netgen.ezplatform_site.find_service"
             - "@netgen.ezplatform_site.load_service"
-            - "@ezpublish.config.resolver"
 
     ngmore.controller.page_layout:
         class: "%ngmore.controller.page_layout.class%"

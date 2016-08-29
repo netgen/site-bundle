@@ -65,7 +65,7 @@ class GlobalVariable
     /**
      * Returns the current layout.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @return \Netgen\EzPlatformSite\API\Values\Content
      */
     public function getLayout()
     {

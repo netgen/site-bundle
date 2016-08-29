@@ -118,9 +118,9 @@ services:
         class: "%ngmore.helper.layout_helper.class%"
         arguments:
             - "@ezpublish.api.repository"
+            - "@netgen.ezplatform_site.load_service"
             - "@ezpublish.spi.search.legacy"
             - "@ngmore.helper.path_helper"
-            - "@ezpublish.translation_helper"
             - "@ezpublish.config.resolver"
 
     ngmore.helper.mail_helper:

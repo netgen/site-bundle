@@ -6,13 +6,13 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\SPI\Search\Handler;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\Content\Location;
+use Netgen\EzPlatformSite\API\Values\Content;
+use Netgen\EzPlatformSite\API\Values\Location;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Netgen\Bundle\MoreBundle\API\Repository\Values\Content\Query\Criterion\Field;
 use Netgen\Bundle\MoreBundle\API\Repository\Values\Content\Query\SortClause\FieldLength;
-use eZ\Publish\Core\Helper\TranslationHelper;
+use Netgen\EzPlatformSite\API\LoadService;
 
 class LayoutHelper
 {
@@ -20,6 +20,11 @@ class LayoutHelper
      * @var \eZ\Publish\API\Repository\Repository
      */
     protected $repository;
+
+    /**
+     * @var \Netgen\EzPlatformSite\API\LoadService
+     */
+    protected $loadService;
 
     /**
      * @var \eZ\Publish\SPI\Search\Handler
@@ -32,28 +37,28 @@ class LayoutHelper
     protected $pathHelper;
 
     /**
-     * @var \eZ\Publish\Core\Helper\TranslationHelper
-     */
-    protected $translationHelper;
-
-    /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
     protected $configResolver;
 
     /**
      * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
      * @param \Netgen\Bundle\MoreBundle\Helper\PathHelper $pathHelper
-     * @param \eZ\Publish\Core\Helper\TranslationHelper $translationHelper
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      */
-    public function __construct(Repository $repository, Handler $searchHandler, PathHelper $pathHelper, TranslationHelper $translationHelper, ConfigResolverInterface $configResolver)
-    {
+    public function __construct(
+        Repository $repository,
+        LoadService $loadService,
+        Handler $searchHandler,
+        PathHelper $pathHelper,
+        ConfigResolverInterface $configResolver
+    ) {
         $this->repository = $repository;
+        $this->loadService = $loadService;
         $this->searchHandler = $searchHandler;
         $this->pathHelper = $pathHelper;
-        $this->translationHelper = $translationHelper;
         $this->configResolver = $configResolver;
     }
 
@@ -65,7 +70,7 @@ class LayoutHelper
      *                    For example: It can be extracted from current request object with
      *                    $this->request->attributes->get( 'semanticPathinfo' ) . $this->request->attributes->get( 'viewParametersString' )
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @return \Netgen\EzPlatformSite\API\Values\Content
      */
     public function getLayout($locationId, $uri)
     {
@@ -77,7 +82,7 @@ class LayoutHelper
         }
 
         try {
-            $location = $this->repository->getLocationService()->loadLocation((int)$locationId);
+            $location = $this->loadService->loadLocation((int)$locationId);
         } catch (NotFoundException $e) {
             return false;
         }
@@ -87,7 +92,7 @@ class LayoutHelper
 
         foreach ($path as $pathItem) {
             $relations = $this->repository->getContentService()->loadReverseRelations(
-                $this->repository->getContentService()->loadContentInfo($pathItem['contentId'])
+                $this->loadService->loadContentInfo($pathItem['contentId'])->innerContentInfo
             );
 
             /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo[] $layoutContentInfos */
@@ -102,7 +107,7 @@ class LayoutHelper
             }
 
             foreach ($layoutContentInfos as $layoutContentInfo) {
-                $layoutContent = $this->repository->getContentService()->loadContent($layoutContentInfo->id);
+                $layoutContent = $this->loadService->loadContent($layoutContentInfo->id);
                 if ($layoutContent instanceof Content && $this->validateLayoutContent($location, $pathItem, $layoutContent)) {
                     return $layoutContent;
                 }
@@ -115,33 +120,32 @@ class LayoutHelper
     /**
      * Validates a layout according to data inside of it.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $originalLocation
+     * @param \Netgen\EzPlatformSite\API\Values\Location $originalLocation
      * @param array $pathItem
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $layoutContent
+     * @param \Netgen\EzPlatformSite\API\Values\Content $layoutContent
      *
      * @return bool
      */
     protected function validateLayoutContent(Location $originalLocation, array $pathItem, Content $layoutContent)
     {
-        $enhancedSelectionFieldType = $this->repository->getFieldTypeService()->getFieldType('sckenhancedselection');
         $originalContentType = $this->repository->getContentTypeService()->loadContentType(
-            $originalLocation->getContentInfo()->contentTypeId
+            $originalLocation->contentInfo->contentTypeId
         );
 
-        $applyLayoutTo = $this->translationHelper->getTranslatedField($layoutContent, 'apply_layout_to')->value;
+        $applyLayoutTo = $layoutContent->getField('apply_layout_to')->value;
         if ($originalLocation->id != $pathItem['locationId']) {
-            if (!$enhancedSelectionFieldType->isEmptyValue($applyLayoutTo) && $applyLayoutTo->identifiers[0] == 'node') {
+            if (!$layoutContent->getField('apply_layout_to')->isEmpty() && $applyLayoutTo->identifiers[0] == 'node') {
                 return false;
             }
         } else {
-            if (!$enhancedSelectionFieldType->isEmptyValue($applyLayoutTo) && $applyLayoutTo->identifiers[0] == 'children') {
+            if (!$layoutContent->getField('apply_layout_to')->isEmpty() && $applyLayoutTo->identifiers[0] == 'children') {
                 return false;
             }
         }
 
-        $classFilterType = $this->translationHelper->getTranslatedField($layoutContent, 'class_filter_type')->value;
-        if (!$enhancedSelectionFieldType->isEmptyValue($classFilterType) && $classFilterType->identifiers[0] == 'include') {
-            $allowedClasses = $this->translationHelper->getTranslatedField($layoutContent, 'class_filter_array')->value;
+        $classFilterType = $layoutContent->getField('class_filter_type')->value;
+        if (!$layoutContent->getField('class_filter_type')->isEmpty() && $classFilterType->identifiers[0] == 'include') {
+            $allowedClasses = $layoutContent->getField('class_filter_array')->value;
             if (in_array($originalContentType->identifier, $allowedClasses->identifiers)) {
                 return true;
             }
@@ -149,8 +153,8 @@ class LayoutHelper
             return false;
         }
 
-        if (!$enhancedSelectionFieldType->isEmptyValue($classFilterType) && $classFilterType->identifiers[0] == 'exclude') {
-            $forbiddenClasses = $this->translationHelper->getTranslatedField($layoutContent, 'class_filter_array')->value;
+        if (!$layoutContent->getField('class_filter_type')->isEmpty() && $classFilterType->identifiers[0] == 'exclude') {
+            $forbiddenClasses = $layoutContent->getField('class_filter_array')->value;
             if (!in_array($originalContentType->identifier, $forbiddenClasses->identifiers)) {
                 return true;
             }
@@ -192,9 +196,7 @@ class LayoutHelper
 
         $layouts = array();
         foreach ($searchResult->searchHits as $hit) {
-            $layouts[] = $this->repository->getContentService()->loadContent(
-                $hit->valueObject->id
-            );
+            $layouts[] = $this->loadService->loadContent($hit->valueObject->id);
         }
 
         return $layouts;

@@ -18,7 +18,7 @@ Add the following to your composer.json and run `php composer.phar update netgen
     { "type": "composer", "url": "http://packagist.netgen.biz" }
 ],
 "require": {
-    "netgen/more-bundle": "~2.1.0"
+    "netgen/more-bundle": "~2.2.0"
 }
 ```
 

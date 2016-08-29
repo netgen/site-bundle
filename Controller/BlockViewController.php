@@ -11,13 +11,29 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\FieldType\Page\Parts\Item;
 use eZ\Publish\Core\MVC\Symfony\View\BlockView;
+use Netgen\EzPlatformSite\API\FindService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use eZ\Publish\Core\Pagination\Pagerfanta\LocationSearchAdapter;
+use Netgen\EzPlatformSite\Core\Site\Pagination\Pagerfanta\LocationSearchAdapter;
 use Pagerfanta\Pagerfanta;
 
 class BlockViewController extends Controller
 {
+    /**
+     * @var \Netgen\EzPlatformSite\API\FindService
+     */
+    protected $findService;
+
+    /**
+     * Constructor.
+     *
+     * @param \Netgen\EzPlatformSite\API\FindService $findService
+     */
+    public function __construct(FindService $findService)
+    {
+        $this->findService = $findService;
+    }
+
     /**
      * Renders the ContentGridDynamic or AjaxContentGridDynamic block found within $view.
      *
@@ -29,7 +45,7 @@ class BlockViewController extends Controller
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If block has an invalid type or parent_node
      *         custom attribute is missing
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \eZ\Publish\Core\MVC\Symfony\View\BlockView
      */
     public function viewContentGridDynamic(Request $request, BlockView $view)
     {
@@ -112,7 +128,7 @@ class BlockViewController extends Controller
         $pager = new Pagerfanta(
             new LocationSearchAdapter(
                 $query,
-                $this->getRepository()->getSearchService()
+                $this->findService
             )
         );
 
@@ -155,7 +171,7 @@ class BlockViewController extends Controller
      * @param array $contentTypeIdentifiers
      * @param string $filterType
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
     protected function getContentTypeFilterCriterion(array $contentTypeIdentifiers, $filterType)
     {
@@ -184,7 +200,7 @@ class BlockViewController extends Controller
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If advanced sort field has an invalid value
      *
-     * @return array
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\SortClause
      */
     protected function getSortClause($sortField, $advancedSortField, $sortOrder, Location $parentLocation)
     {

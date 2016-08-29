@@ -55,6 +55,8 @@ services:
     ngmore.controller.block_view:
         class: "%ngmore.controller.block_view.class%"
         parent: ezpublish.controller.base
+        arguments:
+            - "@netgen.ezplatform_site.find_service"
 
     ngmore.controller.search:
         class: "%ngmore.controller.search.class%"

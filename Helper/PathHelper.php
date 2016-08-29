@@ -2,19 +2,17 @@
 
 namespace Netgen\Bundle\MoreBundle\Helper;
 
-use eZ\Publish\API\Repository\LocationService;
+use Netgen\EzPlatformSite\API\LoadService;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\Core\Helper\TranslationHelper;
 use Symfony\Component\Routing\RouterInterface;
-use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 
 class PathHelper
 {
     /**
-     * @var \eZ\Publish\API\Repository\LocationService
+     * @var \Netgen\EzPlatformSite\API\LoadService
      */
-    protected $locationService;
+    protected $loadService;
 
     /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
@@ -22,41 +20,25 @@ class PathHelper
     protected $configResolver;
 
     /**
-     * @var \eZ\Publish\Core\Helper\TranslationHelper
-     */
-    protected $translationHelper;
-
-    /**
      * @var \Symfony\Component\Routing\RouterInterface
      */
     protected $router;
 
     /**
-     * @var  \eZ\Publish\API\Repository\ContentTypeService
-     */
-    protected $contentTypeService;
-
-    /**
      * Constructor.
      *
-     * @param \eZ\Publish\API\Repository\LocationService $locationService
+     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
-     * @param \eZ\Publish\Core\Helper\TranslationHelper $translationHelper
      * @param \Symfony\Component\Routing\RouterInterface $router
-     * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
      */
     public function __construct(
-        LocationService $locationService,
+        LoadService $loadService,
         ConfigResolverInterface $configResolver,
-        TranslationHelper $translationHelper,
-        RouterInterface $router,
-        ContentTypeService $contentTypeService
+        RouterInterface $router
     ) {
-        $this->locationService = $locationService;
+        $this->loadService = $loadService;
         $this->configResolver = $configResolver;
-        $this->translationHelper = $translationHelper;
         $this->router = $router;
-        $this->contentTypeService = $contentTypeService;
     }
 
     /**
@@ -83,7 +65,7 @@ class PathHelper
         // The root location can be defined at site access level
         $rootLocationId = $this->configResolver->getParameter('content.tree_root.location_id');
 
-        $path = $this->locationService->loadLocation($locationId)->path;
+        $path = $this->loadService->loadLocation($locationId)->path;
 
         // Shift of location "1" from path as it is not a fully valid location and not readable by most users
         array_shift($path);
@@ -100,24 +82,18 @@ class PathHelper
             }
 
             try {
-                $location = $this->locationService->loadLocation($pathItem);
+                $location = $this->loadService->loadLocation($pathItem);
             } catch (UnauthorizedException $e) {
                 return array();
             }
 
-            $contentType = $this->contentTypeService->loadContentType($location->contentInfo->contentTypeId);
-            if (!in_array($contentType->identifier, $excludedContentTypes)) {
+            if (!in_array($location->contentInfo->contentTypeIdentifier, $excludedContentTypes)) {
                 $pathArray[] = array(
-                    'text' => $this->translationHelper->getTranslatedContentNameByContentInfo(
-                        $location->contentInfo
-                    ),
+                    'text' => $location->contentInfo->name,
                     'url' => $location->id != $locationId ?
                         $this->router->generate($location) :
                         false,
-                    'locationId' => $location->id,
-                    'contentId' => $location->contentId,
-                    'contentTypeId' => $location->contentInfo->contentTypeId,
-                    'contentTypeIdentifier' => $contentType->identifier,
+                    'location' => $location,
                 );
             }
         }

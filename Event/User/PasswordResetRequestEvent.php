@@ -8,14 +8,14 @@ use eZ\Publish\API\Repository\Values\User\User;
 class PasswordResetRequestEvent extends Event
 {
     /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
-    protected $user;
-
-    /**
      * @var string
      */
     protected $email;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\User\User
+     */
+    protected $user;
 
     /**
      * @param string $email
@@ -23,16 +23,8 @@ class PasswordResetRequestEvent extends Event
      */
     public function __construct($email, User $user = null)
     {
-        $this->user = $user;
         $this->email = $email;
-    }
-
-    /**
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     */
-    public function getUser()
-    {
-        return $this->user;
+        $this->user = $user;
     }
 
     /**
@@ -41,5 +33,13 @@ class PasswordResetRequestEvent extends Event
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

@@ -8,14 +8,14 @@ use eZ\Publish\API\Repository\Values\User\User;
 class ActivationRequestEvent extends Event
 {
     /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
-    protected $user;
-
-    /**
      * @var string
      */
     protected $email;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\User\User
+     */
+    protected $user;
 
     /**
      * @param \eZ\Publish\API\Repository\Values\User\User $user
@@ -23,16 +23,8 @@ class ActivationRequestEvent extends Event
      */
     public function __construct($email, User $user = null)
     {
-        $this->user = $user;
         $this->email = $email;
-    }
-
-    /**
-     * @return \eZ\Publish\API\Repository\Values\User\User User
-     */
-    public function getUser()
-    {
-        return $this->user;
+        $this->user = $user;
     }
 
     /**
@@ -41,5 +33,13 @@ class ActivationRequestEvent extends Event
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Values\User\User User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

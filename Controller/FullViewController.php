@@ -3,35 +3,67 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Bundle\EzPublishCoreBundle\Controller;
-use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use Netgen\EzPlatformSite\API\FindService;
+use Netgen\EzPlatformSite\API\LoadService;
+use Netgen\EzPlatformSite\API\Values\Location;
+use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use eZ\Publish\Core\FieldType\Relation\Value as RelationValue;
 use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
-use eZ\Publish\Core\Pagination\Pagerfanta\LocationSearchAdapter;
+use Netgen\EzPlatformSite\Core\Site\Pagination\Pagerfanta\LocationSearchAdapter;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use Symfony\Component\Routing\RouterInterface;
 use Pagerfanta\Pagerfanta;
 
 class FullViewController extends Controller
 {
     /**
+     * @var \Netgen\EzPlatformSite\API\LoadService
+     */
+    protected $loadService;
+
+    /**
+     * @var \Netgen\EzPlatformSite\API\FindService
+     */
+    protected $findService;
+
+    /**
+     * @var \Symfony\Component\Routing\RouterInterface
+     */
+    protected $router;
+
+    /**
+     * Constructor.
+     *
+     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
+     * @param \Netgen\EzPlatformSite\API\FindService $findService
+     * @param \Symfony\Component\Routing\RouterInterface $router
+     */
+    public function __construct(LoadService $loadService, FindService $findService, RouterInterface $router)
+    {
+        $this->loadService = $loadService;
+        $this->findService = $findService;
+        $this->router = $router;
+    }
+
+    /**
      * Action for viewing content with ng_category content type identifier.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \eZ\Publish\Core\MVC\Symfony\View\ContentView $view
+     * @param \Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView $view
      *
-     * @return \Symfony\Component\HttpFoundation\Response|\eZ\Publish\Core\MVC\Symfony\View\ContentView
+     * @return \Symfony\Component\HttpFoundation\Response|\Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView
      */
     public function viewNgCategory(Request $request, ContentView $view)
     {
-        $content = $view->getContent();
-        $location = $view->getLocation();
+        $content = $view->getSiteContent();
+        $location = $view->getSiteLocation();
         if (!$location instanceof Location) {
-            $location = $this->getRepository()->getLocationService()->loadLocation(
-                $content->contentInfo->mainLocationId
+            $location = $this->loadService->loadLocation(
+                $content->mainLocationId
             );
         }
 
@@ -40,22 +72,18 @@ class FullViewController extends Controller
             return $response;
         }
 
-        $fieldHelper = $this->container->get('ezpublish.field_helper');
-        $translationHelper = $this->container->get('ezpublish.translation_helper');
-
         $criteria = array(
             new Criterion\Subtree($location->pathString),
             new Criterion\Visibility(Criterion\Visibility::VISIBLE),
             new Criterion\LogicalNot(new Criterion\LocationId($location->id)),
         );
 
-        $fetchSubtreeValue = $translationHelper->getTranslatedField($content, 'fetch_subtree')->value;
-        if (!$fetchSubtreeValue->bool) {
+        if (!$content->getField('fetch_subtree')->value->bool) {
             $criteria[] = new Criterion\Location\Depth(Criterion\Operator::EQ, $location->depth + 1);
         }
 
-        if (!$fieldHelper->isFieldEmpty($content, 'children_class_filter_include')) {
-            $contentTypeFilter = $translationHelper->getTranslatedField($content, 'children_class_filter_include')->value;
+        if (!$content->getField('children_class_filter_include')->isEmpty()) {
+            $contentTypeFilter = $content->getField('children_class_filter_include')->value;
             $criteria[] = new Criterion\ContentTypeIdentifier(
                 array_map(
                     'trim',
@@ -77,14 +105,14 @@ class FullViewController extends Controller
         $pager = new Pagerfanta(
             new LocationSearchAdapter(
                 $query,
-                $this->getRepository()->getSearchService()
+                $this->findService
             )
         );
 
         $pager->setNormalizeOutOfRangePages(true);
 
         /** @var \eZ\Publish\Core\FieldType\Integer\Value $pageLimitValue */
-        $pageLimitValue = $translationHelper->getTranslatedField($content, 'page_limit')->value;
+        $pageLimitValue = $content->getField('page_limit')->value;
 
         $defaultLimit = 12;
         if (isset($params['childrenLimit'])) {
@@ -111,16 +139,16 @@ class FullViewController extends Controller
     /**
      * Action for viewing content with ng_landing_page content type identifier.
      *
-     * @param \eZ\Publish\Core\MVC\Symfony\View\ContentView $view
+     * @param \Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView $view
      *
-     * @return \Symfony\Component\HttpFoundation\Response|\eZ\Publish\Core\MVC\Symfony\View\ContentView
+     * @return \Symfony\Component\HttpFoundation\Response|\Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView
      */
     public function viewNgLandingPage(ContentView $view)
     {
-        $location = $view->getLocation();
+        $location = $view->getSiteLocation();
         if (!$location instanceof Location) {
-            $location = $this->getRepository()->getLocationService()->loadLocation(
-                $view->getContent()->contentInfo->mainLocationId
+            $location = $this->loadService->loadLocation(
+                $view->getSiteContent()->mainLocationId
             );
         }
 
@@ -135,16 +163,16 @@ class FullViewController extends Controller
     /**
      * Action for viewing content with ng_category_page content type identifier.
      *
-     * @param \eZ\Publish\Core\MVC\Symfony\View\ContentView $view
+     * @param \Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView $view
      *
-     * @return \Symfony\Component\HttpFoundation\Response|\eZ\Publish\Core\MVC\Symfony\View\ContentView
+     * @return \Symfony\Component\HttpFoundation\Response|\Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView
      */
     public function viewNgCategoryPage(ContentView $view)
     {
-        $location = $view->getLocation();
+        $location = $view->getSiteLocation();
         if (!$location instanceof Location) {
-            $location = $this->getRepository()->getLocationService()->loadLocation(
-                $view->getContent()->contentInfo->mainLocationId
+            $location = $this->loadService->loadLocation(
+                $view->getSiteContent()->mainLocationId
             );
         }
 
@@ -160,35 +188,31 @@ class FullViewController extends Controller
      * Checks if content at location defined by it's ID contains
      * valid category redirect value and returns a redirect response if it does.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \Netgen\EzPlatformSite\API\Values\Location $location
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function checkCategoryRedirect(Location $location)
     {
-        $contentService = $this->getRepository()->getContentService();
-        $content = $contentService->loadContent($location->contentId);
+        $content = $this->loadService->loadContent($location->contentId);
 
-        $fieldHelper = $this->container->get('ezpublish.field_helper');
-        $translationHelper = $this->container->get('ezpublish.translation_helper');
-
-        $internalRedirectValue = $translationHelper->getTranslatedField($content, 'internal_redirect')->value;
-        $externalRedirectValue = $translationHelper->getTranslatedField($content, 'external_redirect')->value;
-        if ($internalRedirectValue instanceof RelationValue && !$fieldHelper->isFieldEmpty($content, 'internal_redirect')) {
-            $internalRedirectContentInfo = $contentService->loadContentInfo($internalRedirectValue->destinationContentId);
+        $internalRedirectValue = $content->getField('internal_redirect')->value;
+        $externalRedirectValue = $content->getField('external_redirect')->value;
+        if ($internalRedirectValue instanceof RelationValue && !$content->getField('internal_redirect')->isEmpty()) {
+            $internalRedirectContentInfo = $this->loadService->loadContentInfo($internalRedirectValue->destinationContentId);
             if ($internalRedirectContentInfo->mainLocationId != $location->id) {
                 return new RedirectResponse(
-                    $this->container->get('router')->generate($internalRedirectContentInfo),
+                    $this->router->generate($internalRedirectContentInfo),
                     RedirectResponse::HTTP_MOVED_PERMANENTLY
                 );
             }
-        } elseif ($externalRedirectValue instanceof UrlValue && !$fieldHelper->isFieldEmpty($content, 'external_redirect')) {
+        } elseif ($externalRedirectValue instanceof UrlValue && !$content->getField('external_redirect')->isEmpty()) {
             if (stripos($externalRedirectValue->link, 'http') === 0) {
                 return new RedirectResponse($externalRedirectValue->link, RedirectResponse::HTTP_MOVED_PERMANENTLY);
             }
 
             return new RedirectResponse(
-                $this->container->get('router')->generate(
+                $this->router->generate(
                     'ez_urlalias',
                     array(
                         'locationId' => $this->getConfigResolver()->getParameter('content.tree_root.location_id'),

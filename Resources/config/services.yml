@@ -39,6 +39,10 @@ services:
     ngmore.controller.full_view:
         class: "%ngmore.controller.full_view.class%"
         parent: ezpublish.controller.base
+        arguments:
+            - "@netgen.ezplatform_site.load_service"
+            - "@netgen.ezplatform_site.find_service"
+            - "@router"
 
     ngmore.controller.embed_view:
         class: "%ngmore.controller.embed_view.class%"

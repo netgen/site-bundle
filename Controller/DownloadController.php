@@ -2,12 +2,11 @@
 
 namespace Netgen\Bundle\MoreBundle\Controller;
 
-use eZ\Bundle\EzPublishCoreBundle\Controller;
+use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use eZ\Publish\Core\FieldType\BinaryBase\Value as BinaryBaseValue;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
 use eZ\Publish\Core\IO\IOServiceInterface;
-use Netgen\EzPlatformSite\API\LoadService;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -38,22 +37,21 @@ class DownloadController extends Controller
     /**
      * Constructor.
      *
-     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
      * @param \eZ\Publish\Core\IO\IOServiceInterface $ioFileService
      * @param \eZ\Publish\Core\IO\IOServiceInterface $ioImageService
      * @param \Symfony\Component\Translation\TranslatorInterface $translator
      */
     public function __construct(
-        LoadService $loadService,
         IOServiceInterface $ioFileService,
         IOServiceInterface $ioImageService,
         TranslatorInterface $translator
     )
     {
-        $this->loadService = $loadService;
         $this->ioFileService = $ioFileService;
         $this->ioImageService = $ioImageService;
         $this->translator = $translator;
+
+        $this->loadService = $this->getSite()->getLoadService();
     }
 
     /**

@@ -2,9 +2,7 @@
 
 namespace Netgen\Bundle\MoreBundle\Controller;
 
-use eZ\Bundle\EzPublishCoreBundle\Controller;
-use Netgen\EzPlatformSite\API\LoadService;
-use Netgen\EzPlatformSite\API\FindService;
+use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Netgen\EzPlatformSite\Core\Site\Pagination\Pagerfanta\LocationSearchAdapter;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
@@ -35,16 +33,11 @@ class SearchController extends Controller
 
     /**
      * Constructor.
-     *
-     * @param \Netgen\EzPlatformSite\API\FindService $findService
-     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
      */
-    public function __construct(
-        FindService $findService,
-        LoadService $loadService
-    ) {
-        $this->findService = $findService;
-        $this->loadService = $loadService;
+    public function __construct()
+    {
+        $this->findService = $this->getSite()->getFindService();
+        $this->loadService = $this->getSite()->getLoadService();
 
         $this->defaultLimit = (int)$this->getConfigResolver()->getParameter('search.default_limit', 'ngmore');
         $this->template = $this->getConfigResolver()->getParameter('template.search', 'ngmore');

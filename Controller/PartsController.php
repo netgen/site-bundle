@@ -2,13 +2,12 @@
 
 namespace Netgen\Bundle\MoreBundle\Controller;
 
-use eZ\Bundle\EzPublishCoreBundle\Controller;
+use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use Netgen\Bundle\MoreBundle\Helper\SortClauseHelper;
 use Netgen\EzPlatformSite\API\Values\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use Netgen\EzPlatformSite\API\FindService;
-use Netgen\EzPlatformSite\API\LoadService;
 
 class PartsController extends Controller
 {
@@ -23,17 +22,21 @@ class PartsController extends Controller
     protected $findService;
 
     /**
+     * @var \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper
+     */
+    protected $sortClauseHelper;
+
+    /**
      * Constructor.
      *
-     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
-     * @param \Netgen\EzPlatformSite\API\FindService $findService
+     * @param \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper $sortClauseHelper
      */
-    public function __construct(
-        LoadService $loadService,
-        FindService $findService
-    ) {
-        $this->loadService = $loadService;
-        $this->findService = $findService;
+    public function __construct(SortClauseHelper $sortClauseHelper)
+    {
+        $this->sortClauseHelper = $sortClauseHelper;
+
+        $this->loadService = $this->getSite()->getLoadService();
+        $this->findService = $this->getSite()->getFindService();
     }
 
     /**
@@ -185,7 +188,7 @@ class PartsController extends Controller
         $query->filter = new Criterion\LogicalAnd($criteria);
 
         $query->sortClauses = array(
-            $this->container->get('ngmore.helper.sort_clause_helper')->getSortClauseBySortField(
+            $this->sortClauseHelper->getSortClauseBySortField(
                 $location->sortField,
                 $location->sortOrder
             ),

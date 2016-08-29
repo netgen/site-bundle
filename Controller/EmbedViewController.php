@@ -2,11 +2,10 @@
 
 namespace Netgen\Bundle\MoreBundle\Controller;
 
-use eZ\Bundle\EzPublishCoreBundle\Controller;
+use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
-use Netgen\EzPlatformSite\API\LoadService;
 use Symfony\Component\Routing\RouterInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -31,15 +30,15 @@ class EmbedViewController extends Controller
     /**
      * Constructor.
      *
-     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
      * @param \Symfony\Component\Routing\RouterInterface $router
      * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct(LoadService $loadService, RouterInterface $router, LoggerInterface $logger = null)
+    public function __construct(RouterInterface $router, LoggerInterface $logger = null)
     {
-        $this->loadService = $loadService;
         $this->router = $router;
         $this->logger = $logger ?: new NullLogger();
+
+        $this->loadService = $this->getSite()->getLoadService();
     }
 
     /**

@@ -2,8 +2,9 @@
 
 namespace Netgen\Bundle\MoreBundle\Controller;
 
-use eZ\Bundle\EzPublishCoreBundle\Controller;
-use Netgen\EzPlatformSite\API\LoadService;
+use Knp\Menu\Provider\MenuProviderInterface;
+use Knp\Menu\Renderer\RendererProviderInterface;
+use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Knp\Menu\ItemInterface;
 
@@ -15,13 +16,27 @@ class PageLayoutController extends Controller
     protected $loadService;
 
     /**
+     * @var \Knp\Menu\Provider\MenuProviderInterface
+     */
+    protected $menuProvider;
+
+    /**
+     * @var \Knp\Menu\Renderer\RendererProviderInterface
+     */
+    protected $menuRenderer;
+
+    /**
      * Constructor.
      *
-     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
+     * @param \Knp\Menu\Provider\MenuProviderInterface $menuProvider
+     * @param \Knp\Menu\Renderer\RendererProviderInterface $menuRenderer
      */
-    public function __construct(LoadService $loadService)
+    public function __construct(MenuProviderInterface $menuProvider, RendererProviderInterface $menuRenderer)
     {
-        $this->loadService = $loadService;
+        $this->menuProvider = $menuProvider;
+        $this->menuRenderer = $menuRenderer;
+
+        $this->loadService = $this->getSite()->getLoadService();
     }
 
     /**
@@ -39,8 +54,7 @@ class PageLayoutController extends Controller
      */
     public function menu($menuName, $activeItemId, $ulClass = 'nav navbar-nav', $firstClass = 'firstli', $currentClass = 'active', $lastClass = 'lastli', $template = null)
     {
-        /** @var \Knp\Menu\ItemInterface $menu */
-        $menu = $this->container->get('knp_menu.menu_provider')->get($menuName);
+        $menu = $this->menuProvider->get($menuName);
         $menu->setChildrenAttribute('class', $ulClass);
 
         if (!empty($menu[$activeItemId]) && $menu[$activeItemId] instanceof ItemInterface) {
@@ -57,9 +71,7 @@ class PageLayoutController extends Controller
             $menuOptions['template'] = $template;
         }
 
-        /** @var \Knp\Menu\Renderer\RendererInterface $menuRenderer */
-        $menuRenderer = $this->container->get('knp_menu.renderer_provider')->get();
-        $menuContent = $menuRenderer->render(
+        $menuContent = $this->menuRenderer->get()->render(
             $menu,
             $menuOptions
         );

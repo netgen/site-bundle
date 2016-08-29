@@ -2,7 +2,7 @@
 
 namespace Netgen\Bundle\MoreBundle\Controller;
 
-use eZ\Bundle\EzPublishCoreBundle\Controller;
+use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -11,7 +11,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\FieldType\Page\Parts\Item;
 use eZ\Publish\Core\MVC\Symfony\View\BlockView;
-use Netgen\EzPlatformSite\API\FindService;
+use Netgen\Bundle\MoreBundle\Helper\SortClauseHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Netgen\EzPlatformSite\Core\Site\Pagination\Pagerfanta\LocationSearchAdapter;
@@ -20,18 +20,18 @@ use Pagerfanta\Pagerfanta;
 class BlockViewController extends Controller
 {
     /**
-     * @var \Netgen\EzPlatformSite\API\FindService
+     * @var \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper
      */
-    protected $findService;
+    protected $sortClauseHelper;
 
     /**
      * Constructor.
      *
-     * @param \Netgen\EzPlatformSite\API\FindService $findService
+     * @param \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper $sortClauseHelper
      */
-    public function __construct(FindService $findService)
+    public function __construct(SortClauseHelper $sortClauseHelper)
     {
-        $this->findService = $findService;
+        $this->sortClauseHelper = $sortClauseHelper;
     }
 
     /**
@@ -128,7 +128,7 @@ class BlockViewController extends Controller
         $pager = new Pagerfanta(
             new LocationSearchAdapter(
                 $query,
-                $this->findService
+                $this->getSite()->getFindService()
             )
         );
 
@@ -204,10 +204,8 @@ class BlockViewController extends Controller
      */
     protected function getSortClause($sortField, $advancedSortField, $sortOrder, Location $parentLocation)
     {
-        $sortClauseHelper = $this->container->get('ngmore.helper.sort_clause_helper');
-
         if ($sortField === 'parent_node_sort_array') {
-            return $sortClauseHelper->getSortClauseBySortField(
+            return $this->sortClauseHelper->getSortClauseBySortField(
                 $parentLocation->sortField,
                 $parentLocation->sortOrder
             );
@@ -228,11 +226,11 @@ class BlockViewController extends Controller
             return new SortClause\Field(
                 $advancedSortFieldArray[0],
                 $advancedSortFieldArray[1],
-                $sortClauseHelper->getQuerySortOrder($sortOrder),
+                $this->sortClauseHelper->getQuerySortOrder($sortOrder),
                 $fieldDefinition->isTranslatable ? $currentLanguage : null
             );
         }
 
-        return $sortClauseHelper->getSortClauseBySortField($sortField, $sortOrder);
+        return $this->sortClauseHelper->getSortClauseBySortField($sortField, $sortOrder);
     }
 }

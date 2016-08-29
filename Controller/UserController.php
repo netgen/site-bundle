@@ -3,11 +3,13 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey;
+use Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
 use Netgen\Bundle\MoreBundle\Event\User as UserEvents;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints;
-use eZ\Bundle\EzPublishCoreBundle\Controller;
+use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
@@ -28,15 +30,33 @@ class UserController extends Controller
     protected $eventDispatcher;
 
     /**
+     * @var \Symfony\Component\Form\FormFactoryInterface
+     */
+    protected $formFactory;
+
+    /**
+     * @var \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository
+     */
+    protected $accountKeyRepository;
+
+    /**
      * Constructor.
      *
      * @param \eZ\Publish\API\Repository\UserService $userService
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     * @param \Symfony\Component\Form\FormFactoryInterface $formFactory
+     * @param \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository $accountKeyRepository
      */
-    public function __construct(UserService $userService, EventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        UserService $userService,
+        EventDispatcherInterface $eventDispatcher,
+        FormFactoryInterface $formFactory,
+        EzUserAccountKeyRepository $accountKeyRepository
+    ) {
         $this->userService = $userService;
         $this->eventDispatcher = $eventDispatcher;
+        $this->formFactory = $formFactory;
+        $this->accountKeyRepository = $accountKeyRepository;
     }
 
     /**
@@ -66,7 +86,7 @@ class UserController extends Controller
 
         $data = new DataWrapper($userCreateStruct, $userCreateStruct->contentType);
 
-        $formBuilder = $this->container->get('form.factory')->createBuilder(
+        $formBuilder = $this->formFactory->createBuilder(
             'ezforms_create_user',
             $data,
             array(
@@ -196,16 +216,14 @@ class UserController extends Controller
      */
     public function activate($hash)
     {
-        /** @var \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository $accountKeyRepository */
-        $accountKeyRepository = $this->get('ngmore.repository.ezuser_accountkey');
-        $accountKey = $accountKeyRepository->getByHash($hash);
+        $accountKey = $this->accountKeyRepository->getByHash($hash);
 
         if (!$accountKey instanceof EzUserAccountKey) {
             throw new NotFoundHttpException();
         }
 
         if (time() - $accountKey->getTime() > $this->getConfigResolver()->getParameter('user.activate_hash_validity_time', 'ngmore')) {
-            $accountKeyRepository->removeByHash($hash);
+            $this->accountKeyRepository->removeByHash($hash);
 
             return $this->render(
                 $this->getConfigResolver()->getParameter('template.user.activate_done', 'ngmore'),
@@ -289,16 +307,14 @@ class UserController extends Controller
      */
     public function resetPassword(Request $request, $hash)
     {
-        /** @var \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository $accountKeyRepository */
-        $accountKeyRepository = $this->get('ngmore.repository.ezuser_accountkey');
-        $accountKey = $accountKeyRepository->getByHash($hash);
+        $accountKey = $this->accountKeyRepository->getByHash($hash);
 
         if (!$accountKey instanceof EzUserAccountKey) {
             throw new NotFoundHttpException();
         }
 
         if (time() - $accountKey->getTime() > $this->getConfigResolver()->getParameter('user.forgot_password_hash_validity_time', 'ngmore')) {
-            $accountKeyRepository->removeByHash($hash);
+            $this->accountKeyRepository->removeByHash($hash);
 
             return $this->render(
                 $this->getConfigResolver()->getParameter('template.user.reset_password_done', 'ngmore'),
@@ -396,7 +412,7 @@ class UserController extends Controller
      */
     protected function createResetPasswordForm()
     {
-        $minLength = (int)$this->container->getParameter('netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length');
+        $minLength = (int)$this->getParameter('netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length');
 
         $passwordConstraints = array(
             new Constraints\NotBlank(),

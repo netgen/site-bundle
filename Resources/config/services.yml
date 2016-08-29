@@ -38,65 +38,61 @@ services:
 
     ngmore.controller.full_view:
         class: "%ngmore.controller.full_view.class%"
-        parent: ezpublish.controller.base
+        parent: netgen.ezplatform_site.controller.base
         arguments:
-            - "@netgen.ezplatform_site.load_service"
-            - "@netgen.ezplatform_site.find_service"
+            - "@ngmore.helper.sort_clause_helper"
             - "@router"
 
     ngmore.controller.embed_view:
         class: "%ngmore.controller.embed_view.class%"
-        parent: ezpublish.controller.base
+        parent: netgen.ezplatform_site.controller.base
         arguments:
-            - "@netgen.ezplatform_site.load_service"
             - "@router"
             - "@?logger"
 
     ngmore.controller.block_view:
         class: "%ngmore.controller.block_view.class%"
-        parent: ezpublish.controller.base
+        parent: netgen.ezplatform_site.controller.base
         arguments:
-            - "@netgen.ezplatform_site.find_service"
+            - "@ngmore.helper.sort_clause_helper"
 
     ngmore.controller.search:
         class: "%ngmore.controller.search.class%"
-        parent: ezpublish.controller.base
-        arguments:
-            - "@netgen.ezplatform_site.find_service"
-            - "@netgen.ezplatform_site.load_service"
+        parent: netgen.ezplatform_site.controller.base
 
     ngmore.controller.page_layout:
         class: "%ngmore.controller.page_layout.class%"
-        parent: ezpublish.controller.base
+        parent: netgen.ezplatform_site.controller.base
         arguments:
-            - "@netgen.ezplatform_site.load_service"
+            - "@knp_menu.menu_provider"
+            - "@knp_menu.renderer_provider"
 
     ngmore.controller.parts:
         class: "%ngmore.controller.parts.class%"
-        parent: ezpublish.controller.base
+        parent: netgen.ezplatform_site.controller.base
         arguments:
-            - "@netgen.ezplatform_site.load_service"
-            - "@netgen.ezplatform_site.find_service"
+            - "@ngmore.helper.sort_clause_helper"
 
     ngmore.controller.download:
         class: "%ngmore.controller.download.class%"
-        parent: ezpublish.controller.base
+        parent: netgen.ezplatform_site.controller.base
         arguments:
-            - "@netgen.ezplatform_site.load_service"
             - "@ezpublish.fieldtype.ezbinaryfile.io_service"
             - "@ezpublish.fieldtype.ezimage.io_service"
             - "@translator"
 
     ngmore.controller.sitemap:
         class: "%ngmore.controller.sitemap.class%"
-        parent: ezpublish.controller.base
+        parent: netgen.ezplatform_site.controller.base
 
     ngmore.controller.user:
         class: "%ngmore.controller.user.class%"
-        parent: ezpublish.controller.base
+        parent: netgen.ezplatform_site.controller.base
         arguments:
             - "@ezpublish.api.service.user"
             - "@event_dispatcher"
+            - "@form.factory"
+            - "@ngmore.repository.ezuser_accountkey"
 
     ngmore.helper.path_helper:
         class: "%ngmore.helper.path_helper.class%"

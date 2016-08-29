@@ -2,9 +2,8 @@
 
 namespace Netgen\Bundle\MoreBundle\Controller;
 
-use eZ\Bundle\EzPublishCoreBundle\Controller;
-use Netgen\EzPlatformSite\API\FindService;
-use Netgen\EzPlatformSite\API\LoadService;
+use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
+use Netgen\Bundle\MoreBundle\Helper\SortClauseHelper;
 use Netgen\EzPlatformSite\API\Values\Location;
 use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,6 +30,11 @@ class FullViewController extends Controller
     protected $findService;
 
     /**
+     * @var \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper
+     */
+    protected $sortClauseHelper;
+
+    /**
      * @var \Symfony\Component\Routing\RouterInterface
      */
     protected $router;
@@ -38,15 +42,16 @@ class FullViewController extends Controller
     /**
      * Constructor.
      *
-     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
-     * @param \Netgen\EzPlatformSite\API\FindService $findService
+     * @param \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper $sortClauseHelper
      * @param \Symfony\Component\Routing\RouterInterface $router
      */
-    public function __construct(LoadService $loadService, FindService $findService, RouterInterface $router)
+    public function __construct(SortClauseHelper $sortClauseHelper, RouterInterface $router)
     {
-        $this->loadService = $loadService;
-        $this->findService = $findService;
+        $this->sortClauseHelper = $sortClauseHelper;
         $this->router = $router;
+
+        $this->loadService = $this->getSite()->getLoadService();
+        $this->findService = $this->getSite()->getFindService();
     }
 
     /**
@@ -96,7 +101,7 @@ class FullViewController extends Controller
         $query->filter = new Criterion\LogicalAnd($criteria);
 
         $query->sortClauses = array(
-            $this->container->get('ngmore.helper.sort_clause_helper')->getSortClauseBySortField(
+            $this->sortClauseHelper->getSortClauseBySortField(
                 $location->sortField,
                 $location->sortOrder
             ),

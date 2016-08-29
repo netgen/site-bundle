@@ -184,7 +184,7 @@ class PartsController extends Controller
         $result = $this->getSite()->getFindService()->findNodes($query);
 
         foreach ($result->searchHits as $searchHit) {
-            $contentList[] = $searchHit->valueObject;
+            $contentList[] = $searchHit->valueObject->content;
         }
 
         return $contentList;

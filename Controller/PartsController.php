@@ -12,16 +12,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 class PartsController extends Controller
 {
     /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
-
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\FindService
-     */
-    protected $findService;
-
-    /**
      * @var \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper
      */
     protected $sortClauseHelper;
@@ -34,9 +24,6 @@ class PartsController extends Controller
     public function __construct(SortClauseHelper $sortClauseHelper)
     {
         $this->sortClauseHelper = $sortClauseHelper;
-
-        $this->loadService = $this->getSite()->getLoadService();
-        $this->findService = $this->getSite()->getFindService();
     }
 
     /**
@@ -53,7 +40,7 @@ class PartsController extends Controller
     {
         $relatedItems = array();
 
-        $content = $this->loadService->loadContent($contentId);
+        $content = $this->getSite()->getLoadService()->loadContent($contentId);
 
         if ($content->hasField($fieldDefinitionIdentifier) && !$content->getField($fieldDefinitionIdentifier)->isEmpty()) {
             /** @var \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value $fieldValue */
@@ -62,7 +49,7 @@ class PartsController extends Controller
                 foreach ($fieldValue->destinationLocationIds as $locationId) {
                     try {
                         if (!empty($locationId)) {
-                            $location = $this->loadService->loadLocation($locationId);
+                            $location = $this->getSite()->getLoadService()->loadLocation($locationId);
                             if (!$location->invisible) {
                                 $relatedItems[] = $location;
                             }
@@ -105,8 +92,8 @@ class PartsController extends Controller
      */
     public function viewRelatedMultimediaItems($locationId, $template, $includeChildren = false, array $contentTypeIdentifiers = array('image'))
     {
-        $location = $this->loadService->loadLocation($locationId);
-        $content = $this->loadService->loadContent($location->contentId);
+        $location = $this->getSite()->getLoadService()->loadLocation($locationId);
+        $content = $this->getSite()->getLoadService()->loadContent($location->contentId);
 
         // Add current location in the multimedia item list
         $multimediaItems = array($content);
@@ -134,7 +121,7 @@ class PartsController extends Controller
         if (!empty($relatedMultimediaLocationIds)) {
             foreach ($relatedMultimediaLocationIds as $relatedMultimediaLocationId) {
                 try {
-                    $relatedMultimediaLocation = $this->loadService->loadLocation($relatedMultimediaLocationId);
+                    $relatedMultimediaLocation = $this->getSite()->getLoadService()->loadLocation($relatedMultimediaLocationId);
                 } catch (NotFoundException $e) {
                     // Skip non-existing locations (item in trash or missing location due to some other reason)
                     continue;
@@ -149,7 +136,7 @@ class PartsController extends Controller
                     $galleryItems = $this->getChildren($relatedMultimediaLocation, $contentTypeIdentifiers);
                     $multimediaItems = array_merge($multimediaItems, $galleryItems);
                 } else {
-                    $relatedMultimediaContent = $this->loadService->loadContent($relatedMultimediaLocation->contentId);
+                    $relatedMultimediaContent = $this->getSite()->getLoadService()->loadContent($relatedMultimediaLocation->contentId);
                     $multimediaItems[] = $relatedMultimediaContent;
                 }
             }
@@ -194,7 +181,7 @@ class PartsController extends Controller
             ),
         );
 
-        $result = $this->findService->findNodes($query);
+        $result = $this->getSite()->getFindService()->findNodes($query);
 
         foreach ($result->searchHits as $searchHit) {
             $contentList[] = $searchHit->valueObject;

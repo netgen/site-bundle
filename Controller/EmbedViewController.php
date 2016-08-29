@@ -13,11 +13,6 @@ use Psr\Log\NullLogger;
 class EmbedViewController extends Controller
 {
     /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
-
-    /**
      * @var \Symfony\Component\Routing\RouterInterface
      */
     protected $router;
@@ -37,8 +32,6 @@ class EmbedViewController extends Controller
     {
         $this->router = $router;
         $this->logger = $logger ?: new NullLogger();
-
-        $this->loadService = $this->getSite()->getLoadService();
     }
 
     /**
@@ -58,8 +51,8 @@ class EmbedViewController extends Controller
                     $locationId = (int)substr($targetLink, 9);
 
                     try {
-                        $location = $this->loadService->loadLocation($locationId);
-                        $content = $this->loadService->loadContent($location->contentId);
+                        $location = $this->getSite()->getLoadService()->loadLocation($locationId);
+                        $content = $this->getSite()->getLoadService()->loadContent($location->contentId);
                     } catch (NotFoundException $e) {
                         $targetLink = null;
                         $this->logger->error(
@@ -75,7 +68,7 @@ class EmbedViewController extends Controller
                     $linkedContentId = (int)substr($targetLink, 11);
 
                     try {
-                        $content = $this->loadService->loadContent($linkedContentId);
+                        $content = $this->getSite()->getLoadService()->loadContent($linkedContentId);
                     } catch (NotFoundException $e) {
                         $targetLink = null;
                         $this->logger->error(

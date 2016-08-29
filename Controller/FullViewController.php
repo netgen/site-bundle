@@ -20,16 +20,6 @@ use Pagerfanta\Pagerfanta;
 class FullViewController extends Controller
 {
     /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
-
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\FindService
-     */
-    protected $findService;
-
-    /**
      * @var \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper
      */
     protected $sortClauseHelper;
@@ -49,9 +39,6 @@ class FullViewController extends Controller
     {
         $this->sortClauseHelper = $sortClauseHelper;
         $this->router = $router;
-
-        $this->loadService = $this->getSite()->getLoadService();
-        $this->findService = $this->getSite()->getFindService();
     }
 
     /**
@@ -67,7 +54,7 @@ class FullViewController extends Controller
         $content = $view->getSiteContent();
         $location = $view->getSiteLocation();
         if (!$location instanceof Location) {
-            $location = $this->loadService->loadLocation(
+            $location = $this->getSite()->getLoadService()->loadLocation(
                 $content->mainLocationId
             );
         }
@@ -110,7 +97,7 @@ class FullViewController extends Controller
         $pager = new Pagerfanta(
             new LocationSearchAdapter(
                 $query,
-                $this->findService
+                $this->getSite()->getFindService()
             )
         );
 
@@ -152,7 +139,7 @@ class FullViewController extends Controller
     {
         $location = $view->getSiteLocation();
         if (!$location instanceof Location) {
-            $location = $this->loadService->loadLocation(
+            $location = $this->getSite()->getLoadService()->loadLocation(
                 $view->getSiteContent()->mainLocationId
             );
         }
@@ -176,7 +163,7 @@ class FullViewController extends Controller
     {
         $location = $view->getSiteLocation();
         if (!$location instanceof Location) {
-            $location = $this->loadService->loadLocation(
+            $location = $this->getSite()->getLoadService()->loadLocation(
                 $view->getSiteContent()->mainLocationId
             );
         }
@@ -199,12 +186,12 @@ class FullViewController extends Controller
      */
     protected function checkCategoryRedirect(Location $location)
     {
-        $content = $this->loadService->loadContent($location->contentId);
+        $content = $this->getSite()->getLoadService()->loadContent($location->contentId);
 
         $internalRedirectValue = $content->getField('internal_redirect')->value;
         $externalRedirectValue = $content->getField('external_redirect')->value;
         if ($internalRedirectValue instanceof RelationValue && !$content->getField('internal_redirect')->isEmpty()) {
-            $internalRedirectContentInfo = $this->loadService->loadContentInfo($internalRedirectValue->destinationContentId);
+            $internalRedirectContentInfo = $this->getSite()->getLoadService()->loadContentInfo($internalRedirectValue->destinationContentId);
             if ($internalRedirectContentInfo->mainLocationId != $location->id) {
                 return new RedirectResponse(
                     $this->router->generate($internalRedirectContentInfo),

@@ -15,11 +15,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class DownloadController extends Controller
 {
     /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
-
-    /**
      * @var \eZ\Publish\Core\IO\IOServiceInterface
      */
     protected $ioFileService;
@@ -50,8 +45,6 @@ class DownloadController extends Controller
         $this->ioFileService = $ioFileService;
         $this->ioImageService = $ioImageService;
         $this->translator = $translator;
-
-        $this->loadService = $this->getSite()->getLoadService();
     }
 
     /**
@@ -70,7 +63,7 @@ class DownloadController extends Controller
      */
     public function downloadFile(Request $request, $contentId, $fieldId, $isInline = false)
     {
-        $content = $this->loadService->loadContent(
+        $content = $this->getSite()->getLoadService()->loadContent(
             $contentId,
             $request->query->has('version') ? $request->query->get('version') : null,
             $request->query->has('inLanguage') ? $request->query->get('inLanguage') : null

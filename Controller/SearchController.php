@@ -12,38 +12,6 @@ use Pagerfanta\Pagerfanta;
 class SearchController extends Controller
 {
     /**
-     * @var \Netgen\EzPlatformSiteApi\API\FindService
-     */
-    protected $findService;
-
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
-
-    /**
-     * @var int
-     */
-    protected $defaultLimit;
-
-    /**
-     * @var string
-     */
-    protected $template;
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        $this->findService = $this->getSite()->getFindService();
-        $this->loadService = $this->getSite()->getLoadService();
-
-        $this->defaultLimit = (int)$this->getConfigResolver()->getParameter('search.default_limit', 'ngmore');
-        $this->template = $this->getConfigResolver()->getParameter('template.search', 'ngmore');
-    }
-
-    /**
      * Action for displaying the results of full text search.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -56,7 +24,7 @@ class SearchController extends Controller
 
         if (empty($searchText)) {
             return $this->render(
-                $this->template,
+                $this->getConfigResolver()->getParameter('template.search', 'ngmore'),
                 array(
                     'search_text' => '',
                     'locations' => array(),
@@ -76,18 +44,20 @@ class SearchController extends Controller
         $pager = new Pagerfanta(
             new LocationSearchAdapter(
                 $query,
-                $this->findService
+                $this->getSite()->getFindService()
             )
         );
 
         $pager->setNormalizeOutOfRangePages(true);
-        $pager->setMaxPerPage($this->defaultLimit);
+        $pager->setMaxPerPage(
+            (int)$this->getConfigResolver()->getParameter('search.default_limit', 'ngmore')
+        );
 
         $currentPage = (int)$request->get('page', 1);
         $pager->setCurrentPage($currentPage > 0 ? $currentPage : 1);
 
         return $this->render(
-            $this->template,
+            $this->getConfigResolver()->getParameter('template.search', 'ngmore'),
             array(
                 'search_text' => $searchText,
                 'locations' => $pager,

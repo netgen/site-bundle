@@ -11,11 +11,6 @@ use Knp\Menu\ItemInterface;
 class PageLayoutController extends Controller
 {
     /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
-
-    /**
      * @var \Knp\Menu\Provider\MenuProviderInterface
      */
     protected $menuProvider;
@@ -35,8 +30,6 @@ class PageLayoutController extends Controller
     {
         $this->menuProvider = $menuProvider;
         $this->menuRenderer = $menuRenderer;
-
-        $this->loadService = $this->getSite()->getLoadService();
     }
 
     /**
@@ -103,7 +96,7 @@ class PageLayoutController extends Controller
     public function region($layoutId, $region, $cssClass = false, $params = array(), $blockSpecificParams = array(), $template = null)
     {
         $response = new Response();
-        $layout = $this->loadService->loadContent($layoutId);
+        $layout = $this->getSite()->getLoadService()->loadContent($layoutId);
 
         /** @var $pageValue \eZ\Publish\Core\FieldType\Page\Value */
         $pageValue = $layout->getField('page')->value;

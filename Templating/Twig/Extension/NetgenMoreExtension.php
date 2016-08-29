@@ -2,7 +2,6 @@
 
 namespace Netgen\Bundle\MoreBundle\Templating\Twig\Extension;
 
-use eZ\Publish\Core\Helper\TranslationHelper;
 use Netgen\Bundle\MoreBundle\Helper\PathHelper;
 use Netgen\Bundle\MoreBundle\Templating\GlobalVariable;
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
@@ -29,11 +28,6 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
     protected $authorizationChecker;
 
     /**
-     * @var \eZ\Publish\Core\Helper\TranslationHelper
-     */
-    protected $translationHelper;
-
-    /**
      * @var \Netgen\Bundle\MoreBundle\Helper\PathHelper
      */
     protected $pathHelper;
@@ -53,7 +47,6 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface $authorizationChecker
-     * @param \eZ\Publish\Core\Helper\TranslationHelper $translationHelper
      * @param \Netgen\Bundle\MoreBundle\Helper\PathHelper $pathHelper
      * @param \Netgen\Bundle\MoreBundle\Templating\GlobalVariable $globalVariable
      * @param \eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface $localeConverter
@@ -61,14 +54,12 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
     public function __construct(
         Repository $repository,
         AuthorizationCheckerInterface $authorizationChecker,
-        TranslationHelper $translationHelper,
         PathHelper $pathHelper,
         GlobalVariable $globalVariable,
         LocaleConverterInterface $localeConverter
     ) {
         $this->repository = $repository;
         $this->authorizationChecker = $authorizationChecker;
-        $this->translationHelper = $translationHelper;
         $this->pathHelper = $pathHelper;
         $this->globalVariable = $globalVariable;
         $this->localeConverter = $localeConverter;
@@ -100,14 +91,6 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
             new Twig_SimpleFunction(
                 'ngmore_language_name',
                 array($this, 'getLanguageName')
-            ),
-            new Twig_SimpleFunction(
-                'ngmore_content_type_identifier',
-                array($this, 'getContentTypeIdentifier')
-            ),
-            new Twig_SimpleFunction(
-                'ngmore_content_type_name',
-                array($this, 'getContentTypeName')
             ),
             new Twig_SimpleFunction(
                 'ngmore_owner',
@@ -158,38 +141,9 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
     }
 
     /**
-     * Returns content type identifier for specified content type ID.
-     *
-     * @param mixed $contentTypeId
-     *
-     * @return string
-     */
-    public function getContentTypeIdentifier($contentTypeId)
-    {
-        return $this->repository->getContentTypeService()->loadContentType($contentTypeId)->identifier;
-    }
-
-    /**
-     * Returns content type name for specified content type ID.
-     *
-     * @param mixed $contentTypeId
-     *
-     * @return string
-     */
-    public function getContentTypeName($contentTypeId)
-    {
-        return $this->translationHelper->getTranslatedByMethod(
-            $this->repository->getContentTypeService()->loadContentType($contentTypeId),
-            'getName'
-        );
-    }
-
-    /**
      * Returns owner content for specified content.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content Must be a valid Content or ContentInfo object
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType When $content is not a valid Content or ContentInfo object
+     * @param \eZ\Publish\API\Repository\Values\Content\Content
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */

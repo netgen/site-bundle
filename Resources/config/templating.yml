@@ -34,7 +34,6 @@ services:
         arguments:
             - "@ezpublish.api.repository"
             - "@security.authorization_checker"
-            - "@ezpublish.translation_helper"
             - "@ngmore.helper.path_helper"
             - "@ngmore.templating.global_variable"
             - "@ezpublish.locale.converter"

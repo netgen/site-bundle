@@ -105,17 +105,13 @@ class PartsController extends Controller
         $location = $this->loadService->loadLocation($locationId);
         $content = $this->loadService->loadContent($location->contentId);
 
-        $multimediaItems = array();
-
         // Add current location in the multimedia item list
-        $multimediaItems[] = $content;
+        $multimediaItems = array($content);
 
         // Get children objects and add them in multimedia item list
         if ($includeChildren) {
             $galleryItems = $this->getChildren($location, $contentTypeIdentifiers);
-            if (!empty($galleryItems)) {
-                $multimediaItems = array_merge($multimediaItems, $galleryItems);
-            }
+            $multimediaItems = array_merge($multimediaItems, $galleryItems);
         }
 
         // Finally, check if related_multimedia field exists and has content
@@ -145,13 +141,12 @@ class PartsController extends Controller
                     continue;
                 }
 
-                $relatedMultimediaContent = $this->loadService->loadContent($relatedMultimediaLocation->contentId);
-
                 // ng_gallery - Find children objects and add them in multimedia item list
                 if ($relatedMultimediaLocation->contentInfo->contentTypeIdentifier == 'ng_gallery') {
                     $galleryItems = $this->getChildren($relatedMultimediaLocation, $contentTypeIdentifiers);
                     $multimediaItems = array_merge($multimediaItems, $galleryItems);
                 } else {
+                    $relatedMultimediaContent = $this->loadService->loadContent($relatedMultimediaLocation->contentId);
                     $multimediaItems[] = $relatedMultimediaContent;
                 }
             }

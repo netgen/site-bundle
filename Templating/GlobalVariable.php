@@ -45,7 +45,7 @@ class GlobalVariable
     /**
      * Returns the SiteInfo location.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     * @return \Netgen\EzPlatformSite\API\Values\Location
      */
     public function getSiteInfoLocation()
     {
@@ -55,7 +55,7 @@ class GlobalVariable
     /**
      * Returns the SiteInfo content.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @return \Netgen\EzPlatformSite\API\Values\Content
      */
     public function getSiteInfoContent()
     {

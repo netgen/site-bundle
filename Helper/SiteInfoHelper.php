@@ -2,21 +2,15 @@
 
 namespace Netgen\Bundle\MoreBundle\Helper;
 
-use eZ\Publish\API\Repository\LocationService;
-use eZ\Publish\API\Repository\ContentService;
+use Netgen\EzPlatformSite\API\LoadService;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 class SiteInfoHelper
 {
     /**
-     * @var \eZ\Publish\API\Repository\LocationService
+     * @var \Netgen\EzPlatformSite\API\LoadService
      */
-    protected $locationService;
-
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
-    protected $contentService;
+    protected $loadService;
 
     /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
@@ -24,41 +18,38 @@ class SiteInfoHelper
     protected $configResolver;
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
+     * @var \Netgen\EzPlatformSite\API\Values\Location
      */
     protected $siteInfoLocation;
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Content
+     * @var \Netgen\EzPlatformSite\API\Values\Content
      */
     protected $siteInfoContent;
 
     /**
      * Constructor.
      *
-     * @param \eZ\Publish\API\Repository\LocationService $locationService
-     * @param \eZ\Publish\API\Repository\ContentService $contentService
+     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      */
     public function __construct(
-        LocationService $locationService,
-        ContentService $contentService,
+        LoadService $loadService,
         ConfigResolverInterface $configResolver
     ) {
-        $this->locationService = $locationService;
-        $this->contentService = $contentService;
+        $this->loadService = $loadService;
         $this->configResolver = $configResolver;
     }
 
     /**
      * Returns the SiteInfo location.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     * @return \Netgen\EzPlatformSite\API\Values\Location
      */
     public function getSiteInfoLocation()
     {
         if ($this->siteInfoLocation === null) {
-            $this->siteInfoLocation = $this->locationService->loadLocation(
+            $this->siteInfoLocation = $this->loadService->loadLocation(
                 $this->configResolver->getParameter('locations.site_info.id', 'ngmore')
             );
         }
@@ -69,14 +60,14 @@ class SiteInfoHelper
     /**
      * Returns the SiteInfo content.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @return \Netgen\EzPlatformSite\API\Values\Content
      */
     public function getSiteInfoContent()
     {
         if ($this->siteInfoContent === null) {
             $siteInfoLocation = $this->getSiteInfoLocation();
             if ($siteInfoLocation !== null) {
-                $this->siteInfoContent = $this->contentService->loadContent(
+                $this->siteInfoContent = $this->loadService->loadContent(
                     $siteInfoLocation->contentId
                 );
             }

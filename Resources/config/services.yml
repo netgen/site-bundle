@@ -93,8 +93,7 @@ services:
     ngmore.helper.site_info_helper:
         class: "%ngmore.helper.site_info_helper.class%"
         arguments:
-            - "@ezpublish.api.service.location"
-            - "@ezpublish.api.service.content"
+            - "@netgen.ezplatform_site.load_service"
             - "@ezpublish.config.resolver"
 
     ngmore.helper.sort_clause_helper:

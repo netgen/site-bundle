@@ -2,12 +2,9 @@
 
 namespace Netgen\Bundle\MoreBundle\XmlText\Converter;
 
+use Netgen\EzPlatformSite\API\LoadService;
 use eZ\Publish\Core\FieldType\XmlText\Converter;
-use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\API\Repository\LocationService;
 use Symfony\Component\Routing\RouterInterface;
-use eZ\Publish\Core\Helper\TranslationHelper;
-use eZ\Publish\Core\Helper\FieldHelper;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use Psr\Log\LoggerInterface;
@@ -16,14 +13,9 @@ use DOMDocument;
 class EzLinkDirectDownload implements Converter
 {
     /**
-     * @var \eZ\Publish\API\Repository\LocationService
+     * @var \Netgen\EzPlatformSite\API\LoadService
      */
-    protected $locationService;
-
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
-    protected $contentService;
+    protected $loadService;
 
     /**
      * @var \Symfony\Component\Routing\RouterInterface
@@ -31,41 +23,22 @@ class EzLinkDirectDownload implements Converter
     protected $router;
 
     /**
-     * @var \eZ\Publish\Core\Helper\TranslationHelper
-     */
-    protected $translationHelper;
-
-    /**
-     * @var \eZ\Publish\Core\Helper\FieldHelper
-     */
-    protected $fieldHelper;
-
-    /**
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
     /**
-     * @param \eZ\Publish\API\Repository\LocationService $locationService
-     * @param \eZ\Publish\API\Repository\ContentService $contentService
+     * @param \Netgen\EzPlatformSite\API\LoadService $loadService
      * @param \Symfony\Component\Routing\RouterInterface $router
-     * @param \eZ\Publish\Core\Helper\TranslationHelper $translationHelper
-     * @param \eZ\Publish\Core\Helper\FieldHelper $fieldHelper
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
-        LocationService $locationService,
-        ContentService $contentService,
+        LoadService $loadService,
         RouterInterface $router,
-        TranslationHelper $translationHelper,
-        FieldHelper $fieldHelper,
         LoggerInterface $logger = null
     ) {
-        $this->locationService = $locationService;
-        $this->contentService = $contentService;
+        $this->loadService = $loadService;
         $this->router = $router;
-        $this->translationHelper = $translationHelper;
-        $this->fieldHelper = $fieldHelper;
         $this->logger = $logger;
     }
 
@@ -79,6 +52,7 @@ class EzLinkDirectDownload implements Converter
     public function convert(DOMDocument $xmlDoc)
     {
         foreach ($xmlDoc->getElementsByTagName('link') as $link) {
+            /** @var \DOMElement $link */
             if (!$link->hasAttribute('custom:file')) {
                 continue;
             }
@@ -88,8 +62,8 @@ class EzLinkDirectDownload implements Converter
 
             if ($link->hasAttribute('object_id')) {
                 try {
-                    $content = $this->contentService->loadContent($link->getAttribute('object_id'));
-                    $location = $this->locationService->loadLocation($content->contentInfo->mainLocationId);
+                    $content = $this->loadService->loadContent($link->getAttribute('object_id'));
+                    $location = $this->loadService->loadLocation($content->contentInfo->mainLocationId);
                 } catch (NotFoundException $e) {
                     if ($this->logger) {
                         $this->logger->warning(
@@ -109,8 +83,8 @@ class EzLinkDirectDownload implements Converter
 
             if ($link->hasAttribute('node_id')) {
                 try {
-                    $location = $this->locationService->loadLocation($link->getAttribute('node_id'));
-                    $content = $this->contentService->loadContent($location->contentId);
+                    $location = $this->loadService->loadLocation($link->getAttribute('node_id'));
+                    $content = $this->loadService->loadContent($location->contentId);
                 } catch (NotFoundException $e) {
                     if ($this->logger) {
                         $this->logger->warning(
@@ -129,10 +103,12 @@ class EzLinkDirectDownload implements Converter
             }
 
             if ($content !== null) {
-                $content = $this->contentService->loadContent($location->contentId);
-                if (isset($content->fields['file']) && !$this->fieldHelper->isFieldEmpty($content, 'file')) {
-                    $field = $this->translationHelper->getTranslatedField($content, 'file');
-                    $url = $this->router->generate('ngmore_download', array('contentId' => $content->id, 'fieldId' => $field->id, 'isInline' => $link->hasAttribute('custom:inline')));
+                $content = $this->loadService->loadContent($location->contentId);
+                if ($content->hasField('file')) {
+                    $field = $content->getField('file');
+                    if (!$field->isEmpty()) {
+                        $url = $this->router->generate('ngmore_download', array('contentId' => $content->id, 'fieldId' => $field->id, 'isInline' => $link->hasAttribute('custom:inline')));
+                    }
                 }
             }
 

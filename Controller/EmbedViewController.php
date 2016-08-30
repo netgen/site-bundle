@@ -3,7 +3,7 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
-use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use Symfony\Component\Routing\RouterInterface;
@@ -37,9 +37,9 @@ class EmbedViewController extends Controller
     /**
      * Action for viewing embedded content with image content type identifier.
      *
-     * @param \eZ\Publish\Core\MVC\Symfony\View\ContentView $view
+     * @param \Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView $view
      *
-     * @return \eZ\Publish\Core\MVC\Symfony\View\ContentView
+     * @return \Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView
      */
     public function embedImage(ContentView $view)
     {

@@ -92,7 +92,7 @@ class LayoutHelper
 
         foreach ($path as $pathItem) {
             $relations = $this->repository->getContentService()->loadReverseRelations(
-                $this->loadService->loadContentInfo($pathItem['contentId'])->innerContentInfo
+                $this->loadService->loadContentInfo($pathItem['location']->contentId)->innerContentInfo
             );
 
             /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo[] $layoutContentInfos */
@@ -133,7 +133,7 @@ class LayoutHelper
         );
 
         $applyLayoutTo = $layoutContent->getField('apply_layout_to')->value;
-        if ($originalLocation->id != $pathItem['locationId']) {
+        if ($originalLocation->id != $pathItem['location']->id) {
             if (!$layoutContent->getField('apply_layout_to')->isEmpty() && $applyLayoutTo->identifiers[0] == 'node') {
                 return false;
             }

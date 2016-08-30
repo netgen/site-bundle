@@ -20,6 +20,8 @@ class EmbedToHtml5 extends BaseEmbedToHtml5
      *
      * @param \DOMDocument $xmlDoc
      * @param $tagName string name of the tag to extract
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException If current user is unauthorized to load the content
      */
     protected function processTag(DOMDocument $xmlDoc, $tagName)
     {

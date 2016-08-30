@@ -1,4 +1,0 @@
-ngmore_content_search:
-    path: /content/search
-    defaults:
-        _controller: "ngmore.controller.search:search"

@@ -5,10 +5,11 @@ namespace Netgen\Bundle\MoreBundle\Templating\Twig\Extension;
 use Netgen\Bundle\MoreBundle\Helper\PathHelper;
 use Netgen\Bundle\MoreBundle\Templating\GlobalVariable;
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
-use eZ\Publish\API\Repository\Values\Content\Content;
+use Netgen\EzPlatformSiteApi\API\Values\Content;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Repository;
+use Netgen\EzPlatformSiteApi\API\LoadService;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Intl\Intl;
 use Twig_Extension_GlobalsInterface;
@@ -21,6 +22,11 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
      * @var \eZ\Publish\API\Repository\Repository
      */
     protected $repository;
+
+    /**
+     * @var \Netgen\EzPlatformSiteApi\API\LoadService
+     */
+    protected $loadService;
 
     /**
      * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
@@ -46,6 +52,7 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
      * Constructor.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \Netgen\EzPlatformSiteApi\API\LoadService $loadService
      * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface $authorizationChecker
      * @param \Netgen\Bundle\MoreBundle\Helper\PathHelper $pathHelper
      * @param \Netgen\Bundle\MoreBundle\Templating\GlobalVariable $globalVariable
@@ -53,12 +60,14 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
      */
     public function __construct(
         Repository $repository,
+        LoadService $loadService,
         AuthorizationCheckerInterface $authorizationChecker,
         PathHelper $pathHelper,
         GlobalVariable $globalVariable,
         LocaleConverterInterface $localeConverter
     ) {
         $this->repository = $repository;
+        $this->loadService = $loadService;
         $this->authorizationChecker = $authorizationChecker;
         $this->pathHelper = $pathHelper;
         $this->globalVariable = $globalVariable;
@@ -143,9 +152,9 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
     /**
      * Returns owner content for specified content.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content
+     * @param \Netgen\EzPlatformSiteApi\API\Values\Content
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @return \Netgen\EzPlatformSiteApi\API\Values\Content
      */
     public function getOwner(Content $content)
     {
@@ -153,7 +162,7 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
 
         return $this->repository->sudo(
             function (Repository $repository) use ($ownerId) {
-                return $repository->getContentService()->loadContent($ownerId);
+                return $this->loadService->loadContent($ownerId);
             }
         );
     }

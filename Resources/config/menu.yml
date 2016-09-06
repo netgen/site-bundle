@@ -12,6 +12,8 @@ services:
             - "@ngmore.helper.sort_clause_helper"
             - "@router"
             - "@?logger"
+        tags:
+            - { name: monolog.logger, channel: relation_list_menu }
 
     ngmore.menu.main_menu:
         class: Knp\Menu\MenuItem

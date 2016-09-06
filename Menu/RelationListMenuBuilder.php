@@ -135,7 +135,7 @@ class RelationListMenuBuilder
         foreach ($field->value->destinationLocationIds as $locationId) {
             try {
                 if (empty($locationId)) {
-                    $this->logger->error('[Relation Menu] Empty location id in relation list');
+                    $this->logger->error('Empty location ID in relation list');
 
                     continue;
                 }
@@ -147,9 +147,9 @@ class RelationListMenuBuilder
                 continue;
             }
 
-            if ($content->contentInfo->contentTypeIdentifier == 'ng_shortcut') {
+            if ($location->contentInfo->contentTypeIdentifier == 'ng_shortcut') {
                 $this->generateFromNgShortcut($menuItem, $location);
-            } elseif ($content->contentInfo->contentTypeIdentifier == 'ng_menu_item') {
+            } elseif ($location->contentInfo->contentTypeIdentifier == 'ng_menu_item') {
                 $this->generateFromNgMenuItem($menuItem, $location);
             } else {
                 $this->addMenuItemsFromLocations($menuItem, array($location));
@@ -236,7 +236,7 @@ class RelationListMenuBuilder
                         $linkAttributes['target'] = '_blank';
                     }
                 } else {
-                    $this->logger->error('[Relation menu] Shortcut has related object that is not published.');
+                    $this->logger->error('Shortcut has a related object that is not published.');
                 }
             } catch (NotFoundException $e) {
                 $this->logger->error($e->getMessage());
@@ -332,7 +332,7 @@ class RelationListMenuBuilder
                         $linkAttributes['target'] = '_blank';
                     }
                 } else {
-                    $this->logger->error('[Relation menu] Menu item has related object that is not published.');
+                    $this->logger->error('Menu item has a related object that is not published.');
                 }
             } catch (NotFoundException $e) {
                 $this->logger->error($e->getMessage());
@@ -412,7 +412,7 @@ class RelationListMenuBuilder
 
                     $this->addMenuItemsFromLocations($childItem, $foundLocations);
                 } else {
-                    $this->logger->error('[Relation menu] Menu item has related object that is not published.');
+                    $this->logger->error('Menu item has a related object that is not published.');
                 }
             } catch (NotFoundException $e) {
                 $this->logger->error($e->getMessage());

@@ -22,7 +22,7 @@ class SearchController extends Controller
     {
         $configResolver = $this->getConfigResolver();
 
-        $searchText = $request->get('searchText', '');
+        $searchText = trim($request->get('searchText', ''));
         $contentTypes = $configResolver->getParameter('search.content_types', 'ngmore');
 
         if (empty($searchText)) {

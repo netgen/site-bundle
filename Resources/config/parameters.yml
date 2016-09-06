@@ -44,6 +44,17 @@ parameters:
     ngmore.default.user.mail.admin_name: "%ngmore.default.mail.admin_name%"
 
     ngmore.default.search.default_limit: 10
+    ngmore.default.search.content_types:
+        - ng_blog_post
+        - ng_article
+        - ng_news
+        - ng_category
+        - ng_feedback_form
+        - ng_landing_page
+        - ng_category_page
+        - ng_video
+        - ng_audio
+        - file
 
     ngmore.default.template.errors.default: 'NetgenMoreBundle:errors:default.html.twig'
     ngmore.default.template.pagerfanta.ngmore: 'NetgenMoreBundle:pagerfanta:ngmore.html.twig'

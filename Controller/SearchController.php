@@ -20,11 +20,14 @@ class SearchController extends Controller
      */
     public function search(Request $request)
     {
+        $configResolver = $this->getConfigResolver();
+
         $searchText = $request->get('searchText', '');
+        $contentTypes = $configResolver->getParameter('search.content_types', 'ngmore');
 
         if (empty($searchText)) {
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.search', 'ngmore'),
+                $configResolver->getParameter('template.search', 'ngmore'),
                 array(
                     'search_text' => '',
                     'locations' => array(),
@@ -38,6 +41,10 @@ class SearchController extends Controller
             new Criterion\Visibility(Criterion\Visibility::VISIBLE),
         );
 
+        if (is_array($contentTypes) && !empty($contentTypes)) {
+            $criteria[] = new Criterion\ContentTypeIdentifier($contentTypes);
+        }
+
         $query = new LocationQuery();
         $query->query = new Criterion\LogicalAnd($criteria);
 
@@ -50,14 +57,14 @@ class SearchController extends Controller
 
         $pager->setNormalizeOutOfRangePages(true);
         $pager->setMaxPerPage(
-            (int)$this->getConfigResolver()->getParameter('search.default_limit', 'ngmore')
+            (int)$configResolver->getParameter('search.default_limit', 'ngmore')
         );
 
         $currentPage = (int)$request->get('page', 1);
         $pager->setCurrentPage($currentPage > 0 ? $currentPage : 1);
 
         return $this->render(
-            $this->getConfigResolver()->getParameter('template.search', 'ngmore'),
+            $configResolver->getParameter('template.search', 'ngmore'),
             array(
                 'search_text' => $searchText,
                 'locations' => $pager,

@@ -40,72 +40,73 @@ class EmbedViewController extends Controller
         $parameters = $view->getParameters();
         $targetLink = !empty($parameters['objectParameters']['href']) ? trim($parameters['objectParameters']['href']) : null;
         if (!empty($targetLink)) {
-            if (!empty($parameters['objectParameters']['link_direct_download'])) {
-                if (stripos($targetLink, 'eznode://') === 0) {
-                    $locationId = (int)substr($targetLink, 9);
+            if (stripos($targetLink, 'eznode://') === 0) {
+                $locationId = (int)substr($targetLink, 9);
 
-                    try {
-                        $location = $this->getRepository()->getLocationService()->loadLocation($locationId);
-                        $content = $this->getRepository()->getContentService()->loadContent($location->contentId);
-                    } catch (NotFoundException $e) {
-                        $targetLink = null;
-                        if ($this->logger) {
-                            $this->logger->error(
-                                'Tried to generate link to non existing location #' . $locationId
-                            );
-                        }
-                    } catch (UnauthorizedException $e) {
-                        $targetLink = null;
-                        if ($this->logger) {
-                            $this->logger->error(
-                                'Tried to generate link to location #' . $locationId . ' without read rights'
-                            );
-                        }
+                try {
+                    $location = $this->getRepository()->getLocationService()->loadLocation($locationId);
+                    $content = $this->getRepository()->getContentService()->loadContent($location->contentId);
+                } catch (NotFoundException $e) {
+                    $targetLink = null;
+                    if ($this->logger) {
+                        $this->logger->error(
+                            'Tried to generate link to non existing location #' . $locationId
+                        );
                     }
-                } elseif (stripos($targetLink, 'ezobject://') === 0) {
-                    $linkedContentId = (int)substr($targetLink, 11);
-
-                    try {
-                        $content = $this->getRepository()->getContentService()->loadContent($linkedContentId);
-                    } catch (NotFoundException $e) {
-                        $targetLink = null;
-                        if ($this->logger) {
-                            $this->logger->error(
-                                'Tried to generate link to non existing content #' . $linkedContentId
-                            );
-                        }
-                    } catch (UnauthorizedException $e) {
-                        $targetLink = null;
-                        if ($this->logger) {
-                            $this->logger->error(
-                                'Tried to generate link to content #' . $linkedContentId . ' without read rights'
-                            );
-                        }
+                } catch (UnauthorizedException $e) {
+                    $targetLink = null;
+                    if ($this->logger) {
+                        $this->logger->error(
+                            'Tried to generate link to location #' . $locationId . ' without read rights'
+                        );
                     }
                 }
+            } elseif (stripos($targetLink, 'ezobject://') === 0) {
+                $linkedContentId = (int)substr($targetLink, 11);
 
-                if (!empty($content)) {
-                    $fieldName = null;
-                    if (isset($content->fields['file']) && !$fieldHelper->isFieldEmpty($content, 'file')) {
-                        $fieldName = 'file';
-                    } elseif (isset($content->fields['image']) && !$fieldHelper->isFieldEmpty($content, 'image')) {
-                        $fieldName = 'image';
+                try {
+                    $content = $this->getRepository()->getContentService()->loadContent($linkedContentId);
+                } catch (NotFoundException $e) {
+                    $targetLink = null;
+                    if ($this->logger) {
+                        $this->logger->error(
+                            'Tried to generate link to non existing content #' . $linkedContentId
+                        );
                     }
-
-                    if ($fieldName !== null) {
-                        $field = $translationHelper->getTranslatedField($content, $fieldName);
-                        $targetLink = $this->generateUrl(
-                            'ngmore_download',
-                            array(
-                                'contentId' => $content->id,
-                                'fieldId' => $field->id,
-                            )
+                } catch (UnauthorizedException $e) {
+                    $targetLink = null;
+                    if ($this->logger) {
+                        $this->logger->error(
+                            'Tried to generate link to content #' . $linkedContentId . ' without read rights'
                         );
                     }
                 }
             }
 
-            if (stripos($targetLink, 'eznode://') === 0) {
+            $directDownloadLink = null;
+            if (!empty($content) && !empty($params['objectParameters']['link_direct_download'])) {
+                $fieldName = null;
+                if (isset($content->fields['file']) && !$fieldHelper->isFieldEmpty($content, 'file')) {
+                    $fieldName = 'file';
+                } elseif (isset($content->fields['image']) && !$fieldHelper->isFieldEmpty($content, 'image')) {
+                    $fieldName = 'image';
+                }
+
+                if ($fieldName !== null) {
+                    $field = $translationHelper->getTranslatedField($content, $fieldName);
+                    $directDownloadLink = $this->generateUrl(
+                        'ngmore_download',
+                        array(
+                            'contentId' => $content->id,
+                            'fieldId' => $field->id,
+                        )
+                    );
+                }
+            }
+
+            if ($directDownloadLink !== null) {
+                $targetLink = $directDownloadLink;
+            } elseif (stripos($targetLink, 'eznode://') === 0) {
                 $targetLink = $this->container->get('router')->generate($location);
             } elseif (stripos($targetLink, 'ezobject://') === 0) {
                 $targetLink = $this->container->get('router')->generate($content);

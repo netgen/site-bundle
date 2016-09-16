@@ -45,64 +45,66 @@ class EmbedViewController extends Controller
     {
         $parameters = $view->getParameters();
         $targetLink = !empty($parameters['objectParameters']['href']) ? trim($parameters['objectParameters']['href']) : null;
+
         if (!empty($targetLink)) {
-            if (!empty($parameters['objectParameters']['link_direct_download'])) {
-                if (stripos($targetLink, 'eznode://') === 0) {
-                    $locationId = (int)substr($targetLink, 9);
+            if (stripos($targetLink, 'eznode://') === 0) {
+                $locationId = (int)substr($targetLink, 9);
 
-                    try {
-                        $location = $this->getSite()->getLoadService()->loadLocation($locationId);
-                        $content = $this->getSite()->getLoadService()->loadContent($location->contentId);
-                    } catch (NotFoundException $e) {
-                        $targetLink = null;
-                        $this->logger->error(
-                            'Tried to generate link to non existing location #' . $locationId
-                        );
-                    } catch (UnauthorizedException $e) {
-                        $targetLink = null;
-                        $this->logger->error(
-                            'Tried to generate link to location #' . $locationId . ' without read rights'
-                        );
-                    }
-                } elseif (stripos($targetLink, 'ezobject://') === 0) {
-                    $linkedContentId = (int)substr($targetLink, 11);
-
-                    try {
-                        $content = $this->getSite()->getLoadService()->loadContent($linkedContentId);
-                    } catch (NotFoundException $e) {
-                        $targetLink = null;
-                        $this->logger->error(
-                            'Tried to generate link to non existing content #' . $linkedContentId
-                        );
-                    } catch (UnauthorizedException $e) {
-                        $targetLink = null;
-                        $this->logger->error(
-                            'Tried to generate link to content #' . $linkedContentId . ' without read rights'
-                        );
-                    }
+                try {
+                    $location = $this->getSite()->getLoadService()->loadLocation($locationId);
+                    $content = $this->getSite()->getLoadService()->loadContent($location->contentId);
+                } catch (NotFoundException $e) {
+                    $targetLink = null;
+                    $this->logger->error(
+                        'Tried to generate link to non existing location #' . $locationId
+                    );
+                } catch (UnauthorizedException $e) {
+                    $targetLink = null;
+                    $this->logger->error(
+                        'Tried to generate link to location #' . $locationId . ' without read rights'
+                    );
                 }
+            } elseif (stripos($targetLink, 'ezobject://') === 0) {
+                $linkedContentId = (int)substr($targetLink, 11);
 
-                if (!empty($content)) {
-                    $fieldName = null;
-                    if ($content->hasField('file') && !$content->getField('file')->isEmpty()) {
-                        $fieldName = 'file';
-                    } elseif ($content->hasField('image') && !$content->getField('image')->isEmpty()) {
-                        $fieldName = 'image';
-                    }
-
-                    if ($fieldName !== null) {
-                        $targetLink = $this->generateUrl(
-                            'ngmore_download',
-                            array(
-                                'contentId' => $content->id,
-                                'fieldId' => $content->getField($fieldName)->id,
-                            )
-                        );
-                    }
+                try {
+                    $content = $this->getSite()->getLoadService()->loadContent($linkedContentId);
+                } catch (NotFoundException $e) {
+                    $targetLink = null;
+                    $this->logger->error(
+                        'Tried to generate link to non existing content #' . $linkedContentId
+                    );
+                } catch (UnauthorizedException $e) {
+                    $targetLink = null;
+                    $this->logger->error(
+                        'Tried to generate link to content #' . $linkedContentId . ' without read rights'
+                    );
                 }
             }
 
-            if (stripos($targetLink, 'eznode://') === 0) {
+            $directDownloadLink = null;
+            if (!empty($content) && !empty($parameters['objectParameters']['link_direct_download'])) {
+                $fieldName = null;
+                if ($content->hasField('file') && !$content->getField('file')->isEmpty()) {
+                    $fieldName = 'file';
+                } elseif ($content->hasField('image') && !$content->getField('image')->isEmpty()) {
+                    $fieldName = 'image';
+                }
+
+                if ($fieldName !== null) {
+                    $directDownloadLink = $this->generateUrl(
+                        'ngmore_download',
+                        array(
+                            'contentId' => $content->id,
+                            'fieldId' => $content->getField($fieldName)->id,
+                        )
+                    );
+                }
+            }
+
+            if ($directDownloadLink !== null) {
+                $targetLink = $directDownloadLink;
+            } elseif (stripos($targetLink, 'eznode://') === 0) {
                 $targetLink = $this->router->generate($location);
             } elseif (stripos($targetLink, 'ezobject://') === 0) {
                 $targetLink = $this->router->generate($content);

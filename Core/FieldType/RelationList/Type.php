@@ -43,11 +43,11 @@ class Type extends BaseRelationListType
                     return $inputValue;
                 }
 
-                if (is_integer($relationListItem['content_id']) || is_string($relationListItem['content_id'])) {
+                if (!is_integer($relationListItem['content_id']) && !is_string($relationListItem['content_id'])) {
                     return $inputValue;
                 }
 
-                if (is_integer($relationListItem['location_id']) || is_string($relationListItem['location_id'])) {
+                if (!is_integer($relationListItem['location_id']) && !is_string($relationListItem['location_id'])) {
                     return $inputValue;
                 }
 

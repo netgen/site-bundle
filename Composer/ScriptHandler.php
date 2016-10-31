@@ -4,7 +4,7 @@ namespace Netgen\Bundle\MoreBundle\Composer;
 
 use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler as DistributionBundleScriptHandler;
 use eZ\Bundle\EzPublishCoreBundle\Composer\ScriptHandler as CoreBundleScriptHandler;
-use Composer\Script\CommandEvent;
+use Composer\Script\Event;
 use RuntimeException;
 
 class ScriptHandler extends DistributionBundleScriptHandler
@@ -12,9 +12,9 @@ class ScriptHandler extends DistributionBundleScriptHandler
     /**
      * Symlinks various project files and folders to their proper locations.
      *
-     * @param $event \Composer\Script\CommandEvent
+     * @param $event \Composer\Script\Event
      */
-    public static function installProjectSymlinks(CommandEvent $event)
+    public static function installProjectSymlinks(Event $event)
     {
         $options = self::getOptions($event);
         $appDir = $options['symfony-app-dir'];
@@ -35,9 +35,9 @@ class ScriptHandler extends DistributionBundleScriptHandler
      * Duplicate error message happens because Assetic already puts
      * the error output in the exception.
      *
-     * @param $event \Composer\Script\CommandEvent
+     * @param $event \Composer\Script\Event
      */
-    public static function dumpAssets(CommandEvent $event)
+    public static function dumpAssets(Event $event)
     {
         try {
             CoreBundleScriptHandler::dumpAssets($event);

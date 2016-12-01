@@ -250,6 +250,9 @@ class RelationListMenuBuilder
                 'label' => $label,
                 'attributes' => $attributes,
                 'linkAttributes' => $linkAttributes,
+                'extras' => array(
+                    'translation_domain' => false,
+                ),
             )
         );
     }
@@ -346,6 +349,9 @@ class RelationListMenuBuilder
                 'label' => $label,
                 'attributes' => $attributes,
                 'linkAttributes' => $linkAttributes,
+                'extras' => array(
+                    'translation_domain' => false,
+                ),
             )
         );
 
@@ -446,6 +452,9 @@ class RelationListMenuBuilder
                     'uri' => $this->router->generate($location),
                     'attributes' => array(
                         'id' => 'menu-item-location-id-' . $location->id,
+                    ),
+                    'extras' => array(
+                        'translation_domain' => false,
                     ),
                 )
             );

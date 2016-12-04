@@ -62,4 +62,11 @@ final class MVCEvents
      * The event listener method receives a \Netgen\Bundle\MoreBundle\Event\User\PostPasswordResetEvent
      */
     const USER_POST_PASSWORD_RESET = 'ngmore.events.user.post_password_reset';
+
+    /**
+     * The CONTENT_DOWNLOAD event occurs after download content
+     *
+     * The event listener method receives a \Netgen\Bundle\MoreBundle\Event\Content\DownloadEvent
+     */
+    const CONTENT_DOWNLOAD = 'ngmore.events.content.download';
 }

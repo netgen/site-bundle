@@ -7,26 +7,26 @@ use Symfony\Component\EventDispatcher\Event;
 class DownloadEvent extends Event
 {
     /**
-     * @var integer
+     * @var int
      */
     protected $contentId;
 
     /**
-     * @var string
+     * @var int
      */
     protected $fieldId;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $versionNo;
 
     /**
-     * DownloadEvent constructor.
+     * Constructor.
      *
-     * @param integer $contentId
-     * @param integer $fieldId
-     * @param integer $versionNo
+     * @param int $contentId
+     * @param int $fieldId
+     * @param int $versionNo
      */
     public function __construct($contentId, $fieldId, $versionNo)
     {
@@ -36,17 +36,17 @@ class DownloadEvent extends Event
     }
 
     /**
-     * Get field ID
+     * Get field ID.
      *
-     * @return string
+     * @return int
      */
     public function getFieldId()
     {
         return $this->fieldId;
     }
-    
+
     /**
-     * Returns contentId
+     * Returns content ID.
      *
      * @return int
      */
@@ -56,7 +56,7 @@ class DownloadEvent extends Event
     }
 
     /**
-     * Returns version number
+     * Returns version number.
      *
      * @return int
      */

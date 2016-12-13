@@ -107,8 +107,10 @@ class EzLinkDirectDownload implements Converter
 
             if (empty($url) && $location !== null) {
                 $link->setAttribute('url', $this->router->generate($location));
-            } else {
+            } elseif (!empty($url)) {
                 $link->setAttribute('url', $url);
+            } else {
+                $link->setAttribute('url', '');
             }
 
             if ($link->hasAttribute('anchor_name')) {

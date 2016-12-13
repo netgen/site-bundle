@@ -8,6 +8,9 @@ use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use Netgen\Bundle\MoreBundle\Event\Content\DownloadEvent;
+use Netgen\Bundle\MoreBundle\Event\MVCEvents;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -30,20 +33,28 @@ class DownloadController extends Controller
     protected $translator;
 
     /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $dispatcher;
+
+    /**
      * Constructor.
      *
      * @param \eZ\Publish\Core\IO\IOServiceInterface $ioFileService
      * @param \eZ\Publish\Core\IO\IOServiceInterface $ioImageService
      * @param \Symfony\Component\Translation\TranslatorInterface $translator
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
      */
     public function __construct(
         IOServiceInterface $ioFileService,
         IOServiceInterface $ioImageService,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        EventDispatcherInterface $dispatcher
     ) {
         $this->ioFileService = $ioFileService;
         $this->ioImageService = $ioImageService;
         $this->translator = $translator;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -95,6 +106,14 @@ class DownloadController extends Controller
             str_replace(array('/', '\\'), '', $binaryFieldValue->fileName),
             'file'
         );
+
+        $downloadEvent = new DownloadEvent(
+            $contentId,
+            $fieldId,
+            $content->contentInfo->currentVersionNo
+        );
+
+        $this->dispatcher->dispatch(MVCEvents::CONTENT_DOWNLOAD, $downloadEvent);
 
         return $response;
     }

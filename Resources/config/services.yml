@@ -63,6 +63,7 @@ services:
             - "@ezpublish.fieldtype.ezbinaryfile.io_service"
             - "@ezpublish.fieldtype.ezimage.io_service"
             - "@translator"
+            - "@event_dispatcher"
 
     ngmore.controller.sitemap:
         class: "%ngmore.controller.sitemap.class%"

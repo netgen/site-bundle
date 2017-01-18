@@ -110,8 +110,7 @@ class DownloadController extends Controller
             'file'
         );
 
-        if ( !$request->headers->has( 'Range' ) )
-        {
+        if (!$request->headers->has('Range')) {
             $downloadEvent = new DownloadEvent(
                 $contentId,
                 $fieldId,

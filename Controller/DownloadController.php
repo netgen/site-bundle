@@ -62,6 +62,8 @@ class DownloadController extends Controller
      *
      * Assumes that the file is locally stored
      *
+     * Dispatch \Netgen\Bundle\MoreBundle\Event\MVCEvents::CONTENT_DOWNLOAD only once
+     *
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param mixed $contentId
      * @param mixed $fieldId
@@ -107,13 +109,15 @@ class DownloadController extends Controller
             'file'
         );
 
-        $downloadEvent = new DownloadEvent(
-            $contentId,
-            $fieldId,
-            $content->contentInfo->currentVersionNo
-        );
+        if (!$request->headers->has('Range')) {
+            $downloadEvent = new DownloadEvent(
+                $contentId,
+                $fieldId,
+                $content->contentInfo->currentVersionNo
+            );
 
-        $this->dispatcher->dispatch(MVCEvents::CONTENT_DOWNLOAD, $downloadEvent);
+            $this->dispatcher->dispatch(MVCEvents::CONTENT_DOWNLOAD, $downloadEvent);
+        }
 
         return $response;
     }

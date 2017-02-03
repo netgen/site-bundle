@@ -50,8 +50,7 @@ class DownloadController extends Controller
         IOServiceInterface $ioImageService,
         TranslatorInterface $translator,
         EventDispatcherInterface $dispatcher
-    )
-    {
+    ) {
         $this->ioFileService = $ioFileService;
         $this->ioImageService = $ioImageService;
         $this->translator = $translator;

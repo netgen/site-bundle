@@ -2,6 +2,7 @@
 
 namespace Netgen\Bundle\MoreBundle\EventListener;
 
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Netgen\Bundle\MoreBundle\Helper\MailHelper;
@@ -37,24 +38,32 @@ abstract class UserEventListener
     protected $loadService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    protected $repository;
+
+    /**
      * @param \Netgen\Bundle\MoreBundle\Helper\MailHelper $mailHelper
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      * @param \Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository $ngUserSettingRepository
      * @param \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository $ezUserAccountKeyRepository
      * @param \Netgen\EzPlatformSiteApi\API\LoadService $loadService
+     * @param \eZ\Publish\API\Repository\Repository $repository
      */
     public function __construct(
         MailHelper $mailHelper,
         ConfigResolverInterface $configResolver,
         NgUserSettingRepository $ngUserSettingRepository,
         EzUserAccountKeyRepository $ezUserAccountKeyRepository,
-        LoadService $loadService
+        LoadService $loadService,
+        Repository $repository
     ) {
         $this->mailHelper = $mailHelper;
         $this->configResolver = $configResolver;
         $this->ngUserSettingRepository = $ngUserSettingRepository;
         $this->ezUserAccountKeyRepository = $ezUserAccountKeyRepository;
         $this->loadService = $loadService;
+        $this->repository = $repository;
     }
 
     /**
@@ -66,7 +75,13 @@ abstract class UserEventListener
      */
     protected function getUserName(User $user)
     {
-        $contentInfo = $this->loadService->loadContentInfo($user->id);
+        $loadService = $this->loadService;
+
+        $contentInfo = $this->repository->sudo(
+            function (Repository $repository) use ($loadService, $user) {
+                return $loadService->loadContentInfo($user->id);
+            }
+        );
 
         return $contentInfo->name;
     }

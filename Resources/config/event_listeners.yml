@@ -42,6 +42,7 @@ services:
             - "@ngmore.repository.nguser_setting"
             - "@ngmore.repository.ezuser_accountkey"
             - "@netgen.ezplatform_site.load_service"
+            - "@ezpublish.api.repository"
 
     ngmore.listener.user.post_register:
         class: "%ngmore.listener.user.post_register.class%"

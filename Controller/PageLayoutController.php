@@ -114,8 +114,6 @@ class PageLayoutController extends Controller
             $response->setSharedMaxAge(86400);
         }
 
-        if ($public) {
-            $response->setPublic();
-        }
+        $public ? $response->setPublic() : $response->setPrivate();
     }
 }

@@ -131,6 +131,12 @@ class PageLayoutController extends Controller
         return $response;
     }
 
+    /**
+     * Configures the response with provided cache settings.
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpFoundation\Response $response
+     */
     protected function processCacheSettings(Request $request, Response $response)
     {
         $cacheSettings = $request->attributes->get('cacheSettings');

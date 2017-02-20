@@ -36,5 +36,6 @@ services:
             - "@ngmore.helper.path_helper"
             - "@ngmore.templating.global_variable"
             - "@ezpublish.locale.converter"
+            - "@ezpublish.translation_helper"
         tags:
             - { name: twig.extension }

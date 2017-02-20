@@ -2,6 +2,8 @@
 
 namespace Netgen\Bundle\MoreBundle\Templating\Twig\Extension;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Helper\TranslationHelper;
 use Netgen\Bundle\MoreBundle\Helper\PathHelper;
 use Netgen\Bundle\MoreBundle\Templating\GlobalVariable;
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
@@ -49,6 +51,11 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
     protected $localeConverter;
 
     /**
+     * @var \eZ\Publish\Core\Helper\TranslationHelper
+     */
+    protected $translationHelper;
+
+    /**
      * Constructor.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -57,6 +64,7 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
      * @param \Netgen\Bundle\MoreBundle\Helper\PathHelper $pathHelper
      * @param \Netgen\Bundle\MoreBundle\Templating\GlobalVariable $globalVariable
      * @param \eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface $localeConverter
+     * @param \eZ\Publish\Core\Helper\TranslationHelper $translationHelper
      */
     public function __construct(
         Repository $repository,
@@ -64,7 +72,8 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
         AuthorizationCheckerInterface $authorizationChecker,
         PathHelper $pathHelper,
         GlobalVariable $globalVariable,
-        LocaleConverterInterface $localeConverter
+        LocaleConverterInterface $localeConverter,
+        TranslationHelper $translationHelper
     ) {
         $this->repository = $repository;
         $this->loadService = $loadService;
@@ -72,6 +81,7 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
         $this->pathHelper = $pathHelper;
         $this->globalVariable = $globalVariable;
         $this->localeConverter = $localeConverter;
+        $this->translationHelper = $translationHelper;
     }
 
     /**
@@ -100,6 +110,10 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
             new Twig_SimpleFunction(
                 'ngmore_language_name',
                 array($this, 'getLanguageName')
+            ),
+            new Twig_SimpleFunction(
+                'ngmore_content_name',
+                array($this, 'getContentName')
             ),
             new Twig_SimpleFunction(
                 'ngmore_owner',
@@ -147,6 +161,25 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
         $languageName = Intl::getLanguageBundle()->getLanguageName($posixLanguageCode, null, $posixLanguageCode);
 
         return ucwords($languageName);
+    }
+
+    /**
+     * Returns content name for specified content ID.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo|\Netgen\EzPlatformSiteApi\API\Values\Content|int $content
+     * @param string $forcedLanguage
+     *
+     * @return string
+     */
+    public function getContentName($content, $forcedLanguage = null)
+    {
+        if (!$content instanceof Content && !$content instanceof ContentInfo) {
+            $contentInfo = $this->repository->getContentService()->loadContentInfo($content);
+        } elseif ($content instanceof Content) {
+            $contentInfo = $content->contentInfo;
+        }
+
+        return $this->translationHelper->getTranslatedContentNameByContentInfo($contentInfo, $forcedLanguage);
     }
 
     /**

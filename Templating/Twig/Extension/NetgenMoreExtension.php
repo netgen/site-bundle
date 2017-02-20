@@ -177,6 +177,8 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
             $contentInfo = $this->repository->getContentService()->loadContentInfo($content);
         } elseif ($content instanceof Content) {
             $contentInfo = $content->innerContent->contentInfo;
+        } else {
+            $contentInfo = $content->innerContentInfo;
         }
 
         return $this->translationHelper->getTranslatedContentNameByContentInfo($contentInfo, $forcedLanguage);

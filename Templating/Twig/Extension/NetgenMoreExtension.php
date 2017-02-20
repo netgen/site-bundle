@@ -2,7 +2,7 @@
 
 namespace Netgen\Bundle\MoreBundle\Templating\Twig\Extension;
 
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use Netgen\EzPlatformSiteApi\API\Values\ContentInfo;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use Netgen\Bundle\MoreBundle\Helper\PathHelper;
 use Netgen\Bundle\MoreBundle\Templating\GlobalVariable;
@@ -166,7 +166,7 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
     /**
      * Returns content name for specified content ID.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo|\Netgen\EzPlatformSiteApi\API\Values\Content|int $content
+     * @param \Netgen\EzPlatformSiteApi\API\Values\ContentInfo|\Netgen\EzPlatformSiteApi\API\Values\Content|int $content
      * @param string $forcedLanguage
      *
      * @return string
@@ -176,7 +176,7 @@ class NetgenMoreExtension extends Twig_Extension implements Twig_Extension_Globa
         if (!$content instanceof Content && !$content instanceof ContentInfo) {
             $contentInfo = $this->repository->getContentService()->loadContentInfo($content);
         } elseif ($content instanceof Content) {
-            $contentInfo = $content->contentInfo;
+            $contentInfo = $content->innerContentInfo;
         }
 
         return $this->translationHelper->getTranslatedContentNameByContentInfo($contentInfo, $forcedLanguage);

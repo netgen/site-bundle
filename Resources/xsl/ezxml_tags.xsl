@@ -262,7 +262,7 @@
                 mapType: "<xsl:value-of select="$map_type"/>"
             }
 
-            google.maps.event.addDomListener(window, 'load', function(){initializeGoogleMaps( mapOptions ); });
+            google.maps.event.addDomListener(window, 'load', function(){ initializeGoogleMaps( mapOptions ); });
         </script>
 
         <div id="map-canvas-{$container_id}" class="google-maps" style="height:{$map_height}px; width:100%;"></div>

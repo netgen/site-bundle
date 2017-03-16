@@ -1,0 +1,32 @@
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false"></script>
+<script type="text/javascript">
+    function initializeGoogleMaps( options ) {
+        var defaults = {
+            containerId: "0",
+            latitude: {{ ezpublish.configResolver.parameter( 'GoogleMapsSettings.DefaultLatitude', 'ngmore' )|raw|escape( 'js' ) }},
+            longitude: {{ ezpublish.configResolver.parameter( 'GoogleMapsSettings.DefaultLongitude', 'ngmore' )|raw|escape( 'js' ) }},
+            zoom: {{ ezpublish.configResolver.parameter( 'GoogleMapsSettings.DefaultZoom', 'ngmore' )|raw|escape( 'js' ) }},
+            mapType: "{{ ezpublish.configResolver.parameter( 'GoogleMapsSettings.DefaultMapType', 'ngmore' )|raw|escape( 'js' ) }}"
+        };
+
+        options = $.extend({}, defaults, options || {});
+
+        var mapCenter = new google.maps.LatLng(
+            options.latitude > 90 || options.latitude < -90 ? defaults.latitude : options.latitude,
+            options.longitude > 180 || options.longitude < -180 ? defaults.longitude : options.longitude
+        );
+
+        var mapOptions = {
+            zoom: options.zoom > 21 || options.zoom < 0 ? defaults.zoom : options.zoom,
+            center: mapCenter,
+            mapTypeId: google.maps.MapTypeId[options.mapType]
+        };
+
+        var map = new google.maps.Map(document.getElementById('map-canvas-' + options.containerId), mapOptions);
+
+        var marker = new google.maps.Marker({
+            position: mapCenter,
+            map: map
+        });
+    }
+</script>

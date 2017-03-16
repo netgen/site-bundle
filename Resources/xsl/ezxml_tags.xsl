@@ -217,4 +217,54 @@
         </xsl:copy>
     </xsl:template>
 
+    <xsl:template match="custom[@name='google_maps']">
+        <xsl:variable name="latitude"><xsl:value-of select="@custom:latitude"></xsl:value-of></xsl:variable>
+        <xsl:variable name="longitude"><xsl:value-of select="@custom:longitude"></xsl:value-of></xsl:variable>
+        <xsl:variable name="container_id">
+            <xsl:choose>
+                <xsl:when test="@custom:container_id != ''" >
+                    <xsl:value-of select="@custom:container_id"></xsl:value-of>
+                </xsl:when>
+                <xsl:otherwise>0</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="zoom">
+            <xsl:choose>
+                <xsl:when test="@custom:zoom != ''">
+                    <xsl:value-of select="@custom:zoom"></xsl:value-of>
+                </xsl:when>
+                <xsl:otherwise>13</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="map_type">
+            <xsl:choose>
+                <xsl:when test="@custom:map_type != ''">
+                    <xsl:value-of select="@custom:map_type"></xsl:value-of>
+                </xsl:when>
+                <xsl:otherwise>ROADMAP</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="map_height">
+            <xsl:choose>
+                <xsl:when test="@custom:map_height != ''">
+                    <xsl:value-of select="@custom:map_height"></xsl:value-of>
+                </xsl:when>
+                <xsl:otherwise>560</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
+        <script type="text/javascript">
+            var mapOptions = {
+                containerId: "<xsl:value-of select="$container_id"/>",
+                latitude: <xsl:value-of select="$latitude"/>,
+                longitude: <xsl:value-of select="$longitude"/>,
+                zoom: <xsl:value-of select="$zoom"/>,
+                mapType: "<xsl:value-of select="$map_type"/>"
+            }
+
+            google.maps.event.addDomListener(window, 'load', function(){ initializeGoogleMaps( mapOptions ); });
+        </script>
+
+        <div id="map-canvas-{$container_id}" class="google-maps" style="height:{$map_height}px; width:100%;"></div>
+    </xsl:template>
 </xsl:stylesheet>

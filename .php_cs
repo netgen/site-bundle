@@ -20,14 +20,6 @@ return PhpCsFixer\Config::create()
             ->in(__DIR__)
             ->exclude([
                 'vendor',
-                'bin/.ci',
-                'bin/.travis',
-                'doc',
-                'app/cache',
-                'var/cache',
-                'ezpublish_legacy',
-                'var/cache',
-                'node_modules'
             ])
             ->notPath('app/autoload.php')
             ->notPath('app/check.php')

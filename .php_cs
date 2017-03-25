@@ -21,11 +21,6 @@ return PhpCsFixer\Config::create()
             ->exclude([
                 'vendor',
             ])
-            ->notPath('app/autoload.php')
-            ->notPath('app/check.php')
-            ->notPath('app/SymfonyRequirements.php')
-            ->notPath('web/index_rest.php')
-            ->notPath('web/index_cluster.php')
             ->files()->name('*.php')
     )
 ;

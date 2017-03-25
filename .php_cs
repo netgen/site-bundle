@@ -1,24 +1,39 @@
 <?php
 
-return Symfony\CS\Config\Config::create()
-    ->setUsingLinter(false)
-    ->setUsingCache(true)
-    ->level(Symfony\CS\FixerInterface::SYMFONY_LEVEL)
-    ->fixers([
-        'concat_with_spaces',
-        '-concat_without_spaces',
-        '-empty_return',
-        '-phpdoc_params',
-        '-phpdoc_separation',
-        '-phpdoc_to_comment',
-        '-spaces_cast',
-        '-blankline_after_open_tag',
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@Symfony' => true,
+        '@Symfony:risky' => true,
+        'concat_space' => ['spacing' => 'one'],
+        'array_syntax' => false,
+        'simplified_null_return' => false,
+        'phpdoc_align' => false,
+        'phpdoc_separation' => false,
+        'phpdoc_to_comment' => false,
+        'cast_spaces' => false,
+        'blank_line_after_opening_tag' => false,
+        'phpdoc_no_alias_tag' => false,
     ])
-    ->finder(
-        Symfony\CS\Finder\DefaultFinder::create()
+    ->setRiskyAllowed(true)
+    ->setFinder(
+        PhpCsFixer\Finder::create()
             ->in(__DIR__)
             ->exclude([
                 'vendor',
+                'bin/.ci',
+                'bin/.travis',
+                'doc',
+                'app/cache',
+                'var/cache',
+                'ezpublish_legacy',
+                'var/cache',
+                'node_modules'
             ])
+            ->notPath('app/autoload.php')
+            ->notPath('app/check.php')
+            ->notPath('app/SymfonyRequirements.php')
+            ->notPath('web/index_rest.php')
+            ->notPath('web/index_cluster.php')
+            ->files()->name('*.php')
     )
 ;

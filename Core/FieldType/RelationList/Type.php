@@ -43,11 +43,11 @@ class Type extends BaseRelationListType
                     return $inputValue;
                 }
 
-                if (!is_integer($relationListItem['content_id']) && !is_string($relationListItem['content_id'])) {
+                if (!is_int($relationListItem['content_id']) && !is_string($relationListItem['content_id'])) {
                     return $inputValue;
                 }
 
-                if (!is_integer($relationListItem['location_id']) && !is_string($relationListItem['location_id'])) {
+                if (!is_int($relationListItem['location_id']) && !is_string($relationListItem['location_id'])) {
                     return $inputValue;
                 }
 
@@ -81,7 +81,7 @@ class Type extends BaseRelationListType
         }
 
         foreach ($value->destinationLocationIds as $key => $destinationLocationId) {
-            if (!is_integer($destinationLocationId) && !is_string($destinationLocationId)) {
+            if (!is_int($destinationLocationId) && !is_string($destinationLocationId)) {
                 throw new InvalidArgumentType(
                     "\$value->destinationLocationIds[$key]",
                     'string|int',

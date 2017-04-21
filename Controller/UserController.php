@@ -2,9 +2,13 @@
 
 namespace Netgen\Bundle\MoreBundle\Controller;
 
+use Netgen\Bundle\EzFormsBundle\Form\Type\CreateUserType;
 use Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey;
 use Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
 use Netgen\Bundle\MoreBundle\Event\User as UserEvents;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
@@ -87,7 +91,7 @@ class UserController extends Controller
         $data = new DataWrapper($userCreateStruct, $userCreateStruct->contentType);
 
         $formBuilder = $this->formFactory->createBuilder(
-            'ezforms_create_user',
+            CreateUserType::class,
             $data,
             array(
                 'translation_domain' => 'ngmore_user',
@@ -375,7 +379,7 @@ class UserController extends Controller
         return $this->createFormBuilder(null, array('translation_domain' => 'ngmore_user'))
             ->add(
                 'email',
-                'email',
+                EmailType::class,
                 array(
                     'constraints' => array(
                         new Constraints\Email(),
@@ -395,7 +399,7 @@ class UserController extends Controller
         return $this->createFormBuilder(null, array('translation_domain' => 'ngmore_user'))
             ->add(
                 'email',
-                'email',
+                EmailType::class,
                 array(
                     'constraints' => array(
                         new Constraints\Email(),
@@ -427,7 +431,7 @@ class UserController extends Controller
         }
 
         $passwordOptions = array(
-            'type' => 'password',
+            'type' => PasswordType::class,
             'required' => true,
             'options' => array(
                 'constraints' => $passwordConstraints,
@@ -435,7 +439,7 @@ class UserController extends Controller
         );
 
         return $this->createFormBuilder(null, array('translation_domain' => 'ngmore_user'))
-            ->add('password', 'repeated', $passwordOptions)
+            ->add('password', RepeatedType::class, $passwordOptions)
             ->getForm();
     }
 }

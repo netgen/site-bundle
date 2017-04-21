@@ -74,7 +74,7 @@ class SiteLocationUrlAliasRouter implements ChainedRouterInterface, RequestMatch
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content|\eZ\Publish\API\Repository\Values\Content\ContentInfo $name Content or ContentInfo instance
      * @param mixed $parameters An array of parameters
-     * @param bool $absolute Whether to generate an absolute URL
+     * @param int $referenceType The type of reference to be generated (one of the constants)
      *
      * @throws \LogicException
      * @throws \Symfony\Component\Routing\Exception\RouteNotFoundException
@@ -82,7 +82,7 @@ class SiteLocationUrlAliasRouter implements ChainedRouterInterface, RequestMatch
      *
      * @return string The generated URL
      */
-    public function generate($name, $parameters = array(), $absolute = false)
+    public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
     {
         if (!$name instanceof Location) {
             throw new RouteNotFoundException('Could not match route');
@@ -91,7 +91,7 @@ class SiteLocationUrlAliasRouter implements ChainedRouterInterface, RequestMatch
         return $this->generator->generate(
             $name->innerLocation,
             $parameters,
-            $absolute
+            $referenceType
         );
     }
 

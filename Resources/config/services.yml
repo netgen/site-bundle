@@ -60,8 +60,8 @@ services:
         class: "%ngmore.controller.download.class%"
         parent: netgen.ezplatform_site.controller.base
         arguments:
-            - "@ezpublish.fieldtype.ezbinaryfile.io_service"
-            - "@ezpublish.fieldtype.ezimage.io_service"
+            - "@ezpublish.fieldType.ezbinaryfile.io_service"
+            - "@ezpublish.fieldType.ezimage.io_service"
             - "@translator"
             - "@event_dispatcher"
 

@@ -15,7 +15,6 @@ class NetgenMoreBundle extends Bundle
      */
     public function build(ContainerBuilder $container)
     {
-        parent::build($container);
         $container->addCompilerPass(new Compiler\XslRegisterPass());
         $container->addCompilerPass(new Compiler\RelationListFieldTypePass());
         $container->addCompilerPass(new Compiler\XmlTextFieldTypePass());

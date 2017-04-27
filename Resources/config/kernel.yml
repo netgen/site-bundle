@@ -1,8 +1,4 @@
 parameters:
-    ezpublish.fieldType.ezobjectrelationlist.class: Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Type
-    ezpublish.fieldType.ezobjectrelationlist.converter.class: Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\FieldValue\Converter\RelationListConverter
-    ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class: Netgen\Bundle\MoreBundle\Core\FieldType\XmlText\Converter\EmbedToHtml5
-
     ezpublish.image_alias.imagine.cache_resolver.class: Netgen\Bundle\MoreBundle\Imagine\IORepositoryResolver
 
     # Override uglifyjs2 and uglifycss Assetic filters to disable outputing

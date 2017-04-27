@@ -4,7 +4,7 @@ namespace Netgen\Bundle\MoreBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Netgen\Bundle\MoreBundle\DependencyInjection\Compiler\XslRegisterPass;
+use Netgen\Bundle\MoreBundle\DependencyInjection\Compiler;
 
 class NetgenMoreBundle extends Bundle
 {
@@ -16,6 +16,8 @@ class NetgenMoreBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
-        $container->addCompilerPass(new XslRegisterPass());
+        $container->addCompilerPass(new Compiler\XslRegisterPass());
+        $container->addCompilerPass(new Compiler\RelationListFieldTypePass());
+        $container->addCompilerPass(new Compiler\XmlTextFieldTypePass());
     }
 }

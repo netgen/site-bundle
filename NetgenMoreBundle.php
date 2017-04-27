@@ -19,5 +19,6 @@ class NetgenMoreBundle extends Bundle
         $container->addCompilerPass(new Compiler\XslRegisterPass());
         $container->addCompilerPass(new Compiler\RelationListFieldTypePass());
         $container->addCompilerPass(new Compiler\XmlTextFieldTypePass());
+        $container->addCompilerPass(new Compiler\AsseticFilterPass());
     }
 }

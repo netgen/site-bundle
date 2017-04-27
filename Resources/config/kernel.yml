@@ -1,11 +1,6 @@
 parameters:
     ezpublish.image_alias.imagine.cache_resolver.class: Netgen\Bundle\MoreBundle\Imagine\IORepositoryResolver
 
-    # Override uglifyjs2 and uglifycss Assetic filters to disable outputing
-    # the input (meaning the entire JS & CSS !!!) when error happens
-    assetic.filter.uglifyjs2.class: Netgen\Bundle\MoreBundle\Assetic\Filter\UglifyJs2Filter
-    assetic.filter.uglifycss.class: Netgen\Bundle\MoreBundle\Assetic\Filter\UglifyCssFilter
-
 services:
     ezpublish.image_alias.variation_purger:
         alias: ezpublish.image_alias.variation_purger.legacy_storage_image_file

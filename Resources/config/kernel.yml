@@ -6,8 +6,6 @@ parameters:
     assetic.filter.uglifyjs2.class: Netgen\Bundle\MoreBundle\Assetic\Filter\UglifyJs2Filter
     assetic.filter.uglifycss.class: Netgen\Bundle\MoreBundle\Assetic\Filter\UglifyCssFilter
 
-    ezpublish.cache_warmer.config_resolver_cleanup.class: Netgen\Bundle\MoreBundle\Cache\Warmer\ConfigResolverCleanup
-
 services:
     ezpublish.image_alias.variation_purger:
         alias: ezpublish.image_alias.variation_purger.legacy_storage_image_file
@@ -18,7 +16,7 @@ services:
     # Implemented to avoid issues with config resolver on Symfony 2.8
     # See https://github.com/ezsystems/ezpublish-kernel/pull/1666
     ezpublish.cache_warmer.config_resolver_cleanup:
-        class: "%ezpublish.cache_warmer.config_resolver_cleanup.class%"
+        class: Netgen\Bundle\MoreBundle\Cache\Warmer\ConfigResolverCleanup
         calls:
             - [setContainer, ["@service_container"]]
         tags:

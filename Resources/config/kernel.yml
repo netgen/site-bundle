@@ -1,6 +1,3 @@
-parameters:
-    ezpublish.image_alias.imagine.cache_resolver.class: Netgen\Bundle\MoreBundle\Imagine\IORepositoryResolver
-
 services:
     ezpublish.image_alias.variation_purger:
         alias: ezpublish.image_alias.variation_purger.legacy_storage_image_file

@@ -10,7 +10,6 @@
     "require": {
         "ezsystems/ezpublish-kernel": "^6.0",
         "netgen/ezplatform-site-api": "^1.0|^2.0",
-        "netgen/admin-ui-bundle": "^1.0",
         "netgen/ez-forms-bundle": "^1.0|^2.0",
         "netgen/siteaccess-routes-bundle": "^1.0",
         "netgen/metadata-bundle": "^1.0",

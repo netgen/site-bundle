@@ -23,7 +23,7 @@ class SitemapController extends Controller
         $response->setPublic()->setSharedMaxAge(86400);
         $response->setContent(
             $this->render(
-                $template !== null ? $template : 'NetgenMoreBundle::sitemap.html.twig',
+                $template !== null ? $template : '@NetgenMore/sitemap.html.twig',
                 array(
                     'items' => $sitemapItems,
                 )

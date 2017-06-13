@@ -1,4 +1,4 @@
-{% include 'NetgenMoreBundle:parts:google_maps_init.html.twig' %}
+{% include '@NetgenMore/parts/google_maps_init.html.twig' %}
 <script type="text/javascript">
     var mapOptions = {
         {% if container_id is defined and container_id is not empty %}containerId: "{{ container_id|raw|escape( 'js' ) }}",{% endif %}

@@ -1,7 +1,7 @@
 parameters:
     ngmore.default.locale.conversion_map: "%ezpublish.locale.conversion_map%"
 
-    ngmore.default.pagelayout: 'NetgenMoreBundle::pagelayout_empty.html.twig'
+    ngmore.default.pagelayout: '@@NetgenMore/pagelayout_empty.html.twig'
 
     ngmore.default.site_domain: localhost
 
@@ -45,8 +45,8 @@ parameters:
     ngmore.default.search.default_limit: 10
     ngmore.default.search.content_types: []
 
-    ngmore.default.template.errors.default: 'NetgenMoreBundle:errors:default.html.twig'
-    ngmore.default.template.pagerfanta.ngmore: 'NetgenMoreBundle:pagerfanta:ngmore.html.twig'
-    ngmore.default.template.search: 'NetgenMoreBundle:search:search.html.twig'
+    ngmore.default.template.errors.default: '@@NetgenMore/errors/default.html.twig'
+    ngmore.default.template.pagerfanta.ngmore: '@@NetgenMore/pagerfanta/ngmore.html.twig'
+    ngmore.default.template.search: '@@NetgenMore/search/search.html.twig'
 
     netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length: 0

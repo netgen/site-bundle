@@ -1,4 +1,4 @@
-{% extends 'EzPublishCoreBundle::content_fields.html.twig' %}
+{% extends '@EzPublishCore/content_fields.html.twig' %}
 
 {% block ezimage_field %}
 {% spaceless %}
@@ -33,7 +33,7 @@
     {% set longitude = field.value.longitude|default( false ) %}
 
     {% include
-        'NetgenMoreBundle:parts:google_maps.html.twig' with {
+        '@NetgenMore/parts/google_maps.html.twig' with {
             'container_id': field.id,
             'latitude': latitude,
             'longitude': longitude,

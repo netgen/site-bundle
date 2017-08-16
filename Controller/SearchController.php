@@ -4,7 +4,7 @@ namespace Netgen\Bundle\MoreBundle\Controller;
 
 use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\NodeSearchHitAdapter;
+use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\LocationSearchHitAdapter;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use Pagerfanta\Pagerfanta;
@@ -49,7 +49,7 @@ class SearchController extends Controller
         $query->query = new Criterion\LogicalAnd($criteria);
 
         $pager = new Pagerfanta(
-            new NodeSearchHitAdapter(
+            new LocationSearchHitAdapter(
                 $query,
                 $this->getSite()->getFindService()
             )

@@ -54,9 +54,7 @@ class FullViewController extends Controller
         $content = $view->getSiteContent();
         $location = $view->getSiteLocation();
         if (!$location instanceof Location) {
-            $location = $this->getSite()->getLoadService()->loadLocation(
-                $content->mainLocationId
-            );
+            $location = $content->mainLocation;
         }
 
         $response = $this->checkCategoryRedirect($location);
@@ -139,9 +137,7 @@ class FullViewController extends Controller
     {
         $location = $view->getSiteLocation();
         if (!$location instanceof Location) {
-            $location = $this->getSite()->getLoadService()->loadLocation(
-                $view->getSiteContent()->mainLocationId
-            );
+            $location = $view->getSiteContent()->mainLocation;
         }
 
         $response = $this->checkCategoryRedirect($location);
@@ -162,7 +158,7 @@ class FullViewController extends Controller
      */
     protected function checkCategoryRedirect(Location $location)
     {
-        $content = $this->getSite()->getLoadService()->loadContent($location->contentId);
+        $content = $location->content;
 
         $internalRedirectValue = $content->getField('internal_redirect')->value;
         $externalRedirectValue = $content->getField('external_redirect')->value;

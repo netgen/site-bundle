@@ -52,7 +52,7 @@ class EmbedViewController extends Controller
 
                 try {
                     $location = $this->getSite()->getLoadService()->loadLocation($locationId);
-                    $content = $this->getSite()->getLoadService()->loadContent($location->contentId);
+                    $content = $location->content;
                 } catch (NotFoundException $e) {
                     $targetLink = null;
                     $this->logger->error(

@@ -5,9 +5,6 @@ namespace Netgen\Bundle\MoreBundle\Controller;
 use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Netgen\Bundle\MoreBundle\Helper\SortClauseHelper;
-use Netgen\EzPlatformSiteApi\API\Values\Location;
-use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 class PartsController extends Controller
 {
@@ -93,14 +90,19 @@ class PartsController extends Controller
     public function viewRelatedMultimediaItems($locationId, $template, $includeChildren = false, array $contentTypeIdentifiers = array('image'))
     {
         $location = $this->getSite()->getLoadService()->loadLocation($locationId);
-        $content = $this->getSite()->getLoadService()->loadContent($location->contentId);
+        $content = $location->content;
 
         // Add current location in the multimedia item list
         $multimediaItems = array($content);
 
         // Get children objects and add them in multimedia item list
         if ($includeChildren) {
-            $galleryItems = $this->getChildren($location, $contentTypeIdentifiers);
+            $galleryItems = array();
+            // We want all children, not just 25, so using 1024 as limit
+            foreach ($location->filterChildren($contentTypeIdentifiers, 1024) as $child) {
+                $galleryItems[] = $child->content;
+            }
+
             $multimediaItems = array_merge($multimediaItems, $galleryItems);
         }
 
@@ -133,11 +135,15 @@ class PartsController extends Controller
 
                 // ng_gallery - Find children objects and add them in multimedia item list
                 if ($relatedMultimediaLocation->contentInfo->contentTypeIdentifier == 'ng_gallery') {
-                    $galleryItems = $this->getChildren($relatedMultimediaLocation, $contentTypeIdentifiers);
+                    $galleryItems = array();
+                    // We want all children, not just 25, so using 1024 as limit
+                    foreach ($relatedMultimediaLocation->filterChildren($contentTypeIdentifiers, 1024) as $child) {
+                        $galleryItems[] = $child->content;
+                    }
+
                     $multimediaItems = array_merge($multimediaItems, $galleryItems);
                 } else {
-                    $relatedMultimediaContent = $this->getSite()->getLoadService()->loadContent($relatedMultimediaLocation->contentId);
-                    $multimediaItems[] = $relatedMultimediaContent;
+                    $multimediaItems[] = $relatedMultimediaLocation->content;
                 }
             }
         }
@@ -148,45 +154,5 @@ class PartsController extends Controller
                 'multimedia_items' => $multimediaItems,
             )
         );
-    }
-
-    /**
-     * Helper method for fetching children items from specified location.
-     *
-     * @param \Netgen\EzPlatformSiteApi\API\Values\Location $location
-     * @param array $contentTypeIdentifiers
-     *
-     * @return \Netgen\EzPlatformSiteApi\API\Values\Content[]
-     */
-    protected function getChildren(Location $location, array $contentTypeIdentifiers = array('image'))
-    {
-        $query = new LocationQuery();
-        $contentList = array();
-
-        $criteria = array(
-            new Criterion\ParentLocationId($location->id),
-            new Criterion\Visibility(Criterion\Visibility::VISIBLE),
-        );
-
-        if (!empty($contentTypeIdentifiers)) {
-            $criteria[] = new Criterion\ContentTypeIdentifier($contentTypeIdentifiers);
-        }
-
-        $query->filter = new Criterion\LogicalAnd($criteria);
-
-        $query->sortClauses = array(
-            $this->sortClauseHelper->getSortClauseBySortField(
-                $location->sortField,
-                $location->sortOrder
-            ),
-        );
-
-        $result = $this->getSite()->getFindService()->findNodes($query);
-
-        foreach ($result->searchHits as $searchHit) {
-            $contentList[] = $searchHit->valueObject->content;
-        }
-
-        return $contentList;
     }
 }

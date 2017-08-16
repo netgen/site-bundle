@@ -98,8 +98,7 @@ class PartsController extends Controller
         // Get children objects and add them in multimedia item list
         if ($includeChildren) {
             $galleryItems = array();
-            // We want all children, not just 25, so using 1024 as limit
-            foreach ($location->filterChildren($contentTypeIdentifiers, 1024) as $child) {
+            foreach ($location->filterChildren($contentTypeIdentifiers) as $child) {
                 $galleryItems[] = $child->content;
             }
 
@@ -136,8 +135,7 @@ class PartsController extends Controller
                 // ng_gallery - Find children objects and add them in multimedia item list
                 if ($relatedMultimediaLocation->contentInfo->contentTypeIdentifier == 'ng_gallery') {
                     $galleryItems = array();
-                    // We want all children, not just 25, so using 1024 as limit
-                    foreach ($relatedMultimediaLocation->filterChildren($contentTypeIdentifiers, 1024) as $child) {
+                    foreach ($relatedMultimediaLocation->filterChildren($contentTypeIdentifiers) as $child) {
                         $galleryItems[] = $child->content;
                     }
 

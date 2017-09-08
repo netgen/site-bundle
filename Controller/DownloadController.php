@@ -113,7 +113,8 @@ class DownloadController extends Controller
             $downloadEvent = new DownloadEvent(
                 $contentId,
                 $fieldId,
-                $content->contentInfo->currentVersionNo
+                $content->contentInfo->currentVersionNo,
+                $response
             );
 
             $this->dispatcher->dispatch(MVCEvents::CONTENT_DOWNLOAD, $downloadEvent);

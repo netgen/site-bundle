@@ -20,5 +20,6 @@ class NetgenMoreBundle extends Bundle
         $container->addCompilerPass(new Compiler\XmlTextFieldTypePass());
         $container->addCompilerPass(new Compiler\AsseticFilterPass());
         $container->addCompilerPass(new Compiler\ImagineIOResolverPass());
+        $container->addCompilerPass(new Compiler\ContentDownloadUrlGeneratorPass());
     }
 }

@@ -14,7 +14,7 @@
         "netgen/siteaccess-routes-bundle": "^1.0",
         "netgen/metadata-bundle": "^1.0",
         "netgen/content-type-list-bundle": "^1.0",
-        "netgen/enhanced-selection-bundle": "^2.0",
+        "netgen/enhanced-selection-bundle": "^2.0|^3.0",
         "netgen/birthday-bundle": "^1.0",
         "netgen/open-graph-bundle": "^1.0",
         "netgen/tagsbundle": "^2.2|^3.0",

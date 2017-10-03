@@ -79,7 +79,7 @@ abstract class UserEventListener
 
         $contentInfo = $this->repository->sudo(
             function (Repository $repository) use ($loadService, $user) {
-                return $loadService->loadContentInfo($user->id);
+                return $loadService->loadContent($user->id)->contentInfo;
             }
         );
 

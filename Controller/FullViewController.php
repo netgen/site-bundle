@@ -159,11 +159,12 @@ class FullViewController extends Controller
     protected function checkCategoryRedirect(Location $location)
     {
         $content = $location->content;
+        $loadService = $this->getSite()->getLoadService();
 
         $internalRedirectValue = $content->getField('internal_redirect')->value;
         $externalRedirectValue = $content->getField('external_redirect')->value;
         if ($internalRedirectValue instanceof RelationValue && !$content->getField('internal_redirect')->isEmpty()) {
-            $internalRedirectContentInfo = $this->getSite()->getLoadService()->loadContentInfo($internalRedirectValue->destinationContentId);
+            $internalRedirectContentInfo = $loadService->loadContent($internalRedirectValue->destinationContentId)->contentInfo;
             if ($internalRedirectContentInfo->mainLocationId != $location->id) {
                 return new RedirectResponse(
                     $this->router->generate($internalRedirectContentInfo),

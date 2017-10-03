@@ -206,7 +206,9 @@ class RelationListMenuBuilder
             $fieldValue = $content->getField('related_object')->value;
 
             try {
-                $relatedContent = $this->loadService->loadContentInfo($fieldValue->destinationContentId);
+                $relatedContent = $this->loadService->loadContent(
+                    $fieldValue->destinationContentId
+                )->contentInfo;
 
                 if ($relatedContent->published) {
                     $relatedContentName = $content->name;
@@ -306,7 +308,9 @@ class RelationListMenuBuilder
             $fieldValue = $content->getField('item_object')->value;
 
             try {
-                $relatedContent = $this->loadService->loadContentInfo($fieldValue->destinationContentId);
+                $relatedContent = $this->loadService->loadContent(
+                    $fieldValue->destinationContentId
+                )->contentInfo;
 
                 if ($relatedContent->published) {
                     $relatedContentName = $relatedContent->name;

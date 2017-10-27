@@ -36,7 +36,6 @@ class SearchController extends Controller
         }
 
         $criteria = array(
-            new Criterion\FullText($searchText),
             new Criterion\Subtree($this->getRootLocation()->pathString),
             new Criterion\Visibility(Criterion\Visibility::VISIBLE),
         );
@@ -46,7 +45,8 @@ class SearchController extends Controller
         }
 
         $query = new LocationQuery();
-        $query->query = new Criterion\LogicalAnd($criteria);
+        $query->query = new Criterion\FullText($searchText);
+        $query->filter = new Criterion\LogicalAnd($criteria);
 
         $pager = new Pagerfanta(
             new NodeSearchHitAdapter(

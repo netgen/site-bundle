@@ -25,14 +25,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    ngmore.listener.disable_inmemory_stash_driver:
-        class: "%ngmore.listener.disable_inmemory_stash_driver.class%"
-        arguments:
-            - "@ezpublish.cache_pool"
-            - "@?stash.driver.script_cache"
-        tags:
-            - { name: kernel.event_subscriber }
-
     ngmore.listener.user:
         class: "%ngmore.listener.user.class%"
         abstract: true

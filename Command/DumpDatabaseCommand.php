@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Process\ProcessBuilder;
+use Symfony\Component\Process\Process;
 use RuntimeException;
 
 class DumpDatabaseCommand extends ContainerAwareCommand
@@ -40,10 +40,10 @@ class DumpDatabaseCommand extends ContainerAwareCommand
     {
         $container = $this->getContainer();
 
-        $databaseName = $container->getParameter('database_name');
-        $databaseHost = $container->getParameter('database_host');
-        $databaseUser = $container->getParameter('database_user');
-        $databasePassword = $container->getParameter('database_password');
+        $databaseName = $container->getParameter('env(DATABASE_NAME)');
+        $databaseHost = $container->getParameter('env(DATABASE_HOST)');
+        $databaseUser = $container->getParameter('env(DATABASE_USER)');
+        $databasePassword = $container->getParameter('env(DATABASE_PASSWORD)');
 
         $filePath = getcwd() . DIRECTORY_SEPARATOR . trim($input->getArgument('file'), '/');
         $targetDirectory = dirname($filePath);
@@ -54,7 +54,7 @@ class DumpDatabaseCommand extends ContainerAwareCommand
             $fs->mkdir($targetDirectory);
         }
 
-        $processBuilder = new ProcessBuilder(
+        $process = new Process(
             array(
                 'mysqldump',
                 '-u',
@@ -64,13 +64,15 @@ class DumpDatabaseCommand extends ContainerAwareCommand
                 '-r',
                 $targetDirectory . '/' . $fileName,
                 $databaseName,
-            )
+            ),
+            null,
+            array(
+                'MYSQL_PWD' => $databasePassword,
+            ),
+            null,
+            null
         );
 
-        $processBuilder->setEnv('MYSQL_PWD', $databasePassword);
-        $processBuilder->setTimeout(null);
-
-        $process = $processBuilder->getProcess();
         $process->run();
 
         if (!$process->isSuccessful()) {

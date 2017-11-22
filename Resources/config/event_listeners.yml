@@ -1,32 +1,23 @@
-parameters:
-    ngmore.listener.add_view_type.class: Netgen\Bundle\MoreBundle\EventListener\AddViewTypeEventListener
-    ngmore.listener.set_csrf_enabled.class: Netgen\Bundle\MoreBundle\EventListener\SetCsrfEnabledEventListener
-    ngmore.listener.disable_inmemory_stash_driver.class: Netgen\Bundle\MoreBundle\EventListener\DisableInMemoryStashDriverEventListener
-
-    ngmore.listener.user.class: Netgen\Bundle\MoreBundle\EventListener\UserEventListener
-    ngmore.listener.user.post_register.class: Netgen\Bundle\MoreBundle\EventListener\User\PostRegisterEventListener
-    ngmore.listener.user.activation_request.class: Netgen\Bundle\MoreBundle\EventListener\User\ActivationRequestEventListener
-    ngmore.listener.user.post_activate.class: Netgen\Bundle\MoreBundle\EventListener\User\PostActivateEventListener
-    ngmore.listener.user.password_reset_request.class: Netgen\Bundle\MoreBundle\EventListener\User\PasswordResetRequestEventListener
-    ngmore.listener.user.post_password_reset.class: Netgen\Bundle\MoreBundle\EventListener\User\PostPasswordResetEventListener
-
 services:
     ngmore.listener.add_view_type:
-        class: "%ngmore.listener.add_view_type.class%"
+        class: Netgen\Bundle\MoreBundle\EventListener\AddViewTypeEventListener
+        public: false
         arguments:
             - "@request_stack"
         tags:
             - { name: kernel.event_subscriber }
 
     ngmore.listener.set_csrf_enabled:
-        class: "%ngmore.listener.set_csrf_enabled.class%"
+        class: Netgen\Bundle\MoreBundle\EventListener\SetCsrfEnabledEventListener
+        public: false
         arguments:
             - "@?security.csrf.token_manager"
         tags:
             - { name: kernel.event_subscriber }
 
     ngmore.listener.user:
-        class: "%ngmore.listener.user.class%"
+        class: Netgen\Bundle\MoreBundle\EventListener\UserEventListener
+        public: false
         abstract: true
         arguments:
             - "@ngmore.helper.mail_helper"
@@ -37,31 +28,36 @@ services:
             - "@ezpublish.api.repository"
 
     ngmore.listener.user.post_register:
-        class: "%ngmore.listener.user.post_register.class%"
+        class: Netgen\Bundle\MoreBundle\EventListener\User\PostRegisterEventListener
+        public: false
         parent: ngmore.listener.user
         tags:
             - { name: kernel.event_subscriber }
 
     ngmore.listener.user.activation_request:
-        class: "%ngmore.listener.user.activation_request.class%"
+        class: Netgen\Bundle\MoreBundle\EventListener\User\ActivationRequestEventListener
+        public: false
         parent: ngmore.listener.user
         tags:
             - { name: kernel.event_subscriber }
 
     ngmore.listener.user.post_activate:
-        class: "%ngmore.listener.user.post_activate.class%"
+        class: Netgen\Bundle\MoreBundle\EventListener\User\PostActivateEventListener
+        public: false
         parent: ngmore.listener.user
         tags:
             - { name: kernel.event_subscriber }
 
     ngmore.listener.user.password_reset_request:
-        class: "%ngmore.listener.user.password_reset_request.class%"
+        class: Netgen\Bundle\MoreBundle\EventListener\User\PasswordResetRequestEventListener
+        public: false
         parent: ngmore.listener.user
         tags:
             - { name: kernel.event_subscriber }
 
     ngmore.listener.user.post_password_reset:
-        class: "%ngmore.listener.user.post_password_reset.class%"
+        class: Netgen\Bundle\MoreBundle\EventListener\User\PostPasswordResetEventListener
+        public: false
         parent: ngmore.listener.user
         tags:
             - { name: kernel.event_subscriber }

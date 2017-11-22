@@ -1,28 +1,25 @@
-parameters:
-    twig.extension.array.class: Twig_Extensions_Extension_Array
-    twig.extension.date.class: Twig_Extensions_Extension_Date
-
-    ngmore.templating.global_variable.class: Netgen\Bundle\MoreBundle\Templating\GlobalVariable
-    ngmore.templating.twig.extension.class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\NetgenMoreExtension
-
 services:
     twig.extension.array:
-        class: "%twig.extension.array.class%"
+        class: Twig_Extensions_Extension_Array
+        public: false
         tags:
             - { name: twig.extension }
 
     twig.extension.date:
-        class: "%twig.extension.date.class%"
+        class: Twig_Extensions_Extension_Date
+        public: false
         tags:
             - { name: twig.extension }
 
     ngmore.templating.global_variable:
-        class: "%ngmore.templating.global_variable.class%"
+        class: Netgen\Bundle\MoreBundle\Templating\GlobalVariable
+        public: false
         arguments:
             - "@ngmore.helper.site_info_helper"
 
     ngmore.templating.twig.extension:
-        class: "%ngmore.templating.twig.extension.class%"
+        class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\NetgenMoreExtension
+        public: false
         arguments:
             - "@ngmore.helper.path_helper"
             - "@ngmore.templating.global_variable"

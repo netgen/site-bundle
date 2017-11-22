@@ -1,9 +1,7 @@
-parameters:
-    ngmore.menu.relation_list_menu_builder.class: Netgen\Bundle\MoreBundle\Menu\RelationListMenuBuilder
-
 services:
     ngmore.menu.relation_list_menu_builder:
-        class: "%ngmore.menu.relation_list_menu_builder.class%"
+        class: Netgen\Bundle\MoreBundle\Menu\RelationListMenuBuilder
+        public: false
         arguments:
             - "@knp_menu.factory"
             - "@netgen.ezplatform_site.load_service"
@@ -17,6 +15,7 @@ services:
 
     ngmore.menu.main_menu:
         class: Knp\Menu\MenuItem
+        public: true
         factory: ["@ngmore.menu.relation_list_menu_builder", createRelationListMenu]
         arguments:
             - main_menu
@@ -25,6 +24,7 @@ services:
 
     ngmore.menu.additional_menu:
         class: Knp\Menu\MenuItem
+        public: true
         factory: ["@ngmore.menu.relation_list_menu_builder", createRelationListMenu]
         arguments:
             - additional_menu

@@ -9,6 +9,7 @@ services:
     # See https://github.com/ezsystems/ezpublish-kernel/pull/1666
     ezpublish.cache_warmer.config_resolver_cleanup:
         class: Netgen\Bundle\MoreBundle\Cache\Warmer\ConfigResolverCleanup
+        public: false
         calls:
             - [setContainer, ["@service_container"]]
         tags:

@@ -17,15 +17,9 @@ class ScriptHandler extends DistributionBundleScriptHandler
     public static function installProjectSymlinks(Event $event)
     {
         $options = self::getOptions($event);
-        $binDir = $options['symfony-bin-dir'];
+        $consoleDir = static::getConsoleDir($event, 'install project symlinks');
 
-        if (!is_dir($binDir)) {
-            echo 'The symfony-bin-dir (' . $binDir . ') specified in composer.json was not found in ' . getcwd() . ', can not install project symlinks.' . PHP_EOL;
-
-            return;
-        }
-
-        static::executeCommand($event, $binDir, 'ngmore:symlink:project', $options['process-timeout']);
+        static::executeCommand($event, $consoleDir, 'ngmore:symlink:project', $options['process-timeout']);
     }
 
     /**

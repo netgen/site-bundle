@@ -1,4 +1,6 @@
 parameters:
+    ngmore.command.install.class: Netgen\Bundle\MoreBundle\Command\InstallPlatformCommand
+
     ngmore.controller.full_view.class: Netgen\Bundle\MoreBundle\Controller\FullViewController
     ngmore.controller.embed_view.class: Netgen\Bundle\MoreBundle\Controller\EmbedViewController
     ngmore.controller.search.class: Netgen\Bundle\MoreBundle\Controller\SearchController
@@ -25,6 +27,17 @@ parameters:
     ngmore.context_provider.user.class: Netgen\Bundle\MoreBundle\ContextProvider\UserContextProvider
 
 services:
+    ngmore.command.install:
+        class: "%ngmore.command.install.class%"
+        arguments:
+            - "@database_connection"
+            - []
+            - "@cache_clearer"
+            - "%kernel.cache_dir%"
+            - "%kernel.environment%"
+        tags:
+            - { name: console.command }
+
     ngmore.controller.full_view:
         class: "%ngmore.controller.full_view.class%"
         parent: netgen.ezplatform_site.controller.base

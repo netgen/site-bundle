@@ -40,10 +40,10 @@ class DumpDatabaseCommand extends ContainerAwareCommand
     {
         $container = $this->getContainer();
 
-        $databaseName = $container->getParameter('env(DATABASE_NAME)');
-        $databaseHost = $container->getParameter('env(DATABASE_HOST)');
-        $databaseUser = $container->getParameter('env(DATABASE_USER)');
-        $databasePassword = $container->getParameter('env(DATABASE_PASSWORD)');
+        $databaseName = $container->getParameter('database_name');
+        $databaseHost = $container->getParameter('database_host');
+        $databaseUser = $container->getParameter('database_user');
+        $databasePassword = $container->getParameter('database_password');
 
         $filePath = getcwd() . DIRECTORY_SEPARATOR . trim($input->getArgument('file'), '/');
         $targetDirectory = dirname($filePath);

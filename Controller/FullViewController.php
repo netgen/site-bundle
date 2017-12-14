@@ -46,10 +46,11 @@ class FullViewController extends Controller
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param \Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView $view
+     * @param array $params
      *
      * @return \Symfony\Component\HttpFoundation\Response|\Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView
      */
-    public function viewNgCategory(Request $request, ContentView $view)
+    public function viewNgCategory(Request $request, ContentView $view, array $params = array())
     {
         $content = $view->getSiteContent();
         $location = $view->getSiteLocation();

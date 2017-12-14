@@ -10,18 +10,18 @@
     "require": {
         "ezsystems/ezpublish-kernel": "^6.0",
         "netgen/ezplatform-site-api": "^2.3",
-        "netgen/ez-forms-bundle": "^1.0|^2.0",
+        "netgen/ez-forms-bundle": "^2.0",
         "netgen/siteaccess-routes-bundle": "^1.0",
         "netgen/metadata-bundle": "^1.0",
         "netgen/content-type-list-bundle": "^1.0",
-        "netgen/enhanced-selection-bundle": "^2.0|^3.0",
+        "netgen/enhanced-selection-bundle": "^3.0",
         "netgen/birthday-bundle": "^1.0",
         "netgen/open-graph-bundle": "^1.0",
-        "netgen/tagsbundle": "^2.2|^3.0",
+        "netgen/tagsbundle": "^^3.0",
         "twig/extensions": "^1.2",
         "doctrine/common": "^2.5",
         "doctrine/orm": "^2.4",
-        "knplabs/knp-menu-bundle": "^1.0|^2.0"
+        "knplabs/knp-menu-bundle": "^2.0"
     },
     "conflict": {
         "netgen/more-admin-ui-bundle": "*"
@@ -31,7 +31,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "3.1.x-dev"
+            "dev-master": "3.2.x-dev"
         }
     }
 }

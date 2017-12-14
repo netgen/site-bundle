@@ -21,7 +21,7 @@
         "twig/extensions": "^1.5",
         "doctrine/common": "^2.5",
         "doctrine/orm": "^2.4",
-        "knplabs/knp-menu-bundle": "^2.1"
+        "knplabs/knp-menu-bundle": "^2.2"
     },
     "conflict": {
         "netgen/more-admin-ui-bundle": "*"

@@ -1,7 +1,7 @@
 services:
     ngmore.pagerfanta.view.ngmore:
         class: Netgen\Bundle\MoreBundle\Pagerfanta\View\NetgenMoreView
-        public: true
+        public: false
         arguments:
             - "@twig"
         calls:

@@ -15,7 +15,7 @@ services:
 
     ngmore.menu.main_menu:
         class: Knp\Menu\MenuItem
-        public: true
+        public: false
         factory: ["@ngmore.menu.relation_list_menu_builder", createRelationListMenu]
         arguments:
             - main_menu
@@ -24,7 +24,7 @@ services:
 
     ngmore.menu.additional_menu:
         class: Knp\Menu\MenuItem
-        public: true
+        public: false
         factory: ["@ngmore.menu.relation_list_menu_builder", createRelationListMenu]
         arguments:
             - additional_menu

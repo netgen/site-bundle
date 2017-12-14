@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use eZ\Publish\Core\FieldType\Relation\Value as RelationValue;
 use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
-use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\LocationSearchAdapter;
+use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\LocationSearchFilterAdapter;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use Symfony\Component\Routing\RouterInterface;
@@ -93,9 +93,9 @@ class FullViewController extends Controller
         );
 
         $pager = new Pagerfanta(
-            new LocationSearchAdapter(
+            new LocationSearchFilterAdapter(
                 $query,
-                $this->getSite()->getFindService()
+                $this->getSite()->getFilterService()
             )
         );
 

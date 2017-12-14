@@ -10,7 +10,7 @@ use Knp\Menu\ItemInterface;
 use Knp\Menu\FactoryInterface;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Netgen\Bundle\MoreBundle\Helper\SortClauseHelper;
-use Netgen\EzPlatformSiteApi\API\FindService;
+use Netgen\EzPlatformSiteApi\API\FilterService;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Psr\Log\NullLogger;
 use Symfony\Component\Routing\RouterInterface;
@@ -33,9 +33,9 @@ class RelationListMenuBuilder
     protected $loadService;
 
     /**
-     * @var \Netgen\EzPlatformSiteApi\API\FindService
+     * @var \Netgen\EzPlatformSiteApi\API\FilterService
      */
-    protected $findService;
+    protected $filterService;
 
     /**
      * @var \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper
@@ -62,7 +62,7 @@ class RelationListMenuBuilder
      *
      * @param \Knp\Menu\FactoryInterface $factory
      * @param \Netgen\EzPlatformSiteApi\API\LoadService $loadService
-     * @param \Netgen\EzPlatformSiteApi\API\FindService $findService
+     * @param \Netgen\EzPlatformSiteApi\API\FilterService $filterService
      * @param \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper $siteInfoHelper
      * @param \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper $sortClauseHelper
      * @param \Symfony\Component\Routing\RouterInterface $router
@@ -71,7 +71,7 @@ class RelationListMenuBuilder
     public function __construct(
         FactoryInterface $factory,
         LoadService $loadService,
-        FindService $findService,
+        FilterService $filterService,
         SiteInfoHelper $siteInfoHelper,
         SortClauseHelper $sortClauseHelper,
         RouterInterface $router,
@@ -79,7 +79,7 @@ class RelationListMenuBuilder
     ) {
         $this->factory = $factory;
         $this->loadService = $loadService;
-        $this->findService = $findService;
+        $this->filterService = $filterService;
         $this->siteInfoHelper = $siteInfoHelper;
         $this->sortClauseHelper = $sortClauseHelper;
         $this->router = $router;
@@ -147,9 +147,9 @@ class RelationListMenuBuilder
                 continue;
             }
 
-            if ($location->contentInfo->contentTypeIdentifier == 'ng_shortcut') {
+            if ($location->contentInfo->contentTypeIdentifier === 'ng_shortcut') {
                 $this->generateFromNgShortcut($menuItem, $location);
-            } elseif ($location->contentInfo->contentTypeIdentifier == 'ng_menu_item') {
+            } elseif ($location->contentInfo->contentTypeIdentifier === 'ng_menu_item') {
                 $this->generateFromNgMenuItem($menuItem, $location);
             } else {
                 $this->addMenuItemsFromLocations($menuItem, array($location));
@@ -412,7 +412,7 @@ class RelationListMenuBuilder
                         ),
                     );
 
-                    $searchResult = $this->findService->findLocations($query);
+                    $searchResult = $this->filterService->filterLocations($query);
                     $foundLocations = array_map(
                         function (SearchHit $searchHit) {
                             return $searchHit->valueObject;

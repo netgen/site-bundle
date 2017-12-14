@@ -30,12 +30,8 @@ services:
     ngmore.templating.twig.extension:
         class: "%ngmore.templating.twig.extension.class%"
         arguments:
-            - "@ezpublish.api.repository"
-            - "@netgen.ezplatform_site.load_service"
-            - "@security.authorization_checker"
             - "@ngmore.helper.path_helper"
             - "@ngmore.templating.global_variable"
             - "@ezpublish.locale.converter"
-            - "@ezpublish.translation_helper"
         tags:
             - { name: twig.extension }

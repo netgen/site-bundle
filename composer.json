@@ -17,7 +17,7 @@
         "netgen/enhanced-selection-bundle": "^3.0",
         "netgen/birthday-bundle": "^1.0",
         "netgen/open-graph-bundle": "^1.0",
-        "netgen/tagsbundle": "^^3.0",
+        "netgen/tagsbundle": "^3.0",
         "twig/extensions": "^1.2",
         "doctrine/common": "^2.5",
         "doctrine/orm": "^2.4",

@@ -1,15 +1,4 @@
 services:
-    ngmore.command.install:
-        class: "%ngmore.command.install.class%"
-        arguments:
-            - "@database_connection"
-            - []
-            - "@cache_clearer"
-            - "%kernel.cache_dir%"
-            - "%kernel.environment%"
-        tags:
-            - { name: console.command }
-
     ngmore.controller.full_view:
         class: Netgen\Bundle\MoreBundle\Controller\FullViewController
         public: true

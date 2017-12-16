@@ -87,7 +87,7 @@ class SymlinkProjectCommand extends SymlinkCommand
                     $webFolderName = $input->getOption('web-folder');
                     $webFolderName = !empty($webFolderName) ? $webFolderName : 'web';
 
-                    $destination = $this->getContainer()->getParameter('kernel.root_dir') . '/../' . $webFolderName . '/' . $item->getBasename();
+                    $destination = $this->getContainer()->getParameter('kernel.project_dir') . '/' . $webFolderName . '/' . $item->getBasename();
 
                     if (!$this->fileSystem->exists(dirname($destination))) {
                         $output->writeln('Skipped creating the symlink for <comment>' . basename($destination) . '</comment> in <comment>' . dirname($destination) . '/</comment>. Folder does not exist!');

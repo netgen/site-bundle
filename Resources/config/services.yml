@@ -121,7 +121,7 @@ services:
             - "@ezpublish.urlalias_generator"
             - "@?router.request_context"
         tags:
-            - {name: router, priority: 200}
+            - { name: router, priority: 200 }
 
     ngmore.routing.site_location_url_alias_router:
         class: Netgen\Bundle\MoreBundle\Routing\SiteLocationUrlAliasRouter
@@ -131,7 +131,7 @@ services:
             - "@ezpublish.urlalias_generator"
             - "@?router.request_context"
         tags:
-            - {name: router, priority: 200}
+            - { name: router, priority: 200 }
 
 #    Custom user context hash providers are disabled by default.
 #    Enable them in your project if needed by copying one of the

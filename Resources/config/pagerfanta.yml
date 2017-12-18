@@ -7,4 +7,4 @@ services:
         calls:
             - [setDefaultTemplate, [$template.pagerfanta.ngmore;ngmore$]]
         tags:
-            - {name: pagerfanta.view, alias: ngmore}
+            - { name: pagerfanta.view, alias: ngmore }

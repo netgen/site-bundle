@@ -11,14 +11,14 @@ Installation steps
 
 ### Use Composer
 
-Add the following to your composer.json and run `php composer.phar update netgen/more-bundle` to refresh dependencies:
+Add the following to your `composer.json` and run `composer update netgen/more-bundle` to refresh dependencies:
 
 ```json
 "repositories": [
-    { "type": "composer", "url": "http://packagist.netgen.biz" }
+    { "type": "composer", "url": "https://packagist.netgen.biz" }
 ],
 "require": {
-    "netgen/more-bundle": "~3.0.0"
+    "netgen/more-bundle": "~4.0.0"
 }
 ```
 
@@ -46,8 +46,8 @@ public function registerBundles()
 
 ### Clear the caches
 
-Clear eZ Publish caches.
+Clear eZ Platform caches.
 
 ```bash
-php app/console cache:clear
+php bin/console cache:clear
 ```

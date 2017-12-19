@@ -1,0 +1,2 @@
+globals:
+    ngmore: "@ngmore.templating.global_variable"

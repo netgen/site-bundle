@@ -20,9 +20,14 @@ services:
     ngmore.templating.twig.extension:
         class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\NetgenMoreExtension
         public: false
-        arguments:
-            - "@ngmore.helper.path_helper"
-            - "@ngmore.templating.global_variable"
-            - "@ezpublish.locale.converter"
         tags:
             - { name: twig.extension }
+
+    ngmore.templating.twig.runtime:
+        class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\NetgenMoreRuntime
+        public: false
+        arguments:
+            - "@ngmore.helper.path_helper"
+            - "@ezpublish.locale.converter"
+        tags:
+            - { name: twig.runtime }

@@ -1,12 +1,12 @@
 services:
     twig.extension.array:
-        class: Twig_Extensions_Extension_Array
+        class: Twig\Extensions\ArrayExtension
         public: false
         tags:
             - { name: twig.extension }
 
     twig.extension.date:
-        class: Twig_Extensions_Extension_Date
+        class: Twig\Extensions\DateExtension
         public: false
         tags:
             - { name: twig.extension }

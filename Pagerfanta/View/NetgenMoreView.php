@@ -4,12 +4,12 @@ namespace Netgen\Bundle\MoreBundle\Pagerfanta\View;
 
 use Pagerfanta\PagerfantaInterface;
 use Pagerfanta\View\ViewInterface;
-use Twig_Environment;
+use Twig\Environment;
 
 class NetgenMoreView implements ViewInterface
 {
     /**
-     * @var \Twig_Environment
+     * @var \Twig\Environment
      */
     protected $twig;
 
@@ -46,9 +46,9 @@ class NetgenMoreView implements ViewInterface
     /**
      * Constructor.
      *
-     * @param \Twig_Environment $twig
+     * @param \Twig\Environment $twig
      */
-    public function __construct(Twig_Environment $twig)
+    public function __construct(Environment $twig)
     {
         $this->twig = $twig;
     }

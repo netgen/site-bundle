@@ -2,20 +2,20 @@
 
 namespace Netgen\Bundle\MoreBundle\Templating\Twig\Extension;
 
-use Twig_Extension;
-use Twig_SimpleFunction;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class NetgenMoreExtension extends Twig_Extension
+class NetgenMoreExtension extends AbstractExtension
 {
     public function getFunctions()
     {
         return array(
-            new Twig_SimpleFunction(
+            new TwigFunction(
                 'ngmore_location_path',
                 array(NetgenMoreRuntime::class, 'getLocationPath'),
                 array('is_safe' => array('html'))
             ),
-            new Twig_SimpleFunction(
+            new TwigFunction(
                 'ngmore_language_name',
                 array(NetgenMoreRuntime::class, 'getLanguageName')
             ),

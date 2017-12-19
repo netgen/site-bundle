@@ -4,11 +4,7 @@ namespace Netgen\Bundle\MoreBundle\Templating\Twig\Extension;
 
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
 use Netgen\Bundle\MoreBundle\Helper\PathHelper;
-use Netgen\Bundle\MoreBundle\Templating\GlobalVariable;
 use Symfony\Component\Intl\Intl;
-use Twig_Extension;
-use Twig_Extension_GlobalsInterface;
-use Twig_SimpleFunction;
 
 class NetgenMoreRuntime
 {

@@ -2,9 +2,9 @@
 
 namespace Netgen\Bundle\MoreBundle\Assetic\Filter;
 
-use Assetic\Filter\UglifyCssFilter as BaseUglifyCssFilter;
 use Assetic\Asset\AssetInterface;
 use Assetic\Exception\FilterException;
+use Assetic\Filter\UglifyCssFilter as BaseUglifyCssFilter;
 
 class UglifyCssFilter extends BaseUglifyCssFilter
 {

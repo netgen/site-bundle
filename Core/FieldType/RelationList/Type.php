@@ -2,10 +2,10 @@
 
 namespace Netgen\Bundle\MoreBundle\Core\FieldType\RelationList;
 
-use eZ\Publish\Core\FieldType\RelationList\Type as BaseRelationListType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
-use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\Core\FieldType\RelationList\Type as BaseRelationListType;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
 
 class Type extends BaseRelationListType
 {
@@ -18,6 +18,38 @@ class Type extends BaseRelationListType
     public function getEmptyValue()
     {
         return new Value();
+    }
+
+    /**
+     * Converts an $hash to the Value defined by the field type.
+     *
+     * @param mixed $hash
+     *
+     * @return \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value $value
+     */
+    public function fromHash($hash)
+    {
+        return new Value(
+            $hash['destinationContentIds'],
+            isset($hash['destinationLocationIds']) ?
+                $hash['destinationLocationIds'] :
+                array()
+        );
+    }
+
+    /**
+     * Converts a $Value to a hash.
+     *
+     * @param \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value $value
+     *
+     * @return mixed
+     */
+    public function toHash(SPIValue $value)
+    {
+        return array(
+            'destinationContentIds' => $value->destinationContentIds,
+            'destinationLocationIds' => $value->destinationLocationIds,
+        );
     }
 
     /**
@@ -64,9 +96,10 @@ class Type extends BaseRelationListType
     /**
      * Throws an exception if value structure is not of expected format.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure
      *
      * @param \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value $value
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure
      */
     protected function checkValueStructure(BaseValue $value)
     {
@@ -89,37 +122,5 @@ class Type extends BaseRelationListType
                 );
             }
         }
-    }
-
-    /**
-     * Converts an $hash to the Value defined by the field type.
-     *
-     * @param mixed $hash
-     *
-     * @return \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value $value
-     */
-    public function fromHash($hash)
-    {
-        return new Value(
-            $hash['destinationContentIds'],
-            isset($hash['destinationLocationIds']) ?
-                $hash['destinationLocationIds'] :
-                array()
-        );
-    }
-
-    /**
-     * Converts a $Value to a hash.
-     *
-     * @param \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value $value
-     *
-     * @return mixed
-     */
-    public function toHash(SPIValue $value)
-    {
-        return array(
-            'destinationContentIds' => $value->destinationContentIds,
-            'destinationLocationIds' => $value->destinationLocationIds,
-        );
     }
 }

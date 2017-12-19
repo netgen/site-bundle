@@ -3,9 +3,9 @@
 namespace Netgen\Bundle\MoreBundle\Core\Slot;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Slot;
-use eZ\Publish\API\Repository\UserService;
 use Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository;
 
 class CreateUserSlot extends Slot

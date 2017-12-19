@@ -2,23 +2,23 @@
 
 namespace Netgen\Bundle\MoreBundle\Menu;
 
-use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
-use Netgen\EzPlatformSiteApi\API\Values\Location;
-use Netgen\EzPlatformSiteApi\API\Values\Content;
-use Knp\Menu\ItemInterface;
-use Knp\Menu\FactoryInterface;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use InvalidArgumentException;
+use Knp\Menu\FactoryInterface;
+use Knp\Menu\ItemInterface;
+use Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value as RelationListValue;
+use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;
 use Netgen\Bundle\MoreBundle\Helper\SortClauseHelper;
 use Netgen\EzPlatformSiteApi\API\FilterService;
 use Netgen\EzPlatformSiteApi\API\LoadService;
+use Netgen\EzPlatformSiteApi\API\Values\Content;
+use Netgen\EzPlatformSiteApi\API\Values\Location;
+use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\Routing\RouterInterface;
-use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;
-use Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value as RelationListValue;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use Psr\Log\LoggerInterface;
-use InvalidArgumentException;
 
 class RelationListMenuBuilder
 {

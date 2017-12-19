@@ -2,13 +2,13 @@
 
 namespace Netgen\Bundle\MoreBundle\Command;
 
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
-use RuntimeException;
 
 class DumpDatabaseCommand extends ContainerAwareCommand
 {

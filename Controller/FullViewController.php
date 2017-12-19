@@ -2,20 +2,20 @@
 
 namespace Netgen\Bundle\MoreBundle\Controller;
 
-use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
-use Netgen\Bundle\MoreBundle\Helper\SortClauseHelper;
-use Netgen\EzPlatformSiteApi\API\Values\Location;
-use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use eZ\Publish\Core\FieldType\Relation\Value as RelationValue;
-use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
-use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\LocationSearchFilterAdapter;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use Symfony\Component\Routing\RouterInterface;
+use eZ\Publish\Core\FieldType\Relation\Value as RelationValue;
+use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
+use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
+use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
+use Netgen\Bundle\MoreBundle\Helper\SortClauseHelper;
+use Netgen\EzPlatformSiteApi\API\Values\Location;
+use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\LocationSearchFilterAdapter;
 use Pagerfanta\Pagerfanta;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\RouterInterface;
 
 class FullViewController extends Controller
 {
@@ -107,15 +107,15 @@ class FullViewController extends Controller
 
         $defaultLimit = 12;
         if (isset($params['childrenLimit'])) {
-            $childrenLimit = (int)$params['childrenLimit'];
+            $childrenLimit = (int) $params['childrenLimit'];
             if ($childrenLimit > 0) {
                 $defaultLimit = $childrenLimit;
             }
         }
 
-        $pager->setMaxPerPage($pageLimitValue->value > 0 ? (int)$pageLimitValue->value : $defaultLimit);
+        $pager->setMaxPerPage($pageLimitValue->value > 0 ? (int) $pageLimitValue->value : $defaultLimit);
 
-        $currentPage = (int)$request->get('page', 1);
+        $currentPage = (int) $request->get('page', 1);
         $pager->setCurrentPage($currentPage > 0 ? $currentPage : 1);
 
         $view->addParameters(
@@ -166,7 +166,7 @@ class FullViewController extends Controller
         $externalRedirectValue = $content->getField('external_redirect')->value;
         if ($internalRedirectValue instanceof RelationValue && !$content->getField('internal_redirect')->isEmpty()) {
             $internalRedirectContentInfo = $loadService->loadContent($internalRedirectValue->destinationContentId)->contentInfo;
-            if ($internalRedirectContentInfo->mainLocationId != $location->id) {
+            if ($internalRedirectContentInfo->mainLocationId !== $location->id) {
                 return new RedirectResponse(
                     $this->router->generate($internalRedirectContentInfo),
                     RedirectResponse::HTTP_MOVED_PERMANENTLY

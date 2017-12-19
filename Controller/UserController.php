@@ -2,24 +2,24 @@
 
 namespace Netgen\Bundle\MoreBundle\Controller;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\UserService;
+use Netgen\Bundle\EzFormsBundle\Form\DataWrapper;
 use Netgen\Bundle\EzFormsBundle\Form\Type\CreateUserType;
+use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey;
 use Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
+use Netgen\Bundle\MoreBundle\Event\MVCEvents;
 use Netgen\Bundle\MoreBundle\Event\User as UserEvents;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Constraints;
-use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\UserService;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use Netgen\Bundle\EzFormsBundle\Form\DataWrapper;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Netgen\Bundle\MoreBundle\Event\MVCEvents;
 
 class UserController extends Controller
 {
@@ -85,8 +85,8 @@ class UserController extends Controller
             $contentType
         );
 
-        $userCreateStruct->enabled = (bool)$this->getConfigResolver()->getParameter('user.auto_enable', 'ngmore');
-        $userCreateStruct->alwaysAvailable = (bool)$contentType->defaultAlwaysAvailable;
+        $userCreateStruct->enabled = (bool) $this->getConfigResolver()->getParameter('user.auto_enable', 'ngmore');
+        $userCreateStruct->alwaysAvailable = (bool) $contentType->defaultAlwaysAvailable;
 
         $data = new DataWrapper($userCreateStruct, $userCreateStruct->contentType);
 
@@ -416,7 +416,7 @@ class UserController extends Controller
      */
     protected function createResetPasswordForm()
     {
-        $minLength = (int)$this->getParameter('netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length');
+        $minLength = (int) $this->getParameter('netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length');
 
         $passwordConstraints = array(
             new Constraints\NotBlank(),

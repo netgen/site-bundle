@@ -2,8 +2,8 @@
 
 namespace Netgen\Bundle\MoreBundle\Controller;
 
-use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use Netgen\Bundle\MoreBundle\Helper\SortClauseHelper;
 
 class PartsController extends Controller
@@ -133,7 +133,7 @@ class PartsController extends Controller
                 }
 
                 // ng_gallery - Find children objects and add them in multimedia item list
-                if ($relatedMultimediaLocation->contentInfo->contentTypeIdentifier == 'ng_gallery') {
+                if ($relatedMultimediaLocation->contentInfo->contentTypeIdentifier === 'ng_gallery') {
                     $galleryItems = array();
                     foreach ($relatedMultimediaLocation->filterChildren($contentTypeIdentifiers) as $child) {
                         $galleryItems[] = $child->content;

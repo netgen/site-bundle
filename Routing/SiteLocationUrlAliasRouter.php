@@ -2,19 +2,19 @@
 
 namespace Netgen\Bundle\MoreBundle\Routing;
 
-use Netgen\EzPlatformSiteApi\API\Values\Location;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use Netgen\EzPlatformSiteApi\API\LoadService;
+use Netgen\EzPlatformSiteApi\API\Values\Location;
+use RuntimeException;
 use Symfony\Cmf\Component\Routing\ChainedRouterInterface;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
-use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\Route as SymfonyRoute;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use RuntimeException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Route as SymfonyRoute;
+use Symfony\Component\Routing\RouteCollection;
 
 class SiteLocationUrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 {
@@ -58,9 +58,9 @@ class SiteLocationUrlAliasRouter implements ChainedRouterInterface, RequestMatch
      *
      * @param \Symfony\Component\HttpFoundation\Request $request The request to match
      *
-     * @return array An array of parameters
-     *
      * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException If no matching resource could be found
+     *
+     * @return array An array of parameters
      */
     public function matchRequest(Request $request)
     {
@@ -134,10 +134,10 @@ class SiteLocationUrlAliasRouter implements ChainedRouterInterface, RequestMatch
      *
      * @param string $pathinfo The path info to be parsed (raw format, i.e. not urldecoded)
      *
-     * @return array An array of parameters
-     *
      * @throws \Symfony\Component\Routing\Exception\ResourceNotFoundException If the resource could not be found
      * @throws \Symfony\Component\Routing\Exception\MethodNotAllowedException If the resource was found but the request method is not allowed
+     *
+     * @return array An array of parameters
      */
     public function match($pathinfo)
     {

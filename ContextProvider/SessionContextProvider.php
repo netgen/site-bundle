@@ -2,9 +2,9 @@
 
 namespace Netgen\Bundle\MoreBundle\ContextProvider;
 
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use FOS\HttpCache\UserContext\ContextProviderInterface;
 use FOS\HttpCache\UserContext\UserContext;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class SessionContextProvider implements ContextProviderInterface
 {

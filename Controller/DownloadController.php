@@ -2,18 +2,18 @@
 
 namespace Netgen\Bundle\MoreBundle\Controller;
 
-use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
+use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
 use eZ\Publish\Core\FieldType\BinaryBase\Value as BinaryBaseValue;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
-use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
 use eZ\Publish\Core\IO\IOServiceInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use Netgen\Bundle\MoreBundle\Event\Content\DownloadEvent;
 use Netgen\Bundle\MoreBundle\Event\MVCEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class DownloadController extends Controller
 {
@@ -103,7 +103,7 @@ class DownloadController extends Controller
 
         $response = new BinaryStreamResponse($binaryFile, $ioService);
         $response->setContentDisposition(
-            (bool)$isInline ? ResponseHeaderBag::DISPOSITION_INLINE :
+            (bool) $isInline ? ResponseHeaderBag::DISPOSITION_INLINE :
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             str_replace(array('/', '\\'), '', $binaryFieldValue->fileName),
             'file'

@@ -2,10 +2,10 @@
 
 namespace Netgen\Bundle\MoreBundle\Helper;
 
-use Netgen\EzPlatformSiteApi\API\LoadService;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use Symfony\Component\Routing\RouterInterface;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Netgen\EzPlatformSiteApi\API\LoadService;
+use Symfony\Component\Routing\RouterInterface;
 
 class PathHelper
 {
@@ -63,7 +63,7 @@ class PathHelper
         }
 
         // The root location can be defined at site access level
-        $rootLocationId = $this->configResolver->getParameter('content.tree_root.location_id');
+        $rootLocationId = (int) $this->configResolver->getParameter('content.tree_root.location_id');
 
         $path = $this->loadService->loadLocation($locationId)->path;
 
@@ -73,7 +73,7 @@ class PathHelper
         $pathArray = array();
         $rootLocationFound = false;
         foreach ($path as $index => $pathItem) {
-            if ($pathItem == $rootLocationId) {
+            if ((int) $pathItem === $rootLocationId) {
                 $rootLocationFound = true;
             }
 
@@ -87,10 +87,10 @@ class PathHelper
                 return array();
             }
 
-            if (!in_array($location->contentInfo->contentTypeIdentifier, $excludedContentTypes)) {
+            if (!in_array($location->contentInfo->contentTypeIdentifier, $excludedContentTypes, true)) {
                 $pathArray[] = array(
                     'text' => $location->contentInfo->name,
-                    'url' => $location->id != $locationId ?
+                    'url' => $location->id !== (int) $locationId ?
                         $this->router->generate($location) :
                         false,
                     'location' => $location,

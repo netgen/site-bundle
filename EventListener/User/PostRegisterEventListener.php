@@ -2,10 +2,10 @@
 
 namespace Netgen\Bundle\MoreBundle\EventListener\User;
 
-use Netgen\Bundle\MoreBundle\EventListener\UserEventListener;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Netgen\Bundle\MoreBundle\Event\MVCEvents;
 use Netgen\Bundle\MoreBundle\Event\User\PostRegisterEvent;
+use Netgen\Bundle\MoreBundle\EventListener\UserEventListener;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class PostRegisterEventListener extends UserEventListener implements EventSubscriberInterface
 {

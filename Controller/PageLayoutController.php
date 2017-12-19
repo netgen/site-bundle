@@ -2,12 +2,12 @@
 
 namespace Netgen\Bundle\MoreBundle\Controller;
 
+use Knp\Menu\ItemInterface;
 use Knp\Menu\Provider\MenuProviderInterface;
 use Knp\Menu\Renderer\RendererProviderInterface;
 use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Knp\Menu\ItemInterface;
 
 class PageLayoutController extends Controller
 {

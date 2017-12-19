@@ -2,13 +2,13 @@
 
 namespace Netgen\Bundle\MoreBundle\Controller;
 
-use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
-use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
-use Symfony\Component\Routing\RouterInterface;
+use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
+use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Symfony\Component\Routing\RouterInterface;
 
 class EmbedViewController extends Controller
 {
@@ -48,7 +48,7 @@ class EmbedViewController extends Controller
 
         if (!empty($targetLink)) {
             if (stripos($targetLink, 'eznode://') === 0) {
-                $locationId = (int)substr($targetLink, 9);
+                $locationId = (int) substr($targetLink, 9);
 
                 try {
                     $location = $this->getSite()->getLoadService()->loadLocation($locationId);
@@ -65,7 +65,7 @@ class EmbedViewController extends Controller
                     );
                 }
             } elseif (stripos($targetLink, 'ezobject://') === 0) {
-                $linkedContentId = (int)substr($targetLink, 11);
+                $linkedContentId = (int) substr($targetLink, 11);
 
                 try {
                     $content = $this->getSite()->getLoadService()->loadContent($linkedContentId);

@@ -2,14 +2,14 @@
 
 namespace Netgen\Bundle\MoreBundle\XmlText\Converter;
 
-use Netgen\EzPlatformSiteApi\API\LoadService;
-use eZ\Publish\Core\FieldType\XmlText\Converter;
-use Psr\Log\NullLogger;
-use Symfony\Component\Routing\RouterInterface;
+use DOMDocument;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\FieldType\XmlText\Converter;
+use Netgen\EzPlatformSiteApi\API\LoadService;
 use Psr\Log\LoggerInterface;
-use DOMDocument;
+use Psr\Log\NullLogger;
+use Symfony\Component\Routing\RouterInterface;
 
 class EzLinkDirectDownload implements Converter
 {

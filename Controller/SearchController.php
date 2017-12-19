@@ -2,12 +2,12 @@
 
 namespace Netgen\Bundle\MoreBundle\Controller;
 
-use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\LocationSearchHitAdapter;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
+use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\LocationSearchHitAdapter;
 use Pagerfanta\Pagerfanta;
+use Symfony\Component\HttpFoundation\Request;
 
 class SearchController extends Controller
 {
@@ -57,10 +57,10 @@ class SearchController extends Controller
 
         $pager->setNormalizeOutOfRangePages(true);
         $pager->setMaxPerPage(
-            (int)$configResolver->getParameter('search.default_limit', 'ngmore')
+            (int) $configResolver->getParameter('search.default_limit', 'ngmore')
         );
 
-        $currentPage = (int)$request->get('page', 1);
+        $currentPage = (int) $request->get('page', 1);
         $pager->setCurrentPage($currentPage > 0 ? $currentPage : 1);
 
         return $this->render(

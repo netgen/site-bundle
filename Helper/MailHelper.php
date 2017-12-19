@@ -2,16 +2,16 @@
 
 namespace Netgen\Bundle\MoreBundle\Helper;
 
-use Psr\Log\NullLogger;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Translation\TranslatorInterface;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Templating\EngineInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Swift_Mailer;
 use Swift_Message;
-use InvalidArgumentException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Templating\EngineInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class MailHelper
 {
@@ -160,16 +160,17 @@ class MailHelper
      * ngmore.default.mail.sender_email
      * ngmore.default.mail.sender_name (optional).
      *
-     * @throws \InvalidArgumentException If sender was not provided
      *
      * @param mixed $sender
+     *
+     * @throws \InvalidArgumentException If sender was not provided
      *
      * @return array|string
      */
     protected function getSender($sender)
     {
         if (!empty($sender)) {
-            if ((is_array($sender) && count($sender) == 1 && !isset($sender[0])) || is_string($sender)) {
+            if ((is_array($sender) && count($sender) === 1 && !isset($sender[0])) || is_string($sender)) {
                 return $sender;
             }
 

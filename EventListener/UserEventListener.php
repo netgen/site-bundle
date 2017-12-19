@@ -5,9 +5,9 @@ namespace Netgen\Bundle\MoreBundle\EventListener;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use Netgen\Bundle\MoreBundle\Helper\MailHelper;
-use Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository;
 use Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
+use Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository;
+use Netgen\Bundle\MoreBundle\Helper\MailHelper;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 
 abstract class UserEventListener

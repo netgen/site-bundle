@@ -2,11 +2,11 @@
 
 namespace Netgen\Bundle\MoreBundle\Command;
 
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Netgen\Bundle\MoreBundle\NetgenMoreProjectBundleInterface;
 use DirectoryIterator;
+use Netgen\Bundle\MoreBundle\NetgenMoreProjectBundleInterface;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class SymlinkProjectCommand extends SymlinkCommand
 {
@@ -31,7 +31,7 @@ class SymlinkProjectCommand extends SymlinkCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->forceSymlinks = (bool)$input->getOption('force');
+        $this->forceSymlinks = (bool) $input->getOption('force');
         $this->environment = $this->getContainer()->get('kernel')->getEnvironment();
         $this->fileSystem = $this->getContainer()->get('filesystem');
 
@@ -80,7 +80,7 @@ class SymlinkProjectCommand extends SymlinkCommand
                 }
 
                 if ($item->isDir() || $item->isFile()) {
-                    if (in_array($item->getBasename(), $this->blacklistedItems)) {
+                    if (in_array($item->getBasename(), $this->blacklistedItems, true)) {
                         continue;
                     }
 

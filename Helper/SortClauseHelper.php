@@ -2,9 +2,9 @@
 
 namespace Netgen\Bundle\MoreBundle\Helper;
 
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\API\Repository\Values\Content\Location;
 
 class SortClauseHelper
 {

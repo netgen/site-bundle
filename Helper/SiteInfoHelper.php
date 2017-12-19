@@ -2,8 +2,8 @@
 
 namespace Netgen\Bundle\MoreBundle\Helper;
 
-use Netgen\EzPlatformSiteApi\API\LoadService;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Netgen\EzPlatformSiteApi\API\LoadService;
 
 class SiteInfoHelper
 {

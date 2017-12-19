@@ -2,13 +2,13 @@
 
 namespace Netgen\Bundle\MoreBundle\Core\FieldType\XmlText\Converter;
 
-use eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5 as BaseEmbedToHtml5;
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
-use Symfony\Component\HttpKernel\Controller\ControllerReference;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use DOMDocument;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5 as BaseEmbedToHtml5;
+use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
 /**
  * Converts embedded elements from internal XmlText representation to HTML5.

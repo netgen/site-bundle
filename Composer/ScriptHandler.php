@@ -2,10 +2,10 @@
 
 namespace Netgen\Bundle\MoreBundle\Composer;
 
-use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler as DistributionBundleScriptHandler;
-use eZ\Bundle\EzPublishCoreBundle\Composer\ScriptHandler as CoreBundleScriptHandler;
 use Composer\Script\Event;
+use eZ\Bundle\EzPublishCoreBundle\Composer\ScriptHandler as CoreBundleScriptHandler;
 use RuntimeException;
+use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler as DistributionBundleScriptHandler;
 
 class ScriptHandler extends DistributionBundleScriptHandler
 {

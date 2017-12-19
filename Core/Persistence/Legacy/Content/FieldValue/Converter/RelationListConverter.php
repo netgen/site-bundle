@@ -2,13 +2,13 @@
 
 namespace Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
+use DOMDocument;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RelationListConverter as BaseRelationListConverter;
-use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use RuntimeException;
-use DOMDocument;
 
 class RelationListConverter extends BaseRelationListConverter
 {
@@ -86,7 +86,7 @@ class RelationListConverter extends BaseRelationListConverter
         $dom = new DOMDocument('1.0', 'utf-8');
         if ($dom->loadXML($value->dataText) === true) {
             foreach ($dom->getElementsByTagName('relation-item') as $relationItem) {
-                /** @var \DOMElement $relationItem */
+                /* @var \DOMElement $relationItem */
                 $priorityByContentId[$relationItem->getAttribute('contentobject-id')] =
                     $relationItem->getAttribute('priority');
 

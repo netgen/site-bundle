@@ -3,9 +3,9 @@
 namespace Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id;
 
 use eZ\Publish\Core\MVC\Symfony\Matcher\ViewMatcherInterface;
-use Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased;
 use eZ\Publish\Core\MVC\Symfony\View\ContentValueView;
 use eZ\Publish\Core\MVC\Symfony\View\View;
+use Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased;
 
 class ContentTypeGroup extends ConfigResolverBased implements ViewMatcherInterface
 {

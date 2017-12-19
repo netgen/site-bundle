@@ -3,17 +3,17 @@
 namespace Netgen\Bundle\MoreBundle\Command;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Symfony\Component\Console\Helper\ProgressBar;
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Repository;
-use RuntimeException;
 
 class UpdatePublishDateCommand extends ContainerAwareCommand
 {
@@ -94,7 +94,7 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
         $searchResult = $searchService->findContent($query, array(), false);
 
         $totalCount = $searchResult->totalCount;
-        if ($totalCount == 0) {
+        if ($totalCount === 0) {
             $output->writeln("No content found for <comment>{$contentTypeIdentifier}</comment> content type.");
 
             return 1;

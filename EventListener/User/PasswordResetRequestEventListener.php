@@ -2,11 +2,11 @@
 
 namespace Netgen\Bundle\MoreBundle\EventListener\User;
 
-use Netgen\Bundle\MoreBundle\EventListener\UserEventListener;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use eZ\Publish\API\Repository\Values\User\User;
 use Netgen\Bundle\MoreBundle\Event\MVCEvents;
 use Netgen\Bundle\MoreBundle\Event\User\PasswordResetRequestEvent;
-use eZ\Publish\API\Repository\Values\User\User;
+use Netgen\Bundle\MoreBundle\EventListener\UserEventListener;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class PasswordResetRequestEventListener extends UserEventListener implements EventSubscriberInterface
 {

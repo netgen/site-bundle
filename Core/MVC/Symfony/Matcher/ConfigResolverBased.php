@@ -30,7 +30,7 @@ abstract class ConfigResolverBased extends MultipleValued
             $configValue = $this->configResolver->getParameter($config, $namespace);
             $configValue = !is_array($configValue) ? array($configValue) : $configValue;
 
-            return in_array($value, $configValue);
+            return in_array($value, $configValue, true);
         }
 
         return false;

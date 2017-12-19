@@ -2,8 +2,8 @@
 
 namespace Netgen\Bundle\MoreBundle\EventListener;
 
-use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
+use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;

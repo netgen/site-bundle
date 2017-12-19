@@ -27,6 +27,7 @@ services:
         arguments:
             - "@knp_menu.menu_provider"
             - "@knp_menu.renderer_provider"
+            - "@ezplatform.http_cache.tag_handler"
 
     ngmore.controller.parts:
         class: Netgen\Bundle\MoreBundle\Controller\PartsController

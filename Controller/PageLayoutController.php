@@ -2,6 +2,7 @@
 
 namespace Netgen\Bundle\MoreBundle\Controller;
 
+use EzSystems\PlatformHttpCacheBundle\Handler\TagHandlerInterface;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Provider\MenuProviderInterface;
 use Knp\Menu\Renderer\RendererProviderInterface;
@@ -22,15 +23,18 @@ class PageLayoutController extends Controller
     protected $menuRenderer;
 
     /**
-     * Constructor.
-     *
-     * @param \Knp\Menu\Provider\MenuProviderInterface $menuProvider
-     * @param \Knp\Menu\Renderer\RendererProviderInterface $menuRenderer
+     * @var \EzSystems\PlatformHttpCacheBundle\Handler\TagHandlerInterface
      */
-    public function __construct(MenuProviderInterface $menuProvider, RendererProviderInterface $menuRenderer)
-    {
+    protected $tagHandler;
+
+    public function __construct(
+        MenuProviderInterface $menuProvider,
+        RendererProviderInterface $menuRenderer,
+        TagHandlerInterface $tagHandler
+    ) {
         $this->menuProvider = $menuProvider;
         $this->menuRenderer = $menuRenderer;
+        $this->tagHandler = $tagHandler;
     }
 
     /**
@@ -75,7 +79,7 @@ class PageLayoutController extends Controller
 
         $menuLocationId = $menu->getAttribute('location-id');
         if (!empty($menuLocationId)) {
-            $response->headers->set('X-Location-Id', $menuLocationId);
+            $this->tagHandler->addTagHeaders($response, array('location-' . $menuLocationId));
         }
 
         $this->processCacheSettings($request, $response);

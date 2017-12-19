@@ -14,14 +14,14 @@
         "netgen/siteaccess-routes-bundle": "^1.1",
         "netgen/metadata-bundle": "^1.0",
         "netgen/content-type-list-bundle": "^1.3",
-        "netgen/enhanced-selection-bundle": "^3.0",
+        "netgen/enhanced-selection-bundle": "^3.1",
         "netgen/birthday-bundle": "^1.3",
         "netgen/open-graph-bundle": "^1.2",
         "netgen/tagsbundle": "^3.2",
         "twig/twig": "^1.35|^2.4.4",
         "twig/extensions": "^1.5",
-        "doctrine/common": "^2.5",
-        "doctrine/orm": "^2.4",
+        "doctrine/common": "^2.8",
+        "doctrine/orm": "^2.5",
         "knplabs/knp-menu-bundle": "^2.2"
     },
     "conflict": {

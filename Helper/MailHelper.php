@@ -127,8 +127,7 @@ class MailHelper
 
         $subject = $this->translator->trans($subject, array(), 'ngmore_mail');
 
-        /** @var \Swift_Mime_Message $message */
-        $message = Swift_Message::newInstance();
+        $message = new Swift_Message();
 
         $message
             ->setTo($receivers)

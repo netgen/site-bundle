@@ -105,6 +105,7 @@ class RelationListMenuBuilder
         }
 
         $menu->setAttribute('location-id', $content->mainLocationId);
+        $menu->setExtra('ezlocation', $content->mainLocation);
         $this->generateFromRelationList($menu, $content, $fieldDefIdentifier);
 
         return $menu;
@@ -252,6 +253,7 @@ class RelationListMenuBuilder
                 'linkAttributes' => $linkAttributes,
                 'extras' => array(
                     'translation_domain' => false,
+                    'ezlocation' => $location,
                 ),
             )
         );
@@ -351,6 +353,7 @@ class RelationListMenuBuilder
                 'linkAttributes' => $linkAttributes,
                 'extras' => array(
                     'translation_domain' => false,
+                    'ezlocation' => $location,
                 ),
             )
         );
@@ -455,6 +458,7 @@ class RelationListMenuBuilder
                     ),
                     'extras' => array(
                         'translation_domain' => false,
+                        'ezlocation' => $location,
                     ),
                 )
             );

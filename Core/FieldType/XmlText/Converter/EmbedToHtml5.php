@@ -8,6 +8,8 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5 as BaseEmbedToHtml5;
+use Netgen\EzPlatformSiteApi\Core\Traits\SiteAwareTrait;
+use Psr\Log\NullLogger;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
 /**
@@ -15,6 +17,8 @@ use Symfony\Component\HttpKernel\Controller\ControllerReference;
  */
 class EmbedToHtml5 extends BaseEmbedToHtml5
 {
+    use SiteAwareTrait;
+
     /**
      * Process embed tags for a single tag type (embed or embed-inline).
      *
@@ -25,6 +29,9 @@ class EmbedToHtml5 extends BaseEmbedToHtml5
      */
     protected function processTag(DOMDocument $xmlDoc, $tagName)
     {
+        $this->logger = $this->logger ?: new NullLogger();
+        $permissionResolver = $this->repository->getPermissionResolver();
+
         /** @var $embed \DOMElement */
         foreach ($xmlDoc->getElementsByTagName($tagName) as $embed) {
             if (!$view = $embed->getAttribute('view')) {
@@ -34,26 +41,29 @@ class EmbedToHtml5 extends BaseEmbedToHtml5
             $embedContent = null;
             $parameters = $this->getParameters($embed);
 
-            if ($contentId = $embed->getAttribute('object_id')) {
+            $contentId = $embed->getAttribute('object_id');
+            $locationId = $embed->getAttribute('node_id');
+
+            if ($contentId) {
                 try {
-                    /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
+                    /** @var \Netgen\EzPlatformSiteApi\API\Values\Content $content */
                     $content = $this->repository->sudo(
                         function (Repository $repository) use ($contentId) {
-                            return $repository->getContentService()->loadContent($contentId);
+                            return $this->site->getLoadService()->loadContent($contentId);
                         }
                     );
 
                     if (
-                        !$this->repository->canUser('content', 'read', $content)
-                        && !$this->repository->canUser('content', 'view_embed', $content)
+                        !$permissionResolver->canUser('content', 'read', $content->innerContent)
+                        && !$permissionResolver->canUser('content', 'view_embed', $content->innerContent)
                     ) {
                         throw new UnauthorizedException('content', 'read', array('contentId' => $contentId));
                     }
 
                     // Check published status of the Content
                     if (
-                        $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
-                        && !$this->repository->canUser('content', 'versionread', $content)
+                        $content->versionInfo->status !== APIVersionInfo::STATUS_PUBLISHED
+                        && !$permissionResolver->canUser('content', 'versionread', $content->innerContent)
                     ) {
                         throw new UnauthorizedException('content', 'versionread', array('contentId' => $contentId));
                     }
@@ -62,7 +72,7 @@ class EmbedToHtml5 extends BaseEmbedToHtml5
                         new ControllerReference(
                             'ng_content:embedAction',
                             array(
-                                'contentId' => $contentId,
+                                'content' => $content,
                                 'viewType' => $view,
                                 'layout' => false,
                                 'params' => $parameters,
@@ -70,25 +80,22 @@ class EmbedToHtml5 extends BaseEmbedToHtml5
                         )
                     );
                 } catch (APINotFoundException $e) {
-                    if ($this->logger) {
-                        $this->logger->error(
-                            'While generating embed for xmltext, could not locate ' .
-                            'Content object with ID ' . $contentId
-                        );
-                    }
+                    $this->logger->error(
+                        sprintf('While generating embed for xmltext, could not locate content with ID %d', $contentId)
+                    );
                 }
-            } elseif ($locationId = $embed->getAttribute('node_id')) {
+            } elseif ($locationId) {
                 try {
-                    /** @var \eZ\Publish\API\Repository\Values\Content\Location $location */
+                    /** @var \Netgen\EzPlatformSiteApi\API\Values\Location $location */
                     $location = $this->repository->sudo(
                         function (Repository $repository) use ($locationId) {
-                            return $repository->getLocationService()->loadLocation($locationId);
+                            return $this->site->getLoadService()->loadLocation($locationId);
                         }
                     );
 
                     if (
-                        !$this->repository->canUser('content', 'read', $location->getContentInfo(), $location)
-                        && !$this->repository->canUser('content', 'view_embed', $location->getContentInfo(), $location)
+                        !$permissionResolver->canUser('content', 'read', $location->contentInfo->innerContentInfo, $location->innerLocation)
+                        && !$permissionResolver->canUser('content', 'view_embed', $location->contentInfo->innerContentInfo, $location->innerLocation)
                     ) {
                         throw new UnauthorizedException('content', 'read', array('locationId' => $location->id));
                     }
@@ -97,8 +104,8 @@ class EmbedToHtml5 extends BaseEmbedToHtml5
                         new ControllerReference(
                             'ng_content:embedAction',
                             array(
-                                'contentId' => $location->getContentInfo()->id,
-                                'locationId' => $location->id,
+                                'content' => $location->content,
+                                'location' => $location,
                                 'viewType' => $view,
                                 'layout' => false,
                                 'params' => $parameters,
@@ -106,12 +113,9 @@ class EmbedToHtml5 extends BaseEmbedToHtml5
                         )
                     );
                 } catch (APINotFoundException $e) {
-                    if ($this->logger) {
-                        $this->logger->error(
-                            'While generating embed for xmltext, could not locate ' .
-                            'Location with ID ' . $locationId
-                        );
-                    }
+                    $this->logger->error(
+                        sprintf('While generating embed for xmltext, could not locate location with ID %d', $locationId)
+                    );
                 }
             }
 

@@ -5,6 +5,7 @@ namespace Netgen\Bundle\MoreBundle\DependencyInjection\Compiler;
 use Netgen\Bundle\MoreBundle\Core\FieldType\XmlText\Converter\EmbedToHtml5;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 class XmlTextFieldTypePass implements CompilerPassInterface
 {
@@ -18,7 +19,8 @@ class XmlTextFieldTypePass implements CompilerPassInterface
         if ($container->has('ezpublish.fieldType.ezxmltext.converter.embedToHtml5')) {
             $container
                 ->findDefinition('ezpublish.fieldType.ezxmltext.converter.embedToHtml5')
-                ->setClass(EmbedToHtml5::class);
+                ->setClass(EmbedToHtml5::class)
+                ->addMethodCall('setSite', array(new Reference('netgen.ezplatform_site.site')));
         }
     }
 }

@@ -4,7 +4,6 @@ services:
         public: true
         parent: netgen.ezplatform_site.controller.base
         arguments:
-            - "@ngmore.helper.sort_clause_helper"
             - "@router"
 
     ngmore.controller.embed_view:
@@ -33,8 +32,6 @@ services:
         class: Netgen\Bundle\MoreBundle\Controller\PartsController
         public: true
         parent: netgen.ezplatform_site.controller.base
-        arguments:
-            - "@ngmore.helper.sort_clause_helper"
 
     ngmore.controller.download:
         class: Netgen\Bundle\MoreBundle\Controller\DownloadController
@@ -75,10 +72,6 @@ services:
         arguments:
             - "@netgen.ezplatform_site.load_service"
             - "@ezpublish.config.resolver"
-
-    ngmore.helper.sort_clause_helper:
-        class: Netgen\Bundle\MoreBundle\Helper\SortClauseHelper
-        public: false
 
     ngmore.helper.mail_helper:
         class: Netgen\Bundle\MoreBundle\Helper\MailHelper

@@ -8,7 +8,6 @@ use eZ\Publish\Core\FieldType\Relation\Value as RelationValue;
 use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
 use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
-use Netgen\Bundle\MoreBundle\Helper\SortClauseHelper;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\LocationSearchFilterAdapter;
 use Pagerfanta\Pagerfanta;
@@ -20,11 +19,6 @@ use Symfony\Component\Routing\RouterInterface;
 class FullViewController extends Controller
 {
     /**
-     * @var \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper
-     */
-    protected $sortClauseHelper;
-
-    /**
      * @var \Symfony\Component\Routing\RouterInterface
      */
     protected $router;
@@ -32,12 +26,10 @@ class FullViewController extends Controller
     /**
      * Constructor.
      *
-     * @param \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper $sortClauseHelper
      * @param \Symfony\Component\Routing\RouterInterface $router
      */
-    public function __construct(SortClauseHelper $sortClauseHelper, RouterInterface $router)
+    public function __construct(RouterInterface $router)
     {
-        $this->sortClauseHelper = $sortClauseHelper;
         $this->router = $router;
     }
 
@@ -85,13 +77,7 @@ class FullViewController extends Controller
 
         $query = new LocationQuery();
         $query->filter = new Criterion\LogicalAnd($criteria);
-
-        $query->sortClauses = array(
-            $this->sortClauseHelper->getSortClauseBySortField(
-                $location->sortField,
-                $location->sortOrder
-            ),
-        );
+        $query->sortClauses = $location->innerLocation->getSortClauses();
 
         $pager = new Pagerfanta(
             new LocationSearchFilterAdapter(

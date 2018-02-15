@@ -11,7 +11,6 @@ use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value as RelationListValue;
 use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;
-use Netgen\Bundle\MoreBundle\Helper\SortClauseHelper;
 use Netgen\EzPlatformSiteApi\API\FilterService;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\EzPlatformSiteApi\API\Values\Content;
@@ -43,11 +42,6 @@ class RelationListMenuBuilder
     protected $siteInfoHelper;
 
     /**
-     * @var \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper
-     */
-    protected $sortClauseHelper;
-
-    /**
      * @var \Symfony\Component\Routing\RouterInterface
      */
     protected $router;
@@ -64,7 +58,6 @@ class RelationListMenuBuilder
      * @param \Netgen\EzPlatformSiteApi\API\LoadService $loadService
      * @param \Netgen\EzPlatformSiteApi\API\FilterService $filterService
      * @param \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper $siteInfoHelper
-     * @param \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper $sortClauseHelper
      * @param \Symfony\Component\Routing\RouterInterface $router
      * @param \Psr\Log\LoggerInterface $logger
      */
@@ -73,7 +66,6 @@ class RelationListMenuBuilder
         LoadService $loadService,
         FilterService $filterService,
         SiteInfoHelper $siteInfoHelper,
-        SortClauseHelper $sortClauseHelper,
         RouterInterface $router,
         LoggerInterface $logger = null
     ) {
@@ -81,7 +73,6 @@ class RelationListMenuBuilder
         $this->loadService = $loadService;
         $this->filterService = $filterService;
         $this->siteInfoHelper = $siteInfoHelper;
-        $this->sortClauseHelper = $sortClauseHelper;
         $this->router = $router;
         $this->logger = $logger ?: new NullLogger();
     }
@@ -399,6 +390,7 @@ class RelationListMenuBuilder
 
                     $query = new LocationQuery();
                     $query->filter = new Criterion\LogicalAnd($criteria);
+                    $query->sortClauses = $parentLocation->innerLocation->getSortClauses();
 
                     if (!$content->getField('limit')->isEmpty()) {
                         /** @var \eZ\Publish\Core\FieldType\Integer\Value $limit */
@@ -407,13 +399,6 @@ class RelationListMenuBuilder
                             $query->limit = $limit->value;
                         }
                     }
-
-                    $query->sortClauses = array(
-                        $this->sortClauseHelper->getSortClauseBySortField(
-                            $parentLocation->sortField,
-                            $parentLocation->sortOrder
-                        ),
-                    );
 
                     $searchResult = $this->filterService->filterLocations($query);
                     $foundLocations = array_map(

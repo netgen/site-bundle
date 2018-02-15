@@ -7,7 +7,6 @@ services:
             - "@netgen.ezplatform_site.load_service"
             - "@netgen.ezplatform_site.filter_service"
             - "@ngmore.helper.site_info_helper"
-            - "@ngmore.helper.sort_clause_helper"
             - "@router"
             - "@?logger"
         tags:

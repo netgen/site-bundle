@@ -4,25 +4,9 @@ namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
-use Netgen\Bundle\MoreBundle\Helper\SortClauseHelper;
 
 class PartsController extends Controller
 {
-    /**
-     * @var \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper
-     */
-    protected $sortClauseHelper;
-
-    /**
-     * Constructor.
-     *
-     * @param \Netgen\Bundle\MoreBundle\Helper\SortClauseHelper $sortClauseHelper
-     */
-    public function __construct(SortClauseHelper $sortClauseHelper)
-    {
-        $this->sortClauseHelper = $sortClauseHelper;
-    }
-
     /**
      * Action for rendering related items.
      *

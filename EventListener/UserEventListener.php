@@ -75,11 +75,9 @@ abstract class UserEventListener
      */
     protected function getUserName(User $user)
     {
-        $loadService = $this->loadService;
-
         $contentInfo = $this->repository->sudo(
-            function (Repository $repository) use ($loadService, $user) {
-                return $loadService->loadContent($user->id)->contentInfo;
+            function (Repository $repository) use ($user) {
+                return $this->loadService->loadContent($user->id)->contentInfo;
             }
         );
 

@@ -2,10 +2,10 @@
 
 namespace Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id;
 
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use Netgen\EzPlatformSiteApi\API\Values\Location as APILocation;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ViewMatcherInterface;
-use eZ\Publish\Core\MVC\Symfony\View\LocationValueView;
+use Netgen\Bundle\EzPlatformSiteApiBundle\View\LocationValueView;
 use eZ\Publish\Core\MVC\Symfony\View\View;
 use Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased;
 
@@ -24,18 +24,17 @@ class ParentContentType extends ConfigResolverBased implements ViewMatcherInterf
             return false;
         }
 
-        $location = $view->getLocation();
+        $location = $view->getSiteLocation();
         if (!$location instanceof APILocation) {
             return false;
         }
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Location $parent */
-        $parent = $this->repository->sudo(
-            function (Repository $repository) use ($location) {
-                return $repository->getLocationService()->loadLocation($location->parentLocationId);
-            }
-        );
+        try {
+            $parent = $location->parent;
+        } catch (NotFoundException $e) {
+            return false;
+        }
 
-        return $this->doMatch($parent->getContentInfo()->contentTypeId);
+        return $this->doMatch($parent->contentInfo->contentTypeId);
     }
 }

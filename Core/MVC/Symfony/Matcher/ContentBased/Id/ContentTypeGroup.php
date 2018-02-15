@@ -3,7 +3,7 @@
 namespace Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id;
 
 use eZ\Publish\Core\MVC\Symfony\Matcher\ViewMatcherInterface;
-use eZ\Publish\Core\MVC\Symfony\View\ContentValueView;
+use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentValueView;
 use eZ\Publish\Core\MVC\Symfony\View\View;
 use Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased;
 
@@ -22,9 +22,9 @@ class ContentTypeGroup extends ConfigResolverBased implements ViewMatcherInterfa
             return false;
         }
 
-        $contentTypeGroups = $this->repository
-            ->getContentTypeService()
-            ->loadContentType($view->getContent()->contentInfo->contentTypeId)
+        $contentTypeGroups = $view->getSiteContent()
+            ->contentInfo
+            ->innerContentType
             ->getContentTypeGroups();
 
         foreach ($contentTypeGroups as $group) {

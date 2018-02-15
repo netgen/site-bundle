@@ -7,45 +7,45 @@ services:
 
     ngmore.matcher.content.content_id:
         class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Content
-        public: false
+        public: true
         parent: ngmore.matcher.config_resolver
 
     ngmore.matcher.content.content_type_id:
         class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentType
-        public: false
+        public: true
         parent: ngmore.matcher.config_resolver
 
     ngmore.matcher.content.content_type_group_id:
         class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentTypeGroup
-        public: false
+        public: true
         parent: ngmore.matcher.config_resolver
 
     ngmore.matcher.content.location_id:
         class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Location
-        public: false
+        public: true
         parent: ngmore.matcher.config_resolver
 
     ngmore.matcher.content.parent_content_type_id:
         class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentContentType
-        public: false
+        public: true
         parent: ngmore.matcher.config_resolver
 
     ngmore.matcher.content.parent_location_id:
         class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentLocation
-        public: false
+        public: true
         parent: ngmore.matcher.config_resolver
 
     ngmore.matcher.content.remote_id:
         class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Remote
-        public: false
+        public: true
         parent: ngmore.matcher.config_resolver
 
     ngmore.matcher.content.location_remote_id:
         class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\LocationRemote
-        public: false
+        public: true
         parent: ngmore.matcher.config_resolver
 
     ngmore.matcher.content.section_id:
         class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Section
-        public: false
+        public: true
         parent: ngmore.matcher.config_resolver

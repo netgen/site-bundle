@@ -2,9 +2,7 @@
 
 namespace Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher;
 
-use eZ\Publish\Core\MVC\RepositoryAware;
-
-abstract class MultipleValued extends RepositoryAware
+abstract class MultipleValued
 {
     /**
      * @var array Values to test against

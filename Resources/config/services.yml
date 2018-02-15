@@ -43,11 +43,6 @@ services:
             - "@translator"
             - "@event_dispatcher"
 
-    ngmore.controller.sitemap:
-        class: Netgen\Bundle\MoreBundle\Controller\SitemapController
-        public: true
-        parent: netgen.ezplatform_site.controller.base
-
     ngmore.controller.user:
         class: Netgen\Bundle\MoreBundle\Controller\UserController
         public: true

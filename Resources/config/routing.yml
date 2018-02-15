@@ -1,9 +1,3 @@
-ngmore_sitemap:
-    path: /sitemap
-    defaults:
-        _controller: "ngmore.controller.sitemap:viewSitemap"
-    methods: [GET]
-
 ngmore_download:
     path: /content/download/{contentId}/{fieldId}/{isInline}
     defaults:

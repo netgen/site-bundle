@@ -111,7 +111,6 @@ services:
         class: Netgen\Bundle\MoreBundle\Routing\SiteContentUrlAliasRouter
         public: false
         arguments:
-            - "@netgen.ezplatform_site.load_service"
             - "@ezpublish.urlalias_generator"
             - "@?router.request_context"
         tags:
@@ -121,7 +120,6 @@ services:
         class: Netgen\Bundle\MoreBundle\Routing\SiteLocationUrlAliasRouter
         public: false
         arguments:
-            - "@netgen.ezplatform_site.load_service"
             - "@ezpublish.urlalias_generator"
             - "@?router.request_context"
         tags:

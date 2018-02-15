@@ -64,7 +64,7 @@ class EzLinkDirectDownload implements Converter
             if ($link->hasAttribute('object_id')) {
                 try {
                     $content = $this->loadService->loadContent($link->getAttribute('object_id'));
-                    $location = $this->loadService->loadLocation($content->mainLocationId);
+                    $location = $content->mainLocation;
                 } catch (NotFoundException $e) {
                     $this->logger->warning(
                         'While generating links for xmltext, could not locate ' .
@@ -81,7 +81,7 @@ class EzLinkDirectDownload implements Converter
             if ($link->hasAttribute('node_id')) {
                 try {
                     $location = $this->loadService->loadLocation($link->getAttribute('node_id'));
-                    $content = $this->loadService->loadContent($location->contentId);
+                    $content = $location->content;
                 } catch (NotFoundException $e) {
                     $this->logger->warning(
                         'While generating links for xmltext, could not locate ' .
@@ -96,7 +96,6 @@ class EzLinkDirectDownload implements Converter
             }
 
             if ($content !== null) {
-                $content = $this->loadService->loadContent($location->contentId);
                 if ($content->hasField('file')) {
                     $field = $content->getField('file');
                     if (!$field->isEmpty()) {

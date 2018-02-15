@@ -157,7 +157,7 @@ class RelationListMenuBuilder
      */
     protected function generateFromNgShortcut(ItemInterface $menuItem, Location $location)
     {
-        $content = $this->loadService->loadContent($location->contentId);
+        $content = $location->content;
 
         $uri = false;
         $menuItemId = $label = $content->name;
@@ -260,7 +260,7 @@ class RelationListMenuBuilder
      */
     protected function generateFromNgMenuItem(ItemInterface $menuItem, Location $location)
     {
-        $content = $this->loadService->loadContent($location->contentId);
+        $content = $location->content;
 
         $uri = false;
         $menuItemId = $label = $content->name;
@@ -361,7 +361,7 @@ class RelationListMenuBuilder
                 $destinationContent = $this->loadService->loadContent($fieldValue->destinationContentId);
 
                 if ($destinationContent->contentInfo->published) {
-                    $parentLocation = $this->loadService->loadLocation($destinationContent->mainLocationId);
+                    $parentLocation = $destinationContent->mainLocation;
 
                     if ($content->getField('item_url')->isEmpty() && $content->getField('item_object')->isEmpty()) {
                         $childItem->setName($parentLocation->id);

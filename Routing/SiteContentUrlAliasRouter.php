@@ -4,7 +4,6 @@ namespace Netgen\Bundle\MoreBundle\Routing;
 
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use LogicException;
-use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Netgen\EzPlatformSiteApi\API\Values\ContentInfo;
 use RuntimeException;
@@ -21,11 +20,6 @@ use Symfony\Component\Routing\RouteCollection;
 class SiteContentUrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 {
     /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
-
-    /**
      * @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator
      */
     protected $generator;
@@ -38,16 +32,11 @@ class SiteContentUrlAliasRouter implements ChainedRouterInterface, RequestMatche
     /**
      * Constructor.
      *
-     * @param \Netgen\EzPlatformSiteApi\API\LoadService $loadService
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator $generator
      * @param \Symfony\Component\Routing\RequestContext $requestContext
      */
-    public function __construct(
-        LoadService $loadService,
-        UrlAliasGenerator $generator,
-        RequestContext $requestContext
-    ) {
-        $this->loadService = $loadService;
+    public function __construct(UrlAliasGenerator $generator, RequestContext $requestContext)
+    {
         $this->generator = $generator;
         $this->requestContext = $requestContext ?: new RequestContext();
     }
@@ -94,10 +83,8 @@ class SiteContentUrlAliasRouter implements ChainedRouterInterface, RequestMatche
             throw new LogicException('Cannot generate an UrlAlias route for content without main location.');
         }
 
-        $mainLocation = $this->loadService->loadLocation($name->mainLocationId);
-
         return $this->generator->generate(
-            $mainLocation->innerLocation,
+            $name->mainLocation->innerLocation,
             $parameters,
             $referenceType
         );

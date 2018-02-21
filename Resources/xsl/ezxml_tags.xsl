@@ -254,15 +254,15 @@
         </xsl:variable>
 
         <script type="text/javascript">
-            var mapOptions = {
-                containerId: "<xsl:value-of select="$container_id"/>",
-                latitude: <xsl:value-of select="$latitude"/>,
-                longitude: <xsl:value-of select="$longitude"/>,
-                zoom: <xsl:value-of select="$zoom"/>,
-                mapType: "<xsl:value-of select="$map_type"/>"
-            }
-
-            google.maps.event.addDomListener(window, 'load', function(){ initializeGoogleMaps( mapOptions ); });
+            google.maps.event.addDomListener(window, 'load', function(){
+                initializeGoogleMaps({
+                    containerId: "<xsl:value-of select="$container_id"/>",
+                    latitude: <xsl:value-of select="$latitude"/>,
+                    longitude: <xsl:value-of select="$longitude"/>,
+                    zoom: <xsl:value-of select="$zoom"/>,
+                    mapType: "<xsl:value-of select="$map_type"/>"
+                });
+            });
         </script>
 
         <div id="map-canvas-{$container_id}" class="google-maps" style="height:{$map_height}px; width:100%;"></div>

@@ -1,14 +1,25 @@
 {% include '@NetgenMore/parts/google_maps_init.html.twig' %}
-<script type="text/javascript">
-    var mapOptions = {
-        {% if container_id is defined and container_id is not empty %}containerId: "{{ container_id|raw|escape( 'js' ) }}",{% endif %}
-        {% if latitude is defined and latitude is not empty %}latitude: {{ latitude|raw|escape( 'js' ) }},{% endif %}
-        {% if longitude is defined and longitude is not empty %}longitude: {{ longitude|raw|escape( 'js' ) }},{% endif %}
-        {% if zoom is defined and zoom is not empty %}zoom: {{ zoom|raw|escape( 'js' ) }},{% endif %}
-        {% if map_type is defined and map_type is not empty %}mapType: "{{ map_type|raw|escape( 'js' ) }}"{% endif %}
-    };
 
-    google.maps.event.addDomListener(window, 'load', function(){ initializeGoogleMaps( mapOptions ); });
+{% set container_id = container_id|default(0) %}
+{% set latitude = latitude|default(ezpublish.configResolver.parameter('google_maps.latitude', 'ngmore')) %}
+{% set longitude = longitude|default(ezpublish.configResolver.parameter('google_maps.longitude', 'ngmore')) %}
+{% set zoom = zoom|default(ezpublish.configResolver.parameter('google_maps.zoom', 'ngmore')) %}
+{% set map_type = map_type|default(ezpublish.configResolver.parameter('google_maps.map_type', 'ngmore')) %}
+
+<script type="text/javascript">
+    google.maps.event.addDomListener(window, 'load', function(){
+        initializeGoogleMaps({
+            containerId: "{{ container_id|raw|escape('js') }}",
+            latitude: {{ latitude|raw|escape('js') }},
+            longitude: {{ longitude|raw|escape('js') }},
+            zoom: {{ zoom|raw|escape('js') }},
+            mapType: "{{ map_type|raw|escape('js') }}"
+        });
+    });
 </script>
 
-<div id="map-canvas-{{ container_id|default( 0 )|raw|escape( 'js' ) }}" class="google-maps" style="height:{{ map_height|default( 560 )|raw|escape( 'js' ) }}px; width:100%;"></div>
+<div
+    id="map-canvas-{{ container_id|raw|escape( 'js' ) }}"
+    class="google-maps"
+    style="height:{{ map_height|default(560)|raw|escape('js') }}px; width:100%;">
+</div>

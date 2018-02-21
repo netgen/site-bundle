@@ -34,13 +34,13 @@ class NetgenMoreRuntime
      * Returns the path for specified location ID.
      *
      * @param mixed $locationId
-     * @param bool $includeAllContentTypes
+     * @param array $options
      *
      * @return array
      */
-    public function getLocationPath($locationId, $includeAllContentTypes = false)
+    public function getLocationPath($locationId, array $options = array())
     {
-        return $this->pathHelper->getPath($locationId, !$includeAllContentTypes);
+        return $this->pathHelper->getPath($locationId, $options);
     }
 
     /**

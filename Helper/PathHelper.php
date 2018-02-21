@@ -5,6 +5,8 @@ namespace Netgen\Bundle\MoreBundle\Helper;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Netgen\EzPlatformSiteApi\API\LoadService;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 class PathHelper
@@ -41,20 +43,35 @@ class PathHelper
         $this->router = $router;
     }
 
+    private function configureOptions(OptionsResolver $optionsResolver)
+    {
+        $optionsResolver->setRequired('use_all_content_types');
+        $optionsResolver->setAllowedTypes('use_all_content_types', 'bool');
+        $optionsResolver->setDefault('use_all_content_types', false);
+
+        $optionsResolver->setRequired('absolute_url');
+        $optionsResolver->setAllowedTypes('absolute_url', 'bool');
+        $optionsResolver->setDefault('absolute_url', false);
+    }
+
     /**
      * Returns the path array for location ID.
      *
      * @param mixed $locationId
-     * @param bool $doExcludeContentTypes
+     * @param array $options
      *
      * @return array
      */
-    public function getPath($locationId, $doExcludeContentTypes = false)
+    public function getPath($locationId, array $options = array())
     {
+        $optionsResolver = new OptionsResolver();
+        $this->configureOptions($optionsResolver);
+        $options = $optionsResolver->resolve($options);
+
         $excludedContentTypes = array();
         if (
             $this->configResolver->hasParameter('path_helper.excluded_content_types', 'ngmore') &&
-            $doExcludeContentTypes
+            !$options['use_all_content_types']
         ) {
             $excludedContentTypes = $this->configResolver->getParameter('path_helper.excluded_content_types', 'ngmore');
             if (!is_array($excludedContentTypes)) {
@@ -91,7 +108,13 @@ class PathHelper
                 $pathArray[] = array(
                     'text' => $location->contentInfo->name,
                     'url' => $location->id !== (int) $locationId ?
-                        $this->router->generate($location) :
+                        $this->router->generate(
+                            $location,
+                            array(),
+                            $options['absolute_url'] ?
+                                UrlGeneratorInterface::ABSOLUTE_URL :
+                                UrlGeneratorInterface::ABSOLUTE_PATH
+                        ) :
                         false,
                     'location' => $location,
                 );

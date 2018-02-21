@@ -4,17 +4,3 @@ services:
 
     ezpublish.image_alias.variation_path_generator:
         alias: ezpublish.image_alias.variation_path_generator.original_directory
-
-    # Implemented to avoid issues with config resolver on Symfony 2.8
-    # See https://github.com/ezsystems/ezpublish-kernel/pull/1666
-    ezpublish.cache_warmer.config_resolver_cleanup:
-        class: Netgen\Bundle\MoreBundle\Cache\Warmer\ConfigResolverCleanup
-        public: false
-        calls:
-            - [setContainer, ["@service_container"]]
-        tags:
-            - { name: kernel.cache_warmer }
-
-    # Disable original Twig cache warmer to avoid issues on Symfony 2.8
-    twig.template_cache_warmer:
-        synthetic: true

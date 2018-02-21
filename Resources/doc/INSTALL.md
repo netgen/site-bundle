@@ -4,7 +4,7 @@ Netgen More Bundle installation instructions
 Requirements
 ------------
 
-* eZ Platform 1.0+
+* eZ Platform 2.0+
 
 Installation steps
 ------------------

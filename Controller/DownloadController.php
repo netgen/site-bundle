@@ -83,7 +83,7 @@ class DownloadController extends Controller
 
         if (!$content->hasFieldById($fieldId) || $content->getFieldById($fieldId)->isEmpty()) {
             throw new NotFoundHttpException(
-                $this->translator->trans('ngmore.download.file_not_found')
+                $this->translator->trans('download.file_not_found', array(), 'ngmore')
             );
         }
 
@@ -97,7 +97,7 @@ class DownloadController extends Controller
             $binaryFile = $this->ioImageService->loadBinaryFile($binaryFieldValue->id);
         } else {
             throw new NotFoundHttpException(
-                $this->translator->trans('ngmore.download.file_not_found')
+                $this->translator->trans('download.file_not_found', array(), 'ngmore')
             );
         }
 

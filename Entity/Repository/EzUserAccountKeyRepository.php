@@ -18,11 +18,17 @@ class EzUserAccountKeyRepository extends EntityRepository
     {
         $this->removeByUserId($userId);
 
-        $hash = md5(
-            $userId . ':' . microtime() . ':' .
-            (function_exists('openssl_random_pseudo_bytes') ?
-                openssl_random_pseudo_bytes(32) : mt_rand())
-        );
+        $randomBytes = false;
+
+        if (function_exists('openssl_random_pseudo_bytes')) {
+            $randomBytes = openssl_random_pseudo_bytes(32);
+        }
+
+        if ($randomBytes === false) {
+            $randomBytes = mt_rand();
+        }
+
+        $hash = md5($userId . ':' . microtime() . ':' . $randomBytes);
 
         $userAccount = new EzUserAccountKey();
         $userAccount->setHash($hash);

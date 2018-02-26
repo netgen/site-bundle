@@ -42,21 +42,16 @@ class PageLayoutController extends Controller
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param string $menuName
-     * @param mixed $activeItemId
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function menu(Request $request, $menuName, $activeItemId)
+    public function menu(Request $request, $menuName)
     {
         $requestAttributes = $request->attributes;
 
         $menu = $this->menuProvider->get($menuName);
 
         $menu->setChildrenAttribute('class', $requestAttributes->get('ulClass') ?: 'nav navbar-nav');
-
-        if (!empty($menu[$activeItemId]) && $menu[$activeItemId] instanceof ItemInterface) {
-            $menu[$activeItemId]->setCurrent(true);
-        }
 
         $menuOptions = array(
             'firstClass' => $requestAttributes->get('firstClass') ?: 'firstli',

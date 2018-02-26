@@ -10,6 +10,14 @@ services:
         tags:
             - { name: monolog.logger, channel: ngmore }
 
+    ngmore.menu.voter.location_path:
+        class: Netgen\Bundle\MoreBundle\Menu\Voter\LocationPathVoter
+        public: false
+        arguments:
+            - "@request_stack"
+        tags:
+            - { name: knp_menu.voter }
+
     ngmore.menu.factory.location:
         class: Netgen\Bundle\MoreBundle\Menu\Factory\LocationFactory
         public: false

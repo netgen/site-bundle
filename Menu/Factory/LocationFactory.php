@@ -37,12 +37,12 @@ class LocationFactory implements FactoryInterface
             return $menuItem;
         }
 
-        $extension = $this->getExtension($options['ezlocation']);
-        $extension->buildItem($menuItem, $options['ezlocation']);
-
         $menuItem
             ->setExtra('translation_domain', false)
             ->setExtra('ezlocation', $options['ezlocation']);
+
+        $extension = $this->getExtension($options['ezlocation']);
+        $extension->buildItem($menuItem, $options['ezlocation']);
 
         return $menuItem;
     }

@@ -74,7 +74,7 @@ class MenuItemExtension implements ExtensionInterface
     protected function buildItemFromContent(ItemInterface $item, Content $content)
     {
         if (!$content->getField('item_url')->isEmpty()) {
-            $this->buildItemFromUrl($item, $content->getField('item_url')->value);
+            $this->buildItemFromUrl($item, $content->getField('item_url')->value, $content);
 
             return;
         }
@@ -108,7 +108,7 @@ class MenuItemExtension implements ExtensionInterface
         $this->buildItemFromRelatedContent($item, $content, $relatedContent);
     }
 
-    protected function buildItemFromUrl(ItemInterface $item, UrlValue $urlValue)
+    protected function buildItemFromUrl(ItemInterface $item, UrlValue $urlValue, Content $content)
     {
         $uri = $urlValue->link;
 
@@ -130,6 +130,10 @@ class MenuItemExtension implements ExtensionInterface
 
         if (!empty($urlValue->text)) {
             $item->setLinkAttribute('title', $urlValue->text);
+
+            if (!$content->getField('use_menu_item_name')->value->bool) {
+                $item->setLabel($urlValue->text);
+            }
         }
     }
 
@@ -137,15 +141,13 @@ class MenuItemExtension implements ExtensionInterface
     {
         $item->setUri($this->urlGenerator->generate($relatedContent));
         $item->setName($relatedContent->mainLocationId);
-
-        $item->setLabel(
-            $content->getField('use_menu_item_name')->value->bool ?
-                $content->name :
-                $relatedContent->name
-        );
-
+        $item->setExtra('ezlocation', $relatedContent->mainLocation);
         $item->setAttribute('id', 'menu-item-location-id-' . $relatedContent->mainLocationId);
         $item->setLinkAttribute('title', $item->getLabel());
+
+        if (!$content->getField('use_menu_item_name')->value->bool) {
+            $item->setLabel($relatedContent->name);
+        }
     }
 
     protected function buildChildItems(ItemInterface $item, Content $content)

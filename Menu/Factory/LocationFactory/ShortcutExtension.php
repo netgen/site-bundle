@@ -58,7 +58,7 @@ class ShortcutExtension implements ExtensionInterface
     protected function buildItemFromContent(ItemInterface $item, Content $content)
     {
         if (!$content->getField('url')->isEmpty()) {
-            $this->buildItemFromUrl($item, $content->getField('url')->value);
+            $this->buildItemFromUrl($item, $content->getField('url')->value, $content);
 
             return;
         }
@@ -92,7 +92,7 @@ class ShortcutExtension implements ExtensionInterface
         $this->buildItemFromRelatedContent($item, $content, $relatedContent);
     }
 
-    protected function buildItemFromUrl(ItemInterface $item, UrlValue $urlValue)
+    protected function buildItemFromUrl(ItemInterface $item, UrlValue $urlValue, Content $content)
     {
         $uri = $urlValue->link;
 
@@ -114,6 +114,10 @@ class ShortcutExtension implements ExtensionInterface
 
         if (!empty($urlValue->text)) {
             $item->setLinkAttribute('title', $urlValue->text);
+
+            if (!$content->getField('use_shortcut_name')->value->bool) {
+                $item->setLabel($urlValue->text);
+            }
         }
     }
 
@@ -121,14 +125,12 @@ class ShortcutExtension implements ExtensionInterface
     {
         $item->setUri($this->urlGenerator->generate($relatedContent) . $content->getField('internal_url_suffix')->value->text);
         $item->setName($relatedContent->mainLocationId);
-
-        $item->setLabel(
-            $content->getField('use_shortcut_name')->value->bool ?
-                $content->name :
-                $relatedContent->name
-        );
-
+        $item->setExtra('ezlocation', $relatedContent->mainLocation);
         $item->setAttribute('id', 'menu-item-location-id-' . $relatedContent->mainLocationId);
         $item->setLinkAttribute('title', $item->getLabel());
+
+        if (!$content->getField('use_shortcut_name')->value->bool) {
+            $item->setLabel($relatedContent->name);
+        }
     }
 }

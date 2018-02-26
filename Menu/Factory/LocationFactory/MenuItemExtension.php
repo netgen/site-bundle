@@ -139,7 +139,7 @@ class MenuItemExtension implements ExtensionInterface
         $item->setName($relatedContent->mainLocationId);
 
         $item->setLabel(
-            $content->getField('use_menu_name')->value->bool ?
+            $content->getField('use_menu_item_name')->value->bool ?
                 $content->name :
                 $relatedContent->name
         );

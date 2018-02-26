@@ -58,14 +58,14 @@ class MenuItemExtension implements ExtensionInterface
 
     public function buildItem(ItemInterface $item, Location $location)
     {
-        $item->setName($location->content->name);
-        $item->setLabel($location->content->name);
+        $item->setName($location->content->name)
+            ->setLabel($location->content->name);
 
         $this->buildItemFromContent($item, $location->content);
 
         if (!empty($item->getUri()) && $location->content->getField('target_blank')->value->bool) {
-            $item->setLinkAttribute('target', '_blank');
-            $item->setLinkAttribute('rel', 'noopener noreferrer');
+            $item->setLinkAttribute('target', '_blank')
+                ->setLinkAttribute('rel', 'noopener noreferrer');
         }
 
         $this->buildChildItems($item, $location->content);
@@ -125,8 +125,7 @@ class MenuItemExtension implements ExtensionInterface
             }
         }
 
-        $item->setUri($uri);
-        $item->setName($uri);
+        $item->setUri($uri)->setName($uri);
 
         if (!empty($urlValue->text)) {
             $item->setLinkAttribute('title', $urlValue->text);
@@ -139,11 +138,12 @@ class MenuItemExtension implements ExtensionInterface
 
     protected function buildItemFromRelatedContent(ItemInterface $item, Content $content, Content $relatedContent)
     {
-        $item->setUri($this->urlGenerator->generate($relatedContent));
-        $item->setName($relatedContent->mainLocationId);
-        $item->setExtra('ezlocation', $relatedContent->mainLocation);
-        $item->setAttribute('id', 'menu-item-location-id-' . $relatedContent->mainLocationId);
-        $item->setLinkAttribute('title', $item->getLabel());
+        $item
+            ->setUri($this->urlGenerator->generate($relatedContent))
+            ->setName($relatedContent->mainLocationId)
+            ->setExtra('ezlocation', $relatedContent->mainLocation)
+            ->setAttribute('id', 'menu-item-location-id-' . $relatedContent->mainLocationId)
+            ->setLinkAttribute('title', $item->getLabel());
 
         if (!$content->getField('use_menu_item_name')->value->bool) {
             $item->setLabel($relatedContent->name);

@@ -33,6 +33,6 @@ class LocationFactoryPass implements CompilerPassInterface
         krsort($extensions);
         $extensions = array_merge(...$extensions);
 
-        $factory->replaceArgument(1, $extensions);
+        $factory->replaceArgument(2, $extensions);
     }
 }

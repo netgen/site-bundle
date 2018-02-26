@@ -27,7 +27,11 @@ class LocationPathVoter implements VoterInterface
      * If the voter is not able to determine a result,
      * it should return null to let other voters do the job.
      *
-     * @param ItemInterface $item
+     * This voter specifically marks the item as current if it is in
+     * path of the currently displayed item. This takes care of marking
+     * items in menus of arbitrary depths.
+     *
+     * @param \Knp\Menu\ItemInterface $item
      *
      * @return boolean|null
      */

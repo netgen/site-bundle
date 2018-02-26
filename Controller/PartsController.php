@@ -30,7 +30,7 @@ class PartsController extends Controller
                     try {
                         if (!empty($locationId)) {
                             $location = $this->getSite()->getLoadService()->loadLocation($locationId);
-                            if (!$location->invisible) {
+                            if (!$location->invisible && $location->contentInfo->published) {
                                 $relatedItems[] = $location;
                             }
                         }
@@ -111,7 +111,7 @@ class PartsController extends Controller
                     continue;
                 }
 
-                if (!$relatedMultimediaLocation->contentInfo->published) {
+                if ($relatedMultimediaLocation->invisible || !$relatedMultimediaLocation->contentInfo->published) {
                     continue;
                 }
 

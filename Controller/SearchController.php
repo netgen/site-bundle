@@ -4,7 +4,6 @@ namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\LocationSearchHitAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;

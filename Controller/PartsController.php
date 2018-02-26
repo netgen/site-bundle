@@ -3,7 +3,6 @@
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 
 class PartsController extends Controller
 {

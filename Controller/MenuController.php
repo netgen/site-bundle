@@ -6,11 +6,10 @@ use EzSystems\PlatformHttpCacheBundle\Handler\TagHandlerInterface;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Provider\MenuProviderInterface;
 use Knp\Menu\Renderer\RendererProviderInterface;
-use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class PageLayoutController extends Controller
+class MenuController extends Controller
 {
     /**
      * @var \Knp\Menu\Provider\MenuProviderInterface
@@ -38,14 +37,14 @@ class PageLayoutController extends Controller
     }
 
     /**
-     * Returns rendered menu.
+     * Renders the menu with provided name.
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param string $menuName
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function menu(Request $request, $menuName)
+    public function renderMenu(Request $request, $menuName)
     {
         $menu = $this->menuProvider->get($menuName);
 
@@ -81,37 +80,5 @@ class PageLayoutController extends Controller
         $response->setContent($menuContent);
 
         return $response;
-    }
-
-    /**
-     * Configures the response with provided cache settings.
-     *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\HttpFoundation\Response $response
-     */
-    protected function processCacheSettings(Request $request, Response $response)
-    {
-        $cacheSettings = $request->attributes->get('cacheSettings');
-        if (!is_array($cacheSettings)) {
-            $cacheSettings = array('sharedMaxAge' => 86400);
-        }
-
-        $public = true;
-
-        if (isset($cacheSettings['sharedMaxAge'])) {
-            $response->setSharedMaxAge($cacheSettings['sharedMaxAge']);
-            if (empty($cacheSettings['sharedMaxAge'])) {
-                $public = false;
-            }
-        } elseif (isset($cacheSettings['maxAge'])) {
-            $response->setMaxAge($cacheSettings['maxAge']);
-            if (empty($cacheSettings['maxAge'])) {
-                $public = false;
-            }
-        } else {
-            $response->setSharedMaxAge(86400);
-        }
-
-        $public ? $response->setPublic() : $response->setPrivate();
     }
 }

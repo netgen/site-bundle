@@ -7,7 +7,6 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\UserService;
 use Netgen\Bundle\EzFormsBundle\Form\DataWrapper;
 use Netgen\Bundle\EzFormsBundle\Form\Type\CreateUserType;
-use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey;
 use Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
 use Netgen\Bundle\MoreBundle\Event\MVCEvents;

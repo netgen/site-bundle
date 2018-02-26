@@ -4,7 +4,6 @@ namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
-use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;

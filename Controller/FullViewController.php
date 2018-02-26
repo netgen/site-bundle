@@ -6,7 +6,6 @@ use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\FieldType\Relation\Value as RelationValue;
 use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
-use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\LocationSearchFilterAdapter;

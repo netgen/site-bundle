@@ -1,15 +1,21 @@
 services:
+    ngmore.controller.base:
+        class: Netgen\Bundle\MoreBundle\Controller\Controller
+        parent: netgen.ezplatform_site.controller.base
+        public: false
+        abstract: true
+
     ngmore.controller.full_view:
         class: Netgen\Bundle\MoreBundle\Controller\FullViewController
         public: true
-        parent: netgen.ezplatform_site.controller.base
+        parent: ngmore.controller.base
         arguments:
             - "@router"
 
     ngmore.controller.embed_view:
         class: Netgen\Bundle\MoreBundle\Controller\EmbedViewController
         public: true
-        parent: netgen.ezplatform_site.controller.base
+        parent: ngmore.controller.base
         arguments:
             - "@router"
             - "@?logger"
@@ -17,12 +23,12 @@ services:
     ngmore.controller.search:
         class: Netgen\Bundle\MoreBundle\Controller\SearchController
         public: true
-        parent: netgen.ezplatform_site.controller.base
+        parent: ngmore.controller.base
 
-    ngmore.controller.page_layout:
-        class: Netgen\Bundle\MoreBundle\Controller\PageLayoutController
+    ngmore.controller.menu:
+        class: Netgen\Bundle\MoreBundle\Controller\MenuController
         public: true
-        parent: netgen.ezplatform_site.controller.base
+        parent: ngmore.controller.base
         arguments:
             - "@knp_menu.menu_provider"
             - "@knp_menu.renderer_provider"
@@ -31,12 +37,12 @@ services:
     ngmore.controller.parts:
         class: Netgen\Bundle\MoreBundle\Controller\PartsController
         public: true
-        parent: netgen.ezplatform_site.controller.base
+        parent: ngmore.controller.base
 
     ngmore.controller.download:
         class: Netgen\Bundle\MoreBundle\Controller\DownloadController
         public: true
-        parent: netgen.ezplatform_site.controller.base
+        parent: ngmore.controller.base
         arguments:
             - "@ezpublish.fieldType.ezbinaryfile.io_service"
             - "@ezpublish.fieldType.ezimage.io_service"
@@ -46,7 +52,7 @@ services:
     ngmore.controller.user:
         class: Netgen\Bundle\MoreBundle\Controller\UserController
         public: true
-        parent: netgen.ezplatform_site.controller.base
+        parent: ngmore.controller.base
         arguments:
             - "@ezpublish.api.service.user"
             - "@event_dispatcher"

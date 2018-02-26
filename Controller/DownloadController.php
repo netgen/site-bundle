@@ -6,7 +6,6 @@ use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
 use eZ\Publish\Core\FieldType\BinaryBase\Value as BinaryBaseValue;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\Core\IO\IOServiceInterface;
-use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller;
 use Netgen\Bundle\MoreBundle\Event\Content\DownloadEvent;
 use Netgen\Bundle\MoreBundle\Event\MVCEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

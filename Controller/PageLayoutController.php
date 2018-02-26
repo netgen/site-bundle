@@ -47,21 +47,19 @@ class PageLayoutController extends Controller
      */
     public function menu(Request $request, $menuName)
     {
-        $requestAttributes = $request->attributes;
-
         $menu = $this->menuProvider->get($menuName);
 
-        $menu->setChildrenAttribute('class', $requestAttributes->get('ulClass') ?: 'nav navbar-nav');
+        $menu->setChildrenAttribute('class', $request->attributes->get('ulClass') ?: 'nav navbar-nav');
 
         $menuOptions = array(
-            'firstClass' => $requestAttributes->get('firstClass') ?: 'firstli',
-            'currentClass' => $requestAttributes->get('currentClass') ?: 'active',
-            'lastClass' => $requestAttributes->get('lastClass') ?: 'lastli',
+            'firstClass' => $request->attributes->get('firstClass') ?: 'firstli',
+            'currentClass' => $request->attributes->get('currentClass') ?: 'active',
+            'lastClass' => $request->attributes->get('lastClass') ?: 'lastli',
         );
 
         $menuOptions['template'] = $this->getConfigResolver()->getParameter('template.menu', 'ngmore');
-        if ($requestAttributes->has('template')) {
-            $menuOptions['template'] = $requestAttributes->get('template');
+        if ($request->attributes->has('template')) {
+            $menuOptions['template'] = $request->attributes->get('template');
         }
 
         $menuContent = $this->menuRenderer->get()->render($menu, $menuOptions);

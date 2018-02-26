@@ -33,7 +33,7 @@ class LocationPathVoter implements VoterInterface
      *
      * @param \Knp\Menu\ItemInterface $item
      *
-     * @return boolean|null
+     * @return bool|null
      */
     public function matchItem(ItemInterface $item)
     {

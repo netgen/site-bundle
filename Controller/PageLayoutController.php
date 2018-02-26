@@ -51,6 +51,11 @@ class PageLayoutController extends Controller
 
         $menu->setChildrenAttribute('class', $request->attributes->get('ulClass') ?: 'nav navbar-nav');
 
+        $activeItemId = $request->attributes->get('activeItemId');
+        if (!empty($menu[$activeItemId]) && $menu[$activeItemId] instanceof ItemInterface) {
+            $menu[$activeItemId]->setCurrent(true);
+        }
+
         $menuOptions = array(
             'firstClass' => $request->attributes->get('firstClass') ?: 'firstli',
             'currentClass' => $request->attributes->get('currentClass') ?: 'active',

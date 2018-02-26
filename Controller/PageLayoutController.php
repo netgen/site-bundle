@@ -51,10 +51,8 @@ class PageLayoutController extends Controller
         $requestAttributes = $request->attributes;
 
         $menu = $this->menuProvider->get($menuName);
-        $menu->setChildrenAttribute(
-            'class',
-            $requestAttributes->get('ulClass') ?: 'nav navbar-nav'
-        );
+
+        $menu->setChildrenAttribute('class', $requestAttributes->get('ulClass') ?: 'nav navbar-nav');
 
         if (!empty($menu[$activeItemId]) && $menu[$activeItemId] instanceof ItemInterface) {
             $menu[$activeItemId]->setCurrent(true);
@@ -66,14 +64,12 @@ class PageLayoutController extends Controller
             'lastClass' => $requestAttributes->get('lastClass') ?: 'lastli',
         );
 
+        $menuOptions['template'] = $this->getConfigResolver()->getParameter('template.menu', 'ngmore');
         if ($requestAttributes->has('template')) {
             $menuOptions['template'] = $requestAttributes->get('template');
         }
 
-        $menuContent = $this->menuRenderer->get()->render(
-            $menu,
-            $menuOptions
-        );
+        $menuContent = $this->menuRenderer->get()->render($menu, $menuOptions);
 
         $response = new Response();
 

@@ -48,5 +48,6 @@ parameters:
     ngmore.default.template.errors.default: '@@NetgenMore/errors/default.html.twig'
     ngmore.default.template.pagerfanta.ngmore: '@@NetgenMore/pagerfanta/ngmore.html.twig'
     ngmore.default.template.search: '@@NetgenMore/search/search.html.twig'
+    ngmore.default.template.menu: '@@KnpMenu/menu.html.twig'
 
     netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length: 0

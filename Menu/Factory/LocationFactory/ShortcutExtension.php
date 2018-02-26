@@ -83,7 +83,7 @@ class ShortcutExtension implements ExtensionInterface
             return;
         }
 
-        if (!$relatedContent->mainLocation->invisible) {
+        if ($relatedContent->mainLocation->invisible) {
             $this->logger->error(sprintf('Menu item (#%s) has a related object (#%s) that is not visible.', $content->id, $relatedContent->id));
 
             return;

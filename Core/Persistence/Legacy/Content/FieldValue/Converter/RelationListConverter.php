@@ -36,19 +36,24 @@ class RelationListConverter extends BaseRelationListConverter
         $priority = 0;
 
         foreach ($value->data['destinationContentIds'] as $key => $id) {
+            if (!isset($data[$id][0])) {
+                // Ignore deleted content items (we can't throw as it would block ContentService->createContentDraft())
+                continue;
+            }
+
             $row = $data[$id][0];
             $row['ezcontentobject_id'] = $id;
+            $row['priority'] = ($priority += 1);
 
             if (!empty($value->data['destinationLocationIds'][$key])) {
                 $row['ezcontentobject_tree_node_id'] = $value->data['destinationLocationIds'][$key];
             }
 
-            $row['priority'] = ($priority += 1);
-
             $relationItem = $doc->createElement('relation-item');
             foreach (self::dbAttributeMap() as $domAttrKey => $propertyKey) {
                 if (!isset($row[$propertyKey])) {
-                    throw new RuntimeException("Missing relation-item external data property: $propertyKey");
+                    // left join data missing, ignore the given attribute (content in trash missing location)
+                    continue;
                 }
 
                 $relationItem->setAttribute($domAttrKey, $row[$propertyKey]);

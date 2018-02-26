@@ -69,4 +69,11 @@ final class MVCEvents
      * The event listener method receives a \Netgen\Bundle\MoreBundle\Event\Content\DownloadEvent
      */
     const CONTENT_DOWNLOAD = 'ngmore.events.content.download';
+
+    /**
+     * The MENU_LOCATION_ITEM event occurs when a menu item is build using location menu factory.
+     *
+     * The event listener method receives a \Netgen\Bundle\MoreBundle\Event\Menu\LocationMenuItemEvent
+     */
+    const MENU_LOCATION_ITEM = 'ngmore.events.menu.location_item';
 }

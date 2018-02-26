@@ -22,6 +22,7 @@ services:
         class: Netgen\Bundle\MoreBundle\Menu\Factory\LocationFactory
         public: false
         arguments:
+            - "@event_dispatcher"
             - "@ngmore.menu.factory.location.extension.fallback"
             - []
 

@@ -3,11 +3,11 @@
 namespace Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use Netgen\EzPlatformSiteApi\API\Values\Location as APILocation;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ViewMatcherInterface;
-use Netgen\Bundle\EzPlatformSiteApiBundle\View\LocationValueView;
 use eZ\Publish\Core\MVC\Symfony\View\View;
+use Netgen\Bundle\EzPlatformSiteApiBundle\View\LocationValueView;
 use Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased;
+use Netgen\EzPlatformSiteApi\API\Values\Location as APILocation;
 
 class ParentContentType extends ConfigResolverBased implements ViewMatcherInterface
 {

@@ -43,17 +43,6 @@ class PathHelper
         $this->router = $router;
     }
 
-    private function configureOptions(OptionsResolver $optionsResolver)
-    {
-        $optionsResolver->setRequired('use_all_content_types');
-        $optionsResolver->setAllowedTypes('use_all_content_types', 'bool');
-        $optionsResolver->setDefault('use_all_content_types', false);
-
-        $optionsResolver->setRequired('absolute_url');
-        $optionsResolver->setAllowedTypes('absolute_url', 'bool');
-        $optionsResolver->setDefault('absolute_url', false);
-    }
-
     /**
      * Returns the path array for location ID.
      *
@@ -122,5 +111,16 @@ class PathHelper
         }
 
         return $pathArray;
+    }
+
+    private function configureOptions(OptionsResolver $optionsResolver)
+    {
+        $optionsResolver->setRequired('use_all_content_types');
+        $optionsResolver->setAllowedTypes('use_all_content_types', 'bool');
+        $optionsResolver->setDefault('use_all_content_types', false);
+
+        $optionsResolver->setRequired('absolute_url');
+        $optionsResolver->setAllowedTypes('absolute_url', 'bool');
+        $optionsResolver->setDefault('absolute_url', false);
     }
 }

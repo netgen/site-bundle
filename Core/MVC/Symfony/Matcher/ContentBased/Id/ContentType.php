@@ -3,8 +3,8 @@
 namespace Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id;
 
 use eZ\Publish\Core\MVC\Symfony\Matcher\ViewMatcherInterface;
-use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentValueView;
 use eZ\Publish\Core\MVC\Symfony\View\View;
+use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentValueView;
 use Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased;
 
 class ContentType extends ConfigResolverBased implements ViewMatcherInterface

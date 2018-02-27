@@ -54,14 +54,12 @@ class EmbedViewController extends Controller
                     $content = $location->content;
                 } catch (NotFoundException $e) {
                     $targetLink = null;
-                    $this->logger->error(
-                        'Tried to generate link to non existing location #' . $locationId
-                    );
+
+                    $this->logger->error(sprintf('Tried to generate link to non existing location #%s', $locationId));
                 } catch (UnauthorizedException $e) {
                     $targetLink = null;
-                    $this->logger->error(
-                        'Tried to generate link to location #' . $locationId . ' without read rights'
-                    );
+
+                    $this->logger->error(sprintf('Tried to generate link to location #%s without read rights', $locationId));
                 }
             } elseif (stripos($targetLink, 'ezobject://') === 0) {
                 $linkedContentId = (int) substr($targetLink, 11);
@@ -70,14 +68,12 @@ class EmbedViewController extends Controller
                     $content = $this->getSite()->getLoadService()->loadContent($linkedContentId);
                 } catch (NotFoundException $e) {
                     $targetLink = null;
-                    $this->logger->error(
-                        'Tried to generate link to non existing content #' . $linkedContentId
-                    );
+
+                    $this->logger->error(sprintf('Tried to generate link to non existing content #%s', $linkedContentId));
                 } catch (UnauthorizedException $e) {
                     $targetLink = null;
-                    $this->logger->error(
-                        'Tried to generate link to content #' . $linkedContentId . ' without read rights'
-                    );
+
+                    $this->logger->error(sprintf('Tried to generate link to content #%s without read rights', $linkedContentId));
                 }
             }
 

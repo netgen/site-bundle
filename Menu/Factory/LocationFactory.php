@@ -51,11 +51,14 @@ class LocationFactory implements FactoryInterface
         }
 
         $menuItem
+            ->setLabel($options['ezlocation']->content->name)
             ->setExtra('translation_domain', false)
             ->setExtra('ezlocation', $options['ezlocation']);
 
         $extension = $this->getExtension($options['ezlocation']);
         $extension->buildItem($menuItem, $options['ezlocation']);
+
+        $menuItem->setName(md5($menuItem->getUri()));
 
         $event = new LocationMenuItemEvent($menuItem, $menuItem->getExtra('ezlocation'));
         $this->eventDispatcher->dispatch(MVCEvents::MENU_LOCATION_ITEM, $event);

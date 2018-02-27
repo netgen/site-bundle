@@ -58,9 +58,6 @@ class MenuItemExtension implements ExtensionInterface
 
     public function buildItem(ItemInterface $item, Location $location)
     {
-        $item->setName($location->content->name)
-            ->setLabel($location->content->name);
-
         $this->buildItemFromContent($item, $location->content);
 
         if (!empty($item->getUri()) && $location->content->getField('target_blank')->value->bool) {
@@ -125,7 +122,7 @@ class MenuItemExtension implements ExtensionInterface
             }
         }
 
-        $item->setUri($uri)->setName($uri);
+        $item->setUri($uri);
 
         if (!empty($urlValue->text)) {
             $item->setLinkAttribute('title', $urlValue->text);
@@ -140,7 +137,6 @@ class MenuItemExtension implements ExtensionInterface
     {
         $item
             ->setUri($this->urlGenerator->generate($relatedContent))
-            ->setName($relatedContent->mainLocationId)
             ->setExtra('ezlocation', $relatedContent->mainLocation)
             ->setAttribute('id', 'menu-item-location-id-' . $relatedContent->mainLocationId)
             ->setLinkAttribute('title', $item->getLabel());
@@ -178,15 +174,9 @@ class MenuItemExtension implements ExtensionInterface
                 return;
             }
 
-            $parentLocation = $destinationContent->mainLocation;
-
-            if ($content->getField('item_url')->isEmpty() && $content->getField('item_object')->isEmpty()) {
-                $item->setName($parentLocation->id);
-            }
-
             $criteria = array(
                 new Criterion\Visibility(Criterion\Visibility::VISIBLE),
-                new Criterion\ParentLocationId($parentLocation->id),
+                new Criterion\ParentLocationId($destinationContent->mainLocation->id),
             );
 
             if (!$content->getField('class_filter')->isEmpty() && !$content->getField('class_filter_type')->isEmpty()) {
@@ -207,7 +197,7 @@ class MenuItemExtension implements ExtensionInterface
 
             $query = new LocationQuery();
             $query->filter = new Criterion\LogicalAnd($criteria);
-            $query->sortClauses = $parentLocation->innerLocation->getSortClauses();
+            $query->sortClauses = $destinationContent->mainLocation->innerLocation->getSortClauses();
 
             if (!$content->getField('limit')->isEmpty()) {
                 /** @var \eZ\Publish\Core\FieldType\Integer\Value $limit */

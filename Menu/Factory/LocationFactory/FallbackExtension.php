@@ -30,8 +30,6 @@ class FallbackExtension implements ExtensionInterface
     {
         $item
             ->setUri($this->urlGenerator->generate($location))
-            ->setName($location->id)
-            ->setLabel($location->content->name)
             ->setAttribute('id', 'menu-item-location-id-' . $location->id);
     }
 }

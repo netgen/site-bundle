@@ -60,23 +60,8 @@ class ShortcutExtension implements ExtensionInterface
             return;
         }
 
-        if ($content->getField('related_object')->isEmpty()) {
-            return;
-        }
-
-        try {
-            $relatedContent = $this->loadService->loadContent(
-                $content->getField('related_object')->value->destinationContentId
-            );
-        } catch (Throwable $t) {
-            $this->logger->error($t->getMessage());
-
-            return;
-        }
-
-        if (!$relatedContent->contentInfo->published) {
-            $this->logger->error(sprintf('Menu item (#%s) has a related object (#%s) that is not published.', $content->id, $relatedContent->id));
-
+        $relatedContent = $content->getFieldRelation('related_object');
+        if (!$relatedContent instanceof Content) {
             return;
         }
 

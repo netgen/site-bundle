@@ -76,23 +76,8 @@ class MenuItemExtension implements ExtensionInterface
             return;
         }
 
-        if ($content->getField('item_object')->isEmpty()) {
-            return;
-        }
-
-        try {
-            $relatedContent = $this->loadService->loadContent(
-                $content->getField('item_object')->value->destinationContentId
-            );
-        } catch (Throwable $t) {
-            $this->logger->error($t->getMessage());
-
-            return;
-        }
-
-        if (!$relatedContent->contentInfo->published) {
-            $this->logger->error(sprintf('Menu item (#%s) has a related object (#%s) that is not published.', $content->id, $relatedContent->id));
-
+        $relatedContent = $content->getFieldRelation('item_object');
+        if (!$relatedContent instanceof Content) {
             return;
         }
 
@@ -151,20 +136,8 @@ class MenuItemExtension implements ExtensionInterface
         $childLocations = array();
 
         if (!$content->getField('parent_node')->isEmpty()) {
-            /** @var \eZ\Publish\Core\FieldType\Relation\Value $fieldValue */
-            $fieldValue = $content->getField('parent_node')->value;
-
-            try {
-                $destinationContent = $this->loadService->loadContent($fieldValue->destinationContentId);
-            } catch (Throwable $t) {
-                $this->logger->error($t->getMessage());
-
-                return;
-            }
-
-            if (!$destinationContent->contentInfo->published) {
-                $this->logger->error(sprintf('Menu item (#%s) has a related object (#%s) that is not published.', $content->id, $destinationContent->id));
-
+            $destinationContent = $content->getFieldRelation('parent_node');
+            if (!$destinationContent instanceof Content) {
                 return;
             }
 

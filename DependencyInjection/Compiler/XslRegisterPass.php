@@ -11,12 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class XslRegisterPass implements CompilerPassInterface
 {
     /**
-     * Compiler pass to register ezxml_tags.xsl as custom XSL stylesheet for
-     * XmlText field type.
-     *
-     * Avoids having it in app/Resources folder
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * Registers ezxml_tags.xsl as custom XSL stylesheet for ezxmltext field type.
      */
     public function process(ContainerBuilder $container)
     {

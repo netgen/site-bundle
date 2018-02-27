@@ -31,8 +31,6 @@ class LocationMenuItemEvent extends Event
 
     /**
      * Returns the item which was built.
-     *
-     * @return \Knp\Menu\ItemInterface
      */
     public function getItem(): ItemInterface
     {
@@ -41,8 +39,6 @@ class LocationMenuItemEvent extends Event
 
     /**
      * Returns the eZ Publish location for which the menu item was built.
-     *
-     * @return \Netgen\EzPlatformSiteApi\API\Values\Location
      */
     public function getLocation(): Location
     {

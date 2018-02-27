@@ -14,17 +14,11 @@ class PostPasswordResetEvent extends Event
      */
     protected $user;
 
-    /**
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     */
     public function __construct(User $user)
     {
         $this->user = $user;
     }
 
-    /**
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     */
     public function getUser(): User
     {
         return $this->user;

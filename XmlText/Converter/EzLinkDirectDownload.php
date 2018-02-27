@@ -30,11 +30,6 @@ class EzLinkDirectDownload implements Converter
      */
     protected $logger;
 
-    /**
-     * @param \Netgen\EzPlatformSiteApi\API\LoadService $loadService
-     * @param \Symfony\Component\Routing\RouterInterface $router
-     * @param \Psr\Log\LoggerInterface $logger
-     */
     public function __construct(
         LoadService $loadService,
         RouterInterface $router,
@@ -48,9 +43,7 @@ class EzLinkDirectDownload implements Converter
     /**
      * Converts internal links (eznode:// and ezobject://) to URLs.
      *
-     * @param \DOMDocument $xmlDoc
-     *
-     * @return string|null
+     * Overriden to add option to download files by using Netgen More specific route.
      */
     public function convert(DOMDocument $xmlDoc)
     {

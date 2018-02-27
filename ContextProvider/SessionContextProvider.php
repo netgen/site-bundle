@@ -15,22 +15,14 @@ class SessionContextProvider implements ContextProviderInterface
      */
     protected $session;
 
-    /**
-     * Constructor.
-     *
-     * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
-     */
     public function __construct(SessionInterface $session)
     {
         $this->session = $session;
     }
 
     /**
-     * This function is called before generating the hash of a UserContext.
-     *
-     * This allow to add a parameter on UserContext or set the whole array of parameters
-     *
-     * @param \FOS\HttpCache\UserContext\UserContext $context
+     * If the session is started, adds the session ID to user context. This allows
+     * varying the cache per session.
      */
     public function updateUserContext(UserContext $context)
     {

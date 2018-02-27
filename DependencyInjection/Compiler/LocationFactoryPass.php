@@ -12,8 +12,6 @@ class LocationFactoryPass implements CompilerPassInterface
 {
     /**
      * Injects location factory extensions into the factory.
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process(ContainerBuilder $container)
     {

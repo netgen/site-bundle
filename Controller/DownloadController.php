@@ -38,14 +38,6 @@ class DownloadController extends Controller
      */
     protected $dispatcher;
 
-    /**
-     * Constructor.
-     *
-     * @param \eZ\Publish\Core\IO\IOServiceInterface $ioFileService
-     * @param \eZ\Publish\Core\IO\IOServiceInterface $ioImageService
-     * @param \Symfony\Component\Translation\TranslatorInterface $translator
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
-     */
     public function __construct(
         IOServiceInterface $ioFileService,
         IOServiceInterface $ioImageService,

@@ -45,11 +45,6 @@ class NetgenMoreView implements ViewInterface
      */
     protected $endPage;
 
-    /**
-     * Constructor.
-     *
-     * @param \Twig\Environment $twig
-     */
     public function __construct(Environment $twig)
     {
         $this->twig = $twig;
@@ -57,8 +52,6 @@ class NetgenMoreView implements ViewInterface
 
     /**
      * Sets the default template.
-     *
-     * @param string $template
      */
     public function setDefaultTemplate(string $template = null): void
     {

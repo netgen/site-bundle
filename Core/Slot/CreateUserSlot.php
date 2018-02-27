@@ -22,23 +22,12 @@ class CreateUserSlot extends Slot
      */
     protected $ngUserSettingRepository;
 
-    /**
-     * Constructor.
-     *
-     * @param \eZ\Publish\API\Repository\UserService $userService
-     * @param \Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository $ngUserSettingRepository
-     */
     public function __construct(UserService $userService, NgUserSettingRepository $ngUserSettingRepository)
     {
         $this->userService = $userService;
         $this->ngUserSettingRepository = $ngUserSettingRepository;
     }
 
-    /**
-     * Receive the given $signal and react on it.
-     *
-     * @param \eZ\Publish\Core\SignalSlot\Signal $signal
-     */
     public function receive(Signal $signal)
     {
         if (!$signal instanceof Signal\UserService\CreateUserSignal) {

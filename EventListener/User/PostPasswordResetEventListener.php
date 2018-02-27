@@ -26,8 +26,6 @@ class PostPasswordResetEventListener extends UserEventListener implements EventS
     /**
      * Listens to the event triggered after the password has been reset.
      * Event contains the information about the user who has changed the password.
-     *
-     * @param \Netgen\Bundle\MoreBundle\Event\User\PostPasswordResetEvent $event
      */
     public function onPasswordReset(PostPasswordResetEvent $event): void
     {

@@ -12,9 +12,6 @@ abstract class Controller extends BaseController
 {
     /**
      * Configures the response with provided cache settings.
-     *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\HttpFoundation\Response $response
      */
     protected function processCacheSettings(Request $request, Response $response)
     {

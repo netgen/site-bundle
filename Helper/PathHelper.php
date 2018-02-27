@@ -40,6 +40,8 @@ class PathHelper
 
     /**
      * Returns the path array for provided location ID.
+     *
+     * @param mixed $locationId
      */
     public function getPath($locationId, array $options = array()): array
     {

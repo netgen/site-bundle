@@ -35,14 +35,6 @@ class RelationListMenuBuilder
      */
     protected $logger;
 
-    /**
-     * Constructor.
-     *
-     * @param \Knp\Menu\FactoryInterface $factory
-     * @param \Netgen\EzPlatformSiteApi\API\LoadService $loadService
-     * @param \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper $siteInfoHelper
-     * @param \Psr\Log\LoggerInterface $logger
-     */
     public function __construct(
         FactoryInterface $factory,
         LoadService $loadService,
@@ -58,10 +50,7 @@ class RelationListMenuBuilder
     /**
      * Creates the KNP menu from provided content and field identifier.
      *
-     * @param string $fieldIdentifier
-     * @param mixed $contentId
-     *
-     * @return \Knp\Menu\ItemInterface
+     * @param null|mixed $contentId
      */
     public function createRelationListMenu(string $fieldIdentifier, $contentId = null): ItemInterface
     {

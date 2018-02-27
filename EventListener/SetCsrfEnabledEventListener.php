@@ -16,11 +16,6 @@ class SetCsrfEnabledEventListener implements EventSubscriberInterface
      */
     protected $csrfTokenManager;
 
-    /**
-     * Constructor.
-     *
-     * @param \Symfony\Component\Security\Csrf\CsrfTokenManager $csrfTokenManager
-     */
     public function __construct(CsrfTokenManager $csrfTokenManager = null)
     {
         $this->csrfTokenManager = $csrfTokenManager;
@@ -38,8 +33,6 @@ class SetCsrfEnabledEventListener implements EventSubscriberInterface
 
     /**
      * Sets the variable into request indicating if CSRF protection is enabled or not.
-     *
-     * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
      */
     public function onKernelRequest(GetResponseEvent $event): void
     {

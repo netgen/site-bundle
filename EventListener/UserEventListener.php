@@ -44,14 +44,6 @@ abstract class UserEventListener
      */
     protected $repository;
 
-    /**
-     * @param \Netgen\Bundle\MoreBundle\Helper\MailHelper $mailHelper
-     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
-     * @param \Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository $ngUserSettingRepository
-     * @param \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository $ezUserAccountKeyRepository
-     * @param \Netgen\EzPlatformSiteApi\API\LoadService $loadService
-     * @param \eZ\Publish\API\Repository\Repository $repository
-     */
     public function __construct(
         MailHelper $mailHelper,
         ConfigResolverInterface $configResolver,
@@ -70,10 +62,6 @@ abstract class UserEventListener
 
     /**
      * Returns the translated user name.
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     *
-     * @return string
      */
     protected function getUserName(User $user): string
     {

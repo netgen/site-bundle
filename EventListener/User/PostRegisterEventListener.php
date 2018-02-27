@@ -26,8 +26,6 @@ class PostRegisterEventListener extends UserEventListener implements EventSubscr
     /**
      * Listens to the event triggered after the user has been registered.
      * The event contains information about registered user.
-     *
-     * @param \Netgen\Bundle\MoreBundle\Event\User\PostRegisterEvent $event
      */
     public function onUserRegistered(PostRegisterEvent $event): void
     {

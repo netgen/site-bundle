@@ -29,11 +29,6 @@ class LocationFactory implements FactoryInterface
      */
     protected $extensions = array();
 
-    /**
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     * @param \Netgen\Bundle\MoreBundle\Menu\Factory\LocationFactory\ExtensionInterface $fallbackExtension
-     * @param \Netgen\Bundle\MoreBundle\Menu\Factory\LocationFactory\ExtensionInterface[] $extensions
-     */
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         ExtensionInterface $fallbackExtension,
@@ -71,10 +66,6 @@ class LocationFactory implements FactoryInterface
      * Returns the first extension that matches the provided location.
      *
      * If none match, fallback extension is returned.
-     *
-     * @param \Netgen\EzPlatformSiteApi\API\Values\Location $location
-     *
-     * @return \Netgen\Bundle\MoreBundle\Menu\Factory\LocationFactory\ExtensionInterface
      */
     protected function getExtension(Location $location): ExtensionInterface
     {

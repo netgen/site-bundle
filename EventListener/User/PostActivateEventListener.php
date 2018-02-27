@@ -26,8 +26,6 @@ class PostActivateEventListener extends UserEventListener implements EventSubscr
     /**
      * Listens to the event triggered after the user activation has been finished.
      * Event contains information about activated user.
-     *
-     * @param \Netgen\Bundle\MoreBundle\Event\User\PostActivateEvent $event
      */
     public function onPostActivate(PostActivateEvent $event): void
     {

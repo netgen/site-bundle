@@ -23,12 +23,6 @@ class EmbedViewController extends Controller
      */
     protected $logger;
 
-    /**
-     * Constructor.
-     *
-     * @param \Symfony\Component\Routing\RouterInterface $router
-     * @param \Psr\Log\LoggerInterface $logger
-     */
     public function __construct(RouterInterface $router, LoggerInterface $logger = null)
     {
         $this->router = $router;

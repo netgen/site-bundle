@@ -27,8 +27,6 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
     /**
      * Listens for the start of the activation process.
      * Event contains information about the submitted email and the user, if found.
-     *
-     * @param \Netgen\Bundle\MoreBundle\Event\User\ActivationRequestEvent $event
      */
     public function onActivationRequest(ActivationRequestEvent $event): void
     {

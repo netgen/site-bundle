@@ -96,6 +96,9 @@ class MailHelper
      * Sender can be:
      * a string: info@netgen.hr
      * an array: array( 'info@netgen.hr' => 'Netgen More' )
+     *
+     * @param mixed $receivers
+     * @param null|mixed $sender
      */
     public function sendMail($receivers, string $subject, string $template, array $templateParameters = array(), $sender = null): int
     {
@@ -126,8 +129,6 @@ class MailHelper
 
     /**
      * Returns an array of parameters that will be passed to every mail template.
-     *
-     * @return array
      */
     protected function getDefaultTemplateParameters(): array
     {

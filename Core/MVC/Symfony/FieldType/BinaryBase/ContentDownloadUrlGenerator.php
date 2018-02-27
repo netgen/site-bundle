@@ -9,6 +9,12 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use Symfony\Component\Routing\RouterInterface;
 
+/**
+ * Generates the path to the file stored in provided field.
+ *
+ * Overrides the base generator to allow generating the link with
+ * Netgen More specific route instead of the built in one.
+ */
 class ContentDownloadUrlGenerator extends PathGenerator
 {
     /**
@@ -16,22 +22,11 @@ class ContentDownloadUrlGenerator extends PathGenerator
      */
     protected $router;
 
-    /**
-     * Constructor.
-     *
-     * @param \Symfony\Component\Routing\RouterInterface $router
-     */
     public function __construct(RouterInterface $router)
     {
         $this->router = $router;
     }
 
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
-     *
-     * @return string
-     */
     public function getStoragePathForField(Field $field, VersionInfo $versionInfo)
     {
         return $this->router->generate(

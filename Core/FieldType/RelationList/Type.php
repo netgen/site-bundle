@@ -11,24 +11,11 @@ use eZ\Publish\SPI\FieldType\Value as SPIValue;
 
 class Type extends BaseRelationListType
 {
-    /**
-     * Returns the fallback default value of field type when no such default
-     * value is provided in the field definition in content types.
-     *
-     * @return \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value
-     */
     public function getEmptyValue()
     {
         return new Value();
     }
 
-    /**
-     * Converts an $hash to the Value defined by the field type.
-     *
-     * @param mixed $hash
-     *
-     * @return \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value $value
-     */
     public function fromHash($hash)
     {
         return new Value(
@@ -39,13 +26,6 @@ class Type extends BaseRelationListType
         );
     }
 
-    /**
-     * Converts a $Value to a hash.
-     *
-     * @param \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value $value
-     *
-     * @return mixed
-     */
     public function toHash(SPIValue $value)
     {
         return array(
@@ -54,13 +34,6 @@ class Type extends BaseRelationListType
         );
     }
 
-    /**
-     * Inspects given $inputValue and potentially converts it into a dedicated value object.
-     *
-     * @param int|string|array|\eZ\Publish\API\Repository\Values\Content\ContentInfo|\eZ\Publish\Core\FieldType\RelationList\Value $inputValue
-     *
-     * @return \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value The potentially converted and structurally plausible value
-     */
     protected function createValueFromInput($inputValue)
     {
         if (is_array($inputValue) && isset($inputValue['relation_list'])) {
@@ -95,14 +68,6 @@ class Type extends BaseRelationListType
         return parent::createValueFromInput($inputValue);
     }
 
-    /**
-     * Throws an exception if value structure is not of expected format.
-     *
-     *
-     * @param \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value $value
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the value does not match the expected structure
-     */
     protected function checkValueStructure(BaseValue $value)
     {
         parent::checkValueStructure($value);

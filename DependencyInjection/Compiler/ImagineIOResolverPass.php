@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class ImagineIOResolverPass implements CompilerPassInterface
 {
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * Overrides the IO resolver to disable generating absolute URIs to images.
      */
     public function process(ContainerBuilder $container)
     {

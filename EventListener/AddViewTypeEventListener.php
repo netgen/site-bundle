@@ -17,11 +17,6 @@ class AddViewTypeEventListener implements EventSubscriberInterface
      */
     protected $requestStack;
 
-    /**
-     * Constructor.
-     *
-     * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
-     */
     public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
@@ -41,8 +36,6 @@ class AddViewTypeEventListener implements EventSubscriberInterface
 
     /**
      * Injects the used view type into the content view template.
-     *
-     * @param \eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent $event
      */
     public function onPreContentView(PreContentViewEvent $event): void
     {

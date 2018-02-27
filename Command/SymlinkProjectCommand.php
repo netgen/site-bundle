@@ -12,9 +12,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class SymlinkProjectCommand extends SymlinkCommand
 {
-    /**
-     * Configures the command.
-     */
     protected function configure()
     {
         $this->addOption('force', null, InputOption::VALUE_NONE, 'If set, it will destroy existing symlinks before recreating them');
@@ -23,14 +20,6 @@ class SymlinkProjectCommand extends SymlinkCommand
         $this->setName('ngmore:symlink:project');
     }
 
-    /**
-     * Runs the command.
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return int
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->forceSymlinks = (bool) $input->getOption('force');
@@ -55,12 +44,8 @@ class SymlinkProjectCommand extends SymlinkCommand
 
     /**
      * Symlinks project files from a bundle.
-     *
-     * @param string $projectFilesPath
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    protected function symlinkProjectFiles($projectFilesPath, InputInterface $input, OutputInterface $output)
+    protected function symlinkProjectFiles(string $projectFilesPath, InputInterface $input, OutputInterface $output): void
     {
         /** @var \DirectoryIterator[] $directories */
         $directories = array();

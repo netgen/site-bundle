@@ -13,13 +13,6 @@ use Netgen\EzPlatformSiteApi\API\Values\Location as APILocation;
 
 class ParentContentType extends ConfigResolverBased implements ViewMatcherInterface
 {
-    /**
-     * Checks if View object matches.
-     *
-     * @param \eZ\Publish\Core\MVC\Symfony\View\View $view
-     *
-     * @return bool
-     */
     public function match(View $view)
     {
         if (!$view instanceof LocationValueView) {

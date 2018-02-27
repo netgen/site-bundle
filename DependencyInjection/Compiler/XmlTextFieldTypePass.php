@@ -12,9 +12,7 @@ use Symfony\Component\DependencyInjection\Reference;
 class XmlTextFieldTypePass implements CompilerPassInterface
 {
     /**
-     * Compiler pass override ezxmltext field type.
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * Overrides EmbedToHtml5 ezxmltext converter with own implementation.
      */
     public function process(ContainerBuilder $container)
     {

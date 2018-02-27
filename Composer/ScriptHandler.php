@@ -11,8 +11,6 @@ class ScriptHandler extends DistributionBundleScriptHandler
 {
     /**
      * Symlinks various project files and folders to their proper locations.
-     *
-     * @param $event \Composer\Script\Event
      */
     public static function installProjectSymlinks(Event $event)
     {

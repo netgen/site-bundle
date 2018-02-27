@@ -15,11 +15,6 @@ class GlobalVariable
      */
     protected $siteInfoHelper;
 
-    /**
-     * Constructor.
-     *
-     * @param \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper $siteInfoHelper
-     */
     public function __construct(SiteInfoHelper $siteInfoHelper)
     {
         $this->siteInfoHelper = $siteInfoHelper;

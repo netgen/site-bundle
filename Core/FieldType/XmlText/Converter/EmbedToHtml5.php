@@ -16,19 +16,13 @@ use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
 /**
  * Converts embedded elements from internal XmlText representation to HTML5.
+ *
+ * Overrides the built in converter to allow rendering embedded content with Site API controller.
  */
 class EmbedToHtml5 extends BaseEmbedToHtml5
 {
     use SiteAwareTrait;
 
-    /**
-     * Process embed tags for a single tag type (embed or embed-inline).
-     *
-     * @param \DOMDocument $xmlDoc
-     * @param $tagName string name of the tag to extract
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException If current user is unauthorized to load the content
-     */
     protected function processTag(DOMDocument $xmlDoc, $tagName)
     {
         $this->logger = $this->logger ?: new NullLogger();

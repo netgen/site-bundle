@@ -19,9 +19,6 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class UpdatePublishDateCommand extends ContainerAwareCommand
 {
-    /**
-     * Configures the current command.
-     */
     protected function configure()
     {
         $this->setName('ngmore:content:update-publish-date')
@@ -46,16 +43,6 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
             );
     }
 
-    /**
-     * Executes the current command.
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface $input An InputInterface instance
-     * @param \Symfony\Component\Console\Output\OutputInterface $output An OutputInterface instance
-     *
-     * @throws \RuntimeException When an error occurs
-     *
-     * @return null|int null or 0 if everything went fine, or an error code
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $questionHelper = $this->getHelper('question');

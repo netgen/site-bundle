@@ -15,22 +15,14 @@ class UserContextProvider implements ContextProviderInterface
      */
     protected $repository;
 
-    /**
-     * Constructor.
-     *
-     * @param \eZ\Publish\API\Repository\Repository $repository
-     */
     public function __construct(Repository $repository)
     {
         $this->repository = $repository;
     }
 
     /**
-     * This function is called before generating the hash of a UserContext.
-     *
-     * This allow to add a parameter on UserContext or set the whole array of parameters
-     *
-     * @param \FOS\HttpCache\UserContext\UserContext $context
+     * Adds the current user ID to the user context. Allows varying the caches
+     * per user, without taking into the account session for example.
      */
     public function updateUserContext(UserContext $context)
     {

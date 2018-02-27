@@ -27,8 +27,6 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
     /**
      * Listens for the start of forgot password procedure.
      * Event contains information about the submitted email and the user, if found.
-     *
-     * @param \Netgen\Bundle\MoreBundle\Event\User\PasswordResetRequestEvent $event
      */
     public function onPasswordResetRequest(PasswordResetRequestEvent $event): void
     {

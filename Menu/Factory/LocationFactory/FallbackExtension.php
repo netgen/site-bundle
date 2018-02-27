@@ -15,9 +15,6 @@ class FallbackExtension implements ExtensionInterface
      */
     protected $urlGenerator;
 
-    /**
-     * @param \Symfony\Component\Routing\Generator\UrlGeneratorInterface $urlGenerator
-     */
     public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;

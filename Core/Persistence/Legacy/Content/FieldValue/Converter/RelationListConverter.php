@@ -18,14 +18,6 @@ class RelationListConverter extends BaseRelationListConverter
      */
     protected $db;
 
-    /**
-     * Converts data from $value to $storageFieldValue.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $storageFieldValue
-     *
-     * @throws \RuntimeException If data is incomplete
-     */
     public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue)
     {
         $doc = new DOMDocument('1.0', 'utf-8');
@@ -69,12 +61,6 @@ class RelationListConverter extends BaseRelationListConverter
         $storageFieldValue->dataText = $doc->saveXML();
     }
 
-    /**
-     * Converts data from $value to $fieldValue.
-     *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
-     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
-     */
     public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue)
     {
         $fieldValue->data = array(
@@ -108,32 +94,6 @@ class RelationListConverter extends BaseRelationListConverter
         $fieldValue->data['destinationLocationIds'] = array_keys($priorityByLocationId);
     }
 
-    /**
-     * Converts field definition data in $storageDef into $fieldDef.
-     *
-     * <?xml version="1.0" encoding="utf-8"?>
-     * <related-objects>
-     *   <constraints>
-     *     <allowed-class contentclass-identifier="blog_post"/>
-     *   </constraints>
-     *   <type value="2"/>
-     *   <selection_type value="1"/>
-     *   <object_class value=""/>
-     *   <contentobject-placement node-id="67"/>
-     * </related-objects>
-     *
-     * <?xml version="1.0" encoding="utf-8"?>
-     * <related-objects>
-     *   <constraints/>
-     *   <type value="2"/>
-     *   <selection_type value="0"/>
-     *   <object_class value=""/>
-     *   <contentobject-placement/>
-     * </related-objects>
-     *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
-     */
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
         parent::toFieldDefinition($storageDef, $fieldDef);
@@ -141,9 +101,6 @@ class RelationListConverter extends BaseRelationListConverter
         $fieldDef->defaultValue->data['destinationLocationIds'] = array();
     }
 
-    /**
-     * @return array
-     */
     private static function dbAttributeMap()
     {
         return array(

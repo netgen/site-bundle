@@ -13,16 +13,23 @@ abstract class ConfigResolverBased extends MultipleValued
      */
     protected $configResolver;
 
-    /**
-     * Constructor.
-     *
-     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
-     */
     public function __construct(ConfigResolverInterface $configResolver)
     {
         $this->configResolver = $configResolver;
     }
 
+    /**
+     * Performs the match against the provided value.
+     *
+     * This works by comparing the value against the parameter from config resolver.
+     *
+     * First element in the value array should be the name of the parameter and the
+     * second should be the namespace.
+     *
+     * @param mixed $value
+     *
+     * @return bool
+     */
     public function doMatch($value): bool
     {
         $config = $this->values[0];

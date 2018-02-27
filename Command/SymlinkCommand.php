@@ -39,13 +39,9 @@ abstract class SymlinkCommand extends ContainerAwareCommand
     );
 
     /**
-     * Verify that source file can be symlinked to destination and do symlinking.
-     *
-     * @param string $source
-     * @param string $destination
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * Verify that source file can be symlinked to destination and do symlinking if it can.
      */
-    protected function verifyAndSymlinkFile($source, $destination, OutputInterface $output)
+    protected function verifyAndSymlinkFile(string $source, string $destination, OutputInterface $output): void
     {
         if (!$this->fileSystem->exists(dirname($destination))) {
             $this->fileSystem->mkdir(dirname($destination), 0755);
@@ -91,13 +87,9 @@ abstract class SymlinkCommand extends ContainerAwareCommand
     }
 
     /**
-     * Verify that source directory can be symlinked to destination and do symlinking.
-     *
-     * @param string $source
-     * @param string $destination
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * Verify that source directory can be symlinked to destination and do symlinking if it can.
      */
-    protected function verifyAndSymlinkDirectory($source, $destination, OutputInterface $output)
+    protected function verifyAndSymlinkDirectory(string $source, string $destination, OutputInterface $output): void
     {
         if ($this->fileSystem->exists($destination) && !is_link($destination)) {
             $output->writeln('<comment>' . basename($destination) . '</comment> already exists in <comment>' . dirname($destination) . '/</comment> and is not a symlink. Skipping...');

@@ -44,14 +44,6 @@ class UserController extends Controller
      */
     protected $accountKeyRepository;
 
-    /**
-     * Constructor.
-     *
-     * @param \eZ\Publish\API\Repository\UserService $userService
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
-     * @param \Symfony\Component\Form\FormFactoryInterface $formFactory
-     * @param \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository $accountKeyRepository
-     */
     public function __construct(
         UserService $userService,
         EventDispatcherInterface $eventDispatcher,

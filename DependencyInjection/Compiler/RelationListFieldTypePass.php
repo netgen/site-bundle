@@ -12,9 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class RelationListFieldTypePass implements CompilerPassInterface
 {
     /**
-     * Compiler pass override ezrelationlist field type.
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * Overrides ezrelationlist field type with own implementations.
      */
     public function process(ContainerBuilder $container)
     {

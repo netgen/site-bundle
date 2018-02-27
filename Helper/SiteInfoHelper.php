@@ -6,8 +6,8 @@ namespace Netgen\Bundle\MoreBundle\Helper;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Netgen\EzPlatformSiteApi\API\LoadService;
-use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Netgen\EzPlatformSiteApi\API\Values\Content;
+use Netgen\EzPlatformSiteApi\API\Values\Location;
 
 class SiteInfoHelper
 {

@@ -20,12 +20,6 @@ class NetgenMoreRuntime
      */
     protected $localeConverter;
 
-    /**
-     * Constructor.
-     *
-     * @param \Netgen\Bundle\MoreBundle\Helper\PathHelper $pathHelper
-     * @param \eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface $localeConverter
-     */
     public function __construct(PathHelper $pathHelper, LocaleConverterInterface $localeConverter)
     {
         $this->pathHelper = $pathHelper;
@@ -36,9 +30,6 @@ class NetgenMoreRuntime
      * Returns the path for specified location ID.
      *
      * @param mixed $locationId
-     * @param array $options
-     *
-     * @return array
      */
     public function getLocationPath($locationId, array $options = array()): array
     {

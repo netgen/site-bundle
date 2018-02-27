@@ -14,9 +14,6 @@ use Symfony\Component\Process\Process;
 
 class DumpDatabaseCommand extends ContainerAwareCommand
 {
-    /**
-     * Configures the current command.
-     */
     protected function configure()
     {
         $this->setName('ngmore:database:dump')
@@ -28,16 +25,6 @@ class DumpDatabaseCommand extends ContainerAwareCommand
             );
     }
 
-    /**
-     * Executes the current command.
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface $input An InputInterface instance
-     * @param \Symfony\Component\Console\Output\OutputInterface $output An OutputInterface instance
-     *
-     * @throws \RuntimeException When an error occurs
-     *
-     * @return null|int null or 0 if everything went fine, or an error code
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $container = $this->getContainer();

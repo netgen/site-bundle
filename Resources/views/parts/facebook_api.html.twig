@@ -1,23 +1,33 @@
-{% if ezpublish.configResolver.hasParameter( 'site_settings.facebook_api', 'ngmore' )
-    and ezpublish.configResolver.hasParameter( 'facebook_app_id', 'netgen_open_graph' ) %}
-    {% set facebook_api = ezpublish.configResolver.getParameter( 'site_settings.facebook_api', 'ngmore' ) %}
+{% if ezpublish.configResolver.hasParameter('site_settings.facebook_api', 'ngmore')
+    and ezpublish.configResolver.hasParameter('facebook_app_id', 'netgen_open_graph') %}
+    {% set facebook_api = ezpublish.configResolver.getParameter('site_settings.facebook_api', 'ngmore') %}
 
     {% if facebook_api %}
-        {% set facebook_app_id = ezpublish.configResolver.getParameter( 'facebook_app_id', 'netgen_open_graph' ) %}
+        {% set facebook_app_id = ezpublish.configResolver.getParameter('facebook_app_id', 'netgen_open_graph') %}
         {% set facebook_locale = 'en_US' %}
-        {% if ezpublish.configResolver.hasParameter( 'site_settings.facebook_locale', 'ngmore' ) %}
-            {% set facebook_locale = ezpublish.configResolver.parameter( 'site_settings.facebook_locale', 'ngmore' ) %}
+        {% if ezpublish.configResolver.hasParameter('site_settings.facebook_locale', 'ngmore') %}
+            {% set facebook_locale = ezpublish.configResolver.parameter('site_settings.facebook_locale', 'ngmore') %}
         {% endif %}
 
         {% if facebook_app_id is not empty and facebook_locale is not empty %}
-            <div id="fb-root"></div>
-            <script>(function(d, s, id) {
-              var js, fjs = d.getElementsByTagName(s)[0];
-              if (d.getElementById(id)) return;
-              js = d.createElement(s); js.id = id;
-              js.src = "//connect.facebook.net/{{ facebook_locale|raw|escape( 'js' ) }}/all.js#xfbml=1&appId={{ facebook_app_id|raw|escape( 'js' ) }}";
-              fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));</script>
+            <script>
+              window.fbAsyncInit = function() {
+                FB.init({
+                  appId            : '{{ facebook_app_id|raw|escape('js') }}',
+                  autoLogAppEvents : true,
+                  xfbml            : true,
+                  version          : 'v2.12'
+                });
+              };
+
+              (function(d, s, id){
+                 var js, fjs = d.getElementsByTagName(s)[0];
+                 if (d.getElementById(id)) {return;}
+                 js = d.createElement(s); js.id = id;
+                 js.src = "https://connect.facebook.net/{{ facebook_locale|raw|escape('js') }}/sdk.js";
+                 fjs.parentNode.insertBefore(js, fjs);
+               }(document, 'script', 'facebook-jssdk'));
+            </script>
         {% endif %}
     {% endif %}
 {% endif %}

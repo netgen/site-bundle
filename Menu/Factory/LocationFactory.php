@@ -44,7 +44,7 @@ class LocationFactory implements FactoryInterface
 
     public function createItem($name, array $options = array())
     {
-        $menuItem = new MenuItem($name, $this);
+        $menuItem = (new MenuItem($name, $this))->setExtra('translation_domain', false);
 
         if (!isset($options['ezlocation']) || !$options['ezlocation'] instanceof Location) {
             return $menuItem;
@@ -52,7 +52,6 @@ class LocationFactory implements FactoryInterface
 
         $menuItem
             ->setLabel($options['ezlocation']->content->name)
-            ->setExtra('translation_domain', false)
             ->setExtra('ezlocation', $options['ezlocation']);
 
         $extension = $this->getExtension($options['ezlocation']);

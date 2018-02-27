@@ -1,6 +1,0 @@
-services:
-    ezpublish.image_alias.variation_purger:
-        alias: ezpublish.image_alias.variation_purger.legacy_storage_image_file
-
-    ezpublish.image_alias.variation_path_generator:
-        alias: ezpublish.image_alias.variation_path_generator.original_directory

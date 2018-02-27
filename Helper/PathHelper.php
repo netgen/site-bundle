@@ -113,7 +113,7 @@ class PathHelper
         return $pathArray;
     }
 
-    private function configureOptions(OptionsResolver $optionsResolver)
+    protected function configureOptions(OptionsResolver $optionsResolver)
     {
         $optionsResolver->setRequired('use_all_content_types');
         $optionsResolver->setAllowedTypes('use_all_content_types', 'bool');

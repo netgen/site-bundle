@@ -11,7 +11,6 @@ use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Throwable;
 
 class ShortcutExtension implements ExtensionInterface
 {

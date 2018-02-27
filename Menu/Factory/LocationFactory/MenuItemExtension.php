@@ -60,7 +60,7 @@ class MenuItemExtension implements ExtensionInterface
     {
         $this->buildItemFromContent($item, $location->content);
 
-        if (!empty($item->getUri()) && $location->content->getField('target_blank')->value->bool) {
+        if ($location->content->getField('target_blank')->value->bool) {
             $item->setLinkAttribute('target', '_blank')
                 ->setLinkAttribute('rel', 'noopener noreferrer');
         }

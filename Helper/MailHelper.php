@@ -57,16 +57,6 @@ class MailHelper
      */
     protected $logger;
 
-    /**
-     * Constructor.
-     *
-     * @param \Swift_Mailer $mailer
-     * @param \Symfony\Component\Templating\EngineInterface $templating
-     * @param \Symfony\Component\Routing\RouterInterface $router
-     * @param \Symfony\Component\Translation\TranslatorInterface $translator
-     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
-     * @param \Psr\Log\LoggerInterface $logger
-     */
     public function __construct(
         Swift_Mailer $mailer,
         EngineInterface $templating,
@@ -106,16 +96,8 @@ class MailHelper
      * Sender can be:
      * a string: info@netgen.hr
      * an array: array( 'info@netgen.hr' => 'Netgen More' )
-     *
-     * @param mixed $receivers
-     * @param string $template
-     * @param string $subject
-     * @param array $templateParameters
-     * @param mixed $sender
-     *
-     * @return int
      */
-    public function sendMail($receivers, $subject, $template, $templateParameters = array(), $sender = null)
+    public function sendMail($receivers, string $subject, string $template, array $templateParameters = array(), $sender = null): int
     {
         try {
             $sender = $this->getSender($sender);
@@ -147,7 +129,7 @@ class MailHelper
      *
      * @return array
      */
-    protected function getDefaultTemplateParameters()
+    protected function getDefaultTemplateParameters(): array
     {
         return array(
             'site_url' => $this->siteUrl,

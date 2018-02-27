@@ -76,7 +76,7 @@ class LocationFactory implements FactoryInterface
      *
      * @return \Netgen\Bundle\MoreBundle\Menu\Factory\LocationFactory\ExtensionInterface
      */
-    protected function getExtension(Location $location)
+    protected function getExtension(Location $location): ExtensionInterface
     {
         foreach ($this->extensions as $extension) {
             if ($extension->matches($location)) {

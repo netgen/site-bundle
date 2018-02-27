@@ -43,7 +43,7 @@ class EzUserAccountKey
      *
      * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
      */
-    public function setHash($hashKey)
+    public function setHash($hashKey): self
     {
         $this->hashKey = $hashKey;
 
@@ -67,7 +67,7 @@ class EzUserAccountKey
      *
      * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
      */
-    public function setUserId($userId)
+    public function setUserId($userId): self
     {
         $this->userId = $userId;
 
@@ -91,7 +91,7 @@ class EzUserAccountKey
      *
      * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
      */
-    public function setTime($time)
+    public function setTime($time): self
     {
         $this->time = $time;
 

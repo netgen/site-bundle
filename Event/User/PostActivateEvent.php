@@ -25,7 +25,7 @@ class PostActivateEvent extends Event
     /**
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }

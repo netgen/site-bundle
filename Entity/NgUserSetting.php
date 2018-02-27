@@ -35,7 +35,7 @@ class NgUserSetting
      *
      * @return \Netgen\Bundle\MoreBundle\Entity\NgUserSetting
      */
-    public function setUserId($userId)
+    public function setUserId($userId): self
     {
         $this->userId = $userId;
 
@@ -59,7 +59,7 @@ class NgUserSetting
      *
      * @return \Netgen\Bundle\MoreBundle\Entity\NgUserSetting
      */
-    public function setIsActivated($isActivated)
+    public function setIsActivated($isActivated): self
     {
         $this->isActivated = $isActivated;
 

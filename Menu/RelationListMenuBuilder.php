@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\MoreBundle\Menu;
 
 use Knp\Menu\FactoryInterface;
+use Knp\Menu\ItemInterface;
 use Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value as RelationListValue;
 use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;
 use Netgen\EzPlatformSiteApi\API\LoadService;
@@ -62,7 +63,7 @@ class RelationListMenuBuilder
      *
      * @return \Knp\Menu\ItemInterface
      */
-    public function createRelationListMenu($fieldIdentifier, $contentId = null)
+    public function createRelationListMenu(string $fieldIdentifier, $contentId = null): ItemInterface
     {
         $content = $contentId !== null ?
             $this->loadService->loadContent($contentId) :

@@ -60,7 +60,7 @@ class NetgenMoreView implements ViewInterface
      *
      * @param string $template
      */
-    public function setDefaultTemplate($template)
+    public function setDefaultTemplate(string $template = null): void
     {
         $this->template = $template;
     }
@@ -110,7 +110,7 @@ class NetgenMoreView implements ViewInterface
      *
      * @param array $options
      */
-    protected function initializeProximity($options)
+    protected function initializeProximity(array $options): void
     {
         $this->proximity = isset($options['proximity']) ?
             (int) $options['proximity'] :
@@ -120,7 +120,7 @@ class NetgenMoreView implements ViewInterface
     /**
      * Calculates start and end page that will be shown in the middle of pager.
      */
-    protected function calculateStartAndEndPage()
+    protected function calculateStartAndEndPage(): void
     {
         $currentPage = $this->pagerfanta->getCurrentPage();
         $nbPages = $this->pagerfanta->getNbPages();
@@ -144,38 +144,24 @@ class NetgenMoreView implements ViewInterface
 
     /**
      * Calculates the end page when start page is underflowed.
-     *
-     * @param int $startPage
-     * @param int $endPage
-     * @param int $nbPages
-     *
-     * @return int
      */
-    protected function calculateEndPageForStartPageUnderflow($startPage, $endPage, $nbPages)
+    protected function calculateEndPageForStartPageUnderflow(int $startPage, int $endPage, int $nbPages): int
     {
         return min($endPage + (1 - $startPage), $nbPages);
     }
 
     /**
      * Calculates the start page when end page is overflowed.
-     *
-     * @param int $startPage
-     * @param int $endPage
-     * @param int $nbPages
-     *
-     * @return int
      */
-    protected function calculateStartPageForEndPageOverflow($startPage, $endPage, $nbPages)
+    protected function calculateStartPageForEndPageOverflow(int $startPage, int $endPage, int $nbPages): int
     {
         return max($startPage - ($endPage - $nbPages), 1);
     }
 
     /**
      * Returns the list of all pages that need to be displayed.
-     *
-     * @return array
      */
-    protected function getPages()
+    protected function getPages(): array
     {
         $pages = array();
 
@@ -220,12 +206,8 @@ class NetgenMoreView implements ViewInterface
 
     /**
      * Generates the URL based on provided page.
-     *
-     * @param int $page
-     *
-     * @return string
      */
-    protected function generateUrl($page)
+    protected function generateUrl(int $page): string
     {
         $routeGenerator = $this->routeGenerator;
 

@@ -53,12 +53,12 @@ class MenuItemExtension implements ExtensionInterface
         $this->logger = $logger ?: new NullLogger();
     }
 
-    public function matches(Location $location)
+    public function matches(Location $location): bool
     {
         return $location->contentInfo->contentTypeIdentifier === 'ng_menu_item';
     }
 
-    public function buildItem(ItemInterface $item, Location $location)
+    public function buildItem(ItemInterface $item, Location $location): void
     {
         $this->buildItemFromContent($item, $location->content);
 
@@ -70,7 +70,7 @@ class MenuItemExtension implements ExtensionInterface
         $this->buildChildItems($item, $location->content);
     }
 
-    protected function buildItemFromContent(ItemInterface $item, Content $content)
+    protected function buildItemFromContent(ItemInterface $item, Content $content): void
     {
         if (!$content->getField('item_url')->isEmpty()) {
             $this->buildItemFromUrl($item, $content->getField('item_url')->value, $content);
@@ -92,7 +92,7 @@ class MenuItemExtension implements ExtensionInterface
         $this->buildItemFromRelatedContent($item, $content, $relatedContent);
     }
 
-    protected function buildItemFromUrl(ItemInterface $item, UrlValue $urlValue, Content $content)
+    protected function buildItemFromUrl(ItemInterface $item, UrlValue $urlValue, Content $content): void
     {
         $uri = $urlValue->link;
 
@@ -120,7 +120,7 @@ class MenuItemExtension implements ExtensionInterface
         }
     }
 
-    protected function buildItemFromRelatedContent(ItemInterface $item, Content $content, Content $relatedContent)
+    protected function buildItemFromRelatedContent(ItemInterface $item, Content $content, Content $relatedContent): void
     {
         $item
             ->setUri($this->urlGenerator->generate($relatedContent))
@@ -133,7 +133,7 @@ class MenuItemExtension implements ExtensionInterface
         }
     }
 
-    protected function buildChildItems(ItemInterface $item, Content $content)
+    protected function buildChildItems(ItemInterface $item, Content $content): void
     {
         $childLocations = array();
 

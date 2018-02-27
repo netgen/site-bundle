@@ -23,7 +23,7 @@ class ActivationRequestEvent extends Event
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param string $email
      */
-    public function __construct($email, User $user = null)
+    public function __construct(string $email, User $user = null)
     {
         $this->email = $email;
         $this->user = $user;
@@ -32,7 +32,7 @@ class ActivationRequestEvent extends Event
     /**
      * @return string
      */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -40,7 +40,7 @@ class ActivationRequestEvent extends Event
     /**
      * @return \eZ\Publish\API\Repository\Values\User\User User
      */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }

@@ -41,7 +41,7 @@ class SetCsrfEnabledEventListener implements EventSubscriberInterface
      *
      * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(GetResponseEvent $event): void
     {
         $event->getRequest()->attributes->set(
             'csrf_enabled',

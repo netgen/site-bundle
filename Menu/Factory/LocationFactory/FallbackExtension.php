@@ -23,12 +23,12 @@ class FallbackExtension implements ExtensionInterface
         $this->urlGenerator = $urlGenerator;
     }
 
-    public function matches(Location $location)
+    public function matches(Location $location): bool
     {
         return true;
     }
 
-    public function buildItem(ItemInterface $item, Location $location)
+    public function buildItem(ItemInterface $item, Location $location): void
     {
         $item
             ->setUri($this->urlGenerator->generate($location))

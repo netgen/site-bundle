@@ -29,7 +29,7 @@ class PostActivateEventListener extends UserEventListener implements EventSubscr
      *
      * @param \Netgen\Bundle\MoreBundle\Event\User\PostActivateEvent $event
      */
-    public function onPostActivate(PostActivateEvent $event)
+    public function onPostActivate(PostActivateEvent $event): void
     {
         $user = $event->getUser();
 

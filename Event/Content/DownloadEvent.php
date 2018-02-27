@@ -80,7 +80,7 @@ class DownloadEvent extends Event
      *
      * @return \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse
      */
-    public function getResponse()
+    public function getResponse(): BinaryStreamResponse
     {
         return $this->response;
     }

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Netgen\Bundle\MoreBundle\Templating;
 
 use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;
+use Netgen\EzPlatformSiteApi\API\Values\Content;
+use Netgen\EzPlatformSiteApi\API\Values\Location;
 
 class GlobalVariable
 {
@@ -23,22 +25,12 @@ class GlobalVariable
         $this->siteInfoHelper = $siteInfoHelper;
     }
 
-    /**
-     * Returns the SiteInfo location.
-     *
-     * @return \Netgen\EzPlatformSiteApi\API\Values\Location
-     */
-    public function getSiteInfoLocation()
+    public function getSiteInfoLocation(): Location
     {
         return $this->siteInfoHelper->getSiteInfoLocation();
     }
 
-    /**
-     * Returns the SiteInfo content.
-     *
-     * @return \Netgen\EzPlatformSiteApi\API\Values\Content
-     */
-    public function getSiteInfoContent()
+    public function getSiteInfoContent(): Content
     {
         return $this->siteInfoHelper->getSiteInfoContent();
     }

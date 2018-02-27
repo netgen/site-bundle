@@ -30,7 +30,7 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
      *
      * @param \Netgen\Bundle\MoreBundle\Event\User\ActivationRequestEvent $event
      */
-    public function onActivationRequest(ActivationRequestEvent $event)
+    public function onActivationRequest(ActivationRequestEvent $event): void
     {
         $user = $event->getUser();
         $email = $event->getEmail();

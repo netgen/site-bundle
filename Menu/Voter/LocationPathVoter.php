@@ -37,7 +37,7 @@ class LocationPathVoter implements VoterInterface
      *
      * @return bool|null
      */
-    public function matchItem(ItemInterface $item)
+    public function matchItem(ItemInterface $item): ?bool
     {
         $masterRequest = $this->requestStack->getMasterRequest();
         if (!$masterRequest instanceof Request) {

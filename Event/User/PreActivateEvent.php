@@ -33,7 +33,7 @@ class PreActivateEvent extends Event
     /**
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
@@ -41,7 +41,7 @@ class PreActivateEvent extends Event
     /**
      * @return \eZ\Publish\API\Repository\Values\User\UserUpdateStruct
      */
-    public function getUserUpdateStruct()
+    public function getUserUpdateStruct(): UserUpdateStruct
     {
         return $this->userUpdateStruct;
     }
@@ -49,7 +49,7 @@ class PreActivateEvent extends Event
     /**
      * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct $userUpdateStruct
      */
-    public function setUserUpdateStruct(UserUpdateStruct $userUpdateStruct)
+    public function setUserUpdateStruct(UserUpdateStruct $userUpdateStruct): void
     {
         $this->userUpdateStruct = $userUpdateStruct;
     }

@@ -30,7 +30,7 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
      *
      * @param \Netgen\Bundle\MoreBundle\Event\User\PasswordResetRequestEvent $event
      */
-    public function onPasswordResetRequest(PasswordResetRequestEvent $event)
+    public function onPasswordResetRequest(PasswordResetRequestEvent $event): void
     {
         $user = $event->getUser();
         $email = $event->getEmail();

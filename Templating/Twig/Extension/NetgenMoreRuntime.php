@@ -40,19 +40,15 @@ class NetgenMoreRuntime
      *
      * @return array
      */
-    public function getLocationPath($locationId, array $options = array())
+    public function getLocationPath($locationId, array $options = array()): array
     {
         return $this->pathHelper->getPath($locationId, $options);
     }
 
     /**
      * Returns the language name for specified language code.
-     *
-     * @param string $languageCode
-     *
-     * @return array
      */
-    public function getLanguageName($languageCode)
+    public function getLanguageName(string $languageCode): ?string
     {
         if (!is_string($languageCode) || strlen($languageCode) < 2) {
             return null;

@@ -16,7 +16,7 @@ interface ExtensionInterface
      *
      * @return bool
      */
-    public function matches(Location $location);
+    public function matches(Location $location): bool;
 
     /**
      * Configures the item with the passed options.
@@ -24,5 +24,5 @@ interface ExtensionInterface
      * @param \Knp\Menu\ItemInterface $item
      * @param \Netgen\EzPlatformSiteApi\API\Values\Location $location
      */
-    public function buildItem(ItemInterface $item, Location $location);
+    public function buildItem(ItemInterface $item, Location $location): void;
 }

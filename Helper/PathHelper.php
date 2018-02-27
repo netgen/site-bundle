@@ -28,13 +28,6 @@ class PathHelper
      */
     protected $router;
 
-    /**
-     * Constructor.
-     *
-     * @param \Netgen\EzPlatformSiteApi\API\LoadService $loadService
-     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
-     * @param \Symfony\Component\Routing\RouterInterface $router
-     */
     public function __construct(
         LoadService $loadService,
         ConfigResolverInterface $configResolver,
@@ -46,14 +39,9 @@ class PathHelper
     }
 
     /**
-     * Returns the path array for location ID.
-     *
-     * @param mixed $locationId
-     * @param array $options
-     *
-     * @return array
+     * Returns the path array for provided location ID.
      */
-    public function getPath($locationId, array $options = array())
+    public function getPath($locationId, array $options = array()): array
     {
         $optionsResolver = new OptionsResolver();
         $this->configureOptions($optionsResolver);
@@ -115,7 +103,7 @@ class PathHelper
         return $pathArray;
     }
 
-    protected function configureOptions(OptionsResolver $optionsResolver)
+    protected function configureOptions(OptionsResolver $optionsResolver): void
     {
         $optionsResolver->setRequired('use_all_content_types');
         $optionsResolver->setAllowedTypes('use_all_content_types', 'bool');

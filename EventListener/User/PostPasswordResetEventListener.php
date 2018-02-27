@@ -29,7 +29,7 @@ class PostPasswordResetEventListener extends UserEventListener implements EventS
      *
      * @param \Netgen\Bundle\MoreBundle\Event\User\PostPasswordResetEvent $event
      */
-    public function onPasswordReset(PostPasswordResetEvent $event)
+    public function onPasswordReset(PostPasswordResetEvent $event): void
     {
         $user = $event->getUser();
 

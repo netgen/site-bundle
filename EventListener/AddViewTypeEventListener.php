@@ -44,7 +44,7 @@ class AddViewTypeEventListener implements EventSubscriberInterface
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent $event
      */
-    public function onPreContentView(PreContentViewEvent $event)
+    public function onPreContentView(PreContentViewEvent $event): void
     {
         $currentRequest = $this->requestStack->getCurrentRequest();
         if (!$currentRequest instanceof Request) {

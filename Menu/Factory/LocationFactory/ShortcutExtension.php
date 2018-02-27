@@ -38,12 +38,12 @@ class ShortcutExtension implements ExtensionInterface
         $this->logger = $logger ?: new NullLogger();
     }
 
-    public function matches(Location $location)
+    public function matches(Location $location): bool
     {
         return $location->contentInfo->contentTypeIdentifier === 'ng_shortcut';
     }
 
-    public function buildItem(ItemInterface $item, Location $location)
+    public function buildItem(ItemInterface $item, Location $location): void
     {
         $this->buildItemFromContent($item, $location->content);
 
@@ -53,7 +53,7 @@ class ShortcutExtension implements ExtensionInterface
         }
     }
 
-    protected function buildItemFromContent(ItemInterface $item, Content $content)
+    protected function buildItemFromContent(ItemInterface $item, Content $content): void
     {
         if (!$content->getField('url')->isEmpty()) {
             $this->buildItemFromUrl($item, $content->getField('url')->value, $content);
@@ -75,7 +75,7 @@ class ShortcutExtension implements ExtensionInterface
         $this->buildItemFromRelatedContent($item, $content, $relatedContent);
     }
 
-    protected function buildItemFromUrl(ItemInterface $item, UrlValue $urlValue, Content $content)
+    protected function buildItemFromUrl(ItemInterface $item, UrlValue $urlValue, Content $content): void
     {
         $uri = $urlValue->link;
 
@@ -103,7 +103,7 @@ class ShortcutExtension implements ExtensionInterface
         }
     }
 
-    protected function buildItemFromRelatedContent(ItemInterface $item, Content $content, Content $relatedContent)
+    protected function buildItemFromRelatedContent(ItemInterface $item, Content $content, Content $relatedContent): void
     {
         $item->setUri($this->urlGenerator->generate($relatedContent) . $content->getField('internal_url_suffix')->value->text)
             ->setExtra('ezlocation', $relatedContent->mainLocation)

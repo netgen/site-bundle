@@ -34,7 +34,7 @@ class LocationMenuItemEvent extends Event
      *
      * @return \Knp\Menu\ItemInterface
      */
-    public function getItem()
+    public function getItem(): ItemInterface
     {
         return $this->item;
     }
@@ -44,7 +44,7 @@ class LocationMenuItemEvent extends Event
      *
      * @return \Netgen\EzPlatformSiteApi\API\Values\Location
      */
-    public function getLocation()
+    public function getLocation(): Location
     {
         return $this->location;
     }

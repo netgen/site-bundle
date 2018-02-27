@@ -16,7 +16,7 @@ class EzUserAccountKeyRepository extends EntityRepository
      *
      * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
      */
-    public function create($userId)
+    public function create($userId): EzUserAccountKey
     {
         $this->removeByUserId($userId);
 
@@ -50,7 +50,7 @@ class EzUserAccountKeyRepository extends EntityRepository
      *
      * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
      */
-    public function getByHash($hash)
+    public function getByHash($hash): ?EzUserAccountKey
     {
         return $this->findOneBy(array('hashKey' => $hash));
     }
@@ -60,7 +60,7 @@ class EzUserAccountKeyRepository extends EntityRepository
      *
      * @param mixed $userId
      */
-    public function removeByUserId($userId)
+    public function removeByUserId($userId): void
     {
         $results = $this->findBy(array('userId' => $userId));
 
@@ -76,7 +76,7 @@ class EzUserAccountKeyRepository extends EntityRepository
      *
      * @param string $hash
      */
-    public function removeByHash($hash)
+    public function removeByHash($hash): void
     {
         $results = $this->findBy(array('hashKey' => $hash));
 

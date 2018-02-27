@@ -23,7 +23,7 @@ class PasswordResetRequestEvent extends Event
      * @param string $email
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      */
-    public function __construct($email, User $user = null)
+    public function __construct(string $email, User $user = null)
     {
         $this->email = $email;
         $this->user = $user;
@@ -32,7 +32,7 @@ class PasswordResetRequestEvent extends Event
     /**
      * @return string
      */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -40,7 +40,7 @@ class PasswordResetRequestEvent extends Event
     /**
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }

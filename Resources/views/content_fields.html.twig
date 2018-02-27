@@ -2,16 +2,16 @@
 
 {% block ezimage_field %}
 {% spaceless %}
-    {% if not ez_is_field_empty( content, field ) %}
+    {% if not ez_is_field_empty(content, field) %}
         {% if parameters.link_href is defined and parameters.link_href is not empty %}
             <a href="{{ parameters.link_href }}" {% if parameters.link_target is defined and parameters.link_target is not empty %} target="{{ parameters.link_target }}" {% endif %} {% if parameters.link_id is defined and parameters.link_id is not empty %} id="{{ parameters.link_id }}" {% endif %} {% if parameters.link_class is defined and parameters.link_class is not empty %} class="{{ parameters.link_class }}" {% endif %} {% if parameters.link_title is defined and parameters.link_title is not empty %} title="{{ parameters.link_title }}" {% endif %}>
         {% endif %}
 
         {% if parameters.disable_src_attribute is not defined or parameters.disable_src_attribute != true %}
-            {% set image_alias = ez_image_alias( field, versionInfo, parameters.alias|default( 'original' ) ) %}
-            <img src="{% if image_alias %}{{ asset( image_alias.uri ) }}{% else %}//:0{% endif %}" {% if parameters.image_class is defined and parameters.image_class is not empty %} class="{{ parameters.image_class }}" {% endif %} {% if image_alias.width is defined and image_alias.width is not empty %} width="{{ image_alias.width }}" {% endif %} {% if image_alias.height is defined and image_alias.height is not empty %} height="{{ image_alias.height }}" {% endif %} alt="{% if parameters.alt_text is defined and parameters.alt_text is not empty %}{{ parameters.alt_text }}{% else %}{{ field.value.alternativeText }}{% endif %}" {{ block( 'field_attributes' ) }} />
+            {% set image_alias = ez_image_alias(field, versionInfo, parameters.alias|default('original')) %}
+            <img src="{% if image_alias %}{{ asset(image_alias.uri) }}{% else %}//:0{% endif %}" {% if parameters.image_class is defined and parameters.image_class is not empty %} class="{{ parameters.image_class }}" {% endif %} {% if image_alias.width is defined and image_alias.width is not empty %} width="{{ image_alias.width }}" {% endif %} {% if image_alias.height is defined and image_alias.height is not empty %} height="{{ image_alias.height }}" {% endif %} alt="{% if parameters.alt_text is defined and parameters.alt_text is not empty %}{{ parameters.alt_text }}{% else %}{{ field.value.alternativeText }}{% endif %}" {{ block('field_attributes') }} />
         {% else %} {# the responsibility of user is to set data-src #}
-            <img {% if parameters.image_class is defined and parameters.image_class is not empty %} class="{{ parameters.image_class }}" {% endif %} alt="{% if parameters.alt_text is defined and parameters.alt_text is not empty %}{{ parameters.alt_text }}{% else %}{{ field.value.alternativeText }}{% endif %}" {{ block( 'field_attributes' ) }} />
+            <img {% if parameters.image_class is defined and parameters.image_class is not empty %} class="{{ parameters.image_class }}" {% endif %} alt="{% if parameters.alt_text is defined and parameters.alt_text is not empty %}{{ parameters.alt_text }}{% else %}{{ field.value.alternativeText }}{% endif %}" {{ block('field_attributes') }} />
         {% endif %}
 
         {% if parameters.link_href is defined and parameters.link_href is not empty %}
@@ -25,12 +25,12 @@
 
 {% block ezgmaplocation_field %}
 {% spaceless %}
-    {% set map_height = map_height|default( 500 ) %}
-    {% set zoom = zoom|default( false ) %}
-    {% set map_type = map_type|default( false ) %}
+    {% set map_height = map_height|default(500) %}
+    {% set zoom = zoom|default(false) %}
+    {% set map_type = map_type|default(false) %}
 
-    {% set latitude = field.value.latitude|default( false ) %}
-    {% set longitude = field.value.longitude|default( false ) %}
+    {% set latitude = field.value.latitude|default(false) %}
+    {% set longitude = field.value.longitude|default(false) %}
 
     {% include
         '@NetgenMore/parts/google_maps.html.twig' with {
@@ -47,9 +47,9 @@
 
 {% block ezbinaryfile_field %}
 {% spaceless %}
-    {% if not ez_is_field_empty( content, field ) %}
-        <a href="{{ path( 'ngmore_download', { contentId: contentInfo.id, fieldId: field.id } ) }}"
-            {{ block( 'field_attributes' ) }}>{{ field.value.fileName }}</a>&nbsp;({{ field.value.fileSize|ez_file_size( 1 ) }})
+    {% if not ez_is_field_empty(content, field) %}
+        <a href="{{ path('ngmore_download', { contentId: contentInfo.id, fieldId: field.id }) }}"
+            {{ block('field_attributes') }}>{{ field.value.fileName }}</a>&nbsp;({{ field.value.fileSize|ez_file_size(1) }})
     {% endif %}
 {% endspaceless %}
 {% endblock %}

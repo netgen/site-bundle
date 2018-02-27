@@ -1,12 +1,12 @@
-{% if ezpublish.configResolver.hasParameter( 'site_settings.jwplayer_id', 'ngmore' ) %}
-    {% set jwplayer_id = ezpublish.configResolver.getParameter( 'site_settings.jwplayer_id', 'ngmore' ) %}
+{% if ezpublish.configResolver.hasParameter('site_settings.jwplayer_id', 'ngmore') %}
+    {% set jwplayer_id = ezpublish.configResolver.getParameter('site_settings.jwplayer_id', 'ngmore') %}
     {% if jwplayer_id is not empty %}
-        <script type="text/javascript" src="https://content.jwplatform.com/libraries/{{ jwplayer_id|raw|escape( 'js' ) }}.js"></script>
+        <script type="text/javascript" src="https://content.jwplatform.com/libraries/{{ jwplayer_id|raw|escape('js') }}.js"></script>
 
-        {% if ezpublish.configResolver.hasParameter( 'site_settings.jwplayer_key', 'ngmore' ) %}
-            {% set jwplayer_key = ezpublish.configResolver.getParameter( 'site_settings.jwplayer_key', 'ngmore' ) %}
+        {% if ezpublish.configResolver.hasParameter('site_settings.jwplayer_key', 'ngmore') %}
+            {% set jwplayer_key = ezpublish.configResolver.getParameter('site_settings.jwplayer_key', 'ngmore') %}
             {% if jwplayer_key is not empty %}
-                <script type="text/javascript">jwplayer.key="{{ jwplayer_key|raw|escape( 'js' ) }}";</script>
+                <script type="text/javascript">jwplayer.key="{{ jwplayer_key|raw|escape('js') }}";</script>
             {% endif %}
         {% endif %}
     {% endif %}

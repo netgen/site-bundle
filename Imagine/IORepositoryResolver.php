@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Netgen\Bundle\MoreBundle\Imagine;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver as BaseIORepositoryResolver;

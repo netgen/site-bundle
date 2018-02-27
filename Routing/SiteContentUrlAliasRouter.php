@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Netgen\Bundle\MoreBundle\Routing;
 
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;

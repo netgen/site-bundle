@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Netgen\Bundle\MoreBundle\Core\MVC\Symfony\FieldType\BinaryBase;
 
 use eZ\Publish\SPI\FieldType\BinaryBase\PathGenerator;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Netgen\Bundle\MoreBundle\Menu\Factory\LocationFactory;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;

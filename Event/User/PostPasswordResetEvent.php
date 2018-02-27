@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Netgen\Bundle\MoreBundle\Event\User;
 
 use eZ\Publish\API\Repository\Values\User\User;

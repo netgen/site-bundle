@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Netgen\Bundle\MoreBundle\Templating;
 
 use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;

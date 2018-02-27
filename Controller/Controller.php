@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller as BaseController;

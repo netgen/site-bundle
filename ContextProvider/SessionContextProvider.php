@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Netgen\Bundle\MoreBundle\ContextProvider;
 
 use FOS\HttpCache\UserContext\ContextProviderInterface;

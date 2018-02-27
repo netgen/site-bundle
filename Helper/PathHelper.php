@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Netgen\Bundle\MoreBundle\Helper;
 
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;

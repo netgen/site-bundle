@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Netgen\Bundle\MoreBundle\Core\FieldType\XmlText\Converter;
 
 use DOMDocument;

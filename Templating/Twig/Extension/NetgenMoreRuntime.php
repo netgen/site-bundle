@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Netgen\Bundle\MoreBundle\Templating\Twig\Extension;
 
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;

@@ -11,7 +11,7 @@ final class MVCEvents
      *
      * The event listener method receives a \Netgen\Bundle\MoreBundle\Event\User\ActivationRequestEvent
      */
-    const USER_ACTIVATION_REQUEST = 'ngmore.events.user.activation_request';
+    public const USER_ACTIVATION_REQUEST = 'ngmore.events.user.activation_request';
 
     /**
      * The USER_PRE_ACTIVATE event occurs just before the user has been activated.
@@ -19,14 +19,14 @@ final class MVCEvents
      *
      * The event listener method receives a \Netgen\Bundle\MoreBundle\Event\User\PreActivateEvent
      */
-    const USER_PRE_ACTIVATE = 'ngmore.events.user.pre_activate';
+    public const USER_PRE_ACTIVATE = 'ngmore.events.user.pre_activate';
 
     /**
      * The USER_POST_ACTIVATE event occurs just after the user has been activated.
      *
      * The event listener method receives a \Netgen\Bundle\MoreBundle\Event\User\PostActivateEvent
      */
-    const USER_POST_ACTIVATE = 'ngmore.events.user.post_activate';
+    public const USER_POST_ACTIVATE = 'ngmore.events.user.post_activate';
 
     /**
      * The USER_PRE_REGISTER event occurs just before the user has been registered.
@@ -34,21 +34,21 @@ final class MVCEvents
      *
      * The event listener method receives a \Netgen\Bundle\MoreBundle\Event\User\PreRegisterEvent
      */
-    const USER_PRE_REGISTER = 'ngmore.events.user.pre_register';
+    public const USER_PRE_REGISTER = 'ngmore.events.user.pre_register';
 
     /**
      * The USER_POST_REGISTER event occurs just after the user has been registered.
      *
      * The event listener method receives a \Netgen\Bundle\MoreBundle\Event\User\PostRegisterEvent
      */
-    const USER_POST_REGISTER = 'ngmore.events.user.post_register';
+    public const USER_POST_REGISTER = 'ngmore.events.user.post_register';
 
     /**
      * The USER_PASSWORD_RESET_REQUEST event occurs after the password reset procedure has been started.
      *
      * The event listener method receives a \Netgen\Bundle\MoreBundle\Event\User\PasswordResetRequestEvent
      */
-    const USER_PASSWORD_RESET_REQUEST = 'ngmore.events.user.password_reset_request';
+    public const USER_PASSWORD_RESET_REQUEST = 'ngmore.events.user.password_reset_request';
 
     /**
      * The USER_PRE_PASSWORD_RESET event occurs just before the password on the user has been changed.
@@ -56,26 +56,26 @@ final class MVCEvents
      *
      * The event listener method receives a \Netgen\Bundle\MoreBundle\Event\User\PrePasswordResetEvent
      */
-    const USER_PRE_PASSWORD_RESET = 'ngmore.events.user.pre_password_reset';
+    public const USER_PRE_PASSWORD_RESET = 'ngmore.events.user.pre_password_reset';
 
     /**
      * The USER_POST_PASSWORD_RESET event occurs just after the password on the user has been changed.
      *
      * The event listener method receives a \Netgen\Bundle\MoreBundle\Event\User\PostPasswordResetEvent
      */
-    const USER_POST_PASSWORD_RESET = 'ngmore.events.user.post_password_reset';
+    public const USER_POST_PASSWORD_RESET = 'ngmore.events.user.post_password_reset';
 
     /**
      * The CONTENT_DOWNLOAD event occurs after download content.
      *
      * The event listener method receives a \Netgen\Bundle\MoreBundle\Event\Content\DownloadEvent
      */
-    const CONTENT_DOWNLOAD = 'ngmore.events.content.download';
+    public const CONTENT_DOWNLOAD = 'ngmore.events.content.download';
 
     /**
      * The MENU_LOCATION_ITEM event occurs when a menu item is build using location menu factory.
      *
      * The event listener method receives a \Netgen\Bundle\MoreBundle\Event\Menu\LocationMenuItemEvent
      */
-    const MENU_LOCATION_ITEM = 'ngmore.events.menu.location_item';
+    public const MENU_LOCATION_ITEM = 'ngmore.events.menu.location_item';
 }

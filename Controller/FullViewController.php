@@ -9,6 +9,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\FieldType\Relation\Value as RelationValue;
 use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
 use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
+use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\LocationSearchFilterAdapter;
 use Pagerfanta\Pagerfanta;
@@ -139,15 +140,13 @@ class FullViewController extends Controller
     protected function checkCategoryRedirect(Location $location)
     {
         $content = $location->content;
-        $loadService = $this->getSite()->getLoadService();
 
-        $internalRedirectValue = $content->getField('internal_redirect')->value;
+        $internalRedirectContent = $content->getFieldRelation('internal_redirect');
         $externalRedirectValue = $content->getField('external_redirect')->value;
-        if ($internalRedirectValue instanceof RelationValue && !$content->getField('internal_redirect')->isEmpty()) {
-            $internalRedirectContentInfo = $loadService->loadContent($internalRedirectValue->destinationContentId)->contentInfo;
-            if ($internalRedirectContentInfo->mainLocationId !== $location->id) {
+        if ($internalRedirectContent instanceof Content) {
+            if ($internalRedirectContent->contentInfo->mainLocationId !== $location->id) {
                 return new RedirectResponse(
-                    $this->router->generate($internalRedirectContentInfo),
+                    $this->router->generate($internalRedirectContent),
                     RedirectResponse::HTTP_MOVED_PERMANENTLY
                 );
             }

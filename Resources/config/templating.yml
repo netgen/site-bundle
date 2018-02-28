@@ -16,6 +16,8 @@ services:
         public: false
         arguments:
             - "@ngmore.helper.site_info_helper"
+            - "@ezpublish.api.repository"
+            - "@netgen.ezplatform_site.load_service"
 
     ngmore.templating.twig.extension:
         class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\NetgenMoreExtension

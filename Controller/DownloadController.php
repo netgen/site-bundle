@@ -70,8 +70,8 @@ class DownloadController extends Controller
     {
         $content = $this->getSite()->getLoadService()->loadContent(
             $contentId,
-            $request->query->has('version') ? $request->query->get('version') : null,
-            $request->query->has('inLanguage') ? $request->query->get('inLanguage') : null
+            $request->query->get('version'),
+            $request->query->get('inLanguage')
         );
 
         if (!$content->hasFieldById($fieldId) || $content->getFieldById($fieldId)->isEmpty()) {

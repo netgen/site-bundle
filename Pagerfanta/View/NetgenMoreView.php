@@ -90,7 +90,7 @@ class NetgenMoreView implements ViewInterface
         $this->calculateStartAndEndPage();
 
         return $this->twig->render(
-            isset($options['template']) ? $options['template'] : $this->template,
+            $options['template'] ?? $this->template,
             array(
                 'pager' => $pagerfanta,
                 'pages' => $this->getPages(),
@@ -105,9 +105,7 @@ class NetgenMoreView implements ViewInterface
      */
     protected function initializeProximity(array $options): void
     {
-        $this->proximity = isset($options['proximity']) ?
-            (int) $options['proximity'] :
-            2;
+        $this->proximity = (int) ($options['proximity'] ?? 2);
     }
 
     /**

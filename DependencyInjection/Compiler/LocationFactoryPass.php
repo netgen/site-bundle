@@ -25,7 +25,7 @@ class LocationFactoryPass implements CompilerPassInterface
 
         foreach ($container->findTaggedServiceIds('ngmore.menu.factory.location.extension') as $extension => $tags) {
             foreach ($tags as $tag) {
-                $priority = isset($tag[0]['priority']) ? (int) $tag[0]['priority'] : 0;
+                $priority = (int) ($tag[0]['priority'] ?? 0);
                 $extensions[$priority][] = new Reference($extension);
             }
         }

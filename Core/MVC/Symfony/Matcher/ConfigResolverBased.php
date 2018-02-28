@@ -33,7 +33,7 @@ abstract class ConfigResolverBased extends MultipleValued
     public function doMatch($value): bool
     {
         $config = $this->values[0];
-        $namespace = isset($this->values[1]) ? $this->values[1] : null;
+        $namespace = $this->values[1] ?? null;
 
         if ($this->configResolver->hasParameter($config, $namespace)) {
             $configValue = $this->configResolver->getParameter($config, $namespace);

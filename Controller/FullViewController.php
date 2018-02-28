@@ -88,14 +88,11 @@ class FullViewController extends Controller
         $pageLimitValue = $content->getField('page_limit')->value;
 
         $defaultLimit = 12;
-        if (isset($params['childrenLimit'])) {
-            $childrenLimit = (int) $params['childrenLimit'];
-            if ($childrenLimit > 0) {
-                $defaultLimit = $childrenLimit;
-            }
-        }
 
-        $pager->setMaxPerPage($pageLimitValue->value > 0 ? (int) $pageLimitValue->value : $defaultLimit);
+        $childrenLimit = (int) ($params['childrenLimit'] ?? $defaultLimit);
+        $childrenLimit = $childrenLimit > 0 ? $childrenLimit : $defaultLimit;
+
+        $pager->setMaxPerPage($pageLimitValue->value > 0 ? (int) $pageLimitValue->value : $childrenLimit);
 
         $currentPage = (int) $request->get('page', 1);
         $pager->setCurrentPage($currentPage > 0 ? $currentPage : 1);

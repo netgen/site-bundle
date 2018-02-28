@@ -192,7 +192,7 @@ class UserController extends Controller
 
         $activationRequestEvent = new UserEvents\ActivationRequestEvent(
             $form->get('email')->getData(),
-            !empty($users) ? $users[0] : null
+            $users[0] ?? null
         );
 
         $this->eventDispatcher->dispatch(MVCEvents::USER_ACTIVATION_REQUEST, $activationRequestEvent);
@@ -282,7 +282,7 @@ class UserController extends Controller
 
         $passwordResetRequestEvent = new UserEvents\PasswordResetRequestEvent(
             $form->get('email')->getData(),
-            !empty($users) ? $users[0] : null
+            $users[0] ?? null
         );
 
         $this->eventDispatcher->dispatch(MVCEvents::USER_PASSWORD_RESET_REQUEST, $passwordResetRequestEvent);

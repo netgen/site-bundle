@@ -20,9 +20,7 @@ class Type extends BaseRelationListType
     {
         return new Value(
             $hash['destinationContentIds'],
-            isset($hash['destinationLocationIds']) ?
-                $hash['destinationLocationIds'] :
-                array()
+            $hash['destinationLocationIds'] ?? array()
         );
     }
 

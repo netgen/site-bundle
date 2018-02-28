@@ -11,12 +11,12 @@ use eZ\Publish\SPI\FieldType\Value as SPIValue;
 
 class Type extends BaseRelationListType
 {
-    public function getEmptyValue(): Value
+    public function getEmptyValue(): SPIValue
     {
         return new Value();
     }
 
-    public function fromHash($hash): Value
+    public function fromHash($hash): SPIValue
     {
         return new Value(
             $hash['destinationContentIds'],

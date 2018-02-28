@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Netgen\Bundle\MoreBundle\Menu\Factory;
 
 use Knp\Menu\FactoryInterface;
+use Knp\Menu\ItemInterface;
 use Knp\Menu\MenuItem;
-use Netgen\BlockManager\Item\ItemInterface;
 use Netgen\Bundle\MoreBundle\Event\Menu\LocationMenuItemEvent;
 use Netgen\Bundle\MoreBundle\Event\MVCEvents;
 use Netgen\Bundle\MoreBundle\Menu\Factory\LocationFactory\ExtensionInterface;
@@ -40,7 +40,7 @@ class LocationFactory implements FactoryInterface
         $this->extensions = $extensions;
     }
 
-    public function createItem($name, array $options = array()): MenuItem
+    public function createItem($name, array $options = array()): ItemInterface
     {
         $menuItem = (new MenuItem($name, $this))->setExtra('translation_domain', false);
 

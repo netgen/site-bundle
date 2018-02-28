@@ -11,6 +11,8 @@ class PartsController extends Controller
 {
     /**
      * Action for rendering related items.
+     *
+     * @param mixed $contentId
      */
     public function viewRelatedItems($contentId, string $fieldDefinitionIdentifier, string $template, string $viewType = 'line'): Response
     {
@@ -58,6 +60,8 @@ class PartsController extends Controller
      * 2. children objects - if $includeChildren parameter is set, all children content objects will be added in the multimedia items list
      * 3. related objects from related_multimedia object relation field ( related images, images from related galleries, banners, videos )
      * - to enable this feature for some content type, add object relations field with content type identifier 'related_multimedia'.
+     *
+     * @param mixed $locationId
      */
     public function viewRelatedMultimediaItems($locationId, string $template, bool $includeChildren = false, array $contentTypeIdentifiers = array('image')): Response
     {

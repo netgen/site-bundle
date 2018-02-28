@@ -38,6 +38,7 @@ services:
         arguments:
             - "@netgen.ezplatform_site.load_service"
             - "@router"
+            - "@request_stack"
             - "@?logger"
         tags:
             - { name: ngmore.menu.factory.location.extension, priority: 0 }
@@ -50,6 +51,7 @@ services:
             - "@netgen.ezplatform_site.load_service"
             - "@netgen.ezplatform_site.filter_service"
             - "@router"
+            - "@request_stack"
             - "@?logger"
         tags:
             - { name: ngmore.menu.factory.location.extension, priority: 0 }

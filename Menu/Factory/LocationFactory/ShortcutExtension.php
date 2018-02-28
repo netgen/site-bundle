@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Netgen\Bundle\MoreBundle\Menu\Factory\LocationFactory;
 
 use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
-use InvalidArgumentException;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 use Knp\Menu\ItemInterface;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ShortcutExtension implements ExtensionInterface
@@ -27,14 +28,24 @@ class ShortcutExtension implements ExtensionInterface
     protected $urlGenerator;
 
     /**
+     * @var \Symfony\Component\HttpFoundation\RequestStack
+     */
+    protected $requestStack;
+
+    /**
      * @var \Psr\Log\NullLogger
      */
     protected $logger;
 
-    public function __construct(LoadService $loadService, UrlGeneratorInterface $urlGenerator, LoggerInterface $logger = null)
-    {
+    public function __construct(
+        LoadService $loadService,
+        UrlGeneratorInterface $urlGenerator,
+        RequestStack $requestStack,
+        LoggerInterface $logger = null
+    ) {
         $this->loadService = $loadService;
         $this->urlGenerator = $urlGenerator;
+        $this->requestStack = $requestStack;
         $this->logger = $logger ?: new NullLogger();
     }
 
@@ -80,15 +91,9 @@ class ShortcutExtension implements ExtensionInterface
         $uri = $urlValue->link;
 
         if (stripos($urlValue->link, 'http') !== 0) {
-            try {
-                $uri = $this->urlGenerator->generate(
-                    'ez_legacy',
-                    array(
-                        'module_uri' => $urlValue->link,
-                    )
-                );
-            } catch (InvalidArgumentException $e) {
-                // Do nothing
+            $currentSiteAccess = $this->requestStack->getMasterRequest()->attributes->get('siteaccess');
+            if ($currentSiteAccess->matcher instanceof URILexer) {
+                $uri = $currentSiteAccess->matcher->analyseLink($uri);
             }
         }
 

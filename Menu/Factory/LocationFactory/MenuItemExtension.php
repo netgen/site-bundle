@@ -8,7 +8,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
-use InvalidArgumentException;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 use Knp\Menu\ItemInterface;
 use Netgen\EzPlatformSiteApi\API\FilterService;
 use Netgen\EzPlatformSiteApi\API\LoadService;
@@ -16,6 +16,7 @@ use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Throwable;
 
@@ -37,6 +38,11 @@ class MenuItemExtension implements ExtensionInterface
     protected $urlGenerator;
 
     /**
+     * @var \Symfony\Component\HttpFoundation\RequestStack
+     */
+    protected $requestStack;
+
+    /**
      * @var \Psr\Log\NullLogger
      */
     protected $logger;
@@ -45,11 +51,13 @@ class MenuItemExtension implements ExtensionInterface
         LoadService $loadService,
         FilterService $filterService,
         UrlGeneratorInterface $urlGenerator,
+        RequestStack $requestStack,
         LoggerInterface $logger = null
     ) {
         $this->loadService = $loadService;
         $this->filterService = $filterService;
         $this->urlGenerator = $urlGenerator;
+        $this->requestStack = $requestStack;
         $this->logger = $logger ?: new NullLogger();
     }
 
@@ -97,15 +105,9 @@ class MenuItemExtension implements ExtensionInterface
         $uri = $urlValue->link;
 
         if (stripos($urlValue->link, 'http') !== 0) {
-            try {
-                $uri = $this->urlGenerator->generate(
-                    'ez_legacy',
-                    array(
-                        'module_uri' => $urlValue->link,
-                    )
-                );
-            } catch (InvalidArgumentException $e) {
-                // Do nothing
+            $currentSiteAccess = $this->requestStack->getMasterRequest()->attributes->get('siteaccess');
+            if ($currentSiteAccess->matcher instanceof URILexer) {
+                $uri = $currentSiteAccess->matcher->analyseLink($uri);
             }
         }
 

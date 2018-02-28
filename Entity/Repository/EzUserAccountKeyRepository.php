@@ -50,7 +50,7 @@ class EzUserAccountKeyRepository extends EntityRepository
      *
      * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
      */
-    public function getByHash($hash): ?EzUserAccountKey
+    public function getByHash(string $hash): ?EzUserAccountKey
     {
         return $this->findOneBy(array('hashKey' => $hash));
     }
@@ -76,7 +76,7 @@ class EzUserAccountKeyRepository extends EntityRepository
      *
      * @param string $hash
      */
-    public function removeByHash($hash): void
+    public function removeByHash(string $hash): void
     {
         $results = $this->findBy(array('hashKey' => $hash));
 

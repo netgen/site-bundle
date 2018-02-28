@@ -33,7 +33,7 @@ class LocationPathVoter implements VoterInterface
      * path of the currently displayed item. This takes care of marking
      * items in menus of arbitrary depths.
      */
-    public function matchItem(ItemInterface $item): ?bool
+    public function matchItem(ItemInterface $item)
     {
         $masterRequest = $this->requestStack->getMasterRequest();
         if (!$masterRequest instanceof Request) {

@@ -9,17 +9,14 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\LocationSearchHitAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class SearchController extends Controller
 {
     /**
      * Action for displaying the results of full text search.
-     *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function search(Request $request)
+    public function search(Request $request): Response
     {
         $configResolver = $this->getConfigResolver();
 

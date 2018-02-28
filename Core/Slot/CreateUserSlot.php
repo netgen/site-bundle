@@ -28,7 +28,7 @@ class CreateUserSlot extends Slot
         $this->ngUserSettingRepository = $ngUserSettingRepository;
     }
 
-    public function receive(Signal $signal)
+    public function receive(Signal $signal): void
     {
         if (!$signal instanceof Signal\UserService\CreateUserSignal) {
             return;

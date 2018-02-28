@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class SymlinkProjectCommand extends SymlinkCommand
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this->addOption('force', null, InputOption::VALUE_NONE, 'If set, it will destroy existing symlinks before recreating them');
         $this->addOption('web-folder', null, InputOption::VALUE_OPTIONAL, 'Name of the webroot folder to use');
@@ -20,7 +20,7 @@ class SymlinkProjectCommand extends SymlinkCommand
         $this->setName('ngmore:symlink:project');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $this->forceSymlinks = (bool) $input->getOption('force');
         $this->environment = $this->getContainer()->get('kernel')->getEnvironment();
@@ -40,6 +40,8 @@ class SymlinkProjectCommand extends SymlinkCommand
 
             $this->symlinkProjectFiles($projectFilesPath, $input, $output);
         }
+
+        return 0;
     }
 
     /**

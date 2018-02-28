@@ -14,7 +14,7 @@ class RelationListFieldTypePass implements CompilerPassInterface
     /**
      * Overrides ezrelationlist field type with own implementations.
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if ($container->has('ezpublish.fieldType.ezobjectrelationlist')) {
             $container

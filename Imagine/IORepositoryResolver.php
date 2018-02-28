@@ -15,7 +15,7 @@ class IORepositoryResolver extends BaseIORepositoryResolver
      *
      * @return string
      */
-    protected function getBaseUrl()
+    protected function getBaseUrl(): string
     {
         return '';
     }

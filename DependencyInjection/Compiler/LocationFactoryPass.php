@@ -13,7 +13,7 @@ class LocationFactoryPass implements CompilerPassInterface
     /**
      * Injects location factory extensions into the factory.
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if (!$container->has('ngmore.menu.factory.location')) {
             return;

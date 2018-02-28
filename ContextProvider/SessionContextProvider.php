@@ -24,7 +24,7 @@ class SessionContextProvider implements ContextProviderInterface
      * If the session is started, adds the session ID to user context. This allows
      * varying the cache per session.
      */
-    public function updateUserContext(UserContext $context)
+    public function updateUserContext(UserContext $context): void
     {
         if ($this->session->isStarted()) {
             $context->addParameter('sessionId', $this->session->getId());

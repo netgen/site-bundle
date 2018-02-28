@@ -29,7 +29,7 @@ class SiteLocationUrlAliasRouter implements ChainedRouterInterface, RequestMatch
      */
     protected $requestContext;
 
-    public function __construct(UrlAliasGenerator $generator, RequestContext $requestContext)
+    public function __construct(UrlAliasGenerator $generator, RequestContext $requestContext = null)
     {
         $this->generator = $generator;
         $this->requestContext = $requestContext ?: new RequestContext();
@@ -47,7 +47,7 @@ class SiteLocationUrlAliasRouter implements ChainedRouterInterface, RequestMatch
      * @param mixed $parameters
      * @param mixed $referenceType
      */
-    public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
+    public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH): string
     {
         if (!$name instanceof Location) {
             throw new RouteNotFoundException('Could not match route');
@@ -60,33 +60,33 @@ class SiteLocationUrlAliasRouter implements ChainedRouterInterface, RequestMatch
         );
     }
 
-    public function getRouteCollection()
+    public function getRouteCollection(): RouteCollection
     {
         return new RouteCollection();
     }
 
-    public function setContext(RequestContext $context)
+    public function setContext(RequestContext $context): void
     {
         $this->requestContext = $context;
         $this->generator->setRequestContext($context);
     }
 
-    public function getContext()
+    public function getContext(): RequestContext
     {
         return $this->requestContext;
     }
 
-    public function match($pathinfo)
+    public function match($pathinfo): array
     {
         throw new RuntimeException("The ContentUrlAliasRouter doesn't support the match() method.");
     }
 
-    public function supports($name)
+    public function supports($name): bool
     {
         return $name instanceof Location;
     }
 
-    public function getRouteDebugMessage($name, array $parameters = array())
+    public function getRouteDebugMessage($name, array $parameters = array()): string
     {
         if ($name instanceof RouteObjectInterface) {
             return 'Route with key ' . $name->getRouteKey();

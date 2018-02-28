@@ -45,7 +45,7 @@ class EzLinkDirectDownload implements Converter
      *
      * Overriden to add option to download files by using Netgen More specific route.
      */
-    public function convert(DOMDocument $xmlDoc)
+    public function convert(DOMDocument $xmlDoc): void
     {
         foreach ($xmlDoc->getElementsByTagName('link') as $link) {
             /** @var \DOMElement $link */

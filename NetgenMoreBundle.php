@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class NetgenMoreBundle extends Bundle
 {
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new Compiler\XslRegisterPass());
         $container->addCompilerPass(new Compiler\RelationListFieldTypePass());

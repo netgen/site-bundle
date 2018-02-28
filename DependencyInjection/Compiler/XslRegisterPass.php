@@ -13,7 +13,7 @@ class XslRegisterPass implements CompilerPassInterface
     /**
      * Registers ezxml_tags.xsl as custom XSL stylesheet for ezxmltext field type.
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $scopes = array_merge(
             array(ConfigResolver::SCOPE_DEFAULT),

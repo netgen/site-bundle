@@ -32,10 +32,6 @@ class FullViewController extends Controller
     /**
      * Action for viewing content with ng_category content type identifier.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView $view
-     * @param array $params
-     *
      * @return \Symfony\Component\HttpFoundation\Response|\Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView
      */
     public function viewNgCategory(Request $request, ContentView $view, array $params = array())
@@ -109,8 +105,6 @@ class FullViewController extends Controller
     /**
      * Action for viewing content with ng_landing_page content type identifier.
      *
-     * @param \Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView $view
-     *
      * @return \Symfony\Component\HttpFoundation\Response|\Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView
      */
     public function viewNgLandingPage(ContentView $view)
@@ -131,12 +125,8 @@ class FullViewController extends Controller
     /**
      * Checks if content at location defined by it's ID contains
      * valid category redirect value and returns a redirect response if it does.
-     *
-     * @param \Netgen\EzPlatformSiteApi\API\Values\Location $location
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function checkCategoryRedirect(Location $location)
+    protected function checkCategoryRedirect(Location $location): ?RedirectResponse
     {
         $content = $location->content;
 
@@ -159,5 +149,7 @@ class FullViewController extends Controller
                 RedirectResponse::HTTP_MOVED_PERMANENTLY
             );
         }
+
+        return null;
     }
 }

@@ -14,7 +14,7 @@ use Symfony\Component\Process\Process;
 
 class DumpDatabaseCommand extends ContainerAwareCommand
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('ngmore:database:dump')
             ->setDescription('Dumps the currently configured database to the provided file')
@@ -25,7 +25,7 @@ class DumpDatabaseCommand extends ContainerAwareCommand
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $container = $this->getContainer();
 
@@ -69,5 +69,7 @@ class DumpDatabaseCommand extends ContainerAwareCommand
         }
 
         $output->writeln('<info>Database dump complete.</info>');
+
+        return 0;
     }
 }

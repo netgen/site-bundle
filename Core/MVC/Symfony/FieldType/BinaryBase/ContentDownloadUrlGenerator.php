@@ -27,7 +27,7 @@ class ContentDownloadUrlGenerator extends PathGenerator
         $this->router = $router;
     }
 
-    public function getStoragePathForField(Field $field, VersionInfo $versionInfo)
+    public function getStoragePathForField(Field $field, VersionInfo $versionInfo): string
     {
         return $this->router->generate(
             'ngmore_download',

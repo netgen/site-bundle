@@ -17,7 +17,7 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
      *
      * @return array
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return array(
             MVCEvents::USER_PASSWORD_RESET_REQUEST => 'onPasswordResetRequest',

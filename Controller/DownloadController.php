@@ -66,7 +66,7 @@ class DownloadController extends Controller
      *
      * @return \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse
      */
-    public function downloadFile(Request $request, $contentId, $fieldId, $isInline = false)
+    public function downloadFile(Request $request, $contentId, $fieldId, $isInline = false): BinaryStreamResponse
     {
         $content = $this->getSite()->getLoadService()->loadContent(
             $contentId,

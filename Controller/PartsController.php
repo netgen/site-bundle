@@ -5,20 +5,14 @@ declare(strict_types=1);
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use Symfony\Component\HttpFoundation\Response;
 
 class PartsController extends Controller
 {
     /**
      * Action for rendering related items.
-     *
-     * @param mixed $contentId
-     * @param string $fieldDefinitionIdentifier
-     * @param string $viewType
-     * @param string $template
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewRelatedItems($contentId, $fieldDefinitionIdentifier, $template, $viewType = 'line')
+    public function viewRelatedItems($contentId, string $fieldDefinitionIdentifier, string $template, string $viewType = 'line'): Response
     {
         $relatedItems = array();
 
@@ -64,15 +58,8 @@ class PartsController extends Controller
      * 2. children objects - if $includeChildren parameter is set, all children content objects will be added in the multimedia items list
      * 3. related objects from related_multimedia object relation field ( related images, images from related galleries, banners, videos )
      * - to enable this feature for some content type, add object relations field with content type identifier 'related_multimedia'.
-     *
-     * @param int $locationId
-     * @param string $template
-     * @param bool $includeChildren
-     * @param array $contentTypeIdentifiers
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewRelatedMultimediaItems($locationId, $template, $includeChildren = false, array $contentTypeIdentifiers = array('image'))
+    public function viewRelatedMultimediaItems($locationId, string $template, bool $includeChildren = false, array $contentTypeIdentifiers = array('image')): Response
     {
         $location = $this->getSite()->getLoadService()->loadLocation($locationId);
         $content = $location->content;

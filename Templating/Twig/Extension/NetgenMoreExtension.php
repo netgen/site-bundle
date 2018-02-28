@@ -9,7 +9,7 @@ use Twig\TwigFunction;
 
 class NetgenMoreExtension extends AbstractExtension
 {
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return array(
             new TwigFunction(

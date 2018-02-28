@@ -13,7 +13,7 @@ use Netgen\EzPlatformSiteApi\API\Values\Location as APILocation;
 
 class ParentContentType extends ConfigResolverBased implements ViewMatcherInterface
 {
-    public function match(View $view)
+    public function match(View $view): bool
     {
         if (!$view instanceof LocationValueView) {
             return false;

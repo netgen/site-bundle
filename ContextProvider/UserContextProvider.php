@@ -24,7 +24,7 @@ class UserContextProvider implements ContextProviderInterface
      * Adds the current user ID to the user context. Allows varying the caches
      * per user, without taking into the account session for example.
      */
-    public function updateUserContext(UserContext $context)
+    public function updateUserContext(UserContext $context): void
     {
         $context->addParameter(
             'userId',

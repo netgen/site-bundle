@@ -14,7 +14,7 @@ use Symfony\Component\Yaml\Yaml;
 
 class NetgenMoreExtension extends Extension implements PrependExtensionInterface
 {
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
@@ -27,7 +27,7 @@ class NetgenMoreExtension extends Extension implements PrependExtensionInterface
         $loader->load('services.yml');
     }
 
-    public function prepend(ContainerBuilder $container)
+    public function prepend(ContainerBuilder $container): void
     {
         $container->prependExtensionConfig(
             'assetic',

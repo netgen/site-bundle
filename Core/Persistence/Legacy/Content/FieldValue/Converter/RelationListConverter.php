@@ -18,7 +18,7 @@ class RelationListConverter extends BaseRelationListConverter
      */
     protected $db;
 
-    public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue)
+    public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue): void
     {
         $doc = new DOMDocument('1.0', 'utf-8');
         $root = $doc->createElement('related-objects');
@@ -61,7 +61,7 @@ class RelationListConverter extends BaseRelationListConverter
         $storageFieldValue->dataText = $doc->saveXML();
     }
 
-    public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue)
+    public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue): void
     {
         $fieldValue->data = array(
             'destinationContentIds' => array(),
@@ -94,14 +94,14 @@ class RelationListConverter extends BaseRelationListConverter
         $fieldValue->data['destinationLocationIds'] = array_keys($priorityByLocationId);
     }
 
-    public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
+    public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef): void
     {
         parent::toFieldDefinition($storageDef, $fieldDef);
 
         $fieldDef->defaultValue->data['destinationLocationIds'] = array();
     }
 
-    private static function dbAttributeMap()
+    private static function dbAttributeMap(): array
     {
         return array(
             // 'identifier' => 'identifier',// not used

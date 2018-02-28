@@ -11,12 +11,12 @@ use eZ\Publish\SPI\FieldType\Value as SPIValue;
 
 class Type extends BaseRelationListType
 {
-    public function getEmptyValue()
+    public function getEmptyValue(): Value
     {
         return new Value();
     }
 
-    public function fromHash($hash)
+    public function fromHash($hash): Value
     {
         return new Value(
             $hash['destinationContentIds'],
@@ -24,7 +24,7 @@ class Type extends BaseRelationListType
         );
     }
 
-    public function toHash(SPIValue $value)
+    public function toHash(SPIValue $value): array
     {
         return array(
             'destinationContentIds' => $value->destinationContentIds,
@@ -66,7 +66,7 @@ class Type extends BaseRelationListType
         return parent::createValueFromInput($inputValue);
     }
 
-    protected function checkValueStructure(BaseValue $value)
+    protected function checkValueStructure(BaseValue $value): void
     {
         parent::checkValueStructure($value);
 

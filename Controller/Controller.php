@@ -13,7 +13,7 @@ abstract class Controller extends BaseController
     /**
      * Configures the response with provided cache settings.
      */
-    protected function processCacheSettings(Request $request, Response $response)
+    protected function processCacheSettings(Request $request, Response $response): void
     {
         $cacheSettings = $request->attributes->get('cacheSettings');
         if (!is_array($cacheSettings)) {

@@ -11,7 +11,7 @@ use Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased;
 
 class ContentTypeGroup extends ConfigResolverBased implements ViewMatcherInterface
 {
-    public function match(View $view)
+    public function match(View $view): bool
     {
         if (!$view instanceof ContentValueView) {
             return false;

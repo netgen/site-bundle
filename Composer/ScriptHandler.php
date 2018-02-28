@@ -12,7 +12,7 @@ class ScriptHandler extends DistributionBundleScriptHandler
     /**
      * Symlinks various project files and folders to their proper locations.
      */
-    public static function installProjectSymlinks(Event $event)
+    public static function installProjectSymlinks(Event $event): void
     {
         $options = self::getOptions($event);
         $consoleDir = static::getConsoleDir($event, 'install project symlinks');

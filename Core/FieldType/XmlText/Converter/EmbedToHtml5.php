@@ -23,7 +23,7 @@ class EmbedToHtml5 extends BaseEmbedToHtml5
 {
     use SiteAwareTrait;
 
-    protected function processTag(DOMDocument $xmlDoc, $tagName)
+    protected function processTag(DOMDocument $xmlDoc, $tagName): void
     {
         $this->logger = $this->logger ?: new NullLogger();
         $permissionResolver = $this->repository->getPermissionResolver();

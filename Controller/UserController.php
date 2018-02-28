@@ -18,7 +18,9 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Constraints;
 
@@ -59,13 +61,9 @@ class UserController extends Controller
     /**
      * Registers user on the site.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException if user does not have permission
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function register(Request $request)
+    public function register(Request $request): Response
     {
         $contentTypeIdentifier = $this->getConfigResolver()->getParameter('user.content_type_identifier', 'ngmore');
         $contentType = $this->getRepository()->getContentTypeService()->loadContentTypeByIdentifier($contentTypeIdentifier);
@@ -169,12 +167,8 @@ class UserController extends Controller
 
     /**
      * Displays and validates the form for sending an activation mail.
-     *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function activationForm(Request $request)
+    public function activationForm(Request $request): Response
     {
         $form = $this->createActivationForm();
         $form->handleRequest($request);
@@ -205,13 +199,9 @@ class UserController extends Controller
     /**
      * Activates the user by hash key.
      *
-     * @param string $hash
-     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException If hash key does not exist
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function activate($hash)
+    public function activate(string $hash): Response
     {
         $accountKey = $this->accountKeyRepository->getByHash($hash);
 
@@ -259,12 +249,8 @@ class UserController extends Controller
 
     /**
      * Displays and validates the forgot password form.
-     *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function forgotPassword(Request $request)
+    public function forgotPassword(Request $request): Response
     {
         $form = $this->createForgotPasswordForm();
         $form->handleRequest($request);
@@ -295,14 +281,9 @@ class UserController extends Controller
     /**
      * Displays and validates the reset password form.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param string $hash
-     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException If hash key does not exist
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function resetPassword(Request $request, $hash)
+    public function resetPassword(Request $request, string $hash): Response
     {
         $accountKey = $this->accountKeyRepository->getByHash($hash);
 
@@ -364,10 +345,8 @@ class UserController extends Controller
 
     /**
      * Creates activation form.
-     *
-     * @return \Symfony\Component\Form\FormInterface
      */
-    protected function createActivationForm()
+    protected function createActivationForm(): FormInterface
     {
         return $this->createFormBuilder(null, array('translation_domain' => 'ngmore_user'))
             ->add(
@@ -384,10 +363,8 @@ class UserController extends Controller
 
     /**
      * Creates forgot password form.
-     *
-     * @return \Symfony\Component\Form\FormInterface
      */
-    protected function createForgotPasswordForm()
+    protected function createForgotPasswordForm(): FormInterface
     {
         return $this->createFormBuilder(null, array('translation_domain' => 'ngmore_user'))
             ->add(
@@ -404,10 +381,8 @@ class UserController extends Controller
 
     /**
      * Creates reset password form.
-     *
-     * @return \Symfony\Component\Form\FormInterface
      */
-    protected function createResetPasswordForm()
+    protected function createResetPasswordForm(): FormInterface
     {
         $minLength = (int) $this->getParameter('netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length');
 

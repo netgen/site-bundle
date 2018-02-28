@@ -14,7 +14,7 @@ class ContentDownloadUrlGeneratorPass implements CompilerPassInterface
      * Override content download URL generator to generate download links
      * to files with Netgen More download route.
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if ($container->has('ezpublish.fieldType.ezbinarybase.download_url_generator')) {
             $container

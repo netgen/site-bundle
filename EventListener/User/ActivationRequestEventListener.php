@@ -17,7 +17,7 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
      *
      * @return array
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return array(
             MVCEvents::USER_ACTIVATION_REQUEST => 'onActivationRequest',

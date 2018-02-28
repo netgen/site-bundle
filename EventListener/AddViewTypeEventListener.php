@@ -27,7 +27,7 @@ class AddViewTypeEventListener implements EventSubscriberInterface
      *
      * @return array
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return array(
             MVCEvents::PRE_CONTENT_VIEW => 'onPreContentView',

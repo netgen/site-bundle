@@ -13,7 +13,7 @@ class ImagineIOResolverPass implements CompilerPassInterface
     /**
      * Overrides the IO resolver to disable generating absolute URIs to images.
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if ($container->has('ezpublish.image_alias.imagine.cache_resolver')) {
             $container

@@ -31,12 +31,8 @@ class EmbedViewController extends Controller
 
     /**
      * Action for viewing embedded content with image content type identifier.
-     *
-     * @param \Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView $view
-     *
-     * @return \Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView
      */
-    public function embedImage(ContentView $view)
+    public function embedImage(ContentView $view): ContentView
     {
         $parameters = $view->getParameters();
         $targetLink = !empty($parameters['objectParameters']['href']) ? trim($parameters['objectParameters']['href']) : null;

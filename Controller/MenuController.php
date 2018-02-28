@@ -40,13 +40,8 @@ class MenuController extends Controller
 
     /**
      * Renders the menu with provided name.
-     *
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param string $menuName
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function renderMenu(Request $request, $menuName)
+    public function renderMenu(Request $request, string $menuName): Response
     {
         $menu = $this->menuProvider->get($menuName);
 

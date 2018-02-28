@@ -14,7 +14,7 @@ class XmlTextFieldTypePass implements CompilerPassInterface
     /**
      * Overrides EmbedToHtml5 ezxmltext converter with own implementation.
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         if ($container->has('ezpublish.fieldType.ezxmltext.converter.embedToHtml5')) {
             $container

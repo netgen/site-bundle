@@ -16,7 +16,7 @@ class PostRegisterEventListener extends UserEventListener implements EventSubscr
      *
      * @return array
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return array(
             MVCEvents::USER_POST_REGISTER => 'onUserRegistered',

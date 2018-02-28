@@ -63,7 +63,7 @@ class NetgenMoreView implements ViewInterface
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'ngmore';
     }
@@ -81,7 +81,7 @@ class NetgenMoreView implements ViewInterface
      *
      * @return string
      */
-    public function render(PagerfantaInterface $pagerfanta, $routeGenerator, array $options = array())
+    public function render(PagerfantaInterface $pagerfanta, $routeGenerator, array $options = array()): string
     {
         $this->pagerfanta = $pagerfanta;
         $this->routeGenerator = $routeGenerator;

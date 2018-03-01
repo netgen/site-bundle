@@ -22,7 +22,8 @@
         "twig/extensions": "^1.5",
         "doctrine/common": "^2.8",
         "doctrine/orm": "^2.5",
-        "knplabs/knp-menu-bundle": "^2.2"
+        "knplabs/knp-menu-bundle": "^2.2",
+        "sensio/framework-extra-bundle": "^3.0|^5.1"
     },
     "conflict": {
         "netgen/more-admin-ui-bundle": "*"

@@ -6,12 +6,12 @@ namespace Netgen\Bundle\MoreBundle\Relation;
 
 use Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value as RelationList;
 use Netgen\EzPlatformSiteApi\API\LoadService;
-use Netgen\EzPlatformSiteApi\API\Values\Content;
+use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Throwable;
 
-class LocationRelationResolver implements RelationResolverInterface
+class LocationRelationResolver implements LocationRelationResolverInterface
 {
     /**
      * @var \Netgen\EzPlatformSiteApi\API\LoadService
@@ -29,11 +29,12 @@ class LocationRelationResolver implements RelationResolverInterface
         $this->logger = $logger ?: new NullLogger();
     }
 
-    public function loadRelations(Content $content, string $fieldIdentifier): array
+    public function loadRelations(Location $location, string $fieldIdentifier = null, array $options = []): array
     {
         $relatedItems = [];
 
-        if (!$content->hasField($fieldIdentifier)) {
+        $content = $location->content;
+        if (!is_string($fieldIdentifier) || !$content->hasField($fieldIdentifier)) {
             return $relatedItems;
         }
 
@@ -44,7 +45,7 @@ class LocationRelationResolver implements RelationResolverInterface
 
         foreach ($field->value->destinationLocationIds as $locationId) {
             try {
-                $location = $this->loadService->loadLocation((int) $locationId);
+                $destinationLocation = $this->loadService->loadLocation((int) $locationId);
             } catch (Throwable $t) {
                 // Do nothing if there's no location or we're not authorized to load it
                 $this->logger->error(
@@ -55,11 +56,11 @@ class LocationRelationResolver implements RelationResolverInterface
                 continue;
             }
 
-            if ($location->invisible || !$location->contentInfo->published) {
+            if ($destinationLocation->invisible || !$destinationLocation->contentInfo->published) {
                 continue;
             }
 
-            $relatedItems[] = $location;
+            $relatedItems[] = $destinationLocation;
         }
 
         return $relatedItems;

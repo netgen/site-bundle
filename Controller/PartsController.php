@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use Netgen\Bundle\MoreBundle\Relation\RelationResolverInterface;
+use Netgen\Bundle\MoreBundle\Relation\LocationRelationResolverInterface;
 use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,11 +13,11 @@ use Symfony\Component\HttpFoundation\Response;
 class PartsController extends Controller
 {
     /**
-     * @var \Netgen\Bundle\MoreBundle\Relation\RelationResolverInterface
+     * @var \Netgen\Bundle\MoreBundle\Relation\LocationRelationResolverInterface
      */
     protected $relationResolver;
 
-    public function __construct(RelationResolverInterface $relationResolver)
+    public function __construct(LocationRelationResolverInterface $relationResolver)
     {
         $this->relationResolver = $relationResolver;
     }
@@ -32,7 +32,7 @@ class PartsController extends Controller
             [
                 'content' => $content,
                 'field_identifier' => $fieldDefinitionIdentifier,
-                'related_items' => $this->relationResolver->loadRelations($content, $fieldDefinitionIdentifier),
+                'related_items' => $this->relationResolver->loadRelations($content->mainLocation, $fieldDefinitionIdentifier),
                 'view_type' => $request->attributes->get('viewType') ?? 'line',
             ]
         );

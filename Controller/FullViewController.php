@@ -128,8 +128,13 @@ class FullViewController extends Controller
     {
         $content = $location->content;
 
-        $internalRedirectContent = !$content->getField('internal_redirect')->isEmpty() && $content->getFieldRelation('internal_redirect');
+        $internalRedirectContent = null;
+        if (!$content->getField('internal_redirect')->isEmpty()) {
+            $internalRedirectContent = $content->getFieldRelation('internal_redirect');
+        }
+
         $externalRedirectValue = $content->getField('external_redirect')->value;
+
         if ($internalRedirectContent instanceof Content) {
             if ($internalRedirectContent->contentInfo->mainLocationId !== $location->id) {
                 return new RedirectResponse(

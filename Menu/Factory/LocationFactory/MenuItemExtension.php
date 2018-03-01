@@ -86,7 +86,11 @@ class MenuItemExtension implements ExtensionInterface
             return;
         }
 
-        $relatedContent = !$content->getField('item_object')->isEmpty() && $content->getFieldRelation('item_object');
+        $relatedContent = null;
+        if (!$content->getField('item_object')->isEmpty()) {
+            $relatedContent = $content->getFieldRelation('item_object');
+        }
+
         if (!$relatedContent instanceof Content) {
             return;
         }

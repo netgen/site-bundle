@@ -72,7 +72,11 @@ class ShortcutExtension implements ExtensionInterface
             return;
         }
 
-        $relatedContent = !$content->getField('related_object')->isEmpty() && $content->getFieldRelation('related_object');
+        $relatedContent = null;
+        if (!$content->getField('related_object')->isEmpty()) {
+            $relatedContent = $content->getFieldRelation('related_object');
+        }
+
         if (!$relatedContent instanceof Content) {
             return;
         }

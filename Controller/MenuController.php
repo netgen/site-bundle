@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use EzSystems\PlatformHttpCacheBundle\Handler\TagHandlerInterface;
-use Knp\Menu\ItemInterface;
 use Knp\Menu\Provider\MenuProviderInterface;
 use Knp\Menu\Renderer\RendererProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,26 +43,18 @@ class MenuController extends Controller
     public function renderMenu(Request $request, string $menuName): Response
     {
         $menu = $this->menuProvider->get($menuName);
-
         $menu->setChildrenAttribute('class', $request->attributes->get('ulClass') ?: 'nav navbar-nav');
-
-        $activeItemId = $request->attributes->get('activeItemId');
-        if (!empty($menu[$activeItemId]) && $menu[$activeItemId] instanceof ItemInterface) {
-            $menu[$activeItemId]->setCurrent(true);
-        }
 
         $menuOptions = array(
             'firstClass' => $request->attributes->get('firstClass') ?: 'firstli',
             'currentClass' => $request->attributes->get('currentClass') ?: 'active',
             'lastClass' => $request->attributes->get('lastClass') ?: 'lastli',
+            'template' => $this->getConfigResolver()->getParameter('template.menu', 'ngmore'),
         );
 
-        $menuOptions['template'] = $this->getConfigResolver()->getParameter('template.menu', 'ngmore');
         if ($request->attributes->has('template')) {
             $menuOptions['template'] = $request->attributes->get('template');
         }
-
-        $menuContent = $this->menuRenderer->get()->render($menu, $menuOptions);
 
         $response = new Response();
 
@@ -74,7 +65,7 @@ class MenuController extends Controller
 
         $this->processCacheSettings($request, $response);
 
-        $response->setContent($menuContent);
+        $response->setContent($this->menuRenderer->get()->render($menu, $menuOptions));
 
         return $response;
     }

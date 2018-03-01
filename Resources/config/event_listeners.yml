@@ -15,6 +15,15 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    ngmore.listener.menu.esi_fragment:
+        class: Netgen\Bundle\MoreBundle\EventListener\Menu\EsiFragmentEventListener
+        public: false
+        arguments:
+            - "@request_stack"
+            - "%fragment.path%"
+        tags:
+            - { name: kernel.event_subscriber }
+
     ngmore.listener.user:
         class: Netgen\Bundle\MoreBundle\EventListener\UserEventListener
         public: false

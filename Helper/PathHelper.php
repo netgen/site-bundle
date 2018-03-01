@@ -43,20 +43,20 @@ class PathHelper
      *
      * @param mixed $locationId
      */
-    public function getPath($locationId, array $options = array()): array
+    public function getPath($locationId, array $options = []): array
     {
         $optionsResolver = new OptionsResolver();
         $this->configureOptions($optionsResolver);
         $options = $optionsResolver->resolve($options);
 
-        $excludedContentTypes = array();
+        $excludedContentTypes = [];
         if (
             $this->configResolver->hasParameter('path_helper.excluded_content_types', 'ngmore') &&
             !$options['use_all_content_types']
         ) {
             $excludedContentTypes = $this->configResolver->getParameter('path_helper.excluded_content_types', 'ngmore');
             if (!is_array($excludedContentTypes)) {
-                $excludedContentTypes = array();
+                $excludedContentTypes = [];
             }
         }
 
@@ -68,7 +68,7 @@ class PathHelper
         // Shift of location "1" from path as it is not a fully valid location and not readable by most users
         array_shift($path);
 
-        $pathArray = array();
+        $pathArray = [];
         $rootLocationFound = false;
         foreach ($path as $index => $pathItem) {
             if ((int) $pathItem === $rootLocationId) {
@@ -82,23 +82,23 @@ class PathHelper
             try {
                 $location = $this->loadService->loadLocation($pathItem);
             } catch (UnauthorizedException $e) {
-                return array();
+                return [];
             }
 
             if (!in_array($location->contentInfo->contentTypeIdentifier, $excludedContentTypes, true)) {
-                $pathArray[] = array(
+                $pathArray[] = [
                     'text' => $location->contentInfo->name,
                     'url' => $location->id !== (int) $locationId ?
                         $this->router->generate(
                             $location,
-                            array(),
+                            [],
                             $options['absolute_url'] ?
                                 UrlGeneratorInterface::ABSOLUTE_URL :
                                 UrlGeneratorInterface::ABSOLUTE_PATH
                         ) :
                         false,
                     'location' => $location,
-                );
+                ];
             }
         }
 

@@ -34,7 +34,7 @@ class FullViewController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response|\Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView
      */
-    public function viewNgCategory(Request $request, ContentView $view, array $params = array())
+    public function viewNgCategory(Request $request, ContentView $view, array $params = [])
     {
         $content = $view->getSiteContent();
         $location = $view->getSiteLocation();
@@ -47,11 +47,11 @@ class FullViewController extends Controller
             return $response;
         }
 
-        $criteria = array(
+        $criteria = [
             new Criterion\Subtree($location->pathString),
             new Criterion\Visibility(Criterion\Visibility::VISIBLE),
             new Criterion\LogicalNot(new Criterion\LocationId($location->id)),
-        );
+        ];
 
         if (!$content->getField('fetch_subtree')->value->bool) {
             $criteria[] = new Criterion\Location\Depth(Criterion\Operator::EQ, $location->depth + 1);
@@ -93,11 +93,9 @@ class FullViewController extends Controller
         $currentPage = (int) $request->get('page', 1);
         $pager->setCurrentPage($currentPage > 0 ? $currentPage : 1);
 
-        $view->addParameters(
-            array(
-                'pager' => $pager,
-            )
-        );
+        $view->addParameters([
+            'pager' => $pager,
+        ]);
 
         return $view;
     }

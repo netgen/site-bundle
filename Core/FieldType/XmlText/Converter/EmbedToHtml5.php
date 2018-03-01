@@ -53,7 +53,7 @@ class EmbedToHtml5 extends BaseEmbedToHtml5
                         !$permissionResolver->canUser('content', 'read', $content->innerContent)
                         && !$permissionResolver->canUser('content', 'view_embed', $content->innerContent)
                     ) {
-                        throw new UnauthorizedException('content', 'read', array('contentId' => $contentId));
+                        throw new UnauthorizedException('content', 'read', ['contentId' => $contentId]);
                     }
 
                     // Check published status of the Content
@@ -61,18 +61,18 @@ class EmbedToHtml5 extends BaseEmbedToHtml5
                         $content->versionInfo->status !== APIVersionInfo::STATUS_PUBLISHED
                         && !$permissionResolver->canUser('content', 'versionread', $content->innerContent)
                     ) {
-                        throw new UnauthorizedException('content', 'versionread', array('contentId' => $contentId));
+                        throw new UnauthorizedException('content', 'versionread', ['contentId' => $contentId]);
                     }
 
                     $embedContent = $this->fragmentHandler->render(
                         new ControllerReference(
                             'ng_content:embedAction',
-                            array(
+                            [
                                 'content' => $content,
                                 'viewType' => $view,
                                 'layout' => false,
                                 'params' => $parameters,
-                            )
+                            ]
                         )
                     );
                 } catch (APINotFoundException $e) {
@@ -93,19 +93,19 @@ class EmbedToHtml5 extends BaseEmbedToHtml5
                         !$permissionResolver->canUser('content', 'read', $location->contentInfo->innerContentInfo, $location->innerLocation)
                         && !$permissionResolver->canUser('content', 'view_embed', $location->contentInfo->innerContentInfo, $location->innerLocation)
                     ) {
-                        throw new UnauthorizedException('content', 'read', array('locationId' => $location->id));
+                        throw new UnauthorizedException('content', 'read', ['locationId' => $location->id]);
                     }
 
                     $embedContent = $this->fragmentHandler->render(
                         new ControllerReference(
                             'ng_content:embedAction',
-                            array(
+                            [
                                 'content' => $location->content,
                                 'location' => $location,
                                 'viewType' => $view,
                                 'layout' => false,
                                 'params' => $parameters,
-                            )
+                            ]
                         )
                     );
                 } catch (APINotFoundException $e) {

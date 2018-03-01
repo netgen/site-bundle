@@ -26,17 +26,17 @@ class SearchController extends Controller
         if (empty($searchText)) {
             return $this->render(
                 $configResolver->getParameter('template.search', 'ngmore'),
-                array(
+                [
                     'search_text' => '',
-                    'locations' => array(),
-                )
+                    'locations' => [],
+                ]
             );
         }
 
-        $criteria = array(
+        $criteria = [
             new Criterion\Subtree($this->getRootLocation()->pathString),
             new Criterion\Visibility(Criterion\Visibility::VISIBLE),
-        );
+        ];
 
         if (is_array($contentTypes) && !empty($contentTypes)) {
             $criteria[] = new Criterion\ContentTypeIdentifier($contentTypes);
@@ -63,10 +63,10 @@ class SearchController extends Controller
 
         return $this->render(
             $configResolver->getParameter('template.search', 'ngmore'),
-            array(
+            [
                 'search_text' => $searchText,
                 'locations' => $pager,
-            )
+            ]
         );
     }
 }

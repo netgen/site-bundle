@@ -20,16 +20,16 @@ class Type extends BaseRelationListType
     {
         return new Value(
             $hash['destinationContentIds'],
-            $hash['destinationLocationIds'] ?? array()
+            $hash['destinationLocationIds'] ?? []
         );
     }
 
     public function toHash(SPIValue $value): array
     {
-        return array(
+        return [
             'destinationContentIds' => $value->destinationContentIds,
             'destinationLocationIds' => $value->destinationLocationIds,
-        );
+        ];
     }
 
     protected function createValueFromInput($inputValue)
@@ -40,8 +40,8 @@ class Type extends BaseRelationListType
                 return $inputValue;
             }
 
-            $destinationContentIds = array();
-            $destinationLocationIds = array();
+            $destinationContentIds = [];
+            $destinationLocationIds = [];
 
             foreach ($relationList as $relationListItem) {
                 if (!isset($relationListItem['content_id']) || !isset($relationListItem['location_id'])) {

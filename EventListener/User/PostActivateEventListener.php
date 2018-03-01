@@ -18,9 +18,9 @@ class PostActivateEventListener extends UserEventListener implements EventSubscr
      */
     public static function getSubscribedEvents(): array
     {
-        return array(
+        return [
             MVCEvents::USER_POST_ACTIVATE => 'onPostActivate',
-        );
+        ];
     }
 
     /**
@@ -36,12 +36,12 @@ class PostActivateEventListener extends UserEventListener implements EventSubscr
 
         $this->mailHelper
             ->sendMail(
-                array($user->email => $this->getUserName($user)),
+                [$user->email => $this->getUserName($user)],
                 'ngmore.user.welcome.subject',
                 $this->configResolver->getParameter('template.user.mail.welcome', 'ngmore'),
-                array(
+                [
                     'user' => $user,
-                )
+                ]
             );
     }
 }

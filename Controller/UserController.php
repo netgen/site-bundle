@@ -84,9 +84,9 @@ class UserController extends Controller
         $formBuilder = $this->formFactory->createBuilder(
             CreateUserType::class,
             $data,
-            array(
+            [
                 'translation_domain' => 'ngmore_user',
-            )
+            ]
         );
 
         $form = $formBuilder->getForm();
@@ -95,9 +95,9 @@ class UserController extends Controller
         if (!$form->isValid()) {
             return $this->render(
                 $this->getConfigResolver()->getParameter('template.user.register', 'ngmore'),
-                array(
+                [
                     'form' => $form->createView(),
-                )
+                ]
             );
         }
 
@@ -106,10 +106,10 @@ class UserController extends Controller
         if (!empty($users)) {
             return $this->render(
                 $this->getConfigResolver()->getParameter('template.user.register', 'ngmore'),
-                array(
+                [
                     'form' => $form->createView(),
                     'error' => 'email_in_use',
-                )
+                ]
             );
         }
 
@@ -118,10 +118,10 @@ class UserController extends Controller
 
             return $this->render(
                 $this->getConfigResolver()->getParameter('template.user.register', 'ngmore'),
-                array(
+                [
                     'form' => $form->createView(),
                     'error' => 'username_taken',
-                )
+                ]
             );
         } catch (NotFoundException $e) {
             // do nothing
@@ -140,7 +140,7 @@ class UserController extends Controller
 
                 return $repository->getUserService()->createUser(
                     $data->payload,
-                    array($userGroup)
+                    [$userGroup]
                 );
             }
         );
@@ -176,9 +176,9 @@ class UserController extends Controller
         if (!$form->isValid()) {
             return $this->render(
                 $this->getConfigResolver()->getParameter('template.user.activate', 'ngmore'),
-                array(
+                [
                     'form' => $form->createView(),
-                )
+                ]
             );
         }
 
@@ -214,9 +214,9 @@ class UserController extends Controller
 
             return $this->render(
                 $this->getConfigResolver()->getParameter('template.user.activate_done', 'ngmore'),
-                array(
+                [
                     'error' => 'hash_expired',
-                )
+                ]
             );
         }
 
@@ -258,9 +258,9 @@ class UserController extends Controller
         if (!$form->isValid()) {
             return $this->render(
                 $this->getConfigResolver()->getParameter('template.user.forgot_password', 'ngmore'),
-                array(
+                [
                     'form' => $form->createView(),
-                )
+                ]
             );
         }
 
@@ -296,9 +296,9 @@ class UserController extends Controller
 
             return $this->render(
                 $this->getConfigResolver()->getParameter('template.user.reset_password_done', 'ngmore'),
-                array(
+                [
                     'error' => 'hash_expired',
-                )
+                ]
             );
         }
 
@@ -314,9 +314,9 @@ class UserController extends Controller
         if (!$form->isValid()) {
             return $this->render(
                 $this->getConfigResolver()->getParameter('template.user.reset_password', 'ngmore'),
-                array(
+                [
                     'form' => $form->createView(),
-                )
+                ]
             );
         }
 
@@ -348,16 +348,16 @@ class UserController extends Controller
      */
     protected function createActivationForm(): FormInterface
     {
-        return $this->createFormBuilder(null, array('translation_domain' => 'ngmore_user'))
+        return $this->createFormBuilder(null, ['translation_domain' => 'ngmore_user'])
             ->add(
                 'email',
                 EmailType::class,
-                array(
-                    'constraints' => array(
+                [
+                    'constraints' => [
                         new Constraints\Email(),
                         new Constraints\NotBlank(),
-                    ),
-                )
+                    ],
+                ]
             )->getForm();
     }
 
@@ -366,16 +366,16 @@ class UserController extends Controller
      */
     protected function createForgotPasswordForm(): FormInterface
     {
-        return $this->createFormBuilder(null, array('translation_domain' => 'ngmore_user'))
+        return $this->createFormBuilder(null, ['translation_domain' => 'ngmore_user'])
             ->add(
                 'email',
                 EmailType::class,
-                array(
-                    'constraints' => array(
+                [
+                    'constraints' => [
                         new Constraints\Email(),
                         new Constraints\NotBlank(),
-                    ),
-                )
+                    ],
+                ]
             )->getForm();
     }
 
@@ -386,27 +386,27 @@ class UserController extends Controller
     {
         $minLength = (int) $this->getParameter('netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length');
 
-        $passwordConstraints = array(
+        $passwordConstraints = [
             new Constraints\NotBlank(),
-        );
+        ];
 
         if ($minLength > 0) {
             $passwordConstraints[] = new Constraints\Length(
-                array(
+                [
                     'min' => $minLength,
-                )
+                ]
             );
         }
 
-        $passwordOptions = array(
+        $passwordOptions = [
             'type' => PasswordType::class,
             'required' => true,
-            'options' => array(
+            'options' => [
                 'constraints' => $passwordConstraints,
-            ),
-        );
+            ],
+        ];
 
-        return $this->createFormBuilder(null, array('translation_domain' => 'ngmore_user'))
+        return $this->createFormBuilder(null, ['translation_domain' => 'ngmore_user'])
             ->add('password', RepeatedType::class, $passwordOptions)
             ->getForm();
     }

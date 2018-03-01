@@ -76,7 +76,7 @@ class DownloadController extends Controller
 
         if (!$content->hasFieldById($fieldId) || $content->getFieldById($fieldId)->isEmpty()) {
             throw new NotFoundHttpException(
-                $this->translator->trans('download.file_not_found', array(), 'ngmore')
+                $this->translator->trans('download.file_not_found', [], 'ngmore')
             );
         }
 
@@ -90,7 +90,7 @@ class DownloadController extends Controller
             $binaryFile = $this->ioImageService->loadBinaryFile($binaryFieldValue->id);
         } else {
             throw new NotFoundHttpException(
-                $this->translator->trans('download.file_not_found', array(), 'ngmore')
+                $this->translator->trans('download.file_not_found', [], 'ngmore')
             );
         }
 
@@ -98,7 +98,7 @@ class DownloadController extends Controller
         $response->setContentDisposition(
             (bool) $isInline ? ResponseHeaderBag::DISPOSITION_INLINE :
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            str_replace(array('/', '\\'), '', $binaryFieldValue->fileName),
+            str_replace(['/', '\\'], '', $binaryFieldValue->fileName),
             'file'
         );
 

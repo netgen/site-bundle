@@ -81,10 +81,10 @@ class EmbedViewController extends Controller
                 if ($fieldName !== null) {
                     $directDownloadLink = $this->generateUrl(
                         'ngmore_download',
-                        array(
+                        [
                             'contentId' => $content->id,
                             'fieldId' => $content->getField($fieldName)->id,
-                        )
+                        ]
                     );
                 }
             }
@@ -98,11 +98,9 @@ class EmbedViewController extends Controller
             }
         }
 
-        $view->addParameters(
-            array(
-                'link_href' => $targetLink,
-            )
-        );
+        $view->addParameters([
+            'link_href' => $targetLink,
+        ]);
 
         return $view;
     }

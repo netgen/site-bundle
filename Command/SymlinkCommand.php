@@ -33,10 +33,10 @@ abstract class SymlinkCommand extends ContainerAwareCommand
      *
      * @var array
      */
-    protected $blacklistedItems = array(
+    protected $blacklistedItems = [
         'offline_cro.html',
         'offline_eng.html',
-    );
+    ];
 
     /**
      * Verify that source file can be symlinked to destination and do symlinking if it can.

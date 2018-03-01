@@ -18,7 +18,7 @@ class NgUserSettingRepository extends EntityRepository
      */
     public function isUserActivated($userId): bool
     {
-        $ngUserSetting = $this->findOneBy(array('userId' => $userId));
+        $ngUserSetting = $this->findOneBy(['userId' => $userId]);
 
         if ($ngUserSetting instanceof NgUserSetting) {
             return $ngUserSetting->getIsActivated();
@@ -36,7 +36,7 @@ class NgUserSettingRepository extends EntityRepository
      */
     public function activateUser($userId): NgUserSetting
     {
-        $ngUserSetting = $this->findOneBy(array('userId' => $userId));
+        $ngUserSetting = $this->findOneBy(['userId' => $userId]);
 
         if ($ngUserSetting instanceof NgUserSetting) {
             $ngUserSetting->setIsActivated(true);

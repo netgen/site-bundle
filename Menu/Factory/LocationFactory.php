@@ -28,19 +28,19 @@ class LocationFactory implements FactoryInterface
     /**
      * @var \Netgen\Bundle\MoreBundle\Menu\Factory\LocationFactory\ExtensionInterface[]
      */
-    protected $extensions = array();
+    protected $extensions = [];
 
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         ExtensionInterface $fallbackExtension,
-        array $extensions = array()
+        array $extensions = []
     ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->fallbackExtension = $fallbackExtension;
         $this->extensions = $extensions;
     }
 
-    public function createItem($name, array $options = array()): ItemInterface
+    public function createItem($name, array $options = []): ItemInterface
     {
         $menuItem = (new MenuItem($name, $this))->setExtra('translation_domain', false);
 

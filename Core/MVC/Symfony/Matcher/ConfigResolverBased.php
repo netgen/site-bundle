@@ -37,7 +37,7 @@ abstract class ConfigResolverBased extends MultipleValued
 
         if ($this->configResolver->hasParameter($config, $namespace)) {
             $configValue = $this->configResolver->getParameter($config, $namespace);
-            $configValue = !is_array($configValue) ? array($configValue) : $configValue;
+            $configValue = !is_array($configValue) ? [$configValue] : $configValue;
 
             return in_array($value, $configValue, true);
         }

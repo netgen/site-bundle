@@ -31,16 +31,16 @@ class NetgenMoreExtension extends Extension implements PrependExtensionInterface
     {
         $container->prependExtensionConfig(
             'assetic',
-            array(
+            [
                 'bundles' => array_keys(
                     $container->getParameter('kernel.bundles')
                 ),
-            )
+            ]
         );
 
-        $prependConfigs = array(
+        $prependConfigs = [
             'framework/twig.yml' => 'twig',
-        );
+        ];
 
         foreach ($prependConfigs as $configFile => $prependConfig) {
             $configFile = __DIR__ . '/../Resources/config/' . $configFile;

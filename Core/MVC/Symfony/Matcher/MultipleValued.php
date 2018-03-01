@@ -21,6 +21,6 @@ abstract class MultipleValued
      */
     public function setMatchingConfig($matchingConfig)
     {
-        $this->values = !is_array($matchingConfig) ? array($matchingConfig) : $matchingConfig;
+        $this->values = !is_array($matchingConfig) ? [$matchingConfig] : $matchingConfig;
     }
 }

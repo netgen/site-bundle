@@ -20,7 +20,7 @@ class XmlTextFieldTypePass implements CompilerPassInterface
             $container
                 ->findDefinition('ezpublish.fieldType.ezxmltext.converter.embedToHtml5')
                 ->setClass(EmbedToHtml5::class)
-                ->addMethodCall('setSite', array(new Reference('netgen.ezplatform_site.site')));
+                ->addMethodCall('setSite', [new Reference('netgen.ezplatform_site.site')]);
         }
     }
 }

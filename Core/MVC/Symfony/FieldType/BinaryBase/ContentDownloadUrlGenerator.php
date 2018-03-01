@@ -31,10 +31,10 @@ class ContentDownloadUrlGenerator extends PathGenerator
     {
         return $this->router->generate(
             'ngmore_download',
-            array(
+            [
                 'contentId' => $versionInfo->contentInfo->id,
                 'fieldId' => $field->id,
-            )
+            ]
         );
     }
 }

@@ -94,7 +94,7 @@ class EzLinkDirectDownload implements Converter
                 if ($content->hasField('file')) {
                     $field = $content->getField('file');
                     if (!$field->isEmpty()) {
-                        $url = $this->router->generate('ngmore_download', array('contentId' => $content->id, 'fieldId' => $field->id, 'isInline' => $link->hasAttribute('custom:inline')));
+                        $url = $this->router->generate('ngmore_download', ['contentId' => $content->id, 'fieldId' => $field->id, 'isInline' => $link->hasAttribute('custom:inline')]);
                     }
                 }
             }

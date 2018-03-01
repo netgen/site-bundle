@@ -28,7 +28,7 @@ class SetCsrfEnabledEventListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents(): array
     {
-        return array(KernelEvents::REQUEST => 'onKernelRequest');
+        return [KernelEvents::REQUEST => 'onKernelRequest'];
     }
 
     /**

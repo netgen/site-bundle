@@ -29,9 +29,9 @@ class AddViewTypeEventListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents(): array
     {
-        return array(
+        return [
             MVCEvents::PRE_CONTENT_VIEW => 'onPreContentView',
-        );
+        ];
     }
 
     /**
@@ -47,9 +47,9 @@ class AddViewTypeEventListener implements EventSubscriberInterface
         $viewType = $currentRequest->attributes->get('viewType');
 
         $event->getContentView()->addParameters(
-            array(
+            [
                 'viewType' => !empty($viewType) ? $viewType : '',
-            )
+            ]
         );
     }
 }

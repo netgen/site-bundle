@@ -74,9 +74,9 @@ class MailHelper
 
         $this->siteUrl = $this->router->generate(
             'ez_urlalias',
-            array(
+            [
                 'locationId' => $configResolver->getParameter('content.tree_root.location_id'),
-            ),
+            ],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
@@ -100,7 +100,7 @@ class MailHelper
      * @param mixed $receivers
      * @param null|mixed $sender
      */
-    public function sendMail($receivers, string $subject, string $template, array $templateParameters = array(), $sender = null): int
+    public function sendMail($receivers, string $subject, string $template, array $templateParameters = [], $sender = null): int
     {
         try {
             $sender = $this->getSender($sender);
@@ -112,7 +112,7 @@ class MailHelper
 
         $body = $this->templating->render($template, $templateParameters + $this->getDefaultTemplateParameters());
 
-        $subject = $this->translator->trans($subject, array(), 'ngmore_mail');
+        $subject = $this->translator->trans($subject, [], 'ngmore_mail');
 
         $message = new Swift_Message();
 
@@ -132,10 +132,10 @@ class MailHelper
      */
     protected function getDefaultTemplateParameters(): array
     {
-        return array(
+        return [
             'site_url' => $this->siteUrl,
             'site_name' => $this->siteName,
-        );
+        ];
     }
 
     /**
@@ -163,9 +163,9 @@ class MailHelper
             );
         } elseif ($this->configResolver->hasParameter('mail.sender_email', 'ngmore')) {
             if ($this->configResolver->hasParameter('mail.sender_name', 'ngmore')) {
-                return array(
+                return [
                     $this->configResolver->getParameter('mail.sender_email', 'ngmore') => $this->configResolver->getParameter('mail.sender_name', 'ngmore'),
-                );
+                ];
             }
 
             return $this->configResolver->getParameter('mail.sender_email', 'ngmore');

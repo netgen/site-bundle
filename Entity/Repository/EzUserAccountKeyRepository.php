@@ -52,7 +52,7 @@ class EzUserAccountKeyRepository extends EntityRepository
      */
     public function getByHash(string $hash): ?EzUserAccountKey
     {
-        return $this->findOneBy(array('hashKey' => $hash));
+        return $this->findOneBy(['hashKey' => $hash]);
     }
 
     /**
@@ -62,7 +62,7 @@ class EzUserAccountKeyRepository extends EntityRepository
      */
     public function removeByUserId($userId): void
     {
-        $results = $this->findBy(array('userId' => $userId));
+        $results = $this->findBy(['userId' => $userId]);
 
         foreach ($results as $result) {
             $this->getEntityManager()->remove($result);
@@ -78,7 +78,7 @@ class EzUserAccountKeyRepository extends EntityRepository
      */
     public function removeByHash(string $hash): void
     {
-        $results = $this->findBy(array('hashKey' => $hash));
+        $results = $this->findBy(['hashKey' => $hash]);
 
         foreach ($results as $result) {
             $this->getEntityManager()->remove($result);

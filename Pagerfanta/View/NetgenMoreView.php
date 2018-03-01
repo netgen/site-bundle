@@ -81,7 +81,7 @@ class NetgenMoreView implements ViewInterface
      *
      * @return string
      */
-    public function render(PagerfantaInterface $pagerfanta, $routeGenerator, array $options = array()): string
+    public function render(PagerfantaInterface $pagerfanta, $routeGenerator, array $options = []): string
     {
         $this->pagerfanta = $pagerfanta;
         $this->routeGenerator = $routeGenerator;
@@ -91,10 +91,10 @@ class NetgenMoreView implements ViewInterface
 
         return $this->twig->render(
             $options['template'] ?? $this->template,
-            array(
+            [
                 'pager' => $pagerfanta,
                 'pages' => $this->getPages(),
-            )
+            ]
         );
     }
 
@@ -154,7 +154,7 @@ class NetgenMoreView implements ViewInterface
      */
     protected function getPages(): array
     {
-        $pages = array();
+        $pages = [];
 
         $pages['previous_page'] = $this->pagerfanta->hasPreviousPage() ?
             $this->generateUrl($this->pagerfanta->getPreviousPage()) :
@@ -167,7 +167,7 @@ class NetgenMoreView implements ViewInterface
 
         $pages['separator_before'] = $this->startPage > 3 ? true : false;
 
-        $middlePages = array();
+        $middlePages = [];
         for ($i = $this->startPage, $end = $this->endPage; $i <= $end; ++$i) {
             $middlePages[$i] = $this->generateUrl($i);
         }

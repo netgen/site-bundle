@@ -80,7 +80,7 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
         $query->filter = new Criterion\ContentTypeIdentifier($contentTypeIdentifier);
         $query->limit = 0;
 
-        $searchResult = $searchService->findContent($query, array(), false);
+        $searchResult = $searchService->findContent($query, [], false);
 
         $totalCount = $searchResult->totalCount;
         if ($totalCount === 0) {
@@ -109,7 +109,7 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
         $query->limit = 50;
         $query->offset = 0;
 
-        $searchResult = $searchService->findContent($query, array(), false);
+        $searchResult = $searchService->findContent($query, [], false);
         $searchHitCount = count($searchResult->searchHits);
 
         while ($searchHitCount > 0) {
@@ -146,7 +146,7 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
             }
 
             $query->offset = $query->offset + $query->limit;
-            $searchResult = $searchService->findContent($query, array(), false);
+            $searchResult = $searchService->findContent($query, [], false);
             $searchHitCount = count($searchResult->searchHits);
         }
 

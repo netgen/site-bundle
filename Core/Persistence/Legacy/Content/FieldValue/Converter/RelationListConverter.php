@@ -63,17 +63,17 @@ class RelationListConverter extends BaseRelationListConverter
 
     public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue): void
     {
-        $fieldValue->data = array(
-            'destinationContentIds' => array(),
-            'destinationLocationIds' => array(),
-        );
+        $fieldValue->data = [
+            'destinationContentIds' => [],
+            'destinationLocationIds' => [],
+        ];
 
         if ($value->dataText === null) {
             return;
         }
 
-        $priorityByContentId = array();
-        $priorityByLocationId = array();
+        $priorityByContentId = [];
+        $priorityByLocationId = [];
 
         $dom = new DOMDocument('1.0', 'utf-8');
         if ($dom->loadXML($value->dataText) === true) {
@@ -98,12 +98,12 @@ class RelationListConverter extends BaseRelationListConverter
     {
         parent::toFieldDefinition($storageDef, $fieldDef);
 
-        $fieldDef->defaultValue->data['destinationLocationIds'] = array();
+        $fieldDef->defaultValue->data['destinationLocationIds'] = [];
     }
 
     private static function dbAttributeMap(): array
     {
-        return array(
+        return [
             // 'identifier' => 'identifier',// not used
             'priority' => 'priority',
             // 'in-trash' => 'in_trash',// false by default and implies
@@ -115,6 +115,6 @@ class RelationListConverter extends BaseRelationListConverter
             'contentclass-identifier' => 'ezcontentclass_identifier',
             // 'is-modified' => 'is_modified',// deprecated and not used
             'contentobject-remote-id' => 'ezcontentobject_remote_id',
-        );
+        ];
     }
 }

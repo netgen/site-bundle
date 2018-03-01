@@ -16,7 +16,7 @@ class PartsController extends Controller
      */
     public function viewRelatedItems($contentId, string $fieldDefinitionIdentifier, string $template, string $viewType = 'line'): Response
     {
-        $relatedItems = array();
+        $relatedItems = [];
 
         $content = $this->getSite()->getLoadService()->loadContent($contentId);
 
@@ -42,10 +42,10 @@ class PartsController extends Controller
 
         return $this->render(
             $template,
-            array(
+            [
                 'related_items' => $relatedItems,
                 'view_type' => $viewType,
-            )
+            ]
         );
     }
 
@@ -63,17 +63,17 @@ class PartsController extends Controller
      *
      * @param mixed $locationId
      */
-    public function viewRelatedMultimediaItems($locationId, string $template, bool $includeChildren = false, array $contentTypeIdentifiers = array('image')): Response
+    public function viewRelatedMultimediaItems($locationId, string $template, bool $includeChildren = false, array $contentTypeIdentifiers = ['image']): Response
     {
         $location = $this->getSite()->getLoadService()->loadLocation($locationId);
         $content = $location->content;
 
         // Add current location in the multimedia item list
-        $multimediaItems = array($content);
+        $multimediaItems = [$content];
 
         // Get children objects and add them in multimedia item list
         if ($includeChildren) {
-            $galleryItems = array();
+            $galleryItems = [];
             foreach ($location->filterChildren($contentTypeIdentifiers) as $child) {
                 $galleryItems[] = $child->content;
             }
@@ -82,7 +82,7 @@ class PartsController extends Controller
         }
 
         // Finally, check if related_multimedia field exists and has content
-        $relatedMultimediaLocationIds = array();
+        $relatedMultimediaLocationIds = [];
         if ($content->hasField('related_multimedia')) {
             if (!$content->getField('related_multimedia')->isEmpty()) {
                 $relatedMultimediaField = $content->getField('related_multimedia')->value;
@@ -90,7 +90,7 @@ class PartsController extends Controller
                 // We need to work with location IDs, because we need to check if related object has location, to prevent
                 // possible problems with related items in trash.
                 // Also, we need location IDs for fetching images from related ng_gallery objects
-                $relatedMultimediaLocationIds = !empty($relatedMultimediaField->destinationLocationIds) ? $relatedMultimediaField->destinationLocationIds : array();
+                $relatedMultimediaLocationIds = !empty($relatedMultimediaField->destinationLocationIds) ? $relatedMultimediaField->destinationLocationIds : [];
             }
         }
 
@@ -110,7 +110,7 @@ class PartsController extends Controller
 
                 // ng_gallery - Find children objects and add them in multimedia item list
                 if ($relatedMultimediaLocation->contentInfo->contentTypeIdentifier === 'ng_gallery') {
-                    $galleryItems = array();
+                    $galleryItems = [];
                     foreach ($relatedMultimediaLocation->filterChildren($contentTypeIdentifiers) as $child) {
                         $galleryItems[] = $child->content;
                     }
@@ -124,9 +124,9 @@ class PartsController extends Controller
 
         return $this->render(
             $template,
-            array(
+            [
                 'multimedia_items' => $multimediaItems,
-            )
+            ]
         );
     }
 }

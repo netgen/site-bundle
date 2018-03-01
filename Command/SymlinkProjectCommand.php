@@ -50,7 +50,7 @@ class SymlinkProjectCommand extends SymlinkCommand
     protected function symlinkProjectFiles(string $projectFilesPath, InputInterface $input, OutputInterface $output): void
     {
         /** @var \DirectoryIterator[] $directories */
-        $directories = array();
+        $directories = [];
 
         $path = $projectFilesPath . '/root_' . $this->environment . '/';
         if ($this->fileSystem->exists($path) && is_dir($path)) {

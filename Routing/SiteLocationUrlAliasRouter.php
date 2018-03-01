@@ -47,7 +47,7 @@ class SiteLocationUrlAliasRouter implements ChainedRouterInterface, RequestMatch
      * @param mixed $parameters
      * @param mixed $referenceType
      */
-    public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH): string
+    public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH): string
     {
         if (!$name instanceof Location) {
             throw new RouteNotFoundException('Could not match route');
@@ -86,7 +86,7 @@ class SiteLocationUrlAliasRouter implements ChainedRouterInterface, RequestMatch
         return $name instanceof Location;
     }
 
-    public function getRouteDebugMessage($name, array $parameters = array()): string
+    public function getRouteDebugMessage($name, array $parameters = []): string
     {
         if ($name instanceof RouteObjectInterface) {
             return 'Route with key ' . $name->getRouteKey();

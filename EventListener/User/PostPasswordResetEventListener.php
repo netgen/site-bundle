@@ -18,9 +18,9 @@ class PostPasswordResetEventListener extends UserEventListener implements EventS
      */
     public static function getSubscribedEvents(): array
     {
-        return array(
+        return [
             MVCEvents::USER_POST_PASSWORD_RESET => 'onPasswordReset',
-        );
+        ];
     }
 
     /**
@@ -33,12 +33,12 @@ class PostPasswordResetEventListener extends UserEventListener implements EventS
 
         $this->mailHelper
             ->sendMail(
-                array($user->email => $this->getUserName($user)),
+                [$user->email => $this->getUserName($user)],
                 'ngmore.user.forgot_password.password_changed.subject',
                 $this->configResolver->getParameter('template.user.mail.forgot_password_password_changed', 'ngmore'),
-                array(
+                [
                     'user' => $user,
-                )
+                ]
             );
 
         $this->ezUserAccountKeyRepository->removeByUserId($user->id);

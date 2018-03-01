@@ -13,9 +13,9 @@ class Value extends BaseRelationListValue
      *
      * @var mixed[]
      */
-    public $destinationLocationIds = array();
+    public $destinationLocationIds = [];
 
-    public function __construct(array $destinationContentIds = array(), array $destinationLocationIds = array())
+    public function __construct(array $destinationContentIds = [], array $destinationLocationIds = [])
     {
         parent::__construct($destinationContentIds);
 

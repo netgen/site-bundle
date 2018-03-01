@@ -45,12 +45,12 @@ class MenuController extends Controller
         $menu = $this->menuProvider->get($menuName);
         $menu->setChildrenAttribute('class', $request->attributes->get('ulClass') ?: 'nav navbar-nav');
 
-        $menuOptions = array(
+        $menuOptions = [
             'firstClass' => $request->attributes->get('firstClass') ?: 'firstli',
             'currentClass' => $request->attributes->get('currentClass') ?: 'active',
             'lastClass' => $request->attributes->get('lastClass') ?: 'lastli',
             'template' => $this->getConfigResolver()->getParameter('template.menu', 'ngmore'),
-        );
+        ];
 
         if ($request->attributes->has('template')) {
             $menuOptions['template'] = $request->attributes->get('template');
@@ -60,7 +60,7 @@ class MenuController extends Controller
 
         $menuLocationId = $menu->getAttribute('location-id');
         if (!empty($menuLocationId)) {
-            $this->tagHandler->addTagHeaders($response, array('location-' . $menuLocationId));
+            $this->tagHandler->addTagHeaders($response, ['location-' . $menuLocationId]);
         }
 
         $this->processCacheSettings($request, $response);

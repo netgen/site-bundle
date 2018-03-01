@@ -21,7 +21,7 @@ class LocationFactoryPass implements CompilerPassInterface
 
         $factory = $container->findDefinition('ngmore.menu.factory.location');
 
-        $extensions = array();
+        $extensions = [];
 
         foreach ($container->findTaggedServiceIds('ngmore.menu.factory.location.extension') as $extension => $tags) {
             foreach ($tags as $tag) {

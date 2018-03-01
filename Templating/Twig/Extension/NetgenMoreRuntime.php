@@ -31,7 +31,7 @@ class NetgenMoreRuntime
      *
      * @param mixed $locationId
      */
-    public function getLocationPath($locationId, array $options = array()): array
+    public function getLocationPath($locationId, array $options = []): array
     {
         return $this->pathHelper->getPath($locationId, $options);
     }

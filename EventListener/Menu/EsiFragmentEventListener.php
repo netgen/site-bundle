@@ -29,7 +29,7 @@ class EsiFragmentEventListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents(): array
     {
-        return array(MVCEvents::MENU_LOCATION_ITEM => 'onMenuItemBuild');
+        return [MVCEvents::MENU_LOCATION_ITEM => 'onMenuItemBuild'];
     }
 
     public function onMenuItemBuild(LocationMenuItemEvent $event): void

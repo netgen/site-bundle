@@ -44,7 +44,7 @@ class DumpDatabaseCommand extends ContainerAwareCommand
         }
 
         $process = new Process(
-            array(
+            [
                 'mysqldump',
                 '-u',
                 $databaseUser,
@@ -53,11 +53,11 @@ class DumpDatabaseCommand extends ContainerAwareCommand
                 '-r',
                 $targetDirectory . '/' . $fileName,
                 $databaseName,
-            ),
+            ],
             null,
-            array(
+            [
                 'MYSQL_PWD' => $databasePassword,
-            ),
+            ],
             null,
             null
         );

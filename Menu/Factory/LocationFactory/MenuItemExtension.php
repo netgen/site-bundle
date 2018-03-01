@@ -137,7 +137,7 @@ class MenuItemExtension implements ExtensionInterface
 
     protected function buildChildItems(ItemInterface $item, Content $content): void
     {
-        $childLocations = array();
+        $childLocations = [];
 
         if (!$content->getField('parent_node')->isEmpty()) {
             $destinationContent = $content->getFieldRelation('parent_node');
@@ -151,10 +151,10 @@ class MenuItemExtension implements ExtensionInterface
                 return;
             }
 
-            $criteria = array(
+            $criteria = [
                 new Criterion\Visibility(Criterion\Visibility::VISIBLE),
                 new Criterion\ParentLocationId($destinationContent->mainLocation->id),
-            );
+            ];
 
             if (!$content->getField('class_filter')->isEmpty() && !$content->getField('class_filter_type')->isEmpty()) {
                 /** @var \Netgen\Bundle\ContentTypeListBundle\Core\FieldType\ContentTypeList\Value $contentTypeFilter */
@@ -211,7 +211,7 @@ class MenuItemExtension implements ExtensionInterface
         }
 
         foreach ($childLocations as $location) {
-            $item->addChild(null, array('ezlocation' => $location));
+            $item->addChild(null, ['ezlocation' => $location]);
         }
     }
 }

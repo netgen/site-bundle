@@ -16,7 +16,7 @@ class XslRegisterPass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         $scopes = array_merge(
-            array(ConfigResolver::SCOPE_DEFAULT),
+            [ConfigResolver::SCOPE_DEFAULT],
             $container->getParameter('ezpublish.siteaccess.list')
         );
 
@@ -27,7 +27,7 @@ class XslRegisterPass implements CompilerPassInterface
             }
 
             $xslConfig = $container->getParameter("ezsettings.$scope.fieldtypes.ezxml.custom_xsl");
-            $xslConfig[] = array('path' => __DIR__ . '/../../Resources/xsl/ezxml_tags.xsl', 'priority' => 5000);
+            $xslConfig[] = ['path' => __DIR__ . '/../../Resources/xsl/ezxml_tags.xsl', 'priority' => 5000];
             $container->setParameter("ezsettings.$scope.fieldtypes.ezxml.custom_xsl", $xslConfig);
         }
     }

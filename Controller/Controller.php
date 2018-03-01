@@ -17,7 +17,7 @@ abstract class Controller extends BaseController
     {
         $cacheSettings = $request->attributes->get('cacheSettings');
         if (!is_array($cacheSettings)) {
-            $cacheSettings = array('sharedMaxAge' => 86400);
+            $cacheSettings = ['sharedMaxAge' => 86400];
         }
 
         $public = true;

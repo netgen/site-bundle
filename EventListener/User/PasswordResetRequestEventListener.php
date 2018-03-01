@@ -19,9 +19,9 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
      */
     public static function getSubscribedEvents(): array
     {
-        return array(
+        return [
             MVCEvents::USER_PASSWORD_RESET_REQUEST => 'onPasswordResetRequest',
-        );
+        ];
     }
 
     /**
@@ -48,12 +48,12 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
             if ($this->ngUserSettingRepository->isUserActivated($user->id)) {
                 $this->mailHelper
                     ->sendMail(
-                        array($user->email => $this->getUserName($user)),
+                        [$user->email => $this->getUserName($user)],
                         'ngmore.user.forgot_password.disabled.subject',
                         $this->configResolver->getParameter('template.user.mail.forgot_password_disabled', 'ngmore'),
-                        array(
+                        [
                             'user' => $user,
-                        )
+                        ]
                     );
 
                 return;
@@ -61,12 +61,12 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
 
             $this->mailHelper
                 ->sendMail(
-                    array($user->email => $this->getUserName($user)),
+                    [$user->email => $this->getUserName($user)],
                     'ngmore.user.forgot_password.not_active.subject',
                     $this->configResolver->getParameter('template.user.mail.forgot_password_not_active', 'ngmore'),
-                    array(
+                    [
                         'user' => $user,
-                    )
+                    ]
                 );
 
             return;
@@ -76,13 +76,13 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
 
         $this->mailHelper
             ->sendMail(
-                array($user->email => $this->getUserName($user)),
+                [$user->email => $this->getUserName($user)],
                 'ngmore.user.forgot_password.subject',
                 $this->configResolver->getParameter('template.user.mail.forgot_password', 'ngmore'),
-                array(
+                [
                     'user' => $user,
                     'hash' => $accountKey->getHash(),
-                )
+                ]
             );
     }
 }

@@ -19,9 +19,9 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
      */
     public static function getSubscribedEvents(): array
     {
-        return array(
+        return [
             MVCEvents::USER_ACTIVATION_REQUEST => 'onActivationRequest',
-        );
+        ];
     }
 
     /**
@@ -45,12 +45,12 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
 
         if ($user->enabled) {
             $this->mailHelper->sendMail(
-                array($user->email => $this->getUserName($user)),
+                [$user->email => $this->getUserName($user)],
                 'ngmore.user.activate.already_active.subject',
                 $this->configResolver->getParameter('template.user.mail.activate_already_active', 'ngmore'),
-                array(
+                [
                     'user' => $user,
-                )
+                ]
             );
 
             return;
@@ -58,12 +58,12 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
 
         if ($this->ngUserSettingRepository->isUserActivated($user->id)) {
             $this->mailHelper->sendMail(
-                array($user->email => $this->getUserName($user)),
+                [$user->email => $this->getUserName($user)],
                 'ngmore.user.activate.disabled.subject',
                 $this->configResolver->getParameter('template.user.mail.activate_disabled', 'ngmore'),
-                array(
+                [
                     'user' => $user,
-                )
+                ]
             );
 
             return;
@@ -73,13 +73,13 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
 
         $this->mailHelper
             ->sendMail(
-                array($user->email => $this->getUserName($user)),
+                [$user->email => $this->getUserName($user)],
                 'ngmore.user.activate.subject',
                 $this->configResolver->getParameter('template.user.mail.activate', 'ngmore'),
-                array(
+                [
                     'user' => $user,
                     'hash' => $accountKey->getHash(),
-                )
+                ]
             );
     }
 }

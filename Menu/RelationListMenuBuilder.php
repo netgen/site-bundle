@@ -87,7 +87,7 @@ class RelationListMenuBuilder
                 continue;
             }
 
-            $menu->addChild(null, array('ezlocation' => $location));
+            $menu->addChild(null, ['ezlocation' => $location]);
         }
 
         return $menu;

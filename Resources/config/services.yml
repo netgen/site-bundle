@@ -40,6 +40,7 @@ services:
         parent: ngmore.controller.base
         arguments:
             - "@ngmore.relation.location_resolver"
+            - "@ngmore.relation.multimedia_resolver"
 
     ngmore.controller.download:
         class: Netgen\Bundle\MoreBundle\Controller\DownloadController
@@ -85,6 +86,13 @@ services:
             - "@?logger"
         tags:
             - { name: monolog.logger, channel: ngmore }
+
+    ngmore.relation.multimedia_resolver:
+        class: Netgen\Bundle\MoreBundle\Relation\MultimediaRelationResolver
+        public: false
+        arguments:
+            - "@netgen.ezplatform_site.load_service"
+            - "@ngmore.relation.location_resolver"
 
     ngmore.helper.path_helper:
         class: Netgen\Bundle\MoreBundle\Helper\PathHelper

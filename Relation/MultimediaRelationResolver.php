@@ -1,0 +1,68 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Netgen\Bundle\MoreBundle\Relation;
+
+use Netgen\EzPlatformSiteApi\API\LoadService;
+use Netgen\EzPlatformSiteApi\API\Values\Location;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class MultimediaRelationResolver implements LocationRelationResolverInterface
+{
+    /**
+     * @var \Netgen\EzPlatformSiteApi\API\LoadService
+     */
+    protected $loadService;
+
+    /**
+     * @var \Netgen\Bundle\MoreBundle\Relation\LocationRelationResolverInterface
+     */
+    protected $innerResolver;
+
+    public function __construct(LoadService $loadService, LocationRelationResolverInterface $innerResolver)
+    {
+        $this->loadService = $loadService;
+        $this->innerResolver = $innerResolver;
+    }
+
+    public function loadRelations(Location $location, string $fieldIdentifier = null, array $options = []): array
+    {
+        $optionsResolver = new OptionsResolver();
+        $this->configureOptions($optionsResolver);
+        $options = $optionsResolver->resolve($options);
+
+        // Add current location in the multimedia item list
+        $multimediaItems = [$location];
+
+        // Get children objects and add them in multimedia item list
+        if ($options['include_children']) {
+            $children = $location->filterChildren($options['content_types']);
+            $multimediaItems = array_merge($multimediaItems, $children->getCurrentPageResults());
+        }
+
+        $relatedMultimedia = $this->innerResolver->loadRelations($location, 'related_multimedia');
+        foreach ($relatedMultimedia as $relatedMultimediaItem) {
+            if ($relatedMultimediaItem->contentInfo->contentTypeIdentifier === 'ng_gallery') {
+                // For galleries, find children objects and add them in multimedia item list
+                $children = $relatedMultimediaItem->filterChildren($options['content_types']);
+                $multimediaItems = array_merge($multimediaItems, $children->getCurrentPageResults());
+            } else {
+                $multimediaItems[] = $relatedMultimediaItem;
+            }
+        }
+
+        return $multimediaItems;
+    }
+
+    protected function configureOptions(OptionsResolver $optionsResolver): void
+    {
+        $optionsResolver->setRequired('include_children');
+        $optionsResolver->setAllowedTypes('include_children', 'bool');
+        $optionsResolver->setDefault('include_children', false);
+
+        $optionsResolver->setRequired('content_types');
+        $optionsResolver->setAllowedTypes('content_types', 'array');
+        $optionsResolver->setDefault('content_types', ['image']);
+    }
+}

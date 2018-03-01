@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\MoreBundle\Controller;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Netgen\Bundle\MoreBundle\Relation\LocationRelationResolverInterface;
 use Netgen\EzPlatformSiteApi\API\Values\Content;
+use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,11 +15,19 @@ class PartsController extends Controller
     /**
      * @var \Netgen\Bundle\MoreBundle\Relation\LocationRelationResolverInterface
      */
-    protected $relationResolver;
+    protected $locationResolver;
 
-    public function __construct(LocationRelationResolverInterface $relationResolver)
-    {
-        $this->relationResolver = $relationResolver;
+    /**
+     * @var \Netgen\Bundle\MoreBundle\Relation\LocationRelationResolverInterface
+     */
+    protected $multimediaResolver;
+
+    public function __construct(
+        LocationRelationResolverInterface $locationResolver,
+        LocationRelationResolverInterface $multimediaResolver
+    ) {
+        $this->locationResolver = $locationResolver;
+        $this->multimediaResolver = $multimediaResolver;
     }
 
     /**
@@ -31,8 +39,9 @@ class PartsController extends Controller
             $template,
             [
                 'content' => $content,
+                'location' => $content->mainLocation,
                 'field_identifier' => $fieldDefinitionIdentifier,
-                'related_items' => $this->relationResolver->loadRelations($content->mainLocation, $fieldDefinitionIdentifier),
+                'related_items' => $this->locationResolver->loadRelations($content->mainLocation, $fieldDefinitionIdentifier),
                 'view_type' => $request->attributes->get('viewType') ?? 'line',
             ]
         );
@@ -49,71 +58,23 @@ class PartsController extends Controller
      * 2. children objects - if $includeChildren parameter is set, all children content objects will be added in the multimedia items list
      * 3. related objects from related_multimedia object relation field ( related images, images from related galleries, banners, videos )
      * - to enable this feature for some content type, add object relations field with content type identifier 'related_multimedia'.
-     *
-     * @param mixed $locationId
      */
-    public function viewRelatedMultimediaItems($locationId, string $template, bool $includeChildren = false, array $contentTypeIdentifiers = ['image']): Response
+    public function viewRelatedMultimediaItems(Request $request, Location $location, string $template): Response
     {
-        $location = $this->getSite()->getLoadService()->loadLocation($locationId);
-        $content = $location->content;
-
-        // Add current location in the multimedia item list
-        $multimediaItems = [$content];
-
-        // Get children objects and add them in multimedia item list
-        if ($includeChildren) {
-            $galleryItems = [];
-            foreach ($location->filterChildren($contentTypeIdentifiers) as $child) {
-                $galleryItems[] = $child->content;
-            }
-
-            $multimediaItems = array_merge($multimediaItems, $galleryItems);
-        }
-
-        // Finally, check if related_multimedia field exists and has content
-        $relatedMultimediaLocationIds = [];
-        if ($content->hasField('related_multimedia')) {
-            if (!$content->getField('related_multimedia')->isEmpty()) {
-                $relatedMultimediaField = $content->getField('related_multimedia')->value;
-
-                // We need to work with location IDs, because we need to check if related object has location, to prevent
-                // possible problems with related items in trash.
-                // Also, we need location IDs for fetching images from related ng_gallery objects
-                $relatedMultimediaLocationIds = !empty($relatedMultimediaField->destinationLocationIds) ? $relatedMultimediaField->destinationLocationIds : [];
-            }
-        }
-
-        // If there are related multimedia objects
-        if (!empty($relatedMultimediaLocationIds)) {
-            foreach ($relatedMultimediaLocationIds as $relatedMultimediaLocationId) {
-                try {
-                    $relatedMultimediaLocation = $this->getSite()->getLoadService()->loadLocation($relatedMultimediaLocationId);
-                } catch (NotFoundException $e) {
-                    // Skip non-existing locations (item in trash or missing location due to some other reason)
-                    continue;
-                }
-
-                if ($relatedMultimediaLocation->invisible || !$relatedMultimediaLocation->contentInfo->published) {
-                    continue;
-                }
-
-                // ng_gallery - Find children objects and add them in multimedia item list
-                if ($relatedMultimediaLocation->contentInfo->contentTypeIdentifier === 'ng_gallery') {
-                    $galleryItems = [];
-                    foreach ($relatedMultimediaLocation->filterChildren($contentTypeIdentifiers) as $child) {
-                        $galleryItems[] = $child->content;
-                    }
-
-                    $multimediaItems = array_merge($multimediaItems, $galleryItems);
-                } else {
-                    $multimediaItems[] = $relatedMultimediaLocation->content;
-                }
-            }
-        }
+        $multimediaItems = $this->multimediaResolver->loadRelations(
+            $location,
+            null,
+            [
+                'include_children' => $request->attributes->get('includeChildren') ?? false,
+                'content_types' => $request->attributes->get('contentTypeIdentifiers') ?? ['image'],
+            ]
+        );
 
         return $this->render(
             $template,
             [
+                'content' => $location->content,
+                'location' => $location,
                 'multimedia_items' => $multimediaItems,
             ]
         );

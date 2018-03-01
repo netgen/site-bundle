@@ -5,46 +5,35 @@ declare(strict_types=1);
 namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use Netgen\Bundle\MoreBundle\Relation\RelationResolverInterface;
+use Netgen\EzPlatformSiteApi\API\Values\Content;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class PartsController extends Controller
 {
     /**
-     * Action for rendering related items.
-     *
-     * @param mixed $contentId
+     * @var \Netgen\Bundle\MoreBundle\Relation\RelationResolverInterface
      */
-    public function viewRelatedItems($contentId, string $fieldDefinitionIdentifier, string $template, string $viewType = 'line'): Response
+    protected $relationResolver;
+
+    public function __construct(RelationResolverInterface $relationResolver)
     {
-        $relatedItems = [];
+        $this->relationResolver = $relationResolver;
+    }
 
-        $content = $this->getSite()->getLoadService()->loadContent($contentId);
-
-        if ($content->hasField($fieldDefinitionIdentifier) && !$content->getField($fieldDefinitionIdentifier)->isEmpty()) {
-            /** @var \Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value $fieldValue */
-            $fieldValue = $content->getField($fieldDefinitionIdentifier)->value;
-            if (!empty($fieldValue->destinationLocationIds)) {
-                foreach ($fieldValue->destinationLocationIds as $locationId) {
-                    try {
-                        if (!empty($locationId)) {
-                            $location = $this->getSite()->getLoadService()->loadLocation($locationId);
-                            if (!$location->invisible && $location->contentInfo->published) {
-                                $relatedItems[] = $location;
-                            }
-                        }
-                    } catch (NotFoundException $e) {
-                        // Do nothing if there's no location
-                        continue;
-                    }
-                }
-            }
-        }
-
+    /**
+     * Action for rendering related items of a provided content.
+     */
+    public function viewRelatedItems(Request $request, Content $content, string $fieldDefinitionIdentifier, string $template): Response
+    {
         return $this->render(
             $template,
             [
-                'related_items' => $relatedItems,
-                'view_type' => $viewType,
+                'content' => $content,
+                'field_identifier' => $fieldDefinitionIdentifier,
+                'related_items' => $this->relationResolver->loadRelations($content, $fieldDefinitionIdentifier),
+                'view_type' => $request->attributes->get('viewType') ?? 'line',
             ]
         );
     }

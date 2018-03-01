@@ -42,6 +42,8 @@ parameters:
     ngmore.default.user.mail.admin_email: "%ngmore.default.mail.admin_email%"
     ngmore.default.user.mail.admin_name: "%ngmore.default.mail.admin_name%"
 
+    ngmore.default.view.shared_max_age: 86400
+
     ngmore.default.search.default_limit: 10
     ngmore.default.search.content_types: []
 

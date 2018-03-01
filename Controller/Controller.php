@@ -15,9 +15,11 @@ abstract class Controller extends BaseController
      */
     protected function processCacheSettings(Request $request, Response $response): void
     {
+        $defaultSharedMaxAge = $this->getConfigResolver()->getParameter('view.shared_max_age', 'ngmore');
+
         $cacheSettings = $request->attributes->get('cacheSettings');
         if (!is_array($cacheSettings)) {
-            $cacheSettings = ['sharedMaxAge' => 86400];
+            $cacheSettings = ['sharedMaxAge' => $defaultSharedMaxAge];
         }
 
         $public = true;
@@ -33,7 +35,7 @@ abstract class Controller extends BaseController
                 $public = false;
             }
         } else {
-            $response->setSharedMaxAge(86400);
+            $response->setSharedMaxAge($defaultSharedMaxAge);
         }
 
         $public ? $response->setPublic() : $response->setPrivate();

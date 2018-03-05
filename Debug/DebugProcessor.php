@@ -7,7 +7,7 @@ namespace Netgen\Bundle\MoreBundle\Debug;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 
 /**
- * This debug processor disables Symfony built in DebugProcessor to exclude
+ * This debug processor overrides Symfony built in DebugProcessor to exclude
  * the provided list of channels from Symfony profiler.
  *
  * By default, it excludes "doctrine" and "event" channels, which cause most

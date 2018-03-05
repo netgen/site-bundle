@@ -1,0 +1,10 @@
+parameters:
+    ngmore.debug.excluded_profiler_channels: [doctrine, event]
+
+services:
+    ngmore.debug.log_processor:
+        class: Netgen\Bundle\MoreBundle\Debug\DebugProcessor
+        arguments:
+            - "@ngmore.debug.log_processor.inner"
+            - "%ngmore.debug.excluded_profiler_channels%"
+        decorates: debug.log_processor

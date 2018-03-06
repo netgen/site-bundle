@@ -50,7 +50,7 @@ class DumpDatabaseCommand extends ContainerAwareCommand
                 $databaseUser,
                 '-h',
                 $databaseHost,
-				'--opt',
+                '--opt',
                 '--quick',
                 '--single-transaction',
                 '-r',

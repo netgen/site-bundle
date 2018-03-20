@@ -37,8 +37,7 @@ class DebugProcessor implements DebugLoggerInterface
     {
         $channel = $record['channel'] ?? '';
         if (!in_array($channel, $this->excludedChannels, true)) {
-            $innerProcessor = $this->innerProcessor;
-            $record = $innerProcessor($record);
+            call_user_func($this->innerProcessor, $record);
         }
 
         return $record;

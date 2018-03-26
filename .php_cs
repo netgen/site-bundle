@@ -13,6 +13,7 @@ return PhpCsFixer\Config::create()
         'cast_spaces' => false,
         'blank_line_after_opening_tag' => false,
         'phpdoc_no_alias_tag' => false,
+        'yoda_style' => false,
     ])
     ->setRiskyAllowed(true)
     ->setFinder(

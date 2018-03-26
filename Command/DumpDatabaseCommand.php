@@ -43,6 +43,9 @@ class DumpDatabaseCommand extends ContainerAwareCommand
             $fs->mkdir($targetDirectory);
         }
 
+        // https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_opt
+        // https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_quick
+        // https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_single-transaction
         $process = new Process(
             [
                 'mysqldump',

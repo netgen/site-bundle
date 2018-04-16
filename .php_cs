@@ -5,7 +5,7 @@ return PhpCsFixer\Config::create()
     ->setRules([
         '@Symfony' => true,
         '@Symfony:risky' => true,
-        'array_syntax' => array('syntax' => 'short'),
+        'array_syntax' => ['syntax' => 'short'],
         'combine_consecutive_unsets' => true,
         'concat_space' => ['spacing' => 'one'],
         'no_useless_else' => true,

@@ -1,0 +1,4 @@
+assets:
+    packages:
+        ezfile:
+            base_path: '%ngmore.ezfile_storage_path%'

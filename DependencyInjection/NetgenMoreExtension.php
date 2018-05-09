@@ -44,6 +44,7 @@ class NetgenMoreExtension extends Extension implements PrependExtensionInterface
 
         $prependConfigs = [
             'framework/twig.yml' => 'twig',
+            'framework/assets.yml' => 'framework',
         ];
 
         foreach ($prependConfigs as $configFile => $prependConfig) {

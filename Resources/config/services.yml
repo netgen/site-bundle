@@ -162,6 +162,14 @@ services:
         tags:
             - { name: router, priority: 200 }
 
+    ngmore.opengraph.handler.site_name:
+        class: Netgen\Bundle\MoreBundle\OpenGraph\Handler\SiteName
+        public: false
+        arguments:
+            - "@ngmore.helper.site_info_helper"
+        tags:
+            - { name: netgen_open_graph.meta_tag_handler, alias: ngmore/site_name }
+
 #    Custom user context hash providers are disabled by default.
 #    Enable them in your project if needed by copying one of the
 #    following service definitions.

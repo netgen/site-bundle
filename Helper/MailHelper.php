@@ -12,8 +12,8 @@ use Swift_Mailer;
 use Swift_Message;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use Twig\Environment;
 
 class MailHelper
 {
@@ -23,9 +23,9 @@ class MailHelper
     protected $mailer;
 
     /**
-     * @var \Symfony\Component\Templating\EngineInterface
+     * @var \Twig\Environment
      */
-    protected $templating;
+    protected $twig;
 
     /**
      * @var  \Symfony\Component\Routing\RouterInterface
@@ -64,7 +64,7 @@ class MailHelper
 
     public function __construct(
         Swift_Mailer $mailer,
-        EngineInterface $templating,
+        Environment $twig,
         RouterInterface $router,
         TranslatorInterface $translator,
         ConfigResolverInterface $configResolver,
@@ -72,7 +72,7 @@ class MailHelper
         LoggerInterface $logger = null
     ) {
         $this->mailer = $mailer;
-        $this->templating = $templating;
+        $this->twig = $twig;
         $this->router = $router;
         $this->translator = $translator;
         $this->configResolver = $configResolver;
@@ -107,7 +107,7 @@ class MailHelper
             return -1;
         }
 
-        $body = $this->templating->render($template, $templateParameters + $this->getDefaultTemplateParameters());
+        $body = $this->twig->render($template, $templateParameters + $this->getDefaultTemplateParameters());
 
         $subject = $this->translator->trans($subject, [], 'ngmore_mail');
 

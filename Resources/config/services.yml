@@ -114,7 +114,7 @@ services:
         public: false
         arguments:
             - "@mailer"
-            - "@templating"
+            - "@twig"
             - "@router"
             - "@translator"
             - "@ezpublish.config.resolver"

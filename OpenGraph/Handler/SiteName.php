@@ -20,12 +20,12 @@ class SiteName implements HandlerInterface
         $this->siteInfoHelper = $siteInfoHelper;
     }
 
-    public function getMetaTags($tagName, array $params = array()): array
+    public function getMetaTags($tagName, array $params = []): array
     {
         $siteName = $this->siteInfoHelper->getSiteInfoContent()->getField('site_name')->value->text;
 
-        return array(
+        return [
             new Item($tagName, trim($siteName)),
-        );
+        ];
     }
 }

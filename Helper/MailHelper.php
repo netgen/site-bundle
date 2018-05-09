@@ -43,6 +43,11 @@ class MailHelper
     protected $configResolver;
 
     /**
+     * @var \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper
+     */
+    protected $siteInfoHelper;
+
+    /**
      * @var string
      */
     protected $siteUrl;
@@ -63,6 +68,7 @@ class MailHelper
         RouterInterface $router,
         TranslatorInterface $translator,
         ConfigResolverInterface $configResolver,
+        SiteInfoHelper $siteInfoHelper,
         LoggerInterface $logger = null
     ) {
         $this->mailer = $mailer;
@@ -70,17 +76,8 @@ class MailHelper
         $this->router = $router;
         $this->translator = $translator;
         $this->configResolver = $configResolver;
+        $this->siteInfoHelper = $siteInfoHelper;
         $this->logger = $logger ?: new NullLogger();
-
-        $this->siteUrl = $this->router->generate(
-            'ez_urlalias',
-            [
-                'locationId' => $configResolver->getParameter('content.tree_root.location_id'),
-            ],
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
-
-        $this->siteName = $configResolver->getParameter('site_settings.site_name', 'ngmore');
     }
 
     /**
@@ -132,6 +129,20 @@ class MailHelper
      */
     protected function getDefaultTemplateParameters(): array
     {
+        if ($this->siteUrl === null) {
+            $this->siteUrl = $this->router->generate(
+                'ez_urlalias',
+                [
+                    'locationId' => $this->configResolver->getParameter('content.tree_root.location_id'),
+                ],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
+        }
+
+        if ($this->siteName === null) {
+            $this->siteName = trim($this->siteInfoHelper->getSiteInfoContent()->getField('site_name')->value->text);
+        }
+
         return [
             'site_url' => $this->siteUrl,
             'site_name' => $this->siteName,

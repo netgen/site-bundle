@@ -118,6 +118,7 @@ services:
             - "@router"
             - "@translator"
             - "@ezpublish.config.resolver"
+            - "@ngmore.helper.site_info_helper"
             - "@?logger"
 
     ngmore.repository.nguser_setting:

@@ -11,7 +11,6 @@ use Psr\Log\NullLogger;
 use Swift_Mailer;
 use Swift_Message;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -28,9 +27,9 @@ class MailHelper
     protected $twig;
 
     /**
-     * @var  \Symfony\Component\Routing\RouterInterface
+     * @var  \Symfony\Component\Routing\Generator\UrlGeneratorInterface
      */
-    protected $router;
+    protected $urlGenerator;
 
     /**
      * @var \Symfony\Component\Translation\TranslatorInterface
@@ -65,7 +64,7 @@ class MailHelper
     public function __construct(
         Swift_Mailer $mailer,
         Environment $twig,
-        RouterInterface $router,
+        UrlGeneratorInterface $urlGenerator,
         TranslatorInterface $translator,
         ConfigResolverInterface $configResolver,
         SiteInfoHelper $siteInfoHelper,
@@ -73,7 +72,7 @@ class MailHelper
     ) {
         $this->mailer = $mailer;
         $this->twig = $twig;
-        $this->router = $router;
+        $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
         $this->configResolver = $configResolver;
         $this->siteInfoHelper = $siteInfoHelper;
@@ -130,7 +129,7 @@ class MailHelper
     protected function getDefaultTemplateParameters(): array
     {
         if ($this->siteUrl === null) {
-            $this->siteUrl = $this->router->generate(
+            $this->siteUrl = $this->urlGenerator->generate(
                 'ez_urlalias',
                 [
                     'locationId' => $this->configResolver->getParameter('content.tree_root.location_id'),

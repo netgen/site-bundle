@@ -21,6 +21,14 @@ class NetgenMoreExtension extends AbstractExtension
                 'ngmore_language_name',
                 [NetgenMoreRuntime::class, 'getLanguageName']
             ),
+            new TwigFunction(
+                'ngmore_content_name',
+                [NetgenMoreRuntime::class, 'getContentName']
+            ),
+            new TwigFunction(
+                'ngmore_location_name',
+                [NetgenMoreRuntime::class, 'getLocationName']
+            ),
         ];
     }
 }

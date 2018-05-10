@@ -31,5 +31,6 @@ services:
         arguments:
             - "@ngmore.helper.path_helper"
             - "@ezpublish.locale.converter"
+            - "@netgen.ezplatform_site.load_service"
         tags:
             - { name: twig.runtime }

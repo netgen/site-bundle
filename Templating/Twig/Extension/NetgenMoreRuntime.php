@@ -39,7 +39,7 @@ class NetgenMoreRuntime
     /**
      * Returns the path for specified location ID.
      *
-     * @param mixed $locationId
+     * @param int|string $locationId
      */
     public function getLocationPath($locationId, array $options = []): array
     {

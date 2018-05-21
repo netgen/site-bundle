@@ -1,0 +1,11 @@
+block.plugin.vertical_whitespace.enabled: 'Use vertical whitespace'
+block.plugin.vertical_whitespace.position: 'Whitespace position'
+block.plugin.vertical_whitespace.size: 'Whitespace size'
+
+block.plugin.vertical_whitespace.top_and_bottom: 'Top and bottom'
+block.plugin.vertical_whitespace.only_top: 'Only top'
+block.plugin.vertical_whitespace.only_bottom: 'Only bottom'
+
+block.plugin.vertical_whitespace.large: 'Large'
+block.plugin.vertical_whitespace.medium: 'Medium'
+block.plugin.vertical_whitespace.small: 'Small'

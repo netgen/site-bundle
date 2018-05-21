@@ -1,0 +1,5 @@
+services:
+    app.block.block_definition.handler.plugin.vertical_whitespace_plugin:
+        class: Netgen\Bundle\MoreBundle\Layouts\Block\Plugin\VerticalWhitespacePlugin
+        tags:
+            - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: 10 }

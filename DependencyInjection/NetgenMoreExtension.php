@@ -24,6 +24,7 @@ class NetgenMoreExtension extends Extension implements PrependExtensionInterface
         $loader->load('menu.yml');
         $loader->load('event_listeners.yml');
         $loader->load('matchers.yml');
+        $loader->load('layouts.yml');
         $loader->load('services.yml');
 
         if ($container->getParameter('kernel.debug')) {

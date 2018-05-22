@@ -59,17 +59,20 @@ class BackgroundImagePlugin extends Plugin
         );
     }
 
-    public function getDynamicParameters(DynamicParameters $params, Block $block)
+    public function getDynamicParameters(DynamicParameters $params, Block $block): void
     {
-        $params['background_image:image'] = null;
+        $params['background_image:image_content'] = null;
 
         if ($block->getParameter('background_image:image')->isEmpty()) {
             return;
         }
+
         try {
-            $params['background_image:image_content'] = $this->loadService->loadContent($block->getParameter('background_image:image')->getValue());
+            $params['background_image:image_content'] = $this->loadService->loadContent(
+                $block->getParameter('background_image:image')->getValue()
+            );
         } catch (UnauthorizedException | NotFoundException | TranslationNotMatchedException $e) {
-            // do nothing
+            // Do nothing
         }
     }
 }

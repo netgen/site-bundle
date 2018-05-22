@@ -13,7 +13,7 @@ class VerticalWhitespacePlugin extends Plugin
 {
     public static function getExtendedHandler()
     {
-        return BlockDefinitionHandlerInterface::class;
+        return [BlockDefinitionHandlerInterface::class];
     }
 
     public function buildParameters(ParameterBuilderInterface $builder): void

@@ -4,3 +4,11 @@ services:
         public: false
         tags:
             - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: 10 }
+
+    ngmore.layouts.block.plugin.background_image:
+        class: Netgen\Bundle\MoreBundle\Layouts\Block\Plugin\BackgroundImagePlugin
+        public: false
+        arguments:
+            - "@netgen.ezplatform_site.load_service"
+        tags:
+            - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: 10 }

@@ -9,3 +9,6 @@ block.plugin.vertical_whitespace.only_bottom: 'Only bottom'
 block.plugin.vertical_whitespace.large: 'Large'
 block.plugin.vertical_whitespace.medium: 'Medium'
 block.plugin.vertical_whitespace.small: 'Small'
+
+block.plugin.background_image.enabled: 'Set background image'
+block.plugin.background_image.image: 'Background image'

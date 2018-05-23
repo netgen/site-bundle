@@ -40,7 +40,7 @@ class SetContainerPlugin extends Plugin
                 'label' => 'block.plugin.set_container.size',
                 'translatable' => false,
                 'options' => [
-                    'block.plugin.set_container.regular' => 'regular',
+                    'block.plugin.set_container.regular' => '',
                     'block.plugin.set_container.narrow' => 'narrow',
                     'block.plugin.set_container.wide' => 'wide',
                 ],

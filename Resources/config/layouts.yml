@@ -3,7 +3,7 @@ services:
         class: Netgen\Bundle\MoreBundle\Layouts\Block\Plugin\VerticalWhitespacePlugin
         public: false
         tags:
-            - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: 10 }
+            - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: 200 }
 
     ngmore.layouts.block.plugin.background_image:
         class: Netgen\Bundle\MoreBundle\Layouts\Block\Plugin\BackgroundImagePlugin
@@ -11,4 +11,10 @@ services:
         arguments:
             - "@netgen.ezplatform_site.load_service"
         tags:
-            - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: 10 }
+            - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: 300 }
+
+    ngmore.layouts.block.plugin.set_container:
+        class: Netgen\Bundle\MoreBundle\Layouts\Block\Plugin\SetContainerPlugin
+        public: false
+        tags:
+            - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: -100 }

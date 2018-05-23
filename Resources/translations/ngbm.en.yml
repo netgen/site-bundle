@@ -12,3 +12,8 @@ block.plugin.vertical_whitespace.small: 'Small'
 
 block.plugin.background_image.enabled: 'Set background image'
 block.plugin.background_image.image: 'Background image'
+
+block.plugin.set_container.size: 'Container size'
+block.plugin.set_container.regular: 'Regular'
+block.plugin.set_container.narrow: 'Narrow'
+block.plugin.set_container.wide: 'Wide'

@@ -31,7 +31,7 @@ class NetgenMoreExtension extends Extension implements PrependExtensionInterface
         $activatedBundles = $container->getParameter('kernel.bundles');
 
         if (in_array(NetgenBlockManagerBundle::class, $activatedBundles, true)) {
-            $loader->load('layouts.yml');
+            $loader->load('layouts/services.yml');
         }
 
         if ($container->getParameter('kernel.debug')) {

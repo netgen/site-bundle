@@ -65,7 +65,7 @@ class SearchController extends Controller
             $configResolver->getParameter('template.search', 'ngmore'),
             [
                 'search_text' => $searchText,
-                'locations' => $pager,
+                'pager' => $pager,
             ]
         );
     }

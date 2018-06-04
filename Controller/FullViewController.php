@@ -10,7 +10,7 @@ use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
 use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
 use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
-use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\LocationSearchFilterAdapter;
+use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\FilterAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,7 +72,7 @@ class FullViewController extends Controller
         $query->sortClauses = $location->innerLocation->getSortClauses();
 
         $pager = new Pagerfanta(
-            new LocationSearchFilterAdapter(
+            new FilterAdapter(
                 $query,
                 $this->getSite()->getFilterService()
             )

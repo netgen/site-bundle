@@ -6,7 +6,7 @@ namespace Netgen\Bundle\MoreBundle\Controller;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\LocationSearchHitAdapter;
+use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\FindAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,7 +47,7 @@ class SearchController extends Controller
         $query->filter = new Criterion\LogicalAnd($criteria);
 
         $pager = new Pagerfanta(
-            new LocationSearchHitAdapter(
+            new FindAdapter(
                 $query,
                 $this->getSite()->getFindService()
             )

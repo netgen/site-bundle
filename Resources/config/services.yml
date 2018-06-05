@@ -170,6 +170,16 @@ services:
         tags:
             - { name: netgen_open_graph.meta_tag_handler, alias: ngmore/site_name }
 
+
+    ngmore.query_type.search:
+        class: Netgen\Bundle\MoreBundle\QueryType\SearchQueryType
+        public: false
+        arguments:
+            - "@netgen.ezplatform_site.site"
+            - "@ezpublish.config.resolver"
+        tags:
+            - { name: ezpublish.query_type }
+
 #    Custom user context hash providers are disabled by default.
 #    Enable them in your project if needed by copying one of the
 #    following service definitions.

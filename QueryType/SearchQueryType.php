@@ -13,7 +13,7 @@ use eZ\Publish\Core\QueryType\QueryType;
 use Netgen\EzPlatformSiteApi\API\Site;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class SearchQueryType extends OptionsResolverBasedQueryType implements QueryType
+class SearchQueryType extends OptionsResolverBasedQueryType implements QueryType
 {
     /**
      * @var \Netgen\EzPlatformSiteApi\API\Site

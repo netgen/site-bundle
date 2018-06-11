@@ -1,0 +1,84 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Netgen\Bundle\MoreBundle\EventListener;
+
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\View\View;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
+class NoViewTemplateEventListener implements EventSubscriberInterface
+{
+    /**
+     * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
+     */
+    protected $urlGenerator;
+
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    protected $configResolver;
+
+    /**
+     * @var bool
+     */
+    protected $enabled = true;
+
+    public function __construct(UrlGeneratorInterface $urlGenerator, ConfigResolverInterface $configResolver)
+    {
+        $this->urlGenerator = $urlGenerator;
+        $this->configResolver = $configResolver;
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [KernelEvents::CONTROLLER => 'getController'];
+    }
+
+    /**
+     * Enables or disables redirection to the frontpage
+     * if no full view template exists for content or location.
+     */
+    public function setEnabled(bool $enabled)
+    {
+        $this->enabled = $enabled;
+    }
+
+    /**
+     * Redirects to the frontpage for any full view that does not have a template configured.
+     */
+    public function getController(FilterControllerEvent $event): void
+    {
+        if ($event->getRequestType() !== Kernel::MASTER_REQUEST || !$this->enabled) {
+            return;
+        }
+
+        $request = $event->getRequest();
+
+        $view = $request->attributes->get('view');
+        if (!$view instanceof View || $view->getViewType() !== 'full') {
+            return;
+        }
+
+        if (is_string($view->getTemplateIdentifier())) {
+            return;
+        }
+
+        $event->setController(
+            function () {
+                $rootLocationId = $this->configResolver->getParameter('content.tree_root.location_id');
+
+                return new RedirectResponse(
+                    $this->urlGenerator->generate('ez_urlalias', ['locationId' => $rootLocationId]),
+                    RedirectResponse::HTTP_MOVED_PERMANENTLY
+                );
+            }
+        );
+    }
+}

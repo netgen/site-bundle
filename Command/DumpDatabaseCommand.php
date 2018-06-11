@@ -34,7 +34,7 @@ class DumpDatabaseCommand extends ContainerAwareCommand
         $databaseUser = $container->getParameter('database_user');
         $databasePassword = $container->getParameter('database_password');
 
-        $filePath = getcwd() . DIRECTORY_SEPARATOR . trim($input->getArgument('file'), '/');
+        $filePath = getcwd() . \DIRECTORY_SEPARATOR . trim($input->getArgument('file'), '/');
         $targetDirectory = dirname($filePath);
         $fileName = basename($filePath);
 

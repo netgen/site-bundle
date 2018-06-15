@@ -36,7 +36,7 @@ class SetContainerPlugin extends Plugin
             'set_container:size',
             ParameterType\ChoiceType::class,
             [
-                'default_value' => 'regular',
+                'default_value' => '',
                 'label' => 'block.plugin.set_container.size',
                 'translatable' => false,
                 'options' => [

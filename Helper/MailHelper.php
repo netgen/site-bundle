@@ -171,7 +171,9 @@ class MailHelper
             throw new InvalidArgumentException(
                 "Parameter 'sender' has to be either a string, or an associative array with one element (e.g. array( 'info@example.com' => 'Example name' )), {$sender} given."
             );
-        } elseif ($this->configResolver->hasParameter('mail.sender_email', 'ngmore')) {
+        }
+
+        if ($this->configResolver->hasParameter('mail.sender_email', 'ngmore')) {
             if ($this->configResolver->hasParameter('mail.sender_name', 'ngmore')) {
                 return [
                     $this->configResolver->getParameter('mail.sender_email', 'ngmore') => $this->configResolver->getParameter('mail.sender_name', 'ngmore'),

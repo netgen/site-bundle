@@ -81,7 +81,7 @@ class Type extends BaseRelationListType
         foreach ($value->destinationLocationIds as $key => $destinationLocationId) {
             if (!is_int($destinationLocationId) && !is_string($destinationLocationId)) {
                 throw new InvalidArgumentType(
-                    "\$value->destinationLocationIds[$key]",
+                    '$value->destinationLocationIds[$key]',
                     'string|int',
                     $destinationLocationId
                 );

@@ -26,7 +26,7 @@ abstract class SymlinkCommand extends ContainerAwareCommand
     /**
      * @var \Symfony\Component\Filesystem\Filesystem
      */
-    protected $fileSystem = null;
+    protected $fileSystem;
 
     /**
      * Files/directories that will not be symlinked in root and root_* folders.

@@ -45,7 +45,7 @@ class NoViewTemplateEventListener implements EventSubscriberInterface
      * Enables or disables redirection to the frontpage
      * if no full view template exists for content or location.
      */
-    public function setEnabled(bool $enabled)
+    public function setEnabled(bool $enabled): void
     {
         $this->enabled = $enabled;
     }

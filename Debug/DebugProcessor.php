@@ -33,7 +33,7 @@ class DebugProcessor implements DebugLoggerInterface
         $this->excludedChannels = $excludedChannels;
     }
 
-    public function __invoke(array $record)
+    public function __invoke(array $record): array
     {
         $channel = $record['channel'] ?? '';
         if (!in_array($channel, $this->excludedChannels, true)) {

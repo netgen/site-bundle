@@ -22,7 +22,7 @@ class NgUserSetting
      * @param mixed $userId
      * @param bool $isActivated
      */
-    public function __construct($userId, $isActivated)
+    public function __construct($userId, bool $isActivated)
     {
         $this->userId = $userId;
         $this->isActivated = $isActivated;
@@ -59,7 +59,7 @@ class NgUserSetting
      *
      * @return \Netgen\Bundle\MoreBundle\Entity\NgUserSetting
      */
-    public function setIsActivated($isActivated): self
+    public function setIsActivated(bool $isActivated): self
     {
         $this->isActivated = $isActivated;
 
@@ -71,7 +71,7 @@ class NgUserSetting
      *
      * @return bool
      */
-    public function getIsActivated()
+    public function getIsActivated(): bool
     {
         return $this->isActivated;
     }

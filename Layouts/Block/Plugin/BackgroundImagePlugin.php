@@ -7,7 +7,7 @@ namespace Netgen\Bundle\MoreBundle\Layouts\Block\Plugin;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use Netgen\BlockManager\API\Values\Block\Block;
-use Netgen\BlockManager\Block\BlockDefinition\ContainerDefinitionHandler;
+use Netgen\BlockManager\Block\BlockDefinition\ContainerDefinitionHandlerInterface;
 use Netgen\BlockManager\Block\BlockDefinition\Handler\Plugin;
 use Netgen\BlockManager\Block\DynamicParameters;
 use Netgen\BlockManager\Ez\Parameters\ParameterType as EzParameterType;
@@ -31,7 +31,7 @@ class BackgroundImagePlugin extends Plugin
 
     public static function getExtendedHandler()
     {
-        return [ListHandler::class, ContainerDefinitionHandler::class];
+        return [ListHandler::class, ContainerDefinitionHandlerInterface::class];
     }
 
     public function buildParameters(ParameterBuilderInterface $builder): void

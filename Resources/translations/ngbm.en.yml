@@ -13,6 +13,11 @@ block.plugin.vertical_whitespace.small: 'Small'
 block.plugin.background_image.enabled: 'Set background image'
 block.plugin.background_image.image: 'Background image'
 
+block.plugin.background_color.enabled: 'Set background color'
+block.plugin.background_color.color: 'Background color'
+block.plugin.background_color.white: 'White'
+block.plugin.background_color.black: 'Black'
+
 block.plugin.set_container.size: 'Container size'
 block.plugin.set_container.regular: 'Regular'
 block.plugin.set_container.narrow: 'Narrow'

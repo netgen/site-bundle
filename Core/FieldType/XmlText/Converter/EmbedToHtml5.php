@@ -90,8 +90,8 @@ class EmbedToHtml5 extends BaseEmbedToHtml5
                     );
 
                     if (
-                        !$permissionResolver->canUser('content', 'read', $location->contentInfo->innerContentInfo, $location->innerLocation)
-                        && !$permissionResolver->canUser('content', 'view_embed', $location->contentInfo->innerContentInfo, $location->innerLocation)
+                        !$permissionResolver->canUser('content', 'read', $location->contentInfo->innerContentInfo, [$location->innerLocation])
+                        && !$permissionResolver->canUser('content', 'view_embed', $location->contentInfo->innerContentInfo, [$location->innerLocation])
                     ) {
                         throw new UnauthorizedException('content', 'read', ['locationId' => $location->id]);
                     }

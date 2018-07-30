@@ -1,5 +1,5 @@
 parameters:
-    netgen_block_manager.block.block_definition.handler.background_color.colors:
+    ngmore.layouts.block.plugin.background_color.colors:
         white: 'block.plugin.background_color.white'
         black: 'block.plugin.background_color.black'
 
@@ -22,7 +22,7 @@ services:
         class: Netgen\Bundle\MoreBundle\Layouts\Block\Plugin\BackgroundColorPlugin
         public: false
         arguments:
-            - "%netgen_block_manager.block.block_definition.handler.background_color.colors%"
+            - "%ngmore.layouts.block.plugin.background_color.colors%"
         tags:
             - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: 400 }
 

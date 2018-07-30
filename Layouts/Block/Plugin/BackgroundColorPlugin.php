@@ -4,27 +4,30 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\MoreBundle\Layouts\Block\Plugin;
 
+use Netgen\BlockManager\Block\BlockDefinition\ContainerDefinitionHandlerInterface;
 use Netgen\BlockManager\Block\BlockDefinition\Handler\Plugin;
 use Netgen\BlockManager\Parameters\ParameterBuilderInterface;
 use Netgen\BlockManager\Parameters\ParameterType;
-use Netgen\BlockManager\Block\BlockDefinition\ContainerDefinitionHandlerInterface;
 use Netgen\BlockManager\Standard\Block\BlockDefinition\Handler\ListHandler;
 
 class BackgroundColorPlugin extends Plugin
 {
-    public static function getExtendedHandler()
-    {
-        return [ListHandler::class, ContainerDefinitionHandlerInterface::class];
-    }
-
     /**
+     * The list of colors available. Keys should be identifiers, while values
+     * should be human readable names of the colors.
+     *
      * @var array
      */
     private $colors = [];
 
-    public function __construct(array $colors = [])
+    public function __construct(array $colors)
     {
-        $this->colors = array_flip($colors);
+        $this->colors = $colors;
+    }
+
+    public static function getExtendedHandler()
+    {
+        return [ListHandler::class, ContainerDefinitionHandlerInterface::class];
     }
 
     public function buildParameters(ParameterBuilderInterface $builder): void
@@ -46,7 +49,7 @@ class BackgroundColorPlugin extends Plugin
             ParameterType\ChoiceType::class,
             [
                 'label' => 'block.plugin.background_color.color',
-                'options' => $this->colors,
+                'options' => array_flip($this->colors),
                 'groups' => $designGroup,
             ]
         );

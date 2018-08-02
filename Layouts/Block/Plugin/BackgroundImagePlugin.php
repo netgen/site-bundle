@@ -29,7 +29,7 @@ class BackgroundImagePlugin extends Plugin
         $this->loadService = $loadService;
     }
 
-    public static function getExtendedHandler()
+    public static function getExtendedHandler(): array
     {
         return [ListHandler::class, ContainerDefinitionHandlerInterface::class];
     }

@@ -11,9 +11,14 @@ use Netgen\BlockManager\Parameters\ParameterType;
 
 class SetContainerPlugin extends Plugin
 {
-    public static function getExtendedHandler(): array
+    public static function getExtendedHandlers(): array
     {
         return [BlockDefinitionHandlerInterface::class];
+    }
+
+    public static function getExtendedHandler(): array
+    {
+        return self::getExtendedHandlers();
     }
 
     public function buildParameters(ParameterBuilderInterface $builder): void

@@ -25,7 +25,7 @@ class BackgroundColorPlugin extends Plugin
         $this->colors = $colors;
     }
 
-    public static function getExtendedHandler()
+    public static function getExtendedHandler(): array
     {
         return [ListHandler::class, ContainerDefinitionHandlerInterface::class];
     }

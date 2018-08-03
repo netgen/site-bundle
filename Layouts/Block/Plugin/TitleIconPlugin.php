@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\MoreBundle\Layouts\Block\Plugin;
 
-use Netgen\BlockManager\Standard\Block\BlockDefinition\Handler\TitleHandler;
 use Netgen\BlockManager\Block\BlockDefinition\Handler\Plugin;
 use Netgen\BlockManager\Parameters\ParameterBuilderInterface;
 use Netgen\BlockManager\Parameters\ParameterType;
+use Netgen\BlockManager\Standard\Block\BlockDefinition\Handler\TitleHandler;
 
 class TitleIconPlugin extends Plugin
 {

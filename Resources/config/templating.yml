@@ -34,3 +34,17 @@ services:
             - "@netgen.ezplatform_site.load_service"
         tags:
             - { name: twig.runtime }
+
+    ngmore.templating.twig.extension.topic_url:
+        class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\TopicUrlExtension
+        public: false
+        tags:
+            - { name: twig.extension }
+
+    ngmore.templating.twig.runtime.topic_url:
+        class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\TopicUrlRuntime
+        public: false
+        arguments:
+            - "@ngmore.topic.url_generator"
+        tags:
+            - { name: twig.runtime }

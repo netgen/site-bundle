@@ -45,6 +45,16 @@ services:
             - "@netgen.ezplatform_site.load_service"
             - "@ezpublish.api.repository"
 
+    ngmore.listener.twig_extensions:
+        class: Netgen\Bundle\MoreBundle\EventListener\TwigExtensionsListener
+        public: false
+        arguments:
+            - "@twig"
+        # Set as lazy to prevent crashing of eZ Platform siteaccess aware config
+        lazy: true
+        tags:
+            - { name: kernel.event_subscriber }
+
     ngmore.listener.user.post_register:
         class: Netgen\Bundle\MoreBundle\EventListener\User\PostRegisterEventListener
         public: false

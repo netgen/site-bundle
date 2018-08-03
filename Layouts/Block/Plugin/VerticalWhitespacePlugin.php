@@ -11,6 +11,28 @@ use Netgen\BlockManager\Parameters\ParameterType;
 
 class VerticalWhitespacePlugin extends Plugin
 {
+    /**
+     * The list of positions available. Keys should be identifiers, while values
+     * should be human readable names of the positions.
+     *
+     * @var array
+     */
+    private $positions = [];
+
+    /**
+     * The list of sizes available. Keys should be identifiers, while values
+     * should be human readable names of the sizes.
+     *
+     * @var array
+     */
+    private $sizes = [];
+
+    public function __construct(array $positions, array $sizes)
+    {
+        $this->positions = $positions;
+        $this->sizes = $sizes;
+    }
+
     public static function getExtendedHandlers(): array
     {
         return [BlockDefinitionHandlerInterface::class];
@@ -41,11 +63,7 @@ class VerticalWhitespacePlugin extends Plugin
             [
                 'default_value' => 'both',
                 'label' => 'block.plugin.vertical_whitespace.position',
-                'options' => [
-                    'block.plugin.vertical_whitespace.top_and_bottom' => 'both',
-                    'block.plugin.vertical_whitespace.only_top' => 'top',
-                    'block.plugin.vertical_whitespace.only_bottom' => 'bottom',
-                ],
+                'options' => array_flip($this->positions),
                 'groups' => $designGroup,
             ]
         );
@@ -56,11 +74,7 @@ class VerticalWhitespacePlugin extends Plugin
             [
                 'default_value' => 'md',
                 'label' => 'block.plugin.vertical_whitespace.size',
-                'options' => [
-                    'block.plugin.vertical_whitespace.large' => 'lg',
-                    'block.plugin.vertical_whitespace.medium' => 'md',
-                    'block.plugin.vertical_whitespace.small' => 'sm',
-                ],
+                'options' => array_flip($this->sizes),
                 'groups' => $designGroup,
             ]
         );

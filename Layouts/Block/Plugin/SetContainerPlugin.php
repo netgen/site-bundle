@@ -11,6 +11,19 @@ use Netgen\BlockManager\Parameters\ParameterType;
 
 class SetContainerPlugin extends Plugin
 {
+    /**
+     * The list of sizes available. Keys should be identifiers, while values
+     * should be human readable names of the sizes.
+     *
+     * @var array
+     */
+    private $sizes = [];
+
+    public function __construct(array $sizes)
+    {
+        $this->sizes = $sizes;
+    }
+
     public static function getExtendedHandlers(): array
     {
         return [BlockDefinitionHandlerInterface::class];
@@ -44,11 +57,7 @@ class SetContainerPlugin extends Plugin
                 'default_value' => '',
                 'label' => 'block.plugin.set_container.size',
                 'translatable' => false,
-                'options' => [
-                    'block.plugin.set_container.regular' => '',
-                    'block.plugin.set_container.narrow' => 'narrow',
-                    'block.plugin.set_container.wide' => 'wide',
-                ],
+                'options' => array_flip($this->sizes),
                 'groups' => $designGroup,
             ]
         );

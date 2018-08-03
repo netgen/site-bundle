@@ -13,7 +13,7 @@ use Netgen\TagsBundle\API\Repository\Values\Content\Query\Criterion\TagId;
 use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-final class UrlGenerator
+class UrlGenerator
 {
     /**
      * @var \Netgen\EzPlatformSiteApi\API\FindService

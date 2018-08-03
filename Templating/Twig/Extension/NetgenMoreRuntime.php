@@ -49,15 +49,11 @@ class NetgenMoreRuntime
     /**
      * Returns the language name for specified language code.
      */
-    public function getLanguageName(string $languageCode): ?string
+    public function getLanguageName(string $languageCode): string
     {
-        if (!is_string($languageCode) || strlen($languageCode) < 2) {
-            return null;
-        }
-
         $posixLanguageCode = $this->localeConverter->convertToPOSIX($languageCode);
         if ($posixLanguageCode === null) {
-            return null;
+            return '';
         }
 
         $posixLanguageCode = substr($posixLanguageCode, 0, 2);

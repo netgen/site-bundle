@@ -19,13 +19,13 @@ services:
             - "@ezpublish.api.repository"
             - "@netgen.ezplatform_site.load_service"
 
-    ngmore.templating.twig.extension:
+    ngmore.templating.twig.extension.ngmore:
         class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\NetgenMoreExtension
         public: false
         tags:
             - { name: twig.extension }
 
-    ngmore.templating.twig.runtime:
+    ngmore.templating.twig.runtime.ngmore:
         class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\NetgenMoreRuntime
         public: false
         arguments:

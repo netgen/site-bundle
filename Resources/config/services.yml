@@ -180,6 +180,15 @@ services:
         tags:
             - { name: ezpublish.query_type }
 
+    ngmore.topic.url_generator:
+        class: Netgen\Bundle\MoreBundle\Topic\UrlGenerator
+        public: false
+        arguments:
+            - "@netgen.ezplatform_site.find_service"
+            - "@netgen.ezplatform_site.load_service"
+            - "@ezpublish.config.resolver"
+            - "@router"
+
 #    Custom user context hash providers are disabled by default.
 #    Enable them in your project if needed by copying one of the
 #    following service definitions.

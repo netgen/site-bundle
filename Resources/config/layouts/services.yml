@@ -19,6 +19,12 @@ parameters:
         'wide': 'block.plugin.set_container.wide'
 
 services:
+    ngmore.layouts.block.plugin.title_icon:
+        class: Netgen\Bundle\MoreBundle\Layouts\Block\Plugin\TitleIconPlugin
+        public: false
+        tags:
+            - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: 100 }
+
     ngmore.layouts.block.plugin.vertical_whitespace:
         class: Netgen\Bundle\MoreBundle\Layouts\Block\Plugin\VerticalWhitespacePlugin
         public: false
@@ -52,8 +58,16 @@ services:
         tags:
             - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: -100 }
 
-    ngmore.layouts.block.plugin.title_icon:
-        class: Netgen\Bundle\MoreBundle\Layouts\Block\Plugin\TitleIconPlugin
+    ngmore.layouts.query.content_by_topic:
+        class: Netgen\Bundle\MoreBundle\Layouts\Query\ContentByTopicHandler
         public: false
+        arguments:
+            - "@ezpublish.api.service.location"
+            - "@netgen.ezplatform_site.load_service"
+            - "@netgen.ezplatform_site.find_service"
+            - "@ezpublish.spi.persistence.content_type_handler"
+            - "@ezpublish.spi.persistence.section_handler"
+            - "@ezpublish.spi.persistence.object_state_handler"
+            - "@netgen_block_manager.ezpublish.content_provider"
         tags:
-            - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: 100 }
+            - { name: netgen_block_manager.collection.query_type_handler, type: content_by_topic }

@@ -57,6 +57,10 @@ class NetgenMoreExtension extends Extension implements PrependExtensionInterface
             'framework/assets.yml' => 'framework',
         ];
 
+        if (in_array(NetgenBlockManagerBundle::class, $activatedBundles, true)) {
+            $prependConfigs['layouts/query_types.yml'] = 'netgen_block_manager';
+        }
+
         foreach ($prependConfigs as $configFile => $prependConfig) {
             $configFile = __DIR__ . '/../Resources/config/' . $configFile;
             $config = Yaml::parse(file_get_contents($configFile));

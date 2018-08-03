@@ -1,0 +1,3 @@
+query_types:
+    content_by_topic:
+        name: 'Content by topic'

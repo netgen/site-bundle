@@ -96,7 +96,6 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
 
         $output->write(PHP_EOL);
 
-        $translationHelper = $this->getContainer()->get('ezpublish.translation_helper');
         $fieldHelper = $this->getContainer()->get('ezpublish.field_helper');
         $repository = $this->getContainer()->get('ezpublish.api.repository');
 
@@ -117,12 +116,13 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
                 /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
                 $content = $hit->valueObject;
 
-                if ($input->getOption('use-main-translation')) {
-                    /** @var \eZ\Publish\Core\FieldType\DateAndTime\Value|\eZ\Publish\Core\FieldType\Date\Value $dateFieldValue */
-                    $dateFieldValue = $content->getFieldValue($fieldDefIdentifier);
-                } else {
-                    $dateFieldValue = $translationHelper->getTranslatedField($content, $fieldDefIdentifier)->value;
-                }
+                /** @var \eZ\Publish\Core\FieldType\DateAndTime\Value|\eZ\Publish\Core\FieldType\Date\Value $dateFieldValue */
+                $dateFieldValue = $content->getField(
+                    $fieldDefIdentifier,
+                    $input->getOption('use-main-translation') ?
+                        $content->contentInfo->mainLanguageCode :
+                        null
+                )->value;
 
                 $dateValueData = $fieldDefinition->fieldTypeIdentifier === 'ezdatetime' ? $dateFieldValue->value : $dateFieldValue->date;
 
@@ -145,7 +145,7 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
                 $progress->advance();
             }
 
-            $query->offset = $query->offset + $query->limit;
+            $query->offset += $query->limit;
             $searchResult = $searchService->findContent($query, [], false);
             $searchHitCount = count($searchResult->searchHits);
         }

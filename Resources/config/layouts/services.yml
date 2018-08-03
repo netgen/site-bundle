@@ -51,3 +51,9 @@ services:
             - "%ngmore.layouts.block.plugin.set_container.sizes%"
         tags:
             - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: -100 }
+
+    ngmore.layouts.block.plugin.title_icon:
+        class: Netgen\Bundle\MoreBundle\Layouts\Block\Plugin\TitleIconPlugin
+        public: false
+        tags:
+            - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: 100 }

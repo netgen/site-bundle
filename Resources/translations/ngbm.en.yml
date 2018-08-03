@@ -22,3 +22,6 @@ block.plugin.set_container.size: 'Container size'
 block.plugin.set_container.regular: 'Regular'
 block.plugin.set_container.narrow: 'Narrow'
 block.plugin.set_container.wide: 'Wide'
+
+block.plugin.title_icon.enabled: 'Use icon'
+block.plugin.title_icon.css_class: 'Icon css class'

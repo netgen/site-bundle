@@ -6,6 +6,7 @@ namespace Netgen\Bundle\MoreBundle\Relation;
 
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
+use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\Slice;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MultimediaRelationResolver implements LocationRelationResolverInterface
@@ -38,7 +39,7 @@ class MultimediaRelationResolver implements LocationRelationResolverInterface
         // Get children objects and add them in multimedia item list
         if ($options['include_children']) {
             $children = $location->filterChildren($options['content_types']);
-            $multimediaItems = array_merge($multimediaItems, $children->getCurrentPageResults());
+            $multimediaItems = array_merge($multimediaItems, iterator_to_array($children->getCurrentPageResults()));
         }
 
         $relatedMultimedia = $this->innerResolver->loadRelations($location, 'related_multimedia');
@@ -46,7 +47,7 @@ class MultimediaRelationResolver implements LocationRelationResolverInterface
             if ($relatedMultimediaItem->contentInfo->contentTypeIdentifier === 'ng_gallery') {
                 // For galleries, find children objects and add them in multimedia item list
                 $children = $relatedMultimediaItem->filterChildren($options['content_types']);
-                $multimediaItems = array_merge($multimediaItems, $children->getCurrentPageResults());
+                $multimediaItems = array_merge($multimediaItems, iterator_to_array($children->getCurrentPageResults()));
             } else {
                 $multimediaItems[] = $relatedMultimediaItem;
             }

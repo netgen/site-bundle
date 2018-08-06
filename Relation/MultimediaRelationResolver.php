@@ -33,7 +33,7 @@ class MultimediaRelationResolver implements LocationRelationResolverInterface
         $options = $optionsResolver->resolve($options);
 
         // Add current location in the multimedia item list
-        $multimediaItems = [$location];
+        $multimediaItems = [[$location]];
 
         // Get children objects and add them in multimedia item list
         if ($options['include_children']) {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\MoreBundle\EventListener\Menu;
 
 use Netgen\Bundle\MoreBundle\Event\Menu\LocationMenuItemEvent;
-use Netgen\Bundle\MoreBundle\Event\MVCEvents;
+use Netgen\Bundle\MoreBundle\Event\NetgenMoreEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -29,7 +29,7 @@ class EsiFragmentEventListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents(): array
     {
-        return [MVCEvents::MENU_LOCATION_ITEM => 'onMenuItemBuild'];
+        return [NetgenMoreEvents::MENU_LOCATION_ITEM => 'onMenuItemBuild'];
     }
 
     public function onMenuItemBuild(LocationMenuItemEvent $event): void

@@ -11,7 +11,7 @@ use Netgen\Bundle\EzFormsBundle\Form\DataWrapper;
 use Netgen\Bundle\EzFormsBundle\Form\Type\CreateUserType;
 use Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey;
 use Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
-use Netgen\Bundle\MoreBundle\Event\MVCEvents;
+use Netgen\Bundle\MoreBundle\Event\NetgenMoreEvents;
 use Netgen\Bundle\MoreBundle\Event\User as UserEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -130,7 +130,7 @@ class UserController extends Controller
         $userGroupId = $this->getConfigResolver()->getParameter('user.user_group_content_id', 'ngmore');
 
         $preUserRegisterEvent = new UserEvents\PreRegisterEvent($data->payload);
-        $this->eventDispatcher->dispatch(MVCEvents::USER_PRE_REGISTER, $preUserRegisterEvent);
+        $this->eventDispatcher->dispatch(NetgenMoreEvents::USER_PRE_REGISTER, $preUserRegisterEvent);
         $data->payload = $preUserRegisterEvent->getUserCreateStruct();
 
         /** @var \eZ\Publish\API\Repository\Values\User\User $newUser */
@@ -146,7 +146,7 @@ class UserController extends Controller
         );
 
         $userRegisterEvent = new UserEvents\PostRegisterEvent($newUser);
-        $this->eventDispatcher->dispatch(MVCEvents::USER_POST_REGISTER, $userRegisterEvent);
+        $this->eventDispatcher->dispatch(NetgenMoreEvents::USER_POST_REGISTER, $userRegisterEvent);
 
         if ($newUser->enabled) {
             return $this->render(
@@ -189,7 +189,7 @@ class UserController extends Controller
             $users[0] ?? null
         );
 
-        $this->eventDispatcher->dispatch(MVCEvents::USER_ACTIVATION_REQUEST, $activationRequestEvent);
+        $this->eventDispatcher->dispatch(NetgenMoreEvents::USER_ACTIVATION_REQUEST, $activationRequestEvent);
 
         return $this->render(
             $this->getConfigResolver()->getParameter('template.user.activate_sent', 'ngmore')
@@ -230,7 +230,7 @@ class UserController extends Controller
         $userUpdateStruct->enabled = true;
 
         $preActivateEvent = new UserEvents\PreActivateEvent($user, $userUpdateStruct);
-        $this->eventDispatcher->dispatch(MVCEvents::USER_PRE_ACTIVATE, $preActivateEvent);
+        $this->eventDispatcher->dispatch(NetgenMoreEvents::USER_PRE_ACTIVATE, $preActivateEvent);
         $userUpdateStruct = $preActivateEvent->getUserUpdateStruct();
 
         $user = $this->getRepository()->sudo(
@@ -240,7 +240,7 @@ class UserController extends Controller
         );
 
         $postActivateEvent = new UserEvents\PostActivateEvent($user);
-        $this->eventDispatcher->dispatch(MVCEvents::USER_POST_ACTIVATE, $postActivateEvent);
+        $this->eventDispatcher->dispatch(NetgenMoreEvents::USER_POST_ACTIVATE, $postActivateEvent);
 
         return $this->render(
             $this->getConfigResolver()->getParameter('template.user.activate_done', 'ngmore')
@@ -271,7 +271,7 @@ class UserController extends Controller
             $users[0] ?? null
         );
 
-        $this->eventDispatcher->dispatch(MVCEvents::USER_PASSWORD_RESET_REQUEST, $passwordResetRequestEvent);
+        $this->eventDispatcher->dispatch(NetgenMoreEvents::USER_PASSWORD_RESET_REQUEST, $passwordResetRequestEvent);
 
         return $this->render(
             $this->getConfigResolver()->getParameter('template.user.forgot_password_sent', 'ngmore')
@@ -326,7 +326,7 @@ class UserController extends Controller
         $userUpdateStruct->password = $data['password'];
 
         $prePasswordResetEvent = new UserEvents\PrePasswordResetEvent($user, $userUpdateStruct);
-        $this->eventDispatcher->dispatch(MVCEvents::USER_PRE_PASSWORD_RESET, $prePasswordResetEvent);
+        $this->eventDispatcher->dispatch(NetgenMoreEvents::USER_PRE_PASSWORD_RESET, $prePasswordResetEvent);
         $userUpdateStruct = $prePasswordResetEvent->getUserUpdateStruct();
 
         $user = $this->getRepository()->sudo(
@@ -336,7 +336,7 @@ class UserController extends Controller
         );
 
         $postPasswordResetEvent = new UserEvents\PostPasswordResetEvent($user);
-        $this->eventDispatcher->dispatch(MVCEvents::USER_POST_PASSWORD_RESET, $postPasswordResetEvent);
+        $this->eventDispatcher->dispatch(NetgenMoreEvents::USER_POST_PASSWORD_RESET, $postPasswordResetEvent);
 
         return $this->render(
             $this->getConfigResolver()->getParameter('template.user.reset_password_done', 'ngmore')

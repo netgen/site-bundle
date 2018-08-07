@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\MoreBundle\EventListener\User;
 
 use eZ\Publish\API\Repository\Values\User\User;
-use Netgen\Bundle\MoreBundle\Event\MVCEvents;
+use Netgen\Bundle\MoreBundle\Event\NetgenMoreEvents;
 use Netgen\Bundle\MoreBundle\Event\User\PasswordResetRequestEvent;
 use Netgen\Bundle\MoreBundle\EventListener\UserEventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -20,7 +20,7 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
     public static function getSubscribedEvents(): array
     {
         return [
-            MVCEvents::USER_PASSWORD_RESET_REQUEST => 'onPasswordResetRequest',
+            NetgenMoreEvents::USER_PASSWORD_RESET_REQUEST => 'onPasswordResetRequest',
         ];
     }
 

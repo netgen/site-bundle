@@ -8,7 +8,7 @@ use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\MenuItem;
 use Netgen\Bundle\MoreBundle\Event\Menu\LocationMenuItemEvent;
-use Netgen\Bundle\MoreBundle\Event\MVCEvents;
+use Netgen\Bundle\MoreBundle\Event\NetgenMoreEvents;
 use Netgen\Bundle\MoreBundle\Menu\Factory\LocationFactory\ExtensionInterface;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -58,7 +58,7 @@ class LocationFactory implements FactoryInterface
         $menuItem->setName(md5($menuItem->getUri() ?? ''));
 
         $event = new LocationMenuItemEvent($menuItem, $menuItem->getExtra('ezlocation'));
-        $this->eventDispatcher->dispatch(MVCEvents::MENU_LOCATION_ITEM, $event);
+        $this->eventDispatcher->dispatch(NetgenMoreEvents::MENU_LOCATION_ITEM, $event);
 
         return $menuItem;
     }

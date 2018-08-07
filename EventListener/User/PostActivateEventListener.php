@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\MoreBundle\EventListener\User;
 
-use Netgen\Bundle\MoreBundle\Event\MVCEvents;
+use Netgen\Bundle\MoreBundle\Event\NetgenMoreEvents;
 use Netgen\Bundle\MoreBundle\Event\User\PostActivateEvent;
 use Netgen\Bundle\MoreBundle\EventListener\UserEventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -19,7 +19,7 @@ class PostActivateEventListener extends UserEventListener implements EventSubscr
     public static function getSubscribedEvents(): array
     {
         return [
-            MVCEvents::USER_POST_ACTIVATE => 'onPostActivate',
+            NetgenMoreEvents::USER_POST_ACTIVATE => 'onPostActivate',
         ];
     }
 

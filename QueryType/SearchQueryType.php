@@ -9,11 +9,10 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\QueryType\OptionsResolverBasedQueryType;
-use eZ\Publish\Core\QueryType\QueryType;
 use Netgen\EzPlatformSiteApi\API\Site;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SearchQueryType extends OptionsResolverBasedQueryType implements QueryType
+class SearchQueryType extends OptionsResolverBasedQueryType
 {
     /**
      * @var \Netgen\EzPlatformSiteApi\API\Site

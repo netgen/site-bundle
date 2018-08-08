@@ -88,7 +88,7 @@
                     <xsl:when test="@custom:align != ''">
                         <xsl:value-of select="concat( 'object-', @custom:align )" />
                     </xsl:when>
-                    <xsl:otherwise>object-left</xsl:otherwise>
+                    <xsl:otherwise>object-full</xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
 
@@ -114,7 +114,7 @@
                     <xsl:when test="@custom:align != ''">
                         <xsl:value-of select="concat( 'factbox object-', @custom:align )" />
                     </xsl:when>
-                    <xsl:otherwise>factbox object-left</xsl:otherwise>
+                    <xsl:otherwise>factbox object-full</xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
 

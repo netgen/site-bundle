@@ -51,6 +51,10 @@ class AddPageCssClassEventListener implements EventSubscriberInterface
             return;
         }
 
+        if ($currentRequest->attributes->get('viewType') !== 'full') {
+            return;
+        }
+
         $content = $view->getSiteContent();
         if (!$content->hasField('css_class') || $content->getField('css_class')->isEmpty()) {
             return;

@@ -7,6 +7,14 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    ngmore.listener.add_page_css_class:
+        class: Netgen\Bundle\MoreBundle\EventListener\AddPageCssClassEventListener
+        public: false
+        arguments:
+            - "@request_stack"
+        tags:
+            - { name: kernel.event_subscriber }
+
     ngmore.listener.no_view_template:
         class: Netgen\Bundle\MoreBundle\EventListener\NoViewTemplateEventListener
         public: false

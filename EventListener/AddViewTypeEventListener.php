@@ -48,7 +48,7 @@ class AddViewTypeEventListener implements EventSubscriberInterface
 
         $event->getContentView()->addParameters(
             [
-                'viewType' => !empty($viewType) ? $viewType : '',
+                'view_type' => !empty($viewType) ? $viewType : '',
             ]
         );
     }

@@ -1,4 +1,4 @@
-Netgen More Bundle installation instructions
+Netgen Site Bundle installation instructions
 ============================================
 
 Requirements
@@ -11,15 +11,10 @@ Installation steps
 
 ### Use Composer
 
-Add the following to your `composer.json` and run `composer update netgen/more-bundle` to refresh dependencies:
+Run the following to install the bundle:
 
-```json
-"repositories": [
-    { "type": "composer", "url": "https://packagist.netgen.biz" }
-],
-"require": {
-    "netgen/more-bundle": "~4.0.0"
-}
+```bash
+composer require netgen/site-bundle
 ```
 
 ### Activate the bundle
@@ -32,11 +27,16 @@ public function registerBundles()
    ...
 
     $bundles[] = new Knp\Bundle\MenuBundle\KnpMenuBundle();
+    $bundles[] = new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle();
+    $bundles[] = new Netgen\Bundle\EzPlatformSiteApiBundle\NetgenEzPlatformSiteApiBundle();
     $bundles[] = new Netgen\Bundle\EzFormsBundle\NetgenEzFormsBundle();
+    $bundles[] = new Netgen\Bundle\SiteAccessRoutesBundle\NetgenSiteAccessRoutesBundle();
     $bundles[] = new Netgen\Bundle\OpenGraphBundle\NetgenOpenGraphBundle();
     $bundles[] = new Netgen\Bundle\MetadataBundle\NetgenMetadataBundle();
     $bundles[] = new Netgen\Bundle\ContentTypeListBundle\NetgenContentTypeListBundle();
     $bundles[] = new Netgen\Bundle\EnhancedSelectionBundle\NetgenEnhancedSelectionBundle();
+    $bundles[] = new Netgen\Bundle\BirthdayBundle\NetgenBirthdayBundle();
+    $bundles[] = new Lolautruche\EzCoreExtraBundle\EzCoreExtraBundle();
     $bundles[] = new Netgen\TagsBundle\NetgenTagsBundle();
     $bundles[] = new Netgen\Bundle\MoreBundle\NetgenMoreBundle();
 

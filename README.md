@@ -1,9 +1,12 @@
-Netgen More Bundle
+Netgen Site Bundle
 ==================
 
-Netgen More Bundle is an eZ Platform bundle that implements common features that are used throughout Netgen's websites.
+Netgen Site Bundle is an eZ Platform bundle that implements common features that are used
+by Netgen to implement websites.
 
-Installation instructions
--------------------------
+Installation & license
+----------------------
 
 [Installation instructions](Resources/doc/INSTALL.md)
+
+Licensed under [GPLv2](LICENSE)

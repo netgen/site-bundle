@@ -62,7 +62,7 @@ class FullViewController extends Controller
             $criteria[] = new Criterion\ContentTypeIdentifier(
                 array_map(
                     'trim',
-                    explode(',', $contentTypeFilter)
+                    explode(',', $contentTypeFilter->text)
                 )
             );
         }

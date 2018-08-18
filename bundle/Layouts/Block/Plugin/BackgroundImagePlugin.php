@@ -34,11 +34,6 @@ class BackgroundImagePlugin extends Plugin
         return [ListHandler::class, ContainerDefinitionHandlerInterface::class];
     }
 
-    public static function getExtendedHandler(): array
-    {
-        return self::getExtendedHandlers();
-    }
-
     public function buildParameters(ParameterBuilderInterface $builder): void
     {
         $designGroup = [self::GROUP_DESIGN];

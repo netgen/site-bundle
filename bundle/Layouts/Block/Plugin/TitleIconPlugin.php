@@ -16,11 +16,6 @@ class TitleIconPlugin extends Plugin
         return [TitleHandler::class];
     }
 
-    public static function getExtendedHandler(): array
-    {
-        return self::getExtendedHandlers();
-    }
-
     public function buildParameters(ParameterBuilderInterface $builder): void
     {
         $designGroup = [self::GROUP_DESIGN];

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Netgen\Bundle\MoreBundle\DependencyInjection;
 
 use Netgen\Bundle\BlockManagerBundle\NetgenBlockManagerBundle;
-use Symfony\Bundle\AsseticBundle\AsseticBundle;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -42,15 +41,6 @@ class NetgenMoreExtension extends Extension implements PrependExtensionInterface
     public function prepend(ContainerBuilder $container): void
     {
         $activatedBundles = $container->getParameter('kernel.bundles');
-
-        if (in_array(AsseticBundle::class, $activatedBundles, true)) {
-            $container->prependExtensionConfig(
-                'assetic',
-                [
-                    'bundles' => array_keys($activatedBundles),
-                ]
-            );
-        }
 
         $prependConfigs = [
             'framework/twig.yml' => 'twig',

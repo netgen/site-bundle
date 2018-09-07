@@ -32,6 +32,11 @@
         {% set link_href = parameters.link_href|default('') %}
         {% set link_target = parameters.link_target|default('') %}
         {% set use_image_size = parameters.use_image_size|default(false) %}
+        {% set image_alias = ez_image_alias(field, versionInfo, parameters.alias|default('original')) %}
+        {% set lazy_loading = ezpublish.configResolver.getParameter('lazy_loading.enabled', 'ngmore') %}
+        {% if parameters.lazy_loading is defined %}
+            {% set lazy_loading = parameters.lazy_loading %}
+        {% endif %}
 
         {% if link_href is not empty %}
             <a href="{{ link_href }}"
@@ -42,21 +47,18 @@
             >
         {% endif %}
 
-        {% if parameters.disable_src_attribute|default(false) == true %}
-            <img {# the responsibility of user is to set data-src #}
-                {% if parameters.image_class|default('') is not empty %} class="{{ parameters.image_class }}" {% endif %}
-                alt="{{ parameters.alt_text|default(field.value.alternativeText) }}"
-                {{ block('field_attributes') }} />
-        {% else %}
-            {% set image_alias = ez_image_alias(field, versionInfo, parameters.alias|default('original')) %}
-
-            <img src="{% if image_alias %}{{ asset(image_alias.uri) }}{% else %}//:0{% endif %}"
-                {% if parameters.image_class|default('') is not empty %} class="{{ parameters.image_class }}" {% endif %}
-                {% if use_image_size and image_alias.width|default('') is not empty %} width="{{ image_alias.width }}" {% endif %}
-                {% if use_image_size and image_alias.height|default('') is not empty %} height="{{ image_alias.height }}" {% endif %}
-                alt="{{ parameters.alt_text|default(field.value.alternativeText) }}"
-                {{ block('field_attributes') }} />
-        {% endif %}
+        <img
+            {% if lazy_loading %}
+                src="{{ ez_image_alias(field, versionInfo, ezpublish.configResolver.getParameter('lazy_loading.initial_image_alias', 'ngmore')).uri }}"
+                data-src="{{ ez_image_alias(field, versionInfo, parameters.alias|default('original')).uri }}"
+            {% else %}
+                src="{% if image_alias %}{{ asset(image_alias.uri) }}{% else %}//:0{% endif %}"
+            {% endif %}
+            {% if parameters.image_class|default('') is not empty %} class="{{ parameters.image_class }}" {% endif %}
+            {% if use_image_size and image_alias.width|default('') is not empty %} width="{{ image_alias.width }}" {% endif %}
+            {% if use_image_size and image_alias.height|default('') is not empty %} height="{{ image_alias.height }}" {% endif %}
+            alt="{{ parameters.alt_text|default(field.value.alternativeText) }}"
+            {{ block('field_attributes') }} />
 
         {% if link_href is not empty %}
             </a>

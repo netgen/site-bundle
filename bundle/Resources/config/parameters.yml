@@ -51,6 +51,9 @@ parameters:
     ngmore.default.template.search: '@@NetgenMore/search/search.html.twig'
     ngmore.default.template.menu: '@@KnpMenu/menu.html.twig'
 
+    ngmore.default.lazy_loading.enabled: false
+    ngmore.default.lazy_loading.initial_image_alias: 'small'
+
     # Non siteaccess aware params
     ngmore.ezfile_storage_path: '/var/site/storage/original'
 

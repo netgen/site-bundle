@@ -49,8 +49,9 @@
 
         <img
             {% if lazy_loading %}
-                src="{{ ez_image_alias(field, versionInfo, ezpublish.configResolver.getParameter('lazy_loading.initial_image_alias', 'ngmore')).uri }}"
-                data-src="{{ ez_image_alias(field, versionInfo, parameters.alias|default('original')).uri }}"
+                {% set lazy_image_alias = ez_image_alias(field, versionInfo, ezpublish.configResolver.getParameter('lazy_loading.initial_image_alias', 'ngmore')) %}
+                src="{% if lazy_image_alias %}{{ asset(lazy_image_alias.uri) }}{% else %}//:0{% endif %}"
+                data-src="{% if image_alias %}{{ asset(image_alias.uri) }}{% else %}//:0{% endif %}"
             {% else %}
                 src="{% if image_alias %}{{ asset(image_alias.uri) }}{% else %}//:0{% endif %}"
             {% endif %}

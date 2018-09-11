@@ -12,6 +12,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class SymlinkProjectCommand extends SymlinkCommand
 {
+    /**
+     * Files/directories that will not be symlinked in root and root_* folders.
+     *
+     * @var array
+     */
+    protected static $blacklistedItems = [
+        'offline_cro.html',
+        'offline_eng.html',
+    ];
+
     protected function configure(): void
     {
         $this->addOption('force', null, InputOption::VALUE_NONE, 'If set, it will destroy existing symlinks before recreating them');
@@ -69,7 +79,7 @@ class SymlinkProjectCommand extends SymlinkCommand
                 }
 
                 if ($item->isDir() || $item->isFile()) {
-                    if (in_array($item->getBasename(), $this->blacklistedItems, true)) {
+                    if (in_array($item->getBasename(), self::$blacklistedItems, true)) {
                         continue;
                     }
 

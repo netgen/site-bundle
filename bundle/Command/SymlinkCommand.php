@@ -29,16 +29,6 @@ abstract class SymlinkCommand extends ContainerAwareCommand
     protected $fileSystem;
 
     /**
-     * Files/directories that will not be symlinked in root and root_* folders.
-     *
-     * @var array
-     */
-    protected $blacklistedItems = [
-        'offline_cro.html',
-        'offline_eng.html',
-    ];
-
-    /**
      * Verify that source file can be symlinked to destination and do symlinking if it can.
      */
     protected function verifyAndSymlinkFile(string $source, string $destination, OutputInterface $output): void

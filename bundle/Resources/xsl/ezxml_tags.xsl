@@ -138,7 +138,7 @@
         <xsl:choose>
             <xsl:when test="@custom:responsive != ''">
             <div class="table-responsive">
-                <xsl:element name="table" use-attribute-sets="ngmore-table">
+                <xsl:element name="table" use-attribute-sets="ngsite-table">
                     <xsl:if test="@custom:caption != ''">
                         <caption>
                             <xsl:value-of select="@custom:caption" />
@@ -150,7 +150,7 @@
             </div>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:element name="table" use-attribute-sets="ngmore-table">
+                <xsl:element name="table" use-attribute-sets="ngsite-table">
                     <xsl:if test="@custom:caption != ''">
                         <caption>
                             <xsl:value-of select="@custom:caption" />
@@ -163,7 +163,7 @@
         </xsl:choose>
     </xsl:template>
 
-    <xsl:attribute-set name="ngmore-table">
+    <xsl:attribute-set name="ngsite-table">
         <xsl:attribute name="class">
             <xsl:choose>
                 <xsl:when test="@class != ''">

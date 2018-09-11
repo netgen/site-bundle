@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\FieldValue\Converter;
+namespace Netgen\Bundle\SiteBundle\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
 use DOMDocument;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RelationListConverter as BaseRelationListConverter;
@@ -13,11 +13,6 @@ use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
 class RelationListConverter extends BaseRelationListConverter
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     */
-    protected $db;
-
     public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue): void
     {
         $doc = new DOMDocument('1.0', 'utf-8');

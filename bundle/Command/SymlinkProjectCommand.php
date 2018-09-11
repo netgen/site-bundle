@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Command;
+namespace Netgen\Bundle\SiteBundle\Command;
 
 use DirectoryIterator;
-use Netgen\Bundle\MoreBundle\NetgenMoreProjectBundleInterface;
+use Netgen\Bundle\SiteBundle\NetgenSiteProjectBundleInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,7 +17,7 @@ class SymlinkProjectCommand extends SymlinkCommand
         $this->addOption('force', null, InputOption::VALUE_NONE, 'If set, it will destroy existing symlinks before recreating them');
         $this->addOption('web-folder', null, InputOption::VALUE_OPTIONAL, 'Name of the webroot folder to use');
         $this->setDescription('Symlinks various project files and folders to their proper locations');
-        $this->setName('ngmore:symlink:project');
+        $this->setName('ngsite:symlink:project');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): ?int
@@ -28,7 +28,7 @@ class SymlinkProjectCommand extends SymlinkCommand
 
         $kernel = $this->getContainer()->get('kernel');
         foreach ($kernel->getBundles() as $bundle) {
-            if (!$bundle instanceof NetgenMoreProjectBundleInterface) {
+            if (!$bundle instanceof NetgenSiteProjectBundleInterface) {
                 continue;
             }
 

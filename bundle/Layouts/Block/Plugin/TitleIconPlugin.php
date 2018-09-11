@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Layouts\Block\Plugin;
+namespace Netgen\Bundle\SiteBundle\Layouts\Block\Plugin;
 
 use Netgen\BlockManager\Block\BlockDefinition\Handler\Plugin;
 use Netgen\BlockManager\Parameters\ParameterBuilderInterface;

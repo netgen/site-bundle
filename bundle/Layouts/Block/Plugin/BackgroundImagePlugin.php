@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Layouts\Block\Plugin;
+namespace Netgen\Bundle\SiteBundle\Layouts\Block\Plugin;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;

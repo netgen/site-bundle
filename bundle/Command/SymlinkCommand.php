@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Command;
+namespace Netgen\Bundle\SiteBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -53,7 +53,7 @@ abstract class SymlinkCommand extends ContainerAwareCommand
             return;
         }
 
-        if (is_link($destination) && $this->forceSymlinks) {
+        if ($this->forceSymlinks && is_link($destination)) {
             $this->fileSystem->remove($destination);
         }
 
@@ -97,7 +97,7 @@ abstract class SymlinkCommand extends ContainerAwareCommand
             return;
         }
 
-        if (is_link($destination) && $this->forceSymlinks) {
+        if ($this->forceSymlinks && is_link($destination)) {
             $this->fileSystem->remove($destination);
         }
 

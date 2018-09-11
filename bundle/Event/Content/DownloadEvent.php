@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Event\Content;
+namespace Netgen\Bundle\SiteBundle\Event\Content;
 
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
 use Symfony\Component\EventDispatcher\Event;

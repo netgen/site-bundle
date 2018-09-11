@@ -1,39 +1,39 @@
-ngmore_download:
+ngsite_download:
     path: /content/download/{contentId}/{fieldId}/{isInline}
     defaults:
-        _controller: "ngmore.controller.download:downloadFile"
+        _controller: "ngsite.controller.download:downloadFile"
         isInline: false
     methods: [GET]
 
-ngmore_user_register:
+ngsite_user_register:
     path: /user/register
     defaults:
-        _controller: "ngmore.controller.user:register"
+        _controller: "ngsite.controller.user:register"
 
-ngmore_resend_activation_mail:
+ngsite_resend_activation_mail:
     path: /user/activate
     defaults:
-        _controller: "ngmore.controller.user:activationForm"
+        _controller: "ngsite.controller.user:activationForm"
 
-ngmore_user_activate:
+ngsite_user_activate:
     path: /user/activate/{hash}
     defaults:
-        _controller: "ngmore.controller.user:activate"
+        _controller: "ngsite.controller.user:activate"
 
-ngmore_user_forgot_password:
+ngsite_user_forgot_password:
     path: /user/forgotpassword
     defaults:
-        _controller: "ngmore.controller.user:forgotPassword"
+        _controller: "ngsite.controller.user:forgotPassword"
 
-ngmore_user_reset_password:
+ngsite_user_reset_password:
     path: /user/forgotpassword/{hash}
     defaults:
-        _controller: "ngmore.controller.user:resetPassword"
+        _controller: "ngsite.controller.user:resetPassword"
 
-ngmore_content_search:
+ngsite_content_search:
     path: /content/search
     defaults:
-        _controller: "ngmore.controller.search:search"
+        _controller: "ngsite.controller.search:search"
 
 # Disable eZ Platform built in routes
 

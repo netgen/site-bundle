@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Templating\Twig\Extension;
+namespace Netgen\Bundle\SiteBundle\Templating\Twig\Extension;
 
-use Netgen\Bundle\MoreBundle\Topic\UrlGenerator;
+use Netgen\Bundle\SiteBundle\Topic\UrlGenerator;
 use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TopicUrlRuntime
 {
     /**
-     * @var \Netgen\Bundle\MoreBundle\Topic\UrlGenerator
+     * @var \Netgen\Bundle\SiteBundle\Topic\UrlGenerator
      */
     private $topicUrlGenerator;
 

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\DependencyInjection\Compiler;
+namespace Netgen\Bundle\SiteBundle\DependencyInjection\Compiler;
 
-use Netgen\Bundle\MoreBundle\Core\FieldType\XmlText\Converter\EmbedToHtml5;
+use Netgen\Bundle\SiteBundle\Core\FieldType\XmlText\Converter\EmbedToHtml5;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;

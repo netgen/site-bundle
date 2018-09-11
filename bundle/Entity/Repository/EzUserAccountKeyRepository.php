@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Entity\Repository;
+namespace Netgen\Bundle\SiteBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey;
+use Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey;
 
 class EzUserAccountKeyRepository extends EntityRepository
 {
@@ -14,7 +14,7 @@ class EzUserAccountKeyRepository extends EntityRepository
      *
      * @param mixed $userId
      *
-     * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
+     * @return \Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
      */
     public function create($userId): EzUserAccountKey
     {
@@ -48,7 +48,7 @@ class EzUserAccountKeyRepository extends EntityRepository
      *
      * @param string $hash
      *
-     * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
+     * @return \Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
      */
     public function getByHash(string $hash): ?EzUserAccountKey
     {

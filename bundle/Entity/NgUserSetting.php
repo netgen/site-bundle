@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Entity;
+namespace Netgen\Bundle\SiteBundle\Entity;
 
 class NgUserSetting
 {
@@ -33,7 +33,7 @@ class NgUserSetting
      *
      * @param mixed $userId
      *
-     * @return \Netgen\Bundle\MoreBundle\Entity\NgUserSetting
+     * @return \Netgen\Bundle\SiteBundle\Entity\NgUserSetting
      */
     public function setUserId($userId): self
     {
@@ -57,7 +57,7 @@ class NgUserSetting
      *
      * @param bool $isActivated
      *
-     * @return \Netgen\Bundle\MoreBundle\Entity\NgUserSetting
+     * @return \Netgen\Bundle\SiteBundle\Entity\NgUserSetting
      */
     public function setIsActivated(bool $isActivated): self
     {

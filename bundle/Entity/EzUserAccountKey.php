@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Entity;
+namespace Netgen\Bundle\SiteBundle\Entity;
 
 class EzUserAccountKey
 {
@@ -41,7 +41,7 @@ class EzUserAccountKey
      *
      * @param string $hashKey
      *
-     * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
+     * @return \Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
      */
     public function setHash(string $hashKey): self
     {
@@ -65,7 +65,7 @@ class EzUserAccountKey
      *
      * @param mixed $userId
      *
-     * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
+     * @return \Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
      */
     public function setUserId($userId): self
     {
@@ -89,7 +89,7 @@ class EzUserAccountKey
      *
      * @param int $time
      *
-     * @return \Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
+     * @return \Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
      */
     public function setTime(int $time): self
     {

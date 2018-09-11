@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Helper;
+namespace Netgen\Bundle\SiteBundle\Helper;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use InvalidArgumentException;
@@ -42,7 +42,7 @@ class MailHelper
     protected $configResolver;
 
     /**
-     * @var \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper
+     * @var \Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper
      */
     protected $siteInfoHelper;
 
@@ -85,13 +85,13 @@ class MailHelper
      * Receivers can be:
      * a string: info@netgen.hr
      * or:
-     * array( 'info@netgen.hr' => 'Netgen More' ) or
+     * array( 'info@netgen.hr' => 'Netgen Site' ) or
      * array( 'info@netgen.hr', 'example@netgen.hr' ) or
-     * array( 'info@netgen.hr' => 'Netgen More', 'example@netgen.hr' => 'Example' )
+     * array( 'info@netgen.hr' => 'Netgen Site', 'example@netgen.hr' => 'Example' )
      *
      * Sender can be:
      * a string: info@netgen.hr
-     * an array: array( 'info@netgen.hr' => 'Netgen More' )
+     * an array: array( 'info@netgen.hr' => 'Netgen Site' )
      *
      * @param mixed $receivers
      * @param null|mixed $sender
@@ -108,7 +108,7 @@ class MailHelper
 
         $body = $this->twig->render($template, $templateParameters + $this->getDefaultTemplateParameters());
 
-        $subject = $this->translator->trans($subject, [], 'ngmore_mail');
+        $subject = $this->translator->trans($subject, [], 'ngsite_mail');
 
         $message = new Swift_Message();
 
@@ -151,8 +151,8 @@ class MailHelper
     /**
      * Validates the sender parameter.
      * If sender not provided, it attempts to get the sender from the parameters:
-     * ngmore.default.mail.sender_email
-     * ngmore.default.mail.sender_name (optional).
+     * ngsite.default.mail.sender_email
+     * ngsite.default.mail.sender_name (optional).
      *
      *
      * @param mixed $sender
@@ -173,16 +173,16 @@ class MailHelper
             );
         }
 
-        if ($this->configResolver->hasParameter('mail.sender_email', 'ngmore')) {
-            if ($this->configResolver->hasParameter('mail.sender_name', 'ngmore')) {
+        if ($this->configResolver->hasParameter('mail.sender_email', 'ngsite')) {
+            if ($this->configResolver->hasParameter('mail.sender_name', 'ngsite')) {
                 return [
-                    $this->configResolver->getParameter('mail.sender_email', 'ngmore') => $this->configResolver->getParameter('mail.sender_name', 'ngmore'),
+                    $this->configResolver->getParameter('mail.sender_email', 'ngsite') => $this->configResolver->getParameter('mail.sender_name', 'ngsite'),
                 ];
             }
 
-            return $this->configResolver->getParameter('mail.sender_email', 'ngmore');
+            return $this->configResolver->getParameter('mail.sender_email', 'ngsite');
         }
 
-        throw new InvalidArgumentException("Parameter 'sender' has not been provided, nor it has been configured via parameters ('ngmore.default.mail.sender_email')!");
+        throw new InvalidArgumentException("Parameter 'sender' has not been provided, nor it has been configured via parameters ('ngsite.default.mail.sender_email')!");
     }
 }

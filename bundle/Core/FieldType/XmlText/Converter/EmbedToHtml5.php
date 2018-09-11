@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Core\FieldType\XmlText\Converter;
+namespace Netgen\Bundle\SiteBundle\Core\FieldType\XmlText\Converter;
 
 use DOMDocument;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;

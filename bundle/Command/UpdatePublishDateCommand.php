@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Command;
+namespace Netgen\Bundle\SiteBundle\Command;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Repository;
@@ -21,7 +21,7 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
 {
     protected function configure(): void
     {
-        $this->setName('ngmore:content:update-publish-date')
+        $this->setName('ngsite:content:update-publish-date')
             ->setDescription('Updates publish date of all content of specified content type')
             ->addOption(
                 'content-type',

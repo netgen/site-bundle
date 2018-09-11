@@ -1,6 +1,6 @@
-Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey:
+Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey:
     type: entity
-    repositoryClass: Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository
+    repositoryClass: Netgen\Bundle\SiteBundle\Entity\Repository\EzUserAccountKeyRepository
     table: ezuser_accountkey
     id:
         id:

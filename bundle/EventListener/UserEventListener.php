@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\EventListener;
+namespace Netgen\Bundle\SiteBundle\EventListener;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
-use Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository;
-use Netgen\Bundle\MoreBundle\Helper\MailHelper;
+use Netgen\Bundle\SiteBundle\Entity\Repository\EzUserAccountKeyRepository;
+use Netgen\Bundle\SiteBundle\Entity\Repository\NgUserSettingRepository;
+use Netgen\Bundle\SiteBundle\Helper\MailHelper;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 
 abstract class UserEventListener
 {
     /**
-     * @var \Netgen\Bundle\MoreBundle\Helper\MailHelper
+     * @var \Netgen\Bundle\SiteBundle\Helper\MailHelper
      */
     protected $mailHelper;
 
@@ -25,12 +25,12 @@ abstract class UserEventListener
     protected $configResolver;
 
     /**
-     * @var \Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository
+     * @var \Netgen\Bundle\SiteBundle\Entity\Repository\NgUserSettingRepository
      */
     protected $ngUserSettingRepository;
 
     /**
-     * @var \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository
+     * @var \Netgen\Bundle\SiteBundle\Entity\Repository\EzUserAccountKeyRepository
      */
     protected $ezUserAccountKeyRepository;
 

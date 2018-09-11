@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\EventListener;
+namespace Netgen\Bundle\SiteBundle\EventListener;
 
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;

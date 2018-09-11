@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\DependencyInjection;
+namespace Netgen\Bundle\SiteBundle\DependencyInjection;
 
 use Netgen\Bundle\BlockManagerBundle\NetgenBlockManagerBundle;
 use Symfony\Component\Config\FileLocator;
@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Yaml\Yaml;
 
-class NetgenMoreExtension extends Extension implements PrependExtensionInterface
+class NetgenSiteExtension extends Extension implements PrependExtensionInterface
 {
     public function load(array $configs, ContainerBuilder $container): void
     {

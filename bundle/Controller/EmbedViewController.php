@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Controller;
+namespace Netgen\Bundle\SiteBundle\Controller;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
@@ -80,7 +80,7 @@ class EmbedViewController extends Controller
 
                 if ($fieldName !== null) {
                     $directDownloadLink = $this->generateUrl(
-                        'ngmore_download',
+                        'ngsite_download',
                         [
                             'contentId' => $content->id,
                             'fieldId' => $content->getField($fieldName)->id,

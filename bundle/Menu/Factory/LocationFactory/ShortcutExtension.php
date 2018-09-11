@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Menu\Factory\LocationFactory;
+namespace Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory;
 
 use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;

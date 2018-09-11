@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\XmlText\Converter;
+namespace Netgen\Bundle\SiteBundle\XmlText\Converter;
 
 use DOMDocument;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
@@ -43,7 +43,7 @@ class EzLinkDirectDownload implements Converter
     /**
      * Converts internal links (eznode:// and ezobject://) to URLs.
      *
-     * Overriden to add option to download files by using Netgen More specific route.
+     * Overridden to add option to download files by using Netgen Site specific route.
      */
     public function convert(DOMDocument $xmlDoc): void
     {
@@ -90,12 +90,10 @@ class EzLinkDirectDownload implements Converter
                 }
             }
 
-            if ($content !== null) {
-                if ($content->hasField('file')) {
-                    $field = $content->getField('file');
-                    if (!$field->isEmpty()) {
-                        $url = $this->router->generate('ngmore_download', ['contentId' => $content->id, 'fieldId' => $field->id, 'isInline' => $link->hasAttribute('custom:inline')]);
-                    }
+            if ($content !== null && $content->hasField('file')) {
+                $field = $content->getField('file');
+                if (!$field->isEmpty()) {
+                    $url = $this->router->generate('ngsite_download', ['contentId' => $content->id, 'fieldId' => $field->id, 'isInline' => $link->hasAttribute('custom:inline')]);
                 }
             }
 
@@ -111,7 +109,7 @@ class EzLinkDirectDownload implements Converter
                 $link->setAttribute('url', $link->getAttribute('url') . '#' . $link->getAttribute('anchor_name'));
             }
 
-            // With this we disable the original preconverter
+            // With this we disable the original pre-converter
             // (and hopefully all other that touch link element)
             $link->removeAttribute('object_id');
             $link->removeAttribute('node_id');

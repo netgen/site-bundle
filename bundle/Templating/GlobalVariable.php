@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Templating;
+namespace Netgen\Bundle\SiteBundle\Templating;
 
 use eZ\Publish\API\Repository\Repository;
-use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;
+use Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
@@ -13,7 +13,7 @@ use Netgen\EzPlatformSiteApi\API\Values\Location;
 class GlobalVariable
 {
     /**
-     * @var \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper
+     * @var \Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper
      */
     protected $siteInfoHelper;
 

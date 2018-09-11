@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Core\Slot;
+namespace Netgen\Bundle\SiteBundle\Core\Slot;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Slot;
-use Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository;
+use Netgen\Bundle\SiteBundle\Entity\Repository\NgUserSettingRepository;
 
 class CreateUserSlot extends Slot
 {
@@ -18,7 +18,7 @@ class CreateUserSlot extends Slot
     protected $userService;
 
     /**
-     * @var \Netgen\Bundle\MoreBundle\Entity\Repository\NgUserSettingRepository
+     * @var \Netgen\Bundle\SiteBundle\Entity\Repository\NgUserSettingRepository
      */
     protected $ngUserSettingRepository;
 

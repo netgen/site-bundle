@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Menu\Factory;
+namespace Netgen\Bundle\SiteBundle\Menu\Factory;
 
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Knp\Menu\MenuItem;
-use Netgen\Bundle\MoreBundle\Event\Menu\LocationMenuItemEvent;
-use Netgen\Bundle\MoreBundle\Event\NetgenMoreEvents;
-use Netgen\Bundle\MoreBundle\Menu\Factory\LocationFactory\ExtensionInterface;
+use Netgen\Bundle\SiteBundle\Event\Menu\LocationMenuItemEvent;
+use Netgen\Bundle\SiteBundle\Event\SiteEvents;
+use Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\ExtensionInterface;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -21,12 +21,12 @@ class LocationFactory implements FactoryInterface
     protected $eventDispatcher;
 
     /**
-     * @var \Netgen\Bundle\MoreBundle\Menu\Factory\LocationFactory\ExtensionInterface
+     * @var \Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\ExtensionInterface
      */
     protected $fallbackExtension;
 
     /**
-     * @var \Netgen\Bundle\MoreBundle\Menu\Factory\LocationFactory\ExtensionInterface[]
+     * @var \Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\ExtensionInterface[]
      */
     protected $extensions = [];
 
@@ -58,7 +58,7 @@ class LocationFactory implements FactoryInterface
         $menuItem->setName(md5($menuItem->getUri() ?? ''));
 
         $event = new LocationMenuItemEvent($menuItem, $menuItem->getExtra('ezlocation'));
-        $this->eventDispatcher->dispatch(NetgenMoreEvents::MENU_LOCATION_ITEM, $event);
+        $this->eventDispatcher->dispatch(SiteEvents::MENU_LOCATION_ITEM, $event);
 
         return $menuItem;
     }

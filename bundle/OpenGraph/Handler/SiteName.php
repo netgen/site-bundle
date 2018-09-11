@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\OpenGraph\Handler;
+namespace Netgen\Bundle\SiteBundle\OpenGraph\Handler;
 
-use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;
 use Netgen\Bundle\OpenGraphBundle\Handler\HandlerInterface;
 use Netgen\Bundle\OpenGraphBundle\MetaTag\Item;
+use Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper;
 
 class SiteName implements HandlerInterface
 {
     /**
-     * @var \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper
+     * @var \Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper
      */
     protected $siteInfoHelper;
 

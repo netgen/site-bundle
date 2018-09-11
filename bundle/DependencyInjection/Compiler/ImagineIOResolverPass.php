@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\DependencyInjection\Compiler;
+namespace Netgen\Bundle\SiteBundle\DependencyInjection\Compiler;
 
-use Netgen\Bundle\MoreBundle\Imagine\IORepositoryResolver;
+use Netgen\Bundle\SiteBundle\Imagine\IORepositoryResolver;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

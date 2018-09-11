@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\EventListener\User;
+namespace Netgen\Bundle\SiteBundle\EventListener\User;
 
 use eZ\Publish\API\Repository\Values\User\User;
-use Netgen\Bundle\MoreBundle\Event\NetgenMoreEvents;
-use Netgen\Bundle\MoreBundle\Event\User\ActivationRequestEvent;
-use Netgen\Bundle\MoreBundle\EventListener\UserEventListener;
+use Netgen\Bundle\SiteBundle\Event\SiteEvents;
+use Netgen\Bundle\SiteBundle\Event\User\ActivationRequestEvent;
+use Netgen\Bundle\SiteBundle\EventListener\UserEventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ActivationRequestEventListener extends UserEventListener implements EventSubscriberInterface
@@ -20,7 +20,7 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
     public static function getSubscribedEvents(): array
     {
         return [
-            NetgenMoreEvents::USER_ACTIVATION_REQUEST => 'onActivationRequest',
+            SiteEvents::USER_ACTIVATION_REQUEST => 'onActivationRequest',
         ];
     }
 
@@ -36,8 +36,8 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
         if (!$user instanceof User) {
             $this->mailHelper->sendMail(
                 $email,
-                'ngmore.user.activate.not_registered.subject',
-                $this->configResolver->getParameter('template.user.mail.activate_not_registered', 'ngmore')
+                'ngsite.user.activate.not_registered.subject',
+                $this->configResolver->getParameter('template.user.mail.activate_not_registered', 'ngsite')
             );
 
             return;
@@ -46,8 +46,8 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
         if ($user->enabled) {
             $this->mailHelper->sendMail(
                 [$user->email => $this->getUserName($user)],
-                'ngmore.user.activate.already_active.subject',
-                $this->configResolver->getParameter('template.user.mail.activate_already_active', 'ngmore'),
+                'ngsite.user.activate.already_active.subject',
+                $this->configResolver->getParameter('template.user.mail.activate_already_active', 'ngsite'),
                 [
                     'user' => $user,
                 ]
@@ -59,8 +59,8 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
         if ($this->ngUserSettingRepository->isUserActivated($user->id)) {
             $this->mailHelper->sendMail(
                 [$user->email => $this->getUserName($user)],
-                'ngmore.user.activate.disabled.subject',
-                $this->configResolver->getParameter('template.user.mail.activate_disabled', 'ngmore'),
+                'ngsite.user.activate.disabled.subject',
+                $this->configResolver->getParameter('template.user.mail.activate_disabled', 'ngsite'),
                 [
                     'user' => $user,
                 ]
@@ -74,8 +74,8 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
         $this->mailHelper
             ->sendMail(
                 [$user->email => $this->getUserName($user)],
-                'ngmore.user.activate.subject',
-                $this->configResolver->getParameter('template.user.mail.activate', 'ngmore'),
+                'ngsite.user.activate.subject',
+                $this->configResolver->getParameter('template.user.mail.activate', 'ngsite'),
                 [
                     'user' => $user,
                     'hash' => $accountKey->getHash(),

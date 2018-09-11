@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Templating\Twig\Extension;
+namespace Netgen\Bundle\SiteBundle\Templating\Twig\Extension;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
-use Netgen\Bundle\MoreBundle\Helper\PathHelper;
+use Netgen\Bundle\SiteBundle\Helper\PathHelper;
 use Netgen\EzPlatformSiteApi\API\Exceptions\TranslationNotMatchedException;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Symfony\Component\Intl\Intl;
 
-class NetgenMoreRuntime
+class SiteRuntime
 {
     /**
-     * @var \Netgen\Bundle\MoreBundle\Helper\PathHelper
+     * @var \Netgen\Bundle\SiteBundle\Helper\PathHelper
      */
     protected $pathHelper;
 

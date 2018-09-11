@@ -1,8 +1,8 @@
-{% if ezpublish.configResolver.hasParameter('site_settings.google_analytics_code', 'ngmore') %}
-    {% set google_analytics_code = ezpublish.configResolver.getParameter('site_settings.google_analytics_code', 'ngmore') %}
+{% if ezpublish.configResolver.hasParameter('site_settings.google_analytics_code', 'ngsite') %}
+    {% set google_analytics_code = ezpublish.configResolver.getParameter('site_settings.google_analytics_code', 'ngsite') %}
 
     {% if google_analytics_code is not empty %}
-        {% set universal_google_analytics = ezpublish.configResolver.getParameter('site_settings.google_analytics_universal', 'ngmore') %}
+        {% set universal_google_analytics = ezpublish.configResolver.getParameter('site_settings.google_analytics_universal', 'ngsite') %}
 
         {% if universal_google_analytics %}
             <script>

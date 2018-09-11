@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\ContextProvider;
+namespace Netgen\Bundle\SiteBundle\ContextProvider;
 
 use FOS\HttpCache\UserContext\ContextProviderInterface;
 use FOS\HttpCache\UserContext\UserContext;

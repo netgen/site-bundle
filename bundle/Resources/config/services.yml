@@ -1,116 +1,116 @@
 services:
-    ngmore.controller.base:
-        class: Netgen\Bundle\MoreBundle\Controller\Controller
+    ngsite.controller.base:
+        class: Netgen\Bundle\SiteBundle\Controller\Controller
         parent: netgen.ezplatform_site.controller.base
         public: false
         abstract: true
 
-    ngmore.controller.full_view:
-        class: Netgen\Bundle\MoreBundle\Controller\FullViewController
+    ngsite.controller.full_view:
+        class: Netgen\Bundle\SiteBundle\Controller\FullViewController
         public: true
-        parent: ngmore.controller.base
+        parent: ngsite.controller.base
         arguments:
             - "@router"
 
-    ngmore.controller.embed_view:
-        class: Netgen\Bundle\MoreBundle\Controller\EmbedViewController
+    ngsite.controller.embed_view:
+        class: Netgen\Bundle\SiteBundle\Controller\EmbedViewController
         public: true
-        parent: ngmore.controller.base
+        parent: ngsite.controller.base
         arguments:
             - "@router"
             - "@?logger"
 
-    ngmore.controller.search:
-        class: Netgen\Bundle\MoreBundle\Controller\SearchController
+    ngsite.controller.search:
+        class: Netgen\Bundle\SiteBundle\Controller\SearchController
         public: true
-        parent: ngmore.controller.base
+        parent: ngsite.controller.base
 
-    ngmore.controller.menu:
-        class: Netgen\Bundle\MoreBundle\Controller\MenuController
+    ngsite.controller.menu:
+        class: Netgen\Bundle\SiteBundle\Controller\MenuController
         public: true
-        parent: ngmore.controller.base
+        parent: ngsite.controller.base
         arguments:
             - "@knp_menu.menu_provider"
             - "@knp_menu.renderer_provider"
             - "@fos_http_cache.handler.tag_handler"
 
-    ngmore.controller.parts:
-        class: Netgen\Bundle\MoreBundle\Controller\PartsController
+    ngsite.controller.parts:
+        class: Netgen\Bundle\SiteBundle\Controller\PartsController
         public: true
-        parent: ngmore.controller.base
+        parent: ngsite.controller.base
         arguments:
-            - "@ngmore.relation.location_resolver"
-            - "@ngmore.relation.multimedia_resolver"
+            - "@ngsite.relation.location_resolver"
+            - "@ngsite.relation.multimedia_resolver"
 
-    ngmore.controller.download:
-        class: Netgen\Bundle\MoreBundle\Controller\DownloadController
+    ngsite.controller.download:
+        class: Netgen\Bundle\SiteBundle\Controller\DownloadController
         public: true
-        parent: ngmore.controller.base
+        parent: ngsite.controller.base
         arguments:
             - "@ezpublish.fieldType.ezbinaryfile.io_service"
             - "@ezpublish.fieldType.ezimage.io_service"
             - "@translator"
             - "@event_dispatcher"
 
-    ngmore.controller.user:
-        class: Netgen\Bundle\MoreBundle\Controller\UserController
+    ngsite.controller.user:
+        class: Netgen\Bundle\SiteBundle\Controller\UserController
         public: true
-        parent: ngmore.controller.base
+        parent: ngsite.controller.base
         arguments:
             - "@ezpublish.api.service.user"
             - "@event_dispatcher"
             - "@form.factory"
-            - "@ngmore.repository.ezuser_accountkey"
+            - "@ngsite.repository.ezuser_accountkey"
 
-    ngmore.param_converter.content:
-        class: Netgen\Bundle\MoreBundle\ParamConverter\ContentParamConverter
+    ngsite.param_converter.content:
+        class: Netgen\Bundle\SiteBundle\ParamConverter\ContentParamConverter
         public: false
         arguments:
             - "@netgen.ezplatform_site.load_service"
         tags:
             - { name: request.param_converter, priority: 100 }
 
-    ngmore.param_converter.location:
-        class: Netgen\Bundle\MoreBundle\ParamConverter\LocationParamConverter
+    ngsite.param_converter.location:
+        class: Netgen\Bundle\SiteBundle\ParamConverter\LocationParamConverter
         public: false
         arguments:
             - "@netgen.ezplatform_site.load_service"
         tags:
             - { name: request.param_converter, priority: 100 }
 
-    ngmore.relation.location_resolver:
-        class: Netgen\Bundle\MoreBundle\Relation\LocationRelationResolver
+    ngsite.relation.location_resolver:
+        class: Netgen\Bundle\SiteBundle\Relation\LocationRelationResolver
         public: false
         arguments:
             - "@netgen.ezplatform_site.load_service"
             - "@?logger"
         tags:
-            - { name: monolog.logger, channel: ngmore }
+            - { name: monolog.logger, channel: ngsite }
 
-    ngmore.relation.multimedia_resolver:
-        class: Netgen\Bundle\MoreBundle\Relation\MultimediaRelationResolver
+    ngsite.relation.multimedia_resolver:
+        class: Netgen\Bundle\SiteBundle\Relation\MultimediaRelationResolver
         public: false
         arguments:
             - "@netgen.ezplatform_site.load_service"
-            - "@ngmore.relation.location_resolver"
+            - "@ngsite.relation.location_resolver"
 
-    ngmore.helper.path_helper:
-        class: Netgen\Bundle\MoreBundle\Helper\PathHelper
+    ngsite.helper.path_helper:
+        class: Netgen\Bundle\SiteBundle\Helper\PathHelper
         public: false
         arguments:
             - "@netgen.ezplatform_site.load_service"
             - "@ezpublish.config.resolver"
             - "@router"
 
-    ngmore.helper.site_info_helper:
-        class: Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper
+    ngsite.helper.site_info_helper:
+        class: Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper
         public: false
         arguments:
             - "@netgen.ezplatform_site.load_service"
             - "@ezpublish.config.resolver"
 
-    ngmore.helper.mail_helper:
-        class: Netgen\Bundle\MoreBundle\Helper\MailHelper
+    ngsite.helper.mail_helper:
+        class: Netgen\Bundle\SiteBundle\Helper\MailHelper
         public: false
         arguments:
             - "@mailer"
@@ -118,34 +118,34 @@ services:
             - "@router"
             - "@translator"
             - "@ezpublish.config.resolver"
-            - "@ngmore.helper.site_info_helper"
+            - "@ngsite.helper.site_info_helper"
             - "@?logger"
 
-    ngmore.repository.nguser_setting:
+    ngsite.repository.nguser_setting:
         class: Doctrine\ORM\EntityRepository
         public: false
         factory: ["@doctrine.orm.default_entity_manager", getRepository]
         arguments:
-            - Netgen\Bundle\MoreBundle\Entity\NgUserSetting
+            - Netgen\Bundle\SiteBundle\Entity\NgUserSetting
 
-    ngmore.repository.ezuser_accountkey:
+    ngsite.repository.ezuser_accountkey:
         class: Doctrine\ORM\EntityRepository
         public: false
         factory: ["@doctrine.orm.default_entity_manager", getRepository]
         arguments:
-            - Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey
+            - Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
 
-    ngmore.slot.create_user:
-        class: Netgen\Bundle\MoreBundle\Core\Slot\CreateUserSlot
+    ngsite.slot.create_user:
+        class: Netgen\Bundle\SiteBundle\Core\Slot\CreateUserSlot
         public: false
         arguments:
             - "@ezpublish.api.service.user"
-            - "@ngmore.repository.nguser_setting"
+            - "@ngsite.repository.nguser_setting"
         tags:
             - { name: ezpublish.api.slot, signal: UserService\CreateUserSignal }
 
-    ngmore.routing.site_content_url_alias_router:
-        class: Netgen\Bundle\MoreBundle\Routing\SiteContentUrlAliasRouter
+    ngsite.routing.site_content_url_alias_router:
+        class: Netgen\Bundle\SiteBundle\Routing\SiteContentUrlAliasRouter
         public: false
         arguments:
             - "@ezpublish.urlalias_generator"
@@ -153,8 +153,8 @@ services:
         tags:
             - { name: router, priority: 200 }
 
-    ngmore.routing.site_location_url_alias_router:
-        class: Netgen\Bundle\MoreBundle\Routing\SiteLocationUrlAliasRouter
+    ngsite.routing.site_location_url_alias_router:
+        class: Netgen\Bundle\SiteBundle\Routing\SiteLocationUrlAliasRouter
         public: false
         arguments:
             - "@ezpublish.urlalias_generator"
@@ -162,17 +162,17 @@ services:
         tags:
             - { name: router, priority: 200 }
 
-    ngmore.opengraph.handler.site_name:
-        class: Netgen\Bundle\MoreBundle\OpenGraph\Handler\SiteName
+    ngsite.opengraph.handler.site_name:
+        class: Netgen\Bundle\SiteBundle\OpenGraph\Handler\SiteName
         public: false
         arguments:
-            - "@ngmore.helper.site_info_helper"
+            - "@ngsite.helper.site_info_helper"
         tags:
-            - { name: netgen_open_graph.meta_tag_handler, alias: ngmore/site_name }
+            - { name: netgen_open_graph.meta_tag_handler, alias: ngsite/site_name }
 
 
-    ngmore.query_type.search:
-        class: Netgen\Bundle\MoreBundle\QueryType\SearchQueryType
+    ngsite.query_type.search:
+        class: Netgen\Bundle\SiteBundle\QueryType\SearchQueryType
         public: false
         arguments:
             - "@netgen.ezplatform_site.site"
@@ -180,8 +180,8 @@ services:
         tags:
             - { name: ezpublish.query_type }
 
-    ngmore.topic.url_generator:
-        class: Netgen\Bundle\MoreBundle\Topic\UrlGenerator
+    ngsite.topic.url_generator:
+        class: Netgen\Bundle\SiteBundle\Topic\UrlGenerator
         public: false
         arguments:
             - "@netgen.ezplatform_site.find_service"
@@ -193,16 +193,16 @@ services:
 #    Enable them in your project if needed by copying one of the
 #    following service definitions.
 #
-#    ngmore.context_provider.session:
-#        class: Netgen\Bundle\MoreBundle\ContextProvider\SessionContextProvider
+#    ngsite.context_provider.session:
+#        class: Netgen\Bundle\SiteBundle\ContextProvider\SessionContextProvider
 #        public: false
 #        arguments:
 #            - "@session"
 #    tags:
 #        - { name: fos_http_cache.user_context_provider }
 #
-#    ngmore.context_provider.user:
-#        class: Netgen\Bundle\MoreBundle\ContextProvider\UserContextProvider
+#    ngsite.context_provider.user:
+#        class: Netgen\Bundle\SiteBundle\ContextProvider\UserContextProvider
 #        public: false
 #        arguments:
 #            - "@ezpublish.api.repository"

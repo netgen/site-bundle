@@ -1,51 +1,51 @@
 services:
-    ngmore.matcher.config_resolver:
-        class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased
+    ngsite.matcher.config_resolver:
+        class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased
         public: false
         abstract: true
         arguments: ["@ezpublish.config.resolver"]
 
-    ngmore.matcher.content.content_id:
-        class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Content
+    ngsite.matcher.content.content_id:
+        class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Content
         public: true
-        parent: ngmore.matcher.config_resolver
+        parent: ngsite.matcher.config_resolver
 
-    ngmore.matcher.content.content_type_id:
-        class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentType
+    ngsite.matcher.content.content_type_id:
+        class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentType
         public: true
-        parent: ngmore.matcher.config_resolver
+        parent: ngsite.matcher.config_resolver
 
-    ngmore.matcher.content.content_type_group_id:
-        class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentTypeGroup
+    ngsite.matcher.content.content_type_group_id:
+        class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentTypeGroup
         public: true
-        parent: ngmore.matcher.config_resolver
+        parent: ngsite.matcher.config_resolver
 
-    ngmore.matcher.content.location_id:
-        class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Location
+    ngsite.matcher.content.location_id:
+        class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Location
         public: true
-        parent: ngmore.matcher.config_resolver
+        parent: ngsite.matcher.config_resolver
 
-    ngmore.matcher.content.parent_content_type_id:
-        class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentContentType
+    ngsite.matcher.content.parent_content_type_id:
+        class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentContentType
         public: true
-        parent: ngmore.matcher.config_resolver
+        parent: ngsite.matcher.config_resolver
 
-    ngmore.matcher.content.parent_location_id:
-        class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentLocation
+    ngsite.matcher.content.parent_location_id:
+        class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentLocation
         public: true
-        parent: ngmore.matcher.config_resolver
+        parent: ngsite.matcher.config_resolver
 
-    ngmore.matcher.content.remote_id:
-        class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Remote
+    ngsite.matcher.content.remote_id:
+        class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Remote
         public: true
-        parent: ngmore.matcher.config_resolver
+        parent: ngsite.matcher.config_resolver
 
-    ngmore.matcher.content.location_remote_id:
-        class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\LocationRemote
+    ngsite.matcher.content.location_remote_id:
+        class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\LocationRemote
         public: true
-        parent: ngmore.matcher.config_resolver
+        parent: ngsite.matcher.config_resolver
 
-    ngmore.matcher.content.section_id:
-        class: Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Section
+    ngsite.matcher.content.section_id:
+        class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Section
         public: true
-        parent: ngmore.matcher.config_resolver
+        parent: ngsite.matcher.config_resolver

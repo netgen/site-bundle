@@ -1,6 +1,6 @@
 services:
-    ngmore.field_type.ezxmltext.converter.direct_download:
-        class: Netgen\Bundle\MoreBundle\XmlText\Converter\EzLinkDirectDownload
+    ngsite.field_type.ezxmltext.converter.direct_download:
+        class: Netgen\Bundle\SiteBundle\XmlText\Converter\EzLinkDirectDownload
         public: false
         arguments:
             - "@netgen.ezplatform_site.load_service"

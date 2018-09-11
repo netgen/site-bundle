@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Core\MVC\Symfony\FieldType\BinaryBase;
+namespace Netgen\Bundle\SiteBundle\Core\MVC\Symfony\FieldType\BinaryBase;
 
 use eZ\Publish\SPI\FieldType\BinaryBase\PathGenerator;
 use eZ\Publish\SPI\Persistence\Content\Field;
@@ -13,7 +13,7 @@ use Symfony\Component\Routing\RouterInterface;
  * Generates the path to the file stored in provided field.
  *
  * Overrides the base generator to allow generating the link with
- * Netgen More specific route instead of the built in one.
+ * Netgen Site specific route instead of the built in one.
  */
 class ContentDownloadUrlGenerator extends PathGenerator
 {
@@ -30,7 +30,7 @@ class ContentDownloadUrlGenerator extends PathGenerator
     public function getStoragePathForField(Field $field, VersionInfo $versionInfo): string
     {
         return $this->router->generate(
-            'ngmore_download',
+            'ngsite_download',
             [
                 'contentId' => $versionInfo->contentInfo->id,
                 'fieldId' => $field->id,

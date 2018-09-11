@@ -1,10 +1,10 @@
 services:
-    ngmore.pagerfanta.view.ngmore:
-        class: Netgen\Bundle\MoreBundle\Pagerfanta\View\NetgenMoreView
+    ngsite.pagerfanta.view.site:
+        class: Netgen\Bundle\SiteBundle\Pagerfanta\View\SiteView
         public: false
         arguments:
             - "@twig"
         calls:
-            - [setDefaultTemplate, [$template.pagerfanta.ngmore;ngmore$]]
+            - [setDefaultTemplate, [$template.pagerfanta.ngsite;ngsite$]]
         tags:
-            - { name: pagerfanta.view, alias: ngmore }
+            - { name: pagerfanta.view, alias: ngsite }

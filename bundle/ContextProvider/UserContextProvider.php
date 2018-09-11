@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\ContextProvider;
+namespace Netgen\Bundle\SiteBundle\ContextProvider;
 
 use eZ\Publish\API\Repository\Repository;
 use FOS\HttpCache\UserContext\ContextProviderInterface;

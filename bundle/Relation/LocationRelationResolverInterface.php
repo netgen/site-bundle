@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Relation;
+namespace Netgen\Bundle\SiteBundle\Relation;
 
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 

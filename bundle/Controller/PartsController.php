@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Controller;
+namespace Netgen\Bundle\SiteBundle\Controller;
 
-use Netgen\Bundle\MoreBundle\Relation\LocationRelationResolverInterface;
+use Netgen\Bundle\SiteBundle\Relation\LocationRelationResolverInterface;
 use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,12 +13,12 @@ use Symfony\Component\HttpFoundation\Response;
 class PartsController extends Controller
 {
     /**
-     * @var \Netgen\Bundle\MoreBundle\Relation\LocationRelationResolverInterface
+     * @var \Netgen\Bundle\SiteBundle\Relation\LocationRelationResolverInterface
      */
     protected $locationResolver;
 
     /**
-     * @var \Netgen\Bundle\MoreBundle\Relation\LocationRelationResolverInterface
+     * @var \Netgen\Bundle\SiteBundle\Relation\LocationRelationResolverInterface
      */
     protected $multimediaResolver;
 

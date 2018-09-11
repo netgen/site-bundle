@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Relation;
+namespace Netgen\Bundle\SiteBundle\Relation;
 
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
@@ -16,7 +16,7 @@ class MultimediaRelationResolver implements LocationRelationResolverInterface
     protected $loadService;
 
     /**
-     * @var \Netgen\Bundle\MoreBundle\Relation\LocationRelationResolverInterface
+     * @var \Netgen\Bundle\SiteBundle\Relation\LocationRelationResolverInterface
      */
     protected $innerResolver;
 

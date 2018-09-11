@@ -1,22 +1,22 @@
 services:
-    ngmore.listener.add_view_type:
-        class: Netgen\Bundle\MoreBundle\EventListener\AddViewTypeEventListener
+    ngsite.listener.add_view_type:
+        class: Netgen\Bundle\SiteBundle\EventListener\AddViewTypeEventListener
         public: false
         arguments:
             - "@request_stack"
         tags:
             - { name: kernel.event_subscriber }
 
-    ngmore.listener.add_page_css_class:
-        class: Netgen\Bundle\MoreBundle\EventListener\AddPageCssClassEventListener
+    ngsite.listener.add_page_css_class:
+        class: Netgen\Bundle\SiteBundle\EventListener\AddPageCssClassEventListener
         public: false
         arguments:
             - "@request_stack"
         tags:
             - { name: kernel.event_subscriber }
 
-    ngmore.listener.no_view_template:
-        class: Netgen\Bundle\MoreBundle\EventListener\NoViewTemplateEventListener
+    ngsite.listener.no_view_template:
+        class: Netgen\Bundle\SiteBundle\EventListener\NoViewTemplateEventListener
         public: false
         arguments:
             - "@router"
@@ -24,16 +24,16 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    ngmore.listener.set_csrf_enabled:
-        class: Netgen\Bundle\MoreBundle\EventListener\SetCsrfEnabledEventListener
+    ngsite.listener.set_csrf_enabled:
+        class: Netgen\Bundle\SiteBundle\EventListener\SetCsrfEnabledEventListener
         public: false
         arguments:
             - "@?security.csrf.token_manager"
         tags:
             - { name: kernel.event_subscriber }
 
-    ngmore.listener.menu.esi_fragment:
-        class: Netgen\Bundle\MoreBundle\EventListener\Menu\EsiFragmentEventListener
+    ngsite.listener.menu.esi_fragment:
+        class: Netgen\Bundle\SiteBundle\EventListener\Menu\EsiFragmentEventListener
         public: false
         arguments:
             - "@request_stack"
@@ -41,49 +41,49 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    ngmore.listener.user:
-        class: Netgen\Bundle\MoreBundle\EventListener\UserEventListener
+    ngsite.listener.user:
+        class: Netgen\Bundle\SiteBundle\EventListener\UserEventListener
         public: false
         abstract: true
         arguments:
-            - "@ngmore.helper.mail_helper"
+            - "@ngsite.helper.mail_helper"
             - "@ezpublish.config.resolver"
-            - "@ngmore.repository.nguser_setting"
-            - "@ngmore.repository.ezuser_accountkey"
+            - "@ngsite.repository.nguser_setting"
+            - "@ngsite.repository.ezuser_accountkey"
             - "@netgen.ezplatform_site.load_service"
             - "@ezpublish.api.repository"
 
-    ngmore.listener.user.post_register:
-        class: Netgen\Bundle\MoreBundle\EventListener\User\PostRegisterEventListener
+    ngsite.listener.user.post_register:
+        class: Netgen\Bundle\SiteBundle\EventListener\User\PostRegisterEventListener
         public: false
-        parent: ngmore.listener.user
+        parent: ngsite.listener.user
         tags:
             - { name: kernel.event_subscriber }
 
-    ngmore.listener.user.activation_request:
-        class: Netgen\Bundle\MoreBundle\EventListener\User\ActivationRequestEventListener
+    ngsite.listener.user.activation_request:
+        class: Netgen\Bundle\SiteBundle\EventListener\User\ActivationRequestEventListener
         public: false
-        parent: ngmore.listener.user
+        parent: ngsite.listener.user
         tags:
             - { name: kernel.event_subscriber }
 
-    ngmore.listener.user.post_activate:
-        class: Netgen\Bundle\MoreBundle\EventListener\User\PostActivateEventListener
+    ngsite.listener.user.post_activate:
+        class: Netgen\Bundle\SiteBundle\EventListener\User\PostActivateEventListener
         public: false
-        parent: ngmore.listener.user
+        parent: ngsite.listener.user
         tags:
             - { name: kernel.event_subscriber }
 
-    ngmore.listener.user.password_reset_request:
-        class: Netgen\Bundle\MoreBundle\EventListener\User\PasswordResetRequestEventListener
+    ngsite.listener.user.password_reset_request:
+        class: Netgen\Bundle\SiteBundle\EventListener\User\PasswordResetRequestEventListener
         public: false
-        parent: ngmore.listener.user
+        parent: ngsite.listener.user
         tags:
             - { name: kernel.event_subscriber }
 
-    ngmore.listener.user.post_password_reset:
-        class: Netgen\Bundle\MoreBundle\EventListener\User\PostPasswordResetEventListener
+    ngsite.listener.user.post_password_reset:
+        class: Netgen\Bundle\SiteBundle\EventListener\User\PostPasswordResetEventListener
         public: false
-        parent: ngmore.listener.user
+        parent: ngsite.listener.user
         tags:
             - { name: kernel.event_subscriber }

@@ -1,65 +1,65 @@
 parameters:
-    ngmore.layouts.block.plugin.vertical_whitespace.positions:
+    ngsite.layouts.block.plugin.vertical_whitespace.positions:
         both: 'block.plugin.vertical_whitespace.top_and_bottom'
         top: 'block.plugin.vertical_whitespace.only_top'
         bottom: 'block.plugin.vertical_whitespace.only_bottom'
 
-    ngmore.layouts.block.plugin.vertical_whitespace.sizes:
+    ngsite.layouts.block.plugin.vertical_whitespace.sizes:
         lg: 'block.plugin.vertical_whitespace.large'
         md: 'block.plugin.vertical_whitespace.medium'
         sm: 'block.plugin.vertical_whitespace.small'
 
-    ngmore.layouts.block.plugin.background_color.colors:
+    ngsite.layouts.block.plugin.background_color.colors:
         white: 'block.plugin.background_color.white'
         black: 'block.plugin.background_color.black'
 
-    ngmore.layouts.block.plugin.set_container.sizes:
+    ngsite.layouts.block.plugin.set_container.sizes:
         '': 'block.plugin.set_container.regular'
         'narow': 'block.plugin.set_container.narrow'
         'wide': 'block.plugin.set_container.wide'
 
 services:
-    ngmore.layouts.block.plugin.title_icon:
-        class: Netgen\Bundle\MoreBundle\Layouts\Block\Plugin\TitleIconPlugin
+    ngsite.layouts.block.plugin.title_icon:
+        class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\TitleIconPlugin
         public: false
         tags:
             - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: 100 }
 
-    ngmore.layouts.block.plugin.vertical_whitespace:
-        class: Netgen\Bundle\MoreBundle\Layouts\Block\Plugin\VerticalWhitespacePlugin
+    ngsite.layouts.block.plugin.vertical_whitespace:
+        class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\VerticalWhitespacePlugin
         public: false
         arguments:
-            - "%ngmore.layouts.block.plugin.vertical_whitespace.positions%"
-            - "%ngmore.layouts.block.plugin.vertical_whitespace.sizes%"
+            - "%ngsite.layouts.block.plugin.vertical_whitespace.positions%"
+            - "%ngsite.layouts.block.plugin.vertical_whitespace.sizes%"
         tags:
             - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: 200 }
 
-    ngmore.layouts.block.plugin.background_image:
-        class: Netgen\Bundle\MoreBundle\Layouts\Block\Plugin\BackgroundImagePlugin
+    ngsite.layouts.block.plugin.background_image:
+        class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\BackgroundImagePlugin
         public: false
         arguments:
             - "@netgen.ezplatform_site.load_service"
         tags:
             - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: 300 }
 
-    ngmore.layouts.block.plugin.background_color:
-        class: Netgen\Bundle\MoreBundle\Layouts\Block\Plugin\BackgroundColorPlugin
+    ngsite.layouts.block.plugin.background_color:
+        class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\BackgroundColorPlugin
         public: false
         arguments:
-            - "%ngmore.layouts.block.plugin.background_color.colors%"
+            - "%ngsite.layouts.block.plugin.background_color.colors%"
         tags:
             - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: 400 }
 
-    ngmore.layouts.block.plugin.set_container:
-        class: Netgen\Bundle\MoreBundle\Layouts\Block\Plugin\SetContainerPlugin
+    ngsite.layouts.block.plugin.set_container:
+        class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\SetContainerPlugin
         public: false
         arguments:
-            - "%ngmore.layouts.block.plugin.set_container.sizes%"
+            - "%ngsite.layouts.block.plugin.set_container.sizes%"
         tags:
             - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: -100 }
 
-    ngmore.layouts.query.content_by_topic:
-        class: Netgen\Bundle\MoreBundle\Layouts\Query\ContentByTopicHandler
+    ngsite.layouts.query.content_by_topic:
+        class: Netgen\Bundle\SiteBundle\Layouts\Query\ContentByTopicHandler
         public: false
         arguments:
             - "@ezpublish.api.service.location"

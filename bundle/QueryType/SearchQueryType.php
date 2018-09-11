@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\QueryType;
+namespace Netgen\Bundle\SiteBundle\QueryType;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -32,7 +32,7 @@ class SearchQueryType extends OptionsResolverBasedQueryType
 
     public static function getName(): string
     {
-        return 'NetgenMore:Search';
+        return 'NetgenSite:Search';
     }
 
     protected function configureOptions(OptionsResolver $resolver): void
@@ -54,7 +54,7 @@ class SearchQueryType extends OptionsResolverBasedQueryType
             }
         );
 
-        $resolver->setDefault('content_types', $this->configResolver->getParameter('search.content_types', 'ngmore'));
+        $resolver->setDefault('content_types', $this->configResolver->getParameter('search.content_types', 'ngsite'));
         $resolver->setDefault('subtree', $this->site->getSettings()->rootLocationId);
     }
 

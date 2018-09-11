@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Core\MVC\Symfony\Matcher;
+namespace Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher;
 
 abstract class MultipleValued
 {

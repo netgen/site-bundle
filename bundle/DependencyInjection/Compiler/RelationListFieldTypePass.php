@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\DependencyInjection\Compiler;
+namespace Netgen\Bundle\SiteBundle\DependencyInjection\Compiler;
 
-use Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Type;
-use Netgen\Bundle\MoreBundle\Core\Persistence\Legacy\Content\FieldValue\Converter\RelationListConverter;
+use Netgen\Bundle\SiteBundle\Core\FieldType\RelationList\Type;
+use Netgen\Bundle\SiteBundle\Core\Persistence\Legacy\Content\FieldValue\Converter\RelationListConverter;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

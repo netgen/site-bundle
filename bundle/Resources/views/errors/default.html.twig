@@ -1,14 +1,14 @@
-{% extends '@NetgenMore/pagelayout_resolver.html.twig' %}
+{% extends '@NetgenSite/pagelayout_resolver.html.twig' %}
 
-{% trans_default_domain 'ngmore_errors' %}
+{% trans_default_domain 'ngsite_errors' %}
 
-{% set site_title = 'ngmore.errors.default.title'|trans %}
+{% set site_title = 'ngsite.errors.default.title'|trans %}
 
 {% block content %}
 	<div class="site-error">
-	    <h1>{{ 'ngmore.errors.default.title'|trans }}</h1>
+	    <h1>{{ 'ngsite.errors.default.title'|trans }}</h1>
 
-	    <div>{{ 'ngmore.errors.default.message'|trans }}</div>
+	    <div>{{ 'ngsite.errors.default.message'|trans }}</div>
 	</div>
 {% endblock %}
 

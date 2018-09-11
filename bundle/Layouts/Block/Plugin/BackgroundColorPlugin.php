@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Layouts\Block\Plugin;
+namespace Netgen\Bundle\SiteBundle\Layouts\Block\Plugin;
 
 use Netgen\BlockManager\Block\BlockDefinition\ContainerDefinitionHandlerInterface;
 use Netgen\BlockManager\Block\BlockDefinition\Handler\Plugin;
@@ -18,7 +18,7 @@ class BackgroundColorPlugin extends Plugin
      *
      * @var array
      */
-    private $colors = [];
+    private $colors;
 
     public function __construct(array $colors)
     {

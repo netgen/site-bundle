@@ -1,5 +1,5 @@
-{% if ezpublish.configResolver.hasParameter('site_settings.typekit_code', 'ngmore') %}
-    {% set typekit_code = ezpublish.configResolver.getParameter('site_settings.typekit_code', 'ngmore') %}
+{% if ezpublish.configResolver.hasParameter('site_settings.typekit_code', 'ngsite') %}
+    {% set typekit_code = ezpublish.configResolver.getParameter('site_settings.typekit_code', 'ngsite') %}
 
     {% if typekit_code is not empty %}
         <link rel="stylesheet" href="https://use.typekit.net/{{ typekit_code|raw|escape('css') }}.css">

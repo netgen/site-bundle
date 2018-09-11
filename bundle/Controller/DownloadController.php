@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Controller;
+namespace Netgen\Bundle\SiteBundle\Controller;
 
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
 use eZ\Publish\Core\FieldType\BinaryBase\Value as BinaryBaseValue;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\Core\IO\IOServiceInterface;
-use Netgen\Bundle\MoreBundle\Event\Content\DownloadEvent;
-use Netgen\Bundle\MoreBundle\Event\NetgenMoreEvents;
+use Netgen\Bundle\SiteBundle\Event\Content\DownloadEvent;
+use Netgen\Bundle\SiteBundle\Event\SiteEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -55,7 +55,7 @@ class DownloadController extends Controller
      *
      * Assumes that the file is locally stored
      *
-     * Dispatch \Netgen\Bundle\MoreBundle\Event\NetgenMoreEvents::CONTENT_DOWNLOAD only once
+     * Dispatch \Netgen\Bundle\SiteBundle\Event\SiteEvents::CONTENT_DOWNLOAD only once
      *
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param mixed $contentId
@@ -76,7 +76,7 @@ class DownloadController extends Controller
 
         if (!$content->hasFieldById($fieldId) || $content->getFieldById($fieldId)->isEmpty()) {
             throw new NotFoundHttpException(
-                $this->translator->trans('download.file_not_found', [], 'ngmore')
+                $this->translator->trans('download.file_not_found', [], 'ngsite')
             );
         }
 
@@ -90,7 +90,7 @@ class DownloadController extends Controller
             $binaryFile = $this->ioImageService->loadBinaryFile($binaryFieldValue->id);
         } else {
             throw new NotFoundHttpException(
-                $this->translator->trans('download.file_not_found', [], 'ngmore')
+                $this->translator->trans('download.file_not_found', [], 'ngsite')
             );
         }
 
@@ -110,7 +110,7 @@ class DownloadController extends Controller
                 $response
             );
 
-            $this->dispatcher->dispatch(NetgenMoreEvents::CONTENT_DOWNLOAD, $downloadEvent);
+            $this->dispatcher->dispatch(SiteEvents::CONTENT_DOWNLOAD, $downloadEvent);
         }
 
         return $response;

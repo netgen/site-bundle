@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\EventListener;
+namespace Netgen\Bundle\SiteBundle\EventListener;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\View\View;
@@ -55,7 +55,7 @@ class NoViewTemplateEventListener implements EventSubscriberInterface
      */
     public function getController(FilterControllerEvent $event): void
     {
-        if ($event->getRequestType() !== Kernel::MASTER_REQUEST || !$this->enabled) {
+        if (!$this->enabled || $event->getRequestType() !== Kernel::MASTER_REQUEST) {
             return;
         }
 

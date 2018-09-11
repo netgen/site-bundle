@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Debug;
+namespace Netgen\Bundle\SiteBundle\Debug;
 
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 

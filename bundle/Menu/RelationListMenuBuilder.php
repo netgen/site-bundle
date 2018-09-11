@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Menu;
+namespace Netgen\Bundle\SiteBundle\Menu;
 
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
-use Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value as RelationListValue;
-use Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper;
+use Netgen\Bundle\SiteBundle\Core\FieldType\RelationList\Value as RelationListValue;
+use Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -26,7 +26,7 @@ class RelationListMenuBuilder
     protected $loadService;
 
     /**
-     * @var \Netgen\Bundle\MoreBundle\Helper\SiteInfoHelper
+     * @var \Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper
      */
     protected $siteInfoHelper;
 

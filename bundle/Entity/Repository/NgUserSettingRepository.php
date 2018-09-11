@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Entity\Repository;
+namespace Netgen\Bundle\SiteBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Netgen\Bundle\MoreBundle\Entity\NgUserSetting;
+use Netgen\Bundle\SiteBundle\Entity\NgUserSetting;
 
 class NgUserSettingRepository extends EntityRepository
 {
@@ -32,7 +32,7 @@ class NgUserSettingRepository extends EntityRepository
      *
      * @param mixed $userId
      *
-     * @return \Netgen\Bundle\MoreBundle\Entity\NgUserSetting
+     * @return \Netgen\Bundle\SiteBundle\Entity\NgUserSetting
      */
     public function activateUser($userId): NgUserSetting
     {

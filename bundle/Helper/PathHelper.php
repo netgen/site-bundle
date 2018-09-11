@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Helper;
+namespace Netgen\Bundle\SiteBundle\Helper;
 
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
@@ -51,10 +51,10 @@ class PathHelper
 
         $excludedContentTypes = [];
         if (
-            $this->configResolver->hasParameter('path_helper.excluded_content_types', 'ngmore') &&
-            !$options['use_all_content_types']
+            !$options['use_all_content_types'] &&
+            $this->configResolver->hasParameter('path_helper.excluded_content_types', 'ngsite')
         ) {
-            $excludedContentTypes = $this->configResolver->getParameter('path_helper.excluded_content_types', 'ngmore');
+            $excludedContentTypes = $this->configResolver->getParameter('path_helper.excluded_content_types', 'ngsite');
             if (!is_array($excludedContentTypes)) {
                 $excludedContentTypes = [];
             }

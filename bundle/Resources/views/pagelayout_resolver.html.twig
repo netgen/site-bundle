@@ -1,8 +1,8 @@
-{% set main_pagelayout = viewbaseLayout|default('@NetgenMore/pagelayout_empty.html.twig') %}
+{% set main_pagelayout = viewbaseLayout|default('@NetgenSite/pagelayout_empty.html.twig') %}
 
 {% if noLayout is not defined or not noLayout %}
-    {% if ezpublish.configResolver.hasParameter('pagelayout', 'ngmore') %}
-        {% set main_pagelayout = ezpublish.configResolver.getParameter('pagelayout', 'ngmore') %}
+    {% if ezpublish.configResolver.hasParameter('pagelayout', 'ngsite') %}
+        {% set main_pagelayout = ezpublish.configResolver.getParameter('pagelayout', 'ngsite') %}
     {% elseif pagelayout is defined %}
         {% set main_pagelayout = pagelayout %}
     {% elseif ezpublish.configResolver.hasParameter('pagelayout') %}

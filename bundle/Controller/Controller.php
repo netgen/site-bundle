@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Controller;
+namespace Netgen\Bundle\SiteBundle\Controller;
 
 use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller as BaseController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +15,7 @@ abstract class Controller extends BaseController
      */
     protected function processCacheSettings(Request $request, Response $response): void
     {
-        $defaultSharedMaxAge = $this->getConfigResolver()->getParameter('view.shared_max_age', 'ngmore');
+        $defaultSharedMaxAge = $this->getConfigResolver()->getParameter('view.shared_max_age', 'ngsite');
 
         $cacheSettings = $request->attributes->get('cacheSettings');
         if (!is_array($cacheSettings)) {

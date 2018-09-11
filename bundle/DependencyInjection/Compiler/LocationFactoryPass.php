@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\DependencyInjection\Compiler;
+namespace Netgen\Bundle\SiteBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,15 +15,15 @@ class LocationFactoryPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container): void
     {
-        if (!$container->has('ngmore.menu.factory.location')) {
+        if (!$container->has('ngsite.menu.factory.location')) {
             return;
         }
 
-        $factory = $container->findDefinition('ngmore.menu.factory.location');
+        $factory = $container->findDefinition('ngsite.menu.factory.location');
 
         $extensions = [];
 
-        foreach ($container->findTaggedServiceIds('ngmore.menu.factory.location.extension') as $extension => $tags) {
+        foreach ($container->findTaggedServiceIds('ngsite.menu.factory.location.extension') as $extension => $tags) {
             foreach ($tags as $tag) {
                 $priority = (int) ($tag[0]['priority'] ?? 0);
                 $extensions[$priority][] = new Reference($extension);

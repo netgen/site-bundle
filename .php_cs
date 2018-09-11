@@ -21,6 +21,7 @@ return PhpCsFixer\Config::create()
         'heredoc_to_nowdoc' => true,
         'list_syntax' => ['syntax' => 'long'],
         'multiline_comment_opening_closing' => true,
+        'native_function_invocation' => false,
         'no_alternative_syntax' => true,
         'no_null_property_initialization' => true,
         'no_superfluous_elseif' => true,

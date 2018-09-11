@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Relation;
+namespace Netgen\Bundle\SiteBundle\Relation;
 
-use Netgen\Bundle\MoreBundle\Core\FieldType\RelationList\Value as RelationList;
+use Netgen\Bundle\SiteBundle\Core\FieldType\RelationList\Value as RelationList;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Psr\Log\LoggerInterface;

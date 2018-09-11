@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Command;
+namespace Netgen\Bundle\SiteBundle\Command;
 
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -16,7 +16,7 @@ class DumpDatabaseCommand extends ContainerAwareCommand
 {
     protected function configure(): void
     {
-        $this->setName('ngmore:database:dump')
+        $this->setName('ngsite:database:dump')
             ->setDescription('Dumps the currently configured database to the provided file')
             ->addArgument(
                 'file',

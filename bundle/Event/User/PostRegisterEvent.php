@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Event\User;
+namespace Netgen\Bundle\SiteBundle\Event\User;
 
 use eZ\Publish\API\Repository\Values\User\User;
 use Symfony\Component\EventDispatcher\Event;

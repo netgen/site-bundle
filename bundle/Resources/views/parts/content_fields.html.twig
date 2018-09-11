@@ -33,7 +33,7 @@
         {% set link_target = parameters.link_target|default('') %}
         {% set use_image_size = parameters.use_image_size|default(false) %}
         {% set image_alias = ez_image_alias(field, versionInfo, parameters.alias|default('original')) %}
-        {% set lazy_loading = ezpublish.configResolver.getParameter('lazy_loading.enabled', 'ngmore') %}
+        {% set lazy_loading = ezpublish.configResolver.getParameter('lazy_loading.enabled', 'ngsite') %}
         {% if parameters.lazy_loading is defined %}
             {% set lazy_loading = parameters.lazy_loading %}
         {% endif %}
@@ -49,9 +49,8 @@
 
         <img
             {% if lazy_loading %}
-                {% set lazy_image_alias = ez_image_alias(field, versionInfo, ezpublish.configResolver.getParameter('lazy_loading.initial_image_alias', 'ngmore')) %}
-                src="{% if lazy_image_alias %}{{ asset(lazy_image_alias.uri) }}{% else %}//:0{% endif %}"
-                data-src="{% if image_alias %}{{ asset(image_alias.uri) }}{% else %}//:0{% endif %}"
+                src="{{ ez_image_alias(field, versionInfo, ezpublish.configResolver.getParameter('lazy_loading.initial_image_alias', 'ngsite')).uri }}"
+                data-src="{{ ez_image_alias(field, versionInfo, parameters.alias|default('original')).uri }}"
             {% else %}
                 src="{% if image_alias %}{{ asset(image_alias.uri) }}{% else %}//:0{% endif %}"
             {% endif %}
@@ -80,7 +79,7 @@
     {% set longitude = field.value.longitude|default(false) %}
 
     {% include
-        '@NetgenMore/parts/google_maps.html.twig' with {
+        '@NetgenSite/parts/google_maps.html.twig' with {
             'container_id': field.id,
             'latitude': latitude,
             'longitude': longitude,
@@ -95,7 +94,7 @@
 {% block ezbinaryfile_field %}
 {% spaceless %}
     {% if not ez_is_field_empty(content, field) %}
-        <a href="{{ path('ngmore_download', { contentId: contentInfo.id, fieldId: field.id }) }}" {{ block('field_attributes') }}>
+        <a href="{{ path('ngsite_download', { contentId: contentInfo.id, fieldId: field.id }) }}" {{ block('field_attributes') }}>
             {{ field.value.fileName }}
         </a>&nbsp;({{ field.value.fileSize|ez_file_size(1) }})
     {% endif %}

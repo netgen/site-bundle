@@ -38,7 +38,7 @@ public function registerBundles()
     $bundles[] = new Netgen\Bundle\BirthdayBundle\NetgenBirthdayBundle();
     $bundles[] = new Lolautruche\EzCoreExtraBundle\EzCoreExtraBundle();
     $bundles[] = new Netgen\TagsBundle\NetgenTagsBundle();
-    $bundles[] = new Netgen\Bundle\MoreBundle\NetgenMoreBundle();
+    $bundles[] = new Netgen\Bundle\SiteBundle\NetgenSiteBundle();
 
     return $bundles;
 }

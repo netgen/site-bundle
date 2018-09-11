@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\ParamConverter;
+namespace Netgen\Bundle\SiteBundle\ParamConverter;
 
 use eZ\Bundle\EzPublishCoreBundle\Converter\RepositoryParamConverter;
 use Netgen\EzPlatformSiteApi\API\LoadService;

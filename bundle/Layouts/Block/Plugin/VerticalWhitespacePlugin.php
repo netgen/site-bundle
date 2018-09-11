@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Layouts\Block\Plugin;
+namespace Netgen\Bundle\SiteBundle\Layouts\Block\Plugin;
 
 use Netgen\BlockManager\Block\BlockDefinition\BlockDefinitionHandlerInterface;
 use Netgen\BlockManager\Block\BlockDefinition\Handler\Plugin;
@@ -17,7 +17,7 @@ class VerticalWhitespacePlugin extends Plugin
      *
      * @var array
      */
-    private $positions = [];
+    private $positions;
 
     /**
      * The list of sizes available. Keys should be identifiers, while values
@@ -25,7 +25,7 @@ class VerticalWhitespacePlugin extends Plugin
      *
      * @var array
      */
-    private $sizes = [];
+    private $sizes;
 
     public function __construct(array $positions, array $sizes)
     {

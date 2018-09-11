@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Core\FieldType\RelationList;
+namespace Netgen\Bundle\SiteBundle\Core\FieldType\RelationList;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\RelationList\Type as BaseRelationListType;
@@ -44,7 +44,7 @@ class Type extends BaseRelationListType
             $destinationLocationIds = [];
 
             foreach ($relationList as $relationListItem) {
-                if (!isset($relationListItem['content_id']) || !isset($relationListItem['location_id'])) {
+                if (!isset($relationListItem['content_id'], $relationListItem['location_id'])) {
                     return $inputValue;
                 }
 

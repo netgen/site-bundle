@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Helper;
+namespace Netgen\Bundle\SiteBundle\Helper;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Netgen\EzPlatformSiteApi\API\LoadService;
@@ -43,7 +43,7 @@ class SiteInfoHelper
     {
         if ($this->siteInfoLocation === null) {
             $this->siteInfoLocation = $this->loadService->loadLocation(
-                $this->configResolver->getParameter('locations.site_info.id', 'ngmore')
+                $this->configResolver->getParameter('locations.site_info.id', 'ngsite')
             );
         }
 

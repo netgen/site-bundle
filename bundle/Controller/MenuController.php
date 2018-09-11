@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Controller;
+namespace Netgen\Bundle\SiteBundle\Controller;
 
 use FOS\HttpCacheBundle\Handler\TagHandler;
 use Knp\Menu\Provider\MenuProviderInterface;
@@ -49,7 +49,7 @@ class MenuController extends Controller
             'firstClass' => $request->attributes->get('firstClass') ?: 'firstli',
             'currentClass' => $request->attributes->get('currentClass') ?: 'active',
             'lastClass' => $request->attributes->get('lastClass') ?: 'lastli',
-            'template' => $this->getConfigResolver()->getParameter('template.menu', 'ngmore'),
+            'template' => $this->getConfigResolver()->getParameter('template.menu', 'ngsite'),
         ];
 
         if ($request->attributes->has('template')) {

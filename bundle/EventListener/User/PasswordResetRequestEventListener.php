@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\EventListener\User;
+namespace Netgen\Bundle\SiteBundle\EventListener\User;
 
 use eZ\Publish\API\Repository\Values\User\User;
-use Netgen\Bundle\MoreBundle\Event\NetgenMoreEvents;
-use Netgen\Bundle\MoreBundle\Event\User\PasswordResetRequestEvent;
-use Netgen\Bundle\MoreBundle\EventListener\UserEventListener;
+use Netgen\Bundle\SiteBundle\Event\SiteEvents;
+use Netgen\Bundle\SiteBundle\Event\User\PasswordResetRequestEvent;
+use Netgen\Bundle\SiteBundle\EventListener\UserEventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class PasswordResetRequestEventListener extends UserEventListener implements EventSubscriberInterface
@@ -20,7 +20,7 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
     public static function getSubscribedEvents(): array
     {
         return [
-            NetgenMoreEvents::USER_PASSWORD_RESET_REQUEST => 'onPasswordResetRequest',
+            SiteEvents::USER_PASSWORD_RESET_REQUEST => 'onPasswordResetRequest',
         ];
     }
 
@@ -37,8 +37,8 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
             $this->mailHelper
                 ->sendMail(
                     $email,
-                    'ngmore.user.forgot_password.not_registered.subject',
-                    $this->configResolver->getParameter('template.user.mail.forgot_password_not_registered', 'ngmore')
+                    'ngsite.user.forgot_password.not_registered.subject',
+                    $this->configResolver->getParameter('template.user.mail.forgot_password_not_registered', 'ngsite')
                 );
 
             return;
@@ -49,8 +49,8 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
                 $this->mailHelper
                     ->sendMail(
                         [$user->email => $this->getUserName($user)],
-                        'ngmore.user.forgot_password.disabled.subject',
-                        $this->configResolver->getParameter('template.user.mail.forgot_password_disabled', 'ngmore'),
+                        'ngsite.user.forgot_password.disabled.subject',
+                        $this->configResolver->getParameter('template.user.mail.forgot_password_disabled', 'ngsite'),
                         [
                             'user' => $user,
                         ]
@@ -62,8 +62,8 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
             $this->mailHelper
                 ->sendMail(
                     [$user->email => $this->getUserName($user)],
-                    'ngmore.user.forgot_password.not_active.subject',
-                    $this->configResolver->getParameter('template.user.mail.forgot_password_not_active', 'ngmore'),
+                    'ngsite.user.forgot_password.not_active.subject',
+                    $this->configResolver->getParameter('template.user.mail.forgot_password_not_active', 'ngsite'),
                     [
                         'user' => $user,
                     ]
@@ -77,8 +77,8 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
         $this->mailHelper
             ->sendMail(
                 [$user->email => $this->getUserName($user)],
-                'ngmore.user.forgot_password.subject',
-                $this->configResolver->getParameter('template.user.mail.forgot_password', 'ngmore'),
+                'ngsite.user.forgot_password.subject',
+                $this->configResolver->getParameter('template.user.mail.forgot_password', 'ngsite'),
                 [
                     'user' => $user,
                     'hash' => $accountKey->getHash(),

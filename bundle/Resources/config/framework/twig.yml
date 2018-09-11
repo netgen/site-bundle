@@ -1,2 +1,2 @@
 globals:
-    ngmore: "@ngmore.templating.global_variable"
+    ngsite: "@ngsite.templating.global_variable"

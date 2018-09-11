@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\EventListener\User;
+namespace Netgen\Bundle\SiteBundle\EventListener\User;
 
-use Netgen\Bundle\MoreBundle\Event\NetgenMoreEvents;
-use Netgen\Bundle\MoreBundle\Event\User\PostPasswordResetEvent;
-use Netgen\Bundle\MoreBundle\EventListener\UserEventListener;
+use Netgen\Bundle\SiteBundle\Event\SiteEvents;
+use Netgen\Bundle\SiteBundle\Event\User\PostPasswordResetEvent;
+use Netgen\Bundle\SiteBundle\EventListener\UserEventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class PostPasswordResetEventListener extends UserEventListener implements EventSubscriberInterface
@@ -19,7 +19,7 @@ class PostPasswordResetEventListener extends UserEventListener implements EventS
     public static function getSubscribedEvents(): array
     {
         return [
-            NetgenMoreEvents::USER_POST_PASSWORD_RESET => 'onPasswordReset',
+            SiteEvents::USER_POST_PASSWORD_RESET => 'onPasswordReset',
         ];
     }
 
@@ -34,8 +34,8 @@ class PostPasswordResetEventListener extends UserEventListener implements EventS
         $this->mailHelper
             ->sendMail(
                 [$user->email => $this->getUserName($user)],
-                'ngmore.user.forgot_password.password_changed.subject',
-                $this->configResolver->getParameter('template.user.mail.forgot_password_password_changed', 'ngmore'),
+                'ngsite.user.forgot_password.password_changed.subject',
+                $this->configResolver->getParameter('template.user.mail.forgot_password_password_changed', 'ngsite'),
                 [
                     'user' => $user,
                 ]

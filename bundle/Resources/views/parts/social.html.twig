@@ -1,5 +1,5 @@
-{% if ezpublish.configResolver.hasParameter('site_settings.add_this_code', 'ngmore') %}
-    {% set add_this_code = ezpublish.configResolver.getParameter('site_settings.add_this_code', 'ngmore') %}
+{% if ezpublish.configResolver.hasParameter('site_settings.add_this_code', 'ngsite') %}
+    {% set add_this_code = ezpublish.configResolver.getParameter('site_settings.add_this_code', 'ngsite') %}
 
     {% if add_this_code is not empty %}
         <div class="action clearfix">

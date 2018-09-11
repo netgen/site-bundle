@@ -2,4 +2,4 @@ ezpublish:
     system:
         default:
             field_templates:
-                - { template: "@NetgenMore/parts/content_fields.html.twig", priority: 5000 }
+                - { template: "@NetgenSite/parts/content_fields.html.twig", priority: 5000 }

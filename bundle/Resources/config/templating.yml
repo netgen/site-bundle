@@ -11,40 +11,40 @@ services:
         tags:
             - { name: twig.extension }
 
-    ngmore.templating.global_variable:
-        class: Netgen\Bundle\MoreBundle\Templating\GlobalVariable
+    ngsite.templating.global_variable:
+        class: Netgen\Bundle\SiteBundle\Templating\GlobalVariable
         public: false
         arguments:
-            - "@ngmore.helper.site_info_helper"
+            - "@ngsite.helper.site_info_helper"
             - "@ezpublish.api.repository"
             - "@netgen.ezplatform_site.load_service"
 
-    ngmore.templating.twig.extension.ngmore:
-        class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\NetgenMoreExtension
+    ngsite.templating.twig.extension.site:
+        class: Netgen\Bundle\SiteBundle\Templating\Twig\Extension\SiteExtension
         public: false
         tags:
             - { name: twig.extension }
 
-    ngmore.templating.twig.runtime.ngmore:
-        class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\NetgenMoreRuntime
+    ngsite.templating.twig.runtime.site:
+        class: Netgen\Bundle\SiteBundle\Templating\Twig\Extension\SiteRuntime
         public: false
         arguments:
-            - "@ngmore.helper.path_helper"
+            - "@ngsite.helper.path_helper"
             - "@ezpublish.locale.converter"
             - "@netgen.ezplatform_site.load_service"
         tags:
             - { name: twig.runtime }
 
-    ngmore.templating.twig.extension.topic_url:
-        class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\TopicUrlExtension
+    ngsite.templating.twig.extension.topic_url:
+        class: Netgen\Bundle\SiteBundle\Templating\Twig\Extension\TopicUrlExtension
         public: false
         tags:
             - { name: twig.extension }
 
-    ngmore.templating.twig.runtime.topic_url:
-        class: Netgen\Bundle\MoreBundle\Templating\Twig\Extension\TopicUrlRuntime
+    ngsite.templating.twig.runtime.topic_url:
+        class: Netgen\Bundle\SiteBundle\Templating\Twig\Extension\TopicUrlRuntime
         public: false
         arguments:
-            - "@ngmore.topic.url_generator"
+            - "@ngsite.topic.url_generator"
         tags:
             - { name: twig.runtime }

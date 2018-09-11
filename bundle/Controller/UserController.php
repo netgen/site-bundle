@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Controller;
+namespace Netgen\Bundle\SiteBundle\Controller;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\UserService;
 use Netgen\Bundle\EzFormsBundle\Form\DataWrapper;
 use Netgen\Bundle\EzFormsBundle\Form\Type\CreateUserType;
-use Netgen\Bundle\MoreBundle\Entity\EzUserAccountKey;
-use Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository;
-use Netgen\Bundle\MoreBundle\Event\NetgenMoreEvents;
-use Netgen\Bundle\MoreBundle\Event\User as UserEvents;
+use Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey;
+use Netgen\Bundle\SiteBundle\Entity\Repository\EzUserAccountKeyRepository;
+use Netgen\Bundle\SiteBundle\Event\SiteEvents;
+use Netgen\Bundle\SiteBundle\Event\User as UserEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -42,7 +42,7 @@ class UserController extends Controller
     protected $formFactory;
 
     /**
-     * @var \Netgen\Bundle\MoreBundle\Entity\Repository\EzUserAccountKeyRepository
+     * @var \Netgen\Bundle\SiteBundle\Entity\Repository\EzUserAccountKeyRepository
      */
     protected $accountKeyRepository;
 
@@ -65,7 +65,7 @@ class UserController extends Controller
      */
     public function register(Request $request): Response
     {
-        $contentTypeIdentifier = $this->getConfigResolver()->getParameter('user.content_type_identifier', 'ngmore');
+        $contentTypeIdentifier = $this->getConfigResolver()->getParameter('user.content_type_identifier', 'ngsite');
         $contentType = $this->getRepository()->getContentTypeService()->loadContentTypeByIdentifier($contentTypeIdentifier);
         $languages = $this->getConfigResolver()->getParameter('languages');
         $userCreateStruct = $this->userService->newUserCreateStruct(
@@ -76,7 +76,7 @@ class UserController extends Controller
             $contentType
         );
 
-        $userCreateStruct->enabled = (bool) $this->getConfigResolver()->getParameter('user.auto_enable', 'ngmore');
+        $userCreateStruct->enabled = (bool) $this->getConfigResolver()->getParameter('user.auto_enable', 'ngsite');
         $userCreateStruct->alwaysAvailable = (bool) $contentType->defaultAlwaysAvailable;
 
         $data = new DataWrapper($userCreateStruct, $userCreateStruct->contentType);
@@ -85,7 +85,7 @@ class UserController extends Controller
             CreateUserType::class,
             $data,
             [
-                'translation_domain' => 'ngmore_user',
+                'translation_domain' => 'ngsite_user',
             ]
         );
 
@@ -94,7 +94,7 @@ class UserController extends Controller
 
         if (!$form->isValid()) {
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.register', 'ngmore'),
+                $this->getConfigResolver()->getParameter('template.user.register', 'ngsite'),
                 [
                     'form' => $form->createView(),
                 ]
@@ -105,7 +105,7 @@ class UserController extends Controller
 
         if (!empty($users)) {
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.register', 'ngmore'),
+                $this->getConfigResolver()->getParameter('template.user.register', 'ngsite'),
                 [
                     'form' => $form->createView(),
                     'error' => 'email_in_use',
@@ -117,7 +117,7 @@ class UserController extends Controller
             $this->userService->loadUserByLogin($form->getData()->payload->login);
 
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.register', 'ngmore'),
+                $this->getConfigResolver()->getParameter('template.user.register', 'ngsite'),
                 [
                     'form' => $form->createView(),
                     'error' => 'username_taken',
@@ -127,10 +127,10 @@ class UserController extends Controller
             // do nothing
         }
 
-        $userGroupId = $this->getConfigResolver()->getParameter('user.user_group_content_id', 'ngmore');
+        $userGroupId = $this->getConfigResolver()->getParameter('user.user_group_content_id', 'ngsite');
 
         $preUserRegisterEvent = new UserEvents\PreRegisterEvent($data->payload);
-        $this->eventDispatcher->dispatch(NetgenMoreEvents::USER_PRE_REGISTER, $preUserRegisterEvent);
+        $this->eventDispatcher->dispatch(SiteEvents::USER_PRE_REGISTER, $preUserRegisterEvent);
         $data->payload = $preUserRegisterEvent->getUserCreateStruct();
 
         /** @var \eZ\Publish\API\Repository\Values\User\User $newUser */
@@ -146,22 +146,22 @@ class UserController extends Controller
         );
 
         $userRegisterEvent = new UserEvents\PostRegisterEvent($newUser);
-        $this->eventDispatcher->dispatch(NetgenMoreEvents::USER_POST_REGISTER, $userRegisterEvent);
+        $this->eventDispatcher->dispatch(SiteEvents::USER_POST_REGISTER, $userRegisterEvent);
 
         if ($newUser->enabled) {
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.register_success', 'ngmore')
+                $this->getConfigResolver()->getParameter('template.user.register_success', 'ngsite')
             );
         }
 
-        if ($this->getConfigResolver()->getParameter('user.require_admin_activation', 'ngmore')) {
+        if ($this->getConfigResolver()->getParameter('user.require_admin_activation', 'ngsite')) {
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.activate_admin_activation_pending', 'ngmore')
+                $this->getConfigResolver()->getParameter('template.user.activate_admin_activation_pending', 'ngsite')
             );
         }
 
         return $this->render(
-            $this->getConfigResolver()->getParameter('template.user.activate_sent', 'ngmore')
+            $this->getConfigResolver()->getParameter('template.user.activate_sent', 'ngsite')
         );
     }
 
@@ -175,7 +175,7 @@ class UserController extends Controller
 
         if (!$form->isValid()) {
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.activate', 'ngmore'),
+                $this->getConfigResolver()->getParameter('template.user.activate', 'ngsite'),
                 [
                     'form' => $form->createView(),
                 ]
@@ -189,10 +189,10 @@ class UserController extends Controller
             $users[0] ?? null
         );
 
-        $this->eventDispatcher->dispatch(NetgenMoreEvents::USER_ACTIVATION_REQUEST, $activationRequestEvent);
+        $this->eventDispatcher->dispatch(SiteEvents::USER_ACTIVATION_REQUEST, $activationRequestEvent);
 
         return $this->render(
-            $this->getConfigResolver()->getParameter('template.user.activate_sent', 'ngmore')
+            $this->getConfigResolver()->getParameter('template.user.activate_sent', 'ngsite')
         );
     }
 
@@ -209,11 +209,11 @@ class UserController extends Controller
             throw new NotFoundHttpException();
         }
 
-        if (time() - $accountKey->getTime() > $this->getConfigResolver()->getParameter('user.activate_hash_validity_time', 'ngmore')) {
+        if (time() - $accountKey->getTime() > $this->getConfigResolver()->getParameter('user.activate_hash_validity_time', 'ngsite')) {
             $this->accountKeyRepository->removeByHash($hash);
 
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.activate_done', 'ngmore'),
+                $this->getConfigResolver()->getParameter('template.user.activate_done', 'ngsite'),
                 [
                     'error' => 'hash_expired',
                 ]
@@ -230,7 +230,7 @@ class UserController extends Controller
         $userUpdateStruct->enabled = true;
 
         $preActivateEvent = new UserEvents\PreActivateEvent($user, $userUpdateStruct);
-        $this->eventDispatcher->dispatch(NetgenMoreEvents::USER_PRE_ACTIVATE, $preActivateEvent);
+        $this->eventDispatcher->dispatch(SiteEvents::USER_PRE_ACTIVATE, $preActivateEvent);
         $userUpdateStruct = $preActivateEvent->getUserUpdateStruct();
 
         $user = $this->getRepository()->sudo(
@@ -240,10 +240,10 @@ class UserController extends Controller
         );
 
         $postActivateEvent = new UserEvents\PostActivateEvent($user);
-        $this->eventDispatcher->dispatch(NetgenMoreEvents::USER_POST_ACTIVATE, $postActivateEvent);
+        $this->eventDispatcher->dispatch(SiteEvents::USER_POST_ACTIVATE, $postActivateEvent);
 
         return $this->render(
-            $this->getConfigResolver()->getParameter('template.user.activate_done', 'ngmore')
+            $this->getConfigResolver()->getParameter('template.user.activate_done', 'ngsite')
         );
     }
 
@@ -257,7 +257,7 @@ class UserController extends Controller
 
         if (!$form->isValid()) {
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.forgot_password', 'ngmore'),
+                $this->getConfigResolver()->getParameter('template.user.forgot_password', 'ngsite'),
                 [
                     'form' => $form->createView(),
                 ]
@@ -271,10 +271,10 @@ class UserController extends Controller
             $users[0] ?? null
         );
 
-        $this->eventDispatcher->dispatch(NetgenMoreEvents::USER_PASSWORD_RESET_REQUEST, $passwordResetRequestEvent);
+        $this->eventDispatcher->dispatch(SiteEvents::USER_PASSWORD_RESET_REQUEST, $passwordResetRequestEvent);
 
         return $this->render(
-            $this->getConfigResolver()->getParameter('template.user.forgot_password_sent', 'ngmore')
+            $this->getConfigResolver()->getParameter('template.user.forgot_password_sent', 'ngsite')
         );
     }
 
@@ -291,11 +291,11 @@ class UserController extends Controller
             throw new NotFoundHttpException();
         }
 
-        if (time() - $accountKey->getTime() > $this->getConfigResolver()->getParameter('user.forgot_password_hash_validity_time', 'ngmore')) {
+        if (time() - $accountKey->getTime() > $this->getConfigResolver()->getParameter('user.forgot_password_hash_validity_time', 'ngsite')) {
             $this->accountKeyRepository->removeByHash($hash);
 
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.reset_password_done', 'ngmore'),
+                $this->getConfigResolver()->getParameter('template.user.reset_password_done', 'ngsite'),
                 [
                     'error' => 'hash_expired',
                 ]
@@ -313,7 +313,7 @@ class UserController extends Controller
 
         if (!$form->isValid()) {
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.reset_password', 'ngmore'),
+                $this->getConfigResolver()->getParameter('template.user.reset_password', 'ngsite'),
                 [
                     'form' => $form->createView(),
                 ]
@@ -326,7 +326,7 @@ class UserController extends Controller
         $userUpdateStruct->password = $data['password'];
 
         $prePasswordResetEvent = new UserEvents\PrePasswordResetEvent($user, $userUpdateStruct);
-        $this->eventDispatcher->dispatch(NetgenMoreEvents::USER_PRE_PASSWORD_RESET, $prePasswordResetEvent);
+        $this->eventDispatcher->dispatch(SiteEvents::USER_PRE_PASSWORD_RESET, $prePasswordResetEvent);
         $userUpdateStruct = $prePasswordResetEvent->getUserUpdateStruct();
 
         $user = $this->getRepository()->sudo(
@@ -336,10 +336,10 @@ class UserController extends Controller
         );
 
         $postPasswordResetEvent = new UserEvents\PostPasswordResetEvent($user);
-        $this->eventDispatcher->dispatch(NetgenMoreEvents::USER_POST_PASSWORD_RESET, $postPasswordResetEvent);
+        $this->eventDispatcher->dispatch(SiteEvents::USER_POST_PASSWORD_RESET, $postPasswordResetEvent);
 
         return $this->render(
-            $this->getConfigResolver()->getParameter('template.user.reset_password_done', 'ngmore')
+            $this->getConfigResolver()->getParameter('template.user.reset_password_done', 'ngsite')
         );
     }
 
@@ -348,7 +348,7 @@ class UserController extends Controller
      */
     protected function createActivationForm(): FormInterface
     {
-        return $this->createFormBuilder(null, ['translation_domain' => 'ngmore_user'])
+        return $this->createFormBuilder(null, ['translation_domain' => 'ngsite_user'])
             ->add(
                 'email',
                 EmailType::class,
@@ -366,7 +366,7 @@ class UserController extends Controller
      */
     protected function createForgotPasswordForm(): FormInterface
     {
-        return $this->createFormBuilder(null, ['translation_domain' => 'ngmore_user'])
+        return $this->createFormBuilder(null, ['translation_domain' => 'ngsite_user'])
             ->add(
                 'email',
                 EmailType::class,
@@ -406,7 +406,7 @@ class UserController extends Controller
             ],
         ];
 
-        return $this->createFormBuilder(null, ['translation_domain' => 'ngmore_user'])
+        return $this->createFormBuilder(null, ['translation_domain' => 'ngsite_user'])
             ->add('password', RepeatedType::class, $passwordOptions)
             ->getForm();
     }

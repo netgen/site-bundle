@@ -1,39 +1,39 @@
 services:
-    ngmore.menu.relation_list_menu_builder:
-        class: Netgen\Bundle\MoreBundle\Menu\RelationListMenuBuilder
+    ngsite.menu.relation_list_menu_builder:
+        class: Netgen\Bundle\SiteBundle\Menu\RelationListMenuBuilder
         public: false
         arguments:
-            - "@ngmore.menu.factory.location"
+            - "@ngsite.menu.factory.location"
             - "@netgen.ezplatform_site.load_service"
-            - "@ngmore.helper.site_info_helper"
+            - "@ngsite.helper.site_info_helper"
             - "@?logger"
         tags:
-            - { name: monolog.logger, channel: ngmore }
+            - { name: monolog.logger, channel: ngsite }
 
-    ngmore.menu.voter.location_path:
-        class: Netgen\Bundle\MoreBundle\Menu\Voter\LocationPathVoter
+    ngsite.menu.voter.location_path:
+        class: Netgen\Bundle\SiteBundle\Menu\Voter\LocationPathVoter
         public: false
         arguments:
             - "@request_stack"
         tags:
             - { name: knp_menu.voter }
 
-    ngmore.menu.factory.location:
-        class: Netgen\Bundle\MoreBundle\Menu\Factory\LocationFactory
+    ngsite.menu.factory.location:
+        class: Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory
         public: false
         arguments:
             - "@event_dispatcher"
-            - "@ngmore.menu.factory.location.extension.fallback"
+            - "@ngsite.menu.factory.location.extension.fallback"
             - []
 
-    ngmore.menu.factory.location.extension.fallback:
-        class: Netgen\Bundle\MoreBundle\Menu\Factory\LocationFactory\FallbackExtension
+    ngsite.menu.factory.location.extension.fallback:
+        class: Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\FallbackExtension
         public: false
         arguments:
             - "@router"
 
-    ngmore.menu.factory.location.extension.shortcut:
-        class: Netgen\Bundle\MoreBundle\Menu\Factory\LocationFactory\ShortcutExtension
+    ngsite.menu.factory.location.extension.shortcut:
+        class: Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\ShortcutExtension
         public: false
         arguments:
             - "@netgen.ezplatform_site.load_service"
@@ -41,11 +41,11 @@ services:
             - "@request_stack"
             - "@?logger"
         tags:
-            - { name: ngmore.menu.factory.location.extension, priority: 0 }
-            - { name: monolog.logger, channel: ngmore }
+            - { name: ngsite.menu.factory.location.extension, priority: 0 }
+            - { name: monolog.logger, channel: ngsite }
 
-    ngmore.menu.factory.location.extension.menu_item:
-        class: Netgen\Bundle\MoreBundle\Menu\Factory\LocationFactory\MenuItemExtension
+    ngsite.menu.factory.location.extension.menu_item:
+        class: Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\MenuItemExtension
         public: false
         arguments:
             - "@netgen.ezplatform_site.load_service"
@@ -54,23 +54,23 @@ services:
             - "@request_stack"
             - "@?logger"
         tags:
-            - { name: ngmore.menu.factory.location.extension, priority: 0 }
-            - { name: monolog.logger, channel: ngmore }
+            - { name: ngsite.menu.factory.location.extension, priority: 0 }
+            - { name: monolog.logger, channel: ngsite }
 
-    ngmore.menu.main_menu:
+    ngsite.menu.main_menu:
         class: Knp\Menu\MenuItem
         public: false
-        factory: ["@ngmore.menu.relation_list_menu_builder", createRelationListMenu]
+        factory: ["@ngsite.menu.relation_list_menu_builder", createRelationListMenu]
         arguments:
             - main_menu
         tags:
-            - { name: knp_menu.menu, alias: ngmore_main_menu }
+            - { name: knp_menu.menu, alias: ngsite_main_menu }
 
-    ngmore.menu.additional_menu:
+    ngsite.menu.additional_menu:
         class: Knp\Menu\MenuItem
         public: false
-        factory: ["@ngmore.menu.relation_list_menu_builder", createRelationListMenu]
+        factory: ["@ngsite.menu.relation_list_menu_builder", createRelationListMenu]
         arguments:
             - additional_menu
         tags:
-            - { name: knp_menu.menu, alias: ngmore_additional_menu }
+            - { name: knp_menu.menu, alias: ngsite_additional_menu }

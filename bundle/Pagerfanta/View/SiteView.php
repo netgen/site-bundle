@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Pagerfanta\View;
+namespace Netgen\Bundle\SiteBundle\Pagerfanta\View;
 
 use Pagerfanta\PagerfantaInterface;
 use Pagerfanta\View\ViewInterface;
 use Twig\Environment;
 
-class NetgenMoreView implements ViewInterface
+class SiteView implements ViewInterface
 {
     /**
      * @var \Twig\Environment
@@ -65,7 +65,7 @@ class NetgenMoreView implements ViewInterface
      */
     public function getName(): string
     {
-        return 'ngmore';
+        return 'ngsite';
     }
 
     /**
@@ -165,7 +165,7 @@ class NetgenMoreView implements ViewInterface
 
         $pages['second_page'] = $this->startPage === 3 ? $this->generateUrl(2) : false;
 
-        $pages['separator_before'] = $this->startPage > 3 ? true : false;
+        $pages['separator_before'] = $this->startPage > 3;
 
         $middlePages = [];
         for ($i = $this->startPage, $end = $this->endPage; $i <= $end; ++$i) {
@@ -174,7 +174,7 @@ class NetgenMoreView implements ViewInterface
 
         $pages['middle_pages'] = $middlePages;
 
-        $pages['separator_after'] = $this->endPage < $this->pagerfanta->getNbPages() - 2 ? true : false;
+        $pages['separator_after'] = $this->endPage < $this->pagerfanta->getNbPages() - 2;
 
         $pages['second_to_last_page'] = $this->endPage === $this->pagerfanta->getNbPages() - 2 ?
             $this->generateUrl($this->pagerfanta->getNbPages() - 1) :

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Menu\Factory\LocationFactory;
+namespace Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory;
 
 use Knp\Menu\ItemInterface;
 use Netgen\EzPlatformSiteApi\API\Values\Location;

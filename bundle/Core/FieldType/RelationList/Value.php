@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\MoreBundle\Core\FieldType\RelationList;
+namespace Netgen\Bundle\SiteBundle\Core\FieldType\RelationList;
 
 use eZ\Publish\Core\FieldType\RelationList\Value as BaseRelationListValue;
 

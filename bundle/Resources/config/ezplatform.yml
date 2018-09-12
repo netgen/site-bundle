@@ -1,3 +1,4 @@
-imports:
-    - { resource: parameters.yml }
-    - { resource: override.yml }
+system:
+    default:
+        field_templates:
+            - { template: "@NetgenSite/parts/content_fields.html.twig", priority: 5000 }

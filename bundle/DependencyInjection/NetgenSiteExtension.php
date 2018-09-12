@@ -40,9 +40,13 @@ class NetgenSiteExtension extends Extension implements PrependExtensionInterface
 
     public function prepend(ContainerBuilder $container): void
     {
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader->load('parameters.yml');
+
         $activatedBundles = $container->getParameter('kernel.bundles');
 
         $prependConfigs = [
+            'ezplatform.yml' => 'ezpublish',
             'framework/twig.yml' => 'twig',
             'framework/assets.yml' => 'framework',
         ];

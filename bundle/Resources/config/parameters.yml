@@ -1,8 +1,6 @@
 parameters:
     ngsite.default.locale.conversion_map: "%ezpublish.locale.conversion_map%"
 
-    ngsite.default.pagelayout: '@@NetgenSite/pagelayout_empty.html.twig'
-
     ngsite.default.site_domain: localhost
 
     ngsite.default.locations.site_info.id: ~

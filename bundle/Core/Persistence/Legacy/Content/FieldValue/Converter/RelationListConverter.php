@@ -44,7 +44,7 @@ class RelationListConverter extends BaseRelationListConverter
                     continue;
                 }
 
-                $relationItem->setAttribute($domAttrKey, $row[$propertyKey]);
+                $relationItem->setAttribute($domAttrKey, (string) $row[$propertyKey]);
             }
             $relationList->appendChild($relationItem);
             unset($relationItem);

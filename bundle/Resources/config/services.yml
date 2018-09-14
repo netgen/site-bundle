@@ -1,4 +1,17 @@
 services:
+    ngsite.command.generate_image_variations:
+        class: Netgen\Bundle\SiteBundle\Command\GenerateImageVariationsCommand
+        public: false
+        arguments:
+            - "@ezpublish.api.repository"
+            - "@ezpublish.fieldType.ezimage.variation_service"
+            - "@ezpublish.cache_pool"
+        calls:
+            - [setVariations, ["$image_variations$"]]
+            - [setLanguages, ["$languages$"]]
+        tags:
+            - { name: console.command, command: 'ngsite:content:generate-image-variations' }
+
     ngsite.controller.base:
         class: Netgen\Bundle\SiteBundle\Controller\Controller
         parent: netgen.ezplatform_site.controller.base

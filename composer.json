@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "ezsystems/ezpublish-kernel": "^7.2",
+        "ezsystems/ezpublish-kernel": "^7.3",
         "netgen/ezplatform-site-api": "^2.5.4",
         "netgen/ez-forms-bundle": "^2.0",
         "netgen/siteaccess-routes-bundle": "^1.1",

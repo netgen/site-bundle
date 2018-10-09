@@ -41,7 +41,7 @@ class MultimediaRelationResolver implements LocationRelationResolverInterface
             $multimediaItems[] = iterator_to_array($children->getCurrentPageResults());
         }
 
-        $relatedMultimedia = $this->innerResolver->loadRelations($location, 'related_multimedia');
+        $relatedMultimedia = $this->innerResolver->loadRelations($location, $fieldIdentifier);
         foreach ($relatedMultimedia as $relatedMultimediaItem) {
             if ($relatedMultimediaItem->contentInfo->contentTypeIdentifier === 'ng_gallery') {
                 // For galleries, find children objects and add them in multimedia item list

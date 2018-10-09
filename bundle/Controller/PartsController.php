@@ -59,11 +59,11 @@ class PartsController extends Controller
      * 3. related objects from related_multimedia object relation field ( related images, images from related galleries, banners, videos )
      * - to enable this feature for some content type, add object relations field with content type identifier 'related_multimedia'.
      */
-    public function viewRelatedMultimediaItems(Request $request, Location $location, string $template): Response
+    public function viewRelatedMultimediaItems(Request $request, Location $location, string $template, string $fieldDefinitionIdentifier = 'related_multimedia'): Response
     {
         $multimediaItems = $this->multimediaResolver->loadRelations(
             $location,
-            null,
+            $fieldDefinitionIdentifier,
             [
                 'include_children' => $request->attributes->get('includeChildren') ?? false,
                 'content_types' => $request->attributes->get('contentTypeIdentifiers') ?? ['image'],

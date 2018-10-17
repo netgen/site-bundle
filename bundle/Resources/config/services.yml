@@ -12,6 +12,14 @@ services:
         tags:
             - { name: console.command, command: 'ngsite:content:generate-image-variations' }
 
+    ngsite.command.profiler_cache_purger:
+        class: Netgen\Bundle\SiteBundle\Command\ProfilerCachePurgerCommand
+        public: false
+        arguments:
+            - "@profiler"
+        tags:
+            - { name: console.command, command: 'ngsite:profiler:clear-cache' }
+
     ngsite.controller.base:
         class: Netgen\Bundle\SiteBundle\Controller\Controller
         parent: netgen.ezplatform_site.controller.base

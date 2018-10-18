@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="vendor/autoload.php"
+         backupGlobals="false"
+         backupStaticAttributes="false"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         colors="true"
+         verbose="true"
+         processIsolation="false"
+         stopOnFailure="false"
+>
+    <testsuites>
+        <testsuite name="NetgenSite\Tests">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">bundle</directory>
+            <exclude>
+                <directory>bundle/Command</directory>
+                <directory>bundle/Composer</directory>
+                <directory>bundle/ContextProvider</directory>
+                <directory>bundle/Controller</directory>
+                <directory>bundle/Core</directory>
+                <directory>bundle/Debug</directory>
+                <directory>bundle/DependencyInjection</directory>
+                <directory>bundle/Entity</directory>
+                <directory>bundle/Event</directory>
+                <directory>bundle/EventListener</directory>
+                <directory>bundle/Helper</directory>
+                <directory>bundle/Imagine</directory>
+                <directory>bundle/Layouts</directory>
+                <directory>bundle/Menu</directory>
+                <directory>bundle/OpenGraph</directory>
+                <directory>bundle/Pagerfanta</directory>
+                <directory>bundle/ParamConverter</directory>
+                <directory>bundle/QueryType</directory>
+                <directory>bundle/Resources</directory>
+                <directory>bundle/Relation</directory>
+                <directory>bundle/Routing</directory>
+                <directory>bundle/Templating</directory>
+                <directory>bundle/Topic</directory>
+                <directory>bundle/XmlText</directory>
+                <file>bundle/NetgenSiteBundle.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
+    <logging>
+        <log type="junit" target="build/report.junit.xml"/>
+        <log type="coverage-html" target="build/coverage"/>
+        <log type="coverage-text" target="build/coverage.txt"/>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+    </logging>
+</phpunit>

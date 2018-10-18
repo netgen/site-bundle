@@ -2,6 +2,14 @@
     "name": "netgen/site-bundle",
     "description": "Netgen Site Bundle is an eZ Platform bundle that implements common features that are used by Netgen to implement websites",
     "license": "GPL-2.0-only",
+    "type": "ezplatform-bundle",
+    "keywords": [
+        "ezpublish",
+        "ezplatform",
+        "site-bundle",
+        "netgen"
+    ],
+    "homepage": "https://github.com/netgen/site-bundle",
     "authors": [
         {
             "name": "Netgen",

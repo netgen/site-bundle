@@ -8,6 +8,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
+use RuntimeException;
 
 class ProfilerCachePurgerCommand extends Command
 {
@@ -19,9 +20,9 @@ class ProfilerCachePurgerCommand extends Command
     /**
      * ProfilerCachePurgerCommand constructor.
      *
-     * @param \Symfony\Component\HttpKernel\Profiler\Profiler $profiler
+     * @param \Symfony\Component\HttpKernel\Profiler\Profiler|null $profiler
      */
-    public function __construct(Profiler $profiler)
+    public function __construct(Profiler $profiler = null)
     {
         $this->profiler = $profiler;
 
@@ -37,6 +38,10 @@ class ProfilerCachePurgerCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
+        if (is_null($this->profiler)) {
+            throw new RuntimeException("To clear profiler cache, you need to be in dev mode where @profiler service is available.");
+        }
+
         $this->profiler->purge();
         $output->writeln('<info>Clearing Profiler cache finished.</info>');
     }

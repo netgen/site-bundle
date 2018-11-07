@@ -16,7 +16,7 @@ services:
         class: Netgen\Bundle\SiteBundle\Command\ProfilerCachePurgerCommand
         public: false
         arguments:
-            - "@profiler"
+            - "@?profiler"
         tags:
             - { name: console.command, command: 'ngsite:profiler:clear-cache' }
 

@@ -38,8 +38,8 @@ class EmbedViewController extends Controller
         $targetLink = !empty($parameters['objectParameters']['href']) ? trim($parameters['objectParameters']['href']) : null;
 
         if (!empty($targetLink)) {
-            if (stripos($targetLink, 'eznode://') === 0) {
-                $locationId = (int) substr($targetLink, 9);
+            if (mb_stripos($targetLink, 'eznode://') === 0) {
+                $locationId = (int) mb_substr($targetLink, 9);
 
                 try {
                     $location = $this->getSite()->getLoadService()->loadLocation($locationId);
@@ -53,8 +53,8 @@ class EmbedViewController extends Controller
 
                     $this->logger->error(sprintf('Tried to generate link to location #%s without read rights', $locationId));
                 }
-            } elseif (stripos($targetLink, 'ezobject://') === 0) {
-                $linkedContentId = (int) substr($targetLink, 11);
+            } elseif (mb_stripos($targetLink, 'ezobject://') === 0) {
+                $linkedContentId = (int) mb_substr($targetLink, 11);
 
                 try {
                     $content = $this->getSite()->getLoadService()->loadContent($linkedContentId);
@@ -91,9 +91,9 @@ class EmbedViewController extends Controller
 
             if ($directDownloadLink !== null) {
                 $targetLink = $directDownloadLink;
-            } elseif (stripos($targetLink, 'eznode://') === 0) {
+            } elseif (mb_stripos($targetLink, 'eznode://') === 0) {
                 $targetLink = $this->router->generate($location);
-            } elseif (stripos($targetLink, 'ezobject://') === 0) {
+            } elseif (mb_stripos($targetLink, 'ezobject://') === 0) {
                 $targetLink = $this->router->generate($content);
             }
         }

@@ -56,7 +56,7 @@ class SiteRuntime
             return '';
         }
 
-        $posixLanguageCode = substr($posixLanguageCode, 0, 2);
+        $posixLanguageCode = mb_substr($posixLanguageCode, 0, 2);
         $languageName = Intl::getLanguageBundle()->getLanguageName($posixLanguageCode, null, $posixLanguageCode);
 
         return ucwords($languageName);

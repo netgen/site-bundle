@@ -143,7 +143,7 @@ class FullViewController extends Controller
                 );
             }
         } elseif ($externalRedirectValue instanceof UrlValue && !$content->getField('external_redirect')->isEmpty()) {
-            if (stripos($externalRedirectValue->link, 'http') === 0) {
+            if (mb_stripos($externalRedirectValue->link, 'http') === 0) {
                 return new RedirectResponse($externalRedirectValue->link, RedirectResponse::HTTP_MOVED_PERMANENTLY);
             }
 

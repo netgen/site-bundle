@@ -50,7 +50,7 @@ class RelationListMenuBuilder
     /**
      * Creates the KNP menu from provided content and field identifier.
      *
-     * @param null|mixed $contentId
+     * @param mixed|null $contentId
      */
     public function createRelationListMenu(string $fieldIdentifier, $contentId = null): ItemInterface
     {

@@ -90,6 +90,7 @@ class SymlinkProjectCommand extends SymlinkCommand
 
                     if (!$this->fileSystem->exists(dirname($destination))) {
                         $output->writeln('Skipped creating the symlink for <comment>' . basename($destination) . '</comment> in <comment>' . dirname($destination) . '/</comment>. Folder does not exist!');
+
                         continue;
                     }
 

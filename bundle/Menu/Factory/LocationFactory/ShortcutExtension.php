@@ -94,7 +94,7 @@ class ShortcutExtension implements ExtensionInterface
     {
         $uri = $urlValue->link;
 
-        if (stripos($urlValue->link, 'http') !== 0) {
+        if (mb_stripos($urlValue->link, 'http') !== 0) {
             $currentSiteAccess = $this->requestStack->getMasterRequest()->attributes->get('siteaccess');
             if ($currentSiteAccess->matcher instanceof URILexer) {
                 $uri = $currentSiteAccess->matcher->analyseLink($uri);

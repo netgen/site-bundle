@@ -28,7 +28,7 @@ class EmbedToHtml5 extends BaseEmbedToHtml5
         $this->logger = $this->logger ?: new NullLogger();
         $permissionResolver = $this->repository->getPermissionResolver();
 
-        /** @var $embed \DOMElement */
+        /** @var \DOMElement $embed */
         foreach ($xmlDoc->getElementsByTagName($tagName) as $embed) {
             if (!$view = $embed->getAttribute('view')) {
                 $view = $tagName;

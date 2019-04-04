@@ -94,7 +94,7 @@ class MailHelper
      * an array: array( 'info@netgen.hr' => 'Netgen Site' )
      *
      * @param mixed $receivers
-     * @param null|mixed $sender
+     * @param mixed|null $sender
      */
     public function sendMail($receivers, string $subject, string $template, array $templateParameters = [], $sender = null): int
     {
@@ -153,7 +153,6 @@ class MailHelper
      * If sender not provided, it attempts to get the sender from the parameters:
      * ngsite.default.mail.sender_email
      * ngsite.default.mail.sender_name (optional).
-     *
      *
      * @param mixed $sender
      *

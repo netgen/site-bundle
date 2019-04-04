@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Layouts\Query;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -196,7 +198,11 @@ class ContentByTopicHandler implements QueryTypeHandlerInterface
         if ($query->getParameter('use_topic_from_current_content')->getValue()) {
             $content = $this->contentProvider->provideContent();
         } elseif (!empty($contentId)) {
-            $content = $this->loadService->loadContent($contentId)->innerContent;
+            try {
+                $content = $this->loadService->loadContent($contentId)->innerContent;
+            } catch (NotFoundException | UnauthorizedException $e) {
+                // Do nothing
+            }
         }
 
         if (!$content instanceof Content || !isset($content->fields['topic'])) {

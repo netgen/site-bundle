@@ -48,6 +48,8 @@ class LocationFactory implements FactoryInterface
             return $menuItem;
         }
 
+        $locationId = $options['ezlocation']->id;
+
         $menuItem
             ->setLabel($options['ezlocation']->content->name)
             ->setExtra('ezlocation', $options['ezlocation']);
@@ -55,7 +57,7 @@ class LocationFactory implements FactoryInterface
         $extension = $this->getExtension($options['ezlocation']);
         $extension->buildItem($menuItem, $options['ezlocation']);
 
-        $menuItem->setName(md5($menuItem->getUri() ?? ''));
+        $menuItem->setName(md5(($menuItem->getUri() ?? '') . '-' . $locationId));
 
         $event = new LocationMenuItemEvent($menuItem, $menuItem->getExtra('ezlocation'));
         $this->eventDispatcher->dispatch(SiteEvents::MENU_LOCATION_ITEM, $event);

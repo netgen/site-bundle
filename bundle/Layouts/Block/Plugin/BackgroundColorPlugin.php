@@ -27,7 +27,7 @@ class BackgroundColorPlugin extends Plugin
 
     public static function getExtendedHandlers(): array
     {
-        return [ListHandler::class, ContainerDefinitionHandlerInterface::class];
+        return [ListHandler::class, ContainerDefinitionHandlerInterface::class, BackgroundColorPluginInterface::class];
     }
 
     public function buildParameters(ParameterBuilderInterface $builder): void

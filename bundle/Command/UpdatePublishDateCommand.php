@@ -6,6 +6,7 @@ namespace Netgen\Bundle\SiteBundle\Command;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
@@ -134,7 +135,7 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
                     $metadataUpdateStruct->publishedDate = $dateValueData;
 
                     $repository->sudo(
-                        function (Repository $repository) use ($content, $metadataUpdateStruct) {
+                        static function (Repository $repository) use ($content, $metadataUpdateStruct): Content {
                             return $repository->getContentService()->updateContentMetadata($content->contentInfo, $metadataUpdateStruct);
                         }
                     );

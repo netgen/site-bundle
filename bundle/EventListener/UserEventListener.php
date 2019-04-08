@@ -11,6 +11,7 @@ use Netgen\Bundle\SiteBundle\Entity\Repository\EzUserAccountKeyRepository;
 use Netgen\Bundle\SiteBundle\Entity\Repository\NgUserSettingRepository;
 use Netgen\Bundle\SiteBundle\Helper\MailHelper;
 use Netgen\EzPlatformSiteApi\API\LoadService;
+use Netgen\EzPlatformSiteApi\API\Values\ContentInfo;
 
 abstract class UserEventListener
 {
@@ -66,7 +67,7 @@ abstract class UserEventListener
     protected function getUserName(User $user): string
     {
         $contentInfo = $this->repository->sudo(
-            function (Repository $repository) use ($user) {
+            function (Repository $repository) use ($user): ContentInfo {
                 return $this->loadService->loadContent($user->id)->contentInfo;
             }
         );

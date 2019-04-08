@@ -71,7 +71,7 @@ class NoViewTemplateEventListener implements EventSubscriberInterface
         }
 
         $event->setController(
-            function () {
+            function (): RedirectResponse {
                 $rootLocationId = $this->configResolver->getParameter('content.tree_root.location_id');
 
                 return new RedirectResponse(

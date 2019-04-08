@@ -104,7 +104,7 @@ class ContentByTopicHandler implements QueryTypeHandlerInterface
             return [];
         }
 
-        list($topicContent, $topicTag) = $this->getTopicTag($query);
+        [$topicContent, $topicTag] = $this->getTopicTag($query);
 
         if (!$topicContent instanceof Content || !$topicTag instanceof Tag) {
             return [];
@@ -121,7 +121,7 @@ class ContentByTopicHandler implements QueryTypeHandlerInterface
         $searchResult = $this->findService->findLocations($locationQuery);
 
         return array_map(
-            function (SearchHit $searchHit) {
+            static function (SearchHit $searchHit) {
                 return $searchHit->valueObject;
             },
             $searchResult->searchHits
@@ -136,7 +136,7 @@ class ContentByTopicHandler implements QueryTypeHandlerInterface
             return 0;
         }
 
-        list($topicContent, $topicTag) = $this->getTopicTag($query);
+        [$topicContent, $topicTag] = $this->getTopicTag($query);
 
         if (!$topicContent instanceof Content || !$topicTag instanceof Tag) {
             return 0;
@@ -179,7 +179,7 @@ class ContentByTopicHandler implements QueryTypeHandlerInterface
 
         $criteria = array_filter(
             $criteria,
-            function ($criterion): bool {
+            static function ($criterion): bool {
                 return $criterion instanceof Criterion;
             }
         );

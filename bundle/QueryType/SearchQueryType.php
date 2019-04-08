@@ -45,7 +45,7 @@ class SearchQueryType extends OptionsResolverBasedQueryType
 
         $resolver->setAllowedValues(
             'search_text',
-            function (string $searchText) {
+            static function (string $searchText): bool {
                 if (empty(trim($searchText))) {
                     return false;
                 }

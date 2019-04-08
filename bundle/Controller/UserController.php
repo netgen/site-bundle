@@ -7,6 +7,7 @@ namespace Netgen\Bundle\SiteBundle\Controller;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\UserService;
+use eZ\Publish\API\Repository\Values\User\User;
 use Netgen\Bundle\EzFormsBundle\Form\DataWrapper;
 use Netgen\Bundle\EzFormsBundle\Form\Type\CreateUserType;
 use Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey;
@@ -135,7 +136,7 @@ class UserController extends Controller
 
         /** @var \eZ\Publish\API\Repository\Values\User\User $newUser */
         $newUser = $this->getRepository()->sudo(
-            function (Repository $repository) use ($data, $userGroupId) {
+            static function (Repository $repository) use ($data, $userGroupId): User {
                 $userGroup = $repository->getUserService()->loadUserGroup($userGroupId);
 
                 return $repository->getUserService()->createUser(
@@ -234,7 +235,7 @@ class UserController extends Controller
         $userUpdateStruct = $preActivateEvent->getUserUpdateStruct();
 
         $user = $this->getRepository()->sudo(
-            function (Repository $repository) use ($user, $userUpdateStruct) {
+            static function (Repository $repository) use ($user, $userUpdateStruct): User {
                 return $repository->getUserService()->updateUser($user, $userUpdateStruct);
             }
         );
@@ -330,7 +331,7 @@ class UserController extends Controller
         $userUpdateStruct = $prePasswordResetEvent->getUserUpdateStruct();
 
         $user = $this->getRepository()->sudo(
-            function (Repository $repository) use ($user, $userUpdateStruct) {
+            static function (Repository $repository) use ($user, $userUpdateStruct): User {
                 return $repository->getUserService()->updateUser($user, $userUpdateStruct);
             }
         );

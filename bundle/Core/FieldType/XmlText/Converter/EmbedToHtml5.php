@@ -10,6 +10,8 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5 as BaseEmbedToHtml5;
+use Netgen\EzPlatformSiteApi\API\Values\Content;
+use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Netgen\EzPlatformSiteApi\Core\Traits\SiteAwareTrait;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
@@ -44,7 +46,7 @@ class EmbedToHtml5 extends BaseEmbedToHtml5
                 try {
                     /** @var \Netgen\EzPlatformSiteApi\API\Values\Content $content */
                     $content = $this->repository->sudo(
-                        function (Repository $repository) use ($contentId) {
+                        function (Repository $repository) use ($contentId): Content {
                             return $this->site->getLoadService()->loadContent($contentId);
                         }
                     );
@@ -84,7 +86,7 @@ class EmbedToHtml5 extends BaseEmbedToHtml5
                 try {
                     /** @var \Netgen\EzPlatformSiteApi\API\Values\Location $location */
                     $location = $this->repository->sudo(
-                        function (Repository $repository) use ($locationId) {
+                        function (Repository $repository) use ($locationId): Location {
                             return $this->site->getLoadService()->loadLocation($locationId);
                         }
                     );

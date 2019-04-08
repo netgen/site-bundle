@@ -103,8 +103,8 @@ class GenerateImageVariationsCommand extends Command
         $query->limit = 0;
 
         $totalCount = $this->repository->sudo(
-            function (Repository $repository) use ($query) {
-                return $repository->getSearchService()->findContentInfo($query, $this->languages, false)->totalCount;
+            function (Repository $repository) use ($query): int {
+                return $repository->getSearchService()->findContentInfo($query, $this->languages, false)->totalCount ?? 0;
             }
         );
 
@@ -123,7 +123,7 @@ class GenerateImageVariationsCommand extends Command
 
         do {
             $searchHits = $this->repository->sudo(
-                function (Repository $repository) use ($query) {
+                function (Repository $repository) use ($query): iterable {
                     return $repository->getSearchService()->findContent($query, $this->languages, false)->searchHits;
                 }
             );
@@ -198,7 +198,7 @@ class GenerateImageVariationsCommand extends Command
     {
         foreach ($subtreeIds as $subtreeId) {
             yield $this->repository->sudo(
-                function (Repository $repository) use ($subtreeId) {
+                static function (Repository $repository) use ($subtreeId): string {
                     return $repository->getLocationService()->loadLocation($subtreeId)->pathString;
                 }
             );

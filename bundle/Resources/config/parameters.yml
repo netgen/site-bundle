@@ -53,6 +53,4 @@ parameters:
     ngsite.default.lazy_loading.initial_image_alias: 'small'
 
     # Non siteaccess aware params
-    ngsite.ezfile_storage_path: '/var/site/storage/original'
-
     netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length: 0

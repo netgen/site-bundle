@@ -19,6 +19,8 @@
                 <xsl:attribute name="target">
                     <xsl:value-of select="@target" />
                 </xsl:attribute>
+
+                <xsl:attribute name="rel"><xsl:text>noopener noreferrer</xsl:text></xsl:attribute>
             </xsl:if>
 
             <xsl:if test="@xhtml:title != ''">

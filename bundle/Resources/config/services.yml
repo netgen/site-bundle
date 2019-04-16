@@ -191,6 +191,14 @@ services:
         tags:
             - { name: netgen_open_graph.meta_tag_handler, alias: ngsite/site_name }
 
+    ngsite.opengraph.handler.site_image:
+        class: Netgen\Bundle\SiteBundle\OpenGraph\Handler\SiteImage
+        public: false
+        arguments:
+            - "@ngsite.helper.site_info_helper"
+            - "@request_stack"
+        tags:
+            - { name: netgen_open_graph.meta_tag_handler, alias: ngsite/site_image }
 
     ngsite.query_type.search:
         class: Netgen\Bundle\SiteBundle\QueryType\SearchQueryType

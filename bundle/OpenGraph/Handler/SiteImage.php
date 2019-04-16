@@ -9,13 +9,13 @@ use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use Netgen\Bundle\OpenGraphBundle\Handler\HandlerInterface;
 use Netgen\Bundle\OpenGraphBundle\MetaTag\Item;
 use Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class SiteImage implements HandlerInterface
 {
     /**
-     * Field identifier that provides opengraph image
+     * Field identifier that provides opengraph image.
      *
      * @var string
      */
@@ -31,21 +31,12 @@ class SiteImage implements HandlerInterface
      */
     private $requestStack;
 
-    /**
-     * SiteImage constructor.
-     *
-     * @param \Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper $siteInfoHelper
-     * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
-     */
     public function __construct(SiteInfoHelper $siteInfoHelper, RequestStack $requestStack)
     {
         $this->siteInfoHelper = $siteInfoHelper;
         $this->requestStack = $requestStack;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getMetaTags($tagName, array $params = []): array
     {
         $siteInfoContent = $this->siteInfoHelper->getSiteInfoContent();

@@ -196,6 +196,7 @@ services:
         public: false
         arguments:
             - "@ngsite.helper.site_info_helper"
+            - "@request_stack"
         tags:
             - { name: netgen_open_graph.meta_tag_handler, alias: ngsite/site_image }
 

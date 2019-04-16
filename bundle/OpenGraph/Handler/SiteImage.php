@@ -52,25 +52,21 @@ class SiteImage implements HandlerInterface
 
         if (
             $siteInfoContent->hasField(self::FIELD_IDENTIFIER)
-            && $siteInfoContent->getField(self::FIELD_IDENTIFIER)->isEmpty()
+            && !$siteInfoContent->getField(self::FIELD_IDENTIFIER)->isEmpty()
             && $siteInfoContent->getFieldValue(self::FIELD_IDENTIFIER) instanceof ImageValue
         ) {
-
             $siteImage = $this->siteInfoHelper
                 ->getSiteInfoContent()
                 ->getField(self::FIELD_IDENTIFIER)
                 ->value
                 ->uri;
-
         } elseif (!empty($params[0])) {
             $siteImage = (string) $params[0];
         } else {
-
             throw new InvalidArgumentException(
                 sprintf('%s or $params[0]', self::FIELD_IDENTIFIER),
                 'Either field does not provide valid value or fallback is not properly set up.'
             );
-
         }
 
         $request = $this->requestStack->getCurrentRequest();

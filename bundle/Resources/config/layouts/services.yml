@@ -15,7 +15,7 @@ parameters:
 
     ngsite.layouts.block.plugin.set_container.sizes:
         '': 'block.plugin.set_container.regular'
-        'narow': 'block.plugin.set_container.narrow'
+        'narrow': 'block.plugin.set_container.narrow'
         'wide': 'block.plugin.set_container.wide'
 
 services:

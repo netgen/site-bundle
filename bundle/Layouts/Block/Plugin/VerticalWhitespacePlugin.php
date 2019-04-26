@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Layouts\Block\Plugin;
 
-use Netgen\BlockManager\Block\BlockDefinition\BlockDefinitionHandlerInterface;
-use Netgen\BlockManager\Block\BlockDefinition\Handler\Plugin;
-use Netgen\BlockManager\Parameters\ParameterBuilderInterface;
-use Netgen\BlockManager\Parameters\ParameterType;
+use Netgen\Layouts\Block\BlockDefinition\BlockDefinitionHandlerInterface;
+use Netgen\Layouts\Block\BlockDefinition\Handler\Plugin;
+use Netgen\Layouts\Parameters\ParameterBuilderInterface;
+use Netgen\Layouts\Parameters\ParameterType;
 
 class VerticalWhitespacePlugin extends Plugin
 {

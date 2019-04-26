@@ -6,14 +6,14 @@ namespace Netgen\Bundle\SiteBundle\Layouts\Block\Plugin;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
-use Netgen\BlockManager\API\Values\Block\Block;
-use Netgen\BlockManager\Block\BlockDefinition\ContainerDefinitionHandlerInterface;
-use Netgen\BlockManager\Block\BlockDefinition\Handler\Plugin;
-use Netgen\BlockManager\Block\DynamicParameters;
-use Netgen\BlockManager\Ez\Parameters\ParameterType as EzParameterType;
-use Netgen\BlockManager\Parameters\ParameterBuilderInterface;
-use Netgen\BlockManager\Parameters\ParameterType;
-use Netgen\BlockManager\Standard\Block\BlockDefinition\Handler\ListHandler;
+use Netgen\Layouts\API\Values\Block\Block;
+use Netgen\Layouts\Block\BlockDefinition\ContainerDefinitionHandlerInterface;
+use Netgen\Layouts\Block\BlockDefinition\Handler\Plugin;
+use Netgen\Layouts\Block\DynamicParameters;
+use Netgen\Layouts\Ez\Parameters\ParameterType as EzParameterType;
+use Netgen\Layouts\Parameters\ParameterBuilderInterface;
+use Netgen\Layouts\Parameters\ParameterType;
+use Netgen\Layouts\Standard\Block\BlockDefinition\Handler\ListHandler;
 use Netgen\EzPlatformSiteApi\API\Exceptions\TranslationNotMatchedException;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 

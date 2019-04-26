@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\DependencyInjection;
 
-use Netgen\Bundle\BlockManagerBundle\NetgenBlockManagerBundle;
+use Netgen\Bundle\LayoutsBundle\NetgenLayoutsBundle;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -30,7 +30,7 @@ class NetgenSiteExtension extends Extension implements PrependExtensionInterface
 
         $activatedBundles = $container->getParameter('kernel.bundles');
 
-        if (in_array(NetgenBlockManagerBundle::class, $activatedBundles, true)) {
+        if (in_array(NetgenLayoutsBundle::class, $activatedBundles, true)) {
             $loader->load('layouts/services.yml');
         }
 
@@ -53,8 +53,8 @@ class NetgenSiteExtension extends Extension implements PrependExtensionInterface
             'framework/assets.yml' => 'framework',
         ];
 
-        if (in_array(NetgenBlockManagerBundle::class, $activatedBundles, true)) {
-            $prependConfigs['layouts/query_types.yml'] = 'netgen_block_manager';
+        if (in_array(NetgenLayoutsBundle::class, $activatedBundles, true)) {
+            $prependConfigs['layouts/query_types.yml'] = 'netgen_layouts';
         }
 
         foreach ($prependConfigs as $configFile => $prependConfig) {

@@ -23,7 +23,7 @@ services:
         class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\TitleIconPlugin
         public: false
         tags:
-            - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: 100 }
+            - { name: netgen_layouts.block_definition_handler.plugin, priority: 100 }
 
     ngsite.layouts.block.plugin.vertical_whitespace:
         class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\VerticalWhitespacePlugin
@@ -32,7 +32,7 @@ services:
             - "%ngsite.layouts.block.plugin.vertical_whitespace.positions%"
             - "%ngsite.layouts.block.plugin.vertical_whitespace.sizes%"
         tags:
-            - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: 200 }
+            - { name: netgen_layouts.block_definition_handler.plugin, priority: 200 }
 
     ngsite.layouts.block.plugin.background_image:
         class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\BackgroundImagePlugin
@@ -40,7 +40,7 @@ services:
         arguments:
             - "@netgen.ezplatform_site.load_service"
         tags:
-            - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: 300 }
+            - { name: netgen_layouts.block_definition_handler.plugin, priority: 300 }
 
     ngsite.layouts.block.plugin.background_color:
         class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\BackgroundColorPlugin
@@ -48,7 +48,7 @@ services:
         arguments:
             - "%ngsite.layouts.block.plugin.background_color.colors%"
         tags:
-            - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: 400 }
+            - { name: netgen_layouts.block_definition_handler.plugin, priority: 400 }
 
     ngsite.layouts.block.plugin.set_container:
         class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\SetContainerPlugin
@@ -56,7 +56,7 @@ services:
         arguments:
             - "%ngsite.layouts.block.plugin.set_container.sizes%"
         tags:
-            - { name: netgen_block_manager.block.block_definition_handler.plugin, priority: -100 }
+            - { name: netgen_layouts.block_definition_handler.plugin, priority: -100 }
 
     ngsite.layouts.query.content_by_topic:
         class: Netgen\Bundle\SiteBundle\Layouts\Query\ContentByTopicHandler
@@ -68,6 +68,6 @@ services:
             - "@ezpublish.spi.persistence.content_type_handler"
             - "@ezpublish.spi.persistence.section_handler"
             - "@ezpublish.spi.persistence.object_state_handler"
-            - "@netgen_block_manager.ezpublish.content_provider"
+            - "@netgen_layouts.ezplatform.content_provider"
         tags:
-            - { name: netgen_block_manager.collection.query_type_handler, type: content_by_topic }
+            - { name: netgen_layouts.query_type_handler, type: content_by_topic }

@@ -1,6 +1,7 @@
-{% set google_maps_api_key = ezpublish.configResolver.parameter('api_keys.google_maps')|default('') %}
+{% if include_google_maps_script|default(false) %}
+    {% include '@NetgenSite/parts/google_maps_script.html.twig' %}
+{% endif %}
 
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;key={{ google_maps_api_key }}"></script>
 <script type="text/javascript">
     function initializeGoogleMaps( options ) {
         var mapCenter = new google.maps.LatLng(

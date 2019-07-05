@@ -15,7 +15,7 @@
 
         {% if link_href is not empty %}
             <a href="{{ link_href }}"
-                {% if link_target is not empty %} target="{{ link_target }}" {% if link_target == '_blank' %}rel="noopener noreferrer"{% endif %} {% endif %}
+                {% if link_target is not empty %} target="{{ link_target }}" {% if link_target == '_blank' %}rel="nofollow noopener noreferrer"{% endif %} {% endif %}
                 {% if parameters.link_id|default('') is not empty %} id="{{ parameters.link_id }}" {% endif %}
                 {% if parameters.link_class|default('') is not empty %} class="{{ parameters.link_class }}" {% endif %}
                 {% if parameters.link_title|default('') is not empty %} title="{{ parameters.link_title }}" {% endif %}

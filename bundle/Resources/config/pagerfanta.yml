@@ -5,7 +5,6 @@ services:
         lazy: true
         arguments:
             - "@twig"
-        calls:
-            - [setDefaultTemplate, [$template.pagerfanta.ngsite;ngsite$]]
+            - "@ezpublish.config.resolver"
         tags:
             - { name: pagerfanta.view, alias: ngsite }

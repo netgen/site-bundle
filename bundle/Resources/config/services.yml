@@ -6,9 +6,7 @@ services:
             - "@ezpublish.api.repository"
             - "@ezpublish.fieldType.ezimage.variation_service"
             - "@ezpublish.cache_pool"
-        calls:
-            - [setVariations, ["$image_variations$"]]
-            - [setLanguages, ["$languages$"]]
+            - "@ezpublish.config.resolver"
         tags:
             - { name: console.command, command: 'ngsite:content:generate-image-variations' }
 

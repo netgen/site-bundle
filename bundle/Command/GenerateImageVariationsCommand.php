@@ -8,6 +8,7 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\SPI\Variation\VariationHandler;
 use Generator;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
@@ -35,6 +36,11 @@ class GenerateImageVariationsCommand extends Command
     private $cache;
 
     /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    private $configResolver;
+
+    /**
      * @var \Symfony\Component\Console\Input\InputInterface
      */
     private $input;
@@ -49,37 +55,19 @@ class GenerateImageVariationsCommand extends Command
      */
     private $style;
 
-    /**
-     * @var array
-     */
-    private $variations;
-
-    /**
-     * @var array
-     */
-    private $languages;
-
     public function __construct(
         Repository $repository,
         VariationHandler $variationHandler,
-        TagAwareAdapterInterface $cache
+        TagAwareAdapterInterface $cache,
+        ConfigResolverInterface $configResolver
     ) {
         $this->repository = $repository;
         $this->variationHandler = $variationHandler;
         $this->cache = $cache;
+        $this->configResolver = $configResolver;
 
         // Parent constructor call is mandatory for commands registered as services
         parent::__construct();
-    }
-
-    public function setVariations(array $variations = null): void
-    {
-        $this->variations = $variations ?? [];
-    }
-
-    public function setLanguages(array $languages = null): void
-    {
-        $this->languages = $languages ?? [];
     }
 
     protected function configure(): void
@@ -104,7 +92,9 @@ class GenerateImageVariationsCommand extends Command
 
         $totalCount = $this->repository->sudo(
             function (Repository $repository) use ($query): int {
-                return $repository->getSearchService()->findContentInfo($query, $this->languages, false)->totalCount ?? 0;
+                $languages = $this->configResolver->getParameter('languages');
+
+                return $repository->getSearchService()->findContentInfo($query, $languages, false)->totalCount ?? 0;
             }
         );
 
@@ -116,7 +106,7 @@ class GenerateImageVariationsCommand extends Command
 
         $imageVariations = $this->parseCommaDelimited($this->input->getOption('variations'));
         if (empty($imageVariations)) {
-            $imageVariations = array_keys($this->variations);
+            $imageVariations = array_keys($this->configResolver->getParameter('image_variations'));
         }
 
         $fields = $this->parseCommaDelimited($this->input->getOption('fields'));
@@ -124,7 +114,9 @@ class GenerateImageVariationsCommand extends Command
         do {
             $searchHits = $this->repository->sudo(
                 function (Repository $repository) use ($query): iterable {
-                    return $repository->getSearchService()->findContent($query, $this->languages, false)->searchHits;
+                    $languages = $this->configResolver->getParameter('languages');
+
+                    return $repository->getSearchService()->findContent($query, $languages, false)->searchHits;
                 }
             );
 

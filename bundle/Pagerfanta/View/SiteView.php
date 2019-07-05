@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Pagerfanta\View;
 
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Pagerfanta\PagerfantaInterface;
 use Pagerfanta\View\ViewInterface;
 use Twig\Environment;
@@ -16,9 +17,9 @@ class SiteView implements ViewInterface
     protected $twig;
 
     /**
-     * @var string
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
-    protected $template;
+    protected $configResolver;
 
     /**
      * @var \Pagerfanta\Pagerfanta
@@ -45,17 +46,10 @@ class SiteView implements ViewInterface
      */
     protected $endPage;
 
-    public function __construct(Environment $twig)
+    public function __construct(Environment $twig, ConfigResolverInterface $configResolver)
     {
         $this->twig = $twig;
-    }
-
-    /**
-     * Sets the default template.
-     */
-    public function setDefaultTemplate(string $template = null): void
-    {
-        $this->template = $template;
+        $this->configResolver = $configResolver;
     }
 
     /**
@@ -90,7 +84,7 @@ class SiteView implements ViewInterface
         $this->calculateStartAndEndPage();
 
         return $this->twig->render(
-            $options['template'] ?? $this->template,
+            $options['template'] ?? $this->configResolver->getParameter('template.pagerfanta.ngsite', 'ngsite'),
             [
                 'pager' => $pagerfanta,
                 'pages' => $this->getPages(),

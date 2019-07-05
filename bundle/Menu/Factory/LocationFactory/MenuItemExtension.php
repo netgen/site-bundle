@@ -72,7 +72,7 @@ class MenuItemExtension implements ExtensionInterface
 
         if ($location->content->getField('target_blank')->value->bool) {
             $item->setLinkAttribute('target', '_blank')
-                ->setLinkAttribute('rel', 'noopener noreferrer');
+                ->setLinkAttribute('rel', 'nofollow noopener noreferrer');
         }
 
         $this->buildChildItems($item, $location->content);

@@ -18,6 +18,5 @@ class NetgenSiteBundle extends Bundle
         $container->addCompilerPass(new Compiler\ImagineIOResolverPass());
         $container->addCompilerPass(new Compiler\ContentDownloadUrlGeneratorPass());
         $container->addCompilerPass(new Compiler\LocationFactoryPass());
-        $container->addCompilerPass(new Compiler\AsseticPass());
     }
 }

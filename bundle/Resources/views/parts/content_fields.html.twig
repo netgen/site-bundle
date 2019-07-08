@@ -2,7 +2,7 @@
 
 {% block ezimage_field %}
 {% apply spaceless %}
-    {% if not ez_is_field_empty(content, field) %}
+    {% if not ez_field_is_empty(content, field) %}
         {% set link_href = parameters.link_href|default('') %}
         {% set link_target = parameters.link_target|default('') %}
         {% set use_image_size = parameters.use_image_size|default(false) %}
@@ -70,7 +70,7 @@
 
 {% block ezbinaryfile_field %}
 {% apply spaceless %}
-    {% if not ez_is_field_empty(content, field) %}
+    {% if not ez_field_is_empty(content, field) %}
         <a href="{{ path('ngsite_download', { contentId: contentInfo.id, fieldId: field.id }) }}" {{ block('field_attributes') }}>
             {{ field.value.fileName }}
         </a>&nbsp;({{ field.value.fileSize|ez_file_size(1) }})

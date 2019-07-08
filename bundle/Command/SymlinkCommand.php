@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 
-abstract class SymlinkCommand extends ContainerAwareCommand
+abstract class SymlinkCommand extends Command
 {
     /**
      * If true, command will destroy existing symlinks before recreating them.

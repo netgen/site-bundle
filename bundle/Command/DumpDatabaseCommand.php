@@ -5,19 +5,32 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Command;
 
 use RuntimeException;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
-class DumpDatabaseCommand extends ContainerAwareCommand
+class DumpDatabaseCommand extends Command
 {
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    private $container;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+
+        // Parent constructor call is mandatory for commands registered as services
+        parent::__construct();
+    }
+
     protected function configure(): void
     {
-        $this->setName('ngsite:database:dump')
-            ->setDescription('Dumps the currently configured database to the provided file')
+        $this->setDescription('Dumps the currently configured database to the provided file')
             ->addArgument(
                 'file',
                 InputArgument::REQUIRED,
@@ -27,12 +40,10 @@ class DumpDatabaseCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $container = $this->getContainer();
-
-        $databaseName = $container->getParameter('database_name');
-        $databaseHost = $container->getParameter('database_host');
-        $databaseUser = $container->getParameter('database_user');
-        $databasePassword = $container->getParameter('database_password');
+        $databaseName = $this->container->getParameter('database_name');
+        $databaseHost = $this->container->getParameter('database_host');
+        $databaseUser = $this->container->getParameter('database_user');
+        $databasePassword = $this->container->getParameter('database_password');
 
         $filePath = getcwd() . \DIRECTORY_SEPARATOR . trim($input->getArgument('file'), '/');
         $targetDirectory = dirname($filePath);

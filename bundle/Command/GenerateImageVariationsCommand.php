@@ -72,8 +72,7 @@ class GenerateImageVariationsCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName('ngsite:content:generate-image-variations')
-            ->setDescription('Generates image variations for images based on provided filters')
+        $this->setDescription('Generates image variations for images based on provided filters')
             ->addOption('content-types', null, InputOption::VALUE_OPTIONAL)
             ->addOption('fields', null, InputOption::VALUE_OPTIONAL)
             ->addOption('variations', null, InputOption::VALUE_OPTIONAL)

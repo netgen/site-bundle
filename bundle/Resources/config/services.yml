@@ -1,4 +1,30 @@
 services:
+    ngsite.command.update_publish_date:
+        class: Netgen\Bundle\SiteBundle\Command\UpdatePublishDateCommand
+        public: false
+        arguments:
+            - "@ezpublish.api.repository"
+            - "@ezpublish.field_helper"
+        tags:
+            - { name: console.command, command: 'ngsite:content:update-publish-date' }
+
+    ngsite.command.symlink_project:
+        class: Netgen\Bundle\SiteBundle\Command\SymlinkProjectCommand
+        public: false
+        arguments:
+            - "@kernel"
+            - "@filesystem"
+        tags:
+            - { name: console.command, command: 'ngsite:symlink:project' }
+
+    ngsite.command.dump_database:
+        class: Netgen\Bundle\SiteBundle\Command\DumpDatabaseCommand
+        public: false
+        arguments:
+            - "@service_container"
+        tags:
+            - { name: console.command, command: 'ngsite:database:dump' }
+
     ngsite.command.generate_image_variations:
         class: Netgen\Bundle\SiteBundle\Command\GenerateImageVariationsCommand
         public: false

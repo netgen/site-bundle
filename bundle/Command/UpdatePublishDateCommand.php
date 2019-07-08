@@ -10,20 +10,39 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Helper\FieldHelper;
 use RuntimeException;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-class UpdatePublishDateCommand extends ContainerAwareCommand
+class UpdatePublishDateCommand extends Command
 {
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    private $repository;
+
+    /**
+     * @var \eZ\Publish\Core\Helper\FieldHelper
+     */
+    private $fieldHelper;
+
+    public function __construct(Repository $repository, FieldHelper $fieldHelper)
+    {
+        $this->repository = $repository;
+        $this->fieldHelper = $fieldHelper;
+
+        // Parent constructor call is mandatory for commands registered as services
+        parent::__construct();
+    }
+
     protected function configure(): void
     {
-        $this->setName('ngsite:content:update-publish-date')
-            ->setDescription('Updates publish date of all content of specified content type')
+        $this->setDescription('Updates publish date of all content of specified content type')
             ->addOption(
                 'content-type',
                 'c',
@@ -58,10 +77,8 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
             throw new RuntimeException("Parameter '--field-def-identifier' ('-f') is required");
         }
 
-        $contentTypeService = $this->getContainer()->get('ezpublish.api.service.content_type');
-
         try {
-            $contentType = $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
+            $contentType = $this->repository->getContentTypeService()->loadContentTypeByIdentifier($contentTypeIdentifier);
         } catch (NotFoundException $e) {
             throw new RuntimeException("Content type '{$contentTypeIdentifier}' does not exist");
         }
@@ -75,7 +92,7 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
             throw new RuntimeException("Field definition '{$fieldDefIdentifier}' must be of 'ezdatetime' or 'ezdate' field type");
         }
 
-        $searchService = $this->getContainer()->get('ezpublish.api.service.search');
+        $searchService = $this->repository->getSearchService();
 
         $query = new Query();
         $query->filter = new Criterion\ContentTypeIdentifier($contentTypeIdentifier);
@@ -96,9 +113,6 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
         }
 
         $output->write(PHP_EOL);
-
-        $fieldHelper = $this->getContainer()->get('ezpublish.field_helper');
-        $repository = $this->getContainer()->get('ezpublish.api.repository');
 
         $progress = new ProgressBar($output, $searchResult->totalCount);
         $progress->start();
@@ -128,13 +142,13 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
                 $dateValueData = $fieldDefinition->fieldTypeIdentifier === 'ezdatetime' ? $dateFieldValue->value : $dateFieldValue->date;
 
                 if (
-                    !$fieldHelper->isFieldEmpty($content, $fieldDefIdentifier)
+                    !$this->fieldHelper->isFieldEmpty($content, $fieldDefIdentifier)
                     && $content->contentInfo->publishedDate->getTimestamp() !== $dateValueData->getTimestamp()
                 ) {
-                    $metadataUpdateStruct = $repository->getContentService()->newContentMetadataUpdateStruct();
+                    $metadataUpdateStruct = $this->repository->getContentService()->newContentMetadataUpdateStruct();
                     $metadataUpdateStruct->publishedDate = $dateValueData;
 
-                    $repository->sudo(
+                    $this->repository->sudo(
                         static function (Repository $repository) use ($content, $metadataUpdateStruct): Content {
                             return $repository->getContentService()->updateContentMetadata($content->contentInfo, $metadataUpdateStruct);
                         }

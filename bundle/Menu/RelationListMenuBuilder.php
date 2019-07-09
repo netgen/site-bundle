@@ -39,12 +39,12 @@ class RelationListMenuBuilder
         FactoryInterface $factory,
         LoadService $loadService,
         SiteInfoHelper $siteInfoHelper,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->factory = $factory;
         $this->loadService = $loadService;
         $this->siteInfoHelper = $siteInfoHelper;
-        $this->logger = $logger ?: new NullLogger();
+        $this->logger = $logger ?? new NullLogger();
     }
 
     /**

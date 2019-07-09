@@ -19,7 +19,7 @@ class PasswordResetRequestEvent extends Event
      */
     protected $user;
 
-    public function __construct(string $email, User $user = null)
+    public function __construct(string $email, ?User $user = null)
     {
         $this->email = $email;
         $this->user = $user;

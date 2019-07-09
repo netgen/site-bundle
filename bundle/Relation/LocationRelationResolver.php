@@ -23,13 +23,13 @@ class LocationRelationResolver implements LocationRelationResolverInterface
      */
     protected $logger;
 
-    public function __construct(LoadService $loadService, LoggerInterface $logger = null)
+    public function __construct(LoadService $loadService, ?LoggerInterface $logger = null)
     {
         $this->loadService = $loadService;
-        $this->logger = $logger ?: new NullLogger();
+        $this->logger = $logger ?? new NullLogger();
     }
 
-    public function loadRelations(Location $location, string $fieldIdentifier = null, array $options = []): array
+    public function loadRelations(Location $location, ?string $fieldIdentifier = null, array $options = []): array
     {
         $relatedItems = [];
 

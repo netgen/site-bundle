@@ -26,7 +26,7 @@ class MultimediaRelationResolver implements LocationRelationResolverInterface
         $this->innerResolver = $innerResolver;
     }
 
-    public function loadRelations(Location $location, string $fieldIdentifier = null, array $options = []): array
+    public function loadRelations(Location $location, ?string $fieldIdentifier = null, array $options = []): array
     {
         $optionsResolver = new OptionsResolver();
         $this->configureOptions($optionsResolver);

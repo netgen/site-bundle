@@ -33,11 +33,11 @@ class EzLinkDirectDownload implements Converter
     public function __construct(
         LoadService $loadService,
         RouterInterface $router,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->loadService = $loadService;
         $this->router = $router;
-        $this->logger = $logger ?: new NullLogger();
+        $this->logger = $logger ?? new NullLogger();
     }
 
     /**

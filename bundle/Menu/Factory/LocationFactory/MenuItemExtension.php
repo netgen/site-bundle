@@ -52,13 +52,13 @@ class MenuItemExtension implements ExtensionInterface
         FilterService $filterService,
         UrlGeneratorInterface $urlGenerator,
         RequestStack $requestStack,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->loadService = $loadService;
         $this->filterService = $filterService;
         $this->urlGenerator = $urlGenerator;
         $this->requestStack = $requestStack;
-        $this->logger = $logger ?: new NullLogger();
+        $this->logger = $logger ?? new NullLogger();
     }
 
     public function matches(Location $location): bool

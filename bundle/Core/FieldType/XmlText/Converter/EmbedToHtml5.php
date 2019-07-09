@@ -27,7 +27,7 @@ class EmbedToHtml5 extends BaseEmbedToHtml5
 
     protected function processTag(DOMDocument $xmlDoc, $tagName): void
     {
-        $this->logger = $this->logger ?: new NullLogger();
+        $this->logger = $this->logger ?? new NullLogger();
         $permissionResolver = $this->repository->getPermissionResolver();
 
         /** @var \DOMElement $embed */

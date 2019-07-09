@@ -17,5 +17,5 @@ interface LocationRelationResolverInterface
      *
      * @return \Netgen\EzPlatformSiteApi\API\Values\Location[]
      */
-    public function loadRelations(Location $location, string $fieldIdentifier = null, array $options = []): array;
+    public function loadRelations(Location $location, ?string $fieldIdentifier = null, array $options = []): array;
 }

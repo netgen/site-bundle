@@ -22,7 +22,7 @@ class ProfilerCachePurgerCommand extends Command
      *
      * @param \Symfony\Component\HttpKernel\Profiler\Profiler|null $profiler
      */
-    public function __construct(Profiler $profiler = null)
+    public function __construct(?Profiler $profiler = null)
     {
         $this->profiler = $profiler;
 

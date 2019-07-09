@@ -69,7 +69,7 @@ class MailHelper
         TranslatorInterface $translator,
         ConfigResolverInterface $configResolver,
         SiteInfoHelper $siteInfoHelper,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->mailer = $mailer;
         $this->twig = $twig;
@@ -77,7 +77,7 @@ class MailHelper
         $this->translator = $translator;
         $this->configResolver = $configResolver;
         $this->siteInfoHelper = $siteInfoHelper;
-        $this->logger = $logger ?: new NullLogger();
+        $this->logger = $logger ?? new NullLogger();
     }
 
     /**

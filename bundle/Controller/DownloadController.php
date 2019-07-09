@@ -118,7 +118,7 @@ class DownloadController extends Controller
                 $response
             );
 
-            $this->dispatcher->dispatch(SiteEvents::CONTENT_DOWNLOAD, $downloadEvent);
+            $this->dispatcher->dispatch($downloadEvent, SiteEvents::CONTENT_DOWNLOAD);
         }
 
         return $response;

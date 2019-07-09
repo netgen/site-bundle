@@ -60,7 +60,7 @@ class LocationFactory implements FactoryInterface
         $menuItem->setName(md5(($menuItem->getUri() ?? '') . '-' . $locationId));
 
         $event = new LocationMenuItemEvent($menuItem, $menuItem->getExtra('ezlocation'));
-        $this->eventDispatcher->dispatch(SiteEvents::MENU_LOCATION_ITEM, $event);
+        $this->eventDispatcher->dispatch($event, SiteEvents::MENU_LOCATION_ITEM);
 
         return $menuItem;
     }

@@ -131,7 +131,7 @@ class UserController extends Controller
         $userGroupId = $this->getConfigResolver()->getParameter('user.user_group_content_id', 'ngsite');
 
         $preUserRegisterEvent = new UserEvents\PreRegisterEvent($data->payload);
-        $this->eventDispatcher->dispatch(SiteEvents::USER_PRE_REGISTER, $preUserRegisterEvent);
+        $this->eventDispatcher->dispatch($preUserRegisterEvent, SiteEvents::USER_PRE_REGISTER);
         $data->payload = $preUserRegisterEvent->getUserCreateStruct();
 
         /** @var \eZ\Publish\API\Repository\Values\User\User $newUser */
@@ -147,7 +147,7 @@ class UserController extends Controller
         );
 
         $userRegisterEvent = new UserEvents\PostRegisterEvent($newUser);
-        $this->eventDispatcher->dispatch(SiteEvents::USER_POST_REGISTER, $userRegisterEvent);
+        $this->eventDispatcher->dispatch($userRegisterEvent, SiteEvents::USER_POST_REGISTER);
 
         if ($newUser->enabled) {
             return $this->render(
@@ -190,7 +190,7 @@ class UserController extends Controller
             $users[0] ?? null
         );
 
-        $this->eventDispatcher->dispatch(SiteEvents::USER_ACTIVATION_REQUEST, $activationRequestEvent);
+        $this->eventDispatcher->dispatch($activationRequestEvent, SiteEvents::USER_ACTIVATION_REQUEST);
 
         return $this->render(
             $this->getConfigResolver()->getParameter('template.user.activate_sent', 'ngsite')
@@ -231,7 +231,7 @@ class UserController extends Controller
         $userUpdateStruct->enabled = true;
 
         $preActivateEvent = new UserEvents\PreActivateEvent($user, $userUpdateStruct);
-        $this->eventDispatcher->dispatch(SiteEvents::USER_PRE_ACTIVATE, $preActivateEvent);
+        $this->eventDispatcher->dispatch($preActivateEvent, SiteEvents::USER_PRE_ACTIVATE);
         $userUpdateStruct = $preActivateEvent->getUserUpdateStruct();
 
         $user = $this->getRepository()->sudo(
@@ -241,7 +241,7 @@ class UserController extends Controller
         );
 
         $postActivateEvent = new UserEvents\PostActivateEvent($user);
-        $this->eventDispatcher->dispatch(SiteEvents::USER_POST_ACTIVATE, $postActivateEvent);
+        $this->eventDispatcher->dispatch($postActivateEvent, SiteEvents::USER_POST_ACTIVATE);
 
         return $this->render(
             $this->getConfigResolver()->getParameter('template.user.activate_done', 'ngsite')
@@ -272,7 +272,7 @@ class UserController extends Controller
             $users[0] ?? null
         );
 
-        $this->eventDispatcher->dispatch(SiteEvents::USER_PASSWORD_RESET_REQUEST, $passwordResetRequestEvent);
+        $this->eventDispatcher->dispatch($passwordResetRequestEvent, SiteEvents::USER_PASSWORD_RESET_REQUEST);
 
         return $this->render(
             $this->getConfigResolver()->getParameter('template.user.forgot_password_sent', 'ngsite')
@@ -327,7 +327,7 @@ class UserController extends Controller
         $userUpdateStruct->password = $data['password'];
 
         $prePasswordResetEvent = new UserEvents\PrePasswordResetEvent($user, $userUpdateStruct);
-        $this->eventDispatcher->dispatch(SiteEvents::USER_PRE_PASSWORD_RESET, $prePasswordResetEvent);
+        $this->eventDispatcher->dispatch($prePasswordResetEvent, SiteEvents::USER_PRE_PASSWORD_RESET);
         $userUpdateStruct = $prePasswordResetEvent->getUserUpdateStruct();
 
         $user = $this->getRepository()->sudo(
@@ -337,7 +337,7 @@ class UserController extends Controller
         );
 
         $postPasswordResetEvent = new UserEvents\PostPasswordResetEvent($user);
-        $this->eventDispatcher->dispatch(SiteEvents::USER_POST_PASSWORD_RESET, $postPasswordResetEvent);
+        $this->eventDispatcher->dispatch($postPasswordResetEvent, SiteEvents::USER_POST_PASSWORD_RESET);
 
         return $this->render(
             $this->getConfigResolver()->getParameter('template.user.reset_password_done', 'ngsite')

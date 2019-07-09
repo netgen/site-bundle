@@ -56,12 +56,15 @@ services:
         parent: ngsite.controller.base
         arguments:
             - "@router"
+            - "@netgen.ezplatform_site.site"
+            - "@ezpublish.config.resolver"
 
     ngsite.controller.embed_view:
         class: Netgen\Bundle\SiteBundle\Controller\EmbedViewController
         public: true
         parent: ngsite.controller.base
         arguments:
+            - "@netgen.ezplatform_site.site"
             - "@router"
             - "@?logger"
 
@@ -69,6 +72,10 @@ services:
         class: Netgen\Bundle\SiteBundle\Controller\SearchController
         public: true
         parent: ngsite.controller.base
+        arguments:
+            - "@netgen.ezplatform_site.site"
+            - "@ezpublish.query_type.registry"
+            - "@ezpublish.config.resolver"
 
     ngsite.controller.menu:
         class: Netgen\Bundle\SiteBundle\Controller\MenuController
@@ -77,6 +84,7 @@ services:
         arguments:
             - "@knp_menu.menu_provider"
             - "@knp_menu.renderer_provider"
+            - "@ezpublish.config.resolver"
             - "@fos_http_cache.http.symfony_response_tagger"
 
     ngsite.controller.parts:
@@ -92,6 +100,7 @@ services:
         public: true
         parent: ngsite.controller.base
         arguments:
+            - "@netgen.ezplatform_site.site"
             - "@ezpublish.fieldType.ezbinaryfile.io_service"
             - "@ezpublish.fieldType.ezimage.io_service"
             - "@translator"

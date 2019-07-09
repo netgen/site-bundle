@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Controller;
 
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use FOS\HttpCache\ResponseTagger;
 use Knp\Menu\Provider\MenuProviderInterface;
 use Knp\Menu\Renderer\RendererProviderInterface;
@@ -23,6 +24,11 @@ class MenuController extends Controller
     protected $menuRenderer;
 
     /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    protected $configResolver;
+
+    /**
      * @var \FOS\HttpCache\ResponseTagger
      */
     protected $responseTagger;
@@ -30,10 +36,12 @@ class MenuController extends Controller
     public function __construct(
         MenuProviderInterface $menuProvider,
         RendererProviderInterface $menuRenderer,
+        ConfigResolverInterface $configResolver,
         ResponseTagger $responseTagger
     ) {
         $this->menuProvider = $menuProvider;
         $this->menuRenderer = $menuRenderer;
+        $this->configResolver = $configResolver;
         $this->responseTagger = $responseTagger;
     }
 
@@ -49,7 +57,7 @@ class MenuController extends Controller
             'firstClass' => $request->attributes->get('firstClass') ?: 'firstli',
             'currentClass' => $request->attributes->get('currentClass') ?: 'active',
             'lastClass' => $request->attributes->get('lastClass') ?: 'lastli',
-            'template' => $this->getConfigResolver()->getParameter('template.menu', 'ngsite'),
+            'template' => $this->configResolver->getParameter('template.menu', 'ngsite'),
         ];
 
         if ($request->attributes->has('template')) {

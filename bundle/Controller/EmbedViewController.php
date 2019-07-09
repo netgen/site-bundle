@@ -7,12 +7,15 @@ namespace Netgen\Bundle\SiteBundle\Controller;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
+use Netgen\EzPlatformSiteApi\API\Site;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\Routing\RouterInterface;
 
 class EmbedViewController extends Controller
 {
+    protected $site;
+
     /**
      * @var \Symfony\Component\Routing\RouterInterface
      */
@@ -23,8 +26,9 @@ class EmbedViewController extends Controller
      */
     protected $logger;
 
-    public function __construct(RouterInterface $router, LoggerInterface $logger = null)
+    public function __construct(Site $site, RouterInterface $router, LoggerInterface $logger = null)
     {
+        $this->site = $site;
         $this->router = $router;
         $this->logger = $logger ?: new NullLogger();
     }
@@ -42,7 +46,7 @@ class EmbedViewController extends Controller
                 $locationId = (int) mb_substr($targetLink, 9);
 
                 try {
-                    $location = $this->getSite()->getLoadService()->loadLocation($locationId);
+                    $location = $this->site->getLoadService()->loadLocation($locationId);
                     $content = $location->content;
                 } catch (NotFoundException $e) {
                     $targetLink = null;
@@ -57,7 +61,7 @@ class EmbedViewController extends Controller
                 $linkedContentId = (int) mb_substr($targetLink, 11);
 
                 try {
-                    $content = $this->getSite()->getLoadService()->loadContent($linkedContentId);
+                    $content = $this->site->getLoadService()->loadContent($linkedContentId);
                 } catch (NotFoundException $e) {
                     $targetLink = null;
 
@@ -79,7 +83,7 @@ class EmbedViewController extends Controller
                 }
 
                 if ($fieldName !== null) {
-                    $directDownloadLink = $this->generateUrl(
+                    $directDownloadLink = $this->router->generate(
                         'ngsite_download',
                         [
                             'contentId' => $content->id,

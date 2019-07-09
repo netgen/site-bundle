@@ -10,6 +10,7 @@ use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use Netgen\Bundle\SiteBundle\Event\Content\DownloadEvent;
 use Netgen\Bundle\SiteBundle\Event\SiteEvents;
+use Netgen\EzPlatformSiteApi\API\Site;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -18,6 +19,11 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 class DownloadController extends Controller
 {
+    /**
+     * @var \Netgen\EzPlatformSiteApi\API\Site
+     */
+    protected $site;
+
     /**
      * @var \eZ\Publish\Core\IO\IOServiceInterface
      */
@@ -39,11 +45,13 @@ class DownloadController extends Controller
     protected $dispatcher;
 
     public function __construct(
+        Site $site,
         IOServiceInterface $ioFileService,
         IOServiceInterface $ioImageService,
         TranslatorInterface $translator,
         EventDispatcherInterface $dispatcher
     ) {
+        $this->site = $site;
         $this->ioFileService = $ioFileService;
         $this->ioImageService = $ioImageService;
         $this->translator = $translator;
@@ -68,7 +76,7 @@ class DownloadController extends Controller
      */
     public function downloadFile(Request $request, $contentId, $fieldId, $isInline = false): BinaryStreamResponse
     {
-        $content = $this->getSite()->getLoadService()->loadContent(
+        $content = $this->site->getLoadService()->loadContent(
             $contentId,
             $request->query->get('version'),
             $request->query->get('inLanguage')

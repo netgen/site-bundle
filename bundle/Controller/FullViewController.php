@@ -7,7 +7,10 @@ namespace Netgen\Bundle\SiteBundle\Controller;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
+use Netgen\EzPlatformSiteApi\API\Site;
 use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\FilterAdapter;
@@ -24,9 +27,24 @@ class FullViewController extends Controller
      */
     protected $router;
 
-    public function __construct(RouterInterface $router)
-    {
+    /**
+     * @var \Netgen\EzPlatformSiteApi\API\Site
+     */
+    protected $site;
+
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    protected $configResolver;
+
+    public function __construct(
+        RouterInterface $router,
+        Site $site,
+        ConfigResolverInterface $configResolver
+    ) {
         $this->router = $router;
+        $this->site = $site;
+        $this->configResolver = $configResolver;
     }
 
     /**
@@ -74,7 +92,7 @@ class FullViewController extends Controller
         $pager = new Pagerfanta(
             new FilterAdapter(
                 $query,
-                $this->getSite()->getFilterService()
+                $this->site->getFilterService()
             )
         );
 
@@ -147,8 +165,15 @@ class FullViewController extends Controller
                 return new RedirectResponse($externalRedirectValue->link, RedirectResponse::HTTP_MOVED_PERMANENTLY);
             }
 
+            $rootPath = $this->router->generate(
+                UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+                [
+                    'locationId' => $this->getSite()->getSettings()->rootLocationId,
+                ]
+            );
+
             return new RedirectResponse(
-                $this->router->generate($this->getRootLocation()) . trim($externalRedirectValue->link, '/'),
+                $rootPath . trim($externalRedirectValue->link, '/'),
                 RedirectResponse::HTTP_MOVED_PERMANENTLY
             );
         }

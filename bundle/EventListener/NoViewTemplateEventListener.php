@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\EventListener;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use eZ\Publish\Core\MVC\Symfony\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\RedirectController;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -84,7 +85,7 @@ class NoViewTemplateEventListener implements EventSubscriberInterface
                 $rootLocationId = $this->configResolver->getParameter('content.tree_root.location_id');
 
                 return new RedirectResponse(
-                    $this->urlGenerator->generate('ez_urlalias', ['locationId' => $rootLocationId]),
+                    $this->urlGenerator->generate(UrlAliasRouter::URL_ALIAS_ROUTE_NAME, ['locationId' => $rootLocationId]),
                     RedirectResponse::HTTP_MOVED_PERMANENTLY
                 );
             }

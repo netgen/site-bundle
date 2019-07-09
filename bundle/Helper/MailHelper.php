@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Helper;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -130,7 +131,7 @@ class MailHelper
     {
         if ($this->siteUrl === null) {
             $this->siteUrl = $this->urlGenerator->generate(
-                'ez_urlalias',
+                UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
                 [
                     'locationId' => $this->configResolver->getParameter('content.tree_root.location_id'),
                 ],

@@ -1,7 +1,6 @@
 services:
     ngsite.matcher.config_resolver:
         class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased
-        public: false
         abstract: true
         arguments: ["@ezpublish.config.resolver"]
 

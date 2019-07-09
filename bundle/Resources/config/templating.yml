@@ -1,19 +1,16 @@
 services:
     twig.extension.array:
         class: Twig\Extensions\ArrayExtension
-        public: false
         tags:
             - { name: twig.extension }
 
     twig.extension.date:
         class: Twig\Extensions\DateExtension
-        public: false
         tags:
             - { name: twig.extension }
 
     ngsite.templating.global_variable:
         class: Netgen\Bundle\SiteBundle\Templating\GlobalVariable
-        public: false
         arguments:
             - "@ngsite.helper.site_info_helper"
             - "@ezpublish.api.repository"
@@ -21,13 +18,11 @@ services:
 
     ngsite.templating.twig.extension.site:
         class: Netgen\Bundle\SiteBundle\Templating\Twig\Extension\SiteExtension
-        public: false
         tags:
             - { name: twig.extension }
 
     ngsite.templating.twig.runtime.site:
         class: Netgen\Bundle\SiteBundle\Templating\Twig\Extension\SiteRuntime
-        public: false
         arguments:
             - "@ngsite.helper.path_helper"
             - "@ezpublish.locale.converter"
@@ -37,13 +32,11 @@ services:
 
     ngsite.templating.twig.extension.topic_url:
         class: Netgen\Bundle\SiteBundle\Templating\Twig\Extension\TopicUrlExtension
-        public: false
         tags:
             - { name: twig.extension }
 
     ngsite.templating.twig.runtime.topic_url:
         class: Netgen\Bundle\SiteBundle\Templating\Twig\Extension\TopicUrlRuntime
-        public: false
         arguments:
             - "@ngsite.topic.url_generator"
         tags:

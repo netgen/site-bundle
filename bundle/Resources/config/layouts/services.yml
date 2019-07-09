@@ -21,13 +21,11 @@ parameters:
 services:
     ngsite.layouts.block.plugin.title_icon:
         class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\TitleIconPlugin
-        public: false
         tags:
             - { name: netgen_layouts.block_definition_handler.plugin, priority: 100 }
 
     ngsite.layouts.block.plugin.vertical_whitespace:
         class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\VerticalWhitespacePlugin
-        public: false
         arguments:
             - "%ngsite.layouts.block.plugin.vertical_whitespace.positions%"
             - "%ngsite.layouts.block.plugin.vertical_whitespace.sizes%"
@@ -36,7 +34,6 @@ services:
 
     ngsite.layouts.block.plugin.background_image:
         class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\BackgroundImagePlugin
-        public: false
         arguments:
             - "@netgen.ezplatform_site.load_service"
         tags:
@@ -44,7 +41,6 @@ services:
 
     ngsite.layouts.block.plugin.background_color:
         class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\BackgroundColorPlugin
-        public: false
         arguments:
             - "%ngsite.layouts.block.plugin.background_color.colors%"
         tags:
@@ -52,7 +48,6 @@ services:
 
     ngsite.layouts.block.plugin.set_container:
         class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\SetContainerPlugin
-        public: false
         arguments:
             - "%ngsite.layouts.block.plugin.set_container.sizes%"
         tags:
@@ -60,7 +55,6 @@ services:
 
     ngsite.layouts.query.content_by_topic:
         class: Netgen\Bundle\SiteBundle\Layouts\Query\ContentByTopicHandler
-        public: false
         arguments:
             - "@ezpublish.api.service.location"
             - "@netgen.ezplatform_site.load_service"

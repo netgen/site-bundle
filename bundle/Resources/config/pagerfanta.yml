@@ -1,7 +1,6 @@
 services:
     ngsite.pagerfanta.view.site:
         class: Netgen\Bundle\SiteBundle\Pagerfanta\View\SiteView
-        public: false
         lazy: true
         arguments:
             - "@twig"

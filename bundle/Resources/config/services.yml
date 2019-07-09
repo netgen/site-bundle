@@ -1,7 +1,6 @@
 services:
     ngsite.command.update_publish_date:
         class: Netgen\Bundle\SiteBundle\Command\UpdatePublishDateCommand
-        public: false
         arguments:
             - "@ezpublish.api.repository"
             - "@ezpublish.field_helper"
@@ -10,7 +9,6 @@ services:
 
     ngsite.command.symlink_project:
         class: Netgen\Bundle\SiteBundle\Command\SymlinkProjectCommand
-        public: false
         arguments:
             - "@kernel"
             - "@filesystem"
@@ -19,7 +17,6 @@ services:
 
     ngsite.command.dump_database:
         class: Netgen\Bundle\SiteBundle\Command\DumpDatabaseCommand
-        public: false
         arguments:
             - "@service_container"
         tags:
@@ -27,7 +24,6 @@ services:
 
     ngsite.command.generate_image_variations:
         class: Netgen\Bundle\SiteBundle\Command\GenerateImageVariationsCommand
-        public: false
         arguments:
             - "@ezpublish.api.repository"
             - "@ezpublish.fieldType.ezimage.variation_service"
@@ -38,7 +34,6 @@ services:
 
     ngsite.command.profiler_cache_purger:
         class: Netgen\Bundle\SiteBundle\Command\ProfilerCachePurgerCommand
-        public: false
         arguments:
             - "@?profiler"
         tags:
@@ -47,7 +42,6 @@ services:
     ngsite.controller.base:
         class: Netgen\Bundle\SiteBundle\Controller\Controller
         parent: netgen.ezplatform_site.controller.base
-        public: false
         abstract: true
 
     ngsite.controller.full_view:
@@ -118,7 +112,6 @@ services:
 
     ngsite.param_converter.content:
         class: Netgen\Bundle\SiteBundle\ParamConverter\ContentParamConverter
-        public: false
         arguments:
             - "@netgen.ezplatform_site.load_service"
         tags:
@@ -126,7 +119,6 @@ services:
 
     ngsite.param_converter.location:
         class: Netgen\Bundle\SiteBundle\ParamConverter\LocationParamConverter
-        public: false
         arguments:
             - "@netgen.ezplatform_site.load_service"
         tags:
@@ -134,7 +126,6 @@ services:
 
     ngsite.relation.location_resolver:
         class: Netgen\Bundle\SiteBundle\Relation\LocationRelationResolver
-        public: false
         arguments:
             - "@netgen.ezplatform_site.load_service"
             - "@?logger"
@@ -143,14 +134,12 @@ services:
 
     ngsite.relation.multimedia_resolver:
         class: Netgen\Bundle\SiteBundle\Relation\MultimediaRelationResolver
-        public: false
         arguments:
             - "@netgen.ezplatform_site.load_service"
             - "@ngsite.relation.location_resolver"
 
     ngsite.helper.path_helper:
         class: Netgen\Bundle\SiteBundle\Helper\PathHelper
-        public: false
         arguments:
             - "@netgen.ezplatform_site.load_service"
             - "@ezpublish.config.resolver"
@@ -158,14 +147,12 @@ services:
 
     ngsite.helper.site_info_helper:
         class: Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper
-        public: false
         arguments:
             - "@netgen.ezplatform_site.load_service"
             - "@ezpublish.config.resolver"
 
     ngsite.helper.mail_helper:
         class: Netgen\Bundle\SiteBundle\Helper\MailHelper
-        public: false
         arguments:
             - "@mailer"
             - "@twig"
@@ -177,21 +164,18 @@ services:
 
     ngsite.repository.nguser_setting:
         class: Doctrine\ORM\EntityRepository
-        public: false
         factory: ["@doctrine.orm.default_entity_manager", getRepository]
         arguments:
             - Netgen\Bundle\SiteBundle\Entity\NgUserSetting
 
     ngsite.repository.ezuser_accountkey:
         class: Doctrine\ORM\EntityRepository
-        public: false
         factory: ["@doctrine.orm.default_entity_manager", getRepository]
         arguments:
             - Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
 
     ngsite.slot.create_user:
         class: Netgen\Bundle\SiteBundle\Core\Slot\CreateUserSlot
-        public: false
         arguments:
             - "@ezpublish.api.service.user"
             - "@ngsite.repository.nguser_setting"
@@ -200,7 +184,6 @@ services:
 
     ngsite.routing.site_content_url_alias_router:
         class: Netgen\Bundle\SiteBundle\Routing\SiteContentUrlAliasRouter
-        public: false
         arguments:
             - "@ezpublish.urlalias_generator"
             - "@?router.request_context"
@@ -209,7 +192,6 @@ services:
 
     ngsite.routing.site_location_url_alias_router:
         class: Netgen\Bundle\SiteBundle\Routing\SiteLocationUrlAliasRouter
-        public: false
         arguments:
             - "@ezpublish.urlalias_generator"
             - "@?router.request_context"
@@ -218,7 +200,6 @@ services:
 
     ngsite.opengraph.handler.site_name:
         class: Netgen\Bundle\SiteBundle\OpenGraph\Handler\SiteName
-        public: false
         arguments:
             - "@ngsite.helper.site_info_helper"
         tags:
@@ -226,7 +207,6 @@ services:
 
     ngsite.opengraph.handler.site_image:
         class: Netgen\Bundle\SiteBundle\OpenGraph\Handler\SiteImage
-        public: false
         arguments:
             - "@ngsite.helper.site_info_helper"
             - "@request_stack"
@@ -235,7 +215,6 @@ services:
 
     ngsite.query_type.search:
         class: Netgen\Bundle\SiteBundle\QueryType\SearchQueryType
-        public: false
         arguments:
             - "@netgen.ezplatform_site.site"
             - "@ezpublish.config.resolver"
@@ -244,7 +223,6 @@ services:
 
     ngsite.topic.url_generator:
         class: Netgen\Bundle\SiteBundle\Topic\UrlGenerator
-        public: false
         arguments:
             - "@netgen.ezplatform_site.find_service"
             - "@netgen.ezplatform_site.load_service"
@@ -257,7 +235,6 @@ services:
 #
 #    ngsite.context_provider.session:
 #        class: Netgen\Bundle\SiteBundle\ContextProvider\SessionContextProvider
-#        public: false
 #        arguments:
 #            - "@session"
 #    tags:
@@ -265,7 +242,6 @@ services:
 #
 #    ngsite.context_provider.user:
 #        class: Netgen\Bundle\SiteBundle\ContextProvider\UserContextProvider
-#        public: false
 #        arguments:
 #            - "@ezpublish.api.repository"
 #    tags:

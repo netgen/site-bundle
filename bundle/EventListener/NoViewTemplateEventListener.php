@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\RedirectController;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -55,7 +55,7 @@ class NoViewTemplateEventListener implements EventSubscriberInterface
     /**
      * Redirects to the frontpage for any full view that does not have a template configured.
      */
-    public function getController(FilterControllerEvent $event): void
+    public function getController(ControllerEvent $event): void
     {
         if (!$this->enabled || $event->getRequestType() !== Kernel::MASTER_REQUEST) {
             return;

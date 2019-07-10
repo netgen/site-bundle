@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\SiteBundle\Core\Slot;
+namespace Netgen\Bundle\SiteBundle\Core\EventListener;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\UserService;
-use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\SignalSlot\Slot;
+use eZ\Publish\Core\Event\User\CreateUserEvent;
 use Netgen\Bundle\SiteBundle\Entity\Repository\NgUserSettingRepository;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class CreateUserSlot extends Slot
+class CreateUserListener implements EventSubscriberInterface
 {
     /**
      * @var \eZ\Publish\API\Repository\UserService
@@ -28,20 +27,17 @@ class CreateUserSlot extends Slot
         $this->ngUserSettingRepository = $ngUserSettingRepository;
     }
 
-    public function receive(Signal $signal): void
+    public static function getSubscribedEvents(): array
     {
-        if (!$signal instanceof Signal\UserService\CreateUserSignal) {
-            return;
-        }
+        return [CreateUserEvent::class => 'onCreateUser'];
+    }
 
-        try {
-            $user = $this->userService->loadUser($signal->userId);
-        } catch (NotFoundException $e) {
-            return;
-        }
+    public function onCreateUser(CreateUserEvent $event): void
+    {
+        $user = $event->getUser();
 
         if ($user->enabled) {
-            $this->ngUserSettingRepository->activateUser($signal->userId);
+            $this->ngUserSettingRepository->activateUser($user->id);
         }
     }
 }

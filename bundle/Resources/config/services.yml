@@ -174,13 +174,13 @@ services:
         arguments:
             - Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
 
-    ngsite.slot.create_user:
-        class: Netgen\Bundle\SiteBundle\Core\Slot\CreateUserSlot
+    ngsite.core.event.create_user:
+        class: Netgen\Bundle\SiteBundle\Core\EventListener\CreateUserListener
         arguments:
             - "@ezpublish.api.service.user"
             - "@ngsite.repository.nguser_setting"
         tags:
-            - { name: ezpublish.api.slot, signal: UserService\CreateUserSignal }
+            - { name: kernel.event_subscriber }
 
     ngsite.routing.site_content_url_alias_router:
         class: Netgen\Bundle\SiteBundle\Routing\SiteContentUrlAliasRouter

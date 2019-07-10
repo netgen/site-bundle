@@ -12,7 +12,7 @@ class NgUserSettingRepository extends EntityRepository
     /**
      * Returns if user specified by $userId is activated.
      *
-     * @param mixed $userId
+     * @param int|string $userId
      *
      * @return bool
      */
@@ -30,7 +30,7 @@ class NgUserSettingRepository extends EntityRepository
     /**
      * Activates the user specified by $userId.
      *
-     * @param mixed $userId
+     * @param int|string $userId
      *
      * @return \Netgen\Bundle\SiteBundle\Entity\NgUserSetting
      */

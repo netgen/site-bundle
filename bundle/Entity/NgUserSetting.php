@@ -7,7 +7,7 @@ namespace Netgen\Bundle\SiteBundle\Entity;
 class NgUserSetting
 {
     /**
-     * @var mixed
+     * @var int|string
      */
     protected $userId;
 
@@ -17,9 +17,7 @@ class NgUserSetting
     protected $isActivated;
 
     /**
-     * Constructor.
-     *
-     * @param mixed $userId
+     * @param int|string $userId
      * @param bool $isActivated
      */
     public function __construct($userId, bool $isActivated)
@@ -31,7 +29,7 @@ class NgUserSetting
     /**
      * Set user ID.
      *
-     * @param mixed $userId
+     * @param int|string $userId
      *
      * @return \Netgen\Bundle\SiteBundle\Entity\NgUserSetting
      */
@@ -45,7 +43,7 @@ class NgUserSetting
     /**
      * Get user ID.
      *
-     * @return mixed
+     * @return int|string
      */
     public function getUserId()
     {

@@ -12,7 +12,7 @@ class EzUserAccountKeyRepository extends EntityRepository
     /**
      * Creates a user account key.
      *
-     * @param mixed $userId
+     * @param int|string $userId
      *
      * @return \Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
      */
@@ -58,7 +58,7 @@ class EzUserAccountKeyRepository extends EntityRepository
     /**
      * Removes user account key for user specified by $userId.
      *
-     * @param mixed $userId
+     * @param int|string $userId
      */
     public function removeByUserId($userId): void
     {

@@ -10,17 +10,17 @@ use Symfony\Component\EventDispatcher\Event;
 class DownloadEvent extends Event
 {
     /**
-     * @var int
+     * @var int|string
      */
     protected $contentId;
 
     /**
-     * @var int
+     * @var int|string
      */
     protected $fieldId;
 
     /**
-     * @var int
+     * @var int|string
      */
     protected $versionNo;
 
@@ -30,11 +30,9 @@ class DownloadEvent extends Event
     protected $response;
 
     /**
-     * Constructor.
-     *
-     * @param int $contentId
-     * @param int $fieldId
-     * @param int $versionNo
+     * @param int|string $contentId
+     * @param int|string $fieldId
+     * @param int|string $versionNo
      * @param \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse $response
      */
     public function __construct($contentId, $fieldId, $versionNo, BinaryStreamResponse $response)
@@ -48,7 +46,7 @@ class DownloadEvent extends Event
     /**
      * Get field ID.
      *
-     * @return int
+     * @return int|string
      */
     public function getFieldId()
     {
@@ -58,7 +56,7 @@ class DownloadEvent extends Event
     /**
      * Returns content ID.
      *
-     * @return int
+     * @return int|string
      */
     public function getContentId()
     {
@@ -68,7 +66,7 @@ class DownloadEvent extends Event
     /**
      * Returns version number.
      *
-     * @return int
+     * @return int|string
      */
     public function getVersionNo()
     {

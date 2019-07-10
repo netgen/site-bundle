@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\ContextProvider;
 
 use eZ\Publish\API\Repository\Repository;
-use FOS\HttpCache\UserContext\ContextProviderInterface;
+use FOS\HttpCache\UserContext\ContextProvider;
 use FOS\HttpCache\UserContext\UserContext;
 
-class UserContextProvider implements ContextProviderInterface
+class UserContextProvider implements ContextProvider
 {
     /**
      * @var \eZ\Publish\API\Repository\Repository

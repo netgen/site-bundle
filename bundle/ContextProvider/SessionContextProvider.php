@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\ContextProvider;
 
-use FOS\HttpCache\UserContext\ContextProviderInterface;
+use FOS\HttpCache\UserContext\ContextProvider;
 use FOS\HttpCache\UserContext\UserContext;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class SessionContextProvider implements ContextProviderInterface
+class SessionContextProvider implements ContextProvider
 {
     /**
      * @var \Symfony\Component\HttpFoundation\Session\SessionInterface

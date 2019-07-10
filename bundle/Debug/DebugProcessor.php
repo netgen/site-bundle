@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Debug;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 
 /**
@@ -43,12 +44,12 @@ class DebugProcessor implements DebugLoggerInterface
         return $record;
     }
 
-    public function getLogs(): array
+    public function getLogs(?Request $request = null): array
     {
         return $this->innerProcessor->getLogs();
     }
 
-    public function countErrors(): int
+    public function countErrors(?Request $request = null): int
     {
         return $this->innerProcessor->countErrors();
     }

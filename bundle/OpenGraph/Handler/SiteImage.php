@@ -37,7 +37,7 @@ class SiteImage implements HandlerInterface
         $this->requestStack = $requestStack;
     }
 
-    public function getMetaTags($tagName, array $params = []): array
+    public function getMetaTags(string $tagName, array $params = []): array
     {
         $siteInfoContent = $this->siteInfoHelper->getSiteInfoContent();
 
@@ -62,7 +62,7 @@ class SiteImage implements HandlerInterface
 
         $request = $this->requestStack->getCurrentRequest();
 
-        if (!preg_match('/^https?:\/\//', $siteImage) && $request instanceof Request) {
+        if ($request instanceof Request && !preg_match('/^https?:\/\//', $siteImage)) {
             $siteImage = $request->getUriForPath('/' . ltrim($siteImage, '/'));
         }
 

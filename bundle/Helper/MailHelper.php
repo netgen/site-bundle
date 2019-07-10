@@ -12,7 +12,7 @@ use Psr\Log\NullLogger;
 use Swift_Mailer;
 use Swift_Message;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 class MailHelper
@@ -33,7 +33,7 @@ class MailHelper
     protected $urlGenerator;
 
     /**
-     * @var \Symfony\Component\Translation\TranslatorInterface
+     * @var \Symfony\Contracts\Translation\TranslatorInterface
      */
     protected $translator;
 

@@ -10,7 +10,7 @@ use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
 use Netgen\Bundle\SiteBundle\Helper\PathHelper;
 use Netgen\EzPlatformSiteApi\API\Exceptions\TranslationNotMatchedException;
 use Netgen\EzPlatformSiteApi\API\LoadService;
-use Symfony\Component\Intl\Intl;
+use Symfony\Component\Intl\Languages;
 
 class SiteRuntime
 {
@@ -57,7 +57,7 @@ class SiteRuntime
         }
 
         $posixLanguageCode = mb_substr($posixLanguageCode, 0, 2);
-        $languageName = Intl::getLanguageBundle()->getLanguageName($posixLanguageCode, null, $posixLanguageCode);
+        $languageName = Languages::getName($posixLanguageCode, $posixLanguageCode);
 
         return ucwords($languageName);
     }

@@ -11,11 +11,11 @@ use eZ\Publish\Core\IO\IOServiceInterface;
 use Netgen\Bundle\SiteBundle\Event\Content\DownloadEvent;
 use Netgen\Bundle\SiteBundle\Event\SiteEvents;
 use Netgen\EzPlatformSiteApi\API\Site;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DownloadController extends Controller
 {
@@ -35,12 +35,12 @@ class DownloadController extends Controller
     protected $ioImageService;
 
     /**
-     * @var \Symfony\Component\Translation\TranslatorInterface
+     * @var \Symfony\Contracts\Translation\TranslatorInterface
      */
     protected $translator;
 
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
      */
     protected $dispatcher;
 

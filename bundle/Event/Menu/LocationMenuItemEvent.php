@@ -6,7 +6,7 @@ namespace Netgen\Bundle\SiteBundle\Event\Menu;
 
 use Knp\Menu\ItemInterface;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * This event is triggered when a menu item is build using the location menu factory.

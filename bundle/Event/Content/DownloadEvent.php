@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Event\Content;
 
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class DownloadEvent extends Event
 {

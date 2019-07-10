@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Event\User;
 
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class PreRegisterEvent extends Event
 {

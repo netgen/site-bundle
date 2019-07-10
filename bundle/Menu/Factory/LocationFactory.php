@@ -11,12 +11,12 @@ use Netgen\Bundle\SiteBundle\Event\Menu\LocationMenuItemEvent;
 use Netgen\Bundle\SiteBundle\Event\SiteEvents;
 use Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\ExtensionInterface;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class LocationFactory implements FactoryInterface
 {
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
 

@@ -14,7 +14,6 @@ use Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey;
 use Netgen\Bundle\SiteBundle\Entity\Repository\EzUserAccountKeyRepository;
 use Netgen\Bundle\SiteBundle\Event\SiteEvents;
 use Netgen\Bundle\SiteBundle\Event\User as UserEvents;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -24,6 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Constraints;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class UserController extends Controller
 {
@@ -33,7 +33,7 @@ class UserController extends Controller
     protected $userService;
 
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
 

@@ -93,7 +93,7 @@ class UserController extends Controller
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
-        if (!$form->isValid()) {
+        if (!$form->isSubmitted() || !$form->isValid()) {
             return $this->render(
                 $this->getConfigResolver()->getParameter('template.user.register', 'ngsite'),
                 [
@@ -174,7 +174,7 @@ class UserController extends Controller
         $form = $this->createActivationForm();
         $form->handleRequest($request);
 
-        if (!$form->isValid()) {
+        if (!$form->isSubmitted() || !$form->isValid()) {
             return $this->render(
                 $this->getConfigResolver()->getParameter('template.user.activate', 'ngsite'),
                 [
@@ -256,7 +256,7 @@ class UserController extends Controller
         $form = $this->createForgotPasswordForm();
         $form->handleRequest($request);
 
-        if (!$form->isValid()) {
+        if (!$form->isSubmitted() || !$form->isValid()) {
             return $this->render(
                 $this->getConfigResolver()->getParameter('template.user.forgot_password', 'ngsite'),
                 [
@@ -312,7 +312,7 @@ class UserController extends Controller
         $form = $this->createResetPasswordForm();
         $form->handleRequest($request);
 
-        if (!$form->isValid()) {
+        if (!$form->isSubmitted() || !$form->isValid()) {
             return $this->render(
                 $this->getConfigResolver()->getParameter('template.user.reset_password', 'ngsite'),
                 [

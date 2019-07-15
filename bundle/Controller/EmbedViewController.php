@@ -42,6 +42,9 @@ class EmbedViewController extends Controller
         $targetLink = !empty($parameters['objectParameters']['href']) ? trim($parameters['objectParameters']['href']) : null;
 
         if (!empty($targetLink)) {
+            $location = null;
+            $content = null;
+
             if (mb_stripos($targetLink, 'eznode://') === 0) {
                 $locationId = (int) mb_substr($targetLink, 9);
 
@@ -74,7 +77,7 @@ class EmbedViewController extends Controller
             }
 
             $directDownloadLink = null;
-            if (!empty($content) && !empty($parameters['objectParameters']['link_direct_download'])) {
+            if ($content !== null && !empty($parameters['objectParameters']['link_direct_download'])) {
                 $fieldName = null;
                 if ($content->hasField('file') && !$content->getField('file')->isEmpty()) {
                     $fieldName = 'file';

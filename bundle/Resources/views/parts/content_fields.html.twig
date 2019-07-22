@@ -7,7 +7,7 @@
         {% set link_target = parameters.link_target|default('') %}
         {% set use_image_size = parameters.use_image_size|default(false) %}
         {% set image_alias = ez_image_alias(field, versionInfo, parameters.alias|default('original')) %}
-        {% set alt_text = parameters.alt_text|default(field.value.alternativeText ?? '') %}
+        {% set alt_text = parameters.alt_text|default(field.value.alternativeText ?: content.name) %}
         {% set lazy_loading = ezpublish.configResolver.getParameter('lazy_loading.enabled', 'ngsite') %}
         {% if parameters.lazy_loading is defined %}
             {% set lazy_loading = parameters.lazy_loading %}

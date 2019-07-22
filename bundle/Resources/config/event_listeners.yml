@@ -2,16 +2,12 @@ services:
     ngsite.listener.add_view_type:
         class: Netgen\Bundle\SiteBundle\EventListener\AddViewTypeEventListener
         public: false
-        arguments:
-            - "@request_stack"
         tags:
             - { name: kernel.event_subscriber }
 
     ngsite.listener.add_page_css_class:
         class: Netgen\Bundle\SiteBundle\EventListener\AddPageCssClassEventListener
         public: false
-        arguments:
-            - "@request_stack"
         tags:
             - { name: kernel.event_subscriber }
 

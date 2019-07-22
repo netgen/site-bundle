@@ -5,25 +5,13 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\EventListener;
 
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
-use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
-use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use eZ\Publish\Core\MVC\Symfony\View\Event\FilterViewParametersEvent;
+use eZ\Publish\Core\MVC\Symfony\View\ViewEvents;
 use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentValueView;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class AddPageCssClassEventListener implements EventSubscriberInterface
 {
-    /**
-     * @var \Symfony\Component\HttpFoundation\RequestStack
-     */
-    protected $requestStack;
-
-    public function __construct(RequestStack $requestStack)
-    {
-        $this->requestStack = $requestStack;
-    }
-
     /**
      * Returns an array of event names this subscriber wants to listen to.
      *
@@ -32,26 +20,18 @@ class AddPageCssClassEventListener implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            MVCEvents::PRE_CONTENT_VIEW => 'onPreContentView',
+            ViewEvents::FILTER_VIEW_PARAMETERS => 'addPageCssParameter',
         ];
     }
 
     /**
      * Injects the used view type into the content view template.
      */
-    public function onPreContentView(PreContentViewEvent $event): void
+    public function addPageCssParameter(FilterViewParametersEvent $event): void
     {
-        $currentRequest = $this->requestStack->getCurrentRequest();
-        if (!$currentRequest instanceof Request) {
-            return;
-        }
+        $view = $event->getView();
 
-        $view = $currentRequest->attributes->get('view');
-        if (!$view instanceof ContentValueView) {
-            return;
-        }
-
-        if ($currentRequest->attributes->get('viewType') !== 'full') {
+        if (!$view instanceof ContentValueView || $view->getViewType() !== 'full') {
             return;
         }
 
@@ -65,10 +45,6 @@ class AddPageCssClassEventListener implements EventSubscriberInterface
             return;
         }
 
-        $event->getContentView()->addParameters(
-            [
-                'page_css_class' => trim($fieldValue->text),
-            ]
-        );
+        $event->getParameterBag()->set('page_css_class', trim($fieldValue->text));
     }
 }

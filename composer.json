@@ -27,7 +27,7 @@
         "netgen/birthday-bundle": "^1.3",
         "netgen/open-graph-bundle": "^1.3",
         "netgen/tagsbundle": "^3.4",
-        "twig/twig": "^2.8.1",
+        "twig/twig": "^2.11.3",
         "twig/extensions": "^1.5.4",
         "doctrine/common": "^2.10",
         "doctrine/orm": "^2.6.3",

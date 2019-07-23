@@ -1,7 +1,7 @@
 {% extends '@EzPublishCore/content_fields.html.twig' %}
 
 {% block ezimage_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% if not ez_is_field_empty(content, field) %}
         {% set link_href = parameters.link_href|default('') %}
         {% set link_target = parameters.link_target|default('') %}
@@ -43,11 +43,11 @@
     {% elseif parameters.force_tag|default(false) %}
         <img src="//:0" alt="" />
     {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {% block ezgmaplocation_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% set map_height = map_height|default(500) %}
     {% set zoom = zoom|default(false) %}
     {% set map_type = map_type|default(false) %}
@@ -65,15 +65,15 @@
             'map_type': map_type
         }
     %}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}
 
 {% block ezbinaryfile_field %}
-{% spaceless %}
+{% apply spaceless %}
     {% if not ez_is_field_empty(content, field) %}
         <a href="{{ path('ngsite_download', { contentId: contentInfo.id, fieldId: field.id }) }}" {{ block('field_attributes') }}>
             {{ field.value.fileName }}
         </a>&nbsp;({{ field.value.fileSize|ez_file_size(1) }})
     {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endblock %}

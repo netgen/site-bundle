@@ -2,7 +2,11 @@ services:
     ngsite.matcher.config_resolver:
         class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased
         abstract: true
-        arguments: ["@ezpublish.config.resolver"]
+        arguments:
+            - "@ezpublish.config.resolver"
+
+    # All matchers need to be public as they need to be fetched from container
+    # when referencing them my service ID in view matcher configuration.
 
     ngsite.matcher.content.content_id:
         class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Content

@@ -182,22 +182,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    ngsite.routing.site_content_url_alias_router:
-        class: Netgen\Bundle\SiteBundle\Routing\SiteContentUrlAliasRouter
-        arguments:
-            - "@ezpublish.urlalias_generator"
-            - "@?router.request_context"
-        tags:
-            - { name: router, priority: 200 }
-
-    ngsite.routing.site_location_url_alias_router:
-        class: Netgen\Bundle\SiteBundle\Routing\SiteLocationUrlAliasRouter
-        arguments:
-            - "@ezpublish.urlalias_generator"
-            - "@?router.request_context"
-        tags:
-            - { name: router, priority: 200 }
-
     ngsite.opengraph.handler.site_name:
         class: Netgen\Bundle\SiteBundle\OpenGraph\Handler\SiteName
         arguments:

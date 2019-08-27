@@ -5,50 +5,56 @@ services:
         arguments:
             - "@ezpublish.config.resolver"
 
-    # All matchers need to be public as they need to be fetched from container
-    # when referencing them my service ID in view matcher configuration.
-
     ngsite.matcher.content.content_id:
         class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Content
-        public: true
         parent: ngsite.matcher.config_resolver
+        tags:
+            - { name: ezplatform.view.matcher }
 
     ngsite.matcher.content.content_type_id:
         class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentType
-        public: true
         parent: ngsite.matcher.config_resolver
+        tags:
+            - { name: ezplatform.view.matcher }
 
     ngsite.matcher.content.content_type_group_id:
         class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentTypeGroup
-        public: true
         parent: ngsite.matcher.config_resolver
+        tags:
+            - { name: ezplatform.view.matcher }
 
     ngsite.matcher.content.location_id:
         class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Location
-        public: true
         parent: ngsite.matcher.config_resolver
+        tags:
+            - { name: ezplatform.view.matcher }
 
     ngsite.matcher.content.parent_content_type_id:
         class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentContentType
-        public: true
         parent: ngsite.matcher.config_resolver
+        tags:
+            - { name: ezplatform.view.matcher }
 
     ngsite.matcher.content.parent_location_id:
         class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentLocation
-        public: true
         parent: ngsite.matcher.config_resolver
+        tags:
+            - { name: ezplatform.view.matcher }
 
     ngsite.matcher.content.remote_id:
         class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Remote
-        public: true
         parent: ngsite.matcher.config_resolver
+        tags:
+            - { name: ezplatform.view.matcher }
 
     ngsite.matcher.content.location_remote_id:
         class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\LocationRemote
-        public: true
         parent: ngsite.matcher.config_resolver
+        tags:
+            - { name: ezplatform.view.matcher }
 
     ngsite.matcher.content.section_id:
         class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Section
-        public: true
         parent: ngsite.matcher.config_resolver
+        tags:
+            - { name: ezplatform.view.matcher }

@@ -48,13 +48,17 @@ class SymlinkProjectCommand extends SymlinkCommand
     {
         $this->forceSymlinks = (bool) $input->getOption('force');
 
+        $projectFilesPaths = [$this->kernel->getProjectDir() . '/src/Resources/symlink'];
+
         foreach ($this->kernel->getBundles() as $bundle) {
             if (!$bundle instanceof NetgenSiteProjectBundleInterface) {
                 continue;
             }
 
-            $projectFilesPath = $bundle->getPath() . '/Resources/symlink';
+            $projectFilesPaths[] = $bundle->getPath() . '/Resources/symlink';
+        }
 
+        foreach ($projectFilesPaths as $projectFilesPath) {
             if (!$this->fileSystem->exists($projectFilesPath) || !is_dir($projectFilesPath) || is_link($projectFilesPath)) {
                 continue;
             }

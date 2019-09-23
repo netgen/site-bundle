@@ -83,15 +83,15 @@ class MailHelper
      * Sends an mail.
      *
      * Receivers can be:
-     * a string: info@netgen.hr
+     * a string: info@netgen.io
      * or:
-     * array( 'info@netgen.hr' => 'Netgen Site' ) or
-     * array( 'info@netgen.hr', 'example@netgen.hr' ) or
-     * array( 'info@netgen.hr' => 'Netgen Site', 'example@netgen.hr' => 'Example' )
+     * array( 'info@netgen.io' => 'Netgen Site' ) or
+     * array( 'info@netgen.io', 'example@netgen.io' ) or
+     * array( 'info@netgen.io' => 'Netgen Site', 'example@netgen.io' => 'Example' )
      *
      * Sender can be:
-     * a string: info@netgen.hr
-     * an array: array( 'info@netgen.hr' => 'Netgen Site' )
+     * a string: info@netgen.io
+     * an array: array( 'info@netgen.io' => 'Netgen Site' )
      *
      * @param mixed $receivers
      * @param mixed|null $sender

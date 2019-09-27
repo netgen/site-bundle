@@ -48,9 +48,3 @@ ez_user_register:
 
 ez_user_register_confirmation:
     path: /_error/404
-
-ezpublishSetup:
-    path: /_error/404
-
-_ezpublishLegacyRest:
-    path: /_error/404

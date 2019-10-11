@@ -1,39 +1,33 @@
 ngsite_download:
     path: /content/download/{contentId}/{fieldId}/{isInline}
-    defaults:
-        _controller: "ngsite.controller.download:downloadFile"
-        isInline: false
+    controller: "ngsite.controller.download:downloadFile"
     methods: [GET]
+    defaults:
+        isInline: false
 
 ngsite_user_register:
     path: /user/register
-    defaults:
-        _controller: "ngsite.controller.user:register"
+    controller: "ngsite.controller.user:register"
 
 ngsite_resend_activation_mail:
     path: /user/activate
-    defaults:
-        _controller: "ngsite.controller.user:activationForm"
+    controller: "ngsite.controller.user:activationForm"
 
 ngsite_user_activate:
     path: /user/activate/{hash}
-    defaults:
-        _controller: "ngsite.controller.user:activate"
+    controller: "ngsite.controller.user:activate"
 
 ngsite_user_forgot_password:
     path: /user/forgotpassword
-    defaults:
-        _controller: "ngsite.controller.user:forgotPassword"
+    controller: "ngsite.controller.user:forgotPassword"
 
 ngsite_user_reset_password:
     path: /user/forgotpassword/{hash}
-    defaults:
-        _controller: "ngsite.controller.user:resetPassword"
+    controller: "ngsite.controller.user:resetPassword"
 
 ngsite_content_search:
     path: /content/search
-    defaults:
-        _controller: "ngsite.controller.search:search"
+    controller: "ngsite.controller.search:search"
 
 # Disable eZ Platform built in routes
 

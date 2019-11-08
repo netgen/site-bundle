@@ -6,6 +6,7 @@ namespace Netgen\Bundle\SiteBundle\EventListener;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\View\View;
+use Symfony\Bundle\FrameworkBundle\Controller\RedirectController;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
@@ -71,8 +72,10 @@ class NoViewTemplateEventListener implements EventSubscriberInterface
             return;
         }
 
-        if ($view->getControllerReference() instanceof ControllerReference
-            && \strpos($view->getControllerReference()->controller, 'Symfony\Bundle\FrameworkBundle\Controller\RedirectController::') === 0) {
+        if (
+            $view->getControllerReference() instanceof ControllerReference &&
+            mb_strpos($view->getControllerReference()->controller, sprintf('%s::', RedirectController::class)) === 0
+        ) {
             return;
         }
 

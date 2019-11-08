@@ -8,6 +8,7 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\View\View;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -67,6 +68,11 @@ class NoViewTemplateEventListener implements EventSubscriberInterface
         }
 
         if (is_string($view->getTemplateIdentifier())) {
+            return;
+        }
+
+        if ($view->getControllerReference() instanceof ControllerReference
+            && \strpos($view->getControllerReference()->controller, 'Symfony\Bundle\FrameworkBundle\Controller\RedirectController::') === 0) {
             return;
         }
 

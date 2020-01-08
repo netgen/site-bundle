@@ -385,7 +385,7 @@ class UserController extends Controller
      */
     protected function createResetPasswordForm(): FormInterface
     {
-        $minLength = (int) $this->getParameter('netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length');
+        $minLength = (int) $this->container->getParameter('netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length');
 
         $passwordConstraints = [
             new Constraints\NotBlank(),

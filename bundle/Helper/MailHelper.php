@@ -76,7 +76,7 @@ class MailHelper
         $this->translator = $translator;
         $this->configResolver = $configResolver;
         $this->siteInfoHelper = $siteInfoHelper;
-        $this->logger = $logger ?: new NullLogger();
+        $this->logger = $logger ?? new NullLogger();
     }
 
     /**

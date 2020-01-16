@@ -66,7 +66,7 @@ class MenuItemExtension implements ExtensionInterface
         $this->urlGenerator = $urlGenerator;
         $this->requestStack = $requestStack;
         $this->configResolver = $configResolver;
-        $this->logger = $logger ?: new NullLogger();
+        $this->logger = $logger ?? new NullLogger();
     }
 
     public function matches(Location $location): bool

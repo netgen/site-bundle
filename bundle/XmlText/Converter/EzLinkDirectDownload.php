@@ -37,7 +37,7 @@ class EzLinkDirectDownload implements Converter
     ) {
         $this->loadService = $loadService;
         $this->router = $router;
-        $this->logger = $logger ?: new NullLogger();
+        $this->logger = $logger ?? new NullLogger();
     }
 
     /**

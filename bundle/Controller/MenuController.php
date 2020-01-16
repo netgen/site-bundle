@@ -43,12 +43,12 @@ class MenuController extends Controller
     public function renderMenu(Request $request, string $menuName): Response
     {
         $menu = $this->menuProvider->get($menuName);
-        $menu->setChildrenAttribute('class', $request->attributes->get('ulClass') ?: 'nav navbar-nav');
+        $menu->setChildrenAttribute('class', $request->attributes->get('ulClass') ?? 'nav navbar-nav');
 
         $menuOptions = [
-            'firstClass' => $request->attributes->get('firstClass') ?: 'firstli',
-            'currentClass' => $request->attributes->get('currentClass') ?: 'active',
-            'lastClass' => $request->attributes->get('lastClass') ?: 'lastli',
+            'firstClass' => $request->attributes->get('firstClass') ?? 'firstli',
+            'currentClass' => $request->attributes->get('currentClass') ?? 'active',
+            'lastClass' => $request->attributes->get('lastClass') ?? 'lastli',
             'template' => $this->getConfigResolver()->getParameter('template.menu', 'ngsite'),
         ];
 

@@ -46,7 +46,7 @@ class ShortcutExtension implements ExtensionInterface
         $this->loadService = $loadService;
         $this->urlGenerator = $urlGenerator;
         $this->requestStack = $requestStack;
-        $this->logger = $logger ?: new NullLogger();
+        $this->logger = $logger ?? new NullLogger();
     }
 
     public function matches(Location $location): bool

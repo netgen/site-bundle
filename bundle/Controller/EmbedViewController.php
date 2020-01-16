@@ -26,7 +26,7 @@ class EmbedViewController extends Controller
     public function __construct(RouterInterface $router, LoggerInterface $logger = null)
     {
         $this->router = $router;
-        $this->logger = $logger ?: new NullLogger();
+        $this->logger = $logger ?? new NullLogger();
     }
 
     /**

@@ -44,7 +44,7 @@ class RelationListMenuBuilder
         $this->factory = $factory;
         $this->loadService = $loadService;
         $this->siteInfoHelper = $siteInfoHelper;
-        $this->logger = $logger ?: new NullLogger();
+        $this->logger = $logger ?? new NullLogger();
     }
 
     /**

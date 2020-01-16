@@ -52,6 +52,7 @@ services:
             - "@netgen.ezplatform_site.filter_service"
             - "@router"
             - "@request_stack"
+            - "@ezpublish.config.resolver"
             - "@?logger"
         tags:
             - { name: ngsite.menu.factory.location.extension, priority: 0 }

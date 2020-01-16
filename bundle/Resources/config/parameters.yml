@@ -24,6 +24,7 @@ parameters:
     ngsite.default.site_settings.show_path_in_title: false
 
     ngsite.default.path_helper.excluded_content_types: ['ng_container', 'folder']
+    ngsite.default.container_content_types: ['ng_container', 'folder']
 
     ngsite.default.mail.sender_email: 'info@example.com'
     ngsite.default.mail.sender_name: 'Netgen Site'

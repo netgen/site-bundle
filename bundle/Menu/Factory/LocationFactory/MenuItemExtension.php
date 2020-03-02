@@ -8,6 +8,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 use Knp\Menu\ItemInterface;
 use Netgen\EzPlatformSiteApi\API\FilterService;
@@ -43,6 +44,11 @@ class MenuItemExtension implements ExtensionInterface
     protected $requestStack;
 
     /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    protected $configResolver;
+
+    /**
      * @var \Psr\Log\NullLogger
      */
     protected $logger;
@@ -52,12 +58,14 @@ class MenuItemExtension implements ExtensionInterface
         FilterService $filterService,
         UrlGeneratorInterface $urlGenerator,
         RequestStack $requestStack,
+        ConfigResolverInterface $configResolver,
         ?LoggerInterface $logger = null
     ) {
         $this->loadService = $loadService;
         $this->filterService = $filterService;
         $this->urlGenerator = $urlGenerator;
         $this->requestStack = $requestStack;
+        $this->configResolver = $configResolver;
         $this->logger = $logger ?? new NullLogger();
     }
 
@@ -136,6 +144,13 @@ class MenuItemExtension implements ExtensionInterface
 
         if (!$content->getField('use_menu_item_name')->value->bool) {
             $item->setLabel($relatedContent->name);
+        }
+
+        $containerClasses = $this->configResolver->getParameter('container_content_types', 'ngsite');
+        if (in_array($relatedContent->contentInfo->contentTypeIdentifier, $containerClasses, true)) {
+            // Disable link for content types that act as simple content containers
+            // and that have no their own full views
+            $item->setUri('');
         }
     }
 

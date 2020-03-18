@@ -41,7 +41,7 @@ class VerticalWhitespaceV2Plugin extends Plugin
             ParameterType\Compound\BooleanType::class,
             [
                 'default_value' => false,
-                'label' => 'block.plugin.vertical_whitespace_v2.enabled',
+                'label' => 'block.plugin.vertical_whitespace.enabled',
                 'groups' => $designGroup,
             ]
         );
@@ -51,7 +51,7 @@ class VerticalWhitespaceV2Plugin extends Plugin
             ParameterType\ChoiceType::class,
             [
                 'default_value' => 'medium',
-                'label' => 'block.plugin.vertical_whitespace_v2.top',
+                'label' => 'block.plugin.vertical_whitespace.top',
                 'options' => array_flip($this->top),
                 'groups' => $designGroup,
             ]
@@ -62,7 +62,7 @@ class VerticalWhitespaceV2Plugin extends Plugin
             ParameterType\ChoiceType::class,
             [
                 'default_value' => 'medium',
-                'label' => 'block.plugin.vertical_whitespace_v2.bottom',
+                'label' => 'block.plugin.vertical_whitespace.bottom',
                 'options' => array_flip($this->bottom),
                 'groups' => $designGroup,
             ]

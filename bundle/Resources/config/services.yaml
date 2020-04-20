@@ -168,7 +168,7 @@ services:
 
     ngsite.repository.ezuser_accountkey:
         class: Doctrine\ORM\EntityRepository
-        factory: ["@doctrine.orm.entityManager", getRepository]
+        factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments:
             - Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
 

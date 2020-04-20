@@ -6,10 +6,10 @@ namespace Netgen\Bundle\SiteBundle\Helper;
 
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
 
 class PathHelper
 {
@@ -24,18 +24,18 @@ class PathHelper
     protected $configResolver;
 
     /**
-     * @var \Symfony\Component\Routing\RouterInterface
+     * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
      */
-    protected $router;
+    protected $urlGenerator;
 
     public function __construct(
         LoadService $loadService,
         ConfigResolverInterface $configResolver,
-        RouterInterface $router
+        UrlGeneratorInterface $urlGenerator
     ) {
         $this->loadService = $loadService;
         $this->configResolver = $configResolver;
-        $this->router = $router;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -89,9 +89,9 @@ class PathHelper
                 $pathArray[] = [
                     'text' => $location->contentInfo->name,
                     'url' => $location->id !== (int) $locationId ?
-                        $this->router->generate(
-                            $location,
-                            [],
+                        $this->urlGenerator->generate(
+                            UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+                            ['location' => $location],
                             $options['absolute_url'] ?
                                 UrlGeneratorInterface::ABSOLUTE_URL :
                                 UrlGeneratorInterface::ABSOLUTE_PATH

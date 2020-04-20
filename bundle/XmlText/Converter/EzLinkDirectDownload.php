@@ -8,10 +8,11 @@ use DOMDocument;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\FieldType\XmlText\Converter;
+use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class EzLinkDirectDownload implements Converter
 {
@@ -21,9 +22,9 @@ class EzLinkDirectDownload implements Converter
     protected $loadService;
 
     /**
-     * @var \Symfony\Component\Routing\RouterInterface
+     * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
      */
-    protected $router;
+    protected $urlGenerator;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -32,11 +33,11 @@ class EzLinkDirectDownload implements Converter
 
     public function __construct(
         LoadService $loadService,
-        RouterInterface $router,
+        UrlGeneratorInterface $urlGenerator,
         ?LoggerInterface $logger = null
     ) {
         $this->loadService = $loadService;
-        $this->router = $router;
+        $this->urlGenerator = $urlGenerator;
         $this->logger = $logger ?? new NullLogger();
     }
 
@@ -93,12 +94,12 @@ class EzLinkDirectDownload implements Converter
             if ($content !== null && $content->hasField('file')) {
                 $field = $content->getField('file');
                 if (!$field->isEmpty()) {
-                    $url = $this->router->generate('ngsite_download', ['contentId' => $content->id, 'fieldId' => $field->id, 'isInline' => $link->hasAttribute('custom:inline')]);
+                    $url = $this->urlGenerator->generate('ngsite_download', ['contentId' => $content->id, 'fieldId' => $field->id, 'isInline' => $link->hasAttribute('custom:inline')]);
                 }
             }
 
             if (empty($url) && $location !== null) {
-                $link->setAttribute('url', $this->router->generate($location));
+                $link->setAttribute('url', $this->urlGenerator->generate(UrlAliasRouter::URL_ALIAS_ROUTE_NAME, ['location' => $location]));
             } elseif (!empty($url)) {
                 $link->setAttribute('url', $url);
             } else {

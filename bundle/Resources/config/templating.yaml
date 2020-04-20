@@ -1,14 +1,4 @@
 services:
-    twig.extension.array:
-        class: Twig\Extensions\ArrayExtension
-        tags:
-            - { name: twig.extension }
-
-    twig.extension.date:
-        class: Twig\Extensions\DateExtension
-        tags:
-            - { name: twig.extension }
-
     ngsite.templating.global_variable:
         class: Netgen\Bundle\SiteBundle\Templating\GlobalVariable
         arguments:

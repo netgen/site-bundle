@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Command;
 
+use const DIRECTORY_SEPARATOR;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -45,7 +46,7 @@ class DumpDatabaseCommand extends Command
         $databaseUser = $this->container->getParameter('database_user');
         $databasePassword = $this->container->getParameter('database_password');
 
-        $filePath = getcwd() . \DIRECTORY_SEPARATOR . trim($input->getArgument('file'), '/');
+        $filePath = getcwd() . DIRECTORY_SEPARATOR . trim($input->getArgument('file'), '/');
         $targetDirectory = dirname($filePath);
         $fileName = basename($filePath);
 

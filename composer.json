@@ -17,9 +17,9 @@
         }
     ],
     "require": {
-        "ezsystems/ezpublish-kernel": "^8.0",
+        "ezsystems/ezplatform-kernel": "^1.0",
         "netgen/ez-forms-bundle": "^3.0",
-        "netgen/ezplatform-site-api": "^3.0",
+        "netgen/ezplatform-site-api": "^3.4",
         "netgen/siteaccess-routes-bundle": "^2.0",
         "netgen/metadata-bundle": "^3.0",
         "netgen/content-type-list-bundle": "^2.0",
@@ -27,16 +27,16 @@
         "netgen/birthday-bundle": "^2.0",
         "netgen/open-graph-bundle": "^2.0",
         "netgen/tagsbundle": "^4.0",
-        "twig/twig": "^2.11.3",
-        "twig/extensions": "^1.5.4",
-        "doctrine/common": "^2.11",
-        "doctrine/orm": "^2.6.4",
-        "knplabs/knp-menu-bundle": "^2.3 || ^3.0",
-        "sensio/framework-extra-bundle": "^5.4"
+        "twig/twig": "^3.0",
+        "doctrine/orm": "^2.7",
+        "knplabs/knp-menu-bundle": "^3.0",
+        "sensio/framework-extra-bundle": "^5.5"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.15.3"
+        "friendsofphp/php-cs-fixer": "^2.16"
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Netgen\\Bundle\\SiteBundle\\": "bundle/"

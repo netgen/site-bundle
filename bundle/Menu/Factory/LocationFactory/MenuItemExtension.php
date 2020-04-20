@@ -9,6 +9,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 use Knp\Menu\ItemInterface;
 use Netgen\EzPlatformSiteApi\API\FilterService;
@@ -137,7 +138,7 @@ class MenuItemExtension implements ExtensionInterface
     protected function buildItemFromRelatedContent(ItemInterface $item, Content $content, Content $relatedContent): void
     {
         $item
-            ->setUri($this->urlGenerator->generate($relatedContent))
+            ->setUri($this->urlGenerator->generate(UrlAliasRouter::URL_ALIAS_ROUTE_NAME, ['location' => $relatedContent->mainLocation]))
             ->setExtra('ezlocation', $relatedContent->mainLocation)
             ->setAttribute('id', 'menu-item-location-id-' . $relatedContent->mainLocationId)
             ->setLinkAttribute('title', $item->getLabel());

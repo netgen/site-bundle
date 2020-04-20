@@ -18,15 +18,9 @@ use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
 
 class FullViewController extends Controller
 {
-    /**
-     * @var \Symfony\Component\Routing\RouterInterface
-     */
-    protected $router;
-
     /**
      * @var \Netgen\EzPlatformSiteApi\API\Site
      */
@@ -38,11 +32,9 @@ class FullViewController extends Controller
     protected $configResolver;
 
     public function __construct(
-        RouterInterface $router,
         Site $site,
         ConfigResolverInterface $configResolver
     ) {
-        $this->router = $router;
         $this->site = $site;
         $this->configResolver = $configResolver;
     }
@@ -156,7 +148,10 @@ class FullViewController extends Controller
         if ($internalRedirectContent instanceof Content) {
             if ($internalRedirectContent->contentInfo->mainLocationId !== $location->id) {
                 return new RedirectResponse(
-                    $this->router->generate($internalRedirectContent),
+                    $this->generateUrl(
+                        UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+                        ['location' => $internalRedirectContent->mainLocation]
+                    ),
                     RedirectResponse::HTTP_MOVED_PERMANENTLY
                 );
             }
@@ -165,7 +160,7 @@ class FullViewController extends Controller
                 return new RedirectResponse($externalRedirectValue->link, RedirectResponse::HTTP_MOVED_PERMANENTLY);
             }
 
-            $rootPath = $this->router->generate(
+            $rootPath = $this->generateUrl(
                 UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
                 [
                     'locationId' => $this->getSite()->getSettings()->rootLocationId,

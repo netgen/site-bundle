@@ -6,30 +6,24 @@ namespace Netgen\Bundle\SiteBundle\Controller;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
 use Netgen\EzPlatformSiteApi\API\Site;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Symfony\Component\Routing\RouterInterface;
 
 class EmbedViewController extends Controller
 {
     protected $site;
 
     /**
-     * @var \Symfony\Component\Routing\RouterInterface
-     */
-    protected $router;
-
-    /**
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
-    public function __construct(Site $site, RouterInterface $router, ?LoggerInterface $logger = null)
+    public function __construct(Site $site, ?LoggerInterface $logger = null)
     {
         $this->site = $site;
-        $this->router = $router;
         $this->logger = $logger ?? new NullLogger();
     }
 
@@ -86,7 +80,7 @@ class EmbedViewController extends Controller
                 }
 
                 if ($fieldName !== null) {
-                    $directDownloadLink = $this->router->generate(
+                    $directDownloadLink = $this->generateUrl(
                         'ngsite_download',
                         [
                             'contentId' => $content->id,
@@ -99,9 +93,9 @@ class EmbedViewController extends Controller
             if ($directDownloadLink !== null) {
                 $targetLink = $directDownloadLink;
             } elseif (mb_stripos($targetLink, 'eznode://') === 0) {
-                $targetLink = $this->router->generate($location);
+                $targetLink = $this->generateUrl(UrlAliasRouter::URL_ALIAS_ROUTE_NAME, ['location' => $location]);
             } elseif (mb_stripos($targetLink, 'ezobject://') === 0) {
-                $targetLink = $this->router->generate($content);
+                $targetLink = $this->generateUrl(UrlAliasRouter::URL_ALIAS_ROUTE_NAME, ['location' => $content->mainLocation]);
             }
         }
 

@@ -49,7 +49,6 @@ services:
         public: true
         parent: ngsite.controller.base
         arguments:
-            - "@router"
             - "@netgen.ezplatform_site.site"
             - "@ezpublish.config.resolver"
 
@@ -59,7 +58,6 @@ services:
         parent: ngsite.controller.base
         arguments:
             - "@netgen.ezplatform_site.site"
-            - "@router"
             - "@?logger"
 
     ngsite.controller.search:
@@ -164,13 +162,13 @@ services:
 
     ngsite.repository.nguser_setting:
         class: Doctrine\ORM\EntityRepository
-        factory: ["@doctrine.orm.default_entity_manager", getRepository]
+        factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments:
             - Netgen\Bundle\SiteBundle\Entity\NgUserSetting
 
     ngsite.repository.ezuser_accountkey:
         class: Doctrine\ORM\EntityRepository
-        factory: ["@doctrine.orm.default_entity_manager", getRepository]
+        factory: ["@doctrine.orm.entityManager", getRepository]
         arguments:
             - Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
 

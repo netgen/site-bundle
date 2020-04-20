@@ -12,25 +12,19 @@ use Netgen\Layouts\Parameters\ParameterType;
 class VerticalWhitespacePlugin extends Plugin
 {
     /**
-     * The list of positions available. Keys should be identifiers, while values
-     * should be human readable names of the positions.
-     *
      * @var array
      */
-    private $positions;
+    private $top;
 
     /**
-     * The list of sizes available. Keys should be identifiers, while values
-     * should be human readable names of the sizes.
-     *
      * @var array
      */
-    private $sizes;
+    private $bottom;
 
-    public function __construct(array $positions, array $sizes)
+    public function __construct(array $top, array $bottom)
     {
-        $this->positions = $positions;
-        $this->sizes = $sizes;
+        $this->top = $top;
+        $this->bottom = $bottom;
     }
 
     public static function getExtendedHandlers(): array
@@ -53,23 +47,23 @@ class VerticalWhitespacePlugin extends Plugin
         );
 
         $builder->get('vertical_whitespace:enabled')->add(
-            'vertical_whitespace:position',
+            'vertical_whitespace:top',
             ParameterType\ChoiceType::class,
             [
-                'default_value' => 'both',
-                'label' => 'block.plugin.vertical_whitespace.position',
-                'options' => array_flip($this->positions),
+                'default_value' => 'medium',
+                'label' => 'block.plugin.vertical_whitespace.top',
+                'options' => array_flip($this->top),
                 'groups' => $designGroup,
             ]
         );
 
         $builder->get('vertical_whitespace:enabled')->add(
-            'vertical_whitespace:size',
+            'vertical_whitespace:bottom',
             ParameterType\ChoiceType::class,
             [
-                'default_value' => 'md',
-                'label' => 'block.plugin.vertical_whitespace.size',
-                'options' => array_flip($this->sizes),
+                'default_value' => 'medium',
+                'label' => 'block.plugin.vertical_whitespace.bottom',
+                'options' => array_flip($this->bottom),
                 'groups' => $designGroup,
             ]
         );

@@ -11,16 +11,6 @@ parameters:
         medium: 'block.plugin.vertical_whitespace.medium'
         large: 'block.plugin.vertical_whitespace.large'
 
-    ngsite.layouts.block.plugin.vertical_whitespace.positions:
-        both: 'block.plugin.vertical_whitespace.top_and_bottom'
-        top: 'block.plugin.vertical_whitespace.only_top'
-        bottom: 'block.plugin.vertical_whitespace.only_bottom'
-
-    ngsite.layouts.block.plugin.vertical_whitespace.sizes:
-        lg: 'block.plugin.vertical_whitespace.large'
-        md: 'block.plugin.vertical_whitespace.medium'
-        sm: 'block.plugin.vertical_whitespace.small'
-
     ngsite.layouts.block.plugin.background_color.colors:
         white: 'block.plugin.background_color.white'
         black: 'block.plugin.background_color.black'
@@ -36,22 +26,12 @@ services:
         tags:
             - { name: netgen_layouts.block_definition_handler.plugin, priority: 100 }
 
-# New plugin version: not enabled by default due to backwards compatibility
-
-#    ngsite.layouts.block.plugin.vertical_whitespace_v2:
-#        class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\VerticalWhitespaceV2Plugin
-#        public: false
-#        arguments:
-#            - "%ngsite.layouts.block.plugin.vertical_whitespace.top%"
-#            - "%ngsite.layouts.block.plugin.vertical_whitespace.bottom%"
-#        tags:
-#            - { name: netgen_layouts.block_definition_handler.plugin, priority: 200 }
-
     ngsite.layouts.block.plugin.vertical_whitespace:
         class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\VerticalWhitespacePlugin
+        public: false
         arguments:
-            - "%ngsite.layouts.block.plugin.vertical_whitespace.positions%"
-            - "%ngsite.layouts.block.plugin.vertical_whitespace.sizes%"
+            - "%ngsite.layouts.block.plugin.vertical_whitespace.top%"
+            - "%ngsite.layouts.block.plugin.vertical_whitespace.bottom%"
         tags:
             - { name: netgen_layouts.block_definition_handler.plugin, priority: 200 }
 

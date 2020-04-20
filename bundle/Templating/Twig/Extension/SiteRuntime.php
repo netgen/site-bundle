@@ -38,10 +38,8 @@ class SiteRuntime
 
     /**
      * Returns the path for specified location ID.
-     *
-     * @param int|string $locationId
      */
-    public function getLocationPath($locationId, array $options = []): array
+    public function getLocationPath(int $locationId, array $options = []): array
     {
         return $this->pathHelper->getPath($locationId, $options);
     }
@@ -64,10 +62,8 @@ class SiteRuntime
 
     /**
      * Returns the name of the content with provided ID.
-     *
-     * @param int|string $contentId
      */
-    public function getContentName($contentId): ?string
+    public function getContentName(int $contentId): ?string
     {
         try {
             $content = $this->loadService->loadContent($contentId);
@@ -80,10 +76,8 @@ class SiteRuntime
 
     /**
      * Returns the name of the content with located at location with provided ID.
-     *
-     * @param int|string $locationId
      */
-    public function getLocationName($locationId): ?string
+    public function getLocationName(int $locationId): ?string
     {
         try {
             $location = $this->loadService->loadLocation($locationId);

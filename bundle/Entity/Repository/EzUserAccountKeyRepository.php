@@ -12,11 +12,11 @@ class EzUserAccountKeyRepository extends EntityRepository
     /**
      * Creates a user account key.
      *
-     * @param int|string $userId
+     * @param int $userId
      *
      * @return \Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
      */
-    public function create($userId): EzUserAccountKey
+    public function create(int $userId): EzUserAccountKey
     {
         $this->removeByUserId($userId);
 
@@ -58,9 +58,9 @@ class EzUserAccountKeyRepository extends EntityRepository
     /**
      * Removes user account key for user specified by $userId.
      *
-     * @param int|string $userId
+     * @param int $userId
      */
-    public function removeByUserId($userId): void
+    public function removeByUserId(int $userId): void
     {
         $results = $this->findBy(['userId' => $userId]);
 

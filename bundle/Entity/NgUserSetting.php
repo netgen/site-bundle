@@ -7,7 +7,7 @@ namespace Netgen\Bundle\SiteBundle\Entity;
 class NgUserSetting
 {
     /**
-     * @var int|string
+     * @var int
      */
     protected $userId;
 
@@ -17,10 +17,10 @@ class NgUserSetting
     protected $isActivated;
 
     /**
-     * @param int|string $userId
+     * @param int $userId
      * @param bool $isActivated
      */
-    public function __construct($userId, bool $isActivated)
+    public function __construct(int $userId, bool $isActivated)
     {
         $this->userId = $userId;
         $this->isActivated = $isActivated;
@@ -29,11 +29,11 @@ class NgUserSetting
     /**
      * Set user ID.
      *
-     * @param int|string $userId
+     * @param int $userId
      *
      * @return \Netgen\Bundle\SiteBundle\Entity\NgUserSetting
      */
-    public function setUserId($userId): self
+    public function setUserId(int $userId): self
     {
         $this->userId = $userId;
 
@@ -43,9 +43,9 @@ class NgUserSetting
     /**
      * Get user ID.
      *
-     * @return int|string
+     * @return int
      */
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->userId;
     }

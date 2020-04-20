@@ -40,10 +40,8 @@ class PathHelper
 
     /**
      * Returns the path array for provided location ID.
-     *
-     * @param int|string $locationId
      */
-    public function getPath($locationId, array $options = []): array
+    public function getPath(int $locationId, array $options = []): array
     {
         $optionsResolver = new OptionsResolver();
         $this->configureOptions($optionsResolver);
@@ -63,7 +61,7 @@ class PathHelper
         // The root location can be defined at site access level
         $rootLocationId = (int) $this->configResolver->getParameter('content.tree_root.location_id');
 
-        $path = $this->loadService->loadLocation($locationId)->path;
+        $path = array_map('intval', $this->loadService->loadLocation($locationId)->path);
 
         // Shift of location "1" from path as it is not a fully valid location and not readable by most users
         array_shift($path);
@@ -71,7 +69,7 @@ class PathHelper
         $pathArray = [];
         $rootLocationFound = false;
         foreach ($path as $index => $pathItem) {
-            if ((int) $pathItem === $rootLocationId) {
+            if ($pathItem === $rootLocationId) {
                 $rootLocationFound = true;
             }
 

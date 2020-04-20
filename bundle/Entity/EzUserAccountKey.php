@@ -22,7 +22,7 @@ class EzUserAccountKey
     protected $time;
 
     /**
-     * @var int|string
+     * @var int
      */
     protected $userId;
 
@@ -63,11 +63,11 @@ class EzUserAccountKey
     /**
      * Set user ID.
      *
-     * @param int|string $userId
+     * @param int $userId
      *
      * @return \Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
      */
-    public function setUserId($userId): self
+    public function setUserId(int $userId): self
     {
         $this->userId = $userId;
 
@@ -77,9 +77,9 @@ class EzUserAccountKey
     /**
      * Get user ID.
      *
-     * @return int|string
+     * @return int
      */
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->userId;
     }

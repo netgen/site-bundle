@@ -49,10 +49,8 @@ class RelationListMenuBuilder
 
     /**
      * Creates the KNP menu from provided content and field identifier.
-     *
-     * @param mixed|null $contentId
      */
-    public function createRelationListMenu(string $fieldIdentifier, $contentId = null): ItemInterface
+    public function createRelationListMenu(string $fieldIdentifier, ?int $contentId = null): ItemInterface
     {
         $content = $contentId !== null ?
             $this->loadService->loadContent($contentId) :

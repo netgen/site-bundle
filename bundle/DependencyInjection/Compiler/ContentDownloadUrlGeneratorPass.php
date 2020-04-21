@@ -16,7 +16,7 @@ class ContentDownloadUrlGeneratorPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container): void
     {
-        if ($container->has('ezpublish.fieldType.ease.download_url_generator')) {
+        if ($container->has('ezpublish.fieldType.ezbinarybase.download_url_generator')) {
             $container
                 ->findDefinition('ezpublish.fieldType.ezbinarybase.download_url_generator')
                 ->setClass(ContentDownloadUrlGenerator::class);

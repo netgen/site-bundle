@@ -86,13 +86,13 @@ class MailHelper
      * a string: info@netgen.io
      * an array: array( 'info@netgen.io' => 'Netgen Site' )
      *
-     * @param mixed $receivers
-     * @param mixed|null $sender
+     * @param string|array $receivers
+     * @param string|array|null $sender
      */
     public function sendMail($receivers, string $subject, string $template, array $parameters = [], $sender = null): void
     {
         try {
-            $sender = $this->createSenderAddress($sender);
+            $senderAddress = $this->createSenderAddress($sender);
         } catch (InvalidArgumentException $e) {
             $this->logger->error($e->getMessage());
 
@@ -100,8 +100,8 @@ class MailHelper
         }
 
         $email = (new Email())
-            ->from($sender)
-            ->sender($sender)
+            ->from($senderAddress)
+            ->sender($senderAddress)
             ->to($this->createReceiverAddresses($receivers))
             ->subject(sprintf('%s: %s', $this->siteName, $this->translator->trans($subject, [], 'ngsite_mail')))
             ->html($this->twig->render($template, $parameters));

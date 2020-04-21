@@ -152,7 +152,9 @@ services:
     ngsite.helper.mail_helper:
         class: Netgen\Bundle\SiteBundle\Helper\MailHelper
         arguments:
-            - "@mailer"
+            # Using "@mailer.mailer" service since "@mailer" is
+            # overwritten by SwiftMailer Bundle
+            - "@mailer.mailer"
             - "@twig"
             - "@translator"
             - "@ezpublish.config.resolver"

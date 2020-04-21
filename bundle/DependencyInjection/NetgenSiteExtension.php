@@ -48,7 +48,7 @@ class NetgenSiteExtension extends Extension implements PrependExtensionInterface
         $activatedBundles = $container->getParameter('kernel.bundles');
 
         $prependConfigs = [
-            'ezplatform.yaml' => 'ezplatform',
+            'ezplatform.yaml' => 'ezpublish',
             'framework/twig.yaml' => 'twig',
             'framework/assets.yaml' => 'framework',
         ];

@@ -154,7 +154,6 @@ services:
         arguments:
             - "@mailer"
             - "@twig"
-            - "@router"
             - "@translator"
             - "@ezpublish.config.resolver"
             - "@ngsite.helper.site_info_helper"

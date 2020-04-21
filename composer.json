@@ -18,6 +18,8 @@
     ],
     "require": {
         "ezsystems/ezplatform-kernel": "^1.0",
+        "symfony/mailer": "^5.0",
+        "symfony/polyfill-php80": "^1.15",
         "netgen/ez-forms-bundle": "^3.0",
         "netgen/ezplatform-site-api": "^3.4",
         "netgen/siteaccess-routes-bundle": "^2.0",

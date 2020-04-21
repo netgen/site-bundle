@@ -6,11 +6,11 @@ namespace Netgen\Bundle\SiteBundle\Controller;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
-use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
 use Netgen\EzPlatformSiteApi\API\Site;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 
 class EmbedViewController extends Controller
 {
@@ -93,9 +93,9 @@ class EmbedViewController extends Controller
             if ($directDownloadLink !== null) {
                 $targetLink = $directDownloadLink;
             } elseif (mb_stripos($targetLink, 'eznode://') === 0) {
-                $targetLink = $this->generateUrl(UrlAliasRouter::URL_ALIAS_ROUTE_NAME, ['location' => $location]);
+                $targetLink = $this->generateUrl('', [RouteObjectInterface::ROUTE_OBJECT => $location]);
             } elseif (mb_stripos($targetLink, 'ezobject://') === 0) {
-                $targetLink = $this->generateUrl(UrlAliasRouter::URL_ALIAS_ROUTE_NAME, ['location' => $content->mainLocation]);
+                $targetLink = $this->generateUrl('', [RouteObjectInterface::ROUTE_OBJECT => $content]);
             }
         }
 

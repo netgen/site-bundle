@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory;
 
 use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
-use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 use Knp\Menu\ItemInterface;
 use Netgen\EzPlatformSiteApi\API\LoadService;
@@ -13,6 +12,7 @@ use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -115,7 +115,7 @@ class ShortcutExtension implements ExtensionInterface
 
     protected function buildItemFromRelatedContent(ItemInterface $item, Content $content, Content $relatedContent): void
     {
-        $contentUri = $this->urlGenerator->generate(UrlAliasRouter::URL_ALIAS_ROUTE_NAME, ['location' => $relatedContent->mainLocation]);
+        $contentUri = $this->urlGenerator->generate('', [RouteObjectInterface::ROUTE_OBJECT => $relatedContent]);
         $item->setUri($contentUri . $content->getField('internal_url_suffix')->value->text)
             ->setExtra('ezlocation', $relatedContent->mainLocation)
             ->setAttribute('id', 'menu-item-location-id-' . $relatedContent->mainLocationId)

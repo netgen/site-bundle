@@ -15,6 +15,7 @@ use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\FilterAdapter;
 use Pagerfanta\Pagerfanta;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -149,8 +150,8 @@ class FullViewController extends Controller
             if ($internalRedirectContent->contentInfo->mainLocationId !== $location->id) {
                 return new RedirectResponse(
                     $this->generateUrl(
-                        UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
-                        ['location' => $internalRedirectContent->mainLocation]
+                        '',
+                        [RouteObjectInterface::ROUTE_OBJECT => $internalRedirectContent]
                     ),
                     RedirectResponse::HTTP_MOVED_PERMANENTLY
                 );

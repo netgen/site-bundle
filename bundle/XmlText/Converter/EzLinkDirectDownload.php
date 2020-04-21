@@ -8,10 +8,10 @@ use DOMDocument;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\FieldType\XmlText\Converter;
-use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class EzLinkDirectDownload implements Converter
@@ -99,7 +99,7 @@ class EzLinkDirectDownload implements Converter
             }
 
             if (empty($url) && $location !== null) {
-                $link->setAttribute('url', $this->urlGenerator->generate(UrlAliasRouter::URL_ALIAS_ROUTE_NAME, ['location' => $location]));
+                $link->setAttribute('url', $this->urlGenerator->generate('', [RouteObjectInterface::ROUTE_OBJECT => $location]));
             } elseif (!empty($url)) {
                 $link->setAttribute('url', $url);
             } else {

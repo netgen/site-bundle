@@ -6,8 +6,8 @@ namespace Netgen\Bundle\SiteBundle\Helper;
 
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Netgen\EzPlatformSiteApi\API\LoadService;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -88,8 +88,8 @@ class PathHelper
                     'text' => $location->contentInfo->name,
                     'url' => $location->id !== (int) $locationId ?
                         $this->urlGenerator->generate(
-                            UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
-                            ['location' => $location],
+                            '',
+                            [RouteObjectInterface::ROUTE_OBJECT => $location],
                             $options['absolute_url'] ?
                                 UrlGeneratorInterface::ABSOLUTE_URL :
                                 UrlGeneratorInterface::ABSOLUTE_PATH

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory;
 
-use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Knp\Menu\ItemInterface;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class FallbackExtension implements ExtensionInterface
@@ -29,7 +29,7 @@ class FallbackExtension implements ExtensionInterface
     public function buildItem(ItemInterface $item, Location $location): void
     {
         $item
-            ->setUri($this->urlGenerator->generate(UrlAliasRouter::URL_ALIAS_ROUTE_NAME, ['location' => $location]))
+            ->setUri($this->urlGenerator->generate('', [RouteObjectInterface::ROUTE_OBJECT => $location]))
             ->setAttribute('id', 'menu-item-location-id-' . $location->id);
     }
 }

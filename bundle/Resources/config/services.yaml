@@ -201,7 +201,7 @@ services:
             - "@netgen.ezplatform_site.site"
             - "@ezpublish.config.resolver"
         tags:
-            - { name: ezpublish.query_type }
+            - { name: ezplatform.query_type }
 
     ngsite.topic.url_generator:
         class: Netgen\Bundle\SiteBundle\Topic\UrlGenerator

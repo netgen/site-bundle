@@ -102,7 +102,7 @@ class MailHelper
         $email = (new Email())
             ->from($senderAddress)
             ->sender($senderAddress)
-            ->to($this->createReceiverAddresses($receivers))
+            ->to(...$this->createReceiverAddresses($receivers))
             ->subject(sprintf('%s: %s', $this->siteName, $this->translator->trans($subject, [], 'ngsite_mail')))
             ->html($this->twig->render($template, $parameters));
 

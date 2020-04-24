@@ -19,6 +19,10 @@ use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use function array_map;
+use function explode;
+use function mb_stripos;
+use function trim;
 
 class FullViewController extends Controller
 {

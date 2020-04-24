@@ -9,6 +9,7 @@ use Netgen\Layouts\Block\BlockDefinition\Handler\Plugin;
 use Netgen\Layouts\Parameters\ParameterBuilderInterface;
 use Netgen\Layouts\Parameters\ParameterType;
 use Netgen\Layouts\Standard\Block\BlockDefinition\Handler\ListHandler;
+use function array_flip;
 
 class BackgroundColorPlugin extends Plugin
 {

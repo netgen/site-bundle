@@ -11,6 +11,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\KernelInterface;
+use function basename;
+use function dirname;
+use function in_array;
+use function is_dir;
+use function is_link;
 
 class SymlinkProjectCommand extends SymlinkCommand
 {

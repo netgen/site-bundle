@@ -13,6 +13,12 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
+use function array_key_first;
+use function count;
+use function get_debug_type;
+use function is_array;
+use function is_string;
+use function sprintf;
 
 class MailHelper
 {

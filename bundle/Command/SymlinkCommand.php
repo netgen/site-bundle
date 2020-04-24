@@ -6,6 +6,11 @@ namespace Netgen\Bundle\SiteBundle\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
+use function basename;
+use function dirname;
+use function is_file;
+use function is_link;
+use function realpath;
 
 abstract class SymlinkCommand extends Command
 {

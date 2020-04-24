@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Command;
 
-use const DIRECTORY_SEPARATOR;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -13,6 +12,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
+use function basename;
+use function dirname;
+use function getcwd;
+use function trim;
+use const DIRECTORY_SEPARATOR;
 
 class DumpDatabaseCommand extends Command
 {

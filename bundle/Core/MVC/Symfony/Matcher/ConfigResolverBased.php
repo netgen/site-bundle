@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use function in_array;
+use function is_array;
 
 abstract class ConfigResolverBased extends MultipleValued
 {

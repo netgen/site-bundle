@@ -7,6 +7,8 @@ namespace Netgen\Bundle\SiteBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use function array_merge;
+use function krsort;
 
 class LocationFactoryPass implements CompilerPassInterface
 {

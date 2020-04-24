@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher;
 
+use function is_array;
+
 abstract class MultipleValued
 {
     /**

@@ -6,6 +6,7 @@ namespace Netgen\Bundle\SiteBundle\Core\FieldType\RelationList;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\RelationList\Type as BaseRelationListType;
+use eZ\Publish\Core\FieldType\RelationList\Value as BaseRelationListValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 
@@ -63,7 +64,34 @@ class Type extends BaseRelationListType
             return new Value($destinationContentIds, $destinationLocationIds);
         }
 
-        return parent::createValueFromInput($inputValue);
+        $parentValue = parent::createValueFromInput($inputValue);
+
+        if (
+            $parentValue instanceof BaseRelationListValue &&
+            !$parentValue instanceof Value
+        ) {
+            return new Value($parentValue->destinationContentIds);
+        }
+
+        return $parentValue;
+    }
+
+    protected static function checkValueType($value): void
+    {
+        if ($value instanceof BaseRelationListValue) {
+            // Includes overridden type too
+            return;
+        }
+
+        throw new InvalidArgumentType(
+            '$value',
+            sprintf(
+                '"%s" or "%s"',
+                BaseRelationListValue::class,
+                Value::class
+            ),
+            $value
+        );
     }
 
     protected function checkValueStructure(BaseValue $value): void

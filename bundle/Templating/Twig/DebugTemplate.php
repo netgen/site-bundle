@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Templating\Twig;
 
 use Symfony\Component\Filesystem\Filesystem;
+use Twig\Source;
 use Twig\Template;
 use function dirname;
 use function getcwd;
@@ -82,7 +83,7 @@ class DebugTemplate extends Template
 
     public function getSourceContext()
     {
-        return '';
+        return new Source('', '');
     }
 
     public function getDebugInfo()

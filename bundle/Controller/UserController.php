@@ -135,6 +135,19 @@ class UserController extends Controller
         $this->eventDispatcher->dispatch($preUserRegisterEvent, SiteEvents::USER_PRE_REGISTER);
         $data->payload = $preUserRegisterEvent->getUserCreateStruct();
 
+        foreach ($data->payload->fields as $field) {
+            if ($field->fieldTypeIdentifier !== 'ezuser') {
+                continue;
+            }
+
+            $field->value->login = $data->payload->login;
+            $field->value->email = $data->payload->email;
+            $field->value->plainPassword = $data->payload->password;
+            $field->value->enabled = $data->payload->enabled;
+
+            break;
+        }
+
         /** @var \eZ\Publish\API\Repository\Values\User\User $newUser */
         $newUser = $this->getRepository()->sudo(
             static function (Repository $repository) use ($data, $userGroupId): User {

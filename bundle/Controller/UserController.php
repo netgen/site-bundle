@@ -8,6 +8,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
 use Netgen\Bundle\EzFormsBundle\Form\DataWrapper;
 use Netgen\Bundle\EzFormsBundle\Form\Type\CreateUserType;
 use Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey;
@@ -67,6 +68,8 @@ class UserController extends Controller
      */
     public function register(Request $request): Response
     {
+        $this->denyAccessUnlessGranted(new Attribute('user', 'register'));
+
         $contentTypeIdentifier = $this->getConfigResolver()->getParameter('user.content_type_identifier', 'ngsite');
         $contentType = $this->getRepository()->getContentTypeService()->loadContentTypeByIdentifier($contentTypeIdentifier);
         $languages = $this->getConfigResolver()->getParameter('languages');

@@ -52,6 +52,3 @@ parameters:
 
     ngsite.default.lazy_loading.enabled: false
     ngsite.default.lazy_loading.initial_image_alias: 'small'
-
-    # Non siteaccess aware params
-    netgen.ezforms.form.type.fieldtype.ezuser.parameters.min_password_length: 0

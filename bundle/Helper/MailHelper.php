@@ -174,6 +174,8 @@ class MailHelper
         foreach ((array) $addresses as $key => $value) {
             if (is_string($key)) {
                 yield new Address($key, $value);
+
+                continue;
             }
 
             yield new Address($value);

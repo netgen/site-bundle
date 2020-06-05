@@ -71,9 +71,9 @@ class UserController extends Controller
         $contentType = $this->getRepository()->getContentTypeService()->loadContentTypeByIdentifier($contentTypeIdentifier);
         $languages = $this->getConfigResolver()->getParameter('languages');
         $userCreateStruct = $this->userService->newUserCreateStruct(
-            null,
-            null,
-            null,
+            '',
+            '',
+            '',
             $languages[0],
             $contentType
         );

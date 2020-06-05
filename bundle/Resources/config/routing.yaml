@@ -29,7 +29,20 @@ ngsite_content_search:
     path: /content/search
     controller: "ngsite.controller.search:search"
 
+# Rewire eZ Platform built in routes to Netgen variants
+
+ezplatform.user.register:
+    path: /user/register
+    controller: "ngsite.controller.user:register"
+
+ezplatform.user.user_register:
+    path: /user/register
+    controller: "ngsite.controller.user:register"
+
 # Disable eZ Platform built in routes
+
+ezplatform.user.register_confirmation:
+    path: /_error/404
 
 ez_content_download:
     path: /_error/404

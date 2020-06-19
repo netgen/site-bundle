@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Controller;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use FOS\HttpCache\ResponseTagger;
+use EzSystems\PlatformHttpCacheBundle\Handler\TagHandler;
 use Knp\Menu\Provider\MenuProviderInterface;
 use Knp\Menu\Renderer\RendererProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,20 +29,20 @@ class MenuController extends Controller
     protected $configResolver;
 
     /**
-     * @var \FOS\HttpCache\ResponseTagger
+     * @var \EzSystems\PlatformHttpCacheBundle\Handler\TagHandler
      */
-    protected $responseTagger;
+    protected $tagHandler;
 
     public function __construct(
         MenuProviderInterface $menuProvider,
         RendererProviderInterface $menuRenderer,
         ConfigResolverInterface $configResolver,
-        ResponseTagger $responseTagger
+        TagHandler $tagHandler
     ) {
         $this->menuProvider = $menuProvider;
         $this->menuRenderer = $menuRenderer;
         $this->configResolver = $configResolver;
-        $this->responseTagger = $responseTagger;
+        $this->tagHandler = $tagHandler;
     }
 
     /**
@@ -68,7 +68,7 @@ class MenuController extends Controller
 
         $menuLocationId = $menu->getAttribute('location-id');
         if (!empty($menuLocationId)) {
-            $this->responseTagger->addTags(['location-' . $menuLocationId]);
+            $this->tagHandler->addLocationTags([$menuLocationId]);
         }
 
         $this->processCacheSettings($request, $response);

@@ -23,7 +23,6 @@
         "netgen/ez-forms-bundle": "^3.0",
         "netgen/ezplatform-site-api": "^3.4",
         "netgen/siteaccess-routes-bundle": "^2.0",
-        "netgen/metadata-bundle": "^3.0",
         "netgen/content-type-list-bundle": "^2.0",
         "netgen/enhanced-selection-bundle": "^4.0",
         "netgen/birthday-bundle": "^2.0",

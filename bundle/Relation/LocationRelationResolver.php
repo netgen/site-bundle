@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Relation;
 
-use Netgen\Bundle\SiteBundle\Core\FieldType\RelationList\Value as RelationList;
+use eZ\Publish\Core\FieldType\RelationList\Value as RelationList;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Psr\Log\LoggerInterface;
@@ -45,13 +45,13 @@ class LocationRelationResolver implements LocationRelationResolverInterface
             return $relatedItems;
         }
 
-        foreach ($field->value->destinationLocationIds as $locationId) {
+        foreach ($field->value->destinationContentIds as $destinationContentId) {
             try {
-                $destinationLocation = $this->loadService->loadLocation((int) $locationId);
+                $destinationLocation = $this->loadService->loadContent((int) $destinationContentId)->mainLocation;
             } catch (Throwable $t) {
                 // Do nothing if there's no location or we're not authorized to load it
                 $this->logger->error(
-                    sprintf('Error while loading location relation with #%s in content #%s', $locationId, $content->id),
+                    sprintf('Error while loading content relation with #%s in content #%s', $destinationContentId, $content->id),
                     ['error' => $t]
                 );
 

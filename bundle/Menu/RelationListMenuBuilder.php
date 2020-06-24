@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Menu;
 
+use eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
-use Netgen\Bundle\SiteBundle\Core\FieldType\RelationList\Value as RelationListValue;
 use Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Psr\Log\LoggerInterface;
@@ -71,22 +71,22 @@ class RelationListMenuBuilder
             return $menu;
         }
 
-        foreach ($field->value->destinationLocationIds as $locationId) {
-            if (empty($locationId)) {
-                $this->logger->error(sprintf('Empty location ID in RelationList field "%s" for content #%s', $fieldIdentifier, $content->id));
+        foreach ($field->value->destinationContentIds as $destinationContentId) {
+            if (empty($destinationContentId)) {
+                $this->logger->error(sprintf('Empty content ID in RelationList field "%s" for content #%s', $fieldIdentifier, $content->id));
 
                 continue;
             }
 
             try {
-                $location = $this->loadService->loadLocation($locationId);
+                $destinationContent = $this->loadService->loadContent($destinationContentId);
             } catch (Throwable $t) {
                 $this->logger->error($t->getMessage());
 
                 continue;
             }
 
-            $menu->addChild($this->factory->createItem('', ['ezlocation' => $location]));
+            $menu->addChild($this->factory->createItem('', ['ezlocation' => $destinationContent->mainLocation]));
         }
 
         return $menu;

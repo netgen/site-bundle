@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use function trim;
 
-class SearchController extends Controller
+class Search extends Controller
 {
     /**
      * @var \Netgen\EzPlatformSiteApi\API\Site
@@ -40,7 +40,7 @@ class SearchController extends Controller
     /**
      * Action for displaying the results of full text search.
      */
-    public function search(Request $request): Response
+    public function __invoke(Request $request): Response
     {
         $queryType = $this->queryTypeRegistry->getQueryType('NetgenSite:Search');
 

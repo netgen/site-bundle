@@ -1,43 +1,43 @@
 ngsite_download:
     path: /content/download/{contentId}/{fieldId}/{isInline}
-    controller: "ngsite.controller.download:downloadFile"
+    controller: ngsite.controller.download
     methods: [GET]
     defaults:
         isInline: false
 
 ngsite_user_register:
     path: /user/register
-    controller: "ngsite.controller.user:register"
+    controller: ngsite.controller.user.register
 
 ngsite_resend_activation_mail:
     path: /user/activate
-    controller: "ngsite.controller.user:activationForm"
+    controller: ngsite.controller.user.activation_form
 
 ngsite_user_activate:
     path: /user/activate/{hash}
-    controller: "ngsite.controller.user:activate"
+    controller: ngsite.controller.user.activate
 
 ngsite_user_forgot_password:
     path: /user/forgotpassword
-    controller: "ngsite.controller.user:forgotPassword"
+    controller: ngsite.controller.user.forgot_password
 
 ngsite_user_reset_password:
     path: /user/forgotpassword/{hash}
-    controller: "ngsite.controller.user:resetPassword"
+    controller: ngsite.controller.user.reset_password
 
 ngsite_content_search:
     path: /content/search
-    controller: "ngsite.controller.search:search"
+    controller: ngsite.controller.search
 
 # Rewire eZ Platform built in routes to Netgen variants
 
 ezplatform.user.register:
     path: /user/register
-    controller: "ngsite.controller.user:register"
+    controller: ngsite.controller.user.register
 
 ezplatform.user.user_register:
     path: /user/register
-    controller: "ngsite.controller.user:register"
+    controller: ngsite.controller.user.register
 
 # Disable eZ Platform built in routes
 

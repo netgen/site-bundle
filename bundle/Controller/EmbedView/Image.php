@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\SiteBundle\Controller;
+namespace Netgen\Bundle\SiteBundle\Controller\EmbedView;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
+use Netgen\Bundle\SiteBundle\Controller\Controller;
 use Netgen\EzPlatformSiteApi\API\Site;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -16,7 +17,7 @@ use function mb_substr;
 use function sprintf;
 use function trim;
 
-class EmbedViewController extends Controller
+class Image extends Controller
 {
     protected $site;
 
@@ -34,7 +35,7 @@ class EmbedViewController extends Controller
     /**
      * Action for viewing embedded content with image content type identifier.
      */
-    public function embedImage(ContentView $view): ContentView
+    public function __invoke(ContentView $view): ContentView
     {
         $parameters = $view->getParameters();
         $targetLink = !empty($parameters['objectParameters']['href']) ? trim($parameters['objectParameters']['href']) : null;

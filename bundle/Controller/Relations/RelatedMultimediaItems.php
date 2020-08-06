@@ -2,49 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\SiteBundle\Controller;
+namespace Netgen\Bundle\SiteBundle\Controller\Relations;
 
+use Netgen\Bundle\SiteBundle\Controller\Controller;
 use Netgen\Bundle\SiteBundle\Relation\LocationRelationResolverInterface;
-use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class PartsController extends Controller
+class RelatedMultimediaItems extends Controller
 {
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Relation\LocationRelationResolverInterface
-     */
-    protected $locationResolver;
-
     /**
      * @var \Netgen\Bundle\SiteBundle\Relation\LocationRelationResolverInterface
      */
     protected $multimediaResolver;
 
-    public function __construct(
-        LocationRelationResolverInterface $locationResolver,
-        LocationRelationResolverInterface $multimediaResolver
-    ) {
-        $this->locationResolver = $locationResolver;
-        $this->multimediaResolver = $multimediaResolver;
-    }
-
-    /**
-     * Action for rendering related items of a provided content.
-     */
-    public function viewRelatedItems(Request $request, Content $content, string $fieldDefinitionIdentifier, string $template): Response
+    public function __construct(LocationRelationResolverInterface $multimediaResolver)
     {
-        return $this->render(
-            $template,
-            [
-                'content' => $content,
-                'location' => $content->mainLocation,
-                'field_identifier' => $fieldDefinitionIdentifier,
-                'related_items' => $this->locationResolver->loadRelations($content->mainLocation, $fieldDefinitionIdentifier),
-                'view_type' => $request->attributes->get('viewType') ?? 'line',
-            ]
-        );
+        $this->multimediaResolver = $multimediaResolver;
     }
 
     /**
@@ -59,7 +34,7 @@ class PartsController extends Controller
      * 3. related objects from related_multimedia object relation field ( related images, images from related galleries, banners, videos )
      * - to enable this feature for some content type, add object relations field with content type identifier 'related_multimedia'.
      */
-    public function viewRelatedMultimediaItems(Request $request, Location $location, string $template, string $fieldDefinitionIdentifier = 'related_multimedia'): Response
+    public function __invoke(Request $request, Location $location, string $template, string $fieldDefinitionIdentifier = 'related_multimedia'): Response
     {
         $multimediaItems = $this->multimediaResolver->loadRelations(
             $location,

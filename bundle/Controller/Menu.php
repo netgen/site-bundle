@@ -11,7 +11,7 @@ use Knp\Menu\Renderer\RendererProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class MenuController extends Controller
+class Menu extends Controller
 {
     /**
      * @var \Knp\Menu\Provider\MenuProviderInterface
@@ -48,7 +48,7 @@ class MenuController extends Controller
     /**
      * Renders the menu with provided name.
      */
-    public function renderMenu(Request $request, string $menuName): Response
+    public function __invoke(Request $request, string $menuName): Response
     {
         $menu = $this->menuProvider->get($menuName);
         $menu->setChildrenAttribute('class', $request->attributes->get('ulClass') ?? 'nav navbar-nav');

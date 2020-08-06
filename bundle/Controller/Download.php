@@ -18,7 +18,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use function str_replace;
 
-class DownloadController extends Controller
+class Download extends Controller
 {
     /**
      * @var \Netgen\EzPlatformSiteApi\API\Site
@@ -75,7 +75,7 @@ class DownloadController extends Controller
      *
      * @return \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse
      */
-    public function downloadFile(Request $request, $contentId, $fieldId, $isInline = false): BinaryStreamResponse
+    public function __invoke(Request $request, $contentId, $fieldId, $isInline = false): BinaryStreamResponse
     {
         $contentId = (int) $contentId;
         $fieldId = (int) $fieldId;

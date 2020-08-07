@@ -8,6 +8,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Netgen\Bundle\SiteBundle\Controller\Controller;
 use Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey;
 use Netgen\Bundle\SiteBundle\Entity\Repository\EzUserAccountKeyRepository;
@@ -35,14 +36,28 @@ class Activate extends Controller
      */
     protected $accountKeyRepository;
 
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    protected $repository;
+
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    protected $configResolver;
+
     public function __construct(
         UserService $userService,
         EventDispatcherInterface $eventDispatcher,
-        EzUserAccountKeyRepository $accountKeyRepository
+        EzUserAccountKeyRepository $accountKeyRepository,
+        Repository $repository,
+        ConfigResolverInterface $configResolver
     ) {
         $this->userService = $userService;
         $this->eventDispatcher = $eventDispatcher;
         $this->accountKeyRepository = $accountKeyRepository;
+        $this->repository = $repository;
+        $this->configResolver = $configResolver;
     }
 
     /**
@@ -58,11 +73,11 @@ class Activate extends Controller
             throw new NotFoundHttpException();
         }
 
-        if (time() - $accountKey->getTime() > $this->getConfigResolver()->getParameter('user.activate_hash_validity_time', 'ngsite')) {
+        if (time() - $accountKey->getTime() > $this->configResolver->getParameter('user.activate_hash_validity_time', 'ngsite')) {
             $this->accountKeyRepository->removeByHash($hash);
 
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.activate_done', 'ngsite'),
+                $this->configResolver->getParameter('template.user.activate_done', 'ngsite'),
                 [
                     'error' => 'hash_expired',
                 ]
@@ -82,7 +97,7 @@ class Activate extends Controller
         $this->eventDispatcher->dispatch($preActivateEvent, SiteEvents::USER_PRE_ACTIVATE);
         $userUpdateStruct = $preActivateEvent->getUserUpdateStruct();
 
-        $user = $this->getRepository()->sudo(
+        $user = $this->repository->sudo(
             static function (Repository $repository) use ($user, $userUpdateStruct): User {
                 return $repository->getUserService()->updateUser($user, $userUpdateStruct);
             }
@@ -92,7 +107,7 @@ class Activate extends Controller
         $this->eventDispatcher->dispatch($postActivateEvent, SiteEvents::USER_POST_ACTIVATE);
 
         return $this->render(
-            $this->getConfigResolver()->getParameter('template.user.activate_done', 'ngsite')
+            $this->configResolver->getParameter('template.user.activate_done', 'ngsite')
         );
     }
 }

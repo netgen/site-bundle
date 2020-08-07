@@ -8,6 +8,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Netgen\Bundle\SiteBundle\Controller\Controller;
 use Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey;
 use Netgen\Bundle\SiteBundle\Entity\Repository\EzUserAccountKeyRepository;
@@ -40,14 +41,28 @@ class ResetPassword extends Controller
      */
     protected $accountKeyRepository;
 
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    protected $repository;
+
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    protected $configResolver;
+
     public function __construct(
         UserService $userService,
         EventDispatcherInterface $eventDispatcher,
-        EzUserAccountKeyRepository $accountKeyRepository
+        EzUserAccountKeyRepository $accountKeyRepository,
+        Repository $repository,
+        ConfigResolverInterface $configResolver
     ) {
         $this->userService = $userService;
         $this->eventDispatcher = $eventDispatcher;
         $this->accountKeyRepository = $accountKeyRepository;
+        $this->repository = $repository;
+        $this->configResolver = $configResolver;
     }
 
     /**
@@ -63,11 +78,11 @@ class ResetPassword extends Controller
             throw new NotFoundHttpException();
         }
 
-        if (time() - $accountKey->getTime() > $this->getConfigResolver()->getParameter('user.forgot_password_hash_validity_time', 'ngsite')) {
+        if (time() - $accountKey->getTime() > $this->configResolver->getParameter('user.forgot_password_hash_validity_time', 'ngsite')) {
             $this->accountKeyRepository->removeByHash($hash);
 
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.reset_password_done', 'ngsite'),
+                $this->configResolver->getParameter('template.user.reset_password_done', 'ngsite'),
                 [
                     'error' => 'hash_expired',
                 ]
@@ -85,7 +100,7 @@ class ResetPassword extends Controller
 
         if (!$form->isSubmitted() || !$form->isValid()) {
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.reset_password', 'ngsite'),
+                $this->configResolver->getParameter('template.user.reset_password', 'ngsite'),
                 [
                     'form' => $form->createView(),
                 ]
@@ -101,7 +116,7 @@ class ResetPassword extends Controller
         $this->eventDispatcher->dispatch($prePasswordResetEvent, SiteEvents::USER_PRE_PASSWORD_RESET);
         $userUpdateStruct = $prePasswordResetEvent->getUserUpdateStruct();
 
-        $user = $this->getRepository()->sudo(
+        $user = $this->repository->sudo(
             static function (Repository $repository) use ($user, $userUpdateStruct): User {
                 return $repository->getUserService()->updateUser($user, $userUpdateStruct);
             }
@@ -111,7 +126,7 @@ class ResetPassword extends Controller
         $this->eventDispatcher->dispatch($postPasswordResetEvent, SiteEvents::USER_POST_PASSWORD_RESET);
 
         return $this->render(
-            $this->getConfigResolver()->getParameter('template.user.reset_password_done', 'ngsite')
+            $this->configResolver->getParameter('template.user.reset_password_done', 'ngsite')
         );
     }
 

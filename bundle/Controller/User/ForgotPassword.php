@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Controller\User;
 
 use eZ\Publish\API\Repository\UserService;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Netgen\Bundle\SiteBundle\Controller\Controller;
 use Netgen\Bundle\SiteBundle\Event\SiteEvents;
 use Netgen\Bundle\SiteBundle\Event\User as UserEvents;
@@ -27,12 +28,19 @@ class ForgotPassword extends Controller
      */
     protected $eventDispatcher;
 
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    protected $configResolver;
+
     public function __construct(
         UserService $userService,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        ConfigResolverInterface $configResolver
     ) {
         $this->userService = $userService;
         $this->eventDispatcher = $eventDispatcher;
+        $this->configResolver = $configResolver;
     }
 
     /**
@@ -45,7 +53,7 @@ class ForgotPassword extends Controller
 
         if (!$form->isSubmitted() || !$form->isValid()) {
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.forgot_password', 'ngsite'),
+                $this->configResolver->getParameter('template.user.forgot_password', 'ngsite'),
                 [
                     'form' => $form->createView(),
                 ]
@@ -62,7 +70,7 @@ class ForgotPassword extends Controller
         $this->eventDispatcher->dispatch($passwordResetRequestEvent, SiteEvents::USER_PASSWORD_RESET_REQUEST);
 
         return $this->render(
-            $this->getConfigResolver()->getParameter('template.user.forgot_password_sent', 'ngsite')
+            $this->configResolver->getParameter('template.user.forgot_password_sent', 'ngsite')
         );
     }
 

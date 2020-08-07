@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Controller\User;
 
+use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
 use Netgen\Bundle\EzFormsBundle\Form\DataWrapper;
 use Netgen\Bundle\EzFormsBundle\Form\Type\CreateUserType;
 use Netgen\Bundle\SiteBundle\Controller\Controller;
 use Netgen\Bundle\SiteBundle\Event\SiteEvents;
 use Netgen\Bundle\SiteBundle\Event\User as UserEvents;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -27,23 +28,37 @@ class Register extends Controller
     protected $userService;
 
     /**
+     * @var \eZ\Publish\API\Repository\ContentTypeService
+     */
+    protected $contentTypeService;
+
+    /**
      * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
 
     /**
-     * @var \Symfony\Component\Form\FormFactoryInterface
+     * @var \eZ\Publish\API\Repository\Repository
      */
-    protected $formFactory;
+    protected $repository;
+
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    protected $configResolver;
 
     public function __construct(
         UserService $userService,
+        ContentTypeService $contentTypeService,
         EventDispatcherInterface $eventDispatcher,
-        FormFactoryInterface $formFactory
+        Repository $repository,
+        ConfigResolverInterface $configResolver
     ) {
         $this->userService = $userService;
+        $this->contentTypeService = $contentTypeService;
         $this->eventDispatcher = $eventDispatcher;
-        $this->formFactory = $formFactory;
+        $this->repository = $repository;
+        $this->configResolver = $configResolver;
     }
 
     /**
@@ -55,9 +70,9 @@ class Register extends Controller
     {
         $this->denyAccessUnlessGranted(new Attribute('user', 'register'));
 
-        $contentTypeIdentifier = $this->getConfigResolver()->getParameter('user.content_type_identifier', 'ngsite');
-        $contentType = $this->getRepository()->getContentTypeService()->loadContentTypeByIdentifier($contentTypeIdentifier);
-        $languages = $this->getConfigResolver()->getParameter('languages');
+        $contentTypeIdentifier = $this->configResolver->getParameter('user.content_type_identifier', 'ngsite');
+        $contentType = $this->contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
+        $languages = $this->configResolver->getParameter('languages');
         $userCreateStruct = $this->userService->newUserCreateStruct(
             '',
             '',
@@ -66,12 +81,12 @@ class Register extends Controller
             $contentType
         );
 
-        $userCreateStruct->enabled = (bool) $this->getConfigResolver()->getParameter('user.auto_enable', 'ngsite');
+        $userCreateStruct->enabled = (bool) $this->configResolver->getParameter('user.auto_enable', 'ngsite');
         $userCreateStruct->alwaysAvailable = (bool) $contentType->defaultAlwaysAvailable;
 
         $data = new DataWrapper($userCreateStruct, $userCreateStruct->contentType);
 
-        $formBuilder = $this->formFactory->createBuilder(
+        $form = $this->createForm(
             CreateUserType::class,
             $data,
             [
@@ -79,12 +94,11 @@ class Register extends Controller
             ]
         );
 
-        $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.register', 'ngsite'),
+                $this->configResolver->getParameter('template.user.register', 'ngsite'),
                 [
                     'form' => $form->createView(),
                 ]
@@ -95,7 +109,7 @@ class Register extends Controller
 
         if (!empty($users)) {
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.register', 'ngsite'),
+                $this->configResolver->getParameter('template.user.register', 'ngsite'),
                 [
                     'form' => $form->createView(),
                     'error' => 'email_in_use',
@@ -107,7 +121,7 @@ class Register extends Controller
             $this->userService->loadUserByLogin($form->getData()->payload->login);
 
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.register', 'ngsite'),
+                $this->configResolver->getParameter('template.user.register', 'ngsite'),
                 [
                     'form' => $form->createView(),
                     'error' => 'username_taken',
@@ -117,7 +131,7 @@ class Register extends Controller
             // do nothing
         }
 
-        $userGroupId = $this->getConfigResolver()->getParameter('user.user_group_content_id', 'ngsite');
+        $userGroupId = $this->configResolver->getParameter('user.user_group_content_id', 'ngsite');
 
         $preUserRegisterEvent = new UserEvents\PreRegisterEvent($data->payload);
         $this->eventDispatcher->dispatch($preUserRegisterEvent, SiteEvents::USER_PRE_REGISTER);
@@ -137,7 +151,7 @@ class Register extends Controller
         }
 
         /** @var \eZ\Publish\API\Repository\Values\User\User $newUser */
-        $newUser = $this->getRepository()->sudo(
+        $newUser = $this->repository->sudo(
             static function (Repository $repository) use ($data, $userGroupId): User {
                 $userGroup = $repository->getUserService()->loadUserGroup($userGroupId);
 
@@ -153,18 +167,18 @@ class Register extends Controller
 
         if ($newUser->enabled) {
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.register_success', 'ngsite')
+                $this->configResolver->getParameter('template.user.register_success', 'ngsite')
             );
         }
 
-        if ($this->getConfigResolver()->getParameter('user.require_admin_activation', 'ngsite')) {
+        if ($this->configResolver->getParameter('user.require_admin_activation', 'ngsite')) {
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.activate_admin_activation_pending', 'ngsite')
+                $this->configResolver->getParameter('template.user.activate_admin_activation_pending', 'ngsite')
             );
         }
 
         return $this->render(
-            $this->getConfigResolver()->getParameter('template.user.activate_sent', 'ngsite')
+            $this->configResolver->getParameter('template.user.activate_sent', 'ngsite')
         );
     }
 }

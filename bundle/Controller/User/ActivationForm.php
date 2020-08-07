@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Controller\User;
 
 use eZ\Publish\API\Repository\UserService;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Netgen\Bundle\SiteBundle\Controller\Controller;
 use Netgen\Bundle\SiteBundle\Event\SiteEvents;
 use Netgen\Bundle\SiteBundle\Event\User as UserEvents;
@@ -27,12 +28,19 @@ class ActivationForm extends Controller
      */
     protected $eventDispatcher;
 
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    protected $configResolver;
+
     public function __construct(
         UserService $userService,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        ConfigResolverInterface $configResolver
     ) {
         $this->userService = $userService;
         $this->eventDispatcher = $eventDispatcher;
+        $this->configResolver = $configResolver;
     }
 
     /**
@@ -45,7 +53,7 @@ class ActivationForm extends Controller
 
         if (!$form->isSubmitted() || !$form->isValid()) {
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.activate', 'ngsite'),
+                $this->configResolver->getParameter('template.user.activate', 'ngsite'),
                 [
                     'form' => $form->createView(),
                 ]
@@ -62,7 +70,7 @@ class ActivationForm extends Controller
         $this->eventDispatcher->dispatch($activationRequestEvent, SiteEvents::USER_ACTIVATION_REQUEST);
 
         return $this->render(
-            $this->getConfigResolver()->getParameter('template.user.activate_sent', 'ngsite')
+            $this->configResolver->getParameter('template.user.activate_sent', 'ngsite')
         );
     }
 

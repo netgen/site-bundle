@@ -114,8 +114,10 @@ services:
         parent: ngsite.controller.base
         arguments:
             - "@ezpublish.api.service.user"
+            - "@ezpublish.api.service.content_type"
             - "@event_dispatcher"
-            - "@form.factory"
+            - "@ezpublish.api.repository"
+            - "@ezpublish.config.resolver"
 
     ngsite.controller.user.activation_form:
         class: Netgen\Bundle\SiteBundle\Controller\User\ActivationForm
@@ -124,6 +126,7 @@ services:
         arguments:
             - "@ezpublish.api.service.user"
             - "@event_dispatcher"
+            - "@ezpublish.config.resolver"
 
     ngsite.controller.user.activate:
         class: Netgen\Bundle\SiteBundle\Controller\User\Activate
@@ -133,6 +136,8 @@ services:
             - "@ezpublish.api.service.user"
             - "@event_dispatcher"
             - "@ngsite.repository.ezuser_accountkey"
+            - "@ezpublish.api.repository"
+            - "@ezpublish.config.resolver"
 
     ngsite.controller.user.forgot_password:
         class: Netgen\Bundle\SiteBundle\Controller\User\ForgotPassword
@@ -141,6 +146,7 @@ services:
         arguments:
             - "@ezpublish.api.service.user"
             - "@event_dispatcher"
+            - "@ezpublish.config.resolver"
 
     ngsite.controller.user.reset_password:
         class: Netgen\Bundle\SiteBundle\Controller\User\ResetPassword
@@ -150,6 +156,8 @@ services:
             - "@ezpublish.api.service.user"
             - "@event_dispatcher"
             - "@ngsite.repository.ezuser_accountkey"
+            - "@ezpublish.api.repository"
+            - "@ezpublish.config.resolver"
 
     ngsite.param_converter.content:
         class: Netgen\Bundle\SiteBundle\ParamConverter\ContentParamConverter

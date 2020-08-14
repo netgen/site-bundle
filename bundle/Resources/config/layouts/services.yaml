@@ -12,6 +12,8 @@ parameters:
         large: 'block.plugin.vertical_whitespace.large'
 
     ngsite.layouts.block.plugin.background_color.colors:
+        primary: 'block.plugin.background_color.primary'
+        secondary: 'block.plugin.background_color.secondary'
         white: 'block.plugin.background_color.white'
         black: 'block.plugin.background_color.black'
 

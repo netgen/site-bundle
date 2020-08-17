@@ -13,7 +13,6 @@ class NetgenSiteBundle extends Bundle
     public function build(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new Compiler\XslRegisterPass());
-        $container->addCompilerPass(new Compiler\XmlTextFieldTypePass());
         $container->addCompilerPass(new Compiler\ImagineIOResolverPass());
         $container->addCompilerPass(new Compiler\ContentDownloadUrlGeneratorPass());
         $container->addCompilerPass(new Compiler\LocationFactoryPass());

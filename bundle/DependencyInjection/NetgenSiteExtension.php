@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\DependencyInjection;
 
+use EzSystems\EzPlatformRichTextBundle\EzPlatformRichTextBundle;
 use Netgen\Bundle\LayoutsBundle\NetgenLayoutsBundle;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
@@ -51,6 +52,7 @@ class NetgenSiteExtension extends Extension implements PrependExtensionInterface
 
         $prependConfigs = [
             'ezplatform.yaml' => 'ezpublish',
+            'ezrichtext.yaml' => 'ezrichtext',
             'framework/twig.yaml' => 'twig',
             'framework/assets.yaml' => 'framework',
         ];

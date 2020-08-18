@@ -1,0 +1,9 @@
+ezrichtext.custom_tags.video.label: Video
+ezrichtext.custom_tags.video.attributes.video_service.label: Video service
+ezrichtext.custom_tags.video.attributes.video_service.choices.youtube.label: YouTube
+ezrichtext.custom_tags.video.attributes.video_service.choices.vimeo.label: Vimeo
+ezrichtext.custom_tags.video.attributes.video_service.choices.dailymotion.label: Dailymotion
+ezrichtext.custom_tags.video.attributes.video_code.label: Video code
+ezrichtext.custom_tags.video.attributes.autoresize.label: Autoresize
+ezrichtext.custom_tags.video.attributes.autoresize.choices.fit.label: Fit
+ezrichtext.custom_tags.video.attributes.autoresize.choices.fill.label: Fill

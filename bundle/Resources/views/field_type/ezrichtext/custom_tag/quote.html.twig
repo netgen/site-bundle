@@ -1,0 +1,20 @@
+{% set css_class = 'object-full' %}
+{% if params.align is defined and params.align is not empty %}
+    {% set css_class = 'object-' ~ params.align %}
+{% endif %}
+
+<div class="{{ css_class }}">
+    <blockquote>
+        {% if content is defined and content is not empty %}
+            <div class="blockquote-body">
+                {{ content|raw }}
+            </div>
+        {% endif %}
+
+        {% if params.author is defined and params.author is not empty %}
+            <small>
+                {{ params.author }}
+            </small>
+        {% endif %}
+    </blockquote>
+</div>

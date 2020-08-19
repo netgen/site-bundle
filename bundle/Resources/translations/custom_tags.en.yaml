@@ -11,3 +11,7 @@ ezrichtext.custom_tags.video.attributes.autoresize.choices.fill.label: Fill
 ezrichtext.custom_tags.factbox.label: Factbox
 ezrichtext.custom_tags.factbox.attributes.title.label: Title
 ezrichtext.custom_tags.factbox.attributes.align.label: Align
+
+ezrichtext.custom_tags.quote.label: Quote
+ezrichtext.custom_tags.quote.attributes.author.label: Author
+ezrichtext.custom_tags.quote.attributes.align.label: Align

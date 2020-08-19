@@ -29,3 +29,15 @@ custom_tags:
                 type: string
                 required: false
                 default_value: right
+    quote:
+        template: '@NetgenSite/field_type/ezrichtext/custom_tag/quote.html.twig'
+        icon: '/bundles/ezplatformadminui/img/ez-icons.svg#quote'
+        is_inline: false
+        attributes:
+            author:
+                type: string
+                required: false
+            align:
+                type: string
+                required: false
+                default_value: right

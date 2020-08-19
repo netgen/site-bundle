@@ -5,13 +5,25 @@ system:
     admin_group:
         fieldtypes:
             ezrichtext:
-                custom_tags: [video]
+                custom_tags: [video, factbox]
                 toolbars:
                     ezadd:
                         buttons:
                             video:
                                 priority: 5
+                            factbox:
+                                priority: 6
                     video:
+                        buttons:
+                            ezmoveup:
+                                priority: 40
+                            ezmovedown:
+                                priority: 30
+                            ezcustomtagedit:
+                                priority: 20
+                            ezblockremove:
+                                priority: 10
+                    factbox:
                         buttons:
                             ezmoveup:
                                 priority: 40

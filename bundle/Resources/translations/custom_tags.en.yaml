@@ -7,3 +7,7 @@ ezrichtext.custom_tags.video.attributes.video_code.label: Video code
 ezrichtext.custom_tags.video.attributes.autoresize.label: Autoresize
 ezrichtext.custom_tags.video.attributes.autoresize.choices.fit.label: Fit
 ezrichtext.custom_tags.video.attributes.autoresize.choices.fill.label: Fill
+
+ezrichtext.custom_tags.factbox.label: Factbox
+ezrichtext.custom_tags.factbox.attributes.title.label: Title
+ezrichtext.custom_tags.factbox.attributes.align.label: Align

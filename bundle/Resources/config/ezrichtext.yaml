@@ -17,3 +17,15 @@ custom_tags:
                 required: false
                 default_value: fit
                 choices: [fit, fill]
+    factbox:
+        template: '@NetgenSite/field_type/ezrichtext/custom_tag/factbox.html.twig'
+        icon: '/bundles/ezplatformadminui/img/ez-icons.svg#information'
+        is_inline: false
+        attributes:
+            title:
+                type: string
+                required: false
+            align:
+                type: string
+                required: false
+                default_value: right

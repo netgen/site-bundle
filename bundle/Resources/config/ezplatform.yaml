@@ -44,8 +44,14 @@ system:
                     quote:
                         buttons:
                             ezmoveup:
-                                priority: 40
+                                priority: 70
                             ezmovedown:
+                                priority: 60
+                            ezembedleft:
+                                priority: 50
+                            ezembedcenter:
+                                priority: 40
+                            ezembedright:
                                 priority: 30
                             ezcustomtagedit:
                                 priority: 20

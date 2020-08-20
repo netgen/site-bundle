@@ -33,7 +33,3 @@ custom_tags:
             author:
                 type: string
                 required: false
-            align:
-                type: string
-                required: false
-                default_value: right

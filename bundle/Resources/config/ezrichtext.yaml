@@ -25,10 +25,6 @@ custom_tags:
             title:
                 type: string
                 required: false
-            align:
-                type: string
-                required: false
-                default_value: right
     quote:
         template: '@NetgenSite/field_type/ezrichtext/custom_tag/quote.html.twig'
         icon: '/bundles/ezplatformadminui/img/ez-icons.svg#quote'

@@ -1,6 +1,6 @@
 {% set css_class = 'factbox object-full' %}
-{% if params.align is defined and params.align is not empty %}
-    {% set css_class = 'factbox object-' ~ params.align %}
+{% if align is defined and align is not empty %}
+    {% set css_class = 'factbox object-' ~ align %}
 {% endif %}
 
 <div class="{{ css_class }}">

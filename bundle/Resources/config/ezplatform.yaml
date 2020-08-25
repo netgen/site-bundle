@@ -5,7 +5,27 @@ system:
     admin_group:
         fieldtypes:
             ezrichtext:
-                custom_tags: [video, factbox, quote]
+                classes:
+                    table:
+                        choices:
+                            - regular
+                            - table-bordered
+                            - table-striped
+                            - table-hover
+                            - table-condensed
+                            - table-no-skin
+                        default_value: regular
+                        required: false
+                        multiple: false
+
+                attributes:
+                    table:
+                        caption:
+                            type: string
+                            required: false
+                        responsive:
+                            type: boolean
+                            default_value: false
                 toolbars:
                     ezadd:
                         buttons:
@@ -61,3 +81,7 @@ system:
                                 priority: 20
                             ezblockremove:
                                 priority: 10
+                    custom_tags:
+                        - video
+                        - factbox
+                        - quote

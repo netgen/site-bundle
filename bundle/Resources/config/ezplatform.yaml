@@ -81,7 +81,7 @@ system:
                                 priority: 20
                             ezblockremove:
                                 priority: 10
-                    custom_tags:
-                        - video
-                        - factbox
-                        - quote
+                custom_tags:
+                    - video
+                    - factbox
+                    - quote

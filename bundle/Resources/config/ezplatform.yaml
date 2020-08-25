@@ -15,6 +15,10 @@ system:
                                 priority: 2
                             quote:
                                 priority: 1
+                    table:
+                        buttons:
+                            elementwidth:
+                                priority: -100
                     video:
                         buttons:
                             ezmoveup:

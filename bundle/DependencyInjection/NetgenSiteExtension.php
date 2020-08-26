@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\DependencyInjection;
 
-use EzSystems\EzPlatformRichTextBundle\EzPlatformRichTextBundle;
 use Netgen\Bundle\LayoutsBundle\NetgenLayoutsBundle;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;

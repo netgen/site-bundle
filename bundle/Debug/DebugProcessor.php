@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Debug;
 
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
+use function call_user_func;
+use function in_array;
 
 /**
  * This debug processor overrides Symfony built in DebugProcessor to exclude

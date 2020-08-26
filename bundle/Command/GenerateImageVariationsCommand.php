@@ -17,6 +17,15 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use function array_filter;
+use function array_keys;
+use function array_map;
+use function array_unique;
+use function array_values;
+use function explode;
+use function in_array;
+use function iterator_to_array;
+use function trim;
 
 class GenerateImageVariationsCommand extends Command
 {

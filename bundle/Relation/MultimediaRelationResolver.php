@@ -7,6 +7,8 @@ namespace Netgen\Bundle\SiteBundle\Relation;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use function array_merge;
+use function iterator_to_array;
 
 class MultimediaRelationResolver implements LocationRelationResolverInterface
 {
@@ -26,7 +28,7 @@ class MultimediaRelationResolver implements LocationRelationResolverInterface
         $this->innerResolver = $innerResolver;
     }
 
-    public function loadRelations(Location $location, string $fieldIdentifier = null, array $options = []): array
+    public function loadRelations(Location $location, ?string $fieldIdentifier = null, array $options = []): array
     {
         $optionsResolver = new OptionsResolver();
         $this->configureOptions($optionsResolver);

@@ -11,6 +11,9 @@ use Netgen\Bundle\OpenGraphBundle\MetaTag\Item;
 use Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use function ltrim;
+use function preg_match;
+use function sprintf;
 
 class SiteImage implements HandlerInterface
 {

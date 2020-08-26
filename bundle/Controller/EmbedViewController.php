@@ -10,6 +10,10 @@ use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\Routing\RouterInterface;
+use function mb_stripos;
+use function mb_substr;
+use function sprintf;
+use function trim;
 
 class EmbedViewController extends Controller
 {
@@ -23,7 +27,7 @@ class EmbedViewController extends Controller
      */
     protected $logger;
 
-    public function __construct(RouterInterface $router, LoggerInterface $logger = null)
+    public function __construct(RouterInterface $router, ?LoggerInterface $logger = null)
     {
         $this->router = $router;
         $this->logger = $logger ?? new NullLogger();

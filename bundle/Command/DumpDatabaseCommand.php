@@ -11,6 +11,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
+use function basename;
+use function dirname;
+use function getcwd;
+use function trim;
+use const DIRECTORY_SEPARATOR;
 
 class DumpDatabaseCommand extends ContainerAwareCommand
 {
@@ -34,7 +39,7 @@ class DumpDatabaseCommand extends ContainerAwareCommand
         $databaseUser = $container->getParameter('database_user');
         $databasePassword = $container->getParameter('database_password');
 
-        $filePath = getcwd() . \DIRECTORY_SEPARATOR . trim($input->getArgument('file'), '/');
+        $filePath = getcwd() . DIRECTORY_SEPARATOR . trim($input->getArgument('file'), '/');
         $targetDirectory = dirname($filePath);
         $fileName = basename($filePath);
 

@@ -10,6 +10,9 @@ use Netgen\EzPlatformSiteApi\API\LoadService;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
+use function array_shift;
+use function in_array;
+use function is_array;
 
 class PathHelper
 {

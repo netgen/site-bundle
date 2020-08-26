@@ -9,6 +9,10 @@ use eZ\Publish\Core\FieldType\RelationList\Type as BaseRelationListType;
 use eZ\Publish\Core\FieldType\RelationList\Value as BaseRelationListValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use function is_array;
+use function is_int;
+use function is_string;
+use function sprintf;
 
 class Type extends BaseRelationListType
 {

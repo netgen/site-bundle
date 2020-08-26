@@ -31,7 +31,7 @@ class SiteContentUrlAliasRouter implements ChainedRouterInterface, RequestMatche
      */
     protected $requestContext;
 
-    public function __construct(UrlAliasGenerator $generator, RequestContext $requestContext = null)
+    public function __construct(UrlAliasGenerator $generator, ?RequestContext $requestContext = null)
     {
         $this->generator = $generator;
         $this->requestContext = $requestContext ?? new RequestContext();

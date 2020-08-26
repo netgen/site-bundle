@@ -13,6 +13,10 @@ use Swift_Message;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig\Environment;
+use function count;
+use function is_array;
+use function is_string;
+use function trim;
 
 class MailHelper
 {
@@ -68,7 +72,7 @@ class MailHelper
         TranslatorInterface $translator,
         ConfigResolverInterface $configResolver,
         SiteInfoHelper $siteInfoHelper,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->mailer = $mailer;
         $this->twig = $twig;

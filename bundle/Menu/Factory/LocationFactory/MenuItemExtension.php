@@ -20,6 +20,10 @@ use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Throwable;
+use function array_map;
+use function in_array;
+use function mb_stripos;
+use function sprintf;
 
 class MenuItemExtension implements ExtensionInterface
 {
@@ -59,7 +63,7 @@ class MenuItemExtension implements ExtensionInterface
         UrlGeneratorInterface $urlGenerator,
         RequestStack $requestStack,
         ConfigResolverInterface $configResolver,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->loadService = $loadService;
         $this->filterService = $filterService;

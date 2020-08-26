@@ -11,6 +11,8 @@ use Netgen\Bundle\SiteBundle\Helper\PathHelper;
 use Netgen\EzPlatformSiteApi\API\Exceptions\TranslationNotMatchedException;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Symfony\Component\Intl\Intl;
+use function mb_substr;
+use function ucwords;
 
 class SiteRuntime
 {

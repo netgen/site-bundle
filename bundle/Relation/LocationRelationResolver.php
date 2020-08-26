@@ -10,6 +10,8 @@ use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Throwable;
+use function is_string;
+use function sprintf;
 
 class LocationRelationResolver implements LocationRelationResolverInterface
 {
@@ -23,13 +25,13 @@ class LocationRelationResolver implements LocationRelationResolverInterface
      */
     protected $logger;
 
-    public function __construct(LoadService $loadService, LoggerInterface $logger = null)
+    public function __construct(LoadService $loadService, ?LoggerInterface $logger = null)
     {
         $this->loadService = $loadService;
         $this->logger = $logger ?? new NullLogger();
     }
 
-    public function loadRelations(Location $location, string $fieldIdentifier = null, array $options = []): array
+    public function loadRelations(Location $location, ?string $fieldIdentifier = null, array $options = []): array
     {
         $relatedItems = [];
 

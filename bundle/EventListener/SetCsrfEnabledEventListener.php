@@ -16,7 +16,7 @@ class SetCsrfEnabledEventListener implements EventSubscriberInterface
      */
     protected $csrfTokenManager;
 
-    public function __construct(CsrfTokenManager $csrfTokenManager = null)
+    public function __construct(?CsrfTokenManager $csrfTokenManager = null)
     {
         $this->csrfTokenManager = $csrfTokenManager;
     }

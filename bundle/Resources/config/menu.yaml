@@ -4,7 +4,7 @@ services:
         arguments:
             - "@ngsite.menu.factory.location"
             - "@netgen.ezplatform_site.load_service"
-            - "@ngsite.helper.site_info_helper"
+            - "@netgen.ezplatform_site.named_object_provider"
             - "@?logger"
         tags:
             - { name: monolog.logger, channel: ngsite }

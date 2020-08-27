@@ -43,9 +43,9 @@ class MailHelper
     protected $configResolver;
 
     /**
-     * @var \Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper
+     * @var \Psr\Log\LoggerInterface
      */
-    protected $siteInfoHelper;
+    protected $logger;
 
     /**
      * @var string
@@ -57,24 +57,17 @@ class MailHelper
      */
     protected $siteName;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
-
     public function __construct(
         MailerInterface $mailer,
         Environment $twig,
         TranslatorInterface $translator,
         ConfigResolverInterface $configResolver,
-        SiteInfoHelper $siteInfoHelper,
         ?LoggerInterface $logger = null
     ) {
         $this->mailer = $mailer;
         $this->twig = $twig;
         $this->translator = $translator;
         $this->configResolver = $configResolver;
-        $this->siteInfoHelper = $siteInfoHelper;
         $this->logger = $logger ?? new NullLogger();
     }
 

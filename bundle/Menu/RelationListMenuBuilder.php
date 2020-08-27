@@ -7,7 +7,7 @@ namespace Netgen\Bundle\SiteBundle\Menu;
 use eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
-use Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper;
+use Netgen\Bundle\EzPlatformSiteApiBundle\NamedObject\Provider;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -27,9 +27,9 @@ class RelationListMenuBuilder
     protected $loadService;
 
     /**
-     * @var \Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper
+     * @var \Netgen\Bundle\EzPlatformSiteApiBundle\NamedObject\Provider
      */
-    protected $siteInfoHelper;
+    protected $namedObjectProvider;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -39,12 +39,12 @@ class RelationListMenuBuilder
     public function __construct(
         FactoryInterface $factory,
         LoadService $loadService,
-        SiteInfoHelper $siteInfoHelper,
+        Provider $namedObjectProvider,
         ?LoggerInterface $logger = null
     ) {
         $this->factory = $factory;
         $this->loadService = $loadService;
-        $this->siteInfoHelper = $siteInfoHelper;
+        $this->namedObjectProvider = $namedObjectProvider;
         $this->logger = $logger ?? new NullLogger();
     }
 
@@ -55,7 +55,7 @@ class RelationListMenuBuilder
     {
         $content = $contentId !== null ?
             $this->loadService->loadContent($contentId) :
-            $this->siteInfoHelper->getSiteInfoContent();
+            $this->namedObjectProvider->getLocation('site_info')->content;
 
         $menu = $this->factory->createItem('root');
 

@@ -52,6 +52,7 @@ class NetgenSiteExtension extends Extension implements PrependExtensionInterface
         $prependConfigs = [
             'ezplatform.yaml' => 'ezpublish',
             'ezrichtext.yaml' => 'ezrichtext',
+            'site_api.yaml' => 'netgen_ez_platform_site_api',
             'framework/twig.yaml' => 'twig',
             'framework/assets.yaml' => 'framework',
         ];

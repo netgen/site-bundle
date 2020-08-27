@@ -2,7 +2,7 @@ services:
     ngsite.templating.global_variable:
         class: Netgen\Bundle\SiteBundle\Templating\GlobalVariable
         arguments:
-            - "@ngsite.helper.site_info_helper"
+            - "@netgen.ezplatform_site.named_object_provider"
             - "@ezpublish.api.repository"
             - "@netgen.ezplatform_site.load_service"
 

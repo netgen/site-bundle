@@ -194,12 +194,6 @@ services:
             - "@ezpublish.config.resolver"
             - "@router"
 
-    ngsite.helper.site_info_helper:
-        class: Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper
-        arguments:
-            - "@netgen.ezplatform_site.load_service"
-            - "@ezpublish.config.resolver"
-
     ngsite.helper.mail_helper:
         class: Netgen\Bundle\SiteBundle\Helper\MailHelper
         arguments:
@@ -209,7 +203,6 @@ services:
             - "@twig"
             - "@translator"
             - "@ezpublish.config.resolver"
-            - "@ngsite.helper.site_info_helper"
             - "@?logger"
 
     ngsite.repository.nguser_setting:
@@ -235,14 +228,14 @@ services:
     ngsite.opengraph.handler.site_name:
         class: Netgen\Bundle\SiteBundle\OpenGraph\Handler\SiteName
         arguments:
-            - "@ngsite.helper.site_info_helper"
+            - "@netgen.ezplatform_site.named_object_provider"
         tags:
             - { name: netgen_open_graph.meta_tag_handler, alias: ngsite/site_name }
 
     ngsite.opengraph.handler.site_image:
         class: Netgen\Bundle\SiteBundle\OpenGraph\Handler\SiteImage
         arguments:
-            - "@ngsite.helper.site_info_helper"
+            - "@netgen.ezplatform_site.named_object_provider"
             - "@request_stack"
         tags:
             - { name: netgen_open_graph.meta_tag_handler, alias: ngsite/site_image }

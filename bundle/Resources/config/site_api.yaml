@@ -1,0 +1,5 @@
+system:
+    default:
+        named_objects:
+            location:
+                site_info: '%ngsite.default.locations.site_info.id%'

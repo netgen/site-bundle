@@ -250,9 +250,26 @@
                         </xsl:attribute>
                     </xsl:if>
                     <xsl:if test="@ezxhtml:class">
-                        <xsl:attribute name="class">
-                            <xsl:value-of select="@ezxhtml:class"/>
-                        </xsl:attribute>
+                        <xsl:choose>
+                            <xsl:when test="@ezxhtml:class = 'none'"/>
+                            <xsl:when test="contains( @ezxhtml:class, 'btn-' )">
+                                <xsl:attribute name="class">
+                                    <xsl:choose>
+                                        <xsl:when test="contains( @ezxhtml:class, 'btn ' )">
+                                            <xsl:value-of select="@ezxhtml:class"/>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:value-of select="concat( 'btn ', @ezxhtml:class )"/>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:attribute>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="class">
+                                    <xsl:value-of select="@ezxhtml:class"/>
+                                </xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </xsl:if>
                     <xsl:call-template name="ezattribute"/>
                     <xsl:apply-templates/>

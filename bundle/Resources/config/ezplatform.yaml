@@ -17,7 +17,14 @@ system:
                         default_value: regular
                         required: false
                         multiple: false
-
+                    ezlink:
+                        choices:
+                            - none
+                            - btn-default
+                            - btn-primary
+                        default_value: none
+                        required: false
+                        multiple: false
                 attributes:
                     table:
                         caption:

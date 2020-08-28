@@ -1,2 +1,5 @@
 ezrichtext.attributes.table.caption.label: Caption
 ezrichtext.attributes.table.responsive.label: Responsive
+
+ezrichtext.attributes.ezlink.direct-download.label: Direct download
+ezrichtext.attributes.ezlink.open-inline.label: Open inline

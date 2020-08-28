@@ -26,7 +26,18 @@ system:
                         responsive:
                             type: boolean
                             default_value: false
+                    ezlink:
+                        direct-download:
+                            type: boolean
+                            default_value: false
+                        open-inline:
+                            type: boolean
+                            default_value: false
                 toolbars:
+                    link:
+                        buttons:
+                            ezlink:
+                                priority: 50
                     ezadd:
                         buttons:
                             video:

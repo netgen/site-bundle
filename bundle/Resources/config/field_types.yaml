@@ -1,9 +1,9 @@
 services:
-    ngsite.field_type.ezxmltext.converter.direct_download:
-        class: Netgen\Bundle\SiteBundle\XmlText\Converter\EzLinkDirectDownload
+    ngsite.field_type.ezrichtext.converter.direct_download:
+        class: Netgen\Bundle\SiteBundle\RichText\Converter\EzLinkDirectDownload
         arguments:
-            - "@netgen.ezplatform_site.load_service"
-            - "@router"
-            - "@?logger"
+            - '@netgen.ezplatform_site.load_service'
+            - '@router'
+            - '@?logger'
         tags:
-            - { name: ezpublish.ezxml.converter }
+            - { name: ezrichtext.converter.output.xhtml5, priority: -10 }

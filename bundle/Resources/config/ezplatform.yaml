@@ -2,7 +2,9 @@ system:
     default:
         field_templates:
             - { template: "@NetgenSite/parts/content_fields.html.twig", priority: 5000 }
-
+        ng_named_objects:
+            locations:
+                site_info: '%ngsite.default.locations.site_info.id%'
     admin_group:
         fieldtypes:
             ezrichtext:

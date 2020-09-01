@@ -2,6 +2,7 @@ system:
     default:
         field_templates:
             - { template: "@NetgenSite/parts/content_fields.html.twig", priority: 5000 }
+
     admin_group:
         fieldtypes:
             ezrichtext:

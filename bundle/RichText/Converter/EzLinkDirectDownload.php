@@ -4,19 +4,16 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\RichText\Converter;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
-use eZ\Publish\API\Repository\Exceptions\UnauthorizedException as APIUnauthorizedException;
-use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
-use EzSystems\EzPlatformRichText\eZ\RichText\Converter;
-use Netgen\EzPlatformSiteApi\API\LoadService;
-use Netgen\EzPlatformSiteApi\API\Values\Location;
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
-use Symfony\Cmf\Component\Routing\RouteObjectInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use DOMDocument;
 use DOMXPath;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException as APIUnauthorizedException;
+use EzSystems\EzPlatformRichText\eZ\RichText\Converter;
+use Netgen\EzPlatformSiteApi\API\LoadService;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\Routing\RouterInterface;
+use function preg_match;
 
 class EzLinkDirectDownload implements Converter
 {
@@ -45,7 +42,7 @@ class EzLinkDirectDownload implements Converter
     public function __construct(
         LoadService $loadService,
         RouterInterface $router,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->loadService = $loadService;
         $this->router = $router;
@@ -74,11 +71,11 @@ class EzLinkDirectDownload implements Converter
 
         /** @var \DOMElement $link */
         foreach ($xpath->query($xpathExpression) as $link) {
-            $directDownloadXpathExpression = "./docbook:ezattribute/docbook:ezvalue[@key=\"direct-download\"]";
+            $directDownloadXpathExpression = './docbook:ezattribute/docbook:ezvalue[@key="direct-download"]';
             $directDownload = $xpath->query($directDownloadXpathExpression, $link)->count() > 0
                 && 'true' === $xpath->query($directDownloadXpathExpression, $link)->item(0)->nodeValue;
 
-            $openInlineXpathExpression = "./docbook:ezattribute/docbook:ezvalue[@key=\"open-inline\"]";
+            $openInlineXpathExpression = './docbook:ezattribute/docbook:ezvalue[@key="open-inline"]';
             $openInline = $xpath->query($openInlineXpathExpression, $link)->count() > 0
                 && 'true' === $xpath->query($openInlineXpathExpression, $link)->item(0)->nodeValue;
 
@@ -88,13 +85,13 @@ class EzLinkDirectDownload implements Converter
 
             $href = $link->getAttribute('xlink:href');
             preg_match('~^(.+://)?([^#]*)?(#.*|\\s*)?$~', $href, $matches);
-            list(, $scheme, $id, $fragment) = $matches;
+            [, $scheme, $id, $fragment] = $matches;
 
             $content = null;
             if ('ezcontent://' === $scheme) {
                 try {
-                    $content = $this->loadService->loadContent((int)$id);
-                }  catch (APINotFoundException $e) {
+                    $content = $this->loadService->loadContent((int) $id);
+                } catch (APINotFoundException $e) {
                     if ($this->logger) {
                         $this->logger->warning(
                             'While generating links for richtext, could not locate ' .

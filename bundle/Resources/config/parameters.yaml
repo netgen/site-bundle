@@ -52,14 +52,3 @@ parameters:
 
     ngsite.default.lazy_loading.enabled: false
     ngsite.default.lazy_loading.initial_image_alias: 'small'
-
-    sitebundle.resources: '%kernel.project_dir%/vendor/netgen/site-bundle/bundle/Resources'
-
-    ezsettings.default.fieldtypes.ezrichtext.output_custom_xsl:
-        -
-            path: '%sitebundle.resources%/stylesheets/docbook/xhtml5/output/core.xsl'
-            priority: 0
-
-    ezsettings.default.fieldtypes.ezrichtext.edit_custom_xsl:
-        -   path: '%sitebundle.resources%/stylesheets/docbook/xhtml5/edit/core.xsl'
-            priority: 0

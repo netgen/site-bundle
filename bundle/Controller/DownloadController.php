@@ -64,6 +64,7 @@ class DownloadController extends Controller
      * @param bool $isInline
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException If file or image does not exist
+     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException If content has all of its locations hidden
      *
      * @return \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse
      */
@@ -79,6 +80,19 @@ class DownloadController extends Controller
             throw new NotFoundHttpException(
                 $this->translator->trans('download.file_not_found', [], 'ngsite')
             );
+        }
+
+        $canAccess = false;
+        foreach ($content->getLocations() as $location) {
+            if (!$location->invisible) {
+                $canAccess = true;
+
+                break;
+            }
+        }
+
+        if (!$canAccess) {
+            throw $this->createAccessDeniedException();
         }
 
         $binaryFieldValue = $content->getFieldById($fieldId)->value;

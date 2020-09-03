@@ -13,7 +13,6 @@ use Netgen\Bundle\SiteBundle\Event\SiteEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Translation\TranslatorInterface;
 use function str_replace;
 
@@ -77,7 +76,7 @@ class DownloadController extends Controller
         );
 
         if (!$content->hasFieldById($fieldId) || $content->getFieldById($fieldId)->isEmpty()) {
-            throw new NotFoundHttpException(
+            throw $this->createNotFoundException(
                 $this->translator->trans('download.file_not_found', [], 'ngsite')
             );
         }
@@ -104,7 +103,7 @@ class DownloadController extends Controller
             $ioService = $this->ioImageService;
             $binaryFile = $this->ioImageService->loadBinaryFile($binaryFieldValue->id);
         } else {
-            throw new NotFoundHttpException(
+            throw $this->createNotFoundException(
                 $this->translator->trans('download.file_not_found', [], 'ngsite')
             );
         }

@@ -13,7 +13,6 @@ use Netgen\Bundle\SiteBundle\Event\SiteEvents;
 use Netgen\EzPlatformSiteApi\API\Site;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use function str_replace;
@@ -72,6 +71,7 @@ class Download extends Controller
      * @param bool $isInline
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException If file or image does not exist
+     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException If content has all of its locations hidden
      *
      * @return \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse
      */
@@ -87,9 +87,22 @@ class Download extends Controller
         );
 
         if (!$content->hasFieldById($fieldId) || $content->getFieldById($fieldId)->isEmpty()) {
-            throw new NotFoundHttpException(
+            throw $this->createNotFoundException(
                 $this->translator->trans('download.file_not_found', [], 'ngsite')
             );
+        }
+
+        $canAccess = false;
+        foreach ($content->getLocations() as $location) {
+            if (!$location->invisible) {
+                $canAccess = true;
+
+                break;
+            }
+        }
+
+        if (!$canAccess) {
+            throw $this->createAccessDeniedException();
         }
 
         $binaryFieldValue = $content->getFieldById($fieldId)->value;
@@ -101,7 +114,7 @@ class Download extends Controller
             $ioService = $this->ioImageService;
             $binaryFile = $this->ioImageService->loadBinaryFile($binaryFieldValue->id);
         } else {
-            throw new NotFoundHttpException(
+            throw $this->createNotFoundException(
                 $this->translator->trans('download.file_not_found', [], 'ngsite')
             );
         }

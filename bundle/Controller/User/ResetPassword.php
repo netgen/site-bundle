@@ -19,7 +19,6 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use function time;
@@ -75,7 +74,7 @@ class ResetPassword extends Controller
         $accountKey = $this->accountKeyRepository->getByHash($hash);
 
         if (!$accountKey instanceof EzUserAccountKey) {
-            throw new NotFoundHttpException();
+            throw $this->createNotFoundException();
         }
 
         if (time() - $accountKey->getTime() > $this->configResolver->getParameter('user.forgot_password_hash_validity_time', 'ngsite')) {
@@ -92,7 +91,7 @@ class ResetPassword extends Controller
         try {
             $user = $this->userService->loadUser($accountKey->getUserId());
         } catch (NotFoundException $e) {
-            throw new NotFoundHttpException();
+            throw $this->createNotFoundException();
         }
 
         $form = $this->createResetPasswordForm();

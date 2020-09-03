@@ -15,7 +15,6 @@ use Netgen\Bundle\SiteBundle\Entity\Repository\EzUserAccountKeyRepository;
 use Netgen\Bundle\SiteBundle\Event\SiteEvents;
 use Netgen\Bundle\SiteBundle\Event\User as UserEvents;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use function time;
 
@@ -70,7 +69,7 @@ class Activate extends Controller
         $accountKey = $this->accountKeyRepository->getByHash($hash);
 
         if (!$accountKey instanceof EzUserAccountKey) {
-            throw new NotFoundHttpException();
+            throw $this->createNotFoundException();
         }
 
         if (time() - $accountKey->getTime() > $this->configResolver->getParameter('user.activate_hash_validity_time', 'ngsite')) {
@@ -87,7 +86,7 @@ class Activate extends Controller
         try {
             $user = $this->userService->loadUser($accountKey->getUserId());
         } catch (NotFoundException $e) {
-            throw new NotFoundHttpException();
+            throw $this->createNotFoundException();
         }
 
         $userUpdateStruct = $this->userService->newUserUpdateStruct();

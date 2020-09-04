@@ -4,14 +4,25 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Controller;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use Netgen\Bundle\SiteBundle\Core\Search\SuggestionResolver;
 use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\FindAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function trim;
 
 class SearchController extends Controller
 {
+    /**
+     * @var \Netgen\Bundle\SiteBundle\Core\Search\SuggestionResolver
+     */
+    protected $suggestionResolver;
+
+    public function __construct(SuggestionResolver $suggestionResolver)
+    {
+        $this->suggestionResolver = $suggestionResolver;
+    }
+
     /**
      * Action for displaying the results of full text search.
      */
@@ -32,9 +43,11 @@ class SearchController extends Controller
             );
         }
 
+        $query = $queryType->getQuery(['search_text' => $searchText]);
+
         $pager = new Pagerfanta(
             new FindAdapter(
-                $queryType->getQuery(['search_text' => $searchText]),
+                $query,
                 $this->getSite()->getFindService()
             )
         );
@@ -45,10 +58,17 @@ class SearchController extends Controller
         $currentPage = $request->query->getInt('page', 1);
         $pager->setCurrentPage($currentPage > 0 ? $currentPage : 1);
 
+        try {
+            $searchSuggestion = $this->suggestionResolver->getSuggestedSearchTerm($query, $pager->getAdapter()->getSuggestion());
+        } catch (NotFoundException $e) {
+            $searchSuggestion = null;
+        }
+
         return $this->render(
             $configResolver->getParameter('template.search', 'ngsite'),
             [
                 'search_text' => $searchText,
+                'search_suggestion' => $searchSuggestion,
                 'pager' => $pager,
             ]
         );

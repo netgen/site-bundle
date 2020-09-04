@@ -43,6 +43,8 @@ services:
         class: Netgen\Bundle\SiteBundle\Controller\SearchController
         public: true
         parent: ngsite.controller.base
+        arguments:
+            - "@ngsite.search.resolver.suggestion"
 
     ngsite.controller.menu:
         class: Netgen\Bundle\SiteBundle\Controller\MenuController

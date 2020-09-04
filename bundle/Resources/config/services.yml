@@ -216,6 +216,10 @@ services:
             - "@ezpublish.config.resolver"
             - "@router"
 
+    ngsite.search.resolver.suggestion:
+        class: Netgen\Bundle\SiteBundle\Core\Search\SuggestionResolver
+        public: false
+
 #    Custom user context hash providers are disabled by default.
 #    Enable them in your project if needed by copying one of the
 #    following service definitions.

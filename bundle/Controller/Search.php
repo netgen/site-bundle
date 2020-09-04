@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Controller;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use Netgen\Bundle\SiteBundle\Core\Search\SuggestionResolver;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\QueryType\QueryTypeRegistry;
+use Netgen\Bundle\SiteBundle\Core\Search\SuggestionResolver;
 use Netgen\EzPlatformSiteApi\API\Site;
 use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\FindAdapter;
 use Pagerfanta\Pagerfanta;

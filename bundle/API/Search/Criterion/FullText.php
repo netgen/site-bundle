@@ -12,8 +12,6 @@ class FullText extends BaseFullText implements FulltextSpellcheck
 {
     /**
      * Gets query to be used for spell check.
-     *
-     * @return \Netgen\EzPlatformSearchExtra\API\Values\Content\SpellcheckQuery
      */
     public function getSpellcheckQuery(): SpellcheckQuery
     {

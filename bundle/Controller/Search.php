@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Controller;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use Netgen\Bundle\SiteBundle\Core\Search\SuggestionResolver;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\QueryType\QueryTypeRegistry;
 use Netgen\EzPlatformSiteApi\API\Site;
@@ -30,11 +32,21 @@ class Search extends Controller
      */
     protected $configResolver;
 
-    public function __construct(Site $site, QueryTypeRegistry $queryTypeRegistry, ConfigResolverInterface $configResolver)
-    {
+    /**
+     * @var \Netgen\Bundle\SiteBundle\Core\Search\SuggestionResolver
+     */
+    protected $suggestionResolver;
+
+    public function __construct(
+        Site $site,
+        QueryTypeRegistry $queryTypeRegistry,
+        ConfigResolverInterface $configResolver,
+        SuggestionResolver $suggestionResolver
+    ) {
         $this->site = $site;
         $this->queryTypeRegistry = $queryTypeRegistry;
         $this->configResolver = $configResolver;
+        $this->suggestionResolver = $suggestionResolver;
     }
 
     /**
@@ -56,9 +68,11 @@ class Search extends Controller
             );
         }
 
+        $query = $queryType->getQuery(['search_text' => $searchText]);
+
         $pager = new Pagerfanta(
             new FindAdapter(
-                $queryType->getQuery(['search_text' => $searchText]),
+                $query,
                 $this->site->getFindService()
             )
         );
@@ -69,10 +83,17 @@ class Search extends Controller
         $currentPage = $request->query->getInt('page', 1);
         $pager->setCurrentPage($currentPage > 0 ? $currentPage : 1);
 
+        try {
+            $searchSuggestion = $this->suggestionResolver->getSuggestedSearchTerm($query, $pager->getAdapter()->getSuggestion());
+        } catch (NotFoundException $e) {
+            $searchSuggestion = null;
+        }
+
         return $this->render(
             $this->configResolver->getParameter('template.search', 'ngsite'),
             [
                 'search_text' => $searchText,
+                'search_suggestion' => $searchSuggestion,
                 'pager' => $pager,
             ]
         );

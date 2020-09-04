@@ -43,6 +43,8 @@ services:
         class: Netgen\Bundle\SiteBundle\Controller\SearchController
         public: true
         parent: ngsite.controller.base
+        arguments:
+            - "@ngsite.search.resolver.suggestion"
 
     ngsite.controller.menu:
         class: Netgen\Bundle\SiteBundle\Controller\MenuController
@@ -215,6 +217,10 @@ services:
             - "@netgen.ezplatform_site.load_service"
             - "@ezpublish.config.resolver"
             - "@router"
+
+    ngsite.search.resolver.suggestion:
+        class: Netgen\Bundle\SiteBundle\Core\Search\SuggestionResolver
+        public: false
 
 #    Custom user context hash providers are disabled by default.
 #    Enable them in your project if needed by copying one of the

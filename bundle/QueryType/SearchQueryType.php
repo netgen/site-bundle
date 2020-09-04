@@ -9,6 +9,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\QueryType\OptionsResolverBasedQueryType;
+use Netgen\Bundle\SiteBundle\API\Search\Criterion\FullText;
 use Netgen\EzPlatformSiteApi\API\Site;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use function trim;
@@ -73,7 +74,7 @@ class SearchQueryType extends OptionsResolverBasedQueryType
         }
 
         $query = new LocationQuery();
-        $query->query = new Criterion\FullText(trim($parameters['search_text']));
+        $query->query = new FullText(trim($parameters['search_text']));
         $query->filter = new Criterion\LogicalAnd($criteria);
 
         return $query;

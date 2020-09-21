@@ -58,7 +58,7 @@ class LocationRelationResolver implements LocationRelationResolverInterface
                 continue;
             }
 
-            if ($destinationLocation->invisible || !$destinationLocation->contentInfo->published) {
+            if (!$destinationLocation->isVisible || !$destinationLocation->contentInfo->published) {
                 continue;
             }
 

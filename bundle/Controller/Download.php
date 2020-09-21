@@ -94,7 +94,7 @@ class Download extends Controller
 
         $canAccess = false;
         foreach ($content->getLocations() as $location) {
-            if (!$location->invisible) {
+            if ($location->isVisible) {
                 $canAccess = true;
 
                 break;

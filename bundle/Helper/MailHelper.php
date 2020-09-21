@@ -8,20 +8,22 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Swift_Mailer;
-use Swift_Message;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
+use function array_key_first;
 use function count;
+use function get_debug_type;
 use function is_array;
 use function is_string;
-use function trim;
+use function sprintf;
 
 class MailHelper
 {
     /**
-     * @var \Swift_Mailer
+     * @var \Symfony\Component\Mailer\MailerInterface
      */
     protected $mailer;
 
@@ -31,12 +33,7 @@ class MailHelper
     protected $twig;
 
     /**
-     * @var  \Symfony\Component\Routing\Generator\UrlGeneratorInterface
-     */
-    protected $urlGenerator;
-
-    /**
-     * @var \Symfony\Component\Translation\TranslatorInterface
+     * @var \Symfony\Contracts\Translation\TranslatorInterface
      */
     protected $translator;
 
@@ -46,9 +43,9 @@ class MailHelper
     protected $configResolver;
 
     /**
-     * @var \Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper
+     * @var \Psr\Log\LoggerInterface
      */
-    protected $siteInfoHelper;
+    protected $logger;
 
     /**
      * @var string
@@ -60,26 +57,17 @@ class MailHelper
      */
     protected $siteName;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
-
     public function __construct(
-        Swift_Mailer $mailer,
+        MailerInterface $mailer,
         Environment $twig,
-        UrlGeneratorInterface $urlGenerator,
         TranslatorInterface $translator,
         ConfigResolverInterface $configResolver,
-        SiteInfoHelper $siteInfoHelper,
         ?LoggerInterface $logger = null
     ) {
         $this->mailer = $mailer;
         $this->twig = $twig;
-        $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
         $this->configResolver = $configResolver;
-        $this->siteInfoHelper = $siteInfoHelper;
         $this->logger = $logger ?? new NullLogger();
     }
 
@@ -97,78 +85,48 @@ class MailHelper
      * a string: info@netgen.io
      * an array: array( 'info@netgen.io' => 'Netgen Site' )
      *
-     * @param mixed $receivers
-     * @param mixed|null $sender
+     * @param string|array $receivers
+     * @param string|array|null $sender
      */
-    public function sendMail($receivers, string $subject, string $template, array $templateParameters = [], $sender = null): int
+    public function sendMail($receivers, string $subject, string $template, array $parameters = [], $sender = null): void
     {
         try {
-            $sender = $this->getSender($sender);
+            $senderAddress = $this->createSenderAddress($sender);
         } catch (InvalidArgumentException $e) {
             $this->logger->error($e->getMessage());
 
-            return -1;
+            return;
         }
 
-        $body = $this->twig->render($template, $templateParameters + $this->getDefaultTemplateParameters());
+        $email = (new Email())
+            ->from($senderAddress)
+            ->sender($senderAddress)
+            ->to(...$this->createReceiverAddresses($receivers))
+            ->subject(sprintf('%s: %s', $this->siteName, $this->translator->trans($subject, [], 'ngsite_mail')))
+            ->html($this->twig->render($template, $parameters));
 
-        $subject = $this->translator->trans($subject, [], 'ngsite_mail');
-
-        $message = new Swift_Message();
-
-        $message
-            ->setTo($receivers)
-            ->setSubject($this->siteName . ': ' . $subject)
-            ->setBody($body, 'text/html');
-
-        $message->setSender($sender);
-        $message->setFrom($sender);
-
-        return $this->mailer->send($message);
+        $this->mailer->send($email);
     }
 
     /**
-     * Returns an array of parameters that will be passed to every mail template.
-     */
-    protected function getDefaultTemplateParameters(): array
-    {
-        if ($this->siteUrl === null) {
-            $this->siteUrl = $this->urlGenerator->generate(
-                'ez_urlalias',
-                [
-                    'locationId' => $this->configResolver->getParameter('content.tree_root.location_id'),
-                ],
-                UrlGeneratorInterface::ABSOLUTE_URL
-            );
-        }
-
-        if ($this->siteName === null) {
-            $this->siteName = trim($this->siteInfoHelper->getSiteInfoContent()->getField('site_name')->value->text);
-        }
-
-        return [
-            'site_url' => $this->siteUrl,
-            'site_name' => $this->siteName,
-        ];
-    }
-
-    /**
-     * Validates the sender parameter.
-     * If sender not provided, it attempts to get the sender from the parameters:
+     * Creates a sender address from provided value.
+     * If sender is not provided (if it is null), it attempts to get the sender from the parameters:
      * ngsite.default.mail.sender_email
      * ngsite.default.mail.sender_name (optional).
      *
-     * @param mixed $sender
+     * @param string|array|null $sender
      *
      * @throws \InvalidArgumentException If sender was not provided
-     *
-     * @return array|string
      */
-    protected function getSender($sender)
+    protected function createSenderAddress($sender): Address
     {
         if (!empty($sender)) {
             if ((is_array($sender) && count($sender) === 1 && !isset($sender[0])) || is_string($sender)) {
-                return $sender;
+                if (is_array($sender)) {
+                    return new Address(array_key_first($sender), $sender[array_key_first($sender)]);
+                }
+
+                return new Address($sender);
             }
 
             throw new InvalidArgumentException(
@@ -177,15 +135,43 @@ class MailHelper
         }
 
         if ($this->configResolver->hasParameter('mail.sender_email', 'ngsite')) {
-            if ($this->configResolver->hasParameter('mail.sender_name', 'ngsite')) {
-                return [
-                    $this->configResolver->getParameter('mail.sender_email', 'ngsite') => $this->configResolver->getParameter('mail.sender_name', 'ngsite'),
-                ];
-            }
+            $name = $this->configResolver->hasParameter('mail.sender_name', 'ngsite') ?
+                $this->configResolver->getParameter('mail.sender_name', 'ngsite') :
+                '';
 
-            return $this->configResolver->getParameter('mail.sender_email', 'ngsite');
+            return new Address(
+                $this->configResolver->getParameter('mail.sender_email', 'ngsite'),
+                $name
+            );
         }
 
         throw new InvalidArgumentException("Parameter 'sender' has not been provided, nor it has been configured via parameters ('ngsite.default.mail.sender_email')!");
+    }
+
+    /**
+     * @param string|array $addresses
+     *
+     * @return iterable<\Symfony\Component\Mime\Address>
+     */
+    private function createReceiverAddresses($addresses): iterable
+    {
+        if (!is_string($addresses) && !is_array($addresses)) {
+            $this->logger->error(
+                sprintf(
+                    'Invalid address format. Required string or array, given %s',
+                    get_debug_type($addresses)
+                )
+            );
+        }
+
+        foreach ((array) $addresses as $key => $value) {
+            if (is_string($key)) {
+                yield new Address($key, $value);
+
+                continue;
+            }
+
+            yield new Address($value);
+        }
     }
 }

@@ -1,0 +1,33 @@
+services:
+    ngsite.templating.global_variable:
+        class: Netgen\Bundle\SiteBundle\Templating\GlobalVariable
+        arguments:
+            - "@netgen.ezplatform_site.named_object_provider"
+            - "@ezpublish.api.repository"
+            - "@netgen.ezplatform_site.load_service"
+
+    ngsite.templating.twig.extension.site:
+        class: Netgen\Bundle\SiteBundle\Templating\Twig\Extension\SiteExtension
+        tags:
+            - { name: twig.extension }
+
+    ngsite.templating.twig.runtime.site:
+        class: Netgen\Bundle\SiteBundle\Templating\Twig\Extension\SiteRuntime
+        arguments:
+            - "@ngsite.helper.path_helper"
+            - "@ezpublish.locale.converter"
+            - "@netgen.ezplatform_site.load_service"
+        tags:
+            - { name: twig.runtime }
+
+    ngsite.templating.twig.extension.topic_url:
+        class: Netgen\Bundle\SiteBundle\Templating\Twig\Extension\TopicUrlExtension
+        tags:
+            - { name: twig.extension }
+
+    ngsite.templating.twig.runtime.topic_url:
+        class: Netgen\Bundle\SiteBundle\Templating\Twig\Extension\TopicUrlRuntime
+        arguments:
+            - "@ngsite.topic.url_generator"
+        tags:
+            - { name: twig.runtime }

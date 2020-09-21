@@ -1,0 +1,35 @@
+custom_tags:
+    video:
+        template: '@NetgenSite/field_type/ezrichtext/custom_tag/video.html.twig'
+        icon: '/bundles/ezplatformadminui/img/ez-icons.svg#video'
+        is_inline: false
+        attributes:
+            video_service:
+                type: choice
+                required: false
+                default_value: youtube
+                choices: [youtube, vimeo, dailymotion]
+            video_code:
+                type: string
+                required: true
+            autoresize:
+                type: choice
+                required: false
+                default_value: fit
+                choices: [fit, fill]
+    factbox:
+        template: '@NetgenSite/field_type/ezrichtext/custom_tag/factbox.html.twig'
+        icon: '/bundles/ezplatformadminui/img/ez-icons.svg#information'
+        is_inline: false
+        attributes:
+            title:
+                type: string
+                required: false
+    quote:
+        template: '@NetgenSite/field_type/ezrichtext/custom_tag/quote.html.twig'
+        icon: '/bundles/ezplatformadminui/img/ez-icons.svg#quote'
+        is_inline: false
+        attributes:
+            author:
+                type: string
+                required: false

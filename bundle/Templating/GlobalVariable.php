@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Templating;
 
 use eZ\Publish\API\Repository\Repository;
-use Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper;
+use Netgen\Bundle\EzPlatformSiteApiBundle\NamedObject\Provider;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
@@ -13,9 +13,9 @@ use Netgen\EzPlatformSiteApi\API\Values\Location;
 class GlobalVariable
 {
     /**
-     * @var \Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper
+     * @var \Netgen\Bundle\EzPlatformSiteApiBundle\NamedObject\Provider
      */
-    protected $siteInfoHelper;
+    protected $namedObjectProvider;
 
     /**
      * @var \eZ\Publish\API\Repository\Repository
@@ -28,23 +28,23 @@ class GlobalVariable
     protected $loadService;
 
     public function __construct(
-        SiteInfoHelper $siteInfoHelper,
+        Provider $namedObjectProvider,
         Repository $repository,
         LoadService $loadService
     ) {
-        $this->siteInfoHelper = $siteInfoHelper;
+        $this->namedObjectProvider = $namedObjectProvider;
         $this->repository = $repository;
         $this->loadService = $loadService;
     }
 
     public function getSiteInfoLocation(): Location
     {
-        return $this->siteInfoHelper->getSiteInfoLocation();
+        return $this->namedObjectProvider->getLocation('site_info');
     }
 
     public function getSiteInfoContent(): Content
     {
-        return $this->siteInfoHelper->getSiteInfoContent();
+        return $this->getSiteInfoLocation()->content;
     }
 
     public function getCurrentUserContent(): Content

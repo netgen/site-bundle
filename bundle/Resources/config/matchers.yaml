@@ -1,0 +1,60 @@
+services:
+    ngsite.matcher.config_resolver:
+        class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased
+        abstract: true
+        arguments:
+            - "@ezpublish.config.resolver"
+
+    ngsite.matcher.content.content_id:
+        class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Content
+        parent: ngsite.matcher.config_resolver
+        tags:
+            - { name: ezplatform.view.matcher }
+
+    ngsite.matcher.content.content_type_id:
+        class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentType
+        parent: ngsite.matcher.config_resolver
+        tags:
+            - { name: ezplatform.view.matcher }
+
+    ngsite.matcher.content.content_type_group_id:
+        class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentTypeGroup
+        parent: ngsite.matcher.config_resolver
+        tags:
+            - { name: ezplatform.view.matcher }
+
+    ngsite.matcher.content.location_id:
+        class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Location
+        parent: ngsite.matcher.config_resolver
+        tags:
+            - { name: ezplatform.view.matcher }
+
+    ngsite.matcher.content.parent_content_type_id:
+        class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentContentType
+        parent: ngsite.matcher.config_resolver
+        tags:
+            - { name: ezplatform.view.matcher }
+
+    ngsite.matcher.content.parent_location_id:
+        class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentLocation
+        parent: ngsite.matcher.config_resolver
+        tags:
+            - { name: ezplatform.view.matcher }
+
+    ngsite.matcher.content.remote_id:
+        class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Remote
+        parent: ngsite.matcher.config_resolver
+        tags:
+            - { name: ezplatform.view.matcher }
+
+    ngsite.matcher.content.location_remote_id:
+        class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\LocationRemote
+        parent: ngsite.matcher.config_resolver
+        tags:
+            - { name: ezplatform.view.matcher }
+
+    ngsite.matcher.content.section_id:
+        class: Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id\Section
+        parent: ngsite.matcher.config_resolver
+        tags:
+            - { name: ezplatform.view.matcher }

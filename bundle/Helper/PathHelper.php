@@ -7,9 +7,10 @@ namespace Netgen\Bundle\SiteBundle\Helper;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Netgen\EzPlatformSiteApi\API\LoadService;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
+use function array_map;
 use function array_shift;
 use function in_array;
 use function is_array;
@@ -27,26 +28,24 @@ class PathHelper
     protected $configResolver;
 
     /**
-     * @var \Symfony\Component\Routing\RouterInterface
+     * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
      */
-    protected $router;
+    protected $urlGenerator;
 
     public function __construct(
         LoadService $loadService,
         ConfigResolverInterface $configResolver,
-        RouterInterface $router
+        UrlGeneratorInterface $urlGenerator
     ) {
         $this->loadService = $loadService;
         $this->configResolver = $configResolver;
-        $this->router = $router;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
      * Returns the path array for provided location ID.
-     *
-     * @param int|string $locationId
      */
-    public function getPath($locationId, array $options = []): array
+    public function getPath(int $locationId, array $options = []): array
     {
         $optionsResolver = new OptionsResolver();
         $this->configureOptions($optionsResolver);
@@ -66,7 +65,7 @@ class PathHelper
         // The root location can be defined at site access level
         $rootLocationId = (int) $this->configResolver->getParameter('content.tree_root.location_id');
 
-        $path = $this->loadService->loadLocation($locationId)->path;
+        $path = array_map('intval', $this->loadService->loadLocation($locationId)->path);
 
         // Shift of location "1" from path as it is not a fully valid location and not readable by most users
         array_shift($path);
@@ -74,7 +73,7 @@ class PathHelper
         $pathArray = [];
         $rootLocationFound = false;
         foreach ($path as $index => $pathItem) {
-            if ((int) $pathItem === $rootLocationId) {
+            if ($pathItem === $rootLocationId) {
                 $rootLocationFound = true;
             }
 
@@ -92,9 +91,9 @@ class PathHelper
                 $pathArray[] = [
                     'text' => $location->contentInfo->name,
                     'url' => $location->id !== (int) $locationId ?
-                        $this->router->generate(
-                            $location,
-                            [],
+                        $this->urlGenerator->generate(
+                            '',
+                            [RouteObjectInterface::ROUTE_OBJECT => $location],
                             $options['absolute_url'] ?
                                 UrlGeneratorInterface::ABSOLUTE_URL :
                                 UrlGeneratorInterface::ABSOLUTE_PATH

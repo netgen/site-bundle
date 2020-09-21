@@ -10,7 +10,7 @@ use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
 use Netgen\Bundle\SiteBundle\Helper\PathHelper;
 use Netgen\EzPlatformSiteApi\API\Exceptions\TranslationNotMatchedException;
 use Netgen\EzPlatformSiteApi\API\LoadService;
-use Symfony\Component\Intl\Intl;
+use Symfony\Component\Intl\Languages;
 use function mb_substr;
 use function ucwords;
 
@@ -40,10 +40,8 @@ class SiteRuntime
 
     /**
      * Returns the path for specified location ID.
-     *
-     * @param int|string $locationId
      */
-    public function getLocationPath($locationId, array $options = []): array
+    public function getLocationPath(int $locationId, array $options = []): array
     {
         return $this->pathHelper->getPath($locationId, $options);
     }
@@ -59,17 +57,15 @@ class SiteRuntime
         }
 
         $posixLanguageCode = mb_substr($posixLanguageCode, 0, 2);
-        $languageName = Intl::getLanguageBundle()->getLanguageName($posixLanguageCode, null, $posixLanguageCode);
+        $languageName = Languages::getName($posixLanguageCode, $posixLanguageCode);
 
         return ucwords($languageName);
     }
 
     /**
      * Returns the name of the content with provided ID.
-     *
-     * @param int|string $contentId
      */
-    public function getContentName($contentId): ?string
+    public function getContentName(int $contentId): ?string
     {
         try {
             $content = $this->loadService->loadContent($contentId);
@@ -82,10 +78,8 @@ class SiteRuntime
 
     /**
      * Returns the name of the content with located at location with provided ID.
-     *
-     * @param int|string $locationId
      */
-    public function getLocationName($locationId): ?string
+    public function getLocationName(int $locationId): ?string
     {
         try {
             $location = $this->loadService->loadLocation($locationId);

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Event\Content;
 
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class DownloadEvent extends Event
 {
@@ -29,15 +29,7 @@ class DownloadEvent extends Event
      */
     protected $response;
 
-    /**
-     * Constructor.
-     *
-     * @param int $contentId
-     * @param int $fieldId
-     * @param int $versionNo
-     * @param \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse $response
-     */
-    public function __construct($contentId, $fieldId, $versionNo, BinaryStreamResponse $response)
+    public function __construct(int $contentId, int $fieldId, int $versionNo, BinaryStreamResponse $response)
     {
         $this->contentId = $contentId;
         $this->fieldId = $fieldId;
@@ -47,38 +39,30 @@ class DownloadEvent extends Event
 
     /**
      * Get field ID.
-     *
-     * @return int
      */
-    public function getFieldId()
+    public function getFieldId(): int
     {
         return $this->fieldId;
     }
 
     /**
      * Returns content ID.
-     *
-     * @return int
      */
-    public function getContentId()
+    public function getContentId(): int
     {
         return $this->contentId;
     }
 
     /**
      * Returns version number.
-     *
-     * @return int
      */
-    public function getVersionNo()
+    public function getVersionNo(): int
     {
         return $this->versionNo;
     }
 
     /**
      * Returns the response.
-     *
-     * @return \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse
      */
     public function getResponse(): BinaryStreamResponse
     {

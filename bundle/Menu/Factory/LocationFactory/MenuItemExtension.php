@@ -17,6 +17,7 @@ use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Throwable;
@@ -107,7 +108,7 @@ class MenuItemExtension implements ExtensionInterface
             return;
         }
 
-        if ($relatedContent->mainLocation->invisible) {
+        if (!$relatedContent->mainLocation->isVisible) {
             $this->logger->error(sprintf('Menu item (#%s) has a related object (#%s) that is not visible.', $content->id, $relatedContent->id));
 
             return;
@@ -141,7 +142,7 @@ class MenuItemExtension implements ExtensionInterface
     protected function buildItemFromRelatedContent(ItemInterface $item, Content $content, Content $relatedContent): void
     {
         $item
-            ->setUri($this->urlGenerator->generate($relatedContent))
+            ->setUri($this->urlGenerator->generate('', [RouteObjectInterface::ROUTE_OBJECT => $relatedContent]))
             ->setExtra('ezlocation', $relatedContent->mainLocation)
             ->setAttribute('id', 'menu-item-location-id-' . $relatedContent->mainLocationId)
             ->setLinkAttribute('title', $item->getLabel());
@@ -168,7 +169,7 @@ class MenuItemExtension implements ExtensionInterface
                 return;
             }
 
-            if ($destinationContent->mainLocation->invisible) {
+            if (!$destinationContent->mainLocation->isVisible) {
                 $this->logger->error(sprintf('Menu item (#%s) has a related object (#%s) that is not visible.', $content->id, $destinationContent->id));
 
                 return;
@@ -216,15 +217,15 @@ class MenuItemExtension implements ExtensionInterface
                 $searchResult->searchHits
             );
         } elseif (!$content->getField('menu_items')->isEmpty()) {
-            foreach ($content->getField('menu_items')->value->destinationLocationIds as $locationId) {
-                if (empty($locationId)) {
-                    $this->logger->error(sprintf('Empty location ID in RelationList field "%s" for content #%s', 'menu_items', $content->id));
+            foreach ($content->getField('menu_items')->value->destinationContentIds as $destinationContentId) {
+                if (empty($destinationContentId)) {
+                    $this->logger->error(sprintf('Empty content ID in RelationList field "%s" for content #%s', 'menu_items', $content->id));
 
                     continue;
                 }
 
                 try {
-                    $childLocations[] = $this->loadService->loadLocation($locationId);
+                    $childLocations[] = $this->loadService->loadContent($destinationContentId)->mainLocation;
                 } catch (Throwable $t) {
                     $this->logger->error($t->getMessage());
 

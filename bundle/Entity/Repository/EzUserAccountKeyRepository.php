@@ -6,11 +6,8 @@ namespace Netgen\Bundle\SiteBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey;
-use function function_exists;
-use function md5;
-use function microtime;
-use function mt_rand;
-use function openssl_random_pseudo_bytes;
+use function hash;
+use function random_bytes;
 use function time;
 
 class EzUserAccountKeyRepository extends EntityRepository
@@ -18,28 +15,16 @@ class EzUserAccountKeyRepository extends EntityRepository
     /**
      * Creates a user account key.
      *
-     * @param mixed $userId
+     * @param int $userId
      *
      * @return \Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
      */
-    public function create($userId): EzUserAccountKey
+    public function create(int $userId): EzUserAccountKey
     {
         $this->removeByUserId($userId);
 
-        $randomBytes = false;
-
-        if (function_exists('openssl_random_pseudo_bytes')) {
-            $randomBytes = openssl_random_pseudo_bytes(32);
-        }
-
-        if ($randomBytes === false) {
-            $randomBytes = mt_rand();
-        }
-
-        $hash = md5($userId . ':' . microtime() . ':' . $randomBytes);
-
         $userAccount = new EzUserAccountKey();
-        $userAccount->setHash($hash);
+        $userAccount->setHash(hash('md5', random_bytes(256)));
         $userAccount->setTime(time());
         $userAccount->setUserId($userId);
 
@@ -64,9 +49,9 @@ class EzUserAccountKeyRepository extends EntityRepository
     /**
      * Removes user account key for user specified by $userId.
      *
-     * @param mixed $userId
+     * @param int $userId
      */
-    public function removeByUserId($userId): void
+    public function removeByUserId(int $userId): void
     {
         $results = $this->findBy(['userId' => $userId]);
 

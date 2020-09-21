@@ -1,0 +1,266 @@
+services:
+    ngsite.command.update_publish_date:
+        class: Netgen\Bundle\SiteBundle\Command\UpdatePublishDateCommand
+        arguments:
+            - "@ezpublish.api.repository"
+            - "@ezpublish.field_helper"
+        tags:
+            - { name: console.command, command: 'ngsite:content:update-publish-date' }
+
+    ngsite.command.symlink_project:
+        class: Netgen\Bundle\SiteBundle\Command\SymlinkProjectCommand
+        arguments:
+            - "@kernel"
+            - "@filesystem"
+        tags:
+            - { name: console.command, command: 'ngsite:symlink:project' }
+
+    ngsite.command.dump_database:
+        class: Netgen\Bundle\SiteBundle\Command\DumpDatabaseCommand
+        arguments:
+            - "@service_container"
+        tags:
+            - { name: console.command, command: 'ngsite:database:dump' }
+
+    ngsite.command.generate_image_variations:
+        class: Netgen\Bundle\SiteBundle\Command\GenerateImageVariationsCommand
+        arguments:
+            - "@ezpublish.api.repository"
+            - "@ezpublish.fieldType.ezimage.variation_service"
+            - "@ezpublish.cache_pool"
+            - "@ezpublish.config.resolver"
+        tags:
+            - { name: console.command, command: 'ngsite:content:generate-image-variations' }
+
+    ngsite.command.profiler_cache_purger:
+        class: Netgen\Bundle\SiteBundle\Command\ProfilerCachePurgerCommand
+        arguments:
+            - "@?profiler"
+        tags:
+            - { name: console.command, command: 'ngsite:profiler:clear-cache' }
+
+    ngsite.controller.base:
+        class: Netgen\Bundle\SiteBundle\Controller\Controller
+        parent: netgen.ezplatform_site.controller.base
+        abstract: true
+
+    ngsite.controller.full_view.category:
+        class: Netgen\Bundle\SiteBundle\Controller\FullView\Category
+        public: true
+        parent: ngsite.controller.base
+        arguments:
+            - "@netgen.ezplatform_site.site"
+
+    ngsite.controller.full_view.landing_page:
+        class: Netgen\Bundle\SiteBundle\Controller\FullView\LandingPage
+        public: true
+        parent: ngsite.controller.base
+
+    ngsite.controller.embed_view.image:
+        class: Netgen\Bundle\SiteBundle\Controller\EmbedView\Image
+        public: true
+        parent: ngsite.controller.base
+        arguments:
+            - "@netgen.ezplatform_site.site"
+            - "@?logger"
+
+    ngsite.controller.search:
+        class: Netgen\Bundle\SiteBundle\Controller\Search
+        public: true
+        parent: ngsite.controller.base
+        arguments:
+            - "@netgen.ezplatform_site.site"
+            - "@ezpublish.query_type.registry"
+            - "@ezpublish.config.resolver"
+            - "@ngsite.search.resolver.suggestion"
+
+    ngsite.controller.menu:
+        class: Netgen\Bundle\SiteBundle\Controller\Menu
+        public: true
+        parent: ngsite.controller.base
+        arguments:
+            - "@knp_menu.menu_provider"
+            - "@knp_menu.renderer_provider"
+            - "@ezpublish.config.resolver"
+            - "@fos_http_cache.http.symfony_response_tagger"
+
+    ngsite.controller.relations.related_items:
+        class: Netgen\Bundle\SiteBundle\Controller\Relations\RelatedItems
+        public: true
+        parent: ngsite.controller.base
+        arguments:
+            - "@ngsite.relation.location_resolver"
+
+    ngsite.controller.relations.related_multimedia_items:
+        class: Netgen\Bundle\SiteBundle\Controller\Relations\RelatedMultimediaItems
+        public: true
+        parent: ngsite.controller.base
+        arguments:
+            - "@ngsite.relation.multimedia_resolver"
+
+    ngsite.controller.download:
+        class: Netgen\Bundle\SiteBundle\Controller\Download
+        public: true
+        parent: ngsite.controller.base
+        arguments:
+            - "@netgen.ezplatform_site.site"
+            - "@ezpublish.fieldType.ezbinaryfile.io_service"
+            - "@ezpublish.fieldType.ezimage.io_service"
+            - "@translator"
+            - "@event_dispatcher"
+
+    ngsite.controller.user.register:
+        class: Netgen\Bundle\SiteBundle\Controller\User\Register
+        public: true
+        parent: ngsite.controller.base
+        arguments:
+            - "@ezpublish.api.service.user"
+            - "@ezpublish.api.service.content_type"
+            - "@event_dispatcher"
+            - "@ezpublish.api.repository"
+            - "@ezpublish.config.resolver"
+
+    ngsite.controller.user.activation_form:
+        class: Netgen\Bundle\SiteBundle\Controller\User\ActivationForm
+        public: true
+        parent: ngsite.controller.base
+        arguments:
+            - "@ezpublish.api.service.user"
+            - "@event_dispatcher"
+            - "@ezpublish.config.resolver"
+
+    ngsite.controller.user.activate:
+        class: Netgen\Bundle\SiteBundle\Controller\User\Activate
+        public: true
+        parent: ngsite.controller.base
+        arguments:
+            - "@ezpublish.api.service.user"
+            - "@event_dispatcher"
+            - "@ngsite.repository.ezuser_accountkey"
+            - "@ezpublish.api.repository"
+            - "@ezpublish.config.resolver"
+
+    ngsite.controller.user.forgot_password:
+        class: Netgen\Bundle\SiteBundle\Controller\User\ForgotPassword
+        public: true
+        parent: ngsite.controller.base
+        arguments:
+            - "@ezpublish.api.service.user"
+            - "@event_dispatcher"
+            - "@ezpublish.config.resolver"
+
+    ngsite.controller.user.reset_password:
+        class: Netgen\Bundle\SiteBundle\Controller\User\ResetPassword
+        public: true
+        parent: ngsite.controller.base
+        arguments:
+            - "@ezpublish.api.service.user"
+            - "@event_dispatcher"
+            - "@ngsite.repository.ezuser_accountkey"
+            - "@ezpublish.api.repository"
+            - "@ezpublish.config.resolver"
+
+    ngsite.relation.location_resolver:
+        class: Netgen\Bundle\SiteBundle\Relation\LocationRelationResolver
+        arguments:
+            - "@netgen.ezplatform_site.load_service"
+            - "@?logger"
+        tags:
+            - { name: monolog.logger, channel: ngsite }
+
+    ngsite.relation.multimedia_resolver:
+        class: Netgen\Bundle\SiteBundle\Relation\MultimediaRelationResolver
+        arguments:
+            - "@netgen.ezplatform_site.load_service"
+            - "@ngsite.relation.location_resolver"
+
+    ngsite.helper.path_helper:
+        class: Netgen\Bundle\SiteBundle\Helper\PathHelper
+        arguments:
+            - "@netgen.ezplatform_site.load_service"
+            - "@ezpublish.config.resolver"
+            - "@router"
+
+    ngsite.helper.mail_helper:
+        class: Netgen\Bundle\SiteBundle\Helper\MailHelper
+        arguments:
+            # Using "@mailer.mailer" service since "@mailer" is
+            # overwritten by SwiftMailer Bundle
+            - "@mailer.mailer"
+            - "@twig"
+            - "@translator"
+            - "@ezpublish.config.resolver"
+            - "@?logger"
+
+    ngsite.repository.nguser_setting:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - Netgen\Bundle\SiteBundle\Entity\NgUserSetting
+
+    ngsite.repository.ezuser_accountkey:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
+
+    ngsite.core.event.create_user:
+        class: Netgen\Bundle\SiteBundle\Core\EventListener\CreateUserListener
+        arguments:
+            - "@ezpublish.api.service.user"
+            - "@ngsite.repository.nguser_setting"
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ngsite.opengraph.handler.site_name:
+        class: Netgen\Bundle\SiteBundle\OpenGraph\Handler\SiteName
+        arguments:
+            - "@netgen.ezplatform_site.named_object_provider"
+        tags:
+            - { name: netgen_open_graph.meta_tag_handler, alias: ngsite/site_name }
+
+    ngsite.opengraph.handler.site_image:
+        class: Netgen\Bundle\SiteBundle\OpenGraph\Handler\SiteImage
+        arguments:
+            - "@netgen.ezplatform_site.named_object_provider"
+            - "@request_stack"
+        tags:
+            - { name: netgen_open_graph.meta_tag_handler, alias: ngsite/site_image }
+
+    ngsite.query_type.search:
+        class: Netgen\Bundle\SiteBundle\QueryType\SearchQueryType
+        arguments:
+            - "@netgen.ezplatform_site.site"
+            - "@ezpublish.config.resolver"
+        tags:
+            - { name: ezplatform.query_type }
+
+    ngsite.topic.url_generator:
+        class: Netgen\Bundle\SiteBundle\Topic\UrlGenerator
+        arguments:
+            - "@netgen.ezplatform_site.find_service"
+            - "@netgen.ezplatform_site.load_service"
+            - "@ezpublish.config.resolver"
+            - "@router"
+
+    ngsite.search.resolver.suggestion:
+        class: Netgen\Bundle\SiteBundle\Core\Search\SuggestionResolver
+        public: false
+
+#    Custom user context hash providers are disabled by default.
+#    Enable them in your project if needed by copying one of the
+#    following service definitions.
+#
+#    ngsite.context_provider.session:
+#        class: Netgen\Bundle\SiteBundle\ContextProvider\SessionContextProvider
+#        arguments:
+#            - "@session"
+#    tags:
+#        - { name: fos_http_cache.user_context_provider }
+#
+#    ngsite.context_provider.user:
+#        class: Netgen\Bundle\SiteBundle\ContextProvider\UserContextProvider
+#        arguments:
+#            - "@ezpublish.api.repository"
+#    tags:
+#        - { name: fos_http_cache.user_context_provider }

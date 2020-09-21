@@ -21,23 +21,23 @@ class NetgenSiteExtension extends Extension implements PrependExtensionInterface
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
-        $loader->load('parameters.yml');
-        $loader->load('field_types.yml');
-        $loader->load('pagerfanta.yml');
-        $loader->load('templating.yml');
-        $loader->load('menu.yml');
-        $loader->load('event_listeners.yml');
-        $loader->load('matchers.yml');
-        $loader->load('services.yml');
+        $loader->load('parameters.yaml');
+        $loader->load('field_types.yaml');
+        $loader->load('pagerfanta.yaml');
+        $loader->load('templating.yaml');
+        $loader->load('menu.yaml');
+        $loader->load('event_listeners.yaml');
+        $loader->load('matchers.yaml');
+        $loader->load('services.yaml');
 
         $activatedBundles = $container->getParameter('kernel.bundles');
 
         if (in_array(NetgenLayoutsBundle::class, $activatedBundles, true)) {
-            $loader->load('layouts/services.yml');
+            $loader->load('layouts/services.yaml');
         }
 
         if ($container->getParameter('kernel.debug')) {
-            $loader->load('debug.yml');
+            $loader->load('debug.yaml');
         }
     }
 
@@ -50,13 +50,14 @@ class NetgenSiteExtension extends Extension implements PrependExtensionInterface
         $activatedBundles = $container->getParameter('kernel.bundles');
 
         $prependConfigs = [
-            'ezplatform.yml' => 'ezpublish',
-            'framework/twig.yml' => 'twig',
-            'framework/assets.yml' => 'framework',
+            'ezplatform.yaml' => 'ezpublish',
+            'ezrichtext.yaml' => 'ezrichtext',
+            'framework/twig.yaml' => 'twig',
+            'framework/assets.yaml' => 'framework',
         ];
 
         if (in_array(NetgenLayoutsBundle::class, $activatedBundles, true)) {
-            $prependConfigs['layouts/query_types.yml'] = 'netgen_layouts';
+            $prependConfigs['layouts/query_types.yaml'] = 'netgen_layouts';
         }
 
         foreach ($prependConfigs as $configFile => $prependConfig) {

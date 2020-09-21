@@ -32,7 +32,6 @@ class ProfilerCachePurgerCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName('ngsite:profiler:clear-cache');
         $this->setDescription('Clears profiler cache.');
     }
 

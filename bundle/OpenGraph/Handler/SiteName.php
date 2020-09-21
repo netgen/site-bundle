@@ -4,26 +4,31 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\OpenGraph\Handler;
 
+use Netgen\Bundle\EzPlatformSiteApiBundle\NamedObject\Provider;
 use Netgen\Bundle\OpenGraphBundle\Handler\HandlerInterface;
 use Netgen\Bundle\OpenGraphBundle\MetaTag\Item;
-use Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper;
 use function trim;
 
 class SiteName implements HandlerInterface
 {
     /**
-     * @var \Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper
+     * @var \Netgen\Bundle\EzPlatformSiteApiBundle\NamedObject\Provider
      */
-    protected $siteInfoHelper;
+    protected $namedObjectProvider;
 
-    public function __construct(SiteInfoHelper $siteInfoHelper)
+    public function __construct(Provider $namedObjectProvider)
     {
-        $this->siteInfoHelper = $siteInfoHelper;
+        $this->namedObjectProvider = $namedObjectProvider;
     }
 
-    public function getMetaTags($tagName, array $params = []): array
+    public function getMetaTags(string $tagName, array $params = []): array
     {
-        $siteName = $this->siteInfoHelper->getSiteInfoContent()->getField('site_name')->value->text;
+        $siteName = $this->namedObjectProvider
+            ->getLocation('site_info')
+            ->content
+            ->getField('site_name')
+            ->value
+            ->text;
 
         return [
             new Item($tagName, trim($siteName)),

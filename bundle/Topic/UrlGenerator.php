@@ -11,6 +11,7 @@ use Netgen\EzPlatformSiteApi\API\FindService;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\TagsBundle\API\Repository\Values\Content\Query\Criterion\TagId;
 use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class UrlGenerator
@@ -52,7 +53,11 @@ class UrlGenerator
      */
     public function generate(Tag $tag, array $parameters = [], int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {
-        return $this->urlGenerator->generate($this->getTopicValueObject($tag), $parameters, $referenceType);
+        return $this->urlGenerator->generate(
+            '',
+            [RouteObjectInterface::ROUTE_OBJECT => $this->getTopicValueObject($tag)] + $parameters,
+            $referenceType
+        );
     }
 
     /**

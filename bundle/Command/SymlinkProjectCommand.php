@@ -9,6 +9,8 @@ use Netgen\Bundle\SiteBundle\NetgenSiteProjectBundleInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpKernel\KernelInterface;
 use function basename;
 use function dirname;
 use function in_array;
@@ -26,29 +28,42 @@ class SymlinkProjectCommand extends SymlinkCommand
         'offline_cro.html',
         'offline_eng.html',
     ];
+    /**
+     * @var \Symfony\Component\HttpKernel\KernelInterface
+     */
+    protected $kernel;
+
+    public function __construct(KernelInterface $kernel, Filesystem $fileSystem)
+    {
+        $this->kernel = $kernel;
+        $this->fileSystem = $fileSystem;
+
+        // Parent constructor call is mandatory for commands registered as services
+        parent::__construct();
+    }
 
     protected function configure(): void
     {
         $this->addOption('force', null, InputOption::VALUE_NONE, 'If set, it will destroy existing symlinks before recreating them');
         $this->addOption('web-folder', null, InputOption::VALUE_OPTIONAL, 'Name of the webroot folder to use');
         $this->setDescription('Symlinks various project files and folders to their proper locations');
-        $this->setName('ngsite:symlink:project');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $this->forceSymlinks = (bool) $input->getOption('force');
-        $this->environment = $this->getContainer()->get('kernel')->getEnvironment();
-        $this->fileSystem = $this->getContainer()->get('filesystem');
 
-        $kernel = $this->getContainer()->get('kernel');
-        foreach ($kernel->getBundles() as $bundle) {
+        $projectFilesPaths = [$this->kernel->getProjectDir() . '/assets/symlink'];
+
+        foreach ($this->kernel->getBundles() as $bundle) {
             if (!$bundle instanceof NetgenSiteProjectBundleInterface) {
                 continue;
             }
 
-            $projectFilesPath = $bundle->getPath() . '/Resources/symlink';
+            $projectFilesPaths[] = $bundle->getPath() . '/Resources/symlink';
+        }
 
+        foreach ($projectFilesPaths as $projectFilesPath) {
             if (!$this->fileSystem->exists($projectFilesPath) || !is_dir($projectFilesPath) || is_link($projectFilesPath)) {
                 continue;
             }
@@ -67,7 +82,7 @@ class SymlinkProjectCommand extends SymlinkCommand
         /** @var \DirectoryIterator[] $directories */
         $directories = [];
 
-        $path = $projectFilesPath . '/root_' . $this->environment . '/';
+        $path = $projectFilesPath . '/root_' . $this->kernel->getEnvironment() . '/';
         if ($this->fileSystem->exists($path) && is_dir($path)) {
             $directories[] = new DirectoryIterator($path);
         }
@@ -89,9 +104,9 @@ class SymlinkProjectCommand extends SymlinkCommand
                     }
 
                     $webFolderName = $input->getOption('web-folder');
-                    $webFolderName = !empty($webFolderName) ? $webFolderName : 'web';
+                    $webFolderName = !empty($webFolderName) ? $webFolderName : 'public';
 
-                    $destination = $this->getContainer()->getParameter('kernel.project_dir') . '/' . $webFolderName . '/' . $item->getBasename();
+                    $destination = $this->kernel->getProjectDir() . '/' . $webFolderName . '/' . $item->getBasename();
 
                     if (!$this->fileSystem->exists(dirname($destination))) {
                         $output->writeln('Skipped creating the symlink for <comment>' . basename($destination) . '</comment> in <comment>' . dirname($destination) . '/</comment>. Folder does not exist!');

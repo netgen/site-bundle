@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Menu;
 
+use eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
-use Netgen\Bundle\SiteBundle\Core\FieldType\RelationList\Value as RelationListValue;
-use Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper;
+use Netgen\Bundle\EzPlatformSiteApiBundle\NamedObject\Provider;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -27,9 +27,9 @@ class RelationListMenuBuilder
     protected $loadService;
 
     /**
-     * @var \Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper
+     * @var \Netgen\Bundle\EzPlatformSiteApiBundle\NamedObject\Provider
      */
-    protected $siteInfoHelper;
+    protected $namedObjectProvider;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -39,25 +39,23 @@ class RelationListMenuBuilder
     public function __construct(
         FactoryInterface $factory,
         LoadService $loadService,
-        SiteInfoHelper $siteInfoHelper,
+        Provider $namedObjectProvider,
         ?LoggerInterface $logger = null
     ) {
         $this->factory = $factory;
         $this->loadService = $loadService;
-        $this->siteInfoHelper = $siteInfoHelper;
+        $this->namedObjectProvider = $namedObjectProvider;
         $this->logger = $logger ?? new NullLogger();
     }
 
     /**
      * Creates the KNP menu from provided content and field identifier.
-     *
-     * @param mixed|null $contentId
      */
-    public function createRelationListMenu(string $fieldIdentifier, $contentId = null): ItemInterface
+    public function createRelationListMenu(string $fieldIdentifier, ?int $contentId = null): ItemInterface
     {
         $content = $contentId !== null ?
             $this->loadService->loadContent($contentId) :
-            $this->siteInfoHelper->getSiteInfoContent();
+            $this->namedObjectProvider->getLocation('site_info')->content;
 
         $menu = $this->factory->createItem('root');
 
@@ -73,22 +71,22 @@ class RelationListMenuBuilder
             return $menu;
         }
 
-        foreach ($field->value->destinationLocationIds as $locationId) {
-            if (empty($locationId)) {
-                $this->logger->error(sprintf('Empty location ID in RelationList field "%s" for content #%s', $fieldIdentifier, $content->id));
+        foreach ($field->value->destinationContentIds as $destinationContentId) {
+            if (empty($destinationContentId)) {
+                $this->logger->error(sprintf('Empty content ID in RelationList field "%s" for content #%s', $fieldIdentifier, $content->id));
 
                 continue;
             }
 
             try {
-                $location = $this->loadService->loadLocation($locationId);
+                $destinationContent = $this->loadService->loadContent($destinationContentId);
             } catch (Throwable $t) {
                 $this->logger->error($t->getMessage());
 
                 continue;
             }
 
-            $menu->addChild(null, ['ezlocation' => $location]);
+            $menu->addChild($this->factory->createItem('', ['ezlocation' => $destinationContent->mainLocation]));
         }
 
         return $menu;

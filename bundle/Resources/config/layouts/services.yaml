@@ -1,0 +1,72 @@
+parameters:
+    ngsite.layouts.block.plugin.vertical_whitespace.top:
+        none: 'block.plugin.vertical_whitespace.none'
+        small: 'block.plugin.vertical_whitespace.small'
+        medium: 'block.plugin.vertical_whitespace.medium'
+        large: 'block.plugin.vertical_whitespace.large'
+
+    ngsite.layouts.block.plugin.vertical_whitespace.bottom:
+        none: 'block.plugin.vertical_whitespace.none'
+        small: 'block.plugin.vertical_whitespace.small'
+        medium: 'block.plugin.vertical_whitespace.medium'
+        large: 'block.plugin.vertical_whitespace.large'
+
+    ngsite.layouts.block.plugin.background_color.colors:
+        primary: 'block.plugin.background_color.primary'
+        secondary: 'block.plugin.background_color.secondary'
+        white: 'block.plugin.background_color.white'
+        black: 'block.plugin.background_color.black'
+
+    ngsite.layouts.block.plugin.set_container.sizes:
+        '': 'block.plugin.set_container.regular'
+        'narrow': 'block.plugin.set_container.narrow'
+        'wide': 'block.plugin.set_container.wide'
+
+services:
+    ngsite.layouts.block.plugin.title_icon:
+        class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\TitleIconPlugin
+        tags:
+            - { name: netgen_layouts.block_definition_handler.plugin, priority: 100 }
+
+    ngsite.layouts.block.plugin.vertical_whitespace:
+        class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\VerticalWhitespacePlugin
+        public: false
+        arguments:
+            - "%ngsite.layouts.block.plugin.vertical_whitespace.top%"
+            - "%ngsite.layouts.block.plugin.vertical_whitespace.bottom%"
+        tags:
+            - { name: netgen_layouts.block_definition_handler.plugin, priority: 200 }
+
+    ngsite.layouts.block.plugin.background_image:
+        class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\BackgroundImagePlugin
+        arguments:
+            - "@netgen.ezplatform_site.load_service"
+        tags:
+            - { name: netgen_layouts.block_definition_handler.plugin, priority: 300 }
+
+    ngsite.layouts.block.plugin.background_color:
+        class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\BackgroundColorPlugin
+        arguments:
+            - "%ngsite.layouts.block.plugin.background_color.colors%"
+        tags:
+            - { name: netgen_layouts.block_definition_handler.plugin, priority: 400 }
+
+    ngsite.layouts.block.plugin.set_container:
+        class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\SetContainerPlugin
+        arguments:
+            - "%ngsite.layouts.block.plugin.set_container.sizes%"
+        tags:
+            - { name: netgen_layouts.block_definition_handler.plugin, priority: -100 }
+
+    ngsite.layouts.query.content_by_topic:
+        class: Netgen\Bundle\SiteBundle\Layouts\Query\ContentByTopicHandler
+        arguments:
+            - "@ezpublish.api.service.location"
+            - "@netgen.ezplatform_site.load_service"
+            - "@netgen.ezplatform_site.find_service"
+            - "@ezpublish.spi.persistence.content_type_handler"
+            - "@ezpublish.spi.persistence.section_handler"
+            - "@ezpublish.spi.persistence.object_state_handler"
+            - "@netgen_layouts.ezplatform.content_provider"
+        tags:
+            - { name: netgen_layouts.query_type_handler, type: content_by_topic }

@@ -7,7 +7,7 @@ namespace Netgen\Bundle\SiteBundle\Entity;
 class EzUserAccountKey
 {
     /**
-     * @var mixed
+     * @var int|string
      */
     protected $id;
 
@@ -22,14 +22,14 @@ class EzUserAccountKey
     protected $time;
 
     /**
-     * @var mixed
+     * @var int
      */
     protected $userId;
 
     /**
      * Get ID.
      *
-     * @return mixed
+     * @return int|string
      */
     public function getId()
     {
@@ -63,11 +63,11 @@ class EzUserAccountKey
     /**
      * Set user ID.
      *
-     * @param mixed $userId
+     * @param int $userId
      *
      * @return \Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
      */
-    public function setUserId($userId): self
+    public function setUserId(int $userId): self
     {
         $this->userId = $userId;
 
@@ -77,9 +77,9 @@ class EzUserAccountKey
     /**
      * Get user ID.
      *
-     * @return mixed
+     * @return int
      */
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->userId;
     }

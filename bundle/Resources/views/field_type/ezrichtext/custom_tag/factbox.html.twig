@@ -1,0 +1,19 @@
+{% set css_class = 'factbox object-full' %}
+
+{% if align is defined and align is not empty %}
+    {% set css_class = 'factbox object-' ~ align %}
+{% endif %}
+
+<div class="{{ css_class }}">
+    {% if params.title is defined and params.title is not empty %}
+        <div class="factbox-header">
+            <h2>{{ params.title }}</h2>
+        </div>
+    {% endif %}
+
+    {% if content is defined and content is not empty %}
+        <div class="factbox-content">
+            {{ content|raw }}
+        </div>
+    {% endif %}
+</div>

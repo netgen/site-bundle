@@ -1,0 +1,109 @@
+system:
+    default:
+        field_templates:
+            - { template: "@NetgenSite/parts/content_fields.html.twig", priority: 5000 }
+        ng_site_api:
+            named_objects:
+                locations:
+                    site_info: '%ngsite.default.locations.site_info.id%'
+    admin_group:
+        fieldtypes:
+            ezrichtext:
+                classes:
+                    table:
+                        choices:
+                            - regular
+                            - table-bordered
+                            - table-striped
+                            - table-hover
+                            - table-condensed
+                            - table-no-skin
+                        default_value: regular
+                        required: false
+                        multiple: false
+                    ezlink:
+                        choices:
+                            - none
+                            - btn-default
+                            - btn-primary
+                        default_value: none
+                        required: false
+                        multiple: false
+                attributes:
+                    table:
+                        caption:
+                            type: string
+                            required: false
+                        responsive:
+                            type: boolean
+                            default_value: false
+                    ezlink:
+                        direct-download:
+                            type: boolean
+                            default_value: false
+                        open-inline:
+                            type: boolean
+                            default_value: false
+                toolbars:
+                    link:
+                        buttons:
+                            ezlink:
+                                priority: 50
+                    ezadd:
+                        buttons:
+                            video:
+                                priority: 3
+                            factbox:
+                                priority: 2
+                            quote:
+                                priority: 1
+                    table:
+                        buttons:
+                            elementwidth:
+                                priority: -100
+                    video:
+                        buttons:
+                            ezmoveup:
+                                priority: 40
+                            ezmovedown:
+                                priority: 30
+                            ezcustomtagedit:
+                                priority: 20
+                            ezblockremove:
+                                priority: 10
+                    factbox:
+                        buttons:
+                            ezmoveup:
+                                priority: 70
+                            ezmovedown:
+                                priority: 60
+                            ezembedleft:
+                                priority: 50
+                            ezembedcenter:
+                                priority: 40
+                            ezembedright:
+                                priority: 30
+                            ezcustomtagedit:
+                                priority: 20
+                            ezblockremove:
+                                priority: 10
+                    quote:
+                        buttons:
+                            ezmoveup:
+                                priority: 70
+                            ezmovedown:
+                                priority: 60
+                            ezembedleft:
+                                priority: 50
+                            ezembedcenter:
+                                priority: 40
+                            ezembedright:
+                                priority: 30
+                            ezcustomtagedit:
+                                priority: 20
+                            ezblockremove:
+                                priority: 10
+                custom_tags:
+                    - video
+                    - factbox
+                    - quote

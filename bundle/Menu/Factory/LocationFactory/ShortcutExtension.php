@@ -12,6 +12,7 @@ use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function mb_stripos;
@@ -83,7 +84,7 @@ class ShortcutExtension implements ExtensionInterface
             return;
         }
 
-        if ($relatedContent->mainLocation->invisible) {
+        if (!$relatedContent->mainLocation->isVisible) {
             $this->logger->error(sprintf('Menu item (#%s) has a related object (#%s) that is not visible.', $content->id, $relatedContent->id));
 
             return;
@@ -116,7 +117,8 @@ class ShortcutExtension implements ExtensionInterface
 
     protected function buildItemFromRelatedContent(ItemInterface $item, Content $content, Content $relatedContent): void
     {
-        $item->setUri($this->urlGenerator->generate($relatedContent) . $content->getField('internal_url_suffix')->value->text)
+        $contentUri = $this->urlGenerator->generate('', [RouteObjectInterface::ROUTE_OBJECT => $relatedContent]);
+        $item->setUri($contentUri . $content->getField('internal_url_suffix')->value->text)
             ->setExtra('ezlocation', $relatedContent->mainLocation)
             ->setAttribute('id', 'menu-item-location-id-' . $relatedContent->mainLocationId)
             ->setLinkAttribute('title', $item->getLabel());

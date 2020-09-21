@@ -1,0 +1,19 @@
+<div class="video-{{ params.video_service }} embed-responsive embed-responsive-16by9">
+    {% set video_url = 'https://www.youtube.com/embed/' %}
+    {% if params.video_service == 'vimeo' %}
+        {% set video_url = 'https://player.vimeo.com/video/' %}
+    {% elseif params.video_service == 'dailymotion' %}
+        {% set video_url = 'https://www.dailymotion.com/embed/video/' %}
+    {% endif %}
+
+    {% set video_url = video_url ~ params.video_code %}
+
+    <iframe
+        class="embed-responsive-item"
+        frameborder="0"
+        allowfullscreen="true"
+        width="770"
+        height="433"
+        src="{{ video_url }}"
+    ></iframe>
+</div>

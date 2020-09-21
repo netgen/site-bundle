@@ -1,0 +1,9 @@
+services:
+    ngsite.pagerfanta.view.site:
+        class: Netgen\Bundle\SiteBundle\Pagerfanta\View\SiteView
+        lazy: true
+        arguments:
+            - "@twig"
+            - "@ezpublish.config.resolver"
+        tags:
+            - { name: pagerfanta.view, alias: ngsite }

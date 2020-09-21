@@ -1,0 +1,74 @@
+services:
+    ngsite.listener.add_view_type:
+        class: Netgen\Bundle\SiteBundle\EventListener\AddViewTypeEventListener
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ngsite.listener.add_page_css_class:
+        class: Netgen\Bundle\SiteBundle\EventListener\AddPageCssClassEventListener
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ngsite.listener.no_view_template:
+        class: Netgen\Bundle\SiteBundle\EventListener\NoViewTemplateEventListener
+        arguments:
+            - "@router"
+            - "@ezpublish.config.resolver"
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ngsite.listener.set_csrf_enabled:
+        class: Netgen\Bundle\SiteBundle\EventListener\SetCsrfEnabledEventListener
+        arguments:
+            - "@?security.csrf.token_manager"
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ngsite.listener.menu.esi_fragment:
+        class: Netgen\Bundle\SiteBundle\EventListener\Menu\EsiFragmentEventListener
+        arguments:
+            - "@request_stack"
+            - "%fragment.path%"
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ngsite.listener.user:
+        class: Netgen\Bundle\SiteBundle\EventListener\UserEventListener
+        abstract: true
+        arguments:
+            - "@ngsite.helper.mail_helper"
+            - "@ezpublish.config.resolver"
+            - "@ngsite.repository.nguser_setting"
+            - "@ngsite.repository.ezuser_accountkey"
+            - "@netgen.ezplatform_site.load_service"
+            - "@ezpublish.api.repository"
+
+    ngsite.listener.user.post_register:
+        class: Netgen\Bundle\SiteBundle\EventListener\User\PostRegisterEventListener
+        parent: ngsite.listener.user
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ngsite.listener.user.activation_request:
+        class: Netgen\Bundle\SiteBundle\EventListener\User\ActivationRequestEventListener
+        parent: ngsite.listener.user
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ngsite.listener.user.post_activate:
+        class: Netgen\Bundle\SiteBundle\EventListener\User\PostActivateEventListener
+        parent: ngsite.listener.user
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ngsite.listener.user.password_reset_request:
+        class: Netgen\Bundle\SiteBundle\EventListener\User\PasswordResetRequestEventListener
+        parent: ngsite.listener.user
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ngsite.listener.user.post_password_reset:
+        class: Netgen\Bundle\SiteBundle\EventListener\User\PostPasswordResetEventListener
+        parent: ngsite.listener.user
+        tags:
+            - { name: kernel.event_subscriber }

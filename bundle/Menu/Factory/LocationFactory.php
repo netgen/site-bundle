@@ -11,13 +11,13 @@ use Netgen\Bundle\SiteBundle\Event\Menu\LocationMenuItemEvent;
 use Netgen\Bundle\SiteBundle\Event\SiteEvents;
 use Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\ExtensionInterface;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use function md5;
 
 class LocationFactory implements FactoryInterface
 {
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
 
@@ -65,7 +65,7 @@ class LocationFactory implements FactoryInterface
         $menuItem->setName(md5(($menuItem->getUri() ?? '') . '-' . $locationId));
 
         $event = new LocationMenuItemEvent($menuItem, $menuItem->getExtra('ezlocation'));
-        $this->eventDispatcher->dispatch(SiteEvents::MENU_LOCATION_ITEM, $event);
+        $this->eventDispatcher->dispatch($event, SiteEvents::MENU_LOCATION_ITEM);
 
         return $menuItem;
     }

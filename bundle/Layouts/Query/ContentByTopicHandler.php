@@ -14,7 +14,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
-use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use Netgen\EzPlatformSiteApi\API\FindService;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\Layouts\API\Values\Collection\Query;
@@ -54,7 +53,6 @@ class ContentByTopicHandler implements QueryTypeHandlerInterface
         LocationService $locationService,
         LoadService $loadService,
         FindService $findService,
-        ContentTypeHandler $contentTypeHandler,
         SectionHandler $sectionHandler,
         ObjectStateHandler $objectStateHandler,
         ContentProviderInterface $contentProvider
@@ -62,7 +60,6 @@ class ContentByTopicHandler implements QueryTypeHandlerInterface
         $this->loadService = $loadService;
         $this->findService = $findService;
 
-        $this->setContentTypeHandler($contentTypeHandler);
         $this->setSectionHandler($sectionHandler);
         $this->setObjectStateHandler($objectStateHandler);
         $this->setContentProvider($contentProvider);

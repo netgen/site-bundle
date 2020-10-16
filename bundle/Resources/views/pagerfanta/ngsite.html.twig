@@ -9,7 +9,7 @@
 
         {# Previous page link #}
         {% if pages.previous_page %}
-            <li class="page-item"><a href="{{ pages.previous_page }}" class="page-link" rel="prev">{{ 'collection.pager.previous'|trans }}</a></li>
+            <li class="page-item"><a href="{{ pages.previous_page }}" class="page-link" rel="prev">{{ 'ngsite.pagination.next'|trans }}</a></li>
         {% endif %}
 
         {# First page link #}
@@ -53,7 +53,7 @@
 
         {# Next page link #}
         {% if pages.next_page %}
-            <li class="page-item"><a href="{{ pages.next_page }}" class="page-link" rel="next">{{ 'collection.pager.next'|trans }}</a></li>
+            <li class="page-item"><a href="{{ pages.next_page }}" class="page-link" rel="next">{{ 'ngsite.pagination.next'|trans }}</a></li>
         {% endif %}
 
         {# Last page link (for mobile) #}

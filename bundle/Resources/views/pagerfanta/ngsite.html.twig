@@ -1,14 +1,15 @@
-<nav>
-    <ul class="pagination justify-content-center">
+<nav class="page-navigation">
+    <ul>
 
         {# First page link (for mobile) #}
+        
         {% if pages.mobile_first_page %}
             <li class="page-item d-block d-xs-none"><a href="{{ pages.mobile_first_page }}" class="page-link"><i class="fa fa-angle-double-left"></i></a></li>
         {% endif %}
 
         {# Previous page link #}
         {% if pages.previous_page %}
-            <li class="page-item"><a href="{{ pages.previous_page }}" class="page-link" rel="prev"><i class="fa fa-angle-left"></i></a></li>
+            <li class="page-item"><a href="{{ pages.previous_page }}" class="page-link" rel="prev">{{ 'collection.pager.previous'|trans }}</a></li>
         {% endif %}
 
         {# First page link #}
@@ -29,7 +30,7 @@
         {# Middle pages #}
         {% for page, page_url in pages.middle_pages %}
             {% if page == pager.currentPage %}
-                <li class="page-item active"><span class="page-link">{{ page }}<span class="d-inline d-xs-none"> of {{ pager.nbPages }}</span></span></li>
+                <li class="page-item current"><span class="page-link">{{ page }}<span class="d-inline d-xs-none"> of {{ pager.nbPages }}</span></span></li>
             {% else %}
                 <li class="page-item d-none d-xs-block"><a href="{{ page_url }}" class="page-link">{{ page }}</a></li>
             {% endif %}
@@ -52,7 +53,7 @@
 
         {# Next page link #}
         {% if pages.next_page %}
-            <li class="page-item"><a href="{{ pages.next_page }}" class="page-link" rel="next"><i class="fa fa-angle-right"></i></a></li>
+            <li class="page-item"><a href="{{ pages.next_page }}" class="page-link" rel="next">{{ 'collection.pager.next'|trans }}</a></li>
         {% endif %}
 
         {# Last page link (for mobile) #}

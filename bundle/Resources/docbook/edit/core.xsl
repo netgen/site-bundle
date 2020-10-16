@@ -634,7 +634,14 @@
         </xsl:if>
         <xsl:if test="@xlink:href">
             <xsl:attribute name="data-href">
-                <xsl:value-of select="@xlink:href"/>
+                <xsl:choose>
+                    <xsl:when test="./docbook:ezattribute/docbook:ezvalue[@key='link-suffix'] != ''">
+                        <xsl:value-of select="concat(@xlink:href, ./docbook:ezattribute/docbook:ezvalue[@key='link-suffix'])"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="concat(@xlink:href, 'test')"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:attribute>
         </xsl:if>
         <xsl:if test="@xml:id">
@@ -663,7 +670,14 @@
         <xsl:element name="a" namespace="{$outputNamespace}">
             <xsl:attribute name="data-ezelement">ezlink</xsl:attribute>
             <xsl:attribute name="href">
-                <xsl:value-of select="@xlink:href"/>
+                <xsl:choose>
+                    <xsl:when test="./docbook:ezattribute/docbook:ezvalue[@key='link-suffix'] != ''">
+                        <xsl:value-of select="concat(@xlink:href, ./docbook:ezattribute/docbook:ezvalue[@key='link-suffix'])"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="@xlink:href"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:attribute>
             <xsl:if test="@xlink:show = 'new'">
                 <xsl:attribute name="target">_blank</xsl:attribute>

@@ -38,6 +38,9 @@ system:
                             type: boolean
                             default_value: false
                     ezlink:
+                        link-suffix:
+                            type: string
+                            required: false
                         direct-download:
                             type: boolean
                             default_value: false

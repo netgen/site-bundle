@@ -27,15 +27,6 @@ use function sprintf;
 
 class MenuItemExtension implements ExtensionInterface
 {
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
-
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\FilterService
-     */
-    protected $filterService;
 
     /**
      * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
@@ -57,19 +48,22 @@ class MenuItemExtension implements ExtensionInterface
      */
     protected $logger;
 
+    /**
+     * @var \Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\ChildrenBuilder
+     */
+    protected $childrenBuilder;
+
     public function __construct(
-        LoadService $loadService,
-        FilterService $filterService,
         UrlGeneratorInterface $urlGenerator,
         RequestStack $requestStack,
         ConfigResolverInterface $configResolver,
+        ChildrenBuilder $childrenBuilder,
         ?LoggerInterface $logger = null
     ) {
-        $this->loadService = $loadService;
-        $this->filterService = $filterService;
         $this->urlGenerator = $urlGenerator;
         $this->requestStack = $requestStack;
         $this->configResolver = $configResolver;
+        $this->childrenBuilder = $childrenBuilder;
         $this->logger = $logger ?? new NullLogger();
     }
 
@@ -87,7 +81,7 @@ class MenuItemExtension implements ExtensionInterface
                 ->setLinkAttribute('rel', 'nofollow noopener noreferrer');
         }
 
-        $this->buildChildItems($item, $location->content);
+        $this->childrenBuilder->buildChildItems($item, $location->content);
     }
 
     protected function buildItemFromContent(ItemInterface $item, Content $content): void
@@ -155,86 +149,6 @@ class MenuItemExtension implements ExtensionInterface
             // Disable link for content types that act as simple content containers
             // and that have no their own full views
             $item->setUri('');
-        }
-    }
-
-    protected function buildChildItems(ItemInterface $item, Content $content): void
-    {
-        $childLocations = [];
-
-        if (!$content->getField('parent_node')->isEmpty()) {
-            $destinationContent = $content->getFieldRelation('parent_node');
-            if (!$destinationContent instanceof Content) {
-                return;
-            }
-
-            if ($destinationContent->mainLocation->invisible) {
-                $this->logger->error(sprintf('Menu item (#%s) has a related object (#%s) that is not visible.', $content->id, $destinationContent->id));
-
-                return;
-            }
-
-            $criteria = [
-                new Criterion\Visibility(Criterion\Visibility::VISIBLE),
-                new Criterion\ParentLocationId($destinationContent->mainLocation->id),
-            ];
-
-            if (!$content->getField('class_filter')->isEmpty() && !$content->getField('class_filter_type')->isEmpty()) {
-                /** @var \Netgen\Bundle\ContentTypeListBundle\Core\FieldType\ContentTypeList\Value $contentTypeFilter */
-                $contentTypeFilter = $content->getField('class_filter')->value;
-
-                /** @var \Netgen\Bundle\EnhancedSelectionBundle\Core\FieldType\EnhancedSelection\Value $filterType */
-                $filterType = $content->getField('class_filter_type')->value;
-
-                if ($filterType->identifiers[0] === 'include') {
-                    $criteria[] = new Criterion\ContentTypeIdentifier($contentTypeFilter->identifiers);
-                } elseif ($filterType->identifiers[0] === 'exclude') {
-                    $criteria[] = new Criterion\LogicalNot(
-                        new Criterion\ContentTypeIdentifier($contentTypeFilter->identifiers)
-                    );
-                }
-            }
-
-            $query = new LocationQuery();
-            $query->filter = new Criterion\LogicalAnd($criteria);
-            $query->sortClauses = $destinationContent->mainLocation->innerLocation->getSortClauses();
-
-            if (!$content->getField('limit')->isEmpty()) {
-                /** @var \eZ\Publish\Core\FieldType\Integer\Value $limit */
-                $limit = $content->getField('limit')->value;
-                if ($limit->value > 0) {
-                    $query->limit = $limit->value;
-                }
-            }
-
-            $searchResult = $this->filterService->filterLocations($query);
-
-            $childLocations = array_map(
-                static function (SearchHit $searchHit) {
-                    return $searchHit->valueObject;
-                },
-                $searchResult->searchHits
-            );
-        } elseif (!$content->getField('menu_items')->isEmpty()) {
-            foreach ($content->getField('menu_items')->value->destinationLocationIds as $locationId) {
-                if (empty($locationId)) {
-                    $this->logger->error(sprintf('Empty location ID in RelationList field "%s" for content #%s', 'menu_items', $content->id));
-
-                    continue;
-                }
-
-                try {
-                    $childLocations[] = $this->loadService->loadLocation($locationId);
-                } catch (Throwable $t) {
-                    $this->logger->error($t->getMessage());
-
-                    continue;
-                }
-            }
-        }
-
-        foreach ($childLocations as $location) {
-            $item->addChild(null, ['ezlocation' => $location]);
         }
     }
 }

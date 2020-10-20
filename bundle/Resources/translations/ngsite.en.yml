@@ -1,1 +1,3 @@
 download.file_not_found: 'File not found'
+pagination.previous: 'Previous'
+pagination.next: 'Next'

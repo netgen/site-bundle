@@ -7,7 +7,6 @@ namespace Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Knp\Menu\ItemInterface;
 use Netgen\EzPlatformSiteApi\API\FilterService;
 use Netgen\EzPlatformSiteApi\API\LoadService;
@@ -15,6 +14,8 @@ use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Throwable;
+use function array_map;
+use function sprintf;
 
 class ChildrenBuilder
 {
@@ -112,7 +113,7 @@ class ChildrenBuilder
 
         $maxDepth = 1;
         if (!$content->getField('depth')->isEmpty()) {
-            $maxDepth = (int)$content->getFieldValue('depth')->text;
+            $maxDepth = (int) $content->getFieldValue('depth')->text;
         }
 
         foreach ($childLocations as $location) {

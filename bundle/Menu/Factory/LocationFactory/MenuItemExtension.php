@@ -4,30 +4,22 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory;
 
-use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 use Knp\Menu\ItemInterface;
-use Netgen\EzPlatformSiteApi\API\FilterService;
-use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Throwable;
-use function array_map;
 use function in_array;
 use function mb_stripos;
 use function sprintf;
 
 class MenuItemExtension implements ExtensionInterface
 {
-
     /**
      * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
      */

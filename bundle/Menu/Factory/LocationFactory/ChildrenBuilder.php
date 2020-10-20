@@ -16,22 +16,22 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Throwable;
 
-final class ChildrenBuilder
+class ChildrenBuilder
 {
     /**
      * @var \Netgen\EzPlatformSiteApi\API\LoadService
      */
-    private $loadService;
+    protected $loadService;
 
     /**
      * @var \Netgen\EzPlatformSiteApi\API\FilterService
      */
-    private $filterService;
+    protected $filterService;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    private $logger;
+    protected $logger;
 
     public function __construct(
         LoadService $loadService,
@@ -52,7 +52,7 @@ final class ChildrenBuilder
         }
     }
 
-    private function buildChildrenFromRelatedParentNode(ItemInterface $item, Content $content, ?Content $parentContent = null, int $currentDepth = 1): void
+    protected function buildChildrenFromRelatedParentNode(ItemInterface $item, Content $content, ?Content $parentContent = null, int $currentDepth = 1): void
     {
         $childLocations = [];
 
@@ -123,7 +123,7 @@ final class ChildrenBuilder
         }
     }
 
-    private function buildChildrenFromRelatedMenuItems(ItemInterface $item, Content $content): void
+    protected function buildChildrenFromRelatedMenuItems(ItemInterface $item, Content $content): void
     {
         $childLocations = [];
 

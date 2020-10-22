@@ -639,7 +639,7 @@
                         <xsl:value-of select="concat(@xlink:href, ./docbook:ezattribute/docbook:ezvalue[@key='link-suffix'])"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="concat(@xlink:href, 'test')"/>
+                        <xsl:value-of select="@xlink:href"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>

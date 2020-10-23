@@ -42,15 +42,22 @@ services:
     ngsite.menu.factory.location.extension.menu_item:
         class: Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\MenuItemExtension
         arguments:
-            - "@netgen.ezplatform_site.load_service"
-            - "@netgen.ezplatform_site.filter_service"
             - "@router"
             - "@request_stack"
             - "@ezpublish.config.resolver"
+            - "@ngsite.menu.factory.location.extension.children_builder"
             - "@?logger"
         tags:
             - { name: ngsite.menu.factory.location.extension, priority: 0 }
             - { name: monolog.logger, channel: ngsite }
+
+    ngsite.menu.factory.location.extension.children_builder:
+        class: Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\ChildrenBuilder
+        public: false
+        arguments:
+            - "@netgen.ezplatform_site.load_service"
+            - "@netgen.ezplatform_site.filter_service"
+            - "@?logger"
 
     ngsite.menu.main_menu:
         class: Knp\Menu\MenuItem

@@ -11,9 +11,18 @@
 
     <xsl:template match="link">
         <a>
-            <xsl:attribute name="href">
-                <xsl:value-of select="@url" />
-            </xsl:attribute>
+            <xsl:choose>
+                <xsl:when test="@custom:link_suffix != ''">
+                    <xsl:attribute name="href">
+                       <xsl:value-of select="concat(@url, @custom:link_suffix)" />
+                    </xsl:attribute>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="@url" />
+                    </xsl:attribute>
+                </xsl:otherwise>
+            </xsl:choose>
 
             <xsl:if test="@target != ''">
                 <xsl:attribute name="target">

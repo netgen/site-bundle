@@ -113,7 +113,7 @@ class ChildrenBuilder
 
         $maxDepth = 1;
         if (!$content->getField('depth')->isEmpty()) {
-            $maxDepth = (int) $content->getFieldValue('depth')->text;
+            $maxDepth = $content->getFieldValue('depth')->value;
         }
 
         foreach ($childLocations as $location) {

@@ -24,7 +24,7 @@
         "netgen/ezplatform-site-api": "^4.0",
         "netgen/siteaccess-routes-bundle": "^2.0",
         "netgen/content-type-list-bundle": "^2.0",
-        "netgen/enhanced-selection-bundle": "^4.0",
+        "netgen/enhanced-selection-bundle": "^4.2",
         "netgen/birthday-bundle": "^2.0",
         "netgen/open-graph-bundle": "^2.0",
         "netgen/tagsbundle": "^4.0",

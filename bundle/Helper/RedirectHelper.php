@@ -20,11 +20,6 @@ class RedirectHelper
      */
     protected $router;
 
-    /**
-     * RedirectHelper constructor.
-     *
-     * @param \Symfony\Component\Routing\RouterInterface $router
-     */
     public function __construct(RouterInterface $router)
     {
         $this->router = $router;
@@ -33,10 +28,6 @@ class RedirectHelper
     /**
      * Checks if content on give location has internal or external
      * redirect fields, and if those have a valid redirect value.
-     *
-     * @param \Netgen\EzPlatformSiteApi\API\Values\Location $location
-     *
-     * @return null|\Symfony\Component\HttpFoundation\Response
      */
     public function checkRedirect(Location $location): ?Response
     {

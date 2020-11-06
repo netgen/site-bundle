@@ -25,11 +25,6 @@ class FullViewController extends Controller
      */
     protected $router;
 
-    /**
-     * FullViewController constructor.
-     *
-     * @param \Symfony\Component\Routing\RouterInterface $router
-     */
     public function __construct(RouterInterface $router)
     {
         $this->router = $router;

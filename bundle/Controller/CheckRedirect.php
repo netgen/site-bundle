@@ -16,11 +16,6 @@ class CheckRedirect extends Controller
      */
     protected $redirectHelper;
 
-    /**
-     * CheckRedirect constructor.
-     *
-     * @param \Netgen\Bundle\SiteBundle\Helper\RedirectHelper $redirectHelper
-     */
     public function __construct(RedirectHelper $redirectHelper)
     {
         $this->redirectHelper = $redirectHelper;

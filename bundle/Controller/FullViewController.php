@@ -6,19 +6,16 @@ namespace Netgen\Bundle\SiteBundle\Controller;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
 use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
-use Netgen\EzPlatformSiteApi\API\Values\Content;
+use Netgen\Bundle\SiteBundle\Helper\RedirectHelper;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\FilterAdapter;
 use Pagerfanta\Pagerfanta;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use function array_map;
 use function explode;
-use function mb_stripos;
 use function trim;
 
 class FullViewController extends Controller
@@ -28,6 +25,11 @@ class FullViewController extends Controller
      */
     protected $router;
 
+    /**
+     * FullViewController constructor.
+     *
+     * @param \Symfony\Component\Routing\RouterInterface $router
+     */
     public function __construct(RouterInterface $router)
     {
         $this->router = $router;
@@ -35,6 +37,9 @@ class FullViewController extends Controller
 
     /**
      * Action for viewing content with ng_category content type identifier.
+     *
+     * @deprecated This controller is deprecated, please use SiteAPI query type
+     * for loading cihldren and CheckRedirect controller for checking the redirect.
      *
      * @return \Symfony\Component\HttpFoundation\Response|\Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView
      */
@@ -46,7 +51,9 @@ class FullViewController extends Controller
             $location = $content->mainLocation;
         }
 
-        $response = $this->checkCategoryRedirect($location);
+        $redirectHelper = new RedirectHelper($this->router);
+
+        $response = $redirectHelper->checkRedirect($location);
         if ($response instanceof Response) {
             return $response;
         }
@@ -107,6 +114,9 @@ class FullViewController extends Controller
     /**
      * Action for viewing content with ng_landing_page content type identifier.
      *
+     * @deprecated This controller is deprecated, please use CheckRedirect controller
+     * for checking the redirect.
+     *
      * @return \Symfony\Component\HttpFoundation\Response|\Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView
      */
     public function viewNgLandingPage(ContentView $view)
@@ -116,47 +126,13 @@ class FullViewController extends Controller
             $location = $view->getSiteContent()->mainLocation;
         }
 
-        $response = $this->checkCategoryRedirect($location);
+        $redirectHelper = new RedirectHelper($this->router);
+
+        $response = $redirectHelper->checkRedirect($location);
         if ($response instanceof Response) {
             return $response;
         }
 
         return $view;
-    }
-
-    /**
-     * Checks if content at location defined by it's ID contains
-     * valid category redirect value and returns a redirect response if it does.
-     */
-    protected function checkCategoryRedirect(Location $location): ?RedirectResponse
-    {
-        $content = $location->content;
-
-        $internalRedirectContent = null;
-        if (!$content->getField('internal_redirect')->isEmpty()) {
-            $internalRedirectContent = $content->getFieldRelation('internal_redirect');
-        }
-
-        $externalRedirectValue = $content->getField('external_redirect')->value;
-
-        if ($internalRedirectContent instanceof Content) {
-            if ($internalRedirectContent->contentInfo->mainLocationId !== $location->id) {
-                return new RedirectResponse(
-                    $this->router->generate($internalRedirectContent),
-                    RedirectResponse::HTTP_MOVED_PERMANENTLY
-                );
-            }
-        } elseif ($externalRedirectValue instanceof UrlValue && !$content->getField('external_redirect')->isEmpty()) {
-            if (mb_stripos($externalRedirectValue->link, 'http') === 0) {
-                return new RedirectResponse($externalRedirectValue->link, RedirectResponse::HTTP_MOVED_PERMANENTLY);
-            }
-
-            return new RedirectResponse(
-                $this->router->generate($this->getRootLocation()) . trim($externalRedirectValue->link, '/'),
-                RedirectResponse::HTTP_MOVED_PERMANENTLY
-            );
-        }
-
-        return null;
     }
 }

@@ -24,6 +24,13 @@ services:
         public: false
         abstract: true
 
+    ngsite.controller.check_redirect:
+        class: Netgen\Bundle\SiteBundle\Controller\CheckRedirect
+        public: true
+        parent: ngsite.controller.base
+        arguments:
+            - "@ngsite.helper.redirect_helper"
+
     ngsite.controller.full_view:
         class: Netgen\Bundle\SiteBundle\Controller\FullViewController
         public: true
@@ -141,6 +148,12 @@ services:
             - "@ezpublish.config.resolver"
             - "@ngsite.helper.site_info_helper"
             - "@?logger"
+
+    ngsite.helper.redirect_helper:
+        class: Netgen\Bundle\SiteBundle\Helper\RedirectHelper
+        public: false
+        arguments:
+            - "@router"
 
     ngsite.repository.nguser_setting:
         class: Doctrine\ORM\EntityRepository

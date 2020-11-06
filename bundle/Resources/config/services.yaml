@@ -191,6 +191,7 @@ services:
         class: Netgen\Bundle\SiteBundle\Helper\RedirectHelper
         arguments:
             - "@router"
+            - "@netgen.ezplatform_site.site"
 
     ngsite.repository.nguser_setting:
         class: Doctrine\ORM\EntityRepository

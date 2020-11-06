@@ -13,6 +13,7 @@ use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\FilterAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\RouterInterface;
 use function array_map;
 use function explode;
 use function trim;
@@ -20,18 +21,18 @@ use function trim;
 class FullViewController extends Controller
 {
     /**
-     * @var \Netgen\Bundle\SiteBundle\Helper\RedirectHelper
+     * @var \Symfony\Component\Routing\RouterInterface
      */
-    protected $redirectHelper;
+    protected $router;
 
     /**
      * FullViewController constructor.
      *
-     * @param \Netgen\Bundle\SiteBundle\Helper\RedirectHelper $redirectHelper
+     * @param \Symfony\Component\Routing\RouterInterface $router
      */
-    public function __construct(RedirectHelper $redirectHelper)
+    public function __construct(RouterInterface $router)
     {
-        $this->redirectHelper = $redirectHelper;
+        $this->router = $router;
     }
 
     /**
@@ -50,7 +51,9 @@ class FullViewController extends Controller
             $location = $content->mainLocation;
         }
 
-        $response = $this->redirectHelper->checkRedirect($location);
+        $redirectHelper = new RedirectHelper($this->router);
+
+        $response = $redirectHelper->checkRedirect($location);
         if ($response instanceof Response) {
             return $response;
         }
@@ -123,7 +126,9 @@ class FullViewController extends Controller
             $location = $view->getSiteContent()->mainLocation;
         }
 
-        $response = $this->redirectHelper->checkRedirect($location);
+        $redirectHelper = new RedirectHelper($this->router);
+
+        $response = $redirectHelper->checkRedirect($location);
         if ($response instanceof Response) {
             return $response;
         }

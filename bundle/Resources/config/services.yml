@@ -36,7 +36,7 @@ services:
         public: true
         parent: ngsite.controller.base
         arguments:
-            - "@ngsite.helper.redirect_helper"
+            - "@router"
 
     ngsite.controller.embed_view:
         class: Netgen\Bundle\SiteBundle\Controller\EmbedViewController

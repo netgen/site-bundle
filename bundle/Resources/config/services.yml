@@ -24,12 +24,13 @@ services:
         public: false
         abstract: true
 
-    ngsite.controller.redirect:
-        class: Netgen\Bundle\SiteBundle\Controller\RedirectController
+    ngsite.controller.check_redirect:
+        class: Netgen\Bundle\SiteBundle\Controller\CheckRedirect
         public: true
         parent: ngsite.controller.base
         arguments:
-            - "@router"
+            - "@ngsite.helper.redirect_helper"
+
 
     ngsite.controller.embed_view:
         class: Netgen\Bundle\SiteBundle\Controller\EmbedViewController

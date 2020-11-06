@@ -142,6 +142,12 @@ services:
             - "@ngsite.helper.site_info_helper"
             - "@?logger"
 
+    ngsite.helper.redirect_helper:
+        class: Netgen\Bundle\SiteBundle\Helper\RedirectHelper
+        public: false
+        arguments:
+            - "@router"
+
     ngsite.repository.nguser_setting:
         class: Doctrine\ORM\EntityRepository
         public: false

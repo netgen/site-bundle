@@ -45,7 +45,7 @@ class FullViewController extends Controller
             $location = $content->mainLocation;
         }
 
-        $redirectHelper = new RedirectHelper($this->router);
+        $redirectHelper = new RedirectHelper($this->router, $this->getSite());
 
         $response = $redirectHelper->checkRedirect($location);
         if ($response instanceof Response) {
@@ -120,7 +120,7 @@ class FullViewController extends Controller
             $location = $view->getSiteContent()->mainLocation;
         }
 
-        $redirectHelper = new RedirectHelper($this->router);
+        $redirectHelper = new RedirectHelper($this->router, $this->getSite());
 
         $response = $redirectHelper->checkRedirect($location);
         if ($response instanceof Response) {

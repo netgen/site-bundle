@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Helper;
 
 use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
+use Netgen\EzPlatformSiteApi\API\Site;
 use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -20,9 +21,15 @@ class RedirectHelper
      */
     protected $router;
 
-    public function __construct(RouterInterface $router)
+    /**
+     * @var \Netgen\EzPlatformSiteApi\API\Site
+     */
+    protected $site;
+
+    public function __construct(RouterInterface $router, Site $site)
     {
         $this->router = $router;
+        $this->site = $site;
     }
 
     /**
@@ -61,5 +68,15 @@ class RedirectHelper
         }
 
         return null;
+    }
+
+    /**
+     * Returns the root location object for current siteaccess configuration.
+     */
+    protected function getRootLocation(): Location
+    {
+        return $this->site->getLoadService()->loadLocation(
+            $this->site->getSettings()->rootLocationId
+        );
     }
 }

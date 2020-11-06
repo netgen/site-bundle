@@ -47,7 +47,7 @@ class ChildrenBuilder
     public function buildChildItems(ItemInterface $item, Content $content): void
     {
         if (!$content->getField('parent_node')->isEmpty()) {
-            $childLocations = $this->buildChildrenFromRelatedParentNode($item, $content);
+            $this->buildChildrenFromRelatedParentNode($item, $content);
         } elseif (!$content->getField('menu_items')->isEmpty()) {
             $this->buildChildrenFromRelatedMenuItems($item, $content);
         }
@@ -55,8 +55,6 @@ class ChildrenBuilder
 
     protected function buildChildrenFromRelatedParentNode(ItemInterface $item, Content $content, ?Content $parentContent = null, int $currentDepth = 1): void
     {
-        $childLocations = [];
-
         $parentContent = $parentContent instanceof Content ? $parentContent : $content->getFieldRelation('parent_node');
 
         if (!$parentContent instanceof Content) {

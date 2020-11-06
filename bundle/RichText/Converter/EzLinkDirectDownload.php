@@ -12,7 +12,7 @@ use EzSystems\EzPlatformRichText\eZ\RichText\Converter;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function preg_match;
 
 class EzLinkDirectDownload implements Converter
@@ -23,29 +23,22 @@ class EzLinkDirectDownload implements Converter
     protected $loadService;
 
     /**
-     * @var \Symfony\Component\Routing\RouterInterface
+     * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
      */
-    protected $router;
+    protected $urlGenerator;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
-    /**
-     * EzLinkDirectDownload constructor.
-     *
-     * @param LoadService $loadService
-     * @param RouterInterface $router
-     * @param LoggerInterface|null $logger
-     */
     public function __construct(
         LoadService $loadService,
-        RouterInterface $router,
+        UrlGeneratorInterface $urlGenerator,
         ?LoggerInterface $logger = null
     ) {
         $this->loadService = $loadService;
-        $this->router = $router;
+        $this->urlGenerator = $urlGenerator;
         $this->logger = $logger ?? new NullLogger();
     }
 
@@ -53,12 +46,8 @@ class EzLinkDirectDownload implements Converter
      * Converts internal links (ezcontent:// and ezlocation://) to URLs.
      *
      * Overridden to add option to download files by using Netgen Site specific route.
-     *
-     * @param \DOMDocument $document
-     *
-     * @return \DOMDocument
      */
-    public function convert(DOMDocument $document)
+    public function convert(DOMDocument $document): DOMDocument
     {
         $document = clone $document;
 
@@ -151,7 +140,7 @@ class EzLinkDirectDownload implements Converter
                 continue;
             }
 
-            $hrefResolved = $this->router->generate('ngsite_download', [
+            $hrefResolved = $this->urlGenerator->generate('ngsite_download', [
                 'contentId' => $content->id,
                 'fieldId' => $field->id,
                 'isInline' => $openInline,

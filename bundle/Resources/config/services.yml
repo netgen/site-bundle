@@ -31,6 +31,12 @@ services:
         arguments:
             - "@ngsite.helper.redirect_helper"
 
+    ngsite.controller.full_view:
+        class: Netgen\Bundle\SiteBundle\Controller\FullViewController
+        public: true
+        parent: ngsite.controller.base
+        arguments:
+            - "@ngsite.helper.redirect_helper"
 
     ngsite.controller.embed_view:
         class: Netgen\Bundle\SiteBundle\Controller\EmbedViewController

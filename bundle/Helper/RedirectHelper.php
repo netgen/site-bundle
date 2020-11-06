@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Helper;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
+use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
 use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\RouterInterface;
 use function mb_stripos;
 use function trim;
 

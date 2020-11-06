@@ -2,17 +2,27 @@
 
 declare(strict_types=1);
 
-namespace Netgen\Bundle\SiteBundle\Controller\FullView;
+namespace Netgen\Bundle\SiteBundle\Controller;
 
 use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
-use Netgen\Bundle\SiteBundle\Controller\Controller;
+use Netgen\Bundle\SiteBundle\Helper\RedirectHelper;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Symfony\Component\HttpFoundation\Response;
 
-class LandingPage extends Controller
+class CheckRedirect extends Controller
 {
     /**
-     * Action for viewing content with ng_landing_page content type identifier.
+     * @var \Netgen\Bundle\SiteBundle\Helper\RedirectHelper
+     */
+    protected $redirectHelper;
+
+    public function __construct(RedirectHelper $redirectHelper)
+    {
+        $this->redirectHelper = $redirectHelper;
+    }
+
+    /**
+     * Action for viewing content which has redirect fields.
      *
      * @return \Symfony\Component\HttpFoundation\Response|\Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView
      */
@@ -23,7 +33,7 @@ class LandingPage extends Controller
             $location = $view->getSiteContent()->mainLocation;
         }
 
-        $response = $this->checkRedirect($location);
+        $response = $this->redirectHelper->checkRedirect($location);
         if ($response instanceof Response) {
             return $response;
         }

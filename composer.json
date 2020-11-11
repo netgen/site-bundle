@@ -17,13 +17,13 @@
         }
     ],
     "require": {
-        "ezsystems/ezplatform-kernel": "^1.1",
+        "ezsystems/ezplatform-kernel": "^1.2",
         "symfony/mailer": "^5.1",
         "symfony/polyfill-php80": "^1.15",
         "netgen/ez-forms-bundle": "^3.0",
-        "netgen/ezplatform-site-api": "^4.0",
+        "netgen/ezplatform-site-api": "^4.1",
         "netgen/siteaccess-routes-bundle": "^2.0",
-        "netgen/content-type-list-bundle": "^2.0",
+        "netgen/content-type-list-bundle": "^2.1",
         "netgen/enhanced-selection-bundle": "^4.2",
         "netgen/birthday-bundle": "^2.0",
         "netgen/open-graph-bundle": "^2.0",

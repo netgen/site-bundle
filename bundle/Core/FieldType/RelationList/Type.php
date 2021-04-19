@@ -71,8 +71,8 @@ class Type extends BaseRelationListType
         $parentValue = parent::createValueFromInput($inputValue);
 
         if (
-            $parentValue instanceof BaseRelationListValue &&
-            !$parentValue instanceof Value
+            $parentValue instanceof BaseRelationListValue
+            && !$parentValue instanceof Value
         ) {
             return new Value($parentValue->destinationContentIds);
         }

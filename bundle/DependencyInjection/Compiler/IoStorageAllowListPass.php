@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use function array_merge;
 use function array_search;
+use function array_values;
 
 class IoStorageAllowListPass implements CompilerPassInterface
 {

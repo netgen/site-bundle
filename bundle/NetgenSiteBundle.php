@@ -17,5 +17,6 @@ class NetgenSiteBundle extends Bundle
         $container->addCompilerPass(new Compiler\ContentDownloadUrlGeneratorPass());
         $container->addCompilerPass(new Compiler\LocationFactoryPass());
         $container->addCompilerPass(new Compiler\TwigEnvironmentPass());
+        $container->addCompilerPass(new Compiler\IoStorageAllowListPass());
     }
 }

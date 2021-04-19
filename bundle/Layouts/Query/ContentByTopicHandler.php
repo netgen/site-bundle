@@ -31,13 +31,13 @@ use function array_map;
 
 class ContentByTopicHandler implements QueryTypeHandlerInterface
 {
-    use Traits\ParentLocationTrait;
-    use Traits\SortTrait;
-    use Traits\QueryTypeFilterTrait;
-    use Traits\MainLocationFilterTrait;
     use Traits\ContentTypeFilterTrait;
-    use Traits\SectionFilterTrait;
+    use Traits\MainLocationFilterTrait;
     use Traits\ObjectStateFilterTrait;
+    use Traits\ParentLocationTrait;
+    use Traits\QueryTypeFilterTrait;
+    use Traits\SectionFilterTrait;
+    use Traits\SortTrait;
 
     /**
      * @var \Netgen\EzPlatformSiteApi\API\LoadService
@@ -152,8 +152,8 @@ class ContentByTopicHandler implements QueryTypeHandlerInterface
     public function isContextual(Query $query): bool
     {
         return
-            $query->getParameter('use_topic_from_current_content')->getValue() === true ||
-            $query->getParameter('use_current_location')->getValue() === true;
+            $query->getParameter('use_topic_from_current_content')->getValue() === true
+            || $query->getParameter('use_current_location')->getValue() === true;
     }
 
     /**

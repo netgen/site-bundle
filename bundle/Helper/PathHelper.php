@@ -53,8 +53,8 @@ class PathHelper
 
         $excludedContentTypes = [];
         if (
-            !$options['use_all_content_types'] &&
-            $this->configResolver->hasParameter('path_helper.excluded_content_types', 'ngsite')
+            !$options['use_all_content_types']
+            && $this->configResolver->hasParameter('path_helper.excluded_content_types', 'ngsite')
         ) {
             $excludedContentTypes = $this->configResolver->getParameter('path_helper.excluded_content_types', 'ngsite');
             if (!is_array($excludedContentTypes)) {

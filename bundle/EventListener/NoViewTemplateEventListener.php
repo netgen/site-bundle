@@ -77,8 +77,8 @@ class NoViewTemplateEventListener implements EventSubscriberInterface
         }
 
         if (
-            $view->getControllerReference() instanceof ControllerReference &&
-            mb_strpos($view->getControllerReference()->controller, sprintf('%s::', RedirectController::class)) === 0
+            $view->getControllerReference() instanceof ControllerReference
+            && mb_strpos($view->getControllerReference()->controller, sprintf('%s::', RedirectController::class)) === 0
         ) {
             return;
         }

@@ -23,9 +23,10 @@ class IoStorageAllowListPass implements CompilerPassInterface
             if ($container->hasParameter("ezsettings.{$scope}.io.file_storage.file_type_blacklist")) {
                 $bannedFileTypes = $container->getParameter("ezsettings.{$scope}.io.file_storage.file_type_blacklist");
                 $index = array_search('svg', $bannedFileTypes, true);
+
                 if ($index !== false) {
                     unset($bannedFileTypes[$index]);
-                    $container->setParameter("ezsettings.{$scope}.io.file_storage.file_type_blacklist", $bannedFileTypes);
+                    $container->setParameter("ezsettings.{$scope}.io.file_storage.file_type_blacklist", array_values($bannedFileTypes));
                 }
             }
         }

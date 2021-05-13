@@ -88,9 +88,9 @@ class NoViewTemplateEventListener implements EventSubscriberInterface
 
                 return new RedirectResponse(
                     $this->urlGenerator->generate('ez_urlalias', ['locationId' => $rootLocationId]),
-                    RedirectResponse::HTTP_MOVED_PERMANENTLY
+                    RedirectResponse::HTTP_MOVED_PERMANENTLY,
                 );
-            }
+            },
         );
     }
 }

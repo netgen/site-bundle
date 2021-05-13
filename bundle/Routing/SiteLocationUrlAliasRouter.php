@@ -56,7 +56,7 @@ class SiteLocationUrlAliasRouter implements ChainedRouterInterface, RequestMatch
         return $this->generator->generate(
             $name->innerLocation,
             $parameters,
-            $referenceType
+            $referenceType,
         );
     }
 

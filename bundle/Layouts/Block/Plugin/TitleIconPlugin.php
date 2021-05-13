@@ -27,7 +27,7 @@ class TitleIconPlugin extends Plugin
                 'default_value' => false,
                 'label' => 'block.plugin.title_icon.enabled',
                 'groups' => $designGroup,
-            ]
+            ],
         );
 
         $builder->get('title_icon:enabled')->add(
@@ -37,7 +37,7 @@ class TitleIconPlugin extends Plugin
                 'default_value' => '',
                 'label' => 'block.plugin.title_icon.css_class',
                 'groups' => $designGroup,
-            ]
+            ],
         );
     }
 }

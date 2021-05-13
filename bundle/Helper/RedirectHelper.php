@@ -53,7 +53,7 @@ class RedirectHelper
             if ($internalRedirectContent->contentInfo->mainLocationId !== $location->id) {
                 return new RedirectResponse(
                     $this->router->generate($internalRedirectContent),
-                    RedirectResponse::HTTP_MOVED_PERMANENTLY
+                    RedirectResponse::HTTP_MOVED_PERMANENTLY,
                 );
             }
         } elseif ($externalRedirectValue instanceof UrlValue && !$content->getField('external_redirect')->isEmpty()) {
@@ -63,7 +63,7 @@ class RedirectHelper
 
             return new RedirectResponse(
                 $this->router->generate($this->getRootLocation()) . trim($externalRedirectValue->link, '/'),
-                RedirectResponse::HTTP_MOVED_PERMANENTLY
+                RedirectResponse::HTTP_MOVED_PERMANENTLY,
             );
         }
 
@@ -76,7 +76,7 @@ class RedirectHelper
     protected function getRootLocation(): Location
     {
         return $this->site->getLoadService()->loadLocation(
-            $this->site->getSettings()->rootLocationId
+            $this->site->getSettings()->rootLocationId,
         );
     }
 }

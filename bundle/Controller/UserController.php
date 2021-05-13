@@ -74,7 +74,7 @@ class UserController extends Controller
             null,
             null,
             $languages[0],
-            $contentType
+            $contentType,
         );
 
         $userCreateStruct->enabled = (bool) $this->getConfigResolver()->getParameter('user.auto_enable', 'ngsite');
@@ -87,7 +87,7 @@ class UserController extends Controller
             $data,
             [
                 'translation_domain' => 'ngsite_user',
-            ]
+            ],
         );
 
         $form = $formBuilder->getForm();
@@ -98,7 +98,7 @@ class UserController extends Controller
                 $this->getConfigResolver()->getParameter('template.user.register', 'ngsite'),
                 [
                     'form' => $form->createView(),
-                ]
+                ],
             );
         }
 
@@ -110,7 +110,7 @@ class UserController extends Controller
                 [
                     'form' => $form->createView(),
                     'error' => 'email_in_use',
-                ]
+                ],
             );
         }
 
@@ -122,7 +122,7 @@ class UserController extends Controller
                 [
                     'form' => $form->createView(),
                     'error' => 'username_taken',
-                ]
+                ],
             );
         } catch (NotFoundException $e) {
             // do nothing
@@ -141,9 +141,9 @@ class UserController extends Controller
 
                 return $repository->getUserService()->createUser(
                     $data->payload,
-                    [$userGroup]
+                    [$userGroup],
                 );
-            }
+            },
         );
 
         $userRegisterEvent = new UserEvents\PostRegisterEvent($newUser);
@@ -151,18 +151,18 @@ class UserController extends Controller
 
         if ($newUser->enabled) {
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.register_success', 'ngsite')
+                $this->getConfigResolver()->getParameter('template.user.register_success', 'ngsite'),
             );
         }
 
         if ($this->getConfigResolver()->getParameter('user.require_admin_activation', 'ngsite')) {
             return $this->render(
-                $this->getConfigResolver()->getParameter('template.user.activate_admin_activation_pending', 'ngsite')
+                $this->getConfigResolver()->getParameter('template.user.activate_admin_activation_pending', 'ngsite'),
             );
         }
 
         return $this->render(
-            $this->getConfigResolver()->getParameter('template.user.activate_sent', 'ngsite')
+            $this->getConfigResolver()->getParameter('template.user.activate_sent', 'ngsite'),
         );
     }
 
@@ -179,7 +179,7 @@ class UserController extends Controller
                 $this->getConfigResolver()->getParameter('template.user.activate', 'ngsite'),
                 [
                     'form' => $form->createView(),
-                ]
+                ],
             );
         }
 
@@ -187,13 +187,13 @@ class UserController extends Controller
 
         $activationRequestEvent = new UserEvents\ActivationRequestEvent(
             $form->get('email')->getData(),
-            $users[0] ?? null
+            $users[0] ?? null,
         );
 
         $this->eventDispatcher->dispatch(SiteEvents::USER_ACTIVATION_REQUEST, $activationRequestEvent);
 
         return $this->render(
-            $this->getConfigResolver()->getParameter('template.user.activate_sent', 'ngsite')
+            $this->getConfigResolver()->getParameter('template.user.activate_sent', 'ngsite'),
         );
     }
 
@@ -217,7 +217,7 @@ class UserController extends Controller
                 $this->getConfigResolver()->getParameter('template.user.activate_done', 'ngsite'),
                 [
                     'error' => 'hash_expired',
-                ]
+                ],
             );
         }
 
@@ -235,16 +235,14 @@ class UserController extends Controller
         $userUpdateStruct = $preActivateEvent->getUserUpdateStruct();
 
         $user = $this->getRepository()->sudo(
-            static function (Repository $repository) use ($user, $userUpdateStruct): User {
-                return $repository->getUserService()->updateUser($user, $userUpdateStruct);
-            }
+            static fn (Repository $repository): User => $repository->getUserService()->updateUser($user, $userUpdateStruct),
         );
 
         $postActivateEvent = new UserEvents\PostActivateEvent($user);
         $this->eventDispatcher->dispatch(SiteEvents::USER_POST_ACTIVATE, $postActivateEvent);
 
         return $this->render(
-            $this->getConfigResolver()->getParameter('template.user.activate_done', 'ngsite')
+            $this->getConfigResolver()->getParameter('template.user.activate_done', 'ngsite'),
         );
     }
 
@@ -261,7 +259,7 @@ class UserController extends Controller
                 $this->getConfigResolver()->getParameter('template.user.forgot_password', 'ngsite'),
                 [
                     'form' => $form->createView(),
-                ]
+                ],
             );
         }
 
@@ -269,13 +267,13 @@ class UserController extends Controller
 
         $passwordResetRequestEvent = new UserEvents\PasswordResetRequestEvent(
             $form->get('email')->getData(),
-            $users[0] ?? null
+            $users[0] ?? null,
         );
 
         $this->eventDispatcher->dispatch(SiteEvents::USER_PASSWORD_RESET_REQUEST, $passwordResetRequestEvent);
 
         return $this->render(
-            $this->getConfigResolver()->getParameter('template.user.forgot_password_sent', 'ngsite')
+            $this->getConfigResolver()->getParameter('template.user.forgot_password_sent', 'ngsite'),
         );
     }
 
@@ -299,7 +297,7 @@ class UserController extends Controller
                 $this->getConfigResolver()->getParameter('template.user.reset_password_done', 'ngsite'),
                 [
                     'error' => 'hash_expired',
-                ]
+                ],
             );
         }
 
@@ -317,7 +315,7 @@ class UserController extends Controller
                 $this->getConfigResolver()->getParameter('template.user.reset_password', 'ngsite'),
                 [
                     'form' => $form->createView(),
-                ]
+                ],
             );
         }
 
@@ -331,16 +329,14 @@ class UserController extends Controller
         $userUpdateStruct = $prePasswordResetEvent->getUserUpdateStruct();
 
         $user = $this->getRepository()->sudo(
-            static function (Repository $repository) use ($user, $userUpdateStruct): User {
-                return $repository->getUserService()->updateUser($user, $userUpdateStruct);
-            }
+            static fn (Repository $repository): User => $repository->getUserService()->updateUser($user, $userUpdateStruct),
         );
 
         $postPasswordResetEvent = new UserEvents\PostPasswordResetEvent($user);
         $this->eventDispatcher->dispatch(SiteEvents::USER_POST_PASSWORD_RESET, $postPasswordResetEvent);
 
         return $this->render(
-            $this->getConfigResolver()->getParameter('template.user.reset_password_done', 'ngsite')
+            $this->getConfigResolver()->getParameter('template.user.reset_password_done', 'ngsite'),
         );
     }
 
@@ -358,7 +354,7 @@ class UserController extends Controller
                         new Constraints\Email(),
                         new Constraints\NotBlank(),
                     ],
-                ]
+                ],
             )->getForm();
     }
 
@@ -376,7 +372,7 @@ class UserController extends Controller
                         new Constraints\Email(),
                         new Constraints\NotBlank(),
                     ],
-                ]
+                ],
             )->getForm();
     }
 
@@ -395,7 +391,7 @@ class UserController extends Controller
             $passwordConstraints[] = new Constraints\Length(
                 [
                     'min' => $minLength,
-                ]
+                ],
             );
         }
 

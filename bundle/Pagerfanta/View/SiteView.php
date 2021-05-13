@@ -91,7 +91,7 @@ class SiteView implements ViewInterface
             [
                 'pager' => $pagerfanta,
                 'pages' => $this->getPages(),
-            ]
+            ],
         );
     }
 

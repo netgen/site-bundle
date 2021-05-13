@@ -39,7 +39,7 @@ class PostRegisterEventListener extends UserEventListener implements EventSubscr
                     $this->configResolver->getParameter('template.user.mail.welcome', 'ngsite'),
                     [
                         'user' => $user,
-                    ]
+                    ],
                 );
 
             return;
@@ -55,7 +55,7 @@ class PostRegisterEventListener extends UserEventListener implements EventSubscr
                     $this->configResolver->getParameter('template.user.mail.activate_admin_activation_pending', 'ngsite'),
                     [
                         'user' => $user,
-                    ]
+                    ],
                 );
 
             $adminEmail = $this->configResolver->getParameter('user.mail.admin_email', 'ngsite');
@@ -69,7 +69,7 @@ class PostRegisterEventListener extends UserEventListener implements EventSubscr
                         $this->configResolver->getParameter('template.user.mail.activate_admin_activation_required', 'ngsite'),
                         [
                             'user' => $user,
-                        ]
+                        ],
                     );
             }
 
@@ -84,7 +84,7 @@ class PostRegisterEventListener extends UserEventListener implements EventSubscr
                 [
                     'user' => $user,
                     'hash' => $accountKey->getHash(),
-                ]
+                ],
             );
     }
 }

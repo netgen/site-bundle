@@ -43,7 +43,7 @@ class PartsController extends Controller
                 'field_identifier' => $fieldDefinitionIdentifier,
                 'related_items' => $this->locationResolver->loadRelations($content->mainLocation, $fieldDefinitionIdentifier),
                 'view_type' => $request->attributes->get('viewType') ?? 'line',
-            ]
+            ],
         );
     }
 
@@ -67,7 +67,7 @@ class PartsController extends Controller
             [
                 'include_children' => $request->attributes->get('includeChildren') ?? false,
                 'content_types' => $request->attributes->get('contentTypeIdentifiers') ?? ['image'],
-            ]
+            ],
         );
 
         return $this->render(
@@ -76,7 +76,7 @@ class PartsController extends Controller
                 'content' => $location->content,
                 'location' => $location,
                 'multimedia_items' => $multimediaItems,
-            ]
+            ],
         );
     }
 }

@@ -38,7 +38,7 @@ class SetCsrfEnabledEventListener implements EventSubscriberInterface
     {
         $event->getRequest()->attributes->set(
             'csrf_enabled',
-            $this->csrfTokenManager instanceof CsrfTokenManager
+            $this->csrfTokenManager instanceof CsrfTokenManager,
         );
     }
 }

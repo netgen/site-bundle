@@ -14,11 +14,11 @@ class TopicUrlExtension extends AbstractExtension
         return [
             new TwigFunction(
                 'ngsite_topic_path',
-                [TopicUrlRuntime::class, 'getTopicPath']
+                [TopicUrlRuntime::class, 'getTopicPath'],
             ),
             new TwigFunction(
                 'ngsite_topic_url',
-                [TopicUrlRuntime::class, 'getTopicUrl']
+                [TopicUrlRuntime::class, 'getTopicUrl'],
             ),
         ];
     }

@@ -103,13 +103,13 @@ class SymlinkProjectCommand extends SymlinkCommand
                         $this->verifyAndSymlinkDirectory(
                             $item->getPathname(),
                             $destination,
-                            $output
+                            $output,
                         );
                     } else {
                         $this->verifyAndSymlinkFile(
                             $item->getPathname(),
                             $destination,
-                            $output
+                            $output,
                         );
                     }
                 }

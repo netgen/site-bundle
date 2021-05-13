@@ -30,19 +30,19 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
                 'content-type',
                 'c',
                 InputOption::VALUE_REQUIRED,
-                'Content type to update'
+                'Content type to update',
             )
             ->addOption(
                 'field-def-identifier',
                 'f',
                 InputOption::VALUE_REQUIRED,
-                'Field definition identifier containing publish date to read from'
+                'Field definition identifier containing publish date to read from',
             )
             ->addOption(
                 'use-main-translation',
                 null,
                 InputOption::VALUE_NONE,
-                'If specified, the script will use main translation instead of most prioritized one'
+                'If specified, the script will use main translation instead of most prioritized one',
             );
     }
 
@@ -124,7 +124,7 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
                     $fieldDefIdentifier,
                     $input->getOption('use-main-translation') ?
                         $content->contentInfo->mainLanguageCode :
-                        null
+                        null,
                 )->value;
 
                 $dateValueData = $fieldDefinition->fieldTypeIdentifier === 'ezdatetime' ? $dateFieldValue->value : $dateFieldValue->date;
@@ -137,9 +137,7 @@ class UpdatePublishDateCommand extends ContainerAwareCommand
                     $metadataUpdateStruct->publishedDate = $dateValueData;
 
                     $repository->sudo(
-                        static function (Repository $repository) use ($content, $metadataUpdateStruct): Content {
-                            return $repository->getContentService()->updateContentMetadata($content->contentInfo, $metadataUpdateStruct);
-                        }
+                        static fn (Repository $repository): Content => $repository->getContentService()->updateContentMetadata($content->contentInfo, $metadataUpdateStruct),
                     );
 
                     ++$updatedCount;

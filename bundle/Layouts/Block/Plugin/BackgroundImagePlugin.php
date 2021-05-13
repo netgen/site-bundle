@@ -45,7 +45,7 @@ class BackgroundImagePlugin extends Plugin
                 'default_value' => false,
                 'label' => 'block.plugin.background_image.enabled',
                 'groups' => $designGroup,
-            ]
+            ],
         );
 
         $builder->get('background_image:enabled')->add(
@@ -55,7 +55,7 @@ class BackgroundImagePlugin extends Plugin
                 'allow_invalid' => true,
                 'label' => 'block.plugin.background_image.image',
                 'groups' => $designGroup,
-            ]
+            ],
         );
     }
 
@@ -69,7 +69,7 @@ class BackgroundImagePlugin extends Plugin
 
         try {
             $params['background_image:image_content'] = $this->loadService->loadContent(
-                $block->getParameter('background_image:image')->getValue()
+                $block->getParameter('background_image:image')->getValue(),
             );
         } catch (UnauthorizedException | NotFoundException | TranslationNotMatchedException $e) {
             // Do nothing

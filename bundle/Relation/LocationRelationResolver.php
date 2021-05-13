@@ -52,7 +52,7 @@ class LocationRelationResolver implements LocationRelationResolverInterface
                 // Do nothing if there's no location or we're not authorized to load it
                 $this->logger->error(
                     sprintf('Error while loading location relation with #%s in content #%s', $locationId, $content->id),
-                    ['error' => $t]
+                    ['error' => $t],
                 );
 
                 continue;

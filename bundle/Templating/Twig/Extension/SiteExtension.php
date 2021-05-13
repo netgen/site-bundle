@@ -15,19 +15,19 @@ class SiteExtension extends AbstractExtension
             new TwigFunction(
                 'ngsite_location_path',
                 [SiteRuntime::class, 'getLocationPath'],
-                ['is_safe' => ['html']]
+                ['is_safe' => ['html']],
             ),
             new TwigFunction(
                 'ngsite_language_name',
-                [SiteRuntime::class, 'getLanguageName']
+                [SiteRuntime::class, 'getLanguageName'],
             ),
             new TwigFunction(
                 'ngsite_content_name',
-                [SiteRuntime::class, 'getContentName']
+                [SiteRuntime::class, 'getContentName'],
             ),
             new TwigFunction(
                 'ngsite_location_name',
-                [SiteRuntime::class, 'getLocationName']
+                [SiteRuntime::class, 'getLocationName'],
             ),
         ];
     }

@@ -72,12 +72,12 @@ class DownloadController extends Controller
         $content = $this->getSite()->getLoadService()->loadContent(
             $contentId,
             $request->query->get('version'),
-            $request->query->get('inLanguage')
+            $request->query->get('inLanguage'),
         );
 
         if (!$content->hasFieldById($fieldId) || $content->getFieldById($fieldId)->isEmpty()) {
             throw $this->createNotFoundException(
-                $this->translator->trans('download.file_not_found', [], 'ngsite')
+                $this->translator->trans('download.file_not_found', [], 'ngsite'),
             );
         }
 
@@ -104,7 +104,7 @@ class DownloadController extends Controller
             $binaryFile = $this->ioImageService->loadBinaryFile($binaryFieldValue->id);
         } else {
             throw $this->createNotFoundException(
-                $this->translator->trans('download.file_not_found', [], 'ngsite')
+                $this->translator->trans('download.file_not_found', [], 'ngsite'),
             );
         }
 
@@ -113,7 +113,7 @@ class DownloadController extends Controller
             (bool) $isInline ? ResponseHeaderBag::DISPOSITION_INLINE :
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             str_replace(['/', '\\'], '', $binaryFieldValue->fileName),
-            'file'
+            'file',
         );
 
         if (!$request->headers->has('Range')) {
@@ -121,7 +121,7 @@ class DownloadController extends Controller
                 $contentId,
                 $fieldId,
                 $content->contentInfo->currentVersionNo,
-                $response
+                $response,
             );
 
             $this->dispatcher->dispatch(SiteEvents::CONTENT_DOWNLOAD, $downloadEvent);

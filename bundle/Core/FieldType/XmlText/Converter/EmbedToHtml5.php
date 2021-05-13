@@ -47,9 +47,7 @@ class EmbedToHtml5 extends BaseEmbedToHtml5
                 try {
                     /** @var \Netgen\EzPlatformSiteApi\API\Values\Content $content */
                     $content = $this->repository->sudo(
-                        function (Repository $repository) use ($contentId): Content {
-                            return $this->site->getLoadService()->loadContent($contentId);
-                        }
+                        fn (Repository $repository): Content => $this->site->getLoadService()->loadContent($contentId),
                     );
 
                     if (
@@ -75,21 +73,19 @@ class EmbedToHtml5 extends BaseEmbedToHtml5
                                 'viewType' => $view,
                                 'layout' => false,
                                 'params' => $parameters,
-                            ]
-                        )
+                            ],
+                        ),
                     );
                 } catch (APINotFoundException $e) {
                     $this->logger->error(
-                        sprintf('While generating embed for xmltext, could not locate content with ID %d', $contentId)
+                        sprintf('While generating embed for xmltext, could not locate content with ID %d', $contentId),
                     );
                 }
             } elseif ($locationId) {
                 try {
                     /** @var \Netgen\EzPlatformSiteApi\API\Values\Location $location */
                     $location = $this->repository->sudo(
-                        function (Repository $repository) use ($locationId): Location {
-                            return $this->site->getLoadService()->loadLocation($locationId);
-                        }
+                        fn (Repository $repository): Location => $this->site->getLoadService()->loadLocation($locationId),
                     );
 
                     if (
@@ -108,12 +104,12 @@ class EmbedToHtml5 extends BaseEmbedToHtml5
                                 'viewType' => $view,
                                 'layout' => false,
                                 'params' => $parameters,
-                            ]
-                        )
+                            ],
+                        ),
                     );
                 } catch (APINotFoundException $e) {
                     $this->logger->error(
-                        sprintf('While generating embed for xmltext, could not locate location with ID %d', $locationId)
+                        sprintf('While generating embed for xmltext, could not locate location with ID %d', $locationId),
                     );
                 }
             }

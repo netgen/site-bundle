@@ -30,7 +30,7 @@ class TopicUrlRuntime
             $parameters,
             $relative ?
                 UrlGeneratorInterface::RELATIVE_PATH :
-                UrlGeneratorInterface::ABSOLUTE_PATH
+                UrlGeneratorInterface::ABSOLUTE_PATH,
         );
     }
 
@@ -44,7 +44,7 @@ class TopicUrlRuntime
             $parameters,
             $schemeRelative ?
                 UrlGeneratorInterface::NETWORK_PATH :
-                UrlGeneratorInterface::ABSOLUTE_URL
+                UrlGeneratorInterface::ABSOLUTE_URL,
         );
     }
 }

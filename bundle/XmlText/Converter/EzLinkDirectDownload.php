@@ -63,12 +63,12 @@ class EzLinkDirectDownload implements Converter
                 } catch (NotFoundException $e) {
                     $this->logger->warning(
                         'While generating links for xmltext, could not locate ' .
-                        'Content object with ID ' . $link->getAttribute('object_id')
+                        'Content object with ID ' . $link->getAttribute('object_id'),
                     );
                 } catch (UnauthorizedException $e) {
                     $this->logger->notice(
                         'While generating links for xmltext, unauthorized to load ' .
-                        'Content object with ID ' . $link->getAttribute('object_id')
+                        'Content object with ID ' . $link->getAttribute('object_id'),
                     );
                 }
             }
@@ -80,12 +80,12 @@ class EzLinkDirectDownload implements Converter
                 } catch (NotFoundException $e) {
                     $this->logger->warning(
                         'While generating links for xmltext, could not locate ' .
-                        'Location with ID ' . $link->getAttribute('node_id')
+                        'Location with ID ' . $link->getAttribute('node_id'),
                     );
                 } catch (UnauthorizedException $e) {
                     $this->logger->notice(
                         'While generating links for xmltext, unauthorized to load ' .
-                        'Location with ID ' . $link->getAttribute('node_id')
+                        'Location with ID ' . $link->getAttribute('node_id'),
                     );
                 }
             }

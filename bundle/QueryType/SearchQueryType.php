@@ -53,7 +53,7 @@ class SearchQueryType extends OptionsResolverBasedQueryType
                 }
 
                 return true;
-            }
+            },
         );
 
         $resolver->setDefault('content_types', $this->configResolver->getParameter('search.content_types', 'ngsite'));

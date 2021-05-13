@@ -67,8 +67,8 @@ class FullViewController extends Controller
             $criteria[] = new Criterion\ContentTypeIdentifier(
                 array_map(
                     'trim',
-                    explode(',', $contentTypeFilter->text)
-                )
+                    explode(',', $contentTypeFilter->text),
+                ),
             );
         }
 
@@ -79,8 +79,8 @@ class FullViewController extends Controller
         $pager = new Pagerfanta(
             new FilterAdapter(
                 $query,
-                $this->getSite()->getFilterService()
-            )
+                $this->getSite()->getFilterService(),
+            ),
         );
 
         $pager->setNormalizeOutOfRangePages(true);

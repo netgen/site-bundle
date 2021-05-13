@@ -65,7 +65,7 @@ class UrlGenerator
     private function getTopicValueObject(Tag $tag)
     {
         $rootLocation = $this->loadService->loadLocation(
-            $this->configResolver->getParameter('content.tree_root.location_id')
+            $this->configResolver->getParameter('content.tree_root.location_id'),
         );
 
         $query = new LocationQuery();
@@ -79,7 +79,7 @@ class UrlGenerator
                 new Criterion\Visibility(Criterion\Visibility::VISIBLE),
                 new Criterion\ContentTypeIdentifier(['ng_topic']),
                 new TagId($tag->id),
-            ]
+            ],
         );
 
         $searchResult = $this->findService->findLocations($query);

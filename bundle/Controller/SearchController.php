@@ -40,7 +40,7 @@ class SearchController extends Controller
                 [
                     'search_text' => '',
                     'pager' => null,
-                ]
+                ],
             );
         }
 
@@ -49,8 +49,8 @@ class SearchController extends Controller
         $pager = new Pagerfanta(
             new FindAdapter(
                 $query,
-                $this->getSite()->getFindService()
-            )
+                $this->getSite()->getFindService(),
+            ),
         );
 
         $pager->setNormalizeOutOfRangePages(true);
@@ -71,7 +71,7 @@ class SearchController extends Controller
                 'search_text' => $searchText,
                 'search_suggestion' => $searchSuggestion,
                 'pager' => $pager,
-            ]
+            ],
         );
     }
 }

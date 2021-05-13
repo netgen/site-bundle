@@ -138,7 +138,7 @@ class MailHelper
                 [
                     'locationId' => $this->configResolver->getParameter('content.tree_root.location_id'),
                 ],
-                UrlGeneratorInterface::ABSOLUTE_URL
+                UrlGeneratorInterface::ABSOLUTE_URL,
             );
         }
 
@@ -172,7 +172,7 @@ class MailHelper
             }
 
             throw new InvalidArgumentException(
-                "Parameter 'sender' has to be either a string, or an associative array with one element (e.g. array( 'info@example.com' => 'Example name' )), {$sender} given."
+                "Parameter 'sender' has to be either a string, or an associative array with one element (e.g. array( 'info@example.com' => 'Example name' )), {$sender} given.",
             );
         }
 

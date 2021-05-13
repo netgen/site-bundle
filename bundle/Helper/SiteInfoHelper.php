@@ -43,7 +43,7 @@ class SiteInfoHelper
     {
         if ($this->siteInfoLocation === null) {
             $this->siteInfoLocation = $this->loadService->loadLocation(
-                $this->configResolver->getParameter('locations.site_info.id', 'ngsite')
+                $this->configResolver->getParameter('locations.site_info.id', 'ngsite'),
             );
         }
 

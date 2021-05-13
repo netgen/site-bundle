@@ -29,7 +29,7 @@ class AddViewTypeEventListener implements EventSubscriberInterface
     {
         $event->getParameterBag()->set(
             'view_type',
-            $event->getView()->getViewType()
+            $event->getView()->getViewType(),
         );
     }
 }

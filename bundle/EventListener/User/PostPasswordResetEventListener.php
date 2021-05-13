@@ -38,7 +38,7 @@ class PostPasswordResetEventListener extends UserEventListener implements EventS
                 $this->configResolver->getParameter('template.user.mail.forgot_password_password_changed', 'ngsite'),
                 [
                     'user' => $user,
-                ]
+                ],
             );
 
         $this->ezUserAccountKeyRepository->removeByUserId($user->id);

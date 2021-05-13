@@ -88,7 +88,7 @@ class EmbedViewController extends Controller
                         [
                             'contentId' => $content->id,
                             'fieldId' => $content->getField($fieldName)->id,
-                        ]
+                        ],
                     );
                 }
             }

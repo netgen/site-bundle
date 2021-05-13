@@ -26,7 +26,7 @@ class DumpDatabaseCommand extends ContainerAwareCommand
             ->addArgument(
                 'file',
                 InputArgument::REQUIRED,
-                'File name where to write the database dump'
+                'File name where to write the database dump',
             );
     }
 
@@ -70,7 +70,7 @@ class DumpDatabaseCommand extends ContainerAwareCommand
                 'MYSQL_PWD' => $databasePassword,
             ],
             null,
-            null
+            null,
         );
 
         $process->run();

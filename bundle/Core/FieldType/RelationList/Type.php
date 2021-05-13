@@ -25,7 +25,7 @@ class Type extends BaseRelationListType
     {
         return new Value(
             $hash['destinationContentIds'],
-            $hash['destinationLocationIds'] ?? []
+            $hash['destinationLocationIds'] ?? [],
         );
     }
 
@@ -92,9 +92,9 @@ class Type extends BaseRelationListType
             sprintf(
                 '"%s" or "%s"',
                 BaseRelationListValue::class,
-                Value::class
+                Value::class,
             ),
-            $value
+            $value,
         );
     }
 
@@ -106,7 +106,7 @@ class Type extends BaseRelationListType
             throw new InvalidArgumentType(
                 '$value->destinationLocationIds',
                 'array',
-                $value->destinationLocationIds
+                $value->destinationLocationIds,
             );
         }
 
@@ -115,7 +115,7 @@ class Type extends BaseRelationListType
                 throw new InvalidArgumentType(
                     '$value->destinationLocationIds[$key]',
                     'string|int',
-                    $destinationLocationId
+                    $destinationLocationId,
                 );
             }
         }

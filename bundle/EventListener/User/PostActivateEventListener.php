@@ -41,7 +41,7 @@ class PostActivateEventListener extends UserEventListener implements EventSubscr
                 $this->configResolver->getParameter('template.user.mail.welcome', 'ngsite'),
                 [
                     'user' => $user,
-                ]
+                ],
             );
     }
 }

@@ -43,7 +43,7 @@ class SetContainerPlugin extends Plugin
                 'label' => 'block.plugin.common_params.set_container',
                 'translatable' => false,
                 'groups' => $designGroup,
-            ]
+            ],
         );
 
         $builder->get('set_container')->add(
@@ -55,7 +55,7 @@ class SetContainerPlugin extends Plugin
                 'translatable' => false,
                 'options' => array_flip($this->sizes),
                 'groups' => $designGroup,
-            ]
+            ],
         );
     }
 }

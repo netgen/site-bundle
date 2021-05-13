@@ -85,7 +85,7 @@ class ChildrenBuilder
                 $criteria[] = new Criterion\ContentTypeIdentifier($contentTypeFilter->identifiers);
             } elseif ($filterType->identifiers[0] === 'exclude') {
                 $criteria[] = new Criterion\LogicalNot(
-                    new Criterion\ContentTypeIdentifier($contentTypeFilter->identifiers)
+                    new Criterion\ContentTypeIdentifier($contentTypeFilter->identifiers),
                 );
             }
         }
@@ -105,10 +105,8 @@ class ChildrenBuilder
         $searchResult = $this->filterService->filterLocations($query);
 
         $childLocations = array_map(
-            static function (SearchHit $searchHit) {
-                return $searchHit->valueObject;
-            },
-            $searchResult->searchHits
+            static fn (SearchHit $searchHit) => $searchHit->valueObject,
+            $searchResult->searchHits,
         );
 
         $maxDepth = 1;

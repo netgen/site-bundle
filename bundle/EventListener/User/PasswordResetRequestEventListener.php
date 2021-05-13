@@ -38,7 +38,7 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
                 ->sendMail(
                     $email,
                     'ngsite.user.forgot_password.not_registered.subject',
-                    $this->configResolver->getParameter('template.user.mail.forgot_password_not_registered', 'ngsite')
+                    $this->configResolver->getParameter('template.user.mail.forgot_password_not_registered', 'ngsite'),
                 );
 
             return;
@@ -53,7 +53,7 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
                         $this->configResolver->getParameter('template.user.mail.forgot_password_disabled', 'ngsite'),
                         [
                             'user' => $user,
-                        ]
+                        ],
                     );
 
                 return;
@@ -66,7 +66,7 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
                     $this->configResolver->getParameter('template.user.mail.forgot_password_not_active', 'ngsite'),
                     [
                         'user' => $user,
-                    ]
+                    ],
                 );
 
             return;
@@ -82,7 +82,7 @@ class PasswordResetRequestEventListener extends UserEventListener implements Eve
                 [
                     'user' => $user,
                     'hash' => $accountKey->getHash(),
-                ]
+                ],
             );
     }
 }

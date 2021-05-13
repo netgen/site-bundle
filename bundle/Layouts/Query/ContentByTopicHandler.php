@@ -78,7 +78,7 @@ class ContentByTopicHandler implements QueryTypeHandlerInterface
             ParameterType\Compound\BooleanType::class,
             [
                 'reverse' => true,
-            ]
+            ],
         );
 
         $builder->get('use_topic_from_current_content')->add(
@@ -86,7 +86,7 @@ class ContentByTopicHandler implements QueryTypeHandlerInterface
             EzParameterType\ContentType::class,
             [
                 'allow_invalid' => true,
-            ]
+            ],
         );
 
         $this->buildParentLocationParameters($builder);
@@ -123,10 +123,8 @@ class ContentByTopicHandler implements QueryTypeHandlerInterface
         $searchResult = $this->findService->findLocations($locationQuery);
 
         return array_map(
-            static function (SearchHit $searchHit) {
-                return $searchHit->valueObject;
-            },
-            $searchResult->searchHits
+            static fn (SearchHit $searchHit) => $searchHit->valueObject,
+            $searchResult->searchHits,
         );
     }
 
@@ -181,9 +179,7 @@ class ContentByTopicHandler implements QueryTypeHandlerInterface
 
         $criteria = array_filter(
             $criteria,
-            static function ($criterion): bool {
-                return $criterion instanceof Criterion;
-            }
+            static fn ($criterion): bool => $criterion instanceof Criterion,
         );
 
         $locationQuery->filter = new Criterion\LogicalAnd($criteria);

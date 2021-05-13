@@ -50,7 +50,7 @@ class VerticalWhitespacePlugin extends Plugin
                 'default_value' => false,
                 'label' => 'block.plugin.vertical_whitespace.enabled',
                 'groups' => $designGroup,
-            ]
+            ],
         );
 
         $builder->get('vertical_whitespace:enabled')->add(
@@ -61,7 +61,7 @@ class VerticalWhitespacePlugin extends Plugin
                 'label' => 'block.plugin.vertical_whitespace.position',
                 'options' => array_flip($this->positions),
                 'groups' => $designGroup,
-            ]
+            ],
         );
 
         $builder->get('vertical_whitespace:enabled')->add(
@@ -72,7 +72,7 @@ class VerticalWhitespacePlugin extends Plugin
                 'label' => 'block.plugin.vertical_whitespace.size',
                 'options' => array_flip($this->sizes),
                 'groups' => $designGroup,
-            ]
+            ],
         );
     }
 }

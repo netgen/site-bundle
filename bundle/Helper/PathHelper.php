@@ -97,7 +97,7 @@ class PathHelper
                             [],
                             $options['absolute_url'] ?
                                 UrlGeneratorInterface::ABSOLUTE_URL :
-                                UrlGeneratorInterface::ABSOLUTE_PATH
+                                UrlGeneratorInterface::ABSOLUTE_PATH,
                         ) :
                         false,
                     'location' => $location,

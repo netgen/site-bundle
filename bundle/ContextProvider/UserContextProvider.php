@@ -28,7 +28,7 @@ class UserContextProvider implements ContextProviderInterface
     {
         $context->addParameter(
             'userId',
-            $this->repository->getPermissionResolver()->getCurrentUserReference()->getUserId()
+            $this->repository->getPermissionResolver()->getCurrentUserReference()->getUserId(),
         );
     }
 }

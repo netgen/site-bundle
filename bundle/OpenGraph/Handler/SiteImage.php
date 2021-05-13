@@ -59,7 +59,7 @@ class SiteImage implements HandlerInterface
         } else {
             throw new InvalidArgumentException(
                 sprintf('%s or $params[0]', self::FIELD_IDENTIFIER),
-                'Either field does not provide valid value or fallback is not properly set up.'
+                'Either field does not provide valid value or fallback is not properly set up.',
             );
         }
 

@@ -75,9 +75,9 @@ abstract class SymlinkCommand extends ContainerAwareCommand
         $this->fileSystem->symlink(
             $this->fileSystem->makePathRelative(
                 dirname($source),
-                realpath(dirname($destination))
+                realpath(dirname($destination)),
             ) . basename($source),
-            $destination
+            $destination,
         );
     }
 
@@ -105,9 +105,9 @@ abstract class SymlinkCommand extends ContainerAwareCommand
         $this->fileSystem->symlink(
             $this->fileSystem->makePathRelative(
                 $source,
-                realpath(dirname($destination))
+                realpath(dirname($destination)),
             ),
-            $destination
+            $destination,
         );
     }
 }

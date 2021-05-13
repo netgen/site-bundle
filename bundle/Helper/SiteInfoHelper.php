@@ -41,11 +41,9 @@ class SiteInfoHelper
 
     public function getSiteInfoLocation(): Location
     {
-        if ($this->siteInfoLocation === null) {
-            $this->siteInfoLocation = $this->loadService->loadLocation(
-                $this->configResolver->getParameter('locations.site_info.id', 'ngsite'),
-            );
-        }
+        $this->siteInfoLocation ??= $this->loadService->loadLocation(
+            $this->configResolver->getParameter('locations.site_info.id', 'ngsite'),
+        );
 
         return $this->siteInfoLocation;
     }

@@ -132,19 +132,15 @@ class MailHelper
      */
     protected function getDefaultTemplateParameters(): array
     {
-        if ($this->siteUrl === null) {
-            $this->siteUrl = $this->urlGenerator->generate(
-                'ez_urlalias',
-                [
-                    'locationId' => $this->configResolver->getParameter('content.tree_root.location_id'),
-                ],
-                UrlGeneratorInterface::ABSOLUTE_URL,
-            );
-        }
+        $this->siteUrl ??= $this->urlGenerator->generate(
+            'ez_urlalias',
+            [
+                'locationId' => $this->configResolver->getParameter('content.tree_root.location_id'),
+            ],
+            UrlGeneratorInterface::ABSOLUTE_URL,
+        );
 
-        if ($this->siteName === null) {
-            $this->siteName = trim($this->siteInfoHelper->getSiteInfoContent()->getField('site_name')->value->text);
-        }
+        $this->siteName ??= trim($this->siteInfoHelper->getSiteInfoContent()->getField('site_name')->value->text);
 
         return [
             'site_url' => $this->siteUrl,

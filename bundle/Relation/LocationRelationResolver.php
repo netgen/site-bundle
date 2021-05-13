@@ -15,15 +15,9 @@ use function sprintf;
 
 class LocationRelationResolver implements LocationRelationResolverInterface
 {
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
+    protected LoadService $loadService;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
+    protected LoggerInterface $logger;
 
     public function __construct(LoadService $loadService, ?LoggerInterface $logger = null)
     {
@@ -52,7 +46,7 @@ class LocationRelationResolver implements LocationRelationResolverInterface
                 // Do nothing if there's no location or we're not authorized to load it
                 $this->logger->error(
                     sprintf('Error while loading content relation with #%s in content #%s', $destinationContentId, $content->id),
-                    ['error' => $t]
+                    ['error' => $t],
                 );
 
                 continue;

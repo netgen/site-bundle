@@ -13,25 +13,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Menu extends Controller
 {
-    /**
-     * @var \Knp\Menu\Provider\MenuProviderInterface
-     */
-    protected $menuProvider;
+    protected MenuProviderInterface $menuProvider;
 
-    /**
-     * @var \Knp\Menu\Renderer\RendererProviderInterface
-     */
-    protected $menuRenderer;
+    protected RendererProviderInterface $menuRenderer;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
-    /**
-     * @var \EzSystems\PlatformHttpCacheBundle\Handler\TagHandler
-     */
-    protected $tagHandler;
+    protected TagHandler $tagHandler;
 
     public function __construct(
         MenuProviderInterface $menuProvider,

@@ -25,10 +25,7 @@ use function trim;
  */
 class DebugTemplate extends Template
 {
-    /**
-     * @var \Symfony\Component\Filesystem\Filesystem
-     */
-    private $fileSystem;
+    private Filesystem $fileSystem;
 
     public function display(array $context, array $blocks = [])
     {
@@ -52,7 +49,7 @@ class DebugTemplate extends Template
                 $templateResult = preg_replace(
                     '#(<!doctype[^>]+>)#im',
                     "$1\n<!-- START " . $templateName . ' -->',
-                    $templateResult
+                    $templateResult,
                 );
             } else {
                 echo "\n<!-- START {$templateName} -->\n";

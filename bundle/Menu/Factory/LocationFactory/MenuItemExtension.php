@@ -21,30 +21,15 @@ use function sprintf;
 
 class MenuItemExtension implements ExtensionInterface
 {
-    /**
-     * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
-     */
-    protected $urlGenerator;
+    protected UrlGeneratorInterface $urlGenerator;
 
-    /**
-     * @var \Symfony\Component\HttpFoundation\RequestStack
-     */
-    protected $requestStack;
+    protected RequestStack $requestStack;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
-    /**
-     * @var \Psr\Log\NullLogger
-     */
-    protected $logger;
+    protected LoggerInterface $logger;
 
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\ChildrenBuilder
-     */
-    protected $childrenBuilder;
+    protected ChildrenBuilder $childrenBuilder;
 
     public function __construct(
         UrlGeneratorInterface $urlGenerator,

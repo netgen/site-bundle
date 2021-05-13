@@ -15,35 +15,17 @@ use Netgen\EzPlatformSiteApi\API\Values\ContentInfo;
 
 abstract class UserEventListener
 {
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Helper\MailHelper
-     */
-    protected $mailHelper;
+    protected MailHelper $mailHelper;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Entity\Repository\NgUserSettingRepository
-     */
-    protected $ngUserSettingRepository;
+    protected NgUserSettingRepository $ngUserSettingRepository;
 
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Entity\Repository\EzUserAccountKeyRepository
-     */
-    protected $ezUserAccountKeyRepository;
+    protected EzUserAccountKeyRepository $ezUserAccountKeyRepository;
 
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
+    protected LoadService $loadService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    protected $repository;
+    protected Repository $repository;
 
     public function __construct(
         MailHelper $mailHelper,
@@ -67,9 +49,7 @@ abstract class UserEventListener
     protected function getUserName(User $user): string
     {
         $contentInfo = $this->repository->sudo(
-            function (Repository $repository) use ($user): ContentInfo {
-                return $this->loadService->loadContent($user->id)->contentInfo;
-            }
+            fn (Repository $repository): ContentInfo => $this->loadService->loadContent($user->id)->contentInfo,
         );
 
         return $contentInfo->name;

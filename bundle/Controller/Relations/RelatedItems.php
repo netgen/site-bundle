@@ -12,10 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RelatedItems extends Controller
 {
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Relation\LocationRelationResolverInterface
-     */
-    protected $locationResolver;
+    protected LocationRelationResolverInterface $locationResolver;
 
     public function __construct(LocationRelationResolverInterface $locationResolver)
     {
@@ -35,7 +32,7 @@ class RelatedItems extends Controller
                 'field_identifier' => $fieldDefinitionIdentifier,
                 'related_items' => $this->locationResolver->loadRelations($content->mainLocation, $fieldDefinitionIdentifier),
                 'view_type' => $request->attributes->get('viewType') ?? 'line',
-            ]
+            ],
         );
     }
 }

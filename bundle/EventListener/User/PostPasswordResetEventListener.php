@@ -13,8 +13,6 @@ class PostPasswordResetEventListener extends UserEventListener implements EventS
 {
     /**
      * Returns an array of event names this subscriber wants to listen to.
-     *
-     * @return array
      */
     public static function getSubscribedEvents(): array
     {
@@ -38,7 +36,7 @@ class PostPasswordResetEventListener extends UserEventListener implements EventS
                 $this->configResolver->getParameter('template.user.mail.forgot_password_password_changed', 'ngsite'),
                 [
                     'user' => $user,
-                ]
+                ],
             );
 
         $this->ezUserAccountKeyRepository->removeByUserId($user->id);

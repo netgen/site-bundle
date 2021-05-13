@@ -29,30 +29,15 @@ use function trim;
 
 class GenerateImageVariationsCommand extends Command
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    private $repository;
+    private Repository $repository;
 
-    /**
-     * @var \eZ\Publish\SPI\Variation\VariationHandler
-     */
-    private $variationHandler;
+    private VariationHandler $variationHandler;
 
-    /**
-     * @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface
-     */
-    private $cache;
+    private TagAwareAdapterInterface $cache;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    private $configResolver;
+    private ConfigResolverInterface $configResolver;
 
-    /**
-     * @var \Symfony\Component\Console\Style\StyleInterface
-     */
-    private $style;
+    private SymfonyStyle $style;
 
     public function __construct(
         Repository $repository,
@@ -93,7 +78,7 @@ class GenerateImageVariationsCommand extends Command
                 $languages = $this->configResolver->getParameter('languages');
 
                 return $repository->getSearchService()->findContentInfo($query, $languages, false)->totalCount ?? 0;
-            }
+            },
         );
 
         $query->limit = 50;
@@ -115,7 +100,7 @@ class GenerateImageVariationsCommand extends Command
                     $languages = $this->configResolver->getParameter('languages');
 
                     return $repository->getSearchService()->findContent($query, $languages, false)->searchHits;
-                }
+                },
             );
 
             foreach ($searchHits as $searchHit) {
@@ -188,9 +173,7 @@ class GenerateImageVariationsCommand extends Command
     {
         foreach ($subtreeIds as $subtreeId) {
             yield $this->repository->sudo(
-                static function (Repository $repository) use ($subtreeId): string {
-                    return $repository->getLocationService()->loadLocation($subtreeId)->pathString;
-                }
+                static fn (Repository $repository): string => $repository->getLocationService()->loadLocation($subtreeId)->pathString,
             );
         }
     }

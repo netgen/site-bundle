@@ -11,10 +11,7 @@ use function trim;
 
 class SiteName implements HandlerInterface
 {
-    /**
-     * @var \Netgen\Bundle\EzPlatformSiteApiBundle\NamedObject\Provider
-     */
-    protected $namedObjectProvider;
+    protected Provider $namedObjectProvider;
 
     public function __construct(Provider $namedObjectProvider)
     {

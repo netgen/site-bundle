@@ -11,10 +11,6 @@ class NgUserSettingRepository extends EntityRepository
 {
     /**
      * Returns if user specified by $userId is activated.
-     *
-     * @param int $userId
-     *
-     * @return bool
      */
     public function isUserActivated(int $userId): bool
     {
@@ -29,10 +25,6 @@ class NgUserSettingRepository extends EntityRepository
 
     /**
      * Activates the user specified by $userId.
-     *
-     * @param int $userId
-     *
-     * @return \Netgen\Bundle\SiteBundle\Entity\NgUserSetting
      */
     public function activateUser(int $userId): NgUserSetting
     {

@@ -20,10 +20,7 @@ use const DIRECTORY_SEPARATOR;
 
 class DumpDatabaseCommand extends Command
 {
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    private $container;
+    private ContainerInterface $container;
 
     public function __construct(ContainerInterface $container)
     {
@@ -39,7 +36,7 @@ class DumpDatabaseCommand extends Command
             ->addArgument(
                 'file',
                 InputArgument::REQUIRED,
-                'File name where to write the database dump'
+                'File name where to write the database dump',
             );
     }
 
@@ -81,7 +78,7 @@ class DumpDatabaseCommand extends Command
                 'MYSQL_PWD' => $databasePassword,
             ],
             null,
-            null
+            null,
         );
 
         $process->run();

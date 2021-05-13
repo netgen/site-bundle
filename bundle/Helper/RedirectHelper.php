@@ -18,15 +18,9 @@ use function trim;
 
 class RedirectHelper
 {
-    /**
-     * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
-     */
-    protected $urlGenerator;
+    protected UrlGeneratorInterface $urlGenerator;
 
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\Site
-     */
-    protected $site;
+    protected Site $site;
 
     public function __construct(UrlGeneratorInterface $urlGenerator, Site $site)
     {
@@ -55,7 +49,7 @@ class RedirectHelper
             if ($internalRedirectContent->contentInfo->mainLocationId !== $location->id) {
                 return new RedirectResponse(
                     $this->urlGenerator->generate('', [RouteObjectInterface::ROUTE_OBJECT => $internalRedirectContent]),
-                    RedirectResponse::HTTP_MOVED_PERMANENTLY
+                    RedirectResponse::HTTP_MOVED_PERMANENTLY,
                 );
             }
         } elseif ($externalRedirectValue instanceof UrlValue && !$content->getField('external_redirect')->isEmpty()) {
@@ -67,9 +61,9 @@ class RedirectHelper
                 sprintf(
                     '%s%s',
                     $this->urlGenerator->generate('', [RouteObjectInterface::ROUTE_OBJECT => $this->getRootLocation()]),
-                    trim($externalRedirectValue->link, '/')
+                    trim($externalRedirectValue->link, '/'),
                 ),
-                RedirectResponse::HTTP_MOVED_PERMANENTLY
+                RedirectResponse::HTTP_MOVED_PERMANENTLY,
             );
         }
 
@@ -82,7 +76,7 @@ class RedirectHelper
     protected function getRootLocation(): Location
     {
         return $this->site->getLoadService()->loadLocation(
-            $this->site->getSettings()->rootLocationId
+            $this->site->getSettings()->rootLocationId,
         );
     }
 }

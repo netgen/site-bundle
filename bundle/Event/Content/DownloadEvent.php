@@ -9,25 +9,13 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class DownloadEvent extends Event
 {
-    /**
-     * @var int
-     */
-    protected $contentId;
+    protected int $contentId;
 
-    /**
-     * @var int
-     */
-    protected $fieldId;
+    protected int $fieldId;
 
-    /**
-     * @var int
-     */
-    protected $versionNo;
+    protected int $versionNo;
 
-    /**
-     * @var \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse
-     */
-    protected $response;
+    protected BinaryStreamResponse $response;
 
     public function __construct(int $contentId, int $fieldId, int $versionNo, BinaryStreamResponse $response)
     {

@@ -6,6 +6,7 @@ namespace Netgen\Bundle\SiteBundle\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use function basename;
 use function dirname;
 use function is_file;
@@ -16,22 +17,15 @@ abstract class SymlinkCommand extends Command
 {
     /**
      * If true, command will destroy existing symlinks before recreating them.
-     *
-     * @var bool
      */
-    protected $forceSymlinks = false;
+    protected bool $forceSymlinks = false;
 
     /**
      * Current environment.
-     *
-     * @var string
      */
-    protected $environment = 'dev';
+    protected string $environment = 'dev';
 
-    /**
-     * @var \Symfony\Component\Filesystem\Filesystem
-     */
-    protected $fileSystem;
+    protected Filesystem $fileSystem;
 
     /**
      * Verify that source file can be symlinked to destination and do symlinking if it can.
@@ -75,9 +69,9 @@ abstract class SymlinkCommand extends Command
         $this->fileSystem->symlink(
             $this->fileSystem->makePathRelative(
                 dirname($source),
-                realpath(dirname($destination))
+                realpath(dirname($destination)),
             ) . basename($source),
-            $destination
+            $destination,
         );
     }
 
@@ -105,9 +99,9 @@ abstract class SymlinkCommand extends Command
         $this->fileSystem->symlink(
             $this->fileSystem->makePathRelative(
                 $source,
-                realpath(dirname($destination))
+                realpath(dirname($destination)),
             ),
-            $destination
+            $destination,
         );
     }
 }

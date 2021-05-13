@@ -10,10 +10,7 @@ use function is_array;
 
 abstract class ConfigResolverBased extends MultipleValued
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
     public function __construct(ConfigResolverInterface $configResolver)
     {
@@ -29,8 +26,6 @@ abstract class ConfigResolverBased extends MultipleValued
      * second should be the namespace.
      *
      * @param mixed $value
-     *
-     * @return bool
      */
     public function doMatch($value): bool
     {

@@ -9,10 +9,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class PostPasswordResetEvent extends Event
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
-    protected $user;
+    protected User $user;
 
     public function __construct(User $user)
     {

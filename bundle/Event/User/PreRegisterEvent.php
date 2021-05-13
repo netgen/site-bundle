@@ -9,10 +9,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class PreRegisterEvent extends Event
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\UserCreateStruct
-     */
-    protected $userCreateStruct;
+    protected UserCreateStruct $userCreateStruct;
 
     public function __construct(UserCreateStruct $userCreateStruct)
     {

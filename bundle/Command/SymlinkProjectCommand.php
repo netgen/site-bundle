@@ -21,17 +21,13 @@ class SymlinkProjectCommand extends SymlinkCommand
 {
     /**
      * Files/directories that will not be symlinked in root and root_* folders.
-     *
-     * @var array
      */
-    protected static $blacklistedItems = [
+    protected static array $blacklistedItems = [
         'offline_cro.html',
         'offline_eng.html',
     ];
-    /**
-     * @var \Symfony\Component\HttpKernel\KernelInterface
-     */
-    protected $kernel;
+
+    protected KernelInterface $kernel;
 
     public function __construct(KernelInterface $kernel, Filesystem $fileSystem)
     {
@@ -118,13 +114,13 @@ class SymlinkProjectCommand extends SymlinkCommand
                         $this->verifyAndSymlinkDirectory(
                             $item->getPathname(),
                             $destination,
-                            $output
+                            $output,
                         );
                     } else {
                         $this->verifyAndSymlinkFile(
                             $item->getPathname(),
                             $destination,
-                            $output
+                            $output,
                         );
                     }
                 }

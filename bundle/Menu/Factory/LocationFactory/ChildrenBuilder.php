@@ -19,20 +19,11 @@ use function sprintf;
 
 class ChildrenBuilder
 {
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
+    protected LoadService $loadService;
 
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\FilterService
-     */
-    protected $filterService;
+    protected FilterService $filterService;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
+    protected LoggerInterface $logger;
 
     public function __construct(
         LoadService $loadService,
@@ -83,7 +74,7 @@ class ChildrenBuilder
                 $criteria[] = new Criterion\ContentTypeIdentifier($contentTypeFilter->identifiers);
             } elseif ($filterType->identifiers[0] === 'exclude') {
                 $criteria[] = new Criterion\LogicalNot(
-                    new Criterion\ContentTypeIdentifier($contentTypeFilter->identifiers)
+                    new Criterion\ContentTypeIdentifier($contentTypeFilter->identifiers),
                 );
             }
         }
@@ -103,10 +94,8 @@ class ChildrenBuilder
         $searchResult = $this->filterService->filterLocations($query);
 
         $childLocations = array_map(
-            static function (SearchHit $searchHit) {
-                return $searchHit->valueObject;
-            },
-            $searchResult->searchHits
+            static fn (SearchHit $searchHit) => $searchHit->valueObject,
+            $searchResult->searchHits,
         );
 
         $maxDepth = 1;

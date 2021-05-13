@@ -25,30 +25,15 @@ use function time;
 
 class ResetPassword extends Controller
 {
-    /**
-     * @var \eZ\Publish\API\Repository\UserService
-     */
-    protected $userService;
+    protected UserService $userService;
 
-    /**
-     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
-     */
-    protected $eventDispatcher;
+    protected EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Entity\Repository\EzUserAccountKeyRepository
-     */
-    protected $accountKeyRepository;
+    protected EzUserAccountKeyRepository $accountKeyRepository;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    protected $repository;
+    protected Repository $repository;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
     public function __construct(
         UserService $userService,
@@ -84,7 +69,7 @@ class ResetPassword extends Controller
                 $this->configResolver->getParameter('template.user.reset_password_done', 'ngsite'),
                 [
                     'error' => 'hash_expired',
-                ]
+                ],
             );
         }
 
@@ -102,7 +87,7 @@ class ResetPassword extends Controller
                 $this->configResolver->getParameter('template.user.reset_password', 'ngsite'),
                 [
                     'form' => $form->createView(),
-                ]
+                ],
             );
         }
 
@@ -116,16 +101,14 @@ class ResetPassword extends Controller
         $userUpdateStruct = $prePasswordResetEvent->getUserUpdateStruct();
 
         $user = $this->repository->sudo(
-            static function (Repository $repository) use ($user, $userUpdateStruct): User {
-                return $repository->getUserService()->updateUser($user, $userUpdateStruct);
-            }
+            static fn (Repository $repository): User => $repository->getUserService()->updateUser($user, $userUpdateStruct),
         );
 
         $postPasswordResetEvent = new UserEvents\PostPasswordResetEvent($user);
         $this->eventDispatcher->dispatch($postPasswordResetEvent, SiteEvents::USER_POST_PASSWORD_RESET);
 
         return $this->render(
-            $this->configResolver->getParameter('template.user.reset_password_done', 'ngsite')
+            $this->configResolver->getParameter('template.user.reset_password_done', 'ngsite'),
         );
     }
 

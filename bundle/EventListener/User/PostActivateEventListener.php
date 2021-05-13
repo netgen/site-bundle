@@ -13,8 +13,6 @@ class PostActivateEventListener extends UserEventListener implements EventSubscr
 {
     /**
      * Returns an array of event names this subscriber wants to listen to.
-     *
-     * @return array
      */
     public static function getSubscribedEvents(): array
     {
@@ -41,7 +39,7 @@ class PostActivateEventListener extends UserEventListener implements EventSubscr
                 $this->configResolver->getParameter('template.user.mail.welcome', 'ngsite'),
                 [
                     'user' => $user,
-                ]
+                ],
             );
     }
 }

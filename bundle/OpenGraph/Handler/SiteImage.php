@@ -19,20 +19,12 @@ class SiteImage implements HandlerInterface
 {
     /**
      * Field identifier that provides opengraph image.
-     *
-     * @var string
      */
     protected const FIELD_IDENTIFIER = 'site_opengraph_image';
 
-    /**
-     * @var \Netgen\Bundle\EzPlatformSiteApiBundle\NamedObject\Provider
-     */
-    protected $namedObjectProvider;
+    protected Provider $namedObjectProvider;
 
-    /**
-     * @var \Symfony\Component\HttpFoundation\RequestStack
-     */
-    private $requestStack;
+    private RequestStack $requestStack;
 
     public function __construct(Provider $namedObjectProvider, RequestStack $requestStack)
     {
@@ -58,7 +50,7 @@ class SiteImage implements HandlerInterface
         } else {
             throw new InvalidArgumentException(
                 sprintf('%s or $params[0]', self::FIELD_IDENTIFIER),
-                'Either field does not provide valid value or fallback is not properly set up.'
+                'Either field does not provide valid value or fallback is not properly set up.',
             );
         }
 

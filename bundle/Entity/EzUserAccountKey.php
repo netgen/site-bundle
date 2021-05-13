@@ -11,20 +11,11 @@ class EzUserAccountKey
      */
     protected $id;
 
-    /**
-     * @var string
-     */
-    protected $hashKey;
+    protected string $hashKey;
 
-    /**
-     * @var int
-     */
-    protected $time;
+    protected int $time;
 
-    /**
-     * @var int
-     */
-    protected $userId;
+    protected int $userId;
 
     /**
      * Get ID.
@@ -38,10 +29,6 @@ class EzUserAccountKey
 
     /**
      * Set hash key.
-     *
-     * @param string $hashKey
-     *
-     * @return \Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
      */
     public function setHash(string $hashKey): self
     {
@@ -52,8 +39,6 @@ class EzUserAccountKey
 
     /**
      * Get hash key.
-     *
-     * @return string
      */
     public function getHash(): string
     {
@@ -62,10 +47,6 @@ class EzUserAccountKey
 
     /**
      * Set user ID.
-     *
-     * @param int $userId
-     *
-     * @return \Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
      */
     public function setUserId(int $userId): self
     {
@@ -76,8 +57,6 @@ class EzUserAccountKey
 
     /**
      * Get user ID.
-     *
-     * @return int
      */
     public function getUserId(): int
     {
@@ -86,10 +65,6 @@ class EzUserAccountKey
 
     /**
      * Set time.
-     *
-     * @param int $time
-     *
-     * @return \Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
      */
     public function setTime(int $time): self
     {
@@ -100,8 +75,6 @@ class EzUserAccountKey
 
     /**
      * Get time.
-     *
-     * @return int
      */
     public function getTime(): int
     {

@@ -16,20 +16,14 @@ use function md5;
 
 class LocationFactory implements FactoryInterface
 {
-    /**
-     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
-     */
-    protected $eventDispatcher;
+    protected EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\ExtensionInterface
-     */
-    protected $fallbackExtension;
+    protected ExtensionInterface $fallbackExtension;
 
     /**
      * @var \Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\ExtensionInterface[]
      */
-    protected $extensions = [];
+    protected array $extensions = [];
 
     public function __construct(
         EventDispatcherInterface $eventDispatcher,

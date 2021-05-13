@@ -12,10 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RelatedMultimediaItems extends Controller
 {
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Relation\LocationRelationResolverInterface
-     */
-    protected $multimediaResolver;
+    protected LocationRelationResolverInterface $multimediaResolver;
 
     public function __construct(LocationRelationResolverInterface $multimediaResolver)
     {
@@ -42,7 +39,7 @@ class RelatedMultimediaItems extends Controller
             [
                 'include_children' => $request->attributes->get('includeChildren') ?? false,
                 'content_types' => $request->attributes->get('contentTypeIdentifiers') ?? ['image'],
-            ]
+            ],
         );
 
         return $this->render(
@@ -51,7 +48,7 @@ class RelatedMultimediaItems extends Controller
                 'content' => $location->content,
                 'location' => $location,
                 'multimedia_items' => $multimediaItems,
-            ]
+            ],
         );
     }
 }

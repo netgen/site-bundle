@@ -20,30 +20,15 @@ use function time;
 
 class Activate extends Controller
 {
-    /**
-     * @var \eZ\Publish\API\Repository\UserService
-     */
-    protected $userService;
+    protected UserService $userService;
 
-    /**
-     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
-     */
-    protected $eventDispatcher;
+    protected EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Entity\Repository\EzUserAccountKeyRepository
-     */
-    protected $accountKeyRepository;
+    protected EzUserAccountKeyRepository $accountKeyRepository;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    protected $repository;
+    protected Repository $repository;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
     public function __construct(
         UserService $userService,
@@ -79,7 +64,7 @@ class Activate extends Controller
                 $this->configResolver->getParameter('template.user.activate_done', 'ngsite'),
                 [
                     'error' => 'hash_expired',
-                ]
+                ],
             );
         }
 
@@ -97,16 +82,14 @@ class Activate extends Controller
         $userUpdateStruct = $preActivateEvent->getUserUpdateStruct();
 
         $user = $this->repository->sudo(
-            static function (Repository $repository) use ($user, $userUpdateStruct): User {
-                return $repository->getUserService()->updateUser($user, $userUpdateStruct);
-            }
+            static fn (Repository $repository): User => $repository->getUserService()->updateUser($user, $userUpdateStruct),
         );
 
         $postActivateEvent = new UserEvents\PostActivateEvent($user);
         $this->eventDispatcher->dispatch($postActivateEvent, SiteEvents::USER_POST_ACTIVATE);
 
         return $this->render(
-            $this->configResolver->getParameter('template.user.activate_done', 'ngsite')
+            $this->configResolver->getParameter('template.user.activate_done', 'ngsite'),
         );
     }
 }

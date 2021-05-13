@@ -13,15 +13,9 @@ use Symfony\Contracts\EventDispatcher\Event;
  */
 class LocationMenuItemEvent extends Event
 {
-    /**
-     * @var \Knp\Menu\ItemInterface
-     */
-    protected $item;
+    protected ItemInterface $item;
 
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\Values\Location
-     */
-    protected $location;
+    protected Location $location;
 
     public function __construct(ItemInterface $item, Location $location)
     {

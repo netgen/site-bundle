@@ -11,15 +11,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class CreateUserListener implements EventSubscriberInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\UserService
-     */
-    protected $userService;
+    protected UserService $userService;
 
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Entity\Repository\NgUserSettingRepository
-     */
-    protected $ngUserSettingRepository;
+    protected NgUserSettingRepository $ngUserSettingRepository;
 
     public function __construct(UserService $userService, NgUserSettingRepository $ngUserSettingRepository)
     {

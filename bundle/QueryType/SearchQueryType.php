@@ -16,15 +16,9 @@ use function trim;
 
 class SearchQueryType extends OptionsResolverBasedQueryType
 {
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\Site
-     */
-    protected $site;
+    protected Site $site;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
     public function __construct(Site $site, ConfigResolverInterface $configResolver)
     {
@@ -37,15 +31,15 @@ class SearchQueryType extends OptionsResolverBasedQueryType
         return 'NetgenSite:Search';
     }
 
-    protected function configureOptions(OptionsResolver $resolver): void
+    protected function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setRequired(['search_text', 'content_types', 'subtree']);
+        $optionsResolver->setRequired(['search_text', 'content_types', 'subtree']);
 
-        $resolver->setAllowedTypes('search_text', 'string');
-        $resolver->setAllowedTypes('content_types', 'string[]');
-        $resolver->setAllowedTypes('subtree', ['int', 'string']);
+        $optionsResolver->setAllowedTypes('search_text', 'string');
+        $optionsResolver->setAllowedTypes('content_types', 'string[]');
+        $optionsResolver->setAllowedTypes('subtree', ['int', 'string']);
 
-        $resolver->setAllowedValues(
+        $optionsResolver->setAllowedValues(
             'search_text',
             static function (string $searchText): bool {
                 if (empty(trim($searchText))) {
@@ -53,11 +47,11 @@ class SearchQueryType extends OptionsResolverBasedQueryType
                 }
 
                 return true;
-            }
+            },
         );
 
-        $resolver->setDefault('content_types', $this->configResolver->getParameter('search.content_types', 'ngsite'));
-        $resolver->setDefault('subtree', $this->site->getSettings()->rootLocationId);
+        $optionsResolver->setDefault('content_types', $this->configResolver->getParameter('search.content_types', 'ngsite'));
+        $optionsResolver->setDefault('subtree', $this->site->getSettings()->rootLocationId);
     }
 
     protected function doGetQuery(array $parameters): Query

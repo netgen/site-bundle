@@ -19,12 +19,9 @@ use function trim;
 
 class Image extends Controller
 {
-    protected $site;
+    protected Site $site;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
+    protected LoggerInterface $logger;
 
     public function __construct(Site $site, ?LoggerInterface $logger = null)
     {
@@ -90,7 +87,7 @@ class Image extends Controller
                         [
                             'contentId' => $content->id,
                             'fieldId' => $content->getField($fieldName)->id,
-                        ]
+                        ],
                     );
                 }
             }

@@ -22,30 +22,15 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class Register extends Controller
 {
-    /**
-     * @var \eZ\Publish\API\Repository\UserService
-     */
-    protected $userService;
+    protected UserService $userService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentTypeService
-     */
-    protected $contentTypeService;
+    protected ContentTypeService $contentTypeService;
 
-    /**
-     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
-     */
-    protected $eventDispatcher;
+    protected EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    protected $repository;
+    protected Repository $repository;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
     public function __construct(
         UserService $userService,
@@ -78,7 +63,7 @@ class Register extends Controller
             '',
             '',
             $languages[0],
-            $contentType
+            $contentType,
         );
 
         $userCreateStruct->enabled = (bool) $this->configResolver->getParameter('user.auto_enable', 'ngsite');
@@ -91,7 +76,7 @@ class Register extends Controller
             $data,
             [
                 'translation_domain' => 'ngsite_user',
-            ]
+            ],
         );
 
         $form->handleRequest($request);
@@ -101,7 +86,7 @@ class Register extends Controller
                 $this->configResolver->getParameter('template.user.register', 'ngsite'),
                 [
                     'form' => $form->createView(),
-                ]
+                ],
             );
         }
 
@@ -113,7 +98,7 @@ class Register extends Controller
                 [
                     'form' => $form->createView(),
                     'error' => 'email_in_use',
-                ]
+                ],
             );
         }
 
@@ -125,7 +110,7 @@ class Register extends Controller
                 [
                     'form' => $form->createView(),
                     'error' => 'username_taken',
-                ]
+                ],
             );
         } catch (NotFoundException $e) {
             // do nothing
@@ -157,9 +142,9 @@ class Register extends Controller
 
                 return $repository->getUserService()->createUser(
                     $data->payload,
-                    [$userGroup]
+                    [$userGroup],
                 );
-            }
+            },
         );
 
         $userRegisterEvent = new UserEvents\PostRegisterEvent($newUser);
@@ -167,18 +152,18 @@ class Register extends Controller
 
         if ($newUser->enabled) {
             return $this->render(
-                $this->configResolver->getParameter('template.user.register_success', 'ngsite')
+                $this->configResolver->getParameter('template.user.register_success', 'ngsite'),
             );
         }
 
         if ($this->configResolver->getParameter('user.require_admin_activation', 'ngsite')) {
             return $this->render(
-                $this->configResolver->getParameter('template.user.activate_admin_activation_pending', 'ngsite')
+                $this->configResolver->getParameter('template.user.activate_admin_activation_pending', 'ngsite'),
             );
         }
 
         return $this->render(
-            $this->configResolver->getParameter('template.user.activate_sent', 'ngsite')
+            $this->configResolver->getParameter('template.user.activate_sent', 'ngsite'),
         );
     }
 }

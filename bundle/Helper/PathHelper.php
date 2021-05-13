@@ -17,20 +17,11 @@ use function is_array;
 
 class PathHelper
 {
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
+    protected LoadService $loadService;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
-    /**
-     * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
-     */
-    protected $urlGenerator;
+    protected UrlGeneratorInterface $urlGenerator;
 
     public function __construct(
         LoadService $loadService,
@@ -72,7 +63,7 @@ class PathHelper
 
         $pathArray = [];
         $rootLocationFound = false;
-        foreach ($path as $index => $pathItem) {
+        foreach ($path as $pathItem) {
             if ($pathItem === $rootLocationId) {
                 $rootLocationFound = true;
             }
@@ -90,13 +81,13 @@ class PathHelper
             if (!in_array($location->contentInfo->contentTypeIdentifier, $excludedContentTypes, true)) {
                 $pathArray[] = [
                     'text' => $location->contentInfo->name,
-                    'url' => $location->id !== (int) $locationId ?
+                    'url' => $location->id !== $locationId ?
                         $this->urlGenerator->generate(
                             '',
                             [RouteObjectInterface::ROUTE_OBJECT => $location],
                             $options['absolute_url'] ?
                                 UrlGeneratorInterface::ABSOLUTE_URL :
-                                UrlGeneratorInterface::ABSOLUTE_PATH
+                                UrlGeneratorInterface::ABSOLUTE_PATH,
                         ) :
                         false,
                     'location' => $location,

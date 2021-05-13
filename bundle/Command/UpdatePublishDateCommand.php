@@ -23,15 +23,9 @@ use const PHP_EOL;
 
 class UpdatePublishDateCommand extends Command
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    private $repository;
+    private Repository $repository;
 
-    /**
-     * @var \eZ\Publish\Core\Helper\FieldHelper
-     */
-    private $fieldHelper;
+    private FieldHelper $fieldHelper;
 
     public function __construct(Repository $repository, FieldHelper $fieldHelper)
     {
@@ -49,19 +43,19 @@ class UpdatePublishDateCommand extends Command
                 'content-type',
                 'c',
                 InputOption::VALUE_REQUIRED,
-                'Content type to update'
+                'Content type to update',
             )
             ->addOption(
                 'field-def-identifier',
                 'f',
                 InputOption::VALUE_REQUIRED,
-                'Field definition identifier containing publish date to read from'
+                'Field definition identifier containing publish date to read from',
             )
             ->addOption(
                 'use-main-translation',
                 null,
                 InputOption::VALUE_NONE,
-                'If specified, the script will use main translation instead of most prioritized one'
+                'If specified, the script will use main translation instead of most prioritized one',
             );
     }
 
@@ -138,7 +132,7 @@ class UpdatePublishDateCommand extends Command
                     $fieldDefIdentifier,
                     $input->getOption('use-main-translation') ?
                         $content->contentInfo->mainLanguageCode :
-                        null
+                        null,
                 )->value;
 
                 $dateValueData = $fieldDefinition->fieldTypeIdentifier === 'ezdatetime' ? $dateFieldValue->value : $dateFieldValue->date;
@@ -151,9 +145,7 @@ class UpdatePublishDateCommand extends Command
                     $metadataUpdateStruct->publishedDate = $dateValueData;
 
                     $this->repository->sudo(
-                        static function (Repository $repository) use ($content, $metadataUpdateStruct): Content {
-                            return $repository->getContentService()->updateContentMetadata($content->contentInfo, $metadataUpdateStruct);
-                        }
+                        static fn (Repository $repository): Content => $repository->getContentService()->updateContentMetadata($content->contentInfo, $metadataUpdateStruct),
                     );
 
                     ++$updatedCount;

@@ -22,40 +22,15 @@ use function sprintf;
 
 class MailHelper
 {
-    /**
-     * @var \Symfony\Component\Mailer\MailerInterface
-     */
-    protected $mailer;
+    protected MailerInterface $mailer;
 
-    /**
-     * @var \Twig\Environment
-     */
-    protected $twig;
+    protected Environment $twig;
 
-    /**
-     * @var \Symfony\Contracts\Translation\TranslatorInterface
-     */
-    protected $translator;
+    protected TranslatorInterface $translator;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @var string
-     */
-    protected $siteUrl;
-
-    /**
-     * @var string
-     */
-    protected $siteName;
+    protected LoggerInterface $logger;
 
     public function __construct(
         MailerInterface $mailer,
@@ -102,7 +77,7 @@ class MailHelper
             ->from($senderAddress)
             ->sender($senderAddress)
             ->to(...$this->createReceiverAddresses($receivers))
-            ->subject(sprintf('%s: %s', $this->siteName, $this->translator->trans($subject, [], 'ngsite_mail')))
+            ->subject($this->translator->trans($subject, [], 'ngsite_mail'))
             ->html($this->twig->render($template, $parameters));
 
         $this->mailer->send($email);
@@ -130,7 +105,7 @@ class MailHelper
             }
 
             throw new InvalidArgumentException(
-                "Parameter 'sender' has to be either a string, or an associative array with one element (e.g. array( 'info@example.com' => 'Example name' )), {$sender} given."
+                "Parameter 'sender' has to be either a string, or an associative array with one element (e.g. array( 'info@example.com' => 'Example name' )), {$sender} given.",
             );
         }
 
@@ -141,7 +116,7 @@ class MailHelper
 
             return new Address(
                 $this->configResolver->getParameter('mail.sender_email', 'ngsite'),
-                $name
+                $name,
             );
         }
 
@@ -159,8 +134,8 @@ class MailHelper
             $this->logger->error(
                 sprintf(
                     'Invalid address format. Required string or array, given %s',
-                    get_debug_type($addresses)
-                )
+                    get_debug_type($addresses),
+                ),
             );
         }
 

@@ -16,25 +16,13 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class UrlGenerator
 {
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\FindService
-     */
-    private $findService;
+    private FindService $findService;
 
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    private $loadService;
+    private LoadService $loadService;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    private $configResolver;
+    private ConfigResolverInterface $configResolver;
 
-    /**
-     * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
-     */
-    private $urlGenerator;
+    private UrlGeneratorInterface $urlGenerator;
 
     public function __construct(
         FindService $findService,
@@ -56,7 +44,7 @@ class UrlGenerator
         return $this->urlGenerator->generate(
             '',
             [RouteObjectInterface::ROUTE_OBJECT => $this->getTopicValueObject($tag)] + $parameters,
-            $referenceType
+            $referenceType,
         );
     }
 
@@ -70,7 +58,7 @@ class UrlGenerator
     private function getTopicValueObject(Tag $tag)
     {
         $rootLocation = $this->loadService->loadLocation(
-            $this->configResolver->getParameter('content.tree_root.location_id')
+            $this->configResolver->getParameter('content.tree_root.location_id'),
         );
 
         $query = new LocationQuery();
@@ -84,7 +72,7 @@ class UrlGenerator
                 new Criterion\Visibility(Criterion\Visibility::VISIBLE),
                 new Criterion\ContentTypeIdentifier(['ng_topic']),
                 new TagId($tag->id),
-            ]
+            ],
         );
 
         $searchResult = $this->findService->findLocations($query);

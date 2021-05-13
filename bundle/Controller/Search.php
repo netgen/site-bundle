@@ -17,25 +17,13 @@ use function trim;
 
 class Search extends Controller
 {
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\Site
-     */
-    protected $site;
+    protected Site $site;
 
-    /**
-     * @var \eZ\Publish\Core\QueryType\QueryTypeRegistry
-     */
-    protected $queryTypeRegistry;
+    protected QueryTypeRegistry $queryTypeRegistry;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Core\Search\SuggestionResolver
-     */
-    protected $suggestionResolver;
+    protected SuggestionResolver $suggestionResolver;
 
     public function __construct(
         Site $site,
@@ -64,7 +52,7 @@ class Search extends Controller
                 [
                     'search_text' => '',
                     'pager' => null,
-                ]
+                ],
             );
         }
 
@@ -73,8 +61,8 @@ class Search extends Controller
         $pager = new Pagerfanta(
             new FindAdapter(
                 $query,
-                $this->site->getFindService()
-            )
+                $this->site->getFindService(),
+            ),
         );
 
         $pager->setNormalizeOutOfRangePages(true);
@@ -95,7 +83,7 @@ class Search extends Controller
                 'search_text' => $searchText,
                 'search_suggestion' => $searchSuggestion,
                 'pager' => $pager,
-            ]
+            ],
         );
     }
 }

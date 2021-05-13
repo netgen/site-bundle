@@ -21,20 +21,11 @@ use function sprintf;
 
 class NoViewTemplateEventListener implements EventSubscriberInterface
 {
-    /**
-     * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
-     */
-    protected $urlGenerator;
+    protected UrlGeneratorInterface $urlGenerator;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
-    /**
-     * @var bool
-     */
-    protected $enabled = true;
+    protected bool $enabled = true;
 
     public function __construct(UrlGeneratorInterface $urlGenerator, ConfigResolverInterface $configResolver)
     {
@@ -89,9 +80,9 @@ class NoViewTemplateEventListener implements EventSubscriberInterface
 
                 return new RedirectResponse(
                     $this->urlGenerator->generate(UrlAliasRouter::URL_ALIAS_ROUTE_NAME, ['locationId' => $rootLocationId]),
-                    RedirectResponse::HTTP_MOVED_PERMANENTLY
+                    RedirectResponse::HTTP_MOVED_PERMANENTLY,
                 );
-            }
+            },
         );
     }
 }

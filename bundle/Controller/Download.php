@@ -19,30 +19,15 @@ use function str_replace;
 
 class Download extends Controller
 {
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\Site
-     */
-    protected $site;
+    protected Site $site;
 
-    /**
-     * @var \eZ\Publish\Core\IO\IOServiceInterface
-     */
-    protected $ioFileService;
+    protected IOServiceInterface $ioFileService;
 
-    /**
-     * @var \eZ\Publish\Core\IO\IOServiceInterface
-     */
-    protected $ioImageService;
+    protected IOServiceInterface $ioImageService;
 
-    /**
-     * @var \Symfony\Contracts\Translation\TranslatorInterface
-     */
-    protected $translator;
+    protected TranslatorInterface $translator;
 
-    /**
-     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
-     */
-    protected $dispatcher;
+    protected EventDispatcherInterface $dispatcher;
 
     public function __construct(
         Site $site,
@@ -72,8 +57,6 @@ class Download extends Controller
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException If file or image does not exist
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException If content has all of its locations hidden
-     *
-     * @return \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse
      */
     public function __invoke(Request $request, $contentId, $fieldId, $isInline = false): BinaryStreamResponse
     {
@@ -83,12 +66,12 @@ class Download extends Controller
         $content = $this->site->getLoadService()->loadContent(
             $contentId,
             $request->query->get('version'),
-            $request->query->get('inLanguage')
+            $request->query->get('inLanguage'),
         );
 
         if (!$content->hasFieldById($fieldId) || $content->getFieldById($fieldId)->isEmpty()) {
             throw $this->createNotFoundException(
-                $this->translator->trans('download.file_not_found', [], 'ngsite')
+                $this->translator->trans('download.file_not_found', [], 'ngsite'),
             );
         }
 
@@ -115,7 +98,7 @@ class Download extends Controller
             $binaryFile = $this->ioImageService->loadBinaryFile($binaryFieldValue->id);
         } else {
             throw $this->createNotFoundException(
-                $this->translator->trans('download.file_not_found', [], 'ngsite')
+                $this->translator->trans('download.file_not_found', [], 'ngsite'),
             );
         }
 
@@ -124,7 +107,7 @@ class Download extends Controller
             (bool) $isInline ? ResponseHeaderBag::DISPOSITION_INLINE :
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             str_replace(['/', '\\'], '', $binaryFieldValue->fileName),
-            'file'
+            'file',
         );
 
         if (!$request->headers->has('Range')) {
@@ -132,7 +115,7 @@ class Download extends Controller
                 $contentId,
                 $fieldId,
                 $content->contentInfo->currentVersionNo,
-                $response
+                $response,
             );
 
             $this->dispatcher->dispatch($downloadEvent, SiteEvents::CONTENT_DOWNLOAD);

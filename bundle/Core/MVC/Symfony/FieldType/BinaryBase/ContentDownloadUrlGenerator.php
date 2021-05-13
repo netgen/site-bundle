@@ -17,10 +17,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class ContentDownloadUrlGenerator extends PathGenerator
 {
-    /**
-     * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
-     */
-    protected $urlGenerator;
+    protected UrlGeneratorInterface $urlGenerator;
 
     public function __construct(UrlGeneratorInterface $urlGenerator)
     {
@@ -34,7 +31,7 @@ class ContentDownloadUrlGenerator extends PathGenerator
             [
                 'contentId' => $versionInfo->contentInfo->id,
                 'fieldId' => $field->id,
-            ]
+            ],
         );
     }
 }

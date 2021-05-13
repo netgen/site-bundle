@@ -10,15 +10,9 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class PreActivateEvent extends Event
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
-    protected $user;
+    protected User $user;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
-     */
-    protected $userUpdateStruct;
+    protected UserUpdateStruct $userUpdateStruct;
 
     public function __construct(User $user, UserUpdateStruct $userUpdateStruct)
     {

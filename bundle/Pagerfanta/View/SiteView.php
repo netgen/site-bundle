@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Pagerfanta\View;
 
+use Closure;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Pagerfanta\PagerfantaInterface;
 use Pagerfanta\View\ViewInterface;
@@ -14,40 +15,19 @@ use function trim;
 
 class SiteView implements ViewInterface
 {
-    /**
-     * @var \Twig\Environment
-     */
-    protected $twig;
+    protected Environment $twig;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
-    /**
-     * @var \Pagerfanta\Pagerfanta
-     */
-    protected $pagerfanta;
+    protected PagerfantaInterface $pagerfanta;
 
-    /**
-     * @var \Closure
-     */
-    protected $routeGenerator;
+    protected Closure $routeGenerator;
 
-    /**
-     * @var int
-     */
-    protected $proximity;
+    protected int $proximity;
 
-    /**
-     * @var int
-     */
-    protected $startPage;
+    protected int $startPage;
 
-    /**
-     * @var
-     */
-    protected $endPage;
+    protected int $endPage;
 
     public function __construct(Environment $twig, ConfigResolverInterface $configResolver)
     {
@@ -57,8 +37,6 @@ class SiteView implements ViewInterface
 
     /**
      * Returns the canonical name.
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -75,13 +53,11 @@ class SiteView implements ViewInterface
      * @param \Pagerfanta\PagerfantaInterface $pagerfanta A pagerfanta
      * @param \Closure $routeGenerator A callable to generate the routes
      * @param array $options An array of options (optional)
-     *
-     * @return string
      */
     public function render(PagerfantaInterface $pagerfanta, $routeGenerator, array $options = []): string
     {
         $this->pagerfanta = $pagerfanta;
-        $this->routeGenerator = $routeGenerator;
+        $this->routeGenerator = Closure::fromCallable($routeGenerator);
 
         $this->initializeProximity($options);
         $this->calculateStartAndEndPage();
@@ -91,14 +67,12 @@ class SiteView implements ViewInterface
             [
                 'pager' => $pagerfanta,
                 'pages' => $this->getPages(),
-            ]
+            ],
         );
     }
 
     /**
      * Initializes the proximity.
-     *
-     * @param array $options
      */
     protected function initializeProximity(array $options): void
     {

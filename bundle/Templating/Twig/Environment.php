@@ -22,7 +22,7 @@ class Environment extends BaseEnvironment
         return str_replace(
             ' extends Template',
             sprintf(' extends %s', DebugTemplate::class),
-            $compiledSource
+            $compiledSource,
         );
     }
 }

@@ -17,20 +17,11 @@ use function preg_match;
 
 class EzLinkDirectDownload implements Converter
 {
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
+    protected LoadService $loadService;
 
-    /**
-     * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
-     */
-    protected $urlGenerator;
+    protected UrlGeneratorInterface $urlGenerator;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
+    protected LoggerInterface $logger;
 
     public function __construct(
         LoadService $loadService,
@@ -47,11 +38,11 @@ class EzLinkDirectDownload implements Converter
      *
      * Overridden to add option to download files by using Netgen Site specific route.
      */
-    public function convert(DOMDocument $document): DOMDocument
+    public function convert(DOMDocument $xmlDoc): DOMDocument
     {
-        $document = clone $document;
+        $xmlDoc = clone $xmlDoc;
 
-        $xpath = new DOMXPath($document);
+        $xpath = new DOMXPath($xmlDoc);
         $xpath->registerNamespace('docbook', 'http://docbook.org/ns/docbook');
         $xpath->registerNamespace('xlink', 'http://www.w3.org/1999/xlink');
 
@@ -84,7 +75,7 @@ class EzLinkDirectDownload implements Converter
                     if ($this->logger) {
                         $this->logger->warning(
                             'While generating links for richtext, could not locate ' .
-                            'Content object with ID ' . $id
+                            'Content object with ID ' . $id,
                         );
                     }
 
@@ -93,7 +84,7 @@ class EzLinkDirectDownload implements Converter
                     if ($this->logger) {
                         $this->logger->notice(
                             'While generating links for richtext, unauthorized to load ' .
-                            'Content object with ID ' . $id
+                            'Content object with ID ' . $id,
                         );
                     }
 
@@ -109,7 +100,7 @@ class EzLinkDirectDownload implements Converter
                     if ($this->logger) {
                         $this->logger->warning(
                             'While generating links for richtext, could not locate ' .
-                            'Location with ID ' . $id
+                            'Location with ID ' . $id,
                         );
                     }
 
@@ -118,7 +109,7 @@ class EzLinkDirectDownload implements Converter
                     if ($this->logger) {
                         $this->logger->notice(
                             'While generating links for richtext, unauthorized to load ' .
-                            'Location with ID ' . $id
+                            'Location with ID ' . $id,
                         );
                     }
 
@@ -159,6 +150,6 @@ class EzLinkDirectDownload implements Converter
             $link->setAttribute($hrefAttributeName, $hrefResolved);
         }
 
-        return $document;
+        return $xmlDoc;
     }
 }

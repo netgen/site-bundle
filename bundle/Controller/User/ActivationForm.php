@@ -18,20 +18,11 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ActivationForm extends Controller
 {
-    /**
-     * @var \eZ\Publish\API\Repository\UserService
-     */
-    protected $userService;
+    protected UserService $userService;
 
-    /**
-     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
-     */
-    protected $eventDispatcher;
+    protected EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
     public function __construct(
         UserService $userService,
@@ -56,7 +47,7 @@ class ActivationForm extends Controller
                 $this->configResolver->getParameter('template.user.activate', 'ngsite'),
                 [
                     'form' => $form->createView(),
-                ]
+                ],
             );
         }
 
@@ -64,13 +55,13 @@ class ActivationForm extends Controller
 
         $activationRequestEvent = new UserEvents\ActivationRequestEvent(
             $form->get('email')->getData(),
-            $users[0] ?? null
+            $users[0] ?? null,
         );
 
         $this->eventDispatcher->dispatch($activationRequestEvent, SiteEvents::USER_ACTIVATION_REQUEST);
 
         return $this->render(
-            $this->configResolver->getParameter('template.user.activate_sent', 'ngsite')
+            $this->configResolver->getParameter('template.user.activate_sent', 'ngsite'),
         );
     }
 
@@ -88,7 +79,7 @@ class ActivationForm extends Controller
                         new Constraints\Email(),
                         new Constraints\NotBlank(),
                     ],
-                ]
+                ],
             )->getForm();
     }
 }

@@ -15,10 +15,7 @@ use function in_array;
 
 class LocationPathVoter implements VoterInterface
 {
-    /**
-     * @var \Symfony\Component\HttpFoundation\RequestStack
-     */
-    protected $requestStack;
+    protected RequestStack $requestStack;
 
     public function __construct(RequestStack $requestStack)
     {

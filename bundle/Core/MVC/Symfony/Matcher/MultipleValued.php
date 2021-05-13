@@ -9,9 +9,9 @@ use function is_array;
 abstract class MultipleValued
 {
     /**
-     * @var array Values to test against
+     * Values to test against.
      */
-    protected $values;
+    protected array $values = [];
 
     /**
      * Registers the matching configuration for the matcher.

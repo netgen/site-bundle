@@ -14,8 +14,6 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
 {
     /**
      * Returns an array of event names this subscriber wants to listen to.
-     *
-     * @return array
      */
     public static function getSubscribedEvents(): array
     {
@@ -37,7 +35,7 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
             $this->mailHelper->sendMail(
                 $email,
                 'ngsite.user.activate.not_registered.subject',
-                $this->configResolver->getParameter('template.user.mail.activate_not_registered', 'ngsite')
+                $this->configResolver->getParameter('template.user.mail.activate_not_registered', 'ngsite'),
             );
 
             return;
@@ -50,7 +48,7 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
                 $this->configResolver->getParameter('template.user.mail.activate_already_active', 'ngsite'),
                 [
                     'user' => $user,
-                ]
+                ],
             );
 
             return;
@@ -63,7 +61,7 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
                 $this->configResolver->getParameter('template.user.mail.activate_disabled', 'ngsite'),
                 [
                     'user' => $user,
-                ]
+                ],
             );
 
             return;
@@ -79,7 +77,7 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
                 [
                     'user' => $user,
                     'hash' => $accountKey->getHash(),
-                ]
+                ],
             );
     }
 }

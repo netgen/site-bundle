@@ -10,10 +10,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TopicUrlRuntime
 {
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Topic\UrlGenerator
-     */
-    private $topicUrlGenerator;
+    private UrlGenerator $topicUrlGenerator;
 
     public function __construct(UrlGenerator $topicUrlGenerator)
     {
@@ -30,7 +27,7 @@ class TopicUrlRuntime
             $parameters,
             $relative ?
                 UrlGeneratorInterface::RELATIVE_PATH :
-                UrlGeneratorInterface::ABSOLUTE_PATH
+                UrlGeneratorInterface::ABSOLUTE_PATH,
         );
     }
 
@@ -44,7 +41,7 @@ class TopicUrlRuntime
             $parameters,
             $schemeRelative ?
                 UrlGeneratorInterface::NETWORK_PATH :
-                UrlGeneratorInterface::ABSOLUTE_URL
+                UrlGeneratorInterface::ABSOLUTE_URL,
         );
     }
 }

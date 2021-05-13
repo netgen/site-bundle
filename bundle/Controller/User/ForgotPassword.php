@@ -18,20 +18,11 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ForgotPassword extends Controller
 {
-    /**
-     * @var \eZ\Publish\API\Repository\UserService
-     */
-    protected $userService;
+    protected UserService $userService;
 
-    /**
-     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
-     */
-    protected $eventDispatcher;
+    protected EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
     public function __construct(
         UserService $userService,
@@ -56,7 +47,7 @@ class ForgotPassword extends Controller
                 $this->configResolver->getParameter('template.user.forgot_password', 'ngsite'),
                 [
                     'form' => $form->createView(),
-                ]
+                ],
             );
         }
 
@@ -64,13 +55,13 @@ class ForgotPassword extends Controller
 
         $passwordResetRequestEvent = new UserEvents\PasswordResetRequestEvent(
             $form->get('email')->getData(),
-            $users[0] ?? null
+            $users[0] ?? null,
         );
 
         $this->eventDispatcher->dispatch($passwordResetRequestEvent, SiteEvents::USER_PASSWORD_RESET_REQUEST);
 
         return $this->render(
-            $this->configResolver->getParameter('template.user.forgot_password_sent', 'ngsite')
+            $this->configResolver->getParameter('template.user.forgot_password_sent', 'ngsite'),
         );
     }
 
@@ -88,7 +79,7 @@ class ForgotPassword extends Controller
                         new Constraints\Email(),
                         new Constraints\NotBlank(),
                     ],
-                ]
+                ],
             )->getForm();
     }
 }

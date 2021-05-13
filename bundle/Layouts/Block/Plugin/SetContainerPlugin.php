@@ -15,10 +15,8 @@ class SetContainerPlugin extends Plugin
     /**
      * The list of sizes available. Keys should be identifiers, while values
      * should be human readable names of the sizes.
-     *
-     * @var array
      */
-    private $sizes;
+    private array $sizes;
 
     public function __construct(array $sizes)
     {
@@ -43,7 +41,7 @@ class SetContainerPlugin extends Plugin
                 'label' => 'block.plugin.common_params.set_container',
                 'translatable' => false,
                 'groups' => $designGroup,
-            ]
+            ],
         );
 
         $builder->get('set_container')->add(
@@ -55,7 +53,7 @@ class SetContainerPlugin extends Plugin
                 'translatable' => false,
                 'options' => array_flip($this->sizes),
                 'groups' => $designGroup,
-            ]
+            ],
         );
     }
 }

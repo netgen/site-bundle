@@ -10,10 +10,7 @@ use FOS\HttpCache\UserContext\UserContext;
 
 class UserContextProvider implements ContextProvider
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    protected $repository;
+    protected Repository $repository;
 
     public function __construct(Repository $repository)
     {
@@ -28,7 +25,7 @@ class UserContextProvider implements ContextProvider
     {
         $context->addParameter(
             'userId',
-            $this->repository->getPermissionResolver()->getCurrentUserReference()->getUserId()
+            $this->repository->getPermissionResolver()->getCurrentUserReference()->getUserId(),
         );
     }
 }

@@ -16,10 +16,8 @@ class BackgroundColorPlugin extends Plugin
     /**
      * The list of colors available. Keys should be identifiers, while values
      * should be human readable names of the colors.
-     *
-     * @var array
      */
-    private $colors;
+    private array $colors;
 
     public function __construct(array $colors)
     {
@@ -42,7 +40,7 @@ class BackgroundColorPlugin extends Plugin
                 'default_value' => false,
                 'label' => 'block.plugin.background_color.enabled',
                 'groups' => $designGroup,
-            ]
+            ],
         );
 
         $builder->get('background_color:enabled')->add(
@@ -52,7 +50,7 @@ class BackgroundColorPlugin extends Plugin
                 'label' => 'block.plugin.background_color.color',
                 'options' => array_flip($this->colors),
                 'groups' => $designGroup,
-            ]
+            ],
         );
     }
 }

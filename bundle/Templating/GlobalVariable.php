@@ -12,20 +12,11 @@ use Netgen\EzPlatformSiteApi\API\Values\Location;
 
 class GlobalVariable
 {
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper
-     */
-    protected $siteInfoHelper;
+    protected SiteInfoHelper $siteInfoHelper;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    protected $repository;
+    protected Repository $repository;
 
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
+    protected LoadService $loadService;
 
     public function __construct(
         SiteInfoHelper $siteInfoHelper,

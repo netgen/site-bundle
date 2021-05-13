@@ -20,50 +20,23 @@ use function trim;
 
 class MailHelper
 {
-    /**
-     * @var \Swift_Mailer
-     */
-    protected $mailer;
+    protected Swift_Mailer $mailer;
 
-    /**
-     * @var \Twig\Environment
-     */
-    protected $twig;
+    protected Environment $twig;
 
-    /**
-     * @var  \Symfony\Component\Routing\Generator\UrlGeneratorInterface
-     */
-    protected $urlGenerator;
+    protected UrlGeneratorInterface $urlGenerator;
 
-    /**
-     * @var \Symfony\Component\Translation\TranslatorInterface
-     */
-    protected $translator;
+    protected TranslatorInterface $translator;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper
-     */
-    protected $siteInfoHelper;
+    protected SiteInfoHelper $siteInfoHelper;
 
-    /**
-     * @var string
-     */
-    protected $siteUrl;
+    protected LoggerInterface $logger;
 
-    /**
-     * @var string
-     */
-    protected $siteName;
+    protected string $siteUrl;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
+    protected string $siteName;
 
     public function __construct(
         Swift_Mailer $mailer,

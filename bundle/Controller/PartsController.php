@@ -12,15 +12,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PartsController extends Controller
 {
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Relation\LocationRelationResolverInterface
-     */
-    protected $locationResolver;
+    protected LocationRelationResolverInterface $locationResolver;
 
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Relation\LocationRelationResolverInterface
-     */
-    protected $multimediaResolver;
+    protected LocationRelationResolverInterface $multimediaResolver;
 
     public function __construct(
         LocationRelationResolverInterface $locationResolver,

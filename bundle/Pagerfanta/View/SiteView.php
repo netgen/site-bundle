@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Pagerfanta\View;
 
+use Closure;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Pagerfanta\Pagerfanta;
 use Pagerfanta\PagerfantaInterface;
 use Pagerfanta\View\ViewInterface;
 use Twig\Environment;
@@ -14,40 +16,19 @@ use function trim;
 
 class SiteView implements ViewInterface
 {
-    /**
-     * @var \Twig\Environment
-     */
-    protected $twig;
+    protected Environment $twig;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
-    /**
-     * @var \Pagerfanta\Pagerfanta
-     */
-    protected $pagerfanta;
+    protected Pagerfanta $pagerfanta;
 
-    /**
-     * @var \Closure
-     */
-    protected $routeGenerator;
+    protected Closure $routeGenerator;
 
-    /**
-     * @var int
-     */
-    protected $proximity;
+    protected int $proximity;
 
-    /**
-     * @var int
-     */
-    protected $startPage;
+    protected int $startPage;
 
-    /**
-     * @var
-     */
-    protected $endPage;
+    protected int $endPage;
 
     public function __construct(Environment $twig, ConfigResolverInterface $configResolver)
     {
@@ -81,7 +62,7 @@ class SiteView implements ViewInterface
     public function render(PagerfantaInterface $pagerfanta, $routeGenerator, array $options = []): string
     {
         $this->pagerfanta = $pagerfanta;
-        $this->routeGenerator = $routeGenerator;
+        $this->routeGenerator = Closure::fromCallable($routeGenerator);
 
         $this->initializeProximity($options);
         $this->calculateStartAndEndPage();

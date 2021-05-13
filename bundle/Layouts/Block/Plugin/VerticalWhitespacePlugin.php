@@ -15,18 +15,14 @@ class VerticalWhitespacePlugin extends Plugin
     /**
      * The list of positions available. Keys should be identifiers, while values
      * should be human readable names of the positions.
-     *
-     * @var array
      */
-    private $positions;
+    private array $positions;
 
     /**
      * The list of sizes available. Keys should be identifiers, while values
      * should be human readable names of the sizes.
-     *
-     * @var array
      */
-    private $sizes;
+    private array $sizes;
 
     public function __construct(array $positions, array $sizes)
     {

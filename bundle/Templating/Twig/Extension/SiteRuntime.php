@@ -16,20 +16,11 @@ use function ucwords;
 
 class SiteRuntime
 {
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Helper\PathHelper
-     */
-    protected $pathHelper;
+    protected PathHelper $pathHelper;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface
-     */
-    protected $localeConverter;
+    protected LocaleConverterInterface $localeConverter;
 
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
+    protected LoadService $loadService;
 
     public function __construct(PathHelper $pathHelper, LocaleConverterInterface $localeConverter, LoadService $loadService)
     {

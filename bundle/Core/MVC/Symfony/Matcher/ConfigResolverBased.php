@@ -10,10 +10,7 @@ use function is_array;
 
 abstract class ConfigResolverBased extends MultipleValued
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
     public function __construct(ConfigResolverInterface $configResolver)
     {

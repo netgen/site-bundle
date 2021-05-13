@@ -12,16 +12,8 @@ use Symfony\Component\HttpKernel\Profiler\Profiler;
 
 class ProfilerCachePurgerCommand extends Command
 {
-    /**
-     * @var \Symfony\Component\HttpKernel\Profiler\Profiler
-     */
-    protected $profiler;
+    protected ?Profiler $profiler;
 
-    /**
-     * ProfilerCachePurgerCommand constructor.
-     *
-     * @param \Symfony\Component\HttpKernel\Profiler\Profiler|null $profiler
-     */
     public function __construct(?Profiler $profiler = null)
     {
         $this->profiler = $profiler;

@@ -10,10 +10,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class FallbackExtension implements ExtensionInterface
 {
-    /**
-     * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
-     */
-    protected $urlGenerator;
+    protected UrlGeneratorInterface $urlGenerator;
 
     public function __construct(UrlGeneratorInterface $urlGenerator)
     {

@@ -27,25 +27,13 @@ use function time;
 
 class UserController extends Controller
 {
-    /**
-     * @var \eZ\Publish\API\Repository\UserService
-     */
-    protected $userService;
+    protected UserService $userService;
 
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    protected $eventDispatcher;
+    protected EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var \Symfony\Component\Form\FormFactoryInterface
-     */
-    protected $formFactory;
+    protected FormFactoryInterface $formFactory;
 
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Entity\Repository\EzUserAccountKeyRepository
-     */
-    protected $accountKeyRepository;
+    protected EzUserAccountKeyRepository $accountKeyRepository;
 
     public function __construct(
         UserService $userService,

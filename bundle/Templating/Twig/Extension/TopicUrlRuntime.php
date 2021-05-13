@@ -10,10 +10,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class TopicUrlRuntime
 {
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Topic\UrlGenerator
-     */
-    private $topicUrlGenerator;
+    private UrlGenerator $topicUrlGenerator;
 
     public function __construct(UrlGenerator $topicUrlGenerator)
     {

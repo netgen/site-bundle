@@ -12,15 +12,9 @@ use function array_flip;
 
 class VerticalWhitespaceV2Plugin extends Plugin
 {
-    /**
-     * @var array
-     */
-    private $top;
+    private array $top;
 
-    /**
-     * @var array
-     */
-    private $bottom;
+    private array $bottom;
 
     public function __construct(array $top, array $bottom)
     {

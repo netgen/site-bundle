@@ -16,15 +16,9 @@ use function trim;
 
 class RedirectHelper
 {
-    /**
-     * @var \Symfony\Component\Routing\RouterInterface
-     */
-    protected $router;
+    protected RouterInterface $router;
 
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\Site
-     */
-    protected $site;
+    protected Site $site;
 
     public function __construct(RouterInterface $router, Site $site)
     {

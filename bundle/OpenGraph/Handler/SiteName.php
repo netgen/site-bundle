@@ -11,10 +11,7 @@ use function trim;
 
 class SiteName implements HandlerInterface
 {
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper
-     */
-    protected $siteInfoHelper;
+    protected SiteInfoHelper $siteInfoHelper;
 
     public function __construct(SiteInfoHelper $siteInfoHelper)
     {

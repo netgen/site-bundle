@@ -16,6 +16,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\StyleInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use function array_filter;
 use function array_keys;
@@ -29,40 +30,19 @@ use function trim;
 
 class GenerateImageVariationsCommand extends Command
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    private $repository;
+    private Repository $repository;
 
-    /**
-     * @var \eZ\Publish\SPI\Variation\VariationHandler
-     */
-    private $variationHandler;
+    private VariationHandler $variationHandler;
 
-    /**
-     * @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface
-     */
-    private $cache;
+    private TagAwareAdapterInterface $cache;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    private $configResolver;
+    private ConfigResolverInterface $configResolver;
 
-    /**
-     * @var \Symfony\Component\Console\Input\InputInterface
-     */
-    private $input;
+    private InputInterface $input;
 
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
-    private $output;
+    private OutputInterface $output;
 
-    /**
-     * @var \Symfony\Component\Console\Style\StyleInterface
-     */
-    private $style;
+    private StyleInterface $style;
 
     public function __construct(
         Repository $repository,

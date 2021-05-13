@@ -16,15 +16,9 @@ use function trim;
 
 class SearchQueryType extends OptionsResolverBasedQueryType
 {
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\Site
-     */
-    protected $site;
+    protected Site $site;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
     public function __construct(Site $site, ConfigResolverInterface $configResolver)
     {

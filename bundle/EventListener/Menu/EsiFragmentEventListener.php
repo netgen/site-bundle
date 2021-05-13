@@ -12,15 +12,9 @@ use function rawurldecode;
 
 class EsiFragmentEventListener implements EventSubscriberInterface
 {
-    /**
-     * @var \Symfony\Component\HttpFoundation\RequestStack
-     */
-    protected $requestStack;
+    protected RequestStack $requestStack;
 
-    /**
-     * @var string
-     */
-    protected $fragmentPath;
+    protected string $fragmentPath;
 
     public function __construct(RequestStack $requestStack, string $fragmentPath)
     {

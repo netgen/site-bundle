@@ -10,15 +10,9 @@ use Symfony\Component\EventDispatcher\Event;
 
 class PrePasswordResetEvent extends Event
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\UserUpdateStruct
-     */
-    protected $userUpdateStruct;
+    protected User $user;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
-    protected $user;
+    protected UserUpdateStruct $userUpdateStruct;
 
     public function __construct(User $user, UserUpdateStruct $userUpdateStruct)
     {

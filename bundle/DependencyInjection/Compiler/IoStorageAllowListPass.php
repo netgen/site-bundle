@@ -13,7 +13,7 @@ use function array_values;
 
 class IoStorageAllowListPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $scopes = array_merge(
             [ConfigResolver::SCOPE_DEFAULT],

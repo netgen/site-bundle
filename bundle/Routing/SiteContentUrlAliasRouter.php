@@ -21,15 +21,9 @@ use Symfony\Component\Routing\RouteCollection;
 
 class SiteContentUrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator
-     */
-    protected $generator;
+    protected UrlAliasGenerator $generator;
 
-    /**
-     * @var \Symfony\Component\Routing\RequestContext
-     */
-    protected $requestContext;
+    protected RequestContext $requestContext;
 
     public function __construct(UrlAliasGenerator $generator, ?RequestContext $requestContext = null)
     {

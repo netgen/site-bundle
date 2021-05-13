@@ -6,6 +6,7 @@ namespace Netgen\Bundle\SiteBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use function basename;
 use function dirname;
 use function is_file;
@@ -16,22 +17,15 @@ abstract class SymlinkCommand extends ContainerAwareCommand
 {
     /**
      * If true, command will destroy existing symlinks before recreating them.
-     *
-     * @var bool
      */
-    protected $forceSymlinks = false;
+    protected bool $forceSymlinks = false;
 
     /**
      * Current environment.
-     *
-     * @var string
      */
-    protected $environment = 'dev';
+    protected string $environment = 'dev';
 
-    /**
-     * @var \Symfony\Component\Filesystem\Filesystem
-     */
-    protected $fileSystem;
+    protected Filesystem $fileSystem;
 
     /**
      * Verify that source file can be symlinked to destination and do symlinking if it can.

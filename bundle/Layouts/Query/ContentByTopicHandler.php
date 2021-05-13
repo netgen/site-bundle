@@ -40,15 +40,9 @@ class ContentByTopicHandler implements QueryTypeHandlerInterface
     use Traits\SectionFilterTrait;
     use Traits\SortTrait;
 
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    private $loadService;
+    private LoadService $loadService;
 
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\FindService
-     */
-    private $findService;
+    private FindService $findService;
 
     public function __construct(
         LocationService $locationService,

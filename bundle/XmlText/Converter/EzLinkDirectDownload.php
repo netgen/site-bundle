@@ -15,20 +15,11 @@ use Symfony\Component\Routing\RouterInterface;
 
 class EzLinkDirectDownload implements Converter
 {
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
+    protected LoadService $loadService;
 
-    /**
-     * @var \Symfony\Component\Routing\RouterInterface
-     */
-    protected $router;
+    protected RouterInterface $router;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
+    protected LoggerInterface $logger;
 
     public function __construct(
         LoadService $loadService,

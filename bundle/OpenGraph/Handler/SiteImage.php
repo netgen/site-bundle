@@ -24,15 +24,9 @@ class SiteImage implements HandlerInterface
      */
     protected const FIELD_IDENTIFIER = 'site_opengraph_image';
 
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper
-     */
-    protected $siteInfoHelper;
+    protected SiteInfoHelper $siteInfoHelper;
 
-    /**
-     * @var \Symfony\Component\HttpFoundation\RequestStack
-     */
-    private $requestStack;
+    private RequestStack $requestStack;
 
     public function __construct(SiteInfoHelper $siteInfoHelper, RequestStack $requestStack)
     {

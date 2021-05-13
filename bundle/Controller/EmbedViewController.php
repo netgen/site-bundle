@@ -17,15 +17,9 @@ use function trim;
 
 class EmbedViewController extends Controller
 {
-    /**
-     * @var \Symfony\Component\Routing\RouterInterface
-     */
-    protected $router;
+    protected RouterInterface $router;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
+    protected LoggerInterface $logger;
 
     public function __construct(RouterInterface $router, ?LoggerInterface $logger = null)
     {

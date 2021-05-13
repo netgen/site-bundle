@@ -10,10 +10,7 @@ use Netgen\EzPlatformSiteApi\API\Values\Location;
 
 class LocationParamConverter extends RepositoryParamConverter
 {
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
+    protected LoadService $loadService;
 
     public function __construct(LoadService $loadService)
     {

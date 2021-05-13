@@ -12,20 +12,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class MenuController extends Controller
 {
-    /**
-     * @var \Knp\Menu\Provider\MenuProviderInterface
-     */
-    protected $menuProvider;
+    protected MenuProviderInterface $menuProvider;
 
-    /**
-     * @var \Knp\Menu\Renderer\RendererProviderInterface
-     */
-    protected $menuRenderer;
+    protected RendererProviderInterface $menuRenderer;
 
-    /**
-     * @var \FOS\HttpCacheBundle\Handler\TagHandler
-     */
-    protected $tagHandler;
+    protected TagHandler $tagHandler;
 
     public function __construct(
         MenuProviderInterface $menuProvider,

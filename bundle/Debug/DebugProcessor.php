@@ -17,15 +17,9 @@ use function in_array;
  */
 class DebugProcessor implements DebugLoggerInterface
 {
-    /**
-     * @var \Symfony\Component\HttpKernel\Log\DebugLoggerInterface
-     */
-    protected $innerProcessor;
+    protected DebugLoggerInterface $innerProcessor;
 
-    /**
-     * @var array
-     */
-    protected $excludedChannels;
+    protected array $excludedChannels;
 
     public function __construct(
         DebugLoggerInterface $innerProcessor,

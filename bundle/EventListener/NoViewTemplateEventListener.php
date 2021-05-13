@@ -20,20 +20,11 @@ use function sprintf;
 
 class NoViewTemplateEventListener implements EventSubscriberInterface
 {
-    /**
-     * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
-     */
-    protected $urlGenerator;
+    protected UrlGeneratorInterface $urlGenerator;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
-    /**
-     * @var bool
-     */
-    protected $enabled = true;
+    protected bool $enabled = true;
 
     public function __construct(UrlGeneratorInterface $urlGenerator, ConfigResolverInterface $configResolver)
     {

@@ -18,15 +18,9 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class ContentDownloadUrlGenerator extends PathGenerator implements RouteAwarePathGenerator
 {
-    /**
-     * @var \Symfony\Component\Routing\RouterInterface
-     */
-    protected $router;
+    protected RouterInterface $router;
 
-    /**
-     * @var string
-     */
-    protected $route = 'ngsite_download';
+    protected string $route = 'ngsite_download';
 
     public function __construct(RouterInterface $router)
     {

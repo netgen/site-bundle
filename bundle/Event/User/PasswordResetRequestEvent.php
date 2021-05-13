@@ -9,15 +9,9 @@ use Symfony\Component\EventDispatcher\Event;
 
 class PasswordResetRequestEvent extends Event
 {
-    /**
-     * @var string
-     */
-    protected $email;
+    protected string $email;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
-    protected $user;
+    protected ?User $user;
 
     public function __construct(string $email, ?User $user = null)
     {

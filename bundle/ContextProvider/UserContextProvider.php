@@ -10,10 +10,7 @@ use FOS\HttpCache\UserContext\UserContext;
 
 class UserContextProvider implements ContextProviderInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    protected $repository;
+    protected Repository $repository;
 
     public function __construct(Repository $repository)
     {

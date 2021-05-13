@@ -11,10 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckRedirect extends Controller
 {
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Helper\RedirectHelper
-     */
-    protected $redirectHelper;
+    protected RedirectHelper $redirectHelper;
 
     public function __construct(RedirectHelper $redirectHelper)
     {

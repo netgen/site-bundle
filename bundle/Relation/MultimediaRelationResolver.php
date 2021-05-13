@@ -12,15 +12,9 @@ use function iterator_to_array;
 
 class MultimediaRelationResolver implements LocationRelationResolverInterface
 {
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
+    protected LoadService $loadService;
 
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Relation\LocationRelationResolverInterface
-     */
-    protected $innerResolver;
+    protected LocationRelationResolverInterface $innerResolver;
 
     public function __construct(LoadService $loadService, LocationRelationResolverInterface $innerResolver)
     {

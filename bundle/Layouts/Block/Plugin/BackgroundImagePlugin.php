@@ -19,10 +19,7 @@ use Netgen\Layouts\Standard\Block\BlockDefinition\Handler\ListHandler;
 
 class BackgroundImagePlugin extends Plugin
 {
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    private $loadService;
+    private LoadService $loadService;
 
     public function __construct(LoadService $loadService)
     {

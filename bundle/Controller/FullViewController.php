@@ -19,10 +19,7 @@ use function explode;
 
 class FullViewController extends Controller
 {
-    /**
-     * @var \Symfony\Component\Routing\RouterInterface
-     */
-    protected $router;
+    protected RouterInterface $router;
 
     public function __construct(RouterInterface $router)
     {
@@ -33,7 +30,7 @@ class FullViewController extends Controller
      * Action for viewing content with ng_category content type identifier.
      *
      * @deprecated this controller is deprecated, please use SiteAPI query type
-     * for loading cihldren and CheckRedirect controller for checking the redirect
+     * for loading children and CheckRedirect controller for checking the redirect
      *
      * @return \Symfony\Component\HttpFoundation\Response|\Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView
      */

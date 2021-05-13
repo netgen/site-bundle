@@ -11,25 +11,13 @@ use Netgen\EzPlatformSiteApi\API\Values\Location;
 
 class SiteInfoHelper
 {
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
+    protected LoadService $loadService;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
+    protected ConfigResolverInterface $configResolver;
 
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\Values\Location
-     */
-    protected $siteInfoLocation;
+    protected Location $siteInfoLocation;
 
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\Values\Content
-     */
-    protected $siteInfoContent;
+    protected Content $siteInfoContent;
 
     public function __construct(
         LoadService $loadService,
@@ -50,12 +38,7 @@ class SiteInfoHelper
 
     public function getSiteInfoContent(): Content
     {
-        if ($this->siteInfoContent === null) {
-            $siteInfoLocation = $this->getSiteInfoLocation();
-            if ($siteInfoLocation !== null) {
-                $this->siteInfoContent = $siteInfoLocation->content;
-            }
-        }
+        $this->siteInfoContent ??= $this->getSiteInfoLocation()->content;
 
         return $this->siteInfoContent;
     }

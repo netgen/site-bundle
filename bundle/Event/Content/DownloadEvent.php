@@ -9,76 +9,54 @@ use Symfony\Component\EventDispatcher\Event;
 
 class DownloadEvent extends Event
 {
-    /**
-     * @var int
-     */
-    protected $contentId;
+    protected int $contentId;
+
+    protected int $fieldId;
+
+    protected int $versionNo;
+
+    protected BinaryStreamResponse $response;
 
     /**
-     * @var int
-     */
-    protected $fieldId;
-
-    /**
-     * @var int
-     */
-    protected $versionNo;
-
-    /**
-     * @var \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse
-     */
-    protected $response;
-
-    /**
-     * Constructor.
-     *
-     * @param int $contentId
-     * @param int $fieldId
-     * @param int $versionNo
+     * @param int|string $contentId
+     * @param int|string $fieldId
+     * @param int|string $versionNo
      * @param \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse $response
      */
     public function __construct($contentId, $fieldId, $versionNo, BinaryStreamResponse $response)
     {
-        $this->contentId = $contentId;
-        $this->fieldId = $fieldId;
-        $this->versionNo = $versionNo;
+        $this->contentId = (int) $contentId;
+        $this->fieldId = (int) $fieldId;
+        $this->versionNo = (int) $versionNo;
         $this->response = $response;
     }
 
     /**
      * Get field ID.
-     *
-     * @return int
      */
-    public function getFieldId()
+    public function getFieldId(): int
     {
         return $this->fieldId;
     }
 
     /**
      * Returns content ID.
-     *
-     * @return int
      */
-    public function getContentId()
+    public function getContentId(): int
     {
         return $this->contentId;
     }
 
     /**
      * Returns version number.
-     *
-     * @return int
      */
-    public function getVersionNo()
+    public function getVersionNo(): int
     {
         return $this->versionNo;
     }
 
     /**
      * Returns the response.
-     *
-     * @return \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse
      */
     public function getResponse(): BinaryStreamResponse
     {

@@ -11,10 +11,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManager;
 
 class SetCsrfEnabledEventListener implements EventSubscriberInterface
 {
-    /**
-     * @var \Symfony\Component\Security\Csrf\CsrfTokenManager
-     */
-    protected $csrfTokenManager;
+    protected ?CsrfTokenManager $csrfTokenManager;
 
     public function __construct(?CsrfTokenManager $csrfTokenManager = null)
     {
@@ -23,8 +20,6 @@ class SetCsrfEnabledEventListener implements EventSubscriberInterface
 
     /**
      * Returns an array of event names this subscriber wants to listen to.
-     *
-     * @return array
      */
     public static function getSubscribedEvents(): array
     {

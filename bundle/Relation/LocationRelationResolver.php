@@ -15,15 +15,9 @@ use function sprintf;
 
 class LocationRelationResolver implements LocationRelationResolverInterface
 {
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
+    protected LoadService $loadService;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
+    protected LoggerInterface $logger;
 
     public function __construct(LoadService $loadService, ?LoggerInterface $logger = null)
     {

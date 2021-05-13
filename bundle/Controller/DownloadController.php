@@ -18,25 +18,13 @@ use function str_replace;
 
 class DownloadController extends Controller
 {
-    /**
-     * @var \eZ\Publish\Core\IO\IOServiceInterface
-     */
-    protected $ioFileService;
+    protected IOServiceInterface $ioFileService;
 
-    /**
-     * @var \eZ\Publish\Core\IO\IOServiceInterface
-     */
-    protected $ioImageService;
+    protected IOServiceInterface $ioImageService;
 
-    /**
-     * @var \Symfony\Component\Translation\TranslatorInterface
-     */
-    protected $translator;
+    protected TranslatorInterface $translator;
 
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    protected $dispatcher;
+    protected EventDispatcherInterface $dispatcher;
 
     public function __construct(
         IOServiceInterface $ioFileService,

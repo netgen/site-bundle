@@ -14,10 +14,7 @@ use function trim;
 
 class SearchController extends Controller
 {
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Core\Search\SuggestionResolver
-     */
-    protected $suggestionResolver;
+    protected SuggestionResolver $suggestionResolver;
 
     public function __construct(SuggestionResolver $suggestionResolver)
     {

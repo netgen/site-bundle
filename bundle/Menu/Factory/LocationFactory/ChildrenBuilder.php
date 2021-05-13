@@ -19,20 +19,11 @@ use function sprintf;
 
 class ChildrenBuilder
 {
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
+    protected LoadService $loadService;
 
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\FilterService
-     */
-    protected $filterService;
+    protected FilterService $filterService;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
+    protected LoggerInterface $logger;
 
     public function __construct(
         LoadService $loadService,

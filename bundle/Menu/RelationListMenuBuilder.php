@@ -16,25 +16,13 @@ use function sprintf;
 
 class RelationListMenuBuilder
 {
-    /**
-     * @var \Knp\Menu\FactoryInterface
-     */
-    protected $factory;
+    protected FactoryInterface $factory;
 
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
+    protected LoadService $loadService;
 
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper
-     */
-    protected $siteInfoHelper;
+    protected SiteInfoHelper $siteInfoHelper;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
+    protected LoggerInterface $logger;
 
     public function __construct(
         FactoryInterface $factory,

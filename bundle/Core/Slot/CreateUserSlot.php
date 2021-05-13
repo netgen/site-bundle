@@ -12,15 +12,9 @@ use Netgen\Bundle\SiteBundle\Entity\Repository\NgUserSettingRepository;
 
 class CreateUserSlot extends Slot
 {
-    /**
-     * @var \eZ\Publish\API\Repository\UserService
-     */
-    protected $userService;
+    protected UserService $userService;
 
-    /**
-     * @var \Netgen\Bundle\SiteBundle\Entity\Repository\NgUserSettingRepository
-     */
-    protected $ngUserSettingRepository;
+    protected NgUserSettingRepository $ngUserSettingRepository;
 
     public function __construct(UserService $userService, NgUserSettingRepository $ngUserSettingRepository)
     {

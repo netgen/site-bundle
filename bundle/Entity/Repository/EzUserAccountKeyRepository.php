@@ -19,8 +19,6 @@ class EzUserAccountKeyRepository extends EntityRepository
      * Creates a user account key.
      *
      * @param mixed $userId
-     *
-     * @return \Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
      */
     public function create($userId): EzUserAccountKey
     {
@@ -51,10 +49,6 @@ class EzUserAccountKeyRepository extends EntityRepository
 
     /**
      * Returns user account key by hash.
-     *
-     * @param string $hash
-     *
-     * @return \Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey
      */
     public function getByHash(string $hash): ?EzUserAccountKey
     {
@@ -79,8 +73,6 @@ class EzUserAccountKeyRepository extends EntityRepository
 
     /**
      * Removes user account key by user hash.
-     *
-     * @param string $hash
      */
     public function removeByHash(string $hash): void
     {

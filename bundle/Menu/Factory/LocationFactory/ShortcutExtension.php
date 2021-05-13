@@ -19,25 +19,13 @@ use function sprintf;
 
 class ShortcutExtension implements ExtensionInterface
 {
-    /**
-     * @var \Netgen\EzPlatformSiteApi\API\LoadService
-     */
-    protected $loadService;
+    protected LoadService $loadService;
 
-    /**
-     * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
-     */
-    protected $urlGenerator;
+    protected UrlGeneratorInterface $urlGenerator;
 
-    /**
-     * @var \Symfony\Component\HttpFoundation\RequestStack
-     */
-    protected $requestStack;
+    protected RequestStack $requestStack;
 
-    /**
-     * @var \Psr\Log\NullLogger
-     */
-    protected $logger;
+    protected LoggerInterface $logger;
 
     public function __construct(
         LoadService $loadService,

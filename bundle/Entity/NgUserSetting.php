@@ -11,14 +11,9 @@ class NgUserSetting
      */
     protected $userId;
 
-    /**
-     * @var bool
-     */
-    protected $isActivated;
+    protected bool $isActivated;
 
     /**
-     * Constructor.
-     *
      * @param mixed $userId
      * @param bool $isActivated
      */
@@ -32,8 +27,6 @@ class NgUserSetting
      * Set user ID.
      *
      * @param mixed $userId
-     *
-     * @return \Netgen\Bundle\SiteBundle\Entity\NgUserSetting
      */
     public function setUserId($userId): self
     {
@@ -54,10 +47,6 @@ class NgUserSetting
 
     /**
      * Sets if user has been activated at least once.
-     *
-     * @param bool $isActivated
-     *
-     * @return \Netgen\Bundle\SiteBundle\Entity\NgUserSetting
      */
     public function setIsActivated(bool $isActivated): self
     {
@@ -68,8 +57,6 @@ class NgUserSetting
 
     /**
      * Returns true once the user has been first activated, false before that.
-     *
-     * @return bool
      */
     public function getIsActivated(): bool
     {

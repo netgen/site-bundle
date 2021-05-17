@@ -29,7 +29,7 @@ class DebugTemplate extends Template
 
     public function display(array $context, array $blocks = [])
     {
-        $this->fileSystem = $this->fileSystem ?: new Filesystem();
+        $this->fileSystem = $this->fileSystem ?? new Filesystem();
 
         // Bufferize to be able to insert template name as HTML comments if applicable.
         // Layout template name will only appear at the end, to avoid potential quirks with old browsers

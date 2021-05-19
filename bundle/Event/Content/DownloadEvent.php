@@ -21,7 +21,6 @@ class DownloadEvent extends Event
      * @param int|string $contentId
      * @param int|string $fieldId
      * @param int|string $versionNo
-     * @param \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse $response
      */
     public function __construct($contentId, $fieldId, $versionNo, BinaryStreamResponse $response)
     {

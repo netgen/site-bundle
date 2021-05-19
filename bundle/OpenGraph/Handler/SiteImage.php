@@ -19,8 +19,6 @@ class SiteImage implements HandlerInterface
 {
     /**
      * Field identifier that provides opengraph image.
-     *
-     * @var string
      */
     protected const FIELD_IDENTIFIER = 'site_opengraph_image';
 

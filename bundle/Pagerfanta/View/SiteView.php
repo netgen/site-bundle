@@ -38,8 +38,6 @@ class SiteView implements ViewInterface
 
     /**
      * Returns the canonical name.
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -53,11 +51,7 @@ class SiteView implements ViewInterface
      * the routes receiving the page number as first and
      * unique argument.
      *
-     * @param \Pagerfanta\PagerfantaInterface $pagerfanta A pagerfanta
      * @param \Closure $routeGenerator A callable to generate the routes
-     * @param array $options An array of options (optional)
-     *
-     * @return string
      */
     public function render(PagerfantaInterface $pagerfanta, $routeGenerator, array $options = []): string
     {
@@ -78,8 +72,6 @@ class SiteView implements ViewInterface
 
     /**
      * Initializes the proximity.
-     *
-     * @param array $options
      */
     protected function initializeProximity(array $options): void
     {

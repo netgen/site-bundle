@@ -45,15 +45,12 @@ class DownloadController extends Controller
      *
      * Dispatch \Netgen\Bundle\SiteBundle\Event\SiteEvents::CONTENT_DOWNLOAD only once
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
      * @param mixed $contentId
      * @param mixed $fieldId
      * @param bool $isInline
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException If file or image does not exist
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException If content has all of its locations hidden
-     *
-     * @return \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse
      */
     public function downloadFile(Request $request, $contentId, $fieldId, $isInline = false): BinaryStreamResponse
     {

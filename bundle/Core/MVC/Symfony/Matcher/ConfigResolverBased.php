@@ -26,8 +26,6 @@ abstract class ConfigResolverBased extends MultipleValued
      * second should be the namespace.
      *
      * @param mixed $value
-     *
-     * @return bool
      */
     public function doMatch($value): bool
     {

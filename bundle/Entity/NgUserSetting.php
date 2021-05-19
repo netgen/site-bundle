@@ -15,7 +15,6 @@ class NgUserSetting
 
     /**
      * @param mixed $userId
-     * @param bool $isActivated
      */
     public function __construct($userId, bool $isActivated)
     {

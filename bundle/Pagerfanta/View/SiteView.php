@@ -50,9 +50,7 @@ class SiteView implements ViewInterface
      * the routes receiving the page number as first and
      * unique argument.
      *
-     * @param \Pagerfanta\PagerfantaInterface $pagerfanta A pagerfanta
      * @param \Closure $routeGenerator A callable to generate the routes
-     * @param array $options An array of options (optional)
      */
     public function render(PagerfantaInterface $pagerfanta, $routeGenerator, array $options = []): string
     {

@@ -50,7 +50,6 @@ class Download extends Controller
      *
      * Dispatch \Netgen\Bundle\SiteBundle\Event\SiteEvents::CONTENT_DOWNLOAD only once
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
      * @param int $contentId
      * @param int $fieldId
      * @param bool $isInline

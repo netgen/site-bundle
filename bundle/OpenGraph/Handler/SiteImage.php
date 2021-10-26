@@ -6,6 +6,7 @@ namespace Netgen\Bundle\SiteBundle\OpenGraph\Handler;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
+use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value as RemoteImageValue;
 use Netgen\Bundle\OpenGraphBundle\Handler\HandlerInterface;
 use Netgen\Bundle\OpenGraphBundle\MetaTag\Item;
 use Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper;
@@ -46,6 +47,16 @@ class SiteImage implements HandlerInterface
                 ->getField(self::FIELD_IDENTIFIER)
                 ->value
                 ->uri;
+        } elseif (
+            $siteInfoContent->hasField(self::FIELD_IDENTIFIER)
+            && !$siteInfoContent->getField(self::FIELD_IDENTIFIER)->isEmpty()
+            && $siteInfoContent->getFieldValue(self::FIELD_IDENTIFIER) instanceof RemoteImageValue
+        ) {
+            $siteImage = $this->siteInfoHelper
+                ->getSiteInfoContent()
+                ->getField(self::FIELD_IDENTIFIER)
+                ->value
+                ->secure_url;
         } elseif (!empty($params[0])) {
             $siteImage = (string) $params[0];
         } else {

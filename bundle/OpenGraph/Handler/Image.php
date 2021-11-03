@@ -17,7 +17,7 @@ use Netgen\Bundle\OpenGraphBundle\Exception\FieldEmptyException;
 use Netgen\Bundle\OpenGraphBundle\Handler\FieldType\Image as ImageHandler;
 use Netgen\Bundle\RemoteMediaBundle\OpenGraph\Handler\RemoteMediaHandler;
 
-final class ImageFallback extends Handler implements HandlerInterface, ContentAware
+final class Image extends Handler implements HandlerInterface, ContentAware
 {
     private $ezImageHandler;
 

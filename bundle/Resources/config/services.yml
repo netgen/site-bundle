@@ -215,7 +215,7 @@ services:
             - { name: netgen_open_graph.meta_tag_handler, alias: ngsite/site_image }
 
     ngsite.opengraph.handler.image_fallback:
-        class: Netgen\Bundle\SiteBundle\OpenGraph\Handler\ImageFallback
+        class: Netgen\Bundle\SiteBundle\OpenGraph\Handler\Image
         public: false
         arguments:
             - "@ezpublish.field_helper"

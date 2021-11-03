@@ -69,7 +69,7 @@ final class Image extends Handler implements HandlerInterface, ContentAware
         }
 
         throw new InvalidArgumentException(
-            sprintf('%s or $params[0]', implode($fieldIdentifiers, ',')),
+            sprintf('%s or $params[0]', implode(',', $fieldIdentifiers)),
             'Either field does not provide valid value or fallback is not properly set up.',
         );
     }

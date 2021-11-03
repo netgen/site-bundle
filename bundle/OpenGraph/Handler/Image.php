@@ -19,9 +19,9 @@ use Netgen\Bundle\RemoteMediaBundle\OpenGraph\Handler\RemoteMediaHandler;
 
 final class Image extends Handler implements HandlerInterface, ContentAware
 {
-    private $ezImageHandler;
+    private ImageHandler $ezImageHandler;
 
-    private $remoteMediaHandler;
+    private RemoteMediaHandler $remoteMediaHandler;
 
     public function __construct(
         FieldHelper $fieldHelper,

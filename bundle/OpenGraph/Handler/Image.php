@@ -74,14 +74,7 @@ final class Image extends Handler implements HandlerInterface, ContentAware
         );
     }
 
-    /**
-     * Returns if this field type handler supports current field.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Field $field
-     *
-     * @return bool
-     */
-    protected function supports(Field $field)
+    protected function supports(Field $field): bool
     {
         return $field->value instanceof ImageValue || $field->value instanceof RemoteImageValue;
     }

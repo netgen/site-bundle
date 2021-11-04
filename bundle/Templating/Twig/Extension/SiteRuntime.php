@@ -115,6 +115,6 @@ class SiteRuntime
             return $this->imageVariationService->getVariation($field->innerField, $content->innerVersionInfo, $alias)->uri;
         }
 
-        return null;
+        return '/';
     }
 }

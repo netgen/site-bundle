@@ -103,7 +103,7 @@ class SiteRuntime
         return $location->content->name;
     }
 
-    public function getImageAbsoluteUrl(Content $content, string $fieldIdentifier, string $alias): ?string
+    public function getImageUrl(Content $content, string $fieldIdentifier, string $alias): ?string
     {
         $field = $content->getField($fieldIdentifier);
 

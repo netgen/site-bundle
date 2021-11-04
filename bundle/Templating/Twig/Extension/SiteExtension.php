@@ -30,8 +30,8 @@ class SiteExtension extends AbstractExtension
                 [SiteRuntime::class, 'getLocationName'],
             ),
             new TwigFunction(
-                'ngsite_image_absolute_url',
-                [SiteRuntime::class, 'getImageAbsoluteUrl'],
+                'ngsite_image_url',
+                [SiteRuntime::class, 'getImageUrl'],
             ),
         ];
     }

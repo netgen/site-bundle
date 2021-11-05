@@ -49,7 +49,7 @@ final class Image extends Handler implements HandlerInterface, ContentAware
 
         foreach ($fieldIdentifiers as $fieldIdentifier) {
             $field = $this->validateField($fieldIdentifier);
-            $params[0] = [$fieldIdentifier];
+            $params[0] = $fieldIdentifier;
 
             try {
                 if ($field->value instanceof RemoteImageValue) {

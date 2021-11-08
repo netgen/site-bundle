@@ -214,7 +214,7 @@ services:
         tags:
             - { name: netgen_open_graph.meta_tag_handler, alias: ngsite/site_image }
 
-    ngsite.opengraph.handler.image_fallback:
+    ngsite.opengraph.handler.image:
         class: Netgen\Bundle\SiteBundle\OpenGraph\Handler\Image
         public: false
         arguments:

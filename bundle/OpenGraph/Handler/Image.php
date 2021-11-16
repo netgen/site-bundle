@@ -4,18 +4,21 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\OpenGraph\Handler;
 
-use Netgen\Bundle\OpenGraphBundle\Handler\ContentAware;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\Content\Field;
-use Netgen\Bundle\OpenGraphBundle\Handler\HandlerInterface;
-use Netgen\Bundle\OpenGraphBundle\Handler\FieldType\Handler;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
-use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value as RemoteImageValue;
 use eZ\Publish\Core\Helper\FieldHelper;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use Netgen\Bundle\OpenGraphBundle\Exception\FieldEmptyException;
+use Netgen\Bundle\OpenGraphBundle\Handler\ContentAware;
+use Netgen\Bundle\OpenGraphBundle\Handler\FieldType\Handler;
 use Netgen\Bundle\OpenGraphBundle\Handler\FieldType\Image as ImageHandler;
+use Netgen\Bundle\OpenGraphBundle\Handler\HandlerInterface;
+use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value as RemoteImageValue;
 use Netgen\Bundle\RemoteMediaBundle\OpenGraph\Handler\RemoteMediaHandler;
+use function implode;
+use function is_array;
+use function sprintf;
 
 final class Image extends Handler implements HandlerInterface, ContentAware
 {
@@ -40,11 +43,11 @@ final class Image extends Handler implements HandlerInterface, ContentAware
         if (!isset($params[0])) {
             throw new InvalidArgumentException(
                 '$params[0]',
-                'Field type handlers require at least a field identifier.'
+                'Field type handlers require at least a field identifier.',
             );
         }
 
-        $fieldIdentifiers = is_array($params[0]) ? $params[0] : array($params[0]);
+        $fieldIdentifiers = is_array($params[0]) ? $params[0] : [$params[0]];
         $fieldValue = $this->getFallbackValue($tagName, $params);
 
         foreach ($fieldIdentifiers as $fieldIdentifier) {
@@ -54,11 +57,13 @@ final class Image extends Handler implements HandlerInterface, ContentAware
             try {
                 if ($field->value instanceof RemoteImageValue) {
                     $this->remoteMediaHandler->setContent($this->content);
+
                     return $this->remoteMediaHandler->getMetaTags($tagName, $params);
                 }
 
                 if ($field->value instanceof ImageValue) {
                     $this->ezImageHandler->setContent($this->content);
+
                     return $this->ezImageHandler->getMetaTags($tagName, $params);
                 }
 

@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Templating\Twig\Extension;
 
-use eZ\Publish\SPI\Variation\VariationHandler;
-use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
-use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
-use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value as RemoteImageValue;
-use Netgen\EzPlatformSiteApi\API\Values\Content;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
+use eZ\Publish\SPI\Variation\VariationHandler;
+use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value as RemoteImageValue;
+use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
 use Netgen\Bundle\SiteBundle\Helper\PathHelper;
 use Netgen\EzPlatformSiteApi\API\Exceptions\TranslationNotMatchedException;
 use Netgen\EzPlatformSiteApi\API\LoadService;
+use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Symfony\Component\Intl\Intl;
 use function mb_substr;
 use function ucwords;
@@ -80,7 +80,7 @@ class SiteRuntime
     {
         try {
             $content = $this->loadService->loadContent($contentId);
-        } catch (UnauthorizedException | NotFoundException | TranslationNotMatchedException $e) {
+        } catch (UnauthorizedException|NotFoundException|TranslationNotMatchedException $e) {
             return null;
         }
 
@@ -96,7 +96,7 @@ class SiteRuntime
     {
         try {
             $location = $this->loadService->loadLocation($locationId);
-        } catch (UnauthorizedException | NotFoundException | TranslationNotMatchedException $e) {
+        } catch (UnauthorizedException|NotFoundException|TranslationNotMatchedException $e) {
             return null;
         }
 

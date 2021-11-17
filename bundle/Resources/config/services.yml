@@ -214,17 +214,6 @@ services:
         tags:
             - { name: netgen_open_graph.meta_tag_handler, alias: ngsite/site_image }
 
-    ngsite.opengraph.handler.image:
-        class: Netgen\Bundle\SiteBundle\OpenGraph\Handler\Image
-        public: false
-        arguments:
-            - "@ezpublish.field_helper"
-            - "@ezpublish.translation_helper"
-            - "@netgen_open_graph.handler.field_type.image"
-            - "@netgen_remote_media.open_graph_handler"
-        tags:
-            - { name: netgen_open_graph.meta_tag_handler, alias: ngsite/image }
-
     ngsite.query_type.search:
         class: Netgen\Bundle\SiteBundle\QueryType\SearchQueryType
         public: false

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\DependencyInjection;
 
 use Netgen\Bundle\LayoutsBundle\NetgenLayoutsBundle;
-use Netgen\Bundle\RemoteMediaBundle\NetgenRemoteMediaBundle;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -35,10 +34,6 @@ class NetgenSiteExtension extends Extension implements PrependExtensionInterface
 
         if (in_array(NetgenLayoutsBundle::class, $activatedBundles, true)) {
             $loader->load('layouts/services.yml');
-        }
-
-        if (in_array(NetgenRemoteMediaBundle::class, $activatedBundles, true)) {
-            $loader->load('remote_media/services.yml');
         }
 
         if ($container->getParameter('kernel.debug')) {

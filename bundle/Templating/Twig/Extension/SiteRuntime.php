@@ -6,10 +6,15 @@ namespace Netgen\Bundle\SiteBundle\Templating\Twig\Extension;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
+use eZ\Publish\SPI\Variation\VariationHandler;
+use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value as RemoteImageValue;
+use Netgen\Bundle\RemoteMediaBundle\RemoteMedia\RemoteMediaProvider;
 use Netgen\Bundle\SiteBundle\Helper\PathHelper;
 use Netgen\EzPlatformSiteApi\API\Exceptions\TranslationNotMatchedException;
 use Netgen\EzPlatformSiteApi\API\LoadService;
+use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Symfony\Component\Intl\Intl;
 use function mb_substr;
 use function ucwords;
@@ -22,14 +27,22 @@ class SiteRuntime
 
     protected LoadService $loadService;
 
+    protected VariationHandler $imageVariationService;
+
+    protected RemoteMediaProvider $remoteMediaProvider;
+
     public function __construct(
         PathHelper $pathHelper,
         LocaleConverterInterface $localeConverter,
-        LoadService $loadService
+        LoadService $loadService,
+        VariationHandler $imageVariationService,
+        RemoteMediaProvider $remoteMediaProvider
     ) {
         $this->pathHelper = $pathHelper;
         $this->localeConverter = $localeConverter;
         $this->loadService = $loadService;
+        $this->imageVariationService = $imageVariationService;
+        $this->remoteMediaProvider = $remoteMediaProvider;
     }
 
     /**
@@ -88,5 +101,20 @@ class SiteRuntime
         }
 
         return $location->content->name;
+    }
+
+    public function getImageUrl(Content $content, string $fieldIdentifier, string $alias): ?string
+    {
+        $field = $content->getField($fieldIdentifier);
+
+        if ($field->value instanceof RemoteImageValue) {
+            return $this->remoteMediaProvider->buildVariation($field->value, $content->contentInfo->contentTypeIdentifier, $alias)->url;
+        }
+
+        if ($field->value instanceof ImageValue) {
+            return $this->imageVariationService->getVariation($field->innerField, $content->innerVersionInfo, $alias)->uri;
+        }
+
+        return '/';
     }
 }

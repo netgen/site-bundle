@@ -33,7 +33,7 @@ services:
             - "@ezpublish.locale.converter"
             - "@netgen.ezplatform_site.load_service"
             - "@ezpublish.fieldType.ezimage.variation_service"
-            - "@netgen_remote_media.provider"
+            - "@?netgen_remote_media.provider"
         tags:
             - { name: twig.runtime }
 

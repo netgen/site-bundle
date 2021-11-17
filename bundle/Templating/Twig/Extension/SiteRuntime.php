@@ -29,14 +29,14 @@ class SiteRuntime
 
     protected VariationHandler $imageVariationService;
 
-    protected RemoteMediaProvider $remoteMediaProvider;
+    protected ?RemoteMediaProvider $remoteMediaProvider;
 
     public function __construct(
         PathHelper $pathHelper,
         LocaleConverterInterface $localeConverter,
         LoadService $loadService,
         VariationHandler $imageVariationService,
-        RemoteMediaProvider $remoteMediaProvider
+        ?RemoteMediaProvider $remoteMediaProvider = null
     ) {
         $this->pathHelper = $pathHelper;
         $this->localeConverter = $localeConverter;
@@ -107,7 +107,7 @@ class SiteRuntime
     {
         $field = $content->getField($fieldIdentifier);
 
-        if ($field->value instanceof RemoteImageValue) {
+        if ($this->remoteMediaProvider !== null && $field->value instanceof RemoteImageValue) {
             return $this->remoteMediaProvider->buildVariation($field->value, $content->contentInfo->contentTypeIdentifier, $alias)->url;
         }
 

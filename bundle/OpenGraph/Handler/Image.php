@@ -24,13 +24,13 @@ final class Image extends Handler implements HandlerInterface, ContentAware
 {
     private ImageHandler $ezImageHandler;
 
-    private RemoteMediaHandler $remoteMediaHandler;
+    private ?RemoteMediaHandler $remoteMediaHandler;
 
     public function __construct(
         FieldHelper $fieldHelper,
         TranslationHelper $translationHelper,
         ImageHandler $ezImageHandler,
-        RemoteMediaHandler $remoteMediaHandler
+        ?RemoteMediaHandler $remoteMediaHandler = null
     ) {
         parent::__construct($fieldHelper, $translationHelper);
 
@@ -55,7 +55,7 @@ final class Image extends Handler implements HandlerInterface, ContentAware
             $params[0] = $fieldIdentifier;
 
             try {
-                if ($field->value instanceof RemoteImageValue) {
+                if ($this->remoteMediaHandler !== null && $field->value instanceof RemoteImageValue) {
                     $this->remoteMediaHandler->setContent($this->content);
 
                     return $this->remoteMediaHandler->getMetaTags($tagName, $params);

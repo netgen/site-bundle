@@ -221,7 +221,7 @@ services:
             - "@ezpublish.field_helper"
             - "@ezpublish.translation_helper"
             - "@netgen_open_graph.handler.field_type.image"
-            - "@netgen_remote_media.open_graph_handler"
+            - "@?netgen_remote_media.open_graph_handler"
         tags:
             - { name: netgen_open_graph.meta_tag_handler, alias: ngsite/image }
 

@@ -10,17 +10,15 @@ use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\Core\Helper\FieldHelper;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use Netgen\Bundle\OpenGraphBundle\Exception\FieldEmptyException;
-use Netgen\Bundle\OpenGraphBundle\Handler\ContentAware;
 use Netgen\Bundle\OpenGraphBundle\Handler\FieldType\Handler;
 use Netgen\Bundle\OpenGraphBundle\Handler\FieldType\Image as ImageHandler;
-use Netgen\Bundle\OpenGraphBundle\Handler\HandlerInterface;
 use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value as RemoteImageValue;
 use Netgen\Bundle\RemoteMediaBundle\OpenGraph\Handler\RemoteMediaHandler;
 use function implode;
 use function is_array;
 use function sprintf;
 
-final class Image extends Handler implements HandlerInterface, ContentAware
+final class Image extends Handler
 {
     private ImageHandler $ezImageHandler;
 

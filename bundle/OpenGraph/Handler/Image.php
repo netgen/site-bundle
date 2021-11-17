@@ -48,7 +48,6 @@ final class Image extends Handler implements HandlerInterface, ContentAware
         }
 
         $fieldIdentifiers = is_array($params[0]) ? $params[0] : [$params[0]];
-        $fieldValue = $this->getFallbackValue($tagName, $params);
 
         foreach ($fieldIdentifiers as $fieldIdentifier) {
             $field = $this->validateField($fieldIdentifier);

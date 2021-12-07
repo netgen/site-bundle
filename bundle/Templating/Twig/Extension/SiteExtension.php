@@ -33,6 +33,10 @@ class SiteExtension extends AbstractExtension
                 'ngsite_image_url',
                 [SiteRuntime::class, 'getImageUrl'],
             ),
+            new TwigFunction(
+                'ngsite_reading_time',
+                [SiteRuntime::class, 'calculateReadingTime'],
+            ),
         ];
     }
 }

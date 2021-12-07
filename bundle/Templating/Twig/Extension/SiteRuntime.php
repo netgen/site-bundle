@@ -21,6 +21,8 @@ use function ucwords;
 
 class SiteRuntime
 {
+    private const WORDS_PER_MINUTE = 230;
+
     protected PathHelper $pathHelper;
 
     protected LocaleConverterInterface $localeConverter;
@@ -116,5 +118,13 @@ class SiteRuntime
         }
 
         return '/';
+    }
+
+    public function calculateReadingTime(string $text): int
+    {
+        $wordCount = str_word_count($text);
+        $readingTime = floor($wordCount / self::WORDS_PER_MINUTE);
+
+        return $readingTime === false || $readingTime < 1 ? 1 : (int) $readingTime;
     }
 }

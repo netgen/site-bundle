@@ -89,8 +89,13 @@ class PathHelper
 
             $disableItemUrl = $useAllContentTypes && in_array($location->contentInfo->contentTypeIdentifier, $excludedContentTypes, true);
 
+            $itemName = $location->contentInfo->name;
+            if ($location->content->hasField('breadcrumb_title') && !$location->content->getField('breadcrumb_title')->isEmpty()) {
+                $itemName = $location->content->getField('breadcrumb_title')->value->text;
+            }
+
             $pathArray[] = [
-                'text' => $location->contentInfo->name,
+                'text' => $itemName,
                 'url' => !$disableItemUrl && $location->id !== (int) $locationId ?
                     $this->router->generate(
                         $location,

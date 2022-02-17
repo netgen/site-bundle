@@ -2,7 +2,7 @@
     "name": "netgen/site-bundle",
     "description": "Netgen Site Bundle is an Ibexa Platform bundle that implements common features that are used by Netgen to implement websites",
     "license": "GPL-2.0-only",
-    "type": "ezplatform-bundle",
+    "type": "ibexa-bundle",
     "keywords": [
         "ibexa",
         "site-bundle",

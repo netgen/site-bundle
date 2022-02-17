@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Command;
 
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\SPI\Variation\VariationHandler;
+use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
+use Ibexa\Contracts\Core\Variation\VariationHandler;
 use Generator;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Console\Command\Command;

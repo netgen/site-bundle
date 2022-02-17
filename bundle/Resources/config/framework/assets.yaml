@@ -1,4 +1,4 @@
 assets:
     packages:
-        ezfile:
-            base_path: '%ngsite.ezfile_storage_path%'
+        ibexa_file:
+            base_path: '%ngsite.ibexa_file_storage_path%'

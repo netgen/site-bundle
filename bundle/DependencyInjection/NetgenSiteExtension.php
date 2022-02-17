@@ -43,15 +43,15 @@ class NetgenSiteExtension extends Extension implements PrependExtensionInterface
 
     public function prepend(ContainerBuilder $container): void
     {
-        if (!$container->hasParameter('ngsite.ezfile_storage_path')) {
-            $container->setParameter('ngsite.ezfile_storage_path', '/var/site/storage/original');
+        if (!$container->hasParameter('ngsite.ibexa_file_storage_path')) {
+            $container->setParameter('ngsite.ibexa_file_storage_path', '/var/site/storage/original');
         }
 
         $activatedBundles = $container->getParameter('kernel.bundles');
 
         $prependConfigs = [
-            'ezplatform.yaml' => 'ezpublish',
-            'ezrichtext.yaml' => 'ezrichtext',
+            'ibexa.yaml' => 'ibexa',
+            'ezrichtext.yaml' => 'ibexa_fieldtype_richtext',
             'framework/twig.yaml' => 'twig',
             'framework/assets.yaml' => 'framework',
         ];

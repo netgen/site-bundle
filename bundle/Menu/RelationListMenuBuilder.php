@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Menu;
 
-use eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue;
+use Ibexa\Core\FieldType\RelationList\Value as RelationListValue;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 use Netgen\Bundle\EzPlatformSiteApiBundle\NamedObject\Provider;
@@ -48,7 +48,7 @@ class RelationListMenuBuilder
         $menu = $this->factory->createItem('root');
 
         $menu->setAttribute('location-id', $content->mainLocationId);
-        $menu->setExtra('ezlocation', $content->mainLocation);
+        $menu->setExtra('ibexa_location', $content->mainLocation);
 
         if (!$content->hasField($fieldIdentifier)) {
             return $menu;
@@ -74,7 +74,7 @@ class RelationListMenuBuilder
                 continue;
             }
 
-            $menu->addChild($this->factory->createItem('', ['ezlocation' => $destinationContent->mainLocation]));
+            $menu->addChild($this->factory->createItem('', ['ibexa_location' => $destinationContent->mainLocation]));
         }
 
         return $menu;

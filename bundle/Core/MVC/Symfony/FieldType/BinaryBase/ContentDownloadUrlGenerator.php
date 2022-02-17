@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Core\MVC\Symfony\FieldType\BinaryBase;
 
-use eZ\Publish\SPI\FieldType\BinaryBase\PathGenerator;
-use eZ\Publish\SPI\FieldType\BinaryBase\RouteAwarePathGenerator;
-use eZ\Publish\SPI\Persistence\Content\Field;
-use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use Ibexa\Contracts\Core\FieldType\BinaryBase\PathGenerator;
+use Ibexa\Contracts\Core\FieldType\BinaryBase\RouteAwarePathGenerator;
+use Ibexa\Contracts\Core\Persistence\Content\Field;
+use Ibexa\Contracts\Core\Persistence\Content\VersionInfo;
 use Symfony\Component\Routing\RouterInterface;
 
 /**

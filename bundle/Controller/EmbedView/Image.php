@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Controller\EmbedView;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
+use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException;
 use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
 use Netgen\Bundle\SiteBundle\Controller\Controller;
 use Netgen\EzPlatformSiteApi\API\Site;

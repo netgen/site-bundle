@@ -6,16 +6,16 @@ namespace Netgen\Bundle\SiteBundle\RichText\Converter;
 
 use DOMDocument;
 use DOMXPath;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
-use eZ\Publish\API\Repository\Exceptions\UnauthorizedException as APIUnauthorizedException;
-use EzSystems\EzPlatformRichText\eZ\RichText\Converter;
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException as APINotFoundException;
+use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException as APIUnauthorizedException;
+use Ibexa\Contracts\FieldTypeRichText\RichText\Converter;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function preg_match;
 
-class EzLinkDirectDownload implements Converter
+class LinkDirectDownload implements Converter
 {
     protected LoadService $loadService;
 

@@ -4,6 +4,6 @@ services:
         lazy: true
         arguments:
             - "@twig"
-            - "@ezpublish.config.resolver"
+            - "@ibexa.config.resolver"
         tags:
             - { name: pagerfanta.view, alias: ngsite }

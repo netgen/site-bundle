@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory;
 
-use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use Ibexa\Contracts\Core\Repository\Values\Content\LocationQuery;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
+use Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchHit;
 use Knp\Menu\ItemInterface;
 use Netgen\EzPlatformSiteApi\API\FilterService;
 use Netgen\EzPlatformSiteApi\API\LoadService;
@@ -84,7 +84,7 @@ class ChildrenBuilder
         $query->sortClauses = $parentContent->mainLocation->innerLocation->getSortClauses();
 
         if (!$content->getField('limit')->isEmpty()) {
-            /** @var \eZ\Publish\Core\FieldType\Integer\Value $limit */
+            /** @var \Ibexa\Core\FieldType\Integer\Value $limit */
             $limit = $content->getField('limit')->value;
             if ($limit->value > 0) {
                 $query->limit = $limit->value;
@@ -104,7 +104,7 @@ class ChildrenBuilder
         }
 
         foreach ($childLocations as $location) {
-            $childItem = $item->addChild('', ['ezlocation' => $location]);
+            $childItem = $item->addChild('', ['ibexa_location' => $location]);
             if ($currentDepth <= $maxDepth) {
                 $this->buildChildrenFromRelatedParentNode($childItem, $content, $location->content, $currentDepth + 1);
             }
@@ -132,7 +132,7 @@ class ChildrenBuilder
         }
 
         foreach ($childLocations as $location) {
-            $item->addChild('', ['ezlocation' => $location]);
+            $item->addChild('', ['ibexa_location' => $location]);
         }
     }
 }

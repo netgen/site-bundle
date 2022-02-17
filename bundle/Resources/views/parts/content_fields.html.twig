@@ -1,14 +1,14 @@
-{% extends '@EzPublishCore/content_fields.html.twig' %}
+{% extends '@IbexaCore/content_fields.html.twig' %}
 
 {% block ezimage_field %}
 {% apply spaceless %}
-    {% if not ez_field_is_empty(content, field) %}
+    {% if not ibexa_field_is_empty(content, field) %}
         {% set link_href = parameters.link_href|default('') %}
         {% set link_target = parameters.link_target|default('') %}
         {% set use_image_size = parameters.use_image_size|default(false) %}
-        {% set image_alias = ez_image_alias(field, versionInfo, parameters.alias|default('original')) %}
+        {% set image_alias = ibexa_image_alias(field, versionInfo, parameters.alias|default('original')) %}
         {% set alt_text = parameters.alt_text|default(field.value.alternativeText ?: content.name) %}
-        {% set lazy_loading = ezplatform.configResolver.getParameter('lazy_loading.enabled', 'ngsite') %}
+        {% set lazy_loading = ibexa.configResolver.getParameter('lazy_loading.enabled', 'ngsite') %}
         {% if parameters.lazy_loading is defined %}
             {% set lazy_loading = parameters.lazy_loading %}
         {% endif %}
@@ -25,7 +25,7 @@
 
         <img
             {% if lazy_loading %}
-                {% set lazy_image_alias = ez_image_alias(field, versionInfo, ezplatform.configResolver.getParameter('lazy_loading.initial_image_alias', 'ngsite')) %}
+                {% set lazy_image_alias = ibexa_image_alias(field, versionInfo, ibexa.configResolver.getParameter('lazy_loading.initial_image_alias', 'ngsite')) %}
                 src="{% if lazy_image_alias %}{{ asset(lazy_image_alias.uri) }}{% else %}//:0{% endif %}"
                 data-src="{% if image_alias %}{{ asset(image_alias.uri) }}{% else %}//:0{% endif %}"
             {% else %}
@@ -70,10 +70,10 @@
 
 {% block ezbinaryfile_field %}
 {% apply spaceless %}
-    {% if not ez_field_is_empty(content, field) %}
+    {% if not ibexa_field_is_empty(content, field) %}
         <a href="{{ path('ngsite_download', { contentId: contentInfo.id, fieldId: field.id }) }}" {{ block('field_attributes') }}>
             {{ field.value.fileName }}
-        </a>&nbsp;({{ field.value.fileSize|ez_file_size(1) }})
+        </a>&nbsp;({{ field.value.fileSize|ibexa_file_size(1) }})
     {% endif %}
 {% endapply %}
 {% endblock %}

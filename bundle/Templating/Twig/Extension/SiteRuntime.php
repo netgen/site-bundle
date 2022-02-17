@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Templating\Twig\Extension;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
-use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
+use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException;
+use Ibexa\Core\MVC\Symfony\Locale\LocaleConverterInterface;
 use Netgen\Bundle\SiteBundle\Helper\PathHelper;
 use Netgen\EzPlatformSiteApi\API\Exceptions\TranslationNotMatchedException;
 use Netgen\EzPlatformSiteApi\API\LoadService;

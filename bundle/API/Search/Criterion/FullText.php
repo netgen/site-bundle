@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\API\Search\Criterion;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText as BaseFullText;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion\FullText as BaseFullText;
 use Netgen\EzPlatformSearchExtra\API\Values\Content\Query\Criterion\FulltextSpellcheck;
 use Netgen\EzPlatformSearchExtra\API\Values\Content\SpellcheckQuery;
 

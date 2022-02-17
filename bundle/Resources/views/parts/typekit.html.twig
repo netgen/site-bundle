@@ -1,5 +1,5 @@
-{% if ezplatform.configResolver.hasParameter('site_settings.typekit_code', 'ngsite') %}
-    {% set typekit_code = ezplatform.configResolver.getParameter('site_settings.typekit_code', 'ngsite') %}
+{% if ibexa.configResolver.hasParameter('site_settings.typekit_code', 'ngsite') %}
+    {% set typekit_code = ibexa.configResolver.getParameter('site_settings.typekit_code', 'ngsite') %}
 
     {% if typekit_code is not empty %}
         <link rel="stylesheet" href="https://use.typekit.net/{{ typekit_code|raw|escape('css') }}.css">

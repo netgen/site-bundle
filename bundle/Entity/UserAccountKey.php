@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Entity;
 
-class EzUserAccountKey
+class UserAccountKey
 {
     /**
      * @var int|string

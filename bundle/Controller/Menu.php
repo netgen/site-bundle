@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Controller;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use EzSystems\PlatformHttpCacheBundle\Handler\TagHandler;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
+use Ibexa\HttpCache\Handler\TagHandler;
 use Knp\Menu\Provider\MenuProviderInterface;
 use Knp\Menu\Renderer\RendererProviderInterface;
 use Symfony\Component\HttpFoundation\Request;

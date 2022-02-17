@@ -39,26 +39,26 @@ class LocationFactory implements FactoryInterface
     {
         $menuItem = (new MenuItem($name, $this))->setExtra('translation_domain', false);
 
-        if (!isset($options['ezlocation']) || !$options['ezlocation'] instanceof Location) {
+        if (!isset($options['ibexa_location']) || !$options['ibexa_location'] instanceof Location) {
             return $menuItem;
         }
 
-        $locationId = $options['ezlocation']->id;
+        $locationId = $options['ibexa_location']->id;
 
         $menuItem
-            ->setLabel($options['ezlocation']->content->name)
-            ->setExtra('ezlocation', $options['ezlocation'])
+            ->setLabel($options['ibexa_location']->content->name)
+            ->setExtra('ibexa_location', $options['ibexa_location'])
             // Used to preserve the reference to the original menu item location
-            // (e.g. in case of menu item or shortcut where ezlocation will be overwritten
+            // (e.g. in case of menu item or shortcut where ibexa_location will be overwritten
             // by the location of related content)
-            ->setExtra('menu_item_location', $options['ezlocation']);
+            ->setExtra('menu_item_location', $options['ibexa_location']);
 
-        $extension = $this->getExtension($options['ezlocation']);
-        $extension->buildItem($menuItem, $options['ezlocation']);
+        $extension = $this->getExtension($options['ibexa_location']);
+        $extension->buildItem($menuItem, $options['ibexa_location']);
 
         $menuItem->setName(md5(($menuItem->getUri() ?? '') . '-' . $locationId));
 
-        $event = new LocationMenuItemEvent($menuItem, $menuItem->getExtra('ezlocation'));
+        $event = new LocationMenuItemEvent($menuItem, $menuItem->getExtra('ibexa_location'));
         $this->eventDispatcher->dispatch($event, SiteEvents::MENU_LOCATION_ITEM);
 
         return $menuItem;

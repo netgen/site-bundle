@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity repository-class="Netgen\Bundle\SiteBundle\Entity\Repository\EzUserAccountKeyRepository" name="Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey" table="ezuser_accountkey">
+    <entity repository-class="Netgen\Bundle\SiteBundle\Entity\Repository\UserAccountKeyRepository" name="Netgen\Bundle\SiteBundle\Entity\UserAccountKey" table="ezuser_accountkey">
         <indexes>
             <index name="hash_key" columns="hash_key"/>
         </indexes>

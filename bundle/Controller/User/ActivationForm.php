@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Controller\User;
 
-use eZ\Publish\API\Repository\UserService;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Ibexa\Contracts\Core\Repository\UserService;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Netgen\Bundle\SiteBundle\Controller\Controller;
 use Netgen\Bundle\SiteBundle\Event\SiteEvents;
 use Netgen\Bundle\SiteBundle\Event\User as UserEvents;

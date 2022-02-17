@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\DependencyInjection\Compiler;
 
+use Ibexa\Core\MVC\Symfony\FieldType\BinaryBase\ContentDownloadUrlGenerator as BaseContentDownloadUrlGenerator;
 use Netgen\Bundle\SiteBundle\Core\MVC\Symfony\FieldType\BinaryBase\ContentDownloadUrlGenerator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -16,9 +17,9 @@ class ContentDownloadUrlGeneratorPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container): void
     {
-        if ($container->has('ezpublish.fieldType.ezbinarybase.download_url_generator')) {
+        if ($container->has(BaseContentDownloadUrlGenerator::class)) {
             $container
-                ->findDefinition('ezpublish.fieldType.ezbinarybase.download_url_generator')
+                ->findDefinition(BaseContentDownloadUrlGenerator::class)
                 ->setClass(ContentDownloadUrlGenerator::class);
         }
     }

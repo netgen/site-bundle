@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Imagine;
 
-use eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver as BaseIORepositoryResolver;
+use Ibexa\Bundle\Core\Imagine\IORepositoryResolver as BaseIORepositoryResolver;
 
 class IORepositoryResolver extends BaseIORepositoryResolver
 {

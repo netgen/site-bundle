@@ -1,7 +1,7 @@
 custom_tags:
     video:
         template: '@NetgenSite/field_type/ezrichtext/custom_tag/video.html.twig'
-        icon: '/bundles/ezplatformadminui/img/ez-icons.svg#video'
+        icon: '/bundles/ibexaadminui/img/ibexa-icons.svg#video'
         is_inline: false
         attributes:
             video_service:
@@ -19,7 +19,7 @@ custom_tags:
                 choices: [fit, fill]
     factbox:
         template: '@NetgenSite/field_type/ezrichtext/custom_tag/factbox.html.twig'
-        icon: '/bundles/ezplatformadminui/img/ez-icons.svg#information'
+        icon: '/bundles/ibexaadminui/img/ibexa-icons.svg#information'
         is_inline: false
         attributes:
             title:
@@ -27,7 +27,7 @@ custom_tags:
                 required: false
     quote:
         template: '@NetgenSite/field_type/ezrichtext/custom_tag/quote.html.twig'
-        icon: '/bundles/ezplatformadminui/img/ez-icons.svg#quote'
+        icon: '/bundles/ibexaadminui/img/ibexa-icons.svg#quote'
         is_inline: false
         attributes:
             author:

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory;
 
-use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
+use Ibexa\Core\FieldType\Url\Value as UrlValue;
+use Ibexa\Core\MVC\Symfony\SiteAccess\URILexer;
 use Knp\Menu\ItemInterface;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\EzPlatformSiteApi\API\Values\Content;
@@ -107,7 +107,7 @@ class ShortcutExtension implements ExtensionInterface
     {
         $contentUri = $this->urlGenerator->generate('', [RouteObjectInterface::ROUTE_OBJECT => $relatedContent]);
         $item->setUri($contentUri . $content->getField('internal_url_suffix')->value->text)
-            ->setExtra('ezlocation', $relatedContent->mainLocation)
+            ->setExtra('ibexa_location', $relatedContent->mainLocation)
             ->setAttribute('id', 'menu-item-location-id-' . $relatedContent->mainLocationId)
             ->setLinkAttribute('title', $item->getLabel());
 

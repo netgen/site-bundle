@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\EventListener;
 
-use eZ\Publish\Core\MVC\Symfony\View\Event\FilterViewParametersEvent;
-use eZ\Publish\Core\MVC\Symfony\View\ViewEvents;
+use Ibexa\Core\MVC\Symfony\View\Event\FilterViewParametersEvent;
+use Ibexa\Core\MVC\Symfony\View\ViewEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class AddViewTypeEventListener implements EventSubscriberInterface

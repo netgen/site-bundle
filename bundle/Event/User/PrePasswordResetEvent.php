@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Event\User;
 
-use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
+use Ibexa\Contracts\Core\Repository\Values\User\User;
+use Ibexa\Contracts\Core\Repository\Values\User\UserUpdateStruct;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class PrePasswordResetEvent extends Event

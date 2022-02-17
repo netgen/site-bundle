@@ -3,7 +3,7 @@ services:
         class: Netgen\Bundle\SiteBundle\Templating\GlobalVariable
         arguments:
             - "@netgen.ezplatform_site.named_object_provider"
-            - "@ezpublish.api.repository"
+            - "@ibexa.api.repository"
             - "@netgen.ezplatform_site.load_service"
 
     ngsite.templating.twig.extension.site:
@@ -15,7 +15,7 @@ services:
         class: Netgen\Bundle\SiteBundle\Templating\Twig\Extension\SiteRuntime
         arguments:
             - "@ngsite.helper.path_helper"
-            - "@ezpublish.locale.converter"
+            - "@Ibexa\\Core\\MVC\\Symfony\\Locale\\LocaleConverterInterface"
             - "@netgen.ezplatform_site.load_service"
         tags:
             - { name: twig.runtime }

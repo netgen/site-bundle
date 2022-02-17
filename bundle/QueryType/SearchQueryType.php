@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\QueryType;
 
-use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\Core\QueryType\OptionsResolverBasedQueryType;
+use Ibexa\Contracts\Core\Repository\Values\Content\LocationQuery;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
+use Ibexa\Core\QueryType\OptionsResolverBasedQueryType;
 use Netgen\Bundle\SiteBundle\API\Search\Criterion\FullText;
 use Netgen\EzPlatformSiteApi\API\Site;
 use Symfony\Component\OptionsResolver\OptionsResolver;

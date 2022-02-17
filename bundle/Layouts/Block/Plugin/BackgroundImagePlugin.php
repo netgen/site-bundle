@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Layouts\Block\Plugin;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
+use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException;
 use Netgen\EzPlatformSiteApi\API\Exceptions\TranslationNotMatchedException;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\Layouts\API\Values\Block\Block;
 use Netgen\Layouts\Block\BlockDefinition\ContainerDefinitionHandlerInterface;
 use Netgen\Layouts\Block\BlockDefinition\Handler\Plugin;
 use Netgen\Layouts\Block\DynamicParameters;
-use Netgen\Layouts\Ez\Parameters\ParameterType as EzParameterType;
+use Netgen\Layouts\Ibexa\Parameters\ParameterType as IbexaParameterType;
 use Netgen\Layouts\Parameters\ParameterBuilderInterface;
 use Netgen\Layouts\Parameters\ParameterType;
 use Netgen\Layouts\Standard\Block\BlockDefinition\Handler\ListHandler;
@@ -47,7 +47,7 @@ class BackgroundImagePlugin extends Plugin
 
         $builder->get('background_image:enabled')->add(
             'background_image:image',
-            EzParameterType\ContentType::class,
+            IbexaParameterType\ContentType::class,
             [
                 'allow_invalid' => true,
                 'label' => 'block.plugin.background_image.image',

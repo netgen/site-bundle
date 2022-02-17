@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Controller;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\Core\QueryType\QueryTypeRegistry;
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
+use Ibexa\Core\QueryType\QueryTypeRegistry;
 use Netgen\Bundle\SiteBundle\Core\Search\SuggestionResolver;
 use Netgen\EzPlatformSiteApi\API\Site;
 use Netgen\EzPlatformSiteApi\Core\Site\Pagination\Pagerfanta\FindAdapter;

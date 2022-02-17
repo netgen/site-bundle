@@ -1,10 +1,10 @@
 {% include '@NetgenSite/parts/google_maps_init.html.twig' %}
 
 {% set container_id = container_id|default(0) %}
-{% set latitude = latitude|default(ezplatform.configResolver.parameter('google_maps.latitude', 'ngsite')) %}
-{% set longitude = longitude|default(ezplatform.configResolver.parameter('google_maps.longitude', 'ngsite')) %}
-{% set zoom = zoom|default(ezplatform.configResolver.parameter('google_maps.zoom', 'ngsite')) %}
-{% set map_type = map_type|default(ezplatform.configResolver.parameter('google_maps.map_type', 'ngsite')) %}
+{% set latitude = latitude|default(ibexa.configResolver.parameter('google_maps.latitude', 'ngsite')) %}
+{% set longitude = longitude|default(ibexa.configResolver.parameter('google_maps.longitude', 'ngsite')) %}
+{% set zoom = zoom|default(ibexa.configResolver.parameter('google_maps.zoom', 'ngsite')) %}
+{% set map_type = map_type|default(ibexa.configResolver.parameter('google_maps.map_type', 'ngsite')) %}
 
 <script type="text/javascript">
     google.maps.event.addDomListener(window, 'load', function(){

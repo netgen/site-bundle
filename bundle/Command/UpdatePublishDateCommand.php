@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Command;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\Core\Helper\FieldHelper;
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
+use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
+use Ibexa\Contracts\Core\Repository\Values\ContentType\FieldDefinition;
+use Ibexa\Core\Helper\FieldHelper;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -124,10 +124,10 @@ class UpdatePublishDateCommand extends Command
 
         while ($searchHitCount > 0) {
             foreach ($searchResult->searchHits as $hit) {
-                /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
+                /** @var \Ibexa\Contracts\Core\Repository\Values\Content\Content $content */
                 $content = $hit->valueObject;
 
-                /** @var \eZ\Publish\Core\FieldType\DateAndTime\Value|\eZ\Publish\Core\FieldType\Date\Value $dateFieldValue */
+                /** @var \Ibexa\Core\FieldType\DateAndTime\Value|\Ibexa\Core\FieldType\Date\Value $dateFieldValue */
                 $dateFieldValue = $content->getField(
                     $fieldDefIdentifier,
                     $input->getOption('use-main-translation') ?

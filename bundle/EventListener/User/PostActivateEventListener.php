@@ -29,7 +29,7 @@ class PostActivateEventListener extends UserEventListener implements EventSubscr
     {
         $user = $event->getUser();
 
-        $this->ezUserAccountKeyRepository->removeByUserId($user->id);
+        $this->userAccountKeyRepository->removeByUserId($user->id);
         $this->ngUserSettingRepository->activateUser($user->id);
 
         $this->mailHelper

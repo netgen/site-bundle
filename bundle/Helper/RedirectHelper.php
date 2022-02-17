@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Helper;
 
-use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
+use Ibexa\Core\FieldType\Url\Value as UrlValue;
 use Netgen\EzPlatformSiteApi\API\Site;
 use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Netgen\EzPlatformSiteApi\API\Values\Location;

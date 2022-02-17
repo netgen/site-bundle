@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Topic;
 
-use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Ibexa\Contracts\Core\Repository\Values\Content\LocationQuery;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Netgen\EzPlatformSiteApi\API\FindService;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\TagsBundle\API\Repository\Values\Content\Query\Criterion\TagId;

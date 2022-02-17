@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Pagerfanta\View;
 
 use Closure;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Pagerfanta\PagerfantaInterface;
 use Pagerfanta\View\ViewInterface;
 use Twig\Environment;

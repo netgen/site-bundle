@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Layouts\Query;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
-use eZ\Publish\API\Repository\LocationService;
-use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
-use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
-use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
+use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException;
+use Ibexa\Contracts\Core\Repository\LocationService;
+use Ibexa\Contracts\Core\Repository\Values\Content\Content;
+use Ibexa\Contracts\Core\Repository\Values\Content\Location;
+use Ibexa\Contracts\Core\Repository\Values\Content\LocationQuery;
+use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
+use Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchHit;
+use Ibexa\Contracts\Core\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
+use Ibexa\Contracts\Core\Persistence\Content\Section\Handler as SectionHandler;
 use Netgen\EzPlatformSiteApi\API\FindService;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\Layouts\API\Values\Collection\Query;
 use Netgen\Layouts\Collection\QueryType\QueryTypeHandlerInterface;
-use Netgen\Layouts\Ez\Collection\QueryType\Handler\Traits;
-use Netgen\Layouts\Ez\ContentProvider\ContentProviderInterface;
-use Netgen\Layouts\Ez\Parameters\ParameterType as EzParameterType;
+use Netgen\Layouts\Ibexa\Collection\QueryType\Handler\Traits;
+use Netgen\Layouts\Ibexa\ContentProvider\ContentProviderInterface;
+use Netgen\Layouts\Ibexa\Parameters\ParameterType as IbexaParameterType;
 use Netgen\Layouts\Parameters\ParameterBuilderInterface;
 use Netgen\Layouts\Parameters\ParameterType;
 use Netgen\TagsBundle\API\Repository\Values\Content\Query\Criterion\TagId;
@@ -74,7 +74,7 @@ class ContentByTopicHandler implements QueryTypeHandlerInterface
 
         $builder->get('use_topic_from_current_content')->add(
             'topic_content_id',
-            EzParameterType\ContentType::class,
+            IbexaParameterType\ContentType::class,
             [
                 'allow_invalid' => true,
             ],

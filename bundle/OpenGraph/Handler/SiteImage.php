@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\OpenGraph\Handler;
 
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
+use Ibexa\Core\Base\Exceptions\InvalidArgumentException;
+use Ibexa\Core\FieldType\Image\Value as ImageValue;
 use Netgen\Bundle\EzPlatformSiteApiBundle\NamedObject\Provider;
 use Netgen\Bundle\OpenGraphBundle\Handler\HandlerInterface;
 use Netgen\Bundle\OpenGraphBundle\MetaTag\Item;

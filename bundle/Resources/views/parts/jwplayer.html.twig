@@ -1,10 +1,10 @@
-{% if ezplatform.configResolver.hasParameter('site_settings.jwplayer_id', 'ngsite') %}
-    {% set jwplayer_id = ezplatform.configResolver.getParameter('site_settings.jwplayer_id', 'ngsite') %}
+{% if ibexa.configResolver.hasParameter('site_settings.jwplayer_id', 'ngsite') %}
+    {% set jwplayer_id = ibexa.configResolver.getParameter('site_settings.jwplayer_id', 'ngsite') %}
     {% if jwplayer_id is not empty %}
         <script type="text/javascript" src="https://content.jwplatform.com/libraries/{{ jwplayer_id|raw|escape('js') }}.js"></script>
 
-        {% if ezplatform.configResolver.hasParameter('site_settings.jwplayer_key', 'ngsite') %}
-            {% set jwplayer_key = ezplatform.configResolver.getParameter('site_settings.jwplayer_key', 'ngsite') %}
+        {% if ibexa.configResolver.hasParameter('site_settings.jwplayer_key', 'ngsite') %}
+            {% set jwplayer_key = ibexa.configResolver.getParameter('site_settings.jwplayer_key', 'ngsite') %}
             {% if jwplayer_key is not empty %}
                 <script type="text/javascript">jwplayer.key="{{ jwplayer_key|raw|escape('js') }}";</script>
             {% endif %}

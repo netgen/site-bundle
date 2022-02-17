@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\EventListener\User;
 
-use eZ\Publish\API\Repository\Values\User\User;
+use Ibexa\Contracts\Core\Repository\Values\User\User;
 use Netgen\Bundle\SiteBundle\Event\SiteEvents;
 use Netgen\Bundle\SiteBundle\Event\User\ActivationRequestEvent;
 use Netgen\Bundle\SiteBundle\EventListener\UserEventListener;
@@ -67,7 +67,7 @@ class ActivationRequestEventListener extends UserEventListener implements EventS
             return;
         }
 
-        $accountKey = $this->ezUserAccountKeyRepository->create($user->id);
+        $accountKey = $this->userAccountKeyRepository->create($user->id);
 
         $this->mailHelper
             ->sendMail(

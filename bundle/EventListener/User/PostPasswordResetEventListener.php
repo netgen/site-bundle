@@ -39,6 +39,6 @@ class PostPasswordResetEventListener extends UserEventListener implements EventS
                 ],
             );
 
-        $this->ezUserAccountKeyRepository->removeByUserId($user->id);
+        $this->userAccountKeyRepository->removeByUserId($user->id);
     }
 }

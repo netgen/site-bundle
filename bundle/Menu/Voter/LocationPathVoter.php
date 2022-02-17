@@ -44,13 +44,13 @@ class LocationPathVoter implements VoterInterface
             return null;
         }
 
-        if (!$locationView->getSiteLocation() instanceof Location || !$item->getExtra('ezlocation') instanceof Location) {
+        if (!$locationView->getSiteLocation() instanceof Location || !$item->getExtra('ibexa_location') instanceof Location) {
             return null;
         }
 
         $locationPath = array_map('intval', $locationView->getSiteLocation()->path);
 
-        if (!in_array($item->getExtra('ezlocation')->id, $locationPath, true)) {
+        if (!in_array($item->getExtra('ibexa_location')->id, $locationPath, true)) {
             return null;
         }
 

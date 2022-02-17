@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Controller\User;
 
-use eZ\Publish\API\Repository\ContentTypeService;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\UserService;
-use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
+use Ibexa\Contracts\Core\Repository\ContentTypeService;
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
+use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\UserService;
+use Ibexa\Contracts\Core\Repository\Values\User\User;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
+use Ibexa\Core\MVC\Symfony\Security\Authorization\Attribute;
 use Netgen\Bundle\EzFormsBundle\Form\DataWrapper;
 use Netgen\Bundle\EzFormsBundle\Form\Type\CreateUserType;
 use Netgen\Bundle\SiteBundle\Controller\Controller;
@@ -135,7 +135,7 @@ class Register extends Controller
             break;
         }
 
-        /** @var \eZ\Publish\API\Repository\Values\User\User $newUser */
+        /** @var \Ibexa\Contracts\Core\Repository\Values\User\User $newUser */
         $newUser = $this->repository->sudo(
             static function (Repository $repository) use ($data, $userGroupId): User {
                 $userGroup = $repository->getUserService()->loadUserGroup($userGroupId);

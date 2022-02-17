@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Helper;
 
-use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

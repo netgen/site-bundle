@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory;
 
-use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
+use Ibexa\Core\FieldType\Url\Value as UrlValue;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
+use Ibexa\Core\MVC\Symfony\SiteAccess\URILexer;
 use Knp\Menu\ItemInterface;
 use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
@@ -114,7 +114,7 @@ class MenuItemExtension implements ExtensionInterface
     {
         $item
             ->setUri($this->urlGenerator->generate('', [RouteObjectInterface::ROUTE_OBJECT => $relatedContent]))
-            ->setExtra('ezlocation', $relatedContent->mainLocation)
+            ->setExtra('ibexa_location', $relatedContent->mainLocation)
             ->setAttribute('id', 'menu-item-location-id-' . $relatedContent->mainLocationId)
             ->setLinkAttribute('title', $item->getLabel());
 

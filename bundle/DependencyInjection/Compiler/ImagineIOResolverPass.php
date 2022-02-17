@@ -15,9 +15,9 @@ class ImagineIOResolverPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container): void
     {
-        if ($container->has('ezpublish.image_alias.imagine.cache_resolver')) {
+        if ($container->has('ibexa.image_alias.imagine.cache_resolver')) {
             $container
-                ->findDefinition('ezpublish.image_alias.imagine.cache_resolver')
+                ->findDefinition('ibexa.image_alias.imagine.cache_resolver')
                 ->setClass(IORepositoryResolver::class);
         }
     }

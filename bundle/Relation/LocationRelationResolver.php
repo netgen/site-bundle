@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Relation;
 
-use eZ\Publish\Core\FieldType\RelationList\Value as RelationList;
+use Ibexa\Core\FieldType\RelationList\Value as RelationList;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Psr\Log\LoggerInterface;

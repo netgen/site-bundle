@@ -44,7 +44,7 @@ services:
         arguments:
             - "@router"
             - "@request_stack"
-            - "@ezpublish.config.resolver"
+            - "@ibexa.config.resolver"
             - "@ngsite.menu.factory.location.extension.children_builder"
             - "@?logger"
         tags:

@@ -43,7 +43,7 @@ class PostRegisterEventListener extends UserEventListener implements EventSubscr
             return;
         }
 
-        $accountKey = $this->ezUserAccountKeyRepository->create($user->id);
+        $accountKey = $this->userAccountKeyRepository->create($user->id);
 
         if ($this->configResolver->getParameter('user.require_admin_activation', 'ngsite')) {
             $this->mailHelper

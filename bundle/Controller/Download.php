@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Controller;
 
-use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
-use eZ\Publish\Core\FieldType\BinaryBase\Value as BinaryBaseValue;
-use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
-use eZ\Publish\Core\IO\IOServiceInterface;
+use Ibexa\Bundle\IO\BinaryStreamResponse;
+use Ibexa\Core\FieldType\BinaryBase\Value as BinaryBaseValue;
+use Ibexa\Core\FieldType\Image\Value as ImageValue;
+use Ibexa\Core\IO\IOServiceInterface;
 use Netgen\Bundle\SiteBundle\Event\Content\DownloadEvent;
 use Netgen\Bundle\SiteBundle\Event\SiteEvents;
 use Netgen\EzPlatformSiteApi\API\Site;

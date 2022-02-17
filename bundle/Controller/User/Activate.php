@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Controller\User;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\UserService;
-use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
+use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\UserService;
+use Ibexa\Contracts\Core\Repository\Values\User\User;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Netgen\Bundle\SiteBundle\Controller\Controller;
-use Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey;
-use Netgen\Bundle\SiteBundle\Entity\Repository\EzUserAccountKeyRepository;
+use Netgen\Bundle\SiteBundle\Entity\UserAccountKey;
+use Netgen\Bundle\SiteBundle\Entity\Repository\UserAccountKeyRepository;
 use Netgen\Bundle\SiteBundle\Event\SiteEvents;
 use Netgen\Bundle\SiteBundle\Event\User as UserEvents;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +24,7 @@ class Activate extends Controller
 
     protected EventDispatcherInterface $eventDispatcher;
 
-    protected EzUserAccountKeyRepository $accountKeyRepository;
+    protected UserAccountKeyRepository $accountKeyRepository;
 
     protected Repository $repository;
 
@@ -33,7 +33,7 @@ class Activate extends Controller
     public function __construct(
         UserService $userService,
         EventDispatcherInterface $eventDispatcher,
-        EzUserAccountKeyRepository $accountKeyRepository,
+        UserAccountKeyRepository $accountKeyRepository,
         Repository $repository,
         ConfigResolverInterface $configResolver
     ) {
@@ -53,7 +53,7 @@ class Activate extends Controller
     {
         $accountKey = $this->accountKeyRepository->getByHash($hash);
 
-        if (!$accountKey instanceof EzUserAccountKey) {
+        if (!$accountKey instanceof UserAccountKey) {
             throw $this->createNotFoundException();
         }
 

@@ -1,5 +1,5 @@
-{% if ezplatform.configResolver.hasParameter('site_settings.add_this_code', 'ngsite') %}
-    {% set add_this_code = ezplatform.configResolver.getParameter('site_settings.add_this_code', 'ngsite') %}
+{% if ibexa.configResolver.hasParameter('site_settings.add_this_code', 'ngsite') %}
+    {% set add_this_code = ibexa.configResolver.getParameter('site_settings.add_this_code', 'ngsite') %}
 
     {% if add_this_code is not empty %}
         <div class="action clearfix">

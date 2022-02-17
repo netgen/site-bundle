@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\Core\MVC\Symfony\Matcher\ViewMatcherInterface;
-use eZ\Publish\Core\MVC\Symfony\View\View;
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
+use Ibexa\Core\MVC\Symfony\Matcher\ViewMatcherInterface;
+use Ibexa\Core\MVC\Symfony\View\View;
 use Netgen\Bundle\EzPlatformSiteApiBundle\View\LocationValueView;
 use Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased;
 use Netgen\EzPlatformSiteApi\API\Values\Location as APILocation;

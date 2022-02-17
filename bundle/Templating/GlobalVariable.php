@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Templating;
 
-use eZ\Publish\API\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\Repository;
 use Netgen\Bundle\EzPlatformSiteApiBundle\NamedObject\Provider;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\EzPlatformSiteApi\API\Values\Content;

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\EventListener;
 
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use Netgen\Bundle\SiteBundle\Entity\Repository\EzUserAccountKeyRepository;
+use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\Values\User\User;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
+use Netgen\Bundle\SiteBundle\Entity\Repository\UserAccountKeyRepository;
 use Netgen\Bundle\SiteBundle\Entity\Repository\NgUserSettingRepository;
 use Netgen\Bundle\SiteBundle\Helper\MailHelper;
 use Netgen\EzPlatformSiteApi\API\LoadService;
@@ -21,7 +21,7 @@ abstract class UserEventListener
 
     protected NgUserSettingRepository $ngUserSettingRepository;
 
-    protected EzUserAccountKeyRepository $ezUserAccountKeyRepository;
+    protected UserAccountKeyRepository $userAccountKeyRepository;
 
     protected LoadService $loadService;
 
@@ -31,14 +31,14 @@ abstract class UserEventListener
         MailHelper $mailHelper,
         ConfigResolverInterface $configResolver,
         NgUserSettingRepository $ngUserSettingRepository,
-        EzUserAccountKeyRepository $ezUserAccountKeyRepository,
+        UserAccountKeyRepository $userAccountKeyRepository,
         LoadService $loadService,
         Repository $repository
     ) {
         $this->mailHelper = $mailHelper;
         $this->configResolver = $configResolver;
         $this->ngUserSettingRepository = $ngUserSettingRepository;
-        $this->ezUserAccountKeyRepository = $ezUserAccountKeyRepository;
+        $this->userAccountKeyRepository = $userAccountKeyRepository;
         $this->loadService = $loadService;
         $this->repository = $repository;
     }

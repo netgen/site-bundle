@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory;
 
-use Ibexa\Core\FieldType\Url\Value as UrlValue;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
+use Ibexa\Core\FieldType\Url\Value as UrlValue;
 use Ibexa\Core\MVC\Symfony\SiteAccess\URILexer;
 use Knp\Menu\ItemInterface;
 use Netgen\EzPlatformSiteApi\API\Values\Content;

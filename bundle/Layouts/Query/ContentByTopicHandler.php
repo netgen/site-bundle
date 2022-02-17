@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Layouts\Query;
 
+use Ibexa\Contracts\Core\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
+use Ibexa\Contracts\Core\Persistence\Content\Section\Handler as SectionHandler;
 use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
 use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException;
 use Ibexa\Contracts\Core\Repository\LocationService;
@@ -12,8 +14,6 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Location;
 use Ibexa\Contracts\Core\Repository\Values\Content\LocationQuery;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
 use Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchHit;
-use Ibexa\Contracts\Core\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
-use Ibexa\Contracts\Core\Persistence\Content\Section\Handler as SectionHandler;
 use Netgen\EzPlatformSiteApi\API\FindService;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\Layouts\API\Values\Collection\Query;
@@ -189,7 +189,7 @@ class ContentByTopicHandler implements QueryTypeHandlerInterface
         } elseif (!empty($contentId)) {
             try {
                 $content = $this->loadService->loadContent($contentId)->innerContent;
-            } catch (NotFoundException | UnauthorizedException $e) {
+            } catch (NotFoundException|UnauthorizedException $e) {
                 // Do nothing
             }
         }

@@ -10,7 +10,7 @@ use Ibexa\Core\FieldType\Image\Value as ImageValue;
 use Ibexa\Core\IO\IOServiceInterface;
 use Netgen\Bundle\SiteBundle\Event\Content\DownloadEvent;
 use Netgen\Bundle\SiteBundle\Event\SiteEvents;
-use Netgen\EzPlatformSiteApi\API\Site;
+use Netgen\IbexaSiteApi\API\Site;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

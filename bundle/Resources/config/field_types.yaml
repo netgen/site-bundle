@@ -2,7 +2,7 @@ services:
     ngsite.field_type.ezrichtext.converter.direct_download:
         class: Netgen\Bundle\SiteBundle\RichText\Converter\LinkDirectDownload
         arguments:
-            - "@netgen.ezplatform_site.load_service"
+            - "@netgen.ibexa_site_api.load_service"
             - "@router"
             - "@?logger"
         tags:

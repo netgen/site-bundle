@@ -6,8 +6,8 @@ namespace Netgen\Bundle\SiteBundle\Layouts\Block\Plugin;
 
 use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
 use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException;
-use Netgen\EzPlatformSiteApi\API\Exceptions\TranslationNotMatchedException;
-use Netgen\EzPlatformSiteApi\API\LoadService;
+use Netgen\IbexaSiteApi\API\Exceptions\TranslationNotMatchedException;
+use Netgen\IbexaSiteApi\API\LoadService;
 use Netgen\Layouts\API\Values\Block\Block;
 use Netgen\Layouts\Block\BlockDefinition\ContainerDefinitionHandlerInterface;
 use Netgen\Layouts\Block\BlockDefinition\Handler\Plugin;

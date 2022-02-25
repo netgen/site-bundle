@@ -3,8 +3,8 @@ services:
         class: Netgen\Bundle\SiteBundle\Menu\RelationListMenuBuilder
         arguments:
             - "@ngsite.menu.factory.location"
-            - "@netgen.ezplatform_site.load_service"
-            - "@netgen.ezplatform_site.named_object_provider"
+            - "@netgen.ibexa_site_api.load_service"
+            - "@netgen.ibexa_site_api.named_object_provider"
             - "@?logger"
         tags:
             - { name: monolog.logger, channel: ngsite }
@@ -31,7 +31,7 @@ services:
     ngsite.menu.factory.location.extension.shortcut:
         class: Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\ShortcutExtension
         arguments:
-            - "@netgen.ezplatform_site.load_service"
+            - "@netgen.ibexa_site_api.load_service"
             - "@router"
             - "@request_stack"
             - "@?logger"
@@ -55,8 +55,8 @@ services:
         class: Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\ChildrenBuilder
         public: false
         arguments:
-            - "@netgen.ezplatform_site.load_service"
-            - "@netgen.ezplatform_site.filter_service"
+            - "@netgen.ibexa_site_api.load_service"
+            - "@netgen.ibexa_site_api.filter_service"
             - "@?logger"
 
     ngsite.menu.main_menu:

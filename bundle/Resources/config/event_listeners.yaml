@@ -40,7 +40,7 @@ services:
             - "@ibexa.config.resolver"
             - "@ngsite.repository.nguser_setting"
             - "@ngsite.repository.user_accountkey"
-            - "@netgen.ezplatform_site.load_service"
+            - "@netgen.ibexa_site_api.load_service"
             - "@ibexa.api.repository"
 
     ngsite.listener.user.post_register:

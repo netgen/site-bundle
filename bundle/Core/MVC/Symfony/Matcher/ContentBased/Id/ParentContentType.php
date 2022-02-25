@@ -7,9 +7,9 @@ namespace Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id;
 use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
 use Ibexa\Core\MVC\Symfony\Matcher\ViewMatcherInterface;
 use Ibexa\Core\MVC\Symfony\View\View;
-use Netgen\Bundle\EzPlatformSiteApiBundle\View\LocationValueView;
+use Netgen\Bundle\IbexaSiteApiBundle\View\LocationValueView;
 use Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased;
-use Netgen\EzPlatformSiteApi\API\Values\Location as APILocation;
+use Netgen\IbexaSiteApi\API\Values\Location as APILocation;
 
 class ParentContentType extends ConfigResolverBased implements ViewMatcherInterface
 {

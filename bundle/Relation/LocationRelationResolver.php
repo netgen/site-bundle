@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Relation;
 
 use Ibexa\Core\FieldType\RelationList\Value as RelationList;
-use Netgen\EzPlatformSiteApi\API\LoadService;
-use Netgen\EzPlatformSiteApi\API\Values\Location;
+use Netgen\IbexaSiteApi\API\LoadService;
+use Netgen\IbexaSiteApi\API\Values\Location;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Throwable;

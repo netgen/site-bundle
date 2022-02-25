@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Templating;
 
 use Ibexa\Contracts\Core\Repository\Repository;
-use Netgen\Bundle\EzPlatformSiteApiBundle\NamedObject\Provider;
-use Netgen\EzPlatformSiteApi\API\LoadService;
-use Netgen\EzPlatformSiteApi\API\Values\Content;
-use Netgen\EzPlatformSiteApi\API\Values\Location;
+use Netgen\Bundle\IbexaSiteApiBundle\NamedObject\Provider;
+use Netgen\IbexaSiteApi\API\LoadService;
+use Netgen\IbexaSiteApi\API\Values\Content;
+use Netgen\IbexaSiteApi\API\Values\Location;
 
 class GlobalVariable
 {

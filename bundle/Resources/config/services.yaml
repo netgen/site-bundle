@@ -41,7 +41,7 @@ services:
 
     ngsite.controller.base:
         class: Netgen\Bundle\SiteBundle\Controller\Controller
-        parent: netgen.ezplatform_site.controller.base
+        parent: netgen.ibexa_site_api.controller.base
         abstract: true
 
     ngsite.controller.check_redirect:
@@ -56,7 +56,7 @@ services:
         public: true
         parent: ngsite.controller.base
         arguments:
-            - "@netgen.ezplatform_site.site"
+            - "@netgen.ibexa_site_api.site"
             - "@?logger"
 
     ngsite.controller.search:
@@ -64,7 +64,7 @@ services:
         public: true
         parent: ngsite.controller.base
         arguments:
-            - "@netgen.ezplatform_site.site"
+            - "@netgen.ibexa_site_api.site"
             - "@Ibexa\\Core\\QueryType\\ArrayQueryTypeRegistry"
             - "@ibexa.config.resolver"
             - "@ngsite.search.resolver.suggestion"
@@ -98,7 +98,7 @@ services:
         public: true
         parent: ngsite.controller.base
         arguments:
-            - "@netgen.ezplatform_site.site"
+            - "@netgen.ibexa_site_api.site"
             - "@ibexa.field_type.ezbinaryfile.io_service"
             - "@ibexa.field_type.ezimage.io_service.published"
             - "@translator"
@@ -158,7 +158,7 @@ services:
     ngsite.relation.location_resolver:
         class: Netgen\Bundle\SiteBundle\Relation\LocationRelationResolver
         arguments:
-            - "@netgen.ezplatform_site.load_service"
+            - "@netgen.ibexa_site_api.load_service"
             - "@?logger"
         tags:
             - { name: monolog.logger, channel: ngsite }
@@ -166,13 +166,13 @@ services:
     ngsite.relation.multimedia_resolver:
         class: Netgen\Bundle\SiteBundle\Relation\MultimediaRelationResolver
         arguments:
-            - "@netgen.ezplatform_site.load_service"
+            - "@netgen.ibexa_site_api.load_service"
             - "@ngsite.relation.location_resolver"
 
     ngsite.helper.path_helper:
         class: Netgen\Bundle\SiteBundle\Helper\PathHelper
         arguments:
-            - "@netgen.ezplatform_site.load_service"
+            - "@netgen.ibexa_site_api.load_service"
             - "@ibexa.config.resolver"
             - "@router"
 
@@ -191,7 +191,7 @@ services:
         class: Netgen\Bundle\SiteBundle\Helper\RedirectHelper
         arguments:
             - "@router"
-            - "@netgen.ezplatform_site.site"
+            - "@netgen.ibexa_site_api.site"
 
     ngsite.repository.nguser_setting:
         class: Doctrine\ORM\EntityRepository
@@ -216,14 +216,14 @@ services:
     ngsite.opengraph.handler.site_name:
         class: Netgen\Bundle\SiteBundle\OpenGraph\Handler\SiteName
         arguments:
-            - "@netgen.ezplatform_site.named_object_provider"
+            - "@netgen.ibexa_site_api.named_object_provider"
         tags:
             - { name: netgen_open_graph.meta_tag_handler, alias: ngsite/site_name }
 
     ngsite.opengraph.handler.site_image:
         class: Netgen\Bundle\SiteBundle\OpenGraph\Handler\SiteImage
         arguments:
-            - "@netgen.ezplatform_site.named_object_provider"
+            - "@netgen.ibexa_site_api.named_object_provider"
             - "@request_stack"
         tags:
             - { name: netgen_open_graph.meta_tag_handler, alias: ngsite/site_image }
@@ -231,7 +231,7 @@ services:
     ngsite.query_type.search:
         class: Netgen\Bundle\SiteBundle\QueryType\SearchQueryType
         arguments:
-            - "@netgen.ezplatform_site.site"
+            - "@netgen.ibexa_site_api.site"
             - "@ibexa.config.resolver"
         tags:
             - { name: ibexa.query_type }
@@ -239,8 +239,8 @@ services:
     ngsite.topic.url_generator:
         class: Netgen\Bundle\SiteBundle\Topic\UrlGenerator
         arguments:
-            - "@netgen.ezplatform_site.find_service"
-            - "@netgen.ezplatform_site.load_service"
+            - "@netgen.ibexa_site_api.find_service"
+            - "@netgen.ibexa_site_api.load_service"
             - "@ibexa.config.resolver"
             - "@router"
 

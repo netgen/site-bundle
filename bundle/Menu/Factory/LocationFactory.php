@@ -10,7 +10,7 @@ use Knp\Menu\MenuItem;
 use Netgen\Bundle\SiteBundle\Event\Menu\LocationMenuItemEvent;
 use Netgen\Bundle\SiteBundle\Event\SiteEvents;
 use Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\ExtensionInterface;
-use Netgen\EzPlatformSiteApi\API\Values\Location;
+use Netgen\IbexaSiteApi\API\Values\Location;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use function md5;
 

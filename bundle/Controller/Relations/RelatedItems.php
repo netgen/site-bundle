@@ -6,7 +6,7 @@ namespace Netgen\Bundle\SiteBundle\Controller\Relations;
 
 use Netgen\Bundle\SiteBundle\Controller\Controller;
 use Netgen\Bundle\SiteBundle\Relation\LocationRelationResolverInterface;
-use Netgen\EzPlatformSiteApi\API\Values\Content;
+use Netgen\IbexaSiteApi\API\Values\Content;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

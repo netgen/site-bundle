@@ -40,7 +40,7 @@ services:
     ngsite.layouts.block.plugin.background_image:
         class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\BackgroundImagePlugin
         arguments:
-            - "@netgen.ezplatform_site.load_service"
+            - "@netgen.ibexa_site_api.load_service"
         tags:
             - { name: netgen_layouts.block_definition_handler.plugin, priority: 300 }
 
@@ -62,8 +62,8 @@ services:
         class: Netgen\Bundle\SiteBundle\Layouts\Query\ContentByTopicHandler
         arguments:
             - "@ibexa.api.service.location"
-            - "@netgen.ezplatform_site.load_service"
-            - "@netgen.ezplatform_site.find_service"
+            - "@netgen.ibexa_site_api.load_service"
+            - "@netgen.ibexa_site_api.find_service"
             - "@Ibexa\\Contracts\\Core\\Persistence\\Content\\Section\\Handler"
             - "@Ibexa\\Contracts\\Core\\Persistence\\Content\\ObjectState\\Handler"
             - "@netgen_layouts.ibexa.content_provider"

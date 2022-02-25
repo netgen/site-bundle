@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\OpenGraph\Handler;
 
-use Netgen\Bundle\EzPlatformSiteApiBundle\NamedObject\Provider;
+use Netgen\Bundle\IbexaSiteApiBundle\NamedObject\Provider;
 use Netgen\Bundle\OpenGraphBundle\Handler\HandlerInterface;
 use Netgen\Bundle\OpenGraphBundle\MetaTag\Item;
 use function trim;

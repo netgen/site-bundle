@@ -47,7 +47,7 @@ system:
                         open-inline:
                             type: boolean
                             default_value: false
-                toolbars:
+                toolbar:
                     link:
                         buttons:
                             ezlink:

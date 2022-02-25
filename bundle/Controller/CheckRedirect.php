@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Controller;
 
-use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
+use Netgen\Bundle\IbexaSiteApiBundle\View\ContentView;
 use Netgen\Bundle\SiteBundle\Helper\RedirectHelper;
-use Netgen\EzPlatformSiteApi\API\Values\Location;
+use Netgen\IbexaSiteApi\API\Values\Location;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckRedirect extends Controller
@@ -21,7 +21,7 @@ class CheckRedirect extends Controller
     /**
      * Action for viewing content which has redirect fields.
      *
-     * @return \Symfony\Component\HttpFoundation\Response|\Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView
+     * @return \Symfony\Component\HttpFoundation\Response|\Netgen\Bundle\IbexaSiteApiBundle\View\ContentView
      */
     public function __invoke(ContentView $view)
     {

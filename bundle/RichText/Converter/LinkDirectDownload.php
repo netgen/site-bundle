@@ -9,7 +9,7 @@ use DOMXPath;
 use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException as APINotFoundException;
 use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException as APIUnauthorizedException;
 use Ibexa\Contracts\FieldTypeRichText\RichText\Converter;
-use Netgen\EzPlatformSiteApi\API\LoadService;
+use Netgen\IbexaSiteApi\API\LoadService;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory;
 
 use Knp\Menu\ItemInterface;
-use Netgen\EzPlatformSiteApi\API\Values\Location;
+use Netgen\IbexaSiteApi\API\Values\Location;
 
 interface ExtensionInterface
 {

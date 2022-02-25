@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Helper;
 
 use Ibexa\Core\FieldType\Url\Value as UrlValue;
-use Netgen\EzPlatformSiteApi\API\Site;
-use Netgen\EzPlatformSiteApi\API\Values\Content;
-use Netgen\EzPlatformSiteApi\API\Values\Location;
+use Netgen\IbexaSiteApi\API\Site;
+use Netgen\IbexaSiteApi\API\Values\Content;
+use Netgen\IbexaSiteApi\API\Values\Location;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;

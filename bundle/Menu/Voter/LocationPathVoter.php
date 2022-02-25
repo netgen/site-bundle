@@ -6,8 +6,8 @@ namespace Netgen\Bundle\SiteBundle\Menu\Voter;
 
 use Knp\Menu\ItemInterface;
 use Knp\Menu\Matcher\Voter\VoterInterface;
-use Netgen\Bundle\EzPlatformSiteApiBundle\View\LocationValueView;
-use Netgen\EzPlatformSiteApi\API\Values\Location;
+use Netgen\Bundle\IbexaSiteApiBundle\View\LocationValueView;
+use Netgen\IbexaSiteApi\API\Values\Location;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use function array_map;

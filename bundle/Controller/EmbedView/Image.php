@@ -6,9 +6,9 @@ namespace Netgen\Bundle\SiteBundle\Controller\EmbedView;
 
 use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
 use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException;
-use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentView;
+use Netgen\Bundle\IbexaSiteApiBundle\View\ContentView;
 use Netgen\Bundle\SiteBundle\Controller\Controller;
-use Netgen\EzPlatformSiteApi\API\Site;
+use Netgen\IbexaSiteApi\API\Site;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;

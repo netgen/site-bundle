@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Controller;
 
-use Netgen\Bundle\EzPlatformSiteApiBundle\Controller\Controller as BaseController;
+use Netgen\Bundle\IbexaSiteApiBundle\Controller\Controller as BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use function is_array;

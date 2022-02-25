@@ -21,7 +21,7 @@
         "symfony/mailer": "^5.4",
         "symfony/polyfill-php80": "^1.22",
         "netgen/ez-forms-bundle": "^4.0",
-        "netgen/ezplatform-site-api": "^5.0",
+        "netgen/ibexa-site-api": "^5.0",
         "netgen/siteaccess-routes-bundle": "^3.0",
         "netgen/content-type-list-bundle": "^3.0",
         "netgen/enhanced-selection-bundle": "^5.0",

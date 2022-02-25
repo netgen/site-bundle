@@ -10,8 +10,8 @@ use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Netgen\Bundle\SiteBundle\Entity\Repository\NgUserSettingRepository;
 use Netgen\Bundle\SiteBundle\Entity\Repository\UserAccountKeyRepository;
 use Netgen\Bundle\SiteBundle\Helper\MailHelper;
-use Netgen\EzPlatformSiteApi\API\LoadService;
-use Netgen\EzPlatformSiteApi\API\Values\ContentInfo;
+use Netgen\IbexaSiteApi\API\LoadService;
+use Netgen\IbexaSiteApi\API\Values\ContentInfo;
 
 abstract class UserEventListener
 {

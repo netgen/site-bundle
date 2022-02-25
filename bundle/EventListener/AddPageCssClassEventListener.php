@@ -7,7 +7,7 @@ namespace Netgen\Bundle\SiteBundle\EventListener;
 use Ibexa\Core\FieldType\TextLine\Value as TextLineValue;
 use Ibexa\Core\MVC\Symfony\View\Event\FilterViewParametersEvent;
 use Ibexa\Core\MVC\Symfony\View\ViewEvents;
-use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentValueView;
+use Netgen\Bundle\IbexaSiteApiBundle\View\ContentValueView;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use function trim;
 

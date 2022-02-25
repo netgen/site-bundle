@@ -7,8 +7,8 @@ namespace Netgen\Bundle\SiteBundle\Topic;
 use Ibexa\Contracts\Core\Repository\Values\Content\LocationQuery;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
-use Netgen\EzPlatformSiteApi\API\FindService;
-use Netgen\EzPlatformSiteApi\API\LoadService;
+use Netgen\IbexaSiteApi\API\FindService;
+use Netgen\IbexaSiteApi\API\LoadService;
 use Netgen\TagsBundle\API\Repository\Values\Content\Query\Criterion\TagId;
 use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
@@ -53,7 +53,7 @@ class UrlGenerator
      *
      * Otherwise, the tag itself is returned.
      *
-     * @return \Netgen\EzPlatformSiteApi\API\Values\Location|\Netgen\TagsBundle\API\Repository\Values\Tags\Tag
+     * @return \Netgen\IbexaSiteApi\API\Values\Location|\Netgen\TagsBundle\API\Repository\Values\Tags\Tag
      */
     private function getTopicValueObject(Tag $tag)
     {

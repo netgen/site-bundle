@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\API\Search\Criterion;
 
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion\FullText as BaseFullText;
-use Netgen\EzPlatformSearchExtra\API\Values\Content\Query\Criterion\FulltextSpellcheck;
-use Netgen\EzPlatformSearchExtra\API\Values\Content\SpellcheckQuery;
+use Netgen\IbexaSearchExtra\API\Values\Content\Query\Criterion\FulltextSpellcheck;
+use Netgen\IbexaSearchExtra\API\Values\Content\SpellcheckQuery;
 
 class FullText extends BaseFullText implements FulltextSpellcheck
 {

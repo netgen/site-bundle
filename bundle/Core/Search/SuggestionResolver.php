@@ -6,7 +6,7 @@ namespace Netgen\Bundle\SiteBundle\Core\Search;
 
 use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 use Ibexa\Core\Base\Exceptions\NotFoundException;
-use Netgen\EzPlatformSearchExtra\API\Values\Content\Search\Suggestion;
+use Netgen\IbexaSearchExtra\API\Values\Content\Search\Suggestion;
 use function sprintf;
 use function str_replace;
 

@@ -21,14 +21,14 @@ system:
                         default_value: regular
                         required: false
                         multiple: false
-                    ezlink:
-                        choices:
-                            - none
-                            - btn-default
-                            - btn-primary
-                        default_value: none
-                        required: false
-                        multiple: false
+#                    ibexaLink:
+#                        choices:
+#                            - none
+#                            - btn-default
+#                            - btn-primary
+#                        default_value: none
+#                        required: false
+#                        multiple: false
                 attributes:
                     table:
                         caption:
@@ -37,16 +37,16 @@ system:
                         responsive:
                             type: boolean
                             default_value: false
-                    ezlink:
-                        link-suffix:
-                            type: string
-                            required: false
-                        direct-download:
-                            type: boolean
-                            default_value: false
-                        open-inline:
-                            type: boolean
-                            default_value: false
+#                    ibexaLink:
+#                        link-suffix:
+#                            type: string
+#                            required: false
+#                        direct-download:
+#                            type: boolean
+#                            default_value: false
+#                        open-inline:
+#                            type: boolean
+#                            default_value: false
                 custom_tags:
                     - video
                     - factbox

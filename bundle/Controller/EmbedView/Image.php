@@ -41,7 +41,7 @@ class Image extends Controller
             $location = null;
             $content = null;
 
-            if (mb_stripos($targetLink, 'eznode://') === 0) {
+            if (mb_stripos($targetLink, 'ezlocation://') === 0) {
                 $locationId = (int) mb_substr($targetLink, 9);
 
                 try {
@@ -56,7 +56,7 @@ class Image extends Controller
 
                     $this->logger->error(sprintf('Tried to generate link to location #%s without read rights', $locationId));
                 }
-            } elseif (mb_stripos($targetLink, 'ezobject://') === 0) {
+            } elseif (mb_stripos($targetLink, 'ezcontent://') === 0) {
                 $linkedContentId = (int) mb_substr($targetLink, 11);
 
                 try {
@@ -94,9 +94,9 @@ class Image extends Controller
 
             if ($directDownloadLink !== null) {
                 $targetLink = $directDownloadLink;
-            } elseif (mb_stripos($targetLink, 'eznode://') === 0) {
+            } elseif (mb_stripos($targetLink, 'ezlocation://') === 0) {
                 $targetLink = $this->generateUrl('', [RouteObjectInterface::ROUTE_OBJECT => $location]);
-            } elseif (mb_stripos($targetLink, 'ezobject://') === 0) {
+            } elseif (mb_stripos($targetLink, 'ezcontent://') === 0) {
                 $targetLink = $this->generateUrl('', [RouteObjectInterface::ROUTE_OBJECT => $content]);
             }
         }

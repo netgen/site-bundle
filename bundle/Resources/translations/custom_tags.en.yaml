@@ -1,4 +1,5 @@
 ezrichtext.custom_tags.video.label: Video
+ezrichtext.custom_tags.video.description: 'Adds an external video'
 ezrichtext.custom_tags.video.attributes.video_service.label: Video service
 ezrichtext.custom_tags.video.attributes.video_service.choices.youtube.label: YouTube
 ezrichtext.custom_tags.video.attributes.video_service.choices.vimeo.label: Vimeo
@@ -9,9 +10,11 @@ ezrichtext.custom_tags.video.attributes.autoresize.choices.fit.label: Fit
 ezrichtext.custom_tags.video.attributes.autoresize.choices.fill.label: Fill
 
 ezrichtext.custom_tags.factbox.label: Factbox
+ezrichtext.custom_tags.factbox.description: 'Adds a fact box'
 ezrichtext.custom_tags.factbox.attributes.title.label: Title
 ezrichtext.custom_tags.factbox.attributes.align.label: Align
 
 ezrichtext.custom_tags.quote.label: Quote
+ezrichtext.custom_tags.quote.description: 'Adds a quote'
 ezrichtext.custom_tags.quote.attributes.author.label: Author
 ezrichtext.custom_tags.quote.attributes.align.label: Align

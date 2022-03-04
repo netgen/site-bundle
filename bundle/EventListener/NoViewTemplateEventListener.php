@@ -12,7 +12,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function is_string;
@@ -52,7 +52,7 @@ class NoViewTemplateEventListener implements EventSubscriberInterface
      */
     public function getController(ControllerEvent $event): void
     {
-        if (!$this->enabled || $event->getRequestType() !== Kernel::MASTER_REQUEST) {
+        if (!$this->enabled || $event->getRequestType() !== HttpKernelInterface::MAIN_REQUEST) {
             return;
         }
 

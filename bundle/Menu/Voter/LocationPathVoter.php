@@ -34,12 +34,12 @@ class LocationPathVoter implements VoterInterface
      */
     public function matchItem(ItemInterface $item): ?bool
     {
-        $masterRequest = $this->requestStack->getMasterRequest();
-        if (!$masterRequest instanceof Request) {
+        $request = $this->requestStack->getMainRequest();
+        if (!$request instanceof Request) {
             return null;
         }
 
-        $locationView = $masterRequest->attributes->get('view');
+        $locationView = $request->attributes->get('view');
         if (!$locationView instanceof LocationValueView) {
             return null;
         }

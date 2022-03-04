@@ -29,7 +29,7 @@ class EsiFragmentEventListener implements EventSubscriberInterface
 
     public function onMenuItemBuild(LocationMenuItemEvent $event): void
     {
-        $request = $this->requestStack->getMasterRequest();
+        $request = $this->requestStack->getMainRequest();
         if ($this->fragmentPath !== rawurldecode($request->getPathInfo())) {
             return;
         }

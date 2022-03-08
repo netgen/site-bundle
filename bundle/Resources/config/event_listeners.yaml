@@ -9,14 +9,6 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    ngsite.listener.no_view_template:
-        class: Netgen\Bundle\SiteBundle\EventListener\NoViewTemplateEventListener
-        arguments:
-            - "@router"
-            - "@ibexa.config.resolver"
-        tags:
-            - { name: kernel.event_subscriber }
-
     ngsite.listener.set_csrf_enabled:
         class: Netgen\Bundle\SiteBundle\EventListener\SetCsrfEnabledEventListener
         arguments:

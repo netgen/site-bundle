@@ -137,14 +137,10 @@ class Register extends Controller
 
         /** @var \Ibexa\Contracts\Core\Repository\Values\User\User $newUser */
         $newUser = $this->repository->sudo(
-            static function (Repository $repository) use ($data, $userGroupId): User {
-                $userGroup = $repository->getUserService()->loadUserGroup($userGroupId);
-
-                return $repository->getUserService()->createUser(
-                    $data->payload,
-                    [$userGroup],
-                );
-            },
+            static fn (Repository $repository): User => $repository->getUserService()->createUser(
+                $data->payload,
+                [$repository->getUserService()->loadUserGroup($userGroupId)],
+            ),
         );
 
         $userRegisterEvent = new UserEvents\PostRegisterEvent($newUser);

@@ -41,13 +41,7 @@ class SearchQueryType extends OptionsResolverBasedQueryType
 
         $optionsResolver->setAllowedValues(
             'search_text',
-            static function (string $searchText): bool {
-                if (empty(trim($searchText))) {
-                    return false;
-                }
-
-                return true;
-            },
+            static fn (string $searchText): bool => !empty(trim($searchText)),
         );
 
         $optionsResolver->setDefault('content_types', $this->configResolver->getParameter('search.content_types', 'ngsite'));

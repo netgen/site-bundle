@@ -2,7 +2,7 @@ services:
     ngsite.templating.global_variable:
         class: Netgen\Bundle\SiteBundle\Templating\GlobalVariable
         arguments:
-            - "@netgen.ibexa_site_api.named_object_provider"
+            - "@netgen.ibexa_site_api.named_object.provider"
             - "@ibexa.api.repository"
             - "@netgen.ibexa_site_api.load_service"
 

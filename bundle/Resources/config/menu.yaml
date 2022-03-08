@@ -4,7 +4,7 @@ services:
         arguments:
             - "@ngsite.menu.factory.location"
             - "@netgen.ibexa_site_api.load_service"
-            - "@netgen.ibexa_site_api.named_object_provider"
+            - "@netgen.ibexa_site_api.named_object.provider"
             - "@?logger"
         tags:
             - { name: monolog.logger, channel: ngsite }

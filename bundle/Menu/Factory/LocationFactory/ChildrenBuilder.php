@@ -115,15 +115,15 @@ class ChildrenBuilder
     {
         $childLocations = [];
 
-        foreach ($content->getField('menu_items')->value->destinationLocationIds as $locationId) {
-            if (empty($locationId)) {
-                $this->logger->error(sprintf('Empty location ID in RelationList field "%s" for content #%s', 'menu_items', $content->id));
+        foreach ($content->getField('menu_items')->value->destinationContentIds as $contentId) {
+            if (empty($contentId)) {
+                $this->logger->error(sprintf('Empty content ID in RelationList field "%s" for content #%s', 'menu_items', $content->id));
 
                 continue;
             }
 
             try {
-                $childLocations[] = $this->loadService->loadLocation($locationId);
+                $childLocations[] = $this->loadService->loadContent($contentId)->mainLocation;
             } catch (Throwable $t) {
                 $this->logger->error($t->getMessage());
 

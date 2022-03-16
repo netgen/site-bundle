@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Templating;
 
-use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\PermissionService;
 use Netgen\Bundle\IbexaSiteApiBundle\NamedObject\Provider;
 use Netgen\IbexaSiteApi\API\LoadService;
 use Netgen\IbexaSiteApi\API\Values\Content;
@@ -14,17 +14,17 @@ class GlobalVariable
 {
     protected Provider $namedObjectProvider;
 
-    protected Repository $repository;
+    protected PermissionService $permissionService;
 
     protected LoadService $loadService;
 
     public function __construct(
         Provider $namedObjectProvider,
-        Repository $repository,
+        PermissionService $permissionService,
         LoadService $loadService
     ) {
         $this->namedObjectProvider = $namedObjectProvider;
-        $this->repository = $repository;
+        $this->permissionService = $permissionService;
         $this->loadService = $loadService;
     }
 
@@ -40,7 +40,7 @@ class GlobalVariable
 
     public function getCurrentUserContent(): Content
     {
-        $currentUser = $this->repository->getPermissionResolver()->getCurrentUserReference();
+        $currentUser = $this->permissionService->getCurrentUserReference();
 
         return $this->loadService->loadContent($currentUser->getUserId());
     }

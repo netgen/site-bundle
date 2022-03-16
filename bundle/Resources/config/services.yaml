@@ -262,6 +262,6 @@ services:
 #    ngsite.context_provider.user:
 #        class: Netgen\Bundle\SiteBundle\ContextProvider\UserContextProvider
 #        arguments:
-#            - "@ibexa.api.repository"
+#            - "@Ibexa\\Contracts\\Core\\Repository\\PermissionService"
 #    tags:
 #        - { name: fos_http_cache.user_context_provider }

@@ -3,7 +3,7 @@ services:
         class: Netgen\Bundle\SiteBundle\Templating\GlobalVariable
         arguments:
             - "@netgen.ibexa_site_api.named_object.provider"
-            - "@ibexa.api.repository"
+            - "@Ibexa\\Contracts\\Core\\Repository\\PermissionService"
             - "@netgen.ibexa_site_api.load_service"
 
     ngsite.templating.twig.extension.site:

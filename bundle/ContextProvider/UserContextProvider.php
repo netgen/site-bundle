@@ -6,15 +6,15 @@ namespace Netgen\Bundle\SiteBundle\ContextProvider;
 
 use FOS\HttpCache\UserContext\ContextProvider;
 use FOS\HttpCache\UserContext\UserContext;
-use Ibexa\Contracts\Core\Repository\Repository;
+use Ibexa\Contracts\Core\Repository\PermissionService;
 
 class UserContextProvider implements ContextProvider
 {
-    protected Repository $repository;
+    protected PermissionService $permissionService;
 
-    public function __construct(Repository $repository)
+    public function __construct(PermissionService $permissionService)
     {
-        $this->repository = $repository;
+        $this->permissionService = $permissionService;
     }
 
     /**
@@ -25,7 +25,7 @@ class UserContextProvider implements ContextProvider
     {
         $context->addParameter(
             'userId',
-            $this->repository->getPermissionResolver()->getCurrentUserReference()->getUserId(),
+            $this->permissionService->getCurrentUserReference()->getUserId(),
         );
     }
 }

@@ -22,6 +22,62 @@ system:
                         default_value: regular
                         required: false
                         multiple: false
+                    heading1:
+                        choices:
+                            - clear
+                            - half-left
+                            - half-right
+                        default_value: clear
+                        required: false
+                        multiple: false
+                    heading2:
+                        choices:
+                            - clear
+                            - half-left
+                            - half-right
+                        default_value: clear
+                        required: false
+                        multiple: false
+                    heading3:
+                        choices:
+                            - clear
+                            - half-left
+                            - half-right
+                        default_value: clear
+                        required: false
+                        multiple: false
+                    heading4:
+                        choices:
+                            - clear
+                            - half-left
+                            - half-right
+                        default_value: clear
+                        required: false
+                        multiple: false
+                    heading5:
+                        choices:
+                            - clear
+                            - half-left
+                            - half-right
+                        default_value: clear
+                        required: false
+                        multiple: false
+                    heading6:
+                        choices:
+                            - clear
+                            - half-left
+                            - half-right
+                        default_value: clear
+                        required: false
+                        multiple: false
+                    paragraph:
+                        choices:
+                            - clear
+                            - half-left
+                            - half-right
+                        default_value: clear
+                        required: false
+                        multiple: false
 #                    ibexaLink:
 #                        choices:
 #                            - none

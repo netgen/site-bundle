@@ -18,7 +18,6 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 final class AssignSingleContentTypeGroupCommand extends Command
 {
-    protected static $defaultName = 'app:content_type:assign_to_group';
     protected static $defaultDescription = 'Assigns ContentType(s) to a single ContentTypeGroup';
 
     private Repository $repository;

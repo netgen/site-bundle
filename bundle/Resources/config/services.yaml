@@ -1,5 +1,5 @@
 services:
-    ngsite.command.assign_single_content_type_group:
+    ngsite.command.move_content_type:
         class: Netgen\Bundle\SiteBundle\Command\MoveContentTypeCommand
         arguments:
             - "@ibexa.api.repository"

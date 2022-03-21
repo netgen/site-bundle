@@ -5,16 +5,19 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Command;
 
 use Exception;
-use Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException;
 use Ibexa\Contracts\Core\Repository\ContentTypeService;
+use Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException;
+use Ibexa\Contracts\Core\Repository\Repository;
 use Ibexa\Contracts\Core\Repository\Values\ContentType\ContentType;
 use Ibexa\Contracts\Core\Repository\Values\ContentType\ContentTypeGroup;
-use Ibexa\Contracts\Core\Repository\Repository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use function array_map;
+use function ctype_digit;
+use function explode;
 
 final class MoveContentTypeCommand extends Command
 {
@@ -48,13 +51,10 @@ final class MoveContentTypeCommand extends Command
             );
     }
 
-    /**
-     * @throws \Exception
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln(
-            '<info>This command assigns given ContentType(s) to the given ContentTypeGroup and unassigns them from all other ContentTypeGroups.</info>'
+            '<info>This command assigns given ContentType(s) to the given ContentTypeGroup and unassigns them from all other ContentTypeGroups.</info>',
         );
 
         $helper = $this->getHelper('question');
@@ -92,63 +92,48 @@ final class MoveContentTypeCommand extends Command
 
         $output->writeln('<info>Done.</info>');
 
-        return self::SUCCESS;
+        return Command::SUCCESS;
     }
 
     /**
      * @param string|int $identifierOrId
-     *
-     * @throws \Exception
      */
     private function loadContentTypeGroup($identifierOrId): ContentTypeGroup
     {
         if (ctype_digit($identifierOrId)) {
             return $this->repository->sudo(
-                function () use ($identifierOrId) {
-                    return $this->contentTypeService->loadContentTypeGroup((int) $identifierOrId);
-                }
+                fn (): ContentTypeGroup => $this->contentTypeService->loadContentTypeGroup((int) $identifierOrId),
             );
         }
 
         return $this->repository->sudo(
-            function () use ($identifierOrId) {
-                return $this->contentTypeService->loadContentTypeGroupByIdentifier($identifierOrId);
-            }
+            fn (): ContentTypeGroup => $this->contentTypeService->loadContentTypeGroupByIdentifier($identifierOrId),
         );
     }
 
     /**
      * @param string|int $identifierOrId
-     *
-     * @throws \Exception
      */
     private function loadContentType($identifierOrId): ContentType
     {
         if (ctype_digit($identifierOrId)) {
             return $this->repository->sudo(
-                function () use ($identifierOrId) {
-                    return $this->contentTypeService->loadContentType((int) $identifierOrId);
-                }
+                fn (): ContentType => $this->contentTypeService->loadContentType((int) $identifierOrId),
             );
         }
 
         return $this->repository->sudo(
-            function () use ($identifierOrId) {
-                return $this->contentTypeService->loadContentTypeByIdentifier($identifierOrId);
-            }
+            fn (): ContentType => $this->contentTypeService->loadContentTypeByIdentifier($identifierOrId),
         );
     }
 
-    /**
-     * @throws \Exception
-     */
     private function assignToSingleGroup(ContentType $contentType, ContentTypeGroup $newContentTypeGroup): void
     {
         try {
             $this->repository->sudo(
                 function () use ($newContentTypeGroup, $contentType) {
                     $this->contentTypeService->assignContentTypeGroup($contentType, $newContentTypeGroup);
-                }
+                },
             );
         } catch (InvalidArgumentException $exception) {
             // ContentType is already assigned to the given ContentTypeGroup, do nothing
@@ -162,7 +147,7 @@ final class MoveContentTypeCommand extends Command
             $this->repository->sudo(
                 function () use ($contentType, $contentTypeGroup) {
                     $this->contentTypeService->unassignContentTypeGroup($contentType, $contentTypeGroup);
-                }
+                },
             );
         }
     }

@@ -47,7 +47,7 @@ final class UpdateContentAlwaysAvailableCommand extends Command
                 'always-available',
                 InputArgument::OPTIONAL,
                 'Always-available state (true/false or 1/0)',
-                true,
+                'true',
             );
     }
 
@@ -88,7 +88,7 @@ final class UpdateContentAlwaysAvailableCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function resolveAlwaysAvailableState($argument): bool
+    private function resolveAlwaysAvailableState(string $argument): bool
     {
         if ($argument === 'false') {
             return false;

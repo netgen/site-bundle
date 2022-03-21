@@ -10,7 +10,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\StyleInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use function array_map;
 use function explode;
 
@@ -19,7 +20,10 @@ final class UpdateContentAlwaysAvailableCommand extends Command
     protected static $defaultDescription = 'Update always-available state for the given Content item(s)';
 
     private Repository $repository;
+
     private ContentService $contentService;
+
+    private StyleInterface $style;
 
     public function __construct(
         Repository $repository,
@@ -47,19 +51,19 @@ final class UpdateContentAlwaysAvailableCommand extends Command
             );
     }
 
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
+        $this->style = new SymfonyStyle($input, $output);
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln(
-            '<info>This command updates Content item(s) always-available flag.</info>',
-        );
+        $this->style->info('This command updates Content item(s) always-available flag.');
 
-        $helper = $this->getHelper('question');
-        $question = new ConfirmationQuestion('Continue with this action? (Y/n) ', true);
+        if (!$this->style->confirm('Continue with this action?', true)) {
+            $this->style->error('Aborted.');
 
-        if (!$helper->ask($input, $output, $question)) {
-            $output->writeln('<info>Aborted.</info>');
-
-            return Command::SUCCESS;
+            return Command::FAILURE;
         }
 
         $types = $input->getArgument('content-ids');
@@ -79,7 +83,7 @@ final class UpdateContentAlwaysAvailableCommand extends Command
             );
         }
 
-        $output->writeln('<info>Done.</info>');
+        $this->style->info('Done.');
 
         return Command::SUCCESS;
     }

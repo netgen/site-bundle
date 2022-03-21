@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-final class AssignSingleContentTypeGroupCommand extends Command
+final class MoveContentTypeCommand extends Command
 {
     protected static $defaultDescription = 'Assigns ContentType(s) to a single ContentTypeGroup';
 

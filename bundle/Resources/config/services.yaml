@@ -1,11 +1,11 @@
 services:
     ngsite.command.assign_single_content_type_group:
-        class: Netgen\Bundle\SiteBundle\Command\AssignSingleContentTypeGroupCommand
+        class: Netgen\Bundle\SiteBundle\Command\MoveContentTypeCommand
         arguments:
             - "@ibexa.api.repository"
             - "@ibexa.api.service.content_type"
         tags:
-            - { name: console.command, command: 'ngsite:content-type:assign-single-content-type-group' }
+            - { name: console.command, command: 'ngsite:content-type:move' }
 
     ngsite.command.update_publish_date:
         class: Netgen\Bundle\SiteBundle\Command\UpdatePublishDateCommand

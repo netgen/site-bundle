@@ -11,6 +11,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use function array_map;
+use function explode;
 
 final class UpdateContentAlwaysAvailableCommand extends Command
 {
@@ -33,7 +35,7 @@ final class UpdateContentAlwaysAvailableCommand extends Command
     {
         $this
             ->addArgument(
-                'content_ids',
+                'content-ids',
                 InputArgument::REQUIRED,
                 'Content IDs (comma delimited)',
             )
@@ -41,17 +43,14 @@ final class UpdateContentAlwaysAvailableCommand extends Command
                 'always-available',
                 InputArgument::OPTIONAL,
                 'Always-available state (true/false or 1/0)',
-                true
+                true,
             );
     }
 
-    /**
-     * @throws \Exception
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln(
-            '<info>This command updates Content item(s) always-available flag.</info>'
+            '<info>This command updates Content item(s) always-available flag.</info>',
         );
 
         $helper = $this->getHelper('question');
@@ -63,16 +62,12 @@ final class UpdateContentAlwaysAvailableCommand extends Command
             return Command::SUCCESS;
         }
 
-        $types = $input->getArgument('content_ids');
+        $types = $input->getArgument('content-ids');
         $contentIds = array_map('intval', array_map('trim', explode(',', $types)));
         $alwaysAvailableState = $this->resolveAlwaysAvailableState($input->getArgument('always-available'));
 
         foreach ($contentIds as $contentId) {
-            $contentInfo = $this->repository->sudo(
-                function () use ($contentId) {
-                    return $this->contentService->loadContentInfo($contentId);
-                }
-            );
+            $contentInfo = $this->contentService->loadContentInfo($contentId);
 
             $struct = $this->contentService->newContentMetadataUpdateStruct();
             $struct->alwaysAvailable = $alwaysAvailableState;
@@ -80,13 +75,13 @@ final class UpdateContentAlwaysAvailableCommand extends Command
             $this->repository->sudo(
                 function () use ($contentInfo, $struct) {
                     $this->contentService->updateContentMetadata($contentInfo, $struct);
-                }
+                },
             );
         }
 
         $output->writeln('<info>Done.</info>');
 
-        return self::SUCCESS;
+        return Command::SUCCESS;
     }
 
     private function resolveAlwaysAvailableState($argument): bool

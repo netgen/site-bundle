@@ -1,11 +1,19 @@
 services:
-    ngsite.command.move_content_type:
+    ngsite.command.content_type.move:
         class: Netgen\Bundle\SiteBundle\Command\MoveContentTypeCommand
         arguments:
             - "@ibexa.api.repository"
             - "@ibexa.api.service.content_type"
         tags:
             - { name: console.command, command: 'ngsite:content-type:move' }
+
+    ngsite.command.content.update_always_available:
+        class: Netgen\Bundle\SiteBundle\Command\UpdateContentAlwaysAvailableCommand
+        arguments:
+            - "@ibexa.api.repository"
+            - "@ibexa.api.service.content"
+        tags:
+            - { name: console.command, command: 'ngsite:content:update-always-available' }
 
     ngsite.command.update_publish_date:
         class: Netgen\Bundle\SiteBundle\Command\UpdatePublishDateCommand

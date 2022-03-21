@@ -3,7 +3,6 @@ services:
         class: Netgen\Bundle\SiteBundle\Command\AssignSingleContentTypeGroupCommand
         arguments:
             - "@ibexa.api.repository"
-            - '@Ibexa\Contracts\Core\Repository\PermissionService'
             - "@ibexa.api.service.content_type"
         tags:
             - { name: console.command, command: 'ngsite:content-type:assign-single-content-type-group' }

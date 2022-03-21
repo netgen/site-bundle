@@ -7,11 +7,9 @@ namespace Netgen\Bundle\SiteBundle\Command;
 use Exception;
 use Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException;
 use Ibexa\Contracts\Core\Repository\ContentTypeService;
-use Ibexa\Contracts\Core\Repository\PermissionResolver;
 use Ibexa\Contracts\Core\Repository\Values\ContentType\ContentType;
 use Ibexa\Contracts\Core\Repository\Values\ContentType\ContentTypeGroup;
 use Ibexa\Contracts\Core\Repository\Repository;
-use Ibexa\Core\Repository\Values\User\UserReference;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,24 +18,19 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 final class AssignSingleContentTypeGroupCommand extends Command
 {
-    private const AdministratorUserId = 14;
-
     protected static $defaultName = 'app:content_type:assign_to_group';
     protected static $defaultDescription = 'Assigns ContentType(s) to a single ContentTypeGroup';
 
     private Repository $repository;
     private ContentTypeService $contentTypeService;
-    private PermissionResolver $permissionResolver;
 
     public function __construct(
         Repository $repository,
-        PermissionResolver $permissionResolver,
         ContentTypeService $contentTypeService
     ) {
         parent::__construct();
 
         $this->repository = $repository;
-        $this->permissionResolver = $permissionResolver;
         $this->contentTypeService = $contentTypeService;
     }
 
@@ -57,7 +50,7 @@ final class AssignSingleContentTypeGroupCommand extends Command
     }
 
     /**
-     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException
+     * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -73,8 +66,6 @@ final class AssignSingleContentTypeGroupCommand extends Command
 
             return Command::SUCCESS;
         }
-
-        $this->permissionResolver->setCurrentUserReference(new UserReference(self::AdministratorUserId));
 
         $types = $input->getArgument('types');
         $contentTypeIdentifiersOrIds = array_map('trim', explode(',', $types));
@@ -108,40 +99,58 @@ final class AssignSingleContentTypeGroupCommand extends Command
     /**
      * @param string|int $identifierOrId
      *
-     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException
+     * @throws \Exception
      */
     private function loadContentTypeGroup($identifierOrId): ContentTypeGroup
     {
         if (ctype_digit($identifierOrId)) {
-            return $this->contentTypeService->loadContentTypeGroup((int) $identifierOrId);
+            return $this->repository->sudo(
+                function () use ($identifierOrId) {
+                    return $this->contentTypeService->loadContentTypeGroup((int) $identifierOrId);
+                }
+            );
         }
 
-        return $this->contentTypeService->loadContentTypeGroupByIdentifier($identifierOrId);
+        return $this->repository->sudo(
+            function () use ($identifierOrId) {
+                return $this->contentTypeService->loadContentTypeGroupByIdentifier($identifierOrId);
+            }
+        );
     }
 
     /**
      * @param string|int $identifierOrId
      *
-     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException
+     * @throws \Exception
      */
     private function loadContentType($identifierOrId): ContentType
     {
         if (ctype_digit($identifierOrId)) {
-            return $this->contentTypeService->loadContentType((int) $identifierOrId);
+            return $this->repository->sudo(
+                function () use ($identifierOrId) {
+                    return $this->contentTypeService->loadContentType((int) $identifierOrId);
+                }
+            );
         }
 
-        return $this->contentTypeService->loadContentTypeByIdentifier($identifierOrId);
+        return $this->repository->sudo(
+            function () use ($identifierOrId) {
+                return $this->contentTypeService->loadContentTypeByIdentifier($identifierOrId);
+            }
+        );
     }
 
     /**
-     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\BadStateException
-     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\InvalidArgumentException
-     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException
+     * @throws \Exception
      */
     private function assignToSingleGroup(ContentType $contentType, ContentTypeGroup $newContentTypeGroup): void
     {
         try {
-            $this->contentTypeService->assignContentTypeGroup($contentType, $newContentTypeGroup);
+            $this->repository->sudo(
+                function () use ($newContentTypeGroup, $contentType) {
+                    $this->contentTypeService->assignContentTypeGroup($contentType, $newContentTypeGroup);
+                }
+            );
         } catch (InvalidArgumentException $exception) {
             // ContentType is already assigned to the given ContentTypeGroup, do nothing
         }
@@ -151,7 +160,11 @@ final class AssignSingleContentTypeGroupCommand extends Command
                 continue;
             }
 
-            $this->contentTypeService->unassignContentTypeGroup($contentType, $contentTypeGroup);
+            $this->repository->sudo(
+                function () use ($contentType, $contentTypeGroup) {
+                    $this->contentTypeService->unassignContentTypeGroup($contentType, $contentTypeGroup);
+                }
+            );
         }
     }
 }

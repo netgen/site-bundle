@@ -103,8 +103,8 @@ class ChildrenBuilder
             $maxDepth = $content->getFieldValue('depth')->value;
         }
 
-        foreach ($childLocations as $location) {
-            $childItem = $item->addChild('', ['ibexa_location' => $location]);
+        foreach ($childLocations as $index => $location) {
+            $childItem = $item->addChild('', ['ibexa_location' => $location, 'index' => $index]);
             if ($currentDepth <= $maxDepth) {
                 $this->buildChildrenFromRelatedParentNode($childItem, $content, $location->content, $currentDepth + 1);
             }
@@ -131,8 +131,8 @@ class ChildrenBuilder
             }
         }
 
-        foreach ($childLocations as $location) {
-            $item->addChild('', ['ibexa_location' => $location]);
+        foreach ($childLocations as $index => $location) {
+            $item->addChild('', ['ibexa_location' => $location, 'index' => $index]);
         }
     }
 }

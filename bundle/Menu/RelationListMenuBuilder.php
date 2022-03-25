@@ -59,7 +59,7 @@ class RelationListMenuBuilder
             return $menu;
         }
 
-        foreach ($field->value->destinationContentIds as $destinationContentId) {
+        foreach ($field->value->destinationContentIds as $index => $destinationContentId) {
             if (empty($destinationContentId)) {
                 $this->logger->error(sprintf('Empty content ID in RelationList field "%s" for content #%s', $fieldIdentifier, $content->id));
 
@@ -74,7 +74,7 @@ class RelationListMenuBuilder
                 continue;
             }
 
-            $menu->addChild($this->factory->createItem('', ['ibexa_location' => $destinationContent->mainLocation]));
+            $menu->addChild($this->factory->createItem('', ['ibexa_location' => $destinationContent->mainLocation, 'index' => $index]));
         }
 
         return $menu;

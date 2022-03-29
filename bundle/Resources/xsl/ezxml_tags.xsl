@@ -77,13 +77,13 @@
                 <xsl:attribute name="height"><xsl:text>433</xsl:text></xsl:attribute>
                 <xsl:attribute name="src">
                     <xsl:if test="@custom:video_service='youtube'">
-                        <xsl:text>//www.youtube.com/embed/</xsl:text>
+                        <xsl:text>https://www.youtube.com/embed/</xsl:text>
                     </xsl:if>
                     <xsl:if test="@custom:video_service='vimeo'">
-                        <xsl:text>//player.vimeo.com/video/</xsl:text>
+                        <xsl:text>https://player.vimeo.com/video/</xsl:text>
                     </xsl:if>
                     <xsl:if test="@custom:video_service='dailymotion'">
-                        <xsl:text>//www.dailymotion.com/embed/video/</xsl:text>
+                        <xsl:text>https://www.dailymotion.com/embed/video/</xsl:text>
                     </xsl:if>
 
                     <xsl:value-of select="@custom:video_code" />

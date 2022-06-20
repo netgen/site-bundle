@@ -11,11 +11,15 @@ use Netgen\Bundle\SiteBundle\Helper\PathHelper;
 use Netgen\EzPlatformSiteApi\API\Exceptions\TranslationNotMatchedException;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Symfony\Component\Intl\Languages;
+use function ceil;
 use function mb_substr;
+use function str_word_count;
 use function ucwords;
 
 class SiteRuntime
 {
+    private const WORDS_PER_MINUTE = 230;
+
     protected PathHelper $pathHelper;
 
     protected LocaleConverterInterface $localeConverter;
@@ -60,7 +64,7 @@ class SiteRuntime
     {
         try {
             $content = $this->loadService->loadContent($contentId);
-        } catch (UnauthorizedException | NotFoundException | TranslationNotMatchedException $e) {
+        } catch (UnauthorizedException|NotFoundException|TranslationNotMatchedException $e) {
             return null;
         }
 
@@ -74,10 +78,18 @@ class SiteRuntime
     {
         try {
             $location = $this->loadService->loadLocation($locationId);
-        } catch (UnauthorizedException | NotFoundException | TranslationNotMatchedException $e) {
+        } catch (UnauthorizedException|NotFoundException|TranslationNotMatchedException $e) {
             return null;
         }
 
         return $location->content->name;
+    }
+
+    public function calculateReadingTime(string $text): int
+    {
+        $wordCount = str_word_count($text);
+        $readingTime = ceil($wordCount / self::WORDS_PER_MINUTE);
+
+        return $readingTime === false || $readingTime < 1 ? 1 : (int) $readingTime;
     }
 }

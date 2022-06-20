@@ -189,7 +189,7 @@ class ContentByTopicHandler implements QueryTypeHandlerInterface
         } elseif (!empty($contentId)) {
             try {
                 $content = $this->loadService->loadContent($contentId)->innerContent;
-            } catch (NotFoundException | UnauthorizedException $e) {
+            } catch (NotFoundException|UnauthorizedException $e) {
                 // Do nothing
             }
         }

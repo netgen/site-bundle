@@ -11,11 +11,15 @@ use Netgen\Bundle\SiteBundle\Helper\PathHelper;
 use Netgen\IbexaSiteApi\API\Exceptions\TranslationNotMatchedException;
 use Netgen\IbexaSiteApi\API\LoadService;
 use Symfony\Component\Intl\Languages;
+use function ceil;
 use function mb_substr;
+use function str_word_count;
 use function ucwords;
 
 class SiteRuntime
 {
+    private const WORDS_PER_MINUTE = 230;
+
     protected PathHelper $pathHelper;
 
     protected LocaleConverterInterface $localeConverter;
@@ -79,5 +83,13 @@ class SiteRuntime
         }
 
         return $location->content->name;
+    }
+
+    public function calculateReadingTime(string $text): int
+    {
+        $wordCount = str_word_count($text);
+        $readingTime = ceil($wordCount / self::WORDS_PER_MINUTE);
+
+        return $readingTime === false || $readingTime < 1 ? 1 : (int) $readingTime;
     }
 }

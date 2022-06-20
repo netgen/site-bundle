@@ -42,11 +42,11 @@ class PathHelper
         $this->configureOptions($optionsResolver);
         $options = $optionsResolver->resolve($options);
 
+        $useAllContentTypes = $options['use_all_content_types'];
+        $showCurrentLocation = $options['show_current_location'];
+
         $excludedContentTypes = [];
-        if (
-            !$options['use_all_content_types']
-            && $this->configResolver->hasParameter('path_helper.excluded_content_types', 'ngsite')
-        ) {
+        if ($this->configResolver->hasParameter('path_helper.excluded_content_types', 'ngsite')) {
             $excludedContentTypes = $this->configResolver->getParameter('path_helper.excluded_content_types', 'ngsite');
             if (!is_array($excludedContentTypes)) {
                 $excludedContentTypes = [];
@@ -78,21 +78,34 @@ class PathHelper
                 return [];
             }
 
-            if (!in_array($location->contentInfo->contentTypeIdentifier, $excludedContentTypes, true)) {
-                $pathArray[] = [
-                    'text' => $location->contentInfo->name,
-                    'url' => $location->id !== $locationId ?
-                        $this->urlGenerator->generate(
-                            '',
-                            [RouteObjectInterface::ROUTE_OBJECT => $location],
-                            $options['absolute_url'] ?
-                                UrlGeneratorInterface::ABSOLUTE_URL :
-                                UrlGeneratorInterface::ABSOLUTE_PATH,
-                        ) :
-                        false,
-                    'location' => $location,
-                ];
+            if (!$showCurrentLocation && $location->id === (int) $locationId) {
+                continue;
             }
+
+            if (!$useAllContentTypes && in_array($location->contentInfo->contentTypeIdentifier, $excludedContentTypes, true)) {
+                continue;
+            }
+
+            $disableItemUrl = $useAllContentTypes && in_array($location->contentInfo->contentTypeIdentifier, $excludedContentTypes, true);
+
+            $itemName = $location->contentInfo->name;
+            if ($location->content->hasField('breadcrumb_title') && !$location->content->getField('breadcrumb_title')->isEmpty()) {
+                $itemName = $location->content->getField('breadcrumb_title')->value->text;
+            }
+
+            $pathArray[] = [
+                'text' => $itemName,
+                'url' => !$disableItemUrl && $location->id !== $locationId ?
+                    $this->urlGenerator->generate(
+                        '',
+                        [RouteObjectInterface::ROUTE_OBJECT => $location],
+                        $options['absolute_url'] ?
+                            UrlGeneratorInterface::ABSOLUTE_URL :
+                            UrlGeneratorInterface::ABSOLUTE_PATH,
+                    ) :
+                    false,
+                'location' => $location,
+            ];
         }
 
         return $pathArray;
@@ -103,6 +116,10 @@ class PathHelper
         $optionsResolver->setRequired('use_all_content_types');
         $optionsResolver->setAllowedTypes('use_all_content_types', 'bool');
         $optionsResolver->setDefault('use_all_content_types', false);
+
+        $optionsResolver->setRequired('show_current_location');
+        $optionsResolver->setAllowedTypes('show_current_location', 'bool');
+        $optionsResolver->setDefault('show_current_location', false);
 
         $optionsResolver->setRequired('absolute_url');
         $optionsResolver->setAllowedTypes('absolute_url', 'bool');

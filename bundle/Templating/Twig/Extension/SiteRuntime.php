@@ -16,7 +16,7 @@ use Netgen\EzPlatformSiteApi\API\Exceptions\TranslationNotMatchedException;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Symfony\Component\Intl\Intl;
-use function floor;
+use function ceil;
 use function mb_substr;
 use function str_word_count;
 use function ucwords;

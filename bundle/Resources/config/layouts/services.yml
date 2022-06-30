@@ -30,7 +30,13 @@ parameters:
         'narrow': 'block.plugin.set_container.narrow'
         'wide': 'block.plugin.set_container.wide'
 
-    ngsite.layouts.block.plugin.vertical_margin.sizes:
+    ngsite.layouts.block.plugin.vertical_margin.top:
+        none: 'block.plugin.vertical_whitespace.none'
+        small: 'block.plugin.vertical_whitespace.small'
+        medium: 'block.plugin.vertical_whitespace.medium'
+        large: 'block.plugin.vertical_whitespace.large'
+
+    ngsite.layouts.block.plugin.vertical_margin.bottom:
         none: 'block.plugin.vertical_whitespace.none'
         small: 'block.plugin.vertical_whitespace.small'
         medium: 'block.plugin.vertical_whitespace.medium'
@@ -63,12 +69,12 @@ services:
         tags:
             - { name: netgen_layouts.block_definition_handler.plugin, priority: 200 }
 
-    app.block.block_definition.handler.plugin.vertical_margin:
-        class: AppBundle\Block\BlockDefinition\Handler\VerticalMarginPlugin
+    ngsite.layouts.block.plugin.vertical_margin:
+        class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\VerticalMarginPlugin
         public: false
         arguments:
-            - "%ngsite.layouts.block.plugin.vertical_whitespace.positions%"
-            - "%ngsite.layouts.block.plugin.vertical_margin.sizes%"
+            - "%ngsite.layouts.block.plugin.vertical_margin.top%"
+            - "%ngsite.layouts.block.plugin.vertical_margin.bottom%"
         tags:
             - { name: netgen_layouts.block_definition_handler.plugin, priority: 200 }
 

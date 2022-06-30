@@ -14,6 +14,11 @@ block.plugin.vertical_whitespace.large: 'Large'
 block.plugin.vertical_whitespace.medium: 'Medium'
 block.plugin.vertical_whitespace.small: 'Small'
 
+block.plugin.vertical_margin.enabled: 'Use vertical margin'
+block.plugin.vertical_margin.top: 'On top'
+block.plugin.vertical_margin.bottom: 'On bottom'
+
+
 block.plugin.background_image.enabled: 'Set background image'
 block.plugin.background_image.image: 'Background image'
 

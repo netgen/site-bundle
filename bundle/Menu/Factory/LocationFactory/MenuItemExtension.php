@@ -115,7 +115,7 @@ class MenuItemExtension implements ExtensionInterface
         $item
             ->setUri($this->urlGenerator->generate('', [RouteObjectInterface::ROUTE_OBJECT => $relatedContent]))
             ->setExtra('ezlocation', $relatedContent->mainLocation)
-            ->setAttribute('id', 'menu-item-location-id-' . $relatedContent->mainLocationId)
+            ->setAttribute('id', 'menu-item-' . $item->getExtra('menu_name') . '-location-id-' . $relatedContent->mainLocationId)
             ->setLinkAttribute('title', $item->getLabel());
 
         if (!$content->getField('use_menu_item_name')->value->bool) {

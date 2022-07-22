@@ -74,7 +74,7 @@ class RelationListMenuBuilder
                 continue;
             }
 
-            $menu->addChild($this->factory->createItem('', ['ezlocation' => $destinationContent->mainLocation]));
+            $menu->addChild($this->factory->createItem('', ['ezlocation' => $destinationContent->mainLocation, 'menu_name' => $fieldIdentifier]));
         }
 
         return $menu;

@@ -27,6 +27,6 @@ class FallbackExtension implements ExtensionInterface
     {
         $item
             ->setUri($this->urlGenerator->generate('', [RouteObjectInterface::ROUTE_OBJECT => $location]))
-            ->setAttribute('id', 'menu-item-location-id-' . $location->id);
+            ->setAttribute('id', 'menu-item-' . $item->getExtra('menu_name') . '-location-id-' . $location->id);
     }
 }

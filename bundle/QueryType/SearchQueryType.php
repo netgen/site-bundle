@@ -12,6 +12,7 @@ use Ibexa\Core\QueryType\OptionsResolverBasedQueryType;
 use Netgen\Bundle\SiteBundle\API\Search\Criterion\FullText;
 use Netgen\IbexaSiteApi\API\Site;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
 use function trim;
 
 class SearchQueryType extends OptionsResolverBasedQueryType

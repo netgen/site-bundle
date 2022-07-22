@@ -26,6 +26,7 @@ use Netgen\Layouts\Parameters\ParameterType;
 use Netgen\TagsBundle\API\Repository\Values\Content\Query\Criterion\TagId;
 use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
 use Netgen\TagsBundle\Core\FieldType\Tags\Value as TagsFieldValue;
+
 use function array_filter;
 use function array_map;
 

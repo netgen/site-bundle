@@ -10,6 +10,7 @@ use Netgen\Bundle\IbexaSiteApiBundle\View\LocationValueView;
 use Netgen\IbexaSiteApi\API\Values\Location;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+
 use function array_map;
 use function in_array;
 

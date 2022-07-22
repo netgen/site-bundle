@@ -11,6 +11,7 @@ use Netgen\Bundle\SiteBundle\Helper\PathHelper;
 use Netgen\IbexaSiteApi\API\Exceptions\TranslationNotMatchedException;
 use Netgen\IbexaSiteApi\API\LoadService;
 use Symfony\Component\Intl\Languages;
+
 use function ceil;
 use function mb_substr;
 use function str_word_count;

@@ -10,6 +10,7 @@ use Netgen\IbexaSiteApi\API\Values\Location;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Throwable;
+
 use function is_string;
 use function sprintf;
 

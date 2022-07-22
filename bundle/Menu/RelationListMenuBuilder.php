@@ -12,6 +12,7 @@ use Netgen\IbexaSiteApi\API\LoadService;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Throwable;
+
 use function sprintf;
 
 class RelationListMenuBuilder

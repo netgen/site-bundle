@@ -7,6 +7,7 @@ namespace Netgen\Bundle\SiteBundle\Relation;
 use Netgen\IbexaSiteApi\API\LoadService;
 use Netgen\IbexaSiteApi\API\Values\Location;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
 use function array_merge;
 use function iterator_to_array;
 

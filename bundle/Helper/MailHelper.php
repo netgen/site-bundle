@@ -13,6 +13,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
+
 use function array_key_first;
 use function count;
 use function get_debug_type;

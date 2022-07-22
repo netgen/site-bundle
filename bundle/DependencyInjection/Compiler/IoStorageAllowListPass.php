@@ -7,6 +7,7 @@ namespace Netgen\Bundle\SiteBundle\DependencyInjection\Compiler;
 use Ibexa\Bundle\Core\DependencyInjection\Configuration\ConfigResolver;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+
 use function array_merge;
 use function array_search;
 use function array_values;

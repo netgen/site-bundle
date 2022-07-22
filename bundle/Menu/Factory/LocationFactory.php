@@ -12,6 +12,7 @@ use Netgen\Bundle\SiteBundle\Event\SiteEvents;
 use Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\ExtensionInterface;
 use Netgen\IbexaSiteApi\API\Values\Location;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+
 use function md5;
 
 class LocationFactory implements FactoryInterface

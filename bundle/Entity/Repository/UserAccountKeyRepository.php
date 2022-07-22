@@ -6,6 +6,7 @@ namespace Netgen\Bundle\SiteBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Netgen\Bundle\SiteBundle\Entity\UserAccountKey;
+
 use function hash;
 use function random_bytes;
 use function time;

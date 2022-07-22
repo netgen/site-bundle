@@ -6,6 +6,7 @@ namespace Netgen\Bundle\SiteBundle\Templating\Twig;
 
 use Twig\Environment as BaseEnvironment;
 use Twig\Source;
+
 use function sprintf;
 use function str_replace;
 

@@ -24,8 +24,10 @@ class FallbackExtension implements ExtensionInterface
 
     public function buildItem(ItemInterface $item, Location $location): void
     {
+        $menuName = $item->getExtra('menu_name');
+
         $item
             ->setUri($this->urlGenerator->generate($location))
-            ->setAttribute('id', 'menu-item-location-id-' . $location->id);
+            ->setAttribute('id', 'menu-item-' . ($menuName ? $menuName . '-' : '') . 'location-id-' . $location->id);
     }
 }

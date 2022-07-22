@@ -106,7 +106,7 @@ class ChildrenBuilder
         }
 
         foreach ($childLocations as $location) {
-            $childItem = $item->addChild(null, ['ezlocation' => $location]);
+            $childItem = $item->addChild(null, ['ezlocation' => $location, 'menu_name' => $item->getExtra('menu_name')]);
             if ($currentDepth <= $maxDepth) {
                 $this->buildChildrenFromRelatedParentNode($childItem, $content, $location->content, $currentDepth + 1);
             }
@@ -134,7 +134,7 @@ class ChildrenBuilder
         }
 
         foreach ($childLocations as $location) {
-            $item->addChild(null, ['ezlocation' => $location]);
+            $item->addChild(null, ['ezlocation' => $location, 'menu_name' => $item->getExtra('menu_name')]);
         }
     }
 }

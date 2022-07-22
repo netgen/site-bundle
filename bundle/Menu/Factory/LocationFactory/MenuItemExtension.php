@@ -111,10 +111,12 @@ class MenuItemExtension implements ExtensionInterface
 
     protected function buildItemFromRelatedContent(ItemInterface $item, Content $content, Content $relatedContent): void
     {
+        $menuName = $item->getExtra('menu_name');
+
         $item
             ->setUri($this->urlGenerator->generate($relatedContent))
             ->setExtra('ezlocation', $relatedContent->mainLocation)
-            ->setAttribute('id', 'menu-item-location-id-' . $relatedContent->mainLocationId)
+            ->setAttribute('id', 'menu-item-' . ($menuName ? $menuName . '-' : '') . 'location-id-' . $relatedContent->mainLocationId)
             ->setLinkAttribute('title', $item->getLabel());
 
         if (!$content->getField('use_menu_item_name')->value->bool) {

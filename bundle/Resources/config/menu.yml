@@ -1,3 +1,6 @@
+parameters:
+    ngsite.menu.use_field_identifier_in_menu_name: false
+
 services:
     ngsite.menu.relation_list_menu_builder:
         class: Netgen\Bundle\SiteBundle\Menu\RelationListMenuBuilder
@@ -71,6 +74,8 @@ services:
         factory: ["@ngsite.menu.relation_list_menu_builder", createRelationListMenu]
         arguments:
             - main_menu
+            - null
+            - '%ngsite.menu.use_field_identifier_in_menu_name%'
         tags:
             - { name: knp_menu.menu, alias: ngsite_main_menu }
 
@@ -80,5 +85,7 @@ services:
         factory: ["@ngsite.menu.relation_list_menu_builder", createRelationListMenu]
         arguments:
             - additional_menu
+            - null
+            - '%ngsite.menu.use_field_identifier_in_menu_name%'
         tags:
             - { name: knp_menu.menu, alias: ngsite_additional_menu }

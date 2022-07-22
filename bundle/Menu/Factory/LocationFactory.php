@@ -48,6 +48,7 @@ class LocationFactory implements FactoryInterface
         $menuItem
             ->setLabel($options['ezlocation']->content->name)
             ->setExtra('ezlocation', $options['ezlocation'])
+            ->setExtra('menu_name', $options['menu_name'])
             // Used to preserve the reference to the original menu item location
             // (e.g. in case of menu item or shortcut where ezlocation will be overwritten
             // by the location of related content)

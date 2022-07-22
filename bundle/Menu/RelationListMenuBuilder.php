@@ -41,7 +41,7 @@ class RelationListMenuBuilder
      *
      * @param mixed|null $contentId
      */
-    public function createRelationListMenu(string $fieldIdentifier, $contentId = null): ItemInterface
+    public function createRelationListMenu(string $fieldIdentifier, $contentId = null, bool $useFieldIdentifier = false): ItemInterface
     {
         $content = $contentId !== null ?
             $this->loadService->loadContent($contentId) :
@@ -76,7 +76,7 @@ class RelationListMenuBuilder
                 continue;
             }
 
-            $menu->addChild(null, ['ezlocation' => $location]);
+            $menu->addChild(null, ['ezlocation' => $location, 'menu_name' => $useFieldIdentifier ? $fieldIdentifier : '']);
         }
 
         return $menu;

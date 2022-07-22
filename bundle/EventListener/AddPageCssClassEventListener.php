@@ -9,6 +9,7 @@ use eZ\Publish\Core\MVC\Symfony\View\Event\FilterViewParametersEvent;
 use eZ\Publish\Core\MVC\Symfony\View\ViewEvents;
 use Netgen\Bundle\EzPlatformSiteApiBundle\View\ContentValueView;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 use function trim;
 
 class AddPageCssClassEventListener implements EventSubscriberInterface

@@ -12,6 +12,7 @@ use eZ\Publish\Core\QueryType\OptionsResolverBasedQueryType;
 use Netgen\Bundle\SiteBundle\API\Search\Criterion\FullText;
 use Netgen\EzPlatformSiteApi\API\Site;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
 use function trim;
 
 class SearchQueryType extends OptionsResolverBasedQueryType

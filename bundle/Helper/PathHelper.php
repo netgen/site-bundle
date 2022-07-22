@@ -10,6 +10,7 @@ use Netgen\EzPlatformSiteApi\API\LoadService;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
 use function array_map;
 use function array_shift;
 use function in_array;

@@ -7,6 +7,7 @@ namespace Netgen\Bundle\SiteBundle\OpenGraph\Handler;
 use Netgen\Bundle\OpenGraphBundle\Handler\HandlerInterface;
 use Netgen\Bundle\OpenGraphBundle\MetaTag\Item;
 use Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper;
+
 use function trim;
 
 class SiteName implements HandlerInterface

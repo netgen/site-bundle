@@ -9,6 +9,7 @@ use Netgen\Bundle\SiteBundle\NetgenSiteProjectBundleInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
 use function basename;
 use function dirname;
 use function in_array;

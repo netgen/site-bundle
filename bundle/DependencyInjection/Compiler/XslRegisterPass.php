@@ -7,6 +7,7 @@ namespace Netgen\Bundle\SiteBundle\DependencyInjection\Compiler;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+
 use function array_merge;
 
 class XslRegisterPass implements CompilerPassInterface

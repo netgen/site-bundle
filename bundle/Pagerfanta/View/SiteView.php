@@ -10,6 +10,7 @@ use Pagerfanta\Pagerfanta;
 use Pagerfanta\PagerfantaInterface;
 use Pagerfanta\View\ViewInterface;
 use Twig\Environment;
+
 use function max;
 use function min;
 use function trim;

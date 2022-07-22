@@ -8,6 +8,7 @@ use Netgen\Bundle\SiteBundle\Event\Menu\LocationMenuItemEvent;
 use Netgen\Bundle\SiteBundle\Event\SiteEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+
 use function rawurldecode;
 
 class EsiFragmentEventListener implements EventSubscriberInterface

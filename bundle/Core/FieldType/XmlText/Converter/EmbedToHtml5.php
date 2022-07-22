@@ -15,6 +15,7 @@ use Netgen\EzPlatformSiteApi\API\Values\Location;
 use Netgen\EzPlatformSiteApi\Core\Traits\SiteAwareTrait;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
+
 use function sprintf;
 
 /**

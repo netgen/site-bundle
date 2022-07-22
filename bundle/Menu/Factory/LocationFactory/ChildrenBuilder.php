@@ -14,6 +14,7 @@ use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Throwable;
+
 use function array_map;
 use function sprintf;
 

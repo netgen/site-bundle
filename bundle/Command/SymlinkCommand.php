@@ -7,6 +7,7 @@ namespace Netgen\Bundle\SiteBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
+
 use function basename;
 use function dirname;
 use function is_file;

@@ -6,6 +6,7 @@ namespace Netgen\Bundle\SiteBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Netgen\Bundle\SiteBundle\Entity\EzUserAccountKey;
+
 use function function_exists;
 use function md5;
 use function microtime;

@@ -12,6 +12,7 @@ use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value as RemoteIm
 use Netgen\Bundle\SiteBundle\Helper\SiteInfoHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+
 use function ltrim;
 use function preg_match;
 use function sprintf;

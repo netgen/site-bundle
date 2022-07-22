@@ -14,6 +14,7 @@ use Netgen\Bundle\OpenGraphBundle\Handler\FieldType\Handler;
 use Netgen\Bundle\OpenGraphBundle\Handler\FieldType\Image as ImageHandler;
 use Netgen\Bundle\RemoteMediaBundle\Core\FieldType\RemoteMedia\Value as RemoteImageValue;
 use Netgen\Bundle\RemoteMediaBundle\OpenGraph\Handler\RemoteMediaHandler;
+
 use function implode;
 use function is_array;
 use function sprintf;

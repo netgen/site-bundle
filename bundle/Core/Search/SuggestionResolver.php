@@ -7,6 +7,7 @@ namespace Netgen\Bundle\SiteBundle\Core\Search;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use Netgen\EzPlatformSearchExtra\API\Values\Content\Search\Suggestion;
+
 use function sprintf;
 use function str_replace;
 

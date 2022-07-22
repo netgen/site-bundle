@@ -48,6 +48,7 @@ class LocationFactory implements FactoryInterface
         $menuItem
             ->setLabel($options['ibexa_location']->content->name)
             ->setExtra('ibexa_location', $options['ibexa_location'])
+            ->setExtra('menu_name', $options['menu_name'])
             // Used to preserve the reference to the original menu item location
             // (e.g. in case of menu item or shortcut where ibexa_location will be overwritten
             // by the location of related content)

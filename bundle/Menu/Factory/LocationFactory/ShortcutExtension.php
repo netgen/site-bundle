@@ -108,7 +108,7 @@ class ShortcutExtension implements ExtensionInterface
         $contentUri = $this->urlGenerator->generate('', [RouteObjectInterface::ROUTE_OBJECT => $relatedContent]);
         $item->setUri($contentUri . $content->getField('internal_url_suffix')->value->text)
             ->setExtra('ibexa_location', $relatedContent->mainLocation)
-            ->setAttribute('id', 'menu-item-location-id-' . $relatedContent->mainLocationId)
+            ->setAttribute('id', 'menu-item-' . $item->getExtra('menu_name') . '-location-id-' . $relatedContent->mainLocationId)
             ->setLinkAttribute('title', $item->getLabel());
 
         if (!$content->getField('use_shortcut_name')->value->bool) {

@@ -74,7 +74,7 @@ class RelationListMenuBuilder
                 continue;
             }
 
-            $menu->addChild($this->factory->createItem('', ['ibexa_location' => $destinationContent->mainLocation, 'index' => $index]));
+            $menu->addChild($this->factory->createItem('', ['ibexa_location' => $destinationContent->mainLocation, 'index' => $index, 'menu_name' => $fieldIdentifier]));
         }
 
         return $menu;

@@ -104,7 +104,7 @@ class ChildrenBuilder
         }
 
         foreach ($childLocations as $index => $location) {
-            $childItem = $item->addChild('', ['ibexa_location' => $location, 'index' => $index]);
+            $childItem = $item->addChild('', ['ibexa_location' => $location, 'index' => $index, 'menu_name' => $item->getExtra('menu_name')]);
             if ($currentDepth <= $maxDepth) {
                 $this->buildChildrenFromRelatedParentNode($childItem, $content, $location->content, $currentDepth + 1);
             }
@@ -132,7 +132,7 @@ class ChildrenBuilder
         }
 
         foreach ($childLocations as $index => $location) {
-            $item->addChild('', ['ibexa_location' => $location, 'index' => $index]);
+            $item->addChild('', ['ibexa_location' => $location, 'index' => $index, 'menu_name' => $item->getExtra('menu_name')]);
         }
     }
 }

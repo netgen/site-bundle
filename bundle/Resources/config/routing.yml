@@ -1,5 +1,9 @@
 ngsite_download:
     path: /content/download/{contentId}/{fieldId}/{isInline}
+    requirements:
+        contentId: '\d+'
+        fieldId: '\d+'
+        isInline: 0|1
     defaults:
         _controller: "ngsite.controller.download:downloadFile"
         isInline: false

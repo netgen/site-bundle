@@ -6,7 +6,7 @@ ngsite_download:
         isInline: 0|1
     defaults:
         _controller: "ngsite.controller.download:downloadFile"
-        isInline: false
+        isInline: 0
     methods: [GET]
 
 ngsite_user_register:

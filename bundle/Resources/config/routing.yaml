@@ -2,8 +2,12 @@ ngsite_download:
     path: /content/download/{contentId}/{fieldId}/{isInline}
     controller: ngsite.controller.download
     methods: [GET]
+    requirements:
+        contentId: '\d+'
+        fieldId: '\d+'
+        isInline: 0|1
     defaults:
-        isInline: false
+        isInline: 0
 
 ngsite_user_register:
     path: /user/register

@@ -136,7 +136,7 @@ abstract class BaseMultiprocessCommand extends Command
         if ($count < 1) {
             $this->symfonyStyle->error('Nothing to process, aborting.');
 
-            return Command::FAILURE;
+            return 1;
         }
 
         $limit = $this->getLimit();
@@ -156,7 +156,7 @@ abstract class BaseMultiprocessCommand extends Command
                 ProgressBar::getFormatDefinition('very_verbose') . '%process_count%',
             );
             $this->progressBar->setMessage(' (...)', 'process_count');
-            $this->symfonyStyle->info(
+            $this->symfonyStyle->writeln(
                 sprintf(
                     'Processing for %s items across %s iteration(s), %s:',
                     $count,
@@ -168,7 +168,7 @@ abstract class BaseMultiprocessCommand extends Command
 
             $this->dispatch($processCount, $limit);
         } else {
-            $this->symfonyStyle->info(sprintf('Processing %s items, %s:', $count, $processMessage));
+            $this->symfonyStyle->writeln(sprintf('Processing %s items, %s:', $count, $processMessage));
             $this->progressBar->start($count);
             $generator = $this->internalGetItemGenerator($limit);
 
@@ -187,7 +187,7 @@ abstract class BaseMultiprocessCommand extends Command
         $this->symfonyStyle->success('Finished processing');
         $this->progressBar->clear();
 
-        return Command::SUCCESS;
+        return 0;
     }
 
     protected function dispatch(int $processCount, int $limit): void

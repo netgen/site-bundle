@@ -54,3 +54,11 @@ services:
             - "@?profiler"
         tags:
             - { name: console.command, command: 'ngsite:profiler:clear-cache' }
+
+    ngsite.command.test_multiprocess:
+        class: Netgen\Bundle\SiteBundle\Command\TestMultiprocessCommand
+        arguments:
+            - '%kernel.project_dir%'
+            - '@logger'
+        tags:
+            - { name: console.command, command: 'ngsite:test-multiprocess' }

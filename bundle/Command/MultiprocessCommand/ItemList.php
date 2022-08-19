@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Command\MultiprocessCommand;
 
-class Items
+class ItemList
 {
     private array $items;
     private int $depth;

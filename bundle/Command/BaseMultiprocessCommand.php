@@ -14,7 +14,6 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\OutputStyle;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
@@ -47,7 +46,7 @@ abstract class BaseMultiprocessCommand extends Command
     protected string $projectDir;
     protected LoggerInterface $logger;
     protected InputInterface $input;
-    protected OutputStyle $outputStyle;
+    protected SymfonyStyle $symfonyStyle;
     protected ProgressBar $progressBar;
 
     public function __construct(
@@ -97,7 +96,7 @@ abstract class BaseMultiprocessCommand extends Command
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->input = $input;
-        $this->outputStyle = new SymfonyStyle($input, $output);
+        $this->symfonyStyle = new SymfonyStyle($input, $output);
     }
 
     protected function getLimit(): int
@@ -135,7 +134,7 @@ abstract class BaseMultiprocessCommand extends Command
         $count = $this->getCount();
 
         if ($count < 1) {
-            $this->outputStyle->error('Nothing to process, aborting.');
+            $this->symfonyStyle->error('Nothing to process, aborting.');
 
             return Command::FAILURE;
         }
@@ -148,7 +147,7 @@ abstract class BaseMultiprocessCommand extends Command
             ? sprintf('using up to %s parallel child processes', $processCount)
             : 'using a single (current) process';
 
-        $this->progressBar = $this->outputStyle->createProgressBar();
+        $this->progressBar = $this->symfonyStyle->createProgressBar();
         $this->progressBar->setFormat('very_verbose');
 
         if ($processCount > 1) {
@@ -157,7 +156,7 @@ abstract class BaseMultiprocessCommand extends Command
                 ProgressBar::getFormatDefinition('very_verbose') . '%process_count%',
             );
             $this->progressBar->setMessage(' (...)', 'process_count');
-            $this->outputStyle->info(
+            $this->symfonyStyle->info(
                 sprintf(
                     'Processing for %s items across %s iteration(s), %s:',
                     $count,
@@ -169,7 +168,7 @@ abstract class BaseMultiprocessCommand extends Command
 
             $this->dispatch($processCount, $limit);
         } else {
-            $this->outputStyle->info(sprintf('Processing %s items, %s:', $count, $processMessage));
+            $this->symfonyStyle->info(sprintf('Processing %s items, %s:', $count, $processMessage));
             $this->progressBar->start($count);
             $generator = $this->internalGetItemGenerator($limit);
 
@@ -184,8 +183,8 @@ abstract class BaseMultiprocessCommand extends Command
 
         $this->progressBar->setMessage('', 'process_count');
         $this->progressBar->finish();
-        $this->outputStyle->newLine(2);
-        $this->outputStyle->success('Finished processing');
+        $this->symfonyStyle->newLine(2);
+        $this->symfonyStyle->success('Finished processing');
         $this->progressBar->clear();
 
         return Command::SUCCESS;

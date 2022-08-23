@@ -153,7 +153,7 @@ abstract class BaseMultiprocessCommand extends Command
         if ($processCount > 1) {
             ProgressBar::setFormatDefinition(
                 'very_verbose',
-                ProgressBar::getFormatDefinition('very_verbose') . '%process_count%',
+                ProgressBar::getFormatDefinition('debug') . '%process_count%',
             );
             $this->progressBar->setMessage(' (...)', 'process_count');
             $this->symfonyStyle->writeln(

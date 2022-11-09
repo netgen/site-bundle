@@ -6,6 +6,7 @@ namespace Netgen\Bundle\SiteBundle\Layouts\Block\Plugin;
 
 use Netgen\Layouts\Block\BlockDefinition\ContainerDefinitionHandlerInterface;
 use Netgen\Layouts\Block\BlockDefinition\Handler\Plugin;
+use Netgen\Layouts\Ez\Block\BlockDefinition\Handler\ComponentHandler;
 use Netgen\Layouts\Parameters\ParameterBuilderInterface;
 use Netgen\Layouts\Parameters\ParameterType;
 use Netgen\Layouts\Standard\Block\BlockDefinition\Handler\ListHandler;
@@ -27,7 +28,12 @@ class BackgroundColorPlugin extends Plugin
 
     public static function getExtendedHandlers(): array
     {
-        return [ListHandler::class, ContainerDefinitionHandlerInterface::class, BackgroundColorPluginInterface::class];
+        return [
+            ListHandler::class,
+            ComponentHandler::class,
+            ContainerDefinitionHandlerInterface::class,
+            BackgroundColorPluginInterface::class,
+        ];
     }
 
     public function buildParameters(ParameterBuilderInterface $builder): void

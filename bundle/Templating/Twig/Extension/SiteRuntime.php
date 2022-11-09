@@ -29,7 +29,7 @@ class SiteRuntime
 {
     private const WORDS_PER_MINUTE = 230;
 
-    protected string $debug;
+    protected bool $debug;
 
     protected PathHelper $pathHelper;
 
@@ -44,7 +44,7 @@ class SiteRuntime
     protected LoggerInterface $logger;
 
     public function __construct(
-        string $debug,
+        bool $debug,
         PathHelper $pathHelper,
         LocaleConverterInterface $localeConverter,
         LoadService $loadService,
@@ -140,7 +140,7 @@ class SiteRuntime
                 )->uri;
             }
         } catch (Throwable $e) {
-            if ($this->debug === true) {
+            if ($this->debug !== true) {
                 $this->logger->critical($e->getMessage());
 
                 return '/';

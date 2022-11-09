@@ -12,6 +12,7 @@ use Netgen\Layouts\API\Values\Block\Block;
 use Netgen\Layouts\Block\BlockDefinition\ContainerDefinitionHandlerInterface;
 use Netgen\Layouts\Block\BlockDefinition\Handler\Plugin;
 use Netgen\Layouts\Block\DynamicParameters;
+use Netgen\Layouts\Ibexa\Block\BlockDefinition\Handler\ComponentHandler;
 use Netgen\Layouts\Ibexa\Parameters\ParameterType as IbexaParameterType;
 use Netgen\Layouts\Parameters\ParameterBuilderInterface;
 use Netgen\Layouts\Parameters\ParameterType;
@@ -28,7 +29,12 @@ class BackgroundImagePlugin extends Plugin
 
     public static function getExtendedHandlers(): array
     {
-        return [ListHandler::class, ContainerDefinitionHandlerInterface::class, BackgroundImagePluginInterface::class];
+        return [
+            ListHandler::class,
+            ComponentHandler::class,
+            ContainerDefinitionHandlerInterface::class,
+            BackgroundImagePluginInterface::class,
+        ];
     }
 
     public function buildParameters(ParameterBuilderInterface $builder): void

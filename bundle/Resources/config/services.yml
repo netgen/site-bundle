@@ -247,6 +247,12 @@ services:
         class: Netgen\Bundle\SiteBundle\Core\Search\SuggestionResolver
         public: false
 
+    ngsite.profiler.data_collector.git:
+        class: Netgen\Bundle\SiteBundle\DataCollector\GitDataCollector
+        public: false
+        tags:
+            - { name: data_collector, template: '@NetgenSite/data_collector/git.html.twig', id: ngsite.data_collector.git }
+
 #    Custom user context hash providers are disabled by default.
 #    Enable them in your project if needed by copying one of the
 #    following service definitions.

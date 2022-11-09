@@ -29,7 +29,7 @@ class SiteRuntime
 {
     private const WORDS_PER_MINUTE = 230;
 
-    protected string $environment;
+    protected string $debug;
 
     protected PathHelper $pathHelper;
 
@@ -44,7 +44,7 @@ class SiteRuntime
     protected LoggerInterface $logger;
 
     public function __construct(
-        string $environment,
+        string $debug,
         PathHelper $pathHelper,
         LocaleConverterInterface $localeConverter,
         LoadService $loadService,
@@ -52,7 +52,7 @@ class SiteRuntime
         ?RemoteMediaProvider $remoteMediaProvider = null,
         ?LoggerInterface $logger = null
     ) {
-        $this->environment = $environment;
+        $this->debug = $debug;
         $this->pathHelper = $pathHelper;
         $this->localeConverter = $localeConverter;
         $this->loadService = $loadService;
@@ -140,7 +140,7 @@ class SiteRuntime
                 )->uri;
             }
         } catch (Throwable $e) {
-            if ($this->environment !== 'dev') {
+            if ($this->debug === true) {
                 $this->logger->critical($e->getMessage());
 
                 return '/';

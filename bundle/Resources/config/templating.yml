@@ -29,7 +29,7 @@ services:
         class: Netgen\Bundle\SiteBundle\Templating\Twig\Extension\SiteRuntime
         public: false
         arguments:
-            - "%kernel.environment%"
+            - "%kernel.debug%"
             - "@ngsite.helper.path_helper"
             - "@ezpublish.locale.converter"
             - "@netgen.ezplatform_site.load_service"

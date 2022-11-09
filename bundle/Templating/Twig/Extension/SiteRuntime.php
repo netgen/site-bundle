@@ -15,8 +15,11 @@ use Netgen\Bundle\SiteBundle\Helper\PathHelper;
 use Netgen\EzPlatformSiteApi\API\Exceptions\TranslationNotMatchedException;
 use Netgen\EzPlatformSiteApi\API\LoadService;
 use Netgen\EzPlatformSiteApi\API\Values\Content;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\Intl\Intl;
 
+use Throwable;
 use function ceil;
 use function mb_substr;
 use function str_word_count;
@@ -25,6 +28,8 @@ use function ucwords;
 class SiteRuntime
 {
     private const WORDS_PER_MINUTE = 230;
+
+    protected bool $debug;
 
     protected PathHelper $pathHelper;
 
@@ -36,18 +41,24 @@ class SiteRuntime
 
     protected ?RemoteMediaProvider $remoteMediaProvider;
 
+    protected LoggerInterface $logger;
+
     public function __construct(
+        bool $debug,
         PathHelper $pathHelper,
         LocaleConverterInterface $localeConverter,
         LoadService $loadService,
         VariationHandler $imageVariationService,
-        ?RemoteMediaProvider $remoteMediaProvider = null
+        ?RemoteMediaProvider $remoteMediaProvider = null,
+        ?LoggerInterface $logger = null
     ) {
+        $this->debug = $debug;
         $this->pathHelper = $pathHelper;
         $this->localeConverter = $localeConverter;
         $this->loadService = $loadService;
         $this->imageVariationService = $imageVariationService;
         $this->remoteMediaProvider = $remoteMediaProvider;
+        $this->logger = $logger ?: new NullLogger();
     }
 
     /**
@@ -112,12 +123,30 @@ class SiteRuntime
     {
         $field = $content->getField($fieldIdentifier);
 
-        if ($this->remoteMediaProvider !== null && $field->value instanceof RemoteImageValue) {
-            return $this->remoteMediaProvider->buildVariation($field->value, $content->contentInfo->contentTypeIdentifier, $alias)->url;
-        }
+        try {
+            if ($this->remoteMediaProvider !== null && $field->value instanceof RemoteImageValue) {
+                return $this->remoteMediaProvider->buildVariation(
+                    $field->value,
+                    $content->contentInfo->contentTypeIdentifier,
+                    $alias
+                )->url;
+            }
 
-        if ($field->value instanceof ImageValue) {
-            return $this->imageVariationService->getVariation($field->innerField, $content->innerVersionInfo, $alias)->uri;
+            if ($field->value instanceof ImageValue) {
+                return $this->imageVariationService->getVariation(
+                    $field->innerField,
+                    $content->innerVersionInfo,
+                    $alias
+                )->uri;
+            }
+        } catch (Throwable $e) {
+            if ($this->debug !== true) {
+                $this->logger->critical($e->getMessage());
+
+                return '/';
+            }
+
+            throw $e;
         }
 
         return '/';

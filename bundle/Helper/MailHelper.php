@@ -130,9 +130,9 @@ class MailHelper
      *
      * @param mixed $sender
      *
-     * @throws \InvalidArgumentException If sender was not provided
-     *
      * @return array|string
+     *
+     * @throws \InvalidArgumentException If sender was not provided
      */
     protected function getSender($sender)
     {

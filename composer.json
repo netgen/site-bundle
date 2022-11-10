@@ -31,7 +31,8 @@
         "twig/twig": "^3.3",
         "doctrine/orm": "^2.11",
         "knplabs/knp-menu-bundle": "^3.2",
-        "sensio/framework-extra-bundle": "^6.2"
+        "sensio/framework-extra-bundle": "^6.2",
+        "sebastianfeldmann/git": "^3.8"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0"

@@ -53,7 +53,6 @@ services:
 
     ngsite.menu.factory.location.extension.children_builder:
         class: Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\ChildrenBuilder
-        public: false
         arguments:
             - "@netgen.ibexa_site_api.load_service"
             - "@netgen.ibexa_site_api.filter_service"

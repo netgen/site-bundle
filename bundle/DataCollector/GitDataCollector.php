@@ -12,7 +12,7 @@ use Throwable;
 
 final class GitDataCollector extends DataCollector
 {
-    public function collect(Request $request, Response $response, ?Throwable $exception = null)
+    public function collect(Request $request, Response $response, ?Throwable $exception = null): void
     {
         $repository = new Repository();
 
@@ -35,7 +35,15 @@ final class GitDataCollector extends DataCollector
         return $this->data['last_commit_hash'];
     }
 
-    public function getName()
+    public function reset(): void
+    {
+        $this->data = [
+            'git_branch' => '',
+            'last_commit_hash' => '',
+        ];
+    }
+
+    public function getName(): string
     {
         return 'ngsite.data_collector.git';
     }

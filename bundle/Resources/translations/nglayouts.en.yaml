@@ -24,6 +24,10 @@ block.plugin.set_container.regular: 'Regular'
 block.plugin.set_container.narrow: 'Narrow'
 block.plugin.set_container.wide: 'Wide'
 
+block.plugin.features_component_grid.2_columns: '2 columns'
+block.plugin.features_component_grid.3_columns: '3 columns'
+block.plugin.features_component_grid.4_columns: '4 columns'
+
 block.plugin.title_icon.enabled: 'Use icon'
 block.plugin.title_icon.css_class: 'Icon CSS class'
 

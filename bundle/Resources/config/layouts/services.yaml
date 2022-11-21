@@ -22,6 +22,11 @@ parameters:
         'narrow': 'block.plugin.set_container.narrow'
         'wide': 'block.plugin.set_container.wide'
 
+    ngsite.layouts.block.plugin.features_component_grid.columns:
+        2: 'block.plugin.features_component_grid.2_columns'
+        3: 'block.plugin.features_component_grid.3_columns'
+        4: 'block.plugin.features_component_grid.4_columns'
+
 services:
     ngsite.layouts.block.plugin.title_icon:
         class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\TitleIconPlugin
@@ -49,6 +54,13 @@ services:
             - "%ngsite.layouts.block.plugin.background_color.colors%"
         tags:
             - { name: netgen_layouts.block_definition_handler.plugin, priority: 400 }
+
+    ngsite.layouts.block.plugin.features_component_grid:
+        class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\FeaturesComponentGridPlugin
+        arguments:
+            - "%ngsite.layouts.block.plugin.features_component_grid.columns%"
+        tags:
+            - { name: netgen_layouts.block_definition_handler.plugin, priority: 350 }
 
     ngsite.layouts.block.plugin.set_container:
         class: Netgen\Bundle\SiteBundle\Layouts\Block\Plugin\SetContainerPlugin

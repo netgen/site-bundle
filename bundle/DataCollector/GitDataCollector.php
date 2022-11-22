@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\DataCollector;
 
+use Exception;
 use SebastianFeldmann\Git\Repository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +12,7 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 
 final class GitDataCollector extends DataCollector
 {
-    public function collect(Request $request, Response $response, ?\Exception $exception = null)
+    public function collect(Request $request, Response $response, ?Exception $exception = null)
     {
         $repository = new Repository();
 

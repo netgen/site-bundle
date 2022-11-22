@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 
 final class GitDataCollector extends DataCollector
 {
-    public function collect(Request $request, Response $response, \Exception $exception = null)
+    public function collect(Request $request, Response $response, ?\Exception $exception = null)
     {
         $repository = new Repository();
 

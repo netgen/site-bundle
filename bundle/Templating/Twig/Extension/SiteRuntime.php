@@ -18,8 +18,8 @@ use Netgen\EzPlatformSiteApi\API\Values\Content;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\Intl\Intl;
-
 use Throwable;
+
 use function ceil;
 use function mb_substr;
 use function str_word_count;
@@ -128,7 +128,7 @@ class SiteRuntime
                 return $this->remoteMediaProvider->buildVariation(
                     $field->value,
                     $content->contentInfo->contentTypeIdentifier,
-                    $alias
+                    $alias,
                 )->url;
             }
 
@@ -136,7 +136,7 @@ class SiteRuntime
                 return $this->imageVariationService->getVariation(
                     $field->innerField,
                     $content->innerVersionInfo,
-                    $alias
+                    $alias,
                 )->uri;
             }
         } catch (Throwable $e) {

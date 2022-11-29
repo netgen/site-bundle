@@ -33,6 +33,10 @@ class SiteExtension extends AbstractExtension
                 'ngsite_reading_time',
                 [SiteRuntime::class, 'calculateReadingTime'],
             ),
+            new TwigFunction(
+                'ngsite_group_fields',
+                [SiteRuntime::class, 'groupFields'],
+            ),
         ];
     }
 }

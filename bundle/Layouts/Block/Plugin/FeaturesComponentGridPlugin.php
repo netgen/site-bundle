@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Layouts\Block\Plugin;
 
 use Netgen\Layouts\Block\BlockDefinition\Handler\Plugin;
-use Netgen\Layouts\Ibexa\Block\BlockDefinition\Handler\ComponentHandler;
 use Netgen\Layouts\Parameters\ParameterBuilderInterface;
 use Netgen\Layouts\Parameters\ParameterType;
 
@@ -29,9 +28,9 @@ final class FeaturesComponentGridPlugin extends Plugin
         $this->columns = $columns;
     }
 
-    public static function getExtendedHandlers(): iterable
+    public static function getExtendedIdentifiers(): iterable
     {
-        yield ComponentHandler::class;
+        yield 'ibexa_component_features';
     }
 
     public function buildParameters(ParameterBuilderInterface $builder): void

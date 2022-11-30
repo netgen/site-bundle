@@ -16,7 +16,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use function array_map;
 use function explode;
 
-final class UpdateContentAlwaysAvailableCommand extends Command
+class UpdateContentAlwaysAvailableCommand extends Command
 {
     protected static $defaultDescription = 'Update always-available state for the given Content item(s)';
 

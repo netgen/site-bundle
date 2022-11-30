@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Throwable;
 
-final class GitDataCollector extends DataCollector
+class GitDataCollector extends DataCollector
 {
     public function collect(Request $request, Response $response, ?Throwable $exception = null): void
     {

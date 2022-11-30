@@ -21,7 +21,7 @@ use function array_map;
 use function ctype_digit;
 use function explode;
 
-final class MoveContentTypeCommand extends Command
+class MoveContentTypeCommand extends Command
 {
     protected static $defaultDescription = 'Assigns ContentType(s) to a single ContentTypeGroup';
 

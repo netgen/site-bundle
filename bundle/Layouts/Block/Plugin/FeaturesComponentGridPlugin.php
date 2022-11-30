@@ -10,7 +10,7 @@ use Netgen\Layouts\Parameters\ParameterType;
 
 use function array_flip;
 
-final class FeaturesComponentGridPlugin extends Plugin
+class FeaturesComponentGridPlugin extends Plugin
 {
     /**
      * The list of columns available. Key should be number of columns, while values

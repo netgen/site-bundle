@@ -33,6 +33,19 @@ ngsite_content_search:
     path: /content/search
     controller: ngsite.controller.search
 
+# Additional Ibexa Admin UI routes
+
+ibexa.location.view:
+    path: /view/location/{locationId}/{viewType}/{layout}/{contentId}
+    controller: ibexa_content::viewAction
+    defaults:
+        viewType: full
+        contentId: null
+        layout: true
+        allowed_siteaccess: [admin_group]
+    options:
+        expose: true
+
 # Rewire Ibexa built in routes to Netgen variants
 
 ibexa.user.register:

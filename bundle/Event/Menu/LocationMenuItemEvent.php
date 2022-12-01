@@ -32,7 +32,7 @@ class LocationMenuItemEvent extends Event
     }
 
     /**
-     * Returns the Ibexa Platform location for which the menu item was built.
+     * Returns the Ibexa location for which the menu item was built.
      */
     public function getLocation(): Location
     {

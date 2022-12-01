@@ -33,7 +33,7 @@ ngsite_content_search:
     path: /content/search
     controller: ngsite.controller.search
 
-# Rewire Ibexa Platform built in routes to Netgen variants
+# Rewire Ibexa built in routes to Netgen variants
 
 ibexa.user.register:
     path: /user/register
@@ -43,7 +43,7 @@ ibexa.user.user_register:
     path: /user/register
     controller: ngsite.controller.user.register
 
-# Disable Ibexa Platform built in routes
+# Disable Ibexa built in routes
 
 ibexa.user.register_confirmation:
     path: /_error/404

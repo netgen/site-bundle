@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Controller\InfoCollection;
 
-use Netgen\Bundle\SiteBundle\Controller\Controller;
 use Netgen\Bundle\IbexaSiteApiBundle\View\ContentView;
+use Netgen\Bundle\SiteBundle\Controller\Controller;
 use Netgen\Bundle\SiteBundle\InfoCollection\RefererResolver;
 use Netgen\IbexaSiteApi\API\Values\Location;
 use Netgen\InformationCollection\API\Events;

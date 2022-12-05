@@ -1,0 +1,67 @@
+services:
+    ngsite.controller.view_modal:
+        class: Netgen\Bundle\SiteBundle\Controller\ViewModal
+        parent: ngsite.controller.base
+        public: true
+        arguments:
+            - "@netgen.ibexa_site_api.twig.content_renderer"
+
+    ngsite.controller.info_collection.ajax_submit:
+        class: Netgen\Bundle\SiteBundle\Controller\InfoCollection\AjaxSubmit
+        parent: ngsite.controller.base
+        public: true
+        arguments:
+            - "@netgen.ibexa_site_api.twig.content_renderer"
+
+    ngsite.controller.info_collection.view_modal:
+        class: Netgen\Bundle\SiteBundle\Controller\InfoCollection\ViewModal
+        parent: ngsite.controller.base
+        public: true
+        arguments:
+            - "@netgen.ibexa_site_api.twig.content_renderer"
+            - "@ngsite.info_collection.referer_resolver"
+
+    ngsite.controller.info_collection.proxy_form_handler:
+        class: Netgen\Bundle\SiteBundle\Controller\InfoCollection\ProxyFormHandler
+        parent: ngsite.controller.base
+        public: true
+        arguments:
+            - "@request_stack"
+            - "@netgen_information_collection.captcha.service"
+            - "@netgen_information_collection.handler"
+            - "@event_dispatcher"
+            - "@ngsite.info_collection.referer_resolver"
+            - "@?logger"
+
+    ngsite.info_collection.referer_resolver:
+        class: Netgen\Bundle\SiteBundle\InfoCollection\RefererResolver
+        arguments:
+            - "@request_stack"
+            - "@router"
+
+    ngsite.info_collection.newsletter_service:
+        class: Netgen\Bundle\SiteBundle\InfoCollection\NewsletterService
+        arguments:
+            - "@mailer.mailer"
+            - "@ngsite.info_collection.mailer_lite"
+            - "@translator"
+            - "%ngsite.default.newsletter.sender_email%"
+            - "%ngsite.default.newsletter.recipient_email%"
+
+    ngsite.info_collection.action.newsletter:
+        class: Netgen\Bundle\SiteBundle\InfoCollection\Action\NewsletterAction
+        arguments:
+            - "@ngsite.info_collection.newsletter_service"
+        tags:
+            - { name: netgen_information_collection.action }
+
+    ngsite.info_collection.form.extension.honeypot_extension:
+        class: Netgen\Bundle\SiteBundle\InfoCollection\Form\Extension\HoneypotExtension
+        tags:
+            - { name: form.type_extension, extended_type: Netgen\Bundle\InformationCollectionBundle\Ibexa\ContentForms\InformationCollectionType }
+
+    ngsite.info_collection.mailer_lite:
+        class: MailerLiteApi\MailerLite
+        arguments:
+            # todo key is optional
+            - "%ngsite.default.info_collection.mailer_lite.api_key%"

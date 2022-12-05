@@ -33,6 +33,21 @@ ngsite_content_search:
     path: /content/search
     controller: ngsite.controller.search
 
+ngsite_view_modal:
+    path: /view-modal/{contentId}
+    controller: ngsite.controller.view_modal
+
+ngsite_info_collection_view_modal:
+    path: /info-collection/view-modal/{formContentId}/{refererLocationId}
+    controller: ngsite.controller.info_collection.view_modal
+    defaults:
+        refererLocationId: ~
+
+ngsite_info_collection_ajax_submit:
+    path: /info-collection/ajax-submit/{formContentId}
+    controller: ngsite.controller.info_collection.ajax_submit
+    methods: [POST]
+
 # Additional Ibexa Admin UI routes
 
 ibexa.location.view:

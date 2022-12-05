@@ -31,6 +31,11 @@ parameters:
     ngsite.default.mail.admin_email: ~
     ngsite.default.mail.admin_name: ~
 
+    ngsite.default.newsletter.sender_email: 'test@netgen.io'
+    ngsite.default.newsletter.recipient_email: 'test@netgen.io'
+
+    ngsite.default.info_collection.mailer_lite.api_key: ''
+
     ngsite.default.user.content_type_identifier: 'user'
     ngsite.default.user.user_group_content_id: 11
     ngsite.default.user.auto_enable: false

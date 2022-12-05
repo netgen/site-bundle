@@ -29,6 +29,7 @@ class NetgenSiteExtension extends Extension implements PrependExtensionInterface
         $loader->load('menu.yaml');
         $loader->load('event_listeners.yaml');
         $loader->load('matchers.yaml');
+        $loader->load('info_collection.yaml');
         $loader->load('services.yaml');
 
         $activatedBundles = $container->getParameter('kernel.bundles');

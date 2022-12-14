@@ -65,7 +65,7 @@ class NewsletterService
         }
     }
 
-    public function subscribeToNewsletter(Content $content, array $fields, FieldData $field): void
+    private function subscribeToNewsletter(Content $content, array $fields, FieldData $field): void
     {
         $identifier = $this->extractOptInIdentifier($field);
 

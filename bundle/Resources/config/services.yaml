@@ -268,6 +268,11 @@ services:
         tags:
             - { name: data_collector, template: '@NetgenSite/data_collector/git.html.twig', id: ngsite.data_collector.git }
 
+    ngsite.content_forms.field_type.binary_file_form_mapper:
+        decorates: Ibexa\ContentForms\FieldType\Mapper\BinaryFileFormMapper
+        arguments:
+            - '@ibexa.api.service.field_type'
+
 #    Custom user context hash providers are disabled by default.
 #    Enable them in your project if needed by copying one of the
 #    following service definitions.

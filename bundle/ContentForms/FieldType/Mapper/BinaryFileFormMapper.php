@@ -32,11 +32,7 @@ class BinaryFileFormMapper implements FieldValueFormMapperInterface
         $fieldDefinition = $data->fieldDefinition;
         $formConfig = $fieldForm->getConfig();
         $fieldType = $this->fieldTypeService->getFieldType($fieldDefinition->fieldTypeIdentifier);
-        $value = $data->value;
-
-        if ($value === null) {
-            $value = $fieldType->getEmptyValue();
-        }
+        $value = $data->value ?? $fieldType->getEmptyValue();
 
         $fieldForm
             ->add(

@@ -269,6 +269,7 @@ services:
             - { name: data_collector, template: '@NetgenSite/data_collector/git.html.twig', id: ngsite.data_collector.git }
 
     ngsite.content_forms.field_type.binary_file_form_mapper:
+        class: Netgen\Bundle\SiteBundle\ContentForms\FieldType\Mapper\BinaryFileFormMapper
         decorates: Ibexa\ContentForms\FieldType\Mapper\BinaryFileFormMapper
         arguments:
             - '@ibexa.api.service.field_type'

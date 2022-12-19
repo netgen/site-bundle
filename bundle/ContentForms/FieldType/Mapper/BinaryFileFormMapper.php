@@ -24,9 +24,6 @@ class BinaryFileFormMapper implements FieldValueFormMapperInterface
         $this->fieldTypeService = $fieldTypeService;
     }
 
-    /**
-     * @throws \Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException
-     */
     public function mapFieldValueForm(FormInterface $fieldForm, FieldData $data): void
     {
         $fieldDefinition = $data->fieldDefinition;

@@ -38,6 +38,9 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0"
     },
+    "conflict": {
+        "netgen/layouts-core": "<1.4"
+    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {

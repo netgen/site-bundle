@@ -42,7 +42,7 @@
     },
     "conflict": {
         "netgen/block-manager": "*",
-        "netgen/layouts-core": "<1.0"
+        "netgen/layouts-core": "<1.4"
     },
     "autoload": {
         "psr-4": {

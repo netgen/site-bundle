@@ -16,27 +16,27 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8.0",
-        "ibexa/core": "^4.0",
-        "ibexa/content-forms": "^4.0",
+        "php": "^7.4 || ^8.1",
+        "ibexa/core": "^4.3",
+        "ibexa/content-forms": "^4.3",
         "symfony/mailer": "^5.4",
-        "symfony/polyfill-php80": "^1.22",
+        "symfony/polyfill-php80": "^1.27",
         "netgen/ibexa-forms-bundle": "^4.0",
-        "netgen/ibexa-site-api": "^5.0",
+        "netgen/ibexa-site-api": "^5.1",
         "netgen/siteaccess-routes-bundle": "^3.0",
         "netgen/content-type-list-bundle": "^3.0",
-        "netgen/enhanced-selection-bundle": "^5.0",
+        "netgen/enhanced-selection-bundle": "^5.1",
         "netgen/birthday-bundle": "^3.0",
         "netgen/open-graph-bundle": "^3.0",
         "netgen/tagsbundle": "^5.0",
-        "twig/twig": "^3.3",
-        "doctrine/orm": "^2.11",
+        "twig/twig": "^3.5",
+        "doctrine/orm": "^2.14",
         "knplabs/knp-menu-bundle": "^3.2",
         "sensio/framework-extra-bundle": "^6.2",
         "sebastianfeldmann/git": "^3.8"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.0"
+        "friendsofphp/php-cs-fixer": "^3.13"
     },
     "conflict": {
         "netgen/layouts-core": "<1.4"

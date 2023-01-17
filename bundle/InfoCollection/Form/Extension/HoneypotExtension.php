@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\InfoCollection\Form\Extension;
 
 use Netgen\Bundle\InformationCollectionBundle\Ibexa\ContentForms\InformationCollectionType;
+use Netgen\Bundle\SiteBundle\InfoCollection\Form\Type\HoneypotType;
 use Symfony\Component\Form\AbstractTypeExtension;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class HoneypotExtension extends AbstractTypeExtension
@@ -20,7 +20,7 @@ class HoneypotExtension extends AbstractTypeExtension
     {
         $builder->add(
             'sender_middle_name',
-            TextType::class,
+            HoneypotType::class,
             [
                 'label' => 'ngsite.collected_info.contact_form.middle_name',
                 'attr' => [

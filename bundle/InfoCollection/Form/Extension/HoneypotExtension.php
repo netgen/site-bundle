@@ -21,16 +21,6 @@ class HoneypotExtension extends AbstractTypeExtension
         $builder->add(
             'sender_middle_name',
             HoneypotType::class,
-            [
-                'label' => 'ngsite.collected_info.contact_form.middle_name',
-                'attr' => [
-                    'class' => 'sender-middle-name',
-                    'placeholder' => 'ngsite.collected_info.contact_form.middle_name',
-                    'tabIndex' => '-1',
-                ],
-                'translation_domain' => 'messages',
-                'empty_data' => '',
-            ],
         );
     }
 }

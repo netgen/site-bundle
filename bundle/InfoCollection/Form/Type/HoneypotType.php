@@ -23,7 +23,6 @@ class HoneypotType extends AbstractType
             [
                 'label' => 'ngsite.collected_info.contact_form.middle_name',
                 'attr' => [
-                    'class' => 'sender-middle-name',
                     'tabIndex' => '-1',
                 ],
                 'translation_domain' => 'messages',

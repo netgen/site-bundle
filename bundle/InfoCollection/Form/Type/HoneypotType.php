@@ -12,7 +12,7 @@ class HoneypotType extends AbstractType
 {
     public function getBlockPrefix(): string
     {
-        return 'information_collection';
+        return 'honeypot';
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)

@@ -21,9 +21,8 @@ class HoneypotType extends AbstractType
             'value',
             TextLineFieldType::class,
             [
-                'label' => 'ngsite.collected_info.contact_form.middle_name',
-                'translation_domain' => 'messages',
-                'empty_data' => '',
+                'label' => $options['label'],
+                'translation_domain' => $options['translation_domain'],
             ],
         );
     }

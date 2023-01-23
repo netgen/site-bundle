@@ -16,7 +16,6 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use RuntimeException;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -110,11 +109,8 @@ class ProxyFormHandler extends Controller
         $validCaptcha = $captcha->isValid($request);
 
         if ($formSubmitted && $form->isValid() && $validCaptcha) {
-            if ($this->isHoneypotEmpty($form)) {
-                $event = new InformationCollected($form->getData(), []);
-
-                $this->eventDispatcher->dispatch($event, Events::INFORMATION_COLLECTED);
-            }
+            $event = new InformationCollected($form->getData(), [], ['form' => $form]);
+            $this->eventDispatcher->dispatch($event, Events::INFORMATION_COLLECTED);
 
             $isCollected = true;
         }
@@ -133,16 +129,5 @@ class ProxyFormHandler extends Controller
             'is_collected' => $isCollected,
             'form' => $form->createView(),
         ];
-    }
-
-    private function isHoneypotEmpty(FormInterface $form): bool
-    {
-        if (!$form->has('sender_middle_name')) {
-            return true;
-        }
-
-        $honeypot = $form->get('sender_middle_name');
-
-        return $honeypot->getData() === '';
     }
 }

@@ -18,9 +18,31 @@ class HoneypotExtension extends AbstractTypeExtension
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var \Netgen\InformationCollection\API\Value\InformationCollectionStruct $struct */
+        $struct = $options['data'];
+        $content = $struct->getContent();
+
+        if (!isset($content->fields['honeypot_field_name'])) {
+            return;
+        }
+
+        $honeyPotFieldName = $content->getFieldValue('honeypot_field_name')->text;
+        if ($honeyPotFieldName === '') {
+            return;
+        }
+
+        $honeyPotFieldLabel = '';
+        if (isset($content->fields['honeypot_field_label'])) {
+            $honeyPotFieldLabel = $content->getFieldValue('honeypot_field_label')->text;
+        }
+
         $builder->add(
-            'sender_middle_name',
+            $honeyPotFieldName,
             HoneypotType::class,
+            [
+                'mapped' => false,
+                'label' => $honeyPotFieldLabel,
+            ],
         );
     }
 }

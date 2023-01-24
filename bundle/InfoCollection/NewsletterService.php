@@ -124,7 +124,7 @@ class NewsletterService
     private function extractOptInIdentifier(FieldData $field): string
     {
         $identifier = $field->fieldDefinition->identifier;
-        $success = preg_match('/^newsletter_opt_in_(?<identifier>.*?)_choice/', $identifier, $matches);
+        $success = preg_match('/^newsletter_(?<identifier>.*?)_consent/', $identifier, $matches);
 
         if ($success === false) {
             throw new RuntimeException('Error matching opt-in identifier');
@@ -147,7 +147,7 @@ class NewsletterService
 
     private function extractMailerLiteGroupIds(Content $content, string $identifier): array
     {
-        $groupIdsFieldIdentifier = 'newsletter_opt_in_' . $identifier . '_group_ids';
+         $groupIdsFieldIdentifier = 'newsletter_' . $identifier . '_group_ids';
         $mailerLiteGroupIds = $content->getFieldValue($groupIdsFieldIdentifier)->text;
         $mailerLiteGroupIds = !empty($mailerLiteGroupIds) ? explode(' ', $mailerLiteGroupIds) : [];
 

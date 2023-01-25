@@ -44,9 +44,11 @@ services:
         arguments:
             - "@mailer.mailer"
             - "@ngsite.info_collection.mailer_lite"
+            - "%ngsite.default.info_collection.mailer_lite.api_key%"
             - "@translator"
             - "%ngsite.default.newsletter.sender_email%"
             - "%ngsite.default.newsletter.recipient_email%"
+            - "@?logger"
 
     ngsite.info_collection.action.newsletter:
         class: Netgen\Bundle\SiteBundle\InfoCollection\Action\NewsletterAction

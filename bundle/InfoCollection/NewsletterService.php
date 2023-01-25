@@ -7,7 +7,10 @@ namespace Netgen\Bundle\SiteBundle\InfoCollection;
 use Ibexa\Contracts\ContentForms\Data\Content\FieldData;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 use Ibexa\Core\FieldType\Checkbox\Value as CheckboxValue;
+use MailerLiteApi\Exceptions\MailerLiteSdkException;
 use MailerLiteApi\MailerLite;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use RuntimeException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
@@ -32,25 +35,31 @@ class NewsletterService
     private MailerInterface $mailer;
 
     private MailerLite $mailerLite;
+    private string $mailerLiteApiKey;
 
     private TranslatorInterface $translator;
 
     private string $newsletterSenderEmail;
 
     private string $newsletterRecipientEmail;
+    protected LoggerInterface $logger;
 
     public function __construct(
         MailerInterface $mailer,
         MailerLite $mailerLite,
+        string $mailerLiteApiKey,
         TranslatorInterface $translator,
         string $newsletterSenderEmail,
-        string $newsletterRecipientEmail
+        string $newsletterRecipientEmail,
+        ?LoggerInterface $logger = null
     ) {
         $this->mailerLite = $mailerLite;
         $this->mailer = $mailer;
+        $this->mailerLiteApiKey = $mailerLiteApiKey;
         $this->translator = $translator;
         $this->newsletterSenderEmail = $newsletterSenderEmail;
         $this->newsletterRecipientEmail = $newsletterRecipientEmail;
+        $this->logger = $logger ?? new NullLogger();
     }
 
     /**
@@ -67,6 +76,14 @@ class NewsletterService
 
     private function subscribeToNewsletter(Content $content, array $fields, FieldData $field): void
     {
+        if ($this->mailerLiteApiKey === '') {
+            $this->logger->warning(
+                'MailerLite API key is not configured, newsletter integration is disabled'
+            );
+
+            return;
+        }
+
         $identifier = $this->extractOptInIdentifier($field);
 
         $subscriberData = $this->extractSubscriberData($fields);
@@ -136,9 +153,9 @@ class NewsletterService
     private function extractSubscriberData(array $fields): array
     {
         return [
-            'email' => isset($fields['email']) ? $fields['email']->value->email : null,
+            'email' => isset($fields['sender_email']) ? $fields['sender_email']->value->email : null,
             'fields' => [
-                'name' => isset($fields['sender_name']) ? $fields['sender_name']->value->text : '',
+                'name' => isset($fields['sender_first_name']) ? $fields['sender_first_name']->value->text : '',
                 'last_name' => isset($fields['sender_last_name']) ? $fields['sender_last_name']->value->text : '',
                 'company' => isset($fields['sender_company']) ? $fields['sender_company']->value->text : '',
             ],
@@ -147,7 +164,7 @@ class NewsletterService
 
     private function extractMailerLiteGroupIds(Content $content, string $identifier): array
     {
-         $groupIdsFieldIdentifier = 'newsletter_' . $identifier . '_group_ids';
+        $groupIdsFieldIdentifier = 'newsletter_' . $identifier . '_group_ids';
         $mailerLiteGroupIds = $content->getFieldValue($groupIdsFieldIdentifier)->text;
         $mailerLiteGroupIds = !empty($mailerLiteGroupIds) ? explode(' ', $mailerLiteGroupIds) : [];
 

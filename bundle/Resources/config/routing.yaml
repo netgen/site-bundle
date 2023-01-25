@@ -57,5 +57,17 @@ ez_content_download_field_id:
 ez_user_register:
     path: /_error/404
 
+ezplatform.user.register:
+    path: /_error/404
+
+ezplatform.user.user_register:
+    path: /_error/404
+
 ez_user_register_confirmation:
+    path: /_error/404
+
+ezplatform.user.register_confirmation:
+    path: /_error/404
+
+ezplatform.user.user_register_confirmation:
     path: /_error/404

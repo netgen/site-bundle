@@ -12,6 +12,8 @@ class NewsletterAction implements ActionInterface
 {
     private NewsletterService $newsletterService;
 
+    public static string $defaultName = 'newsletter';
+
     public function __construct(NewsletterService $newsletterService)
     {
         $this->newsletterService = $newsletterService;

@@ -7,7 +7,6 @@ namespace Netgen\Bundle\SiteBundle\InfoCollection;
 use Ibexa\Contracts\ContentForms\Data\Content\FieldData;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 use Ibexa\Core\FieldType\Checkbox\Value as CheckboxValue;
-use MailerLiteApi\Exceptions\MailerLiteSdkException;
 use MailerLiteApi\MailerLite;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -35,6 +34,7 @@ class NewsletterService
     private MailerInterface $mailer;
 
     private MailerLite $mailerLite;
+
     private string $mailerLiteApiKey;
 
     private TranslatorInterface $translator;
@@ -42,7 +42,8 @@ class NewsletterService
     private string $newsletterSenderEmail;
 
     private string $newsletterRecipientEmail;
-    protected LoggerInterface $logger;
+
+    private LoggerInterface $logger;
 
     public function __construct(
         MailerInterface $mailer,
@@ -78,7 +79,7 @@ class NewsletterService
     {
         if ($this->mailerLiteApiKey === '') {
             $this->logger->warning(
-                'MailerLite API key is not configured, newsletter integration is disabled'
+                'MailerLite API key is not configured, newsletter integration is disabled',
             );
 
             return;

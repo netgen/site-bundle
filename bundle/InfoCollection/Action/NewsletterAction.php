@@ -10,9 +10,9 @@ use Netgen\InformationCollection\API\Value\Event\InformationCollected;
 
 class NewsletterAction implements ActionInterface
 {
-    private NewsletterService $newsletterService;
-
     public static string $defaultName = 'newsletter';
+
+    private NewsletterService $newsletterService;
 
     public function __construct(NewsletterService $newsletterService)
     {

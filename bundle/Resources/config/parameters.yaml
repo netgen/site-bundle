@@ -34,7 +34,7 @@ parameters:
     ngsite.default.newsletter.sender_email: 'test@netgen.io'
     ngsite.default.newsletter.recipient_email: 'test@netgen.io'
 
-    ngsite.default.info_collection.mailer_lite.api_key: ''
+    ngsite.default.info_collection.mailer_lite.api_key: '%env(MAILER_LITE_API_KEY)%'
 
     ngsite.default.user.content_type_identifier: 'user'
     ngsite.default.user.user_group_content_id: 11

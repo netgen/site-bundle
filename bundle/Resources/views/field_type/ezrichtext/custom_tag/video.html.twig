@@ -1,4 +1,4 @@
-<div class="video-{{ params.video_service }} embed-responsive embed-responsive-16by9">
+<div class="video-{{ params.video_service }} ratio ratio-16x9 embed-responsive embed-responsive-16by9">
     {% set video_url = 'https://www.youtube.com/embed/' %}
     {% if params.video_service == 'vimeo' %}
         {% set video_url = 'https://player.vimeo.com/video/' %}

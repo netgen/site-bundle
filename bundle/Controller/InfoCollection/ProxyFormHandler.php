@@ -59,7 +59,7 @@ class ProxyFormHandler extends Controller
 
     public function __invoke(ContentView $view): ContentView
     {
-        $request = $this->requestStack->getCurrentRequest();
+        $request = $this->requestStack->getMainRequest();
 
         if ($request === null) {
             throw new RuntimeException('Missing request');

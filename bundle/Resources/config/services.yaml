@@ -272,7 +272,15 @@ services:
         class: Netgen\Bundle\SiteBundle\ContentForms\FieldType\Mapper\BinaryFileFormMapper
         decorates: Ibexa\ContentForms\FieldType\Mapper\BinaryFileFormMapper
         arguments:
-            - '@ibexa.api.service.field_type'
+            - "@ibexa.api.service.field_type"
+
+    ngsite.security.voter.user_register:
+        class: Netgen\Bundle\SiteBundle\Security\Authorization\Voter\UserRegisterVoter
+        arguments:
+            - "@Ibexa\\Contracts\\Core\\Repository\\PermissionResolver"
+            - "@request_stack"
+        tags:
+            - { name: security.voter, priority: 512 }
 
 #    Custom user context hash providers are disabled by default.
 #    Enable them in your project if needed by copying one of the

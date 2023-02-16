@@ -13,9 +13,9 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 
-use function mb_stripos;
 use function mb_substr;
 use function sprintf;
+use function str_starts_with;
 use function trim;
 
 final class Image extends Controller
@@ -36,7 +36,7 @@ final class Image extends Controller
             $location = null;
             $content = null;
 
-            if (mb_stripos($targetLink, 'ezlocation://') === 0) {
+            if (str_starts_with($targetLink, 'ezlocation://')) {
                 $locationId = (int) mb_substr($targetLink, 9);
 
                 try {
@@ -51,7 +51,7 @@ final class Image extends Controller
 
                     $this->logger->error(sprintf('Tried to generate link to location #%s without read rights', $locationId));
                 }
-            } elseif (mb_stripos($targetLink, 'ezcontent://') === 0) {
+            } elseif (str_starts_with($targetLink, 'ezcontent://')) {
                 $linkedContentId = (int) mb_substr($targetLink, 11);
 
                 try {
@@ -89,9 +89,9 @@ final class Image extends Controller
 
             if ($directDownloadLink !== null) {
                 $targetLink = $directDownloadLink;
-            } elseif (mb_stripos($targetLink, 'ezlocation://') === 0) {
+            } elseif (str_starts_with($targetLink, 'ezlocation://')) {
                 $targetLink = $this->generateUrl('', [RouteObjectInterface::ROUTE_OBJECT => $location]);
-            } elseif (mb_stripos($targetLink, 'ezcontent://') === 0) {
+            } elseif (str_starts_with($targetLink, 'ezcontent://')) {
                 $targetLink = $this->generateUrl('', [RouteObjectInterface::ROUTE_OBJECT => $content]);
             }
         }

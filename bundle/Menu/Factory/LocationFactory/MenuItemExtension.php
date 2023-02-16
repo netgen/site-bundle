@@ -17,8 +17,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use function in_array;
-use function mb_stripos;
 use function sprintf;
+use function str_starts_with;
 
 final class MenuItemExtension implements ExtensionInterface
 {
@@ -78,7 +78,7 @@ final class MenuItemExtension implements ExtensionInterface
     {
         $uri = $urlValue->link;
 
-        if (mb_stripos($urlValue->link, 'http') !== 0) {
+        if (!str_starts_with($urlValue->link, 'http')) {
             $currentSiteAccess = $this->requestStack->getMainRequest()->attributes->get('siteaccess');
             if ($currentSiteAccess->matcher instanceof URILexer) {
                 $uri = $currentSiteAccess->matcher->analyseLink($uri);

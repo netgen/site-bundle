@@ -13,8 +13,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-use function mb_stripos;
 use function sprintf;
+use function str_starts_with;
 use function trim;
 
 final class RedirectHelper
@@ -48,7 +48,7 @@ final class RedirectHelper
                 );
             }
         } elseif ($externalRedirectValue instanceof UrlValue && !$content->getField('external_redirect')->isEmpty()) {
-            if (mb_stripos($externalRedirectValue->link, 'http') === 0) {
+            if (str_starts_with($externalRedirectValue->link, 'http')) {
                 return new RedirectResponse($externalRedirectValue->link, Response::HTTP_MOVED_PERMANENTLY);
             }
 

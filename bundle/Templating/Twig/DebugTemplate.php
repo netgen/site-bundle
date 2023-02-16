@@ -15,6 +15,7 @@ use function mb_substr;
 use function ob_get_clean;
 use function ob_start;
 use function preg_replace;
+use function str_contains;
 use function str_ends_with;
 use function trim;
 
@@ -45,7 +46,7 @@ class DebugTemplate extends Template
 
         // Display start template comment, if applicable.
         if ($isHtmlTemplate) {
-            if (mb_stripos(trim($templateResult), '<!doctype') !== false) {
+            if (str_contains(trim($templateResult), '<!doctype')) {
                 $templateResult = preg_replace(
                     '#(<!doctype[^>]+>)#im',
                     "$1\n<!-- START " . $templateName . ' -->',

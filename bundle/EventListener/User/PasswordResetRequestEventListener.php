@@ -10,7 +10,7 @@ use Netgen\Bundle\SiteBundle\Event\User\PasswordResetRequestEvent;
 use Netgen\Bundle\SiteBundle\EventListener\UserEventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class PasswordResetRequestEventListener extends UserEventListener implements EventSubscriberInterface
+final class PasswordResetRequestEventListener extends UserEventListener implements EventSubscriberInterface
 {
     /**
      * Returns an array of event names this subscriber wants to listen to.

@@ -21,24 +21,15 @@ use function str_word_count;
 use function ucwords;
 use function usort;
 
-class SiteRuntime
+final class SiteRuntime
 {
     private const WORDS_PER_MINUTE = 230;
     private const GROUP_FIELDS_GROUP = 'group';
     private const GROUP_FIELDS_POSITION = 'position';
     private const GROUP_FIELDS_FIELD = 'field';
 
-    protected PathHelper $pathHelper;
-
-    protected LocaleConverterInterface $localeConverter;
-
-    protected LoadService $loadService;
-
-    public function __construct(PathHelper $pathHelper, LocaleConverterInterface $localeConverter, LoadService $loadService)
+    public function __construct(private PathHelper $pathHelper, private LocaleConverterInterface $localeConverter, private LoadService $loadService)
     {
-        $this->pathHelper = $pathHelper;
-        $this->localeConverter = $localeConverter;
-        $this->loadService = $loadService;
     }
 
     /**
@@ -72,7 +63,7 @@ class SiteRuntime
     {
         try {
             $content = $this->loadService->loadContent($contentId);
-        } catch (UnauthorizedException|NotFoundException|TranslationNotMatchedException $e) {
+        } catch (UnauthorizedException|NotFoundException|TranslationNotMatchedException) {
             return null;
         }
 
@@ -86,7 +77,7 @@ class SiteRuntime
     {
         try {
             $location = $this->loadService->loadLocation($locationId);
-        } catch (UnauthorizedException|NotFoundException|TranslationNotMatchedException $e) {
+        } catch (UnauthorizedException|NotFoundException|TranslationNotMatchedException) {
             return null;
         }
 
@@ -98,7 +89,7 @@ class SiteRuntime
         $wordCount = str_word_count($text);
         $readingTime = ceil($wordCount / self::WORDS_PER_MINUTE);
 
-        return $readingTime === false || $readingTime < 1 ? 1 : (int) $readingTime;
+        return $readingTime < 1 ? 1 : (int) $readingTime;
     }
 
     /**

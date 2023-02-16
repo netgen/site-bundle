@@ -27,34 +27,16 @@ use function array_merge;
  * own route. Instead, it's "proxied" through the content view, relying on the main
  * request for its data.
  */
-class ProxyFormHandler extends Controller
+final class ProxyFormHandler extends Controller
 {
-    private RequestStack $requestStack;
-
-    private CaptchaService $captchaService;
-
-    private Handler $handler;
-
-    private EventDispatcherInterface $eventDispatcher;
-
-    private RefererResolver $refererResolver;
-
-    private LoggerInterface $logger;
-
     public function __construct(
-        RequestStack $requestStack,
-        CaptchaService $captchaService,
-        Handler $handler,
-        EventDispatcherInterface $eventDispatcher,
-        RefererResolver $refererResolver,
-        ?LoggerInterface $logger = null
+        private RequestStack $requestStack,
+        private CaptchaService $captchaService,
+        private Handler $handler,
+        private EventDispatcherInterface $eventDispatcher,
+        private RefererResolver $refererResolver,
+        private LoggerInterface $logger = new NullLogger(),
     ) {
-        $this->requestStack = $requestStack;
-        $this->captchaService = $captchaService;
-        $this->handler = $handler;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->refererResolver = $refererResolver;
-        $this->logger = $logger ?? new NullLogger();
     }
 
     public function __invoke(ContentView $view): ContentView

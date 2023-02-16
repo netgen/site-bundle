@@ -16,15 +16,12 @@ use Symfony\Component\Routing\RouterInterface;
  * Overrides the base generator to allow generating the link with
  * Netgen Site specific route instead of the built in one.
  */
-class ContentDownloadUrlGenerator extends PathGenerator implements RouteAwarePathGenerator
+final class ContentDownloadUrlGenerator extends PathGenerator implements RouteAwarePathGenerator
 {
-    protected RouterInterface $router;
+    private string $route = 'ngsite_download';
 
-    protected string $route = 'ngsite_download';
-
-    public function __construct(RouterInterface $router)
+    public function __construct(private RouterInterface $router)
     {
-        $this->router = $router;
     }
 
     public function getStoragePathForField(Field $field, VersionInfo $versionInfo): string

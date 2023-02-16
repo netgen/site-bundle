@@ -17,18 +17,12 @@ use function in_array;
  * By default, it excludes "doctrine" and "event" channels, which cause most
  * of the slowdown when rendering the profiler.
  */
-class DebugProcessor implements DebugLoggerInterface
+final class DebugProcessor implements DebugLoggerInterface
 {
-    protected DebugLoggerInterface $innerProcessor;
-
-    protected array $excludedChannels;
-
     public function __construct(
-        DebugLoggerInterface $innerProcessor,
-        array $excludedChannels = ['event', 'doctrine']
+        private DebugLoggerInterface $innerProcessor,
+        private array $excludedChannels = ['event', 'doctrine'],
     ) {
-        $this->innerProcessor = $innerProcessor;
-        $this->excludedChannels = $excludedChannels;
     }
 
     public function __invoke(array $record): array

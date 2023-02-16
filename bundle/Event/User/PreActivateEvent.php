@@ -8,16 +8,10 @@ use Ibexa\Contracts\Core\Repository\Values\User\User;
 use Ibexa\Contracts\Core\Repository\Values\User\UserUpdateStruct;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class PreActivateEvent extends Event
+final class PreActivateEvent extends Event
 {
-    protected User $user;
-
-    protected UserUpdateStruct $userUpdateStruct;
-
-    public function __construct(User $user, UserUpdateStruct $userUpdateStruct)
+    public function __construct(private User $user, private UserUpdateStruct $userUpdateStruct)
     {
-        $this->user = $user;
-        $this->userUpdateStruct = $userUpdateStruct;
     }
 
     public function getUser(): User

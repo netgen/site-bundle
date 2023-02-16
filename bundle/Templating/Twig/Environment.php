@@ -10,7 +10,7 @@ use Twig\Source;
 use function sprintf;
 use function str_replace;
 
-class Environment extends BaseEnvironment
+final class Environment extends BaseEnvironment
 {
     public function compileSource(Source $source): string
     {

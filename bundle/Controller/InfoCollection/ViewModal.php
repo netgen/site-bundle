@@ -9,16 +9,10 @@ use Netgen\Bundle\SiteBundle\Controller\Controller;
 use Netgen\Bundle\SiteBundle\InfoCollection\RefererResolver;
 use Symfony\Component\HttpFoundation\Response;
 
-class ViewModal extends Controller
+final class ViewModal extends Controller
 {
-    private ContentRenderer $contentRenderer;
-
-    private RefererResolver $refererResolver;
-
-    public function __construct(ContentRenderer $contentRenderer, RefererResolver $refererResolver)
+    public function __construct(private ContentRenderer $contentRenderer, private RefererResolver $refererResolver)
     {
-        $this->contentRenderer = $contentRenderer;
-        $this->refererResolver = $refererResolver;
     }
 
     public function __invoke(int $formContentId, ?int $refererLocationId = null): Response

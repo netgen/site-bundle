@@ -19,30 +19,15 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 use function time;
 
-class Activate extends Controller
+final class Activate extends Controller
 {
-    protected UserService $userService;
-
-    protected EventDispatcherInterface $eventDispatcher;
-
-    protected UserAccountKeyRepository $accountKeyRepository;
-
-    protected Repository $repository;
-
-    protected ConfigResolverInterface $configResolver;
-
     public function __construct(
-        UserService $userService,
-        EventDispatcherInterface $eventDispatcher,
-        UserAccountKeyRepository $accountKeyRepository,
-        Repository $repository,
-        ConfigResolverInterface $configResolver
+        private UserService $userService,
+        private EventDispatcherInterface $eventDispatcher,
+        private UserAccountKeyRepository $accountKeyRepository,
+        private Repository $repository,
+        private ConfigResolverInterface $configResolver,
     ) {
-        $this->userService = $userService;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->accountKeyRepository = $accountKeyRepository;
-        $this->repository = $repository;
-        $this->configResolver = $configResolver;
     }
 
     /**
@@ -71,7 +56,7 @@ class Activate extends Controller
 
         try {
             $user = $this->userService->loadUser($accountKey->getUserId());
-        } catch (NotFoundException $e) {
+        } catch (NotFoundException) {
             throw $this->createNotFoundException();
         }
 
@@ -83,7 +68,7 @@ class Activate extends Controller
         $userUpdateStruct = $preActivateEvent->getUserUpdateStruct();
 
         $user = $this->repository->sudo(
-            static fn (Repository $repository): User => $repository->getUserService()->updateUser($user, $userUpdateStruct),
+            static fn (): User => $this->repository->getUserService()->updateUser($user, $userUpdateStruct),
         );
 
         $postActivateEvent = new UserEvents\PostActivateEvent($user);

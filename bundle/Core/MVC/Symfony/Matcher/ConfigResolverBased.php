@@ -11,11 +11,8 @@ use function is_array;
 
 abstract class ConfigResolverBased extends MultipleValued
 {
-    protected ConfigResolverInterface $configResolver;
-
-    public function __construct(ConfigResolverInterface $configResolver)
+    public function __construct(private ConfigResolverInterface $configResolver)
     {
-        $this->configResolver = $configResolver;
     }
 
     /**
@@ -25,10 +22,8 @@ abstract class ConfigResolverBased extends MultipleValued
      *
      * First element in the value array should be the name of the parameter and the
      * second should be the namespace.
-     *
-     * @param mixed $value
      */
-    public function doMatch($value): bool
+    public function doMatch(mixed $value): bool
     {
         $config = $this->values[0];
         $namespace = $this->values[1] ?? null;

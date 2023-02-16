@@ -8,7 +8,7 @@ use Netgen\Bundle\SiteBundle\Imagine\IORepositoryResolver;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class ImagineIOResolverPass implements CompilerPassInterface
+final class ImagineIOResolverPass implements CompilerPassInterface
 {
     /**
      * Overrides the IO resolver to disable generating absolute URIs to images.

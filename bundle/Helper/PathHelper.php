@@ -16,22 +16,13 @@ use function array_shift;
 use function in_array;
 use function is_array;
 
-class PathHelper
+final class PathHelper
 {
-    protected LoadService $loadService;
-
-    protected ConfigResolverInterface $configResolver;
-
-    protected UrlGeneratorInterface $urlGenerator;
-
     public function __construct(
-        LoadService $loadService,
-        ConfigResolverInterface $configResolver,
-        UrlGeneratorInterface $urlGenerator
+        private LoadService $loadService,
+        private ConfigResolverInterface $configResolver,
+        private UrlGeneratorInterface $urlGenerator,
     ) {
-        $this->loadService = $loadService;
-        $this->configResolver = $configResolver;
-        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -75,11 +66,11 @@ class PathHelper
 
             try {
                 $location = $this->loadService->loadLocation($pathItem);
-            } catch (UnauthorizedException $e) {
+            } catch (UnauthorizedException) {
                 return [];
             }
 
-            if (!$showCurrentLocation && $location->id === (int) $locationId) {
+            if (!$showCurrentLocation && $location->id === $locationId) {
                 continue;
             }
 
@@ -112,7 +103,7 @@ class PathHelper
         return $pathArray;
     }
 
-    protected function configureOptions(OptionsResolver $optionsResolver): void
+    private function configureOptions(OptionsResolver $optionsResolver): void
     {
         $optionsResolver->setRequired('use_all_content_types');
         $optionsResolver->setAllowedTypes('use_all_content_types', 'bool');

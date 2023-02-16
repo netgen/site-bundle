@@ -16,22 +16,13 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use function preg_match;
 
-class LinkDirectDownload implements Converter
+final class LinkDirectDownload implements Converter
 {
-    protected LoadService $loadService;
-
-    protected UrlGeneratorInterface $urlGenerator;
-
-    protected LoggerInterface $logger;
-
     public function __construct(
-        LoadService $loadService,
-        UrlGeneratorInterface $urlGenerator,
-        ?LoggerInterface $logger = null
+        private LoadService $loadService,
+        private UrlGeneratorInterface $urlGenerator,
+        private LoggerInterface $logger = new NullLogger(),
     ) {
-        $this->loadService = $loadService;
-        $this->urlGenerator = $urlGenerator;
-        $this->logger = $logger ?? new NullLogger();
     }
 
     /**
@@ -48,7 +39,7 @@ class LinkDirectDownload implements Converter
         $xpath->registerNamespace('xlink', 'http://www.w3.org/1999/xlink');
 
         $linkAttributeExpression = "starts-with( @xlink:href, 'ezlocation://' ) or starts-with( @xlink:href, 'ezcontent://' )";
-        $xpathExpression = "//docbook:link[{$linkAttributeExpression}]|//docbook:ezlink";
+        $xpathExpression = '//docbook:link[' . $linkAttributeExpression . ']|//docbook:ezlink';
 
         /** @var \DOMElement $link */
         foreach ($xpath->query($xpathExpression) as $link) {
@@ -66,28 +57,24 @@ class LinkDirectDownload implements Converter
 
             $href = $link->getAttribute('xlink:href');
             preg_match('~^(.+://)?([^#]*)?(#.*|\\s*)?$~', $href, $matches);
-            [, $scheme, $id, $fragment] = $matches;
+            [, $scheme, $id] = $matches;
 
             $content = null;
             if ('ezcontent://' === $scheme) {
                 try {
                     $content = $this->loadService->loadContent((int) $id);
-                } catch (APINotFoundException $e) {
-                    if ($this->logger) {
-                        $this->logger->warning(
-                            'While generating links for richtext, could not locate ' .
-                            'Content object with ID ' . $id,
-                        );
-                    }
+                } catch (APINotFoundException) {
+                    $this->logger->warning(
+                        'While generating links for richtext, could not locate ' .
+                        'Content object with ID ' . $id,
+                    );
 
                     continue;
-                } catch (APIUnauthorizedException $e) {
-                    if ($this->logger) {
-                        $this->logger->notice(
-                            'While generating links for richtext, unauthorized to load ' .
-                            'Content object with ID ' . $id,
-                        );
-                    }
+                } catch (APIUnauthorizedException) {
+                    $this->logger->notice(
+                        'While generating links for richtext, unauthorized to load ' .
+                        'Content object with ID ' . $id,
+                    );
 
                     continue;
                 }
@@ -97,22 +84,18 @@ class LinkDirectDownload implements Converter
                 try {
                     $location = $this->loadService->loadLocation((int) $id);
                     $content = $location->content;
-                } catch (APINotFoundException $e) {
-                    if ($this->logger) {
-                        $this->logger->warning(
-                            'While generating links for richtext, could not locate ' .
-                            'Location with ID ' . $id,
-                        );
-                    }
+                } catch (APINotFoundException) {
+                    $this->logger->warning(
+                        'While generating links for richtext, could not locate ' .
+                        'Location with ID ' . $id,
+                    );
 
                     continue;
-                } catch (APIUnauthorizedException $e) {
-                    if ($this->logger) {
-                        $this->logger->notice(
-                            'While generating links for richtext, unauthorized to load ' .
-                            'Location with ID ' . $id,
-                        );
-                    }
+                } catch (APIUnauthorizedException) {
+                    $this->logger->notice(
+                        'While generating links for richtext, unauthorized to load ' .
+                        'Location with ID ' . $id,
+                    );
 
                     continue;
                 }

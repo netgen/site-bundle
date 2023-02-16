@@ -21,30 +21,15 @@ use function is_array;
 use function is_string;
 use function sprintf;
 
-class MailHelper
+final class MailHelper
 {
-    protected MailerInterface $mailer;
-
-    protected Environment $twig;
-
-    protected TranslatorInterface $translator;
-
-    protected ConfigResolverInterface $configResolver;
-
-    protected LoggerInterface $logger;
-
     public function __construct(
-        MailerInterface $mailer,
-        Environment $twig,
-        TranslatorInterface $translator,
-        ConfigResolverInterface $configResolver,
-        ?LoggerInterface $logger = null
+        private MailerInterface $mailer,
+        private Environment $twig,
+        private TranslatorInterface $translator,
+        private ConfigResolverInterface $configResolver,
+        private LoggerInterface $logger = new NullLogger(),
     ) {
-        $this->mailer = $mailer;
-        $this->twig = $twig;
-        $this->translator = $translator;
-        $this->configResolver = $configResolver;
-        $this->logger = $logger ?? new NullLogger();
     }
 
     /**
@@ -60,11 +45,8 @@ class MailHelper
      * Sender can be:
      * a string: info@netgen.io
      * an array: array( 'info@netgen.io' => 'Netgen Site' )
-     *
-     * @param string|array $receivers
-     * @param string|array|null $sender
      */
-    public function sendMail($receivers, string $subject, string $template, array $parameters = [], $sender = null): void
+    public function sendMail(string|array $receivers, string $subject, string $template, array $parameters = [], string|array|null $sender = null): void
     {
         try {
             $senderAddress = $this->createSenderAddress($sender);
@@ -90,11 +72,9 @@ class MailHelper
      * ngsite.default.mail.sender_email
      * ngsite.default.mail.sender_name (optional).
      *
-     * @param string|array|null $sender
-     *
      * @throws \InvalidArgumentException If sender was not provided
      */
-    protected function createSenderAddress($sender): Address
+    private function createSenderAddress(string|array|null $sender): Address
     {
         if (!empty($sender)) {
             if ((is_array($sender) && count($sender) === 1 && !isset($sender[0])) || is_string($sender)) {
@@ -106,7 +86,7 @@ class MailHelper
             }
 
             throw new InvalidArgumentException(
-                "Parameter 'sender' has to be either a string, or an associative array with one element (e.g. array( 'info@example.com' => 'Example name' )), {$sender} given.",
+                "Parameter 'sender' has to be either a string, or an associative array with one element (e.g. array( 'info@example.com' => 'Example name' ))",
             );
         }
 
@@ -125,11 +105,9 @@ class MailHelper
     }
 
     /**
-     * @param string|array $addresses
-     *
      * @return iterable<\Symfony\Component\Mime\Address>
      */
-    private function createReceiverAddresses($addresses): iterable
+    private function createReceiverAddresses(string|array $addresses): iterable
     {
         if (!is_string($addresses) && !is_array($addresses)) {
             $this->logger->error(

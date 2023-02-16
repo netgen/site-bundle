@@ -10,7 +10,7 @@ use Netgen\Bundle\SiteBundle\Event\User\ActivationRequestEvent;
 use Netgen\Bundle\SiteBundle\EventListener\UserEventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class ActivationRequestEventListener extends UserEventListener implements EventSubscriberInterface
+final class ActivationRequestEventListener extends UserEventListener implements EventSubscriberInterface
 {
     /**
      * Returns an array of event names this subscriber wants to listen to.

@@ -11,7 +11,7 @@ use function hash;
 use function random_bytes;
 use function time;
 
-class UserAccountKeyRepository extends EntityRepository
+final class UserAccountKeyRepository extends EntityRepository
 {
     /**
      * Creates a user account key.

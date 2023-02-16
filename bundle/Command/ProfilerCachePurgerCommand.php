@@ -10,14 +10,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 
-class ProfilerCachePurgerCommand extends Command
+final class ProfilerCachePurgerCommand extends Command
 {
-    protected ?Profiler $profiler;
-
-    public function __construct(?Profiler $profiler = null)
+    public function __construct(private ?Profiler $profiler = null)
     {
-        $this->profiler = $profiler;
-
         // Parent constructor call is mandatory for commands registered as services
         parent::__construct();
     }
@@ -34,6 +30,7 @@ class ProfilerCachePurgerCommand extends Command
         }
 
         $this->profiler->purge();
+
         $output->writeln('<info>Clearing Profiler cache finished.</info>');
     }
 }

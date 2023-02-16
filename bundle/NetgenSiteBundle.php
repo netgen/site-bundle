@@ -8,7 +8,7 @@ use Netgen\Bundle\SiteBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class NetgenSiteBundle extends Bundle
+final class NetgenSiteBundle extends Bundle
 {
     public function build(ContainerBuilder $container): void
     {

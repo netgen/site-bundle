@@ -6,7 +6,7 @@ namespace Netgen\Bundle\SiteBundle\Imagine;
 
 use Ibexa\Bundle\Core\Imagine\IORepositoryResolver as BaseIORepositoryResolver;
 
-class IORepositoryResolver extends BaseIORepositoryResolver
+final class IORepositoryResolver extends BaseIORepositoryResolver
 {
     /**
      * Returns empty string to disable absolute image URLs.

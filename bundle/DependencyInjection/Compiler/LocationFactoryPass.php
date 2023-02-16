@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\Reference;
 use function array_merge;
 use function krsort;
 
-class LocationFactoryPass implements CompilerPassInterface
+final class LocationFactoryPass implements CompilerPassInterface
 {
     /**
      * Injects location factory extensions into the factory.

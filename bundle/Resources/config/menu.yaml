@@ -31,7 +31,6 @@ services:
     ngsite.menu.factory.location.extension.shortcut:
         class: Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\ShortcutExtension
         arguments:
-            - "@netgen.ibexa_site_api.load_service"
             - "@router"
             - "@request_stack"
             - "@?logger"

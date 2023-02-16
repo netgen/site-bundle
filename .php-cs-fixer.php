@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setRules([
@@ -23,7 +25,7 @@ return (new PhpCsFixer\Config())
         'phpdoc_order' => ['order' => ['param', 'throws', 'return']],
         'phpdoc_types_order' => ['null_adjustment' => 'always_last', 'sort_algorithm' => 'none'],
         'single_line_comment_style' => false,
-        'trailing_comma_in_multiline' => ['elements' => ['arrays', 'arguments']],
+        'trailing_comma_in_multiline' => ['elements' => ['arrays', 'arguments', 'match', 'parameters']],
         'yoda_style' => false,
 
         // Additional rules

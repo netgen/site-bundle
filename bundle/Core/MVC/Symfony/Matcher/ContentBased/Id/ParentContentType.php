@@ -11,7 +11,7 @@ use Netgen\Bundle\IbexaSiteApiBundle\View\LocationValueView;
 use Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased;
 use Netgen\IbexaSiteApi\API\Values\Location as APILocation;
 
-class ParentContentType extends ConfigResolverBased implements ViewMatcherInterface
+final class ParentContentType extends ConfigResolverBased implements ViewMatcherInterface
 {
     public function match(View $view): bool
     {
@@ -26,7 +26,7 @@ class ParentContentType extends ConfigResolverBased implements ViewMatcherInterf
 
         try {
             $parent = $location->parent;
-        } catch (NotFoundException $e) {
+        } catch (NotFoundException) {
             return false;
         }
 

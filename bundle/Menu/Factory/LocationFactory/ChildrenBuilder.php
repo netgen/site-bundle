@@ -18,22 +18,13 @@ use Throwable;
 use function array_map;
 use function sprintf;
 
-class ChildrenBuilder
+final class ChildrenBuilder
 {
-    protected LoadService $loadService;
-
-    protected FilterService $filterService;
-
-    protected LoggerInterface $logger;
-
     public function __construct(
-        LoadService $loadService,
-        FilterService $filterService,
-        ?LoggerInterface $logger = null
+        private LoadService $loadService,
+        private FilterService $filterService,
+        private LoggerInterface $logger = new NullLogger(),
     ) {
-        $this->loadService = $loadService;
-        $this->filterService = $filterService;
-        $this->logger = $logger ?? new NullLogger();
     }
 
     public function buildChildItems(ItemInterface $item, Content $content): void
@@ -45,7 +36,7 @@ class ChildrenBuilder
         }
     }
 
-    protected function buildChildrenFromRelatedParentNode(ItemInterface $item, Content $content, ?Content $parentContent = null, int $currentDepth = 1): void
+    private function buildChildrenFromRelatedParentNode(ItemInterface $item, Content $content, ?Content $parentContent = null, int $currentDepth = 1): void
     {
         $parentContent = $parentContent instanceof Content ? $parentContent : $content->getFieldRelation('parent_node');
 
@@ -112,7 +103,7 @@ class ChildrenBuilder
         }
     }
 
-    protected function buildChildrenFromRelatedMenuItems(ItemInterface $item, Content $content): void
+    private function buildChildrenFromRelatedMenuItems(ItemInterface $item, Content $content): void
     {
         $childLocations = [];
 

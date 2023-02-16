@@ -7,7 +7,7 @@ namespace Netgen\Bundle\SiteBundle\Templating\Twig\Extension;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
-class SiteExtension extends AbstractExtension
+final class SiteExtension extends AbstractExtension
 {
     public function getFunctions(): array
     {

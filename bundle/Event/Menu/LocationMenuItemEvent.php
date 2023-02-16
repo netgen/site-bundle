@@ -11,16 +11,10 @@ use Symfony\Contracts\EventDispatcher\Event;
 /**
  * This event is triggered when a menu item is build using the location menu factory.
  */
-class LocationMenuItemEvent extends Event
+final class LocationMenuItemEvent extends Event
 {
-    protected ItemInterface $item;
-
-    protected Location $location;
-
-    public function __construct(ItemInterface $item, Location $location)
+    public function __construct(private ItemInterface $item, private Location $location)
     {
-        $this->item = $item;
-        $this->location = $location;
     }
 
     /**

@@ -7,7 +7,6 @@ namespace Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory;
 use Ibexa\Core\FieldType\Url\Value as UrlValue;
 use Ibexa\Core\MVC\Symfony\SiteAccess\URILexer;
 use Knp\Menu\ItemInterface;
-use Netgen\IbexaSiteApi\API\LoadService;
 use Netgen\IbexaSiteApi\API\Values\Content;
 use Netgen\IbexaSiteApi\API\Values\Location;
 use Psr\Log\LoggerInterface;
@@ -19,26 +18,13 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use function mb_stripos;
 use function sprintf;
 
-class ShortcutExtension implements ExtensionInterface
+final class ShortcutExtension implements ExtensionInterface
 {
-    protected LoadService $loadService;
-
-    protected UrlGeneratorInterface $urlGenerator;
-
-    protected RequestStack $requestStack;
-
-    protected LoggerInterface $logger;
-
     public function __construct(
-        LoadService $loadService,
-        UrlGeneratorInterface $urlGenerator,
-        RequestStack $requestStack,
-        ?LoggerInterface $logger = null
+        private UrlGeneratorInterface $urlGenerator,
+        private RequestStack $requestStack,
+        private LoggerInterface $logger = new NullLogger(),
     ) {
-        $this->loadService = $loadService;
-        $this->urlGenerator = $urlGenerator;
-        $this->requestStack = $requestStack;
-        $this->logger = $logger ?? new NullLogger();
     }
 
     public function matches(Location $location): bool
@@ -56,7 +42,7 @@ class ShortcutExtension implements ExtensionInterface
         }
     }
 
-    protected function buildItemFromContent(ItemInterface $item, Content $content): void
+    private function buildItemFromContent(ItemInterface $item, Content $content): void
     {
         if (!$content->getField('url')->isEmpty()) {
             $this->buildItemFromUrl($item, $content->getField('url')->value, $content);
@@ -82,7 +68,7 @@ class ShortcutExtension implements ExtensionInterface
         $this->buildItemFromRelatedContent($item, $content, $relatedContent);
     }
 
-    protected function buildItemFromUrl(ItemInterface $item, UrlValue $urlValue, Content $content): void
+    private function buildItemFromUrl(ItemInterface $item, UrlValue $urlValue, Content $content): void
     {
         $uri = $urlValue->link;
 
@@ -104,7 +90,7 @@ class ShortcutExtension implements ExtensionInterface
         }
     }
 
-    protected function buildItemFromRelatedContent(ItemInterface $item, Content $content, Content $relatedContent): void
+    private function buildItemFromRelatedContent(ItemInterface $item, Content $content, Content $relatedContent): void
     {
         $contentUri = $this->urlGenerator->generate('', [RouteObjectInterface::ROUTE_OBJECT => $relatedContent]);
         $item->setUri($contentUri . $content->getField('internal_url_suffix')->value->text)

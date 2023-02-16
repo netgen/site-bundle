@@ -8,15 +8,12 @@ use Netgen\Bundle\SiteBundle\InfoCollection\NewsletterService;
 use Netgen\InformationCollection\API\Action\ActionInterface;
 use Netgen\InformationCollection\API\Value\Event\InformationCollected;
 
-class NewsletterAction implements ActionInterface
+final class NewsletterAction implements ActionInterface
 {
     public static string $defaultName = 'newsletter';
 
-    private NewsletterService $newsletterService;
-
-    public function __construct(NewsletterService $newsletterService)
+    public function __construct(private NewsletterService $newsletterService)
     {
-        $this->newsletterService = $newsletterService;
     }
 
     public function act(InformationCollected $event): void

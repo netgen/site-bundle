@@ -30,7 +30,7 @@ use Netgen\TagsBundle\Core\FieldType\Tags\Value as TagsFieldValue;
 use function array_filter;
 use function array_map;
 
-class ContentByTopicHandler implements QueryTypeHandlerInterface
+final class ContentByTopicHandler implements QueryTypeHandlerInterface
 {
     use Traits\ContentTypeFilterTrait;
     use Traits\MainLocationFilterTrait;
@@ -40,21 +40,14 @@ class ContentByTopicHandler implements QueryTypeHandlerInterface
     use Traits\SectionFilterTrait;
     use Traits\SortTrait;
 
-    private LoadService $loadService;
-
-    private FindService $findService;
-
     public function __construct(
+        private LoadService $loadService,
+        private FindService $findService,
         LocationService $locationService,
-        LoadService $loadService,
-        FindService $findService,
         SectionHandler $sectionHandler,
         ObjectStateHandler $objectStateHandler,
-        ContentProviderInterface $contentProvider
+        ContentProviderInterface $contentProvider,
     ) {
-        $this->loadService = $loadService;
-        $this->findService = $findService;
-
         $this->setSectionHandler($sectionHandler);
         $this->setObjectStateHandler($objectStateHandler);
         $this->setContentProvider($contentProvider);
@@ -190,7 +183,7 @@ class ContentByTopicHandler implements QueryTypeHandlerInterface
         } elseif (!empty($contentId)) {
             try {
                 $content = $this->loadService->loadContent($contentId)->innerContent;
-            } catch (NotFoundException|UnauthorizedException $e) {
+            } catch (NotFoundException|UnauthorizedException) {
                 // Do nothing
             }
         }

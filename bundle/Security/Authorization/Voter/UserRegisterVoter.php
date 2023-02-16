@@ -14,19 +14,13 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 /**
  * Provides access to ngsite_user_register route, even if user does not have access to user/login policy.
  */
-class UserRegisterVoter extends Voter
+final class UserRegisterVoter extends Voter
 {
-    private PermissionResolver $permissionResolver;
-
-    private RequestStack $requestStack;
-
-    public function __construct(PermissionResolver $permissionResolver, RequestStack $requestStack)
+    public function __construct(private PermissionResolver $permissionResolver, private RequestStack $requestStack)
     {
-        $this->permissionResolver = $permissionResolver;
-        $this->requestStack = $requestStack;
     }
 
-    protected function supports($attribute, $subject): bool
+    protected function supports(string $attribute, mixed $subject): bool
     {
         if (!$attribute instanceof Attribute) {
             return false;
@@ -44,7 +38,7 @@ class UserRegisterVoter extends Voter
         return $attribute->module === 'user' && $attribute->function === 'login';
     }
 
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         return $this->permissionResolver->hasAccess('user', 'register');
     }

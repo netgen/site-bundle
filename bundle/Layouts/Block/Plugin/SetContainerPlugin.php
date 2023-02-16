@@ -11,22 +11,19 @@ use Netgen\Layouts\Parameters\ParameterType;
 
 use function array_flip;
 
-class SetContainerPlugin extends Plugin
+final class SetContainerPlugin extends Plugin
 {
     /**
      * The list of sizes available. Keys should be identifiers, while values
      * should be human readable names of the sizes.
      */
-    private array $sizes;
-
-    public function __construct(array $sizes)
+    public function __construct(private array $sizes)
     {
-        $this->sizes = $sizes;
     }
 
-    public static function getExtendedHandlers(): array
+    public static function getExtendedHandlers(): iterable
     {
-        return [BlockDefinitionHandlerInterface::class];
+        yield BlockDefinitionHandlerInterface::class;
     }
 
     public function buildParameters(ParameterBuilderInterface $builder): void

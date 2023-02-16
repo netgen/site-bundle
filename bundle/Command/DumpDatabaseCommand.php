@@ -20,14 +20,10 @@ use function trim;
 
 use const DIRECTORY_SEPARATOR;
 
-class DumpDatabaseCommand extends Command
+final class DumpDatabaseCommand extends Command
 {
-    private ContainerInterface $container;
-
-    public function __construct(ContainerInterface $container)
+    public function __construct(private ContainerInterface $container)
     {
-        $this->container = $container;
-
         // Parent constructor call is mandatory for commands registered as services
         parent::__construct();
     }

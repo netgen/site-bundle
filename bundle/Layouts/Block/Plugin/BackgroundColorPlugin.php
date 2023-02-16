@@ -13,27 +13,25 @@ use Netgen\Layouts\Standard\Block\BlockDefinition\Handler\ListHandler;
 
 use function array_flip;
 
-class BackgroundColorPlugin extends Plugin
+final class BackgroundColorPlugin extends Plugin
 {
     /**
      * The list of colors available. Keys should be identifiers, while values
      * should be human readable names of the colors.
      */
-    private array $colors;
-
-    public function __construct(array $colors)
+    public function __construct(private array $colors)
     {
-        $this->colors = $colors;
     }
 
-    public static function getExtendedHandlers(): array
+    public static function getExtendedHandlers(): iterable
     {
-        return [
-            ListHandler::class,
-            ComponentHandler::class,
-            ContainerDefinitionHandlerInterface::class,
-            BackgroundColorPluginInterface::class,
-        ];
+        yield ListHandler::class;
+
+        yield ComponentHandler::class;
+
+        yield ContainerDefinitionHandlerInterface::class;
+
+        yield BackgroundColorPluginInterface::class;
     }
 
     public function buildParameters(ParameterBuilderInterface $builder): void

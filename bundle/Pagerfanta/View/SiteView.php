@@ -16,24 +16,18 @@ use function trim;
 
 class SiteView implements ViewInterface
 {
-    protected Environment $twig;
+    private PagerfantaInterface $pagerfanta;
 
-    protected ConfigResolverInterface $configResolver;
+    private Closure $routeGenerator;
 
-    protected PagerfantaInterface $pagerfanta;
+    private int $proximity;
 
-    protected Closure $routeGenerator;
+    private int $startPage;
 
-    protected int $proximity;
+    private int $endPage;
 
-    protected int $startPage;
-
-    protected int $endPage;
-
-    public function __construct(Environment $twig, ConfigResolverInterface $configResolver)
+    public function __construct(private Environment $twig, private ConfigResolverInterface $configResolver)
     {
-        $this->twig = $twig;
-        $this->configResolver = $configResolver;
     }
 
     /**
@@ -56,7 +50,7 @@ class SiteView implements ViewInterface
     public function render(PagerfantaInterface $pagerfanta, $routeGenerator, array $options = []): string
     {
         $this->pagerfanta = $pagerfanta;
-        $this->routeGenerator = Closure::fromCallable($routeGenerator);
+        $this->routeGenerator = $routeGenerator(...);
 
         $this->initializeProximity($options);
         $this->calculateStartAndEndPage();
@@ -73,7 +67,7 @@ class SiteView implements ViewInterface
     /**
      * Initializes the proximity.
      */
-    protected function initializeProximity(array $options): void
+    private function initializeProximity(array $options): void
     {
         $this->proximity = (int) ($options['proximity'] ?? 2);
     }
@@ -81,7 +75,7 @@ class SiteView implements ViewInterface
     /**
      * Calculates start and end page that will be shown in the middle of pager.
      */
-    protected function calculateStartAndEndPage(): void
+    private function calculateStartAndEndPage(): void
     {
         $currentPage = $this->pagerfanta->getCurrentPage();
         $nbPages = $this->pagerfanta->getNbPages();
@@ -106,7 +100,7 @@ class SiteView implements ViewInterface
     /**
      * Calculates the end page when start page is underflowed.
      */
-    protected function calculateEndPageForStartPageUnderflow(int $startPage, int $endPage, int $nbPages): int
+    private function calculateEndPageForStartPageUnderflow(int $startPage, int $endPage, int $nbPages): int
     {
         return min($endPage + (1 - $startPage), $nbPages);
     }
@@ -114,7 +108,7 @@ class SiteView implements ViewInterface
     /**
      * Calculates the start page when end page is overflowed.
      */
-    protected function calculateStartPageForEndPageOverflow(int $startPage, int $endPage, int $nbPages): int
+    private function calculateStartPageForEndPageOverflow(int $startPage, int $endPage, int $nbPages): int
     {
         return max($startPage - ($endPage - $nbPages), 1);
     }
@@ -122,7 +116,7 @@ class SiteView implements ViewInterface
     /**
      * Returns the list of all pages that need to be displayed.
      */
-    protected function getPages(): array
+    private function getPages(): array
     {
         $pages = [];
 
@@ -168,7 +162,7 @@ class SiteView implements ViewInterface
     /**
      * Generates the URL based on provided page.
      */
-    protected function generateUrl(int $page): string
+    private function generateUrl(int $page): string
     {
         $routeGenerator = $this->routeGenerator;
 

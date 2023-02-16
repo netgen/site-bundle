@@ -23,17 +23,10 @@ use function count;
 
 use const PHP_EOL;
 
-class UpdatePublishDateCommand extends Command
+final class UpdatePublishDateCommand extends Command
 {
-    private Repository $repository;
-
-    private FieldHelper $fieldHelper;
-
-    public function __construct(Repository $repository, FieldHelper $fieldHelper)
+    public function __construct(private Repository $repository, private FieldHelper $fieldHelper)
     {
-        $this->repository = $repository;
-        $this->fieldHelper = $fieldHelper;
-
         // Parent constructor call is mandatory for commands registered as services
         parent::__construct();
     }
@@ -77,17 +70,17 @@ class UpdatePublishDateCommand extends Command
 
         try {
             $contentType = $this->repository->getContentTypeService()->loadContentTypeByIdentifier($contentTypeIdentifier);
-        } catch (NotFoundException $e) {
-            throw new RuntimeException("Content type '{$contentTypeIdentifier}' does not exist");
+        } catch (NotFoundException) {
+            throw new RuntimeException("Content type '" . $contentTypeIdentifier . "' does not exist");
         }
 
         $fieldDefinition = $contentType->getFieldDefinition($fieldDefIdentifier);
         if (!$fieldDefinition instanceof FieldDefinition) {
-            throw new RuntimeException("Field definition '{$fieldDefIdentifier}' does not exist in '{$contentTypeIdentifier}' content type");
+            throw new RuntimeException("Field definition '" . $fieldDefIdentifier . "' does not exist in '" . $contentTypeIdentifier . "' content type");
         }
 
         if ($fieldDefinition->fieldTypeIdentifier !== 'ezdatetime' && $fieldDefinition->fieldTypeIdentifier !== 'ezdate') {
-            throw new RuntimeException("Field definition '{$fieldDefIdentifier}' must be of 'ezdatetime' or 'ezdate' field type");
+            throw new RuntimeException("Field definition '" . $fieldDefIdentifier . "' must be of 'ezdatetime' or 'ezdate' field type");
         }
 
         $searchService = $this->repository->getSearchService();
@@ -100,12 +93,12 @@ class UpdatePublishDateCommand extends Command
 
         $totalCount = $searchResult->totalCount;
         if ($totalCount === 0) {
-            $output->writeln("No content found for <comment>{$contentTypeIdentifier}</comment> content type.");
+            $output->writeln('No content found for <comment>' . $contentTypeIdentifier . '</comment> content type.');
 
             return 1;
         }
 
-        $question = new ConfirmationQuestion("Found <comment>{$totalCount}</comment> content items. Proceed? <info>[y/N]</info> ", false);
+        $question = new ConfirmationQuestion('Found <comment>' . $totalCount . '</comment> content items. Proceed? <info>[y/N]</info> ', false);
         if (!$questionHelper->ask($input, $output, $question)) {
             return 1;
         }
@@ -147,7 +140,7 @@ class UpdatePublishDateCommand extends Command
                     $metadataUpdateStruct->publishedDate = $dateValueData;
 
                     $this->repository->sudo(
-                        static fn (Repository $repository): Content => $repository->getContentService()->updateContentMetadata($content->contentInfo, $metadataUpdateStruct),
+                        static fn (): Content => $this->repository->getContentService()->updateContentMetadata($content->contentInfo, $metadataUpdateStruct),
                     );
 
                     ++$updatedCount;
@@ -163,7 +156,7 @@ class UpdatePublishDateCommand extends Command
 
         $progress->finish();
 
-        $output->writeln(PHP_EOL . PHP_EOL . "Updated <comment>{$updatedCount}</comment> content items.");
+        $output->writeln(PHP_EOL . PHP_EOL . 'Updated <comment>' . $updatedCount . '</comment> content items.');
 
         return 0;
     }

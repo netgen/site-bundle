@@ -182,7 +182,6 @@ services:
     ngsite.relation.multimedia_resolver:
         class: Netgen\Bundle\SiteBundle\Relation\MultimediaRelationResolver
         arguments:
-            - "@netgen.ibexa_site_api.load_service"
             - "@ngsite.relation.location_resolver"
 
     ngsite.helper.path_helper:
@@ -224,7 +223,6 @@ services:
     ngsite.core.event.create_user:
         class: Netgen\Bundle\SiteBundle\Core\EventListener\CreateUserListener
         arguments:
-            - "@ibexa.api.service.user"
             - "@ngsite.repository.nguser_setting"
         tags:
             - { name: kernel.event_subscriber }

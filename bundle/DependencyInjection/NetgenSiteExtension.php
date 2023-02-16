@@ -16,7 +16,7 @@ use Symfony\Component\Yaml\Yaml;
 use function file_get_contents;
 use function in_array;
 
-class NetgenSiteExtension extends Extension implements PrependExtensionInterface
+final class NetgenSiteExtension extends Extension implements PrependExtensionInterface
 {
     public function load(array $configs, ContainerBuilder $container): void
     {

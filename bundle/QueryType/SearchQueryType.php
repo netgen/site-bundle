@@ -15,16 +15,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use function trim;
 
-class SearchQueryType extends OptionsResolverBasedQueryType
+final class SearchQueryType extends OptionsResolverBasedQueryType
 {
-    protected Site $site;
-
-    protected ConfigResolverInterface $configResolver;
-
-    public function __construct(Site $site, ConfigResolverInterface $configResolver)
+    public function __construct(private Site $site, private ConfigResolverInterface $configResolver)
     {
-        $this->site = $site;
-        $this->configResolver = $configResolver;
     }
 
     public static function getName(): string

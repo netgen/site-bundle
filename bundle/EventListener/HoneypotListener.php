@@ -20,7 +20,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * will not have any feedback that anything was out of the ordinary, which is
  * the point of the honeypot.
  */
-class HoneypotListener implements EventSubscriberInterface
+final class HoneypotListener implements EventSubscriberInterface
 {
     public static function getSubscribedEvents(): array
     {
@@ -45,7 +45,7 @@ class HoneypotListener implements EventSubscriberInterface
         try {
             /** @var \Symfony\Component\Form\FormInterface $form */
             $form = $event->getAdditionalParameter('form');
-        } catch (MissingAdditionalParameterException $e) {
+        } catch (MissingAdditionalParameterException) {
             return;
         }
 

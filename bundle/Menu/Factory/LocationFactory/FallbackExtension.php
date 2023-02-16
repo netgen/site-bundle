@@ -9,13 +9,10 @@ use Netgen\IbexaSiteApi\API\Values\Location;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class FallbackExtension implements ExtensionInterface
+final class FallbackExtension implements ExtensionInterface
 {
-    protected UrlGeneratorInterface $urlGenerator;
-
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(private UrlGeneratorInterface $urlGenerator)
     {
-        $this->urlGenerator = $urlGenerator;
     }
 
     public function matches(Location $location): bool

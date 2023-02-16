@@ -11,11 +11,11 @@ use Twig\Template;
 use function dirname;
 use function getcwd;
 use function mb_stripos;
-use function mb_strlen;
 use function mb_substr;
 use function ob_get_clean;
 use function ob_start;
 use function preg_replace;
+use function str_ends_with;
 use function trim;
 
 /**
@@ -28,7 +28,7 @@ class DebugTemplate extends Template
 {
     private Filesystem $fileSystem;
 
-    public function display(array $context, array $blocks = [])
+    public function display(array $context, array $blocks = []): void
     {
         $this->fileSystem = $this->fileSystem ?? new Filesystem();
 
@@ -40,8 +40,7 @@ class DebugTemplate extends Template
         $templateResult = ob_get_clean();
 
         $templateName = trim($this->fileSystem->makePathRelative($this->getSourceContext()->getPath(), dirname(getcwd())), '/');
-        // Check if template name ends with "html.twig", indicating this is an HTML template.
-        $isHtmlTemplate = mb_substr($templateName, -mb_strlen('html.twig')) === 'html.twig';
+        $isHtmlTemplate = str_ends_with($templateName, 'html.twig');
         $templateName = $isHtmlTemplate ? $templateName . ' (' . $this->getSourceContext()->getName() . ')' : $templateName;
 
         // Display start template comment, if applicable.
@@ -53,7 +52,7 @@ class DebugTemplate extends Template
                     $templateResult,
                 );
             } else {
-                echo "\n<!-- START {$templateName} -->\n";
+                echo "\n<!-- START " . $templateName . " -->\n";
             }
         }
 
@@ -63,11 +62,11 @@ class DebugTemplate extends Template
             if ($bodyPos !== false) {
                 // Add layout template name before </body>, to avoid display quirks in some browsers.
                 echo mb_substr($templateResult, 0, $bodyPos)
-                     . "\n<!-- STOP {$templateName} -->\n"
+                     . "\n<!-- STOP " . $templateName . " -->\n"
                      . mb_substr($templateResult, $bodyPos);
             } else {
                 echo $templateResult;
-                echo "\n<!-- STOP {$templateName} -->\n";
+                echo "\n<!-- STOP " . $templateName . " -->\n";
             }
         } else {
             echo $templateResult;

@@ -16,22 +16,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class ForgotPassword extends Controller
+final class ForgotPassword extends Controller
 {
-    protected UserService $userService;
-
-    protected EventDispatcherInterface $eventDispatcher;
-
-    protected ConfigResolverInterface $configResolver;
-
     public function __construct(
-        UserService $userService,
-        EventDispatcherInterface $eventDispatcher,
-        ConfigResolverInterface $configResolver
+        private UserService $userService,
+        private EventDispatcherInterface $eventDispatcher,
+        private ConfigResolverInterface $configResolver,
     ) {
-        $this->userService = $userService;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->configResolver = $configResolver;
     }
 
     /**
@@ -68,7 +59,7 @@ class ForgotPassword extends Controller
     /**
      * Creates forgot password form.
      */
-    protected function createForgotPasswordForm(): FormInterface
+    private function createForgotPasswordForm(): FormInterface
     {
         return $this->createFormBuilder(null, ['translation_domain' => 'ngsite_user'])
             ->add(

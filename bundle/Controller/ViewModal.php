@@ -7,13 +7,10 @@ namespace Netgen\Bundle\SiteBundle\Controller;
 use Netgen\Bundle\IbexaSiteApiBundle\View\ContentRenderer;
 use Symfony\Component\HttpFoundation\Response;
 
-class ViewModal extends Controller
+final class ViewModal extends Controller
 {
-    private ContentRenderer $contentRenderer;
-
-    public function __construct(ContentRenderer $contentRenderer)
+    public function __construct(private ContentRenderer $contentRenderer)
     {
-        $this->contentRenderer = $contentRenderer;
     }
 
     public function __invoke(int $contentId): Response

@@ -9,21 +9,16 @@ use Netgen\Bundle\SiteBundle\Helper\RedirectHelper;
 use Netgen\IbexaSiteApi\API\Values\Location;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckRedirect extends Controller
+final class CheckRedirect extends Controller
 {
-    protected RedirectHelper $redirectHelper;
-
-    public function __construct(RedirectHelper $redirectHelper)
+    public function __construct(private RedirectHelper $redirectHelper)
     {
-        $this->redirectHelper = $redirectHelper;
     }
 
     /**
      * Action for viewing content which has redirect fields.
-     *
-     * @return \Symfony\Component\HttpFoundation\Response|\Netgen\Bundle\IbexaSiteApiBundle\View\ContentView
      */
-    public function __invoke(ContentView $view)
+    public function __invoke(ContentView $view): Response|ContentView
     {
         $location = $view->getSiteLocation();
         if (!$location instanceof Location) {

@@ -9,7 +9,7 @@ use Netgen\Bundle\SiteBundle\Core\MVC\Symfony\FieldType\BinaryBase\ContentDownlo
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class ContentDownloadUrlGeneratorPass implements CompilerPassInterface
+final class ContentDownloadUrlGeneratorPass implements CompilerPassInterface
 {
     /**
      * Override content download URL generator to generate download links

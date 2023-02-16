@@ -10,22 +10,13 @@ use Netgen\IbexaSiteApi\API\LoadService;
 use Netgen\IbexaSiteApi\API\Values\Content;
 use Netgen\IbexaSiteApi\API\Values\Location;
 
-class GlobalVariable
+final class GlobalVariable
 {
-    protected Provider $namedObjectProvider;
-
-    protected PermissionService $permissionService;
-
-    protected LoadService $loadService;
-
     public function __construct(
-        Provider $namedObjectProvider,
-        PermissionService $permissionService,
-        LoadService $loadService
+        private Provider $namedObjectProvider,
+        private PermissionService $permissionService,
+        private LoadService $loadService,
     ) {
-        $this->namedObjectProvider = $namedObjectProvider;
-        $this->permissionService = $permissionService;
-        $this->loadService = $loadService;
     }
 
     public function getSiteInfoLocation(): Location

@@ -8,7 +8,7 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion\FullText as B
 use Netgen\IbexaSearchExtra\API\Values\Content\Query\Criterion\FulltextSpellcheck;
 use Netgen\IbexaSearchExtra\API\Values\Content\SpellcheckQuery;
 
-class FullText extends BaseFullText implements FulltextSpellcheck
+final class FullText extends BaseFullText implements FulltextSpellcheck
 {
     /**
      * Gets query to be used for spell check.

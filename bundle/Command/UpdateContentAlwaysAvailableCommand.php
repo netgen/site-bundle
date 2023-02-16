@@ -16,24 +16,17 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use function array_map;
 use function explode;
 
-class UpdateContentAlwaysAvailableCommand extends Command
+final class UpdateContentAlwaysAvailableCommand extends Command
 {
     protected static $defaultDescription = 'Update always-available state for the given Content item(s)';
-
-    private Repository $repository;
-
-    private ContentService $contentService;
 
     private StyleInterface $style;
 
     public function __construct(
-        Repository $repository,
-        ContentService $contentService
+        private Repository $repository,
+        private ContentService $contentService,
     ) {
         parent::__construct();
-
-        $this->repository = $repository;
-        $this->contentService = $contentService;
     }
 
     protected function configure(): void
@@ -59,9 +52,9 @@ class UpdateContentAlwaysAvailableCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->style->info('This command updates Content item(s) always-available flag.');
+        $this->style->info('This command updates content item(s) always-available flag.');
 
-        if (!$this->style->confirm('Continue with this action?', true)) {
+        if (!$this->style->confirm('Continue with this action?')) {
             $this->style->error('Aborted.');
 
             return Command::FAILURE;

@@ -8,13 +8,10 @@ use Netgen\Bundle\IbexaSiteApiBundle\View\ContentRenderer;
 use Netgen\Bundle\SiteBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
-class AjaxSubmit extends Controller
+final class AjaxSubmit extends Controller
 {
-    private ContentRenderer $contentRenderer;
-
-    public function __construct(ContentRenderer $contentRenderer)
+    public function __construct(private ContentRenderer $contentRenderer)
     {
-        $this->contentRenderer = $contentRenderer;
     }
 
     public function __invoke(int $formContentId): Response

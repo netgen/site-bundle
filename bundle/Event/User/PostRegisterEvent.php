@@ -7,13 +7,10 @@ namespace Netgen\Bundle\SiteBundle\Event\User;
 use Ibexa\Contracts\Core\Repository\Values\User\User;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class PostRegisterEvent extends Event
+final class PostRegisterEvent extends Event
 {
-    protected User $user;
-
-    public function __construct(User $user)
+    public function __construct(private User $user)
     {
-        $this->user = $user;
     }
 
     public function getUser(): User

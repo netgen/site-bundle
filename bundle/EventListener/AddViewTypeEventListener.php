@@ -8,7 +8,7 @@ use Ibexa\Core\MVC\Symfony\View\Event\FilterViewParametersEvent;
 use Ibexa\Core\MVC\Symfony\View\ViewEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class AddViewTypeEventListener implements EventSubscriberInterface
+final class AddViewTypeEventListener implements EventSubscriberInterface
 {
     /**
      * Returns an array of event names this subscriber wants to listen to.

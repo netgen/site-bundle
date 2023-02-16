@@ -14,16 +14,10 @@ use Throwable;
 use function is_string;
 use function sprintf;
 
-class LocationRelationResolver implements LocationRelationResolverInterface
+final class LocationRelationResolver implements LocationRelationResolverInterface
 {
-    protected LoadService $loadService;
-
-    protected LoggerInterface $logger;
-
-    public function __construct(LoadService $loadService, ?LoggerInterface $logger = null)
+    public function __construct(private LoadService $loadService, private LoggerInterface $logger = new NullLogger())
     {
-        $this->loadService = $loadService;
-        $this->logger = $logger ?? new NullLogger();
     }
 
     public function loadRelations(Location $location, ?string $fieldIdentifier = null, array $options = []): array

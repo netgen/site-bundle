@@ -10,13 +10,10 @@ use Netgen\Bundle\OpenGraphBundle\MetaTag\Item;
 
 use function trim;
 
-class SiteName implements HandlerInterface
+final class SiteName implements HandlerInterface
 {
-    protected Provider $namedObjectProvider;
-
-    public function __construct(Provider $namedObjectProvider)
+    public function __construct(private Provider $namedObjectProvider)
     {
-        $this->namedObjectProvider = $namedObjectProvider;
     }
 
     public function getMetaTags(string $tagName, array $params = []): array

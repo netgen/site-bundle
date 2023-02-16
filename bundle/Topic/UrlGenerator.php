@@ -9,31 +9,20 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Netgen\IbexaSiteApi\API\FindService;
 use Netgen\IbexaSiteApi\API\LoadService;
+use Netgen\IbexaSiteApi\API\Values\Location;
 use Netgen\TagsBundle\API\Repository\Values\Content\Query\Criterion\TagId;
 use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class UrlGenerator
+final class UrlGenerator
 {
-    private FindService $findService;
-
-    private LoadService $loadService;
-
-    private ConfigResolverInterface $configResolver;
-
-    private UrlGeneratorInterface $urlGenerator;
-
     public function __construct(
-        FindService $findService,
-        LoadService $loadService,
-        ConfigResolverInterface $configResolver,
-        UrlGeneratorInterface $urlGenerator
+        private FindService $findService,
+        private LoadService $loadService,
+        private ConfigResolverInterface $configResolver,
+        private UrlGeneratorInterface $urlGenerator,
     ) {
-        $this->findService = $findService;
-        $this->loadService = $loadService;
-        $this->configResolver = $configResolver;
-        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -52,10 +41,8 @@ class UrlGenerator
      * If exists, returns the location of the content with ng_topic identifier connected to provided tag.
      *
      * Otherwise, the tag itself is returned.
-     *
-     * @return \Netgen\IbexaSiteApi\API\Values\Location|\Netgen\TagsBundle\API\Repository\Values\Tags\Tag
      */
-    private function getTopicValueObject(Tag $tag)
+    private function getTopicValueObject(Tag $tag): Location|Tag
     {
         $rootLocation = $this->loadService->loadLocation(
             $this->configResolver->getParameter('content.tree_root.location_id'),

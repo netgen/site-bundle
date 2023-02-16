@@ -17,16 +17,10 @@ use function mb_stripos;
 use function sprintf;
 use function trim;
 
-class RedirectHelper
+final class RedirectHelper
 {
-    protected UrlGeneratorInterface $urlGenerator;
-
-    protected Site $site;
-
-    public function __construct(UrlGeneratorInterface $urlGenerator, Site $site)
+    public function __construct(private UrlGeneratorInterface $urlGenerator, private Site $site)
     {
-        $this->urlGenerator = $urlGenerator;
-        $this->site = $site;
     }
 
     /**
@@ -50,12 +44,12 @@ class RedirectHelper
             if ($internalRedirectContent->contentInfo->mainLocationId !== $location->id) {
                 return new RedirectResponse(
                     $this->urlGenerator->generate('', [RouteObjectInterface::ROUTE_OBJECT => $internalRedirectContent]),
-                    RedirectResponse::HTTP_MOVED_PERMANENTLY,
+                    Response::HTTP_MOVED_PERMANENTLY,
                 );
             }
         } elseif ($externalRedirectValue instanceof UrlValue && !$content->getField('external_redirect')->isEmpty()) {
             if (mb_stripos($externalRedirectValue->link, 'http') === 0) {
-                return new RedirectResponse($externalRedirectValue->link, RedirectResponse::HTTP_MOVED_PERMANENTLY);
+                return new RedirectResponse($externalRedirectValue->link, Response::HTTP_MOVED_PERMANENTLY);
             }
 
             return new RedirectResponse(
@@ -64,7 +58,7 @@ class RedirectHelper
                     $this->urlGenerator->generate('', [RouteObjectInterface::ROUTE_OBJECT => $this->getRootLocation()]),
                     trim($externalRedirectValue->link, '/'),
                 ),
-                RedirectResponse::HTTP_MOVED_PERMANENTLY,
+                Response::HTTP_MOVED_PERMANENTLY,
             );
         }
 
@@ -74,7 +68,7 @@ class RedirectHelper
     /**
      * Returns the root location object for current siteaccess configuration.
      */
-    protected function getRootLocation(): Location
+    private function getRootLocation(): Location
     {
         return $this->site->getLoadService()->loadLocation(
             $this->site->getSettings()->rootLocationId,

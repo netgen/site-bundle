@@ -24,43 +24,22 @@ use function is_array;
 use function preg_match;
 use function reset;
 
-class NewsletterService
+final class NewsletterService
 {
     public const ALREADY_ACTIVE = 'already_active';
     public const NEW_UNCONFIRMED = 'new';
     public const PREVIOUS_UNCONFIRMED = 'unconfirmed';
     public const UNSUBSCRIBED = 'unsubscribed';
 
-    private MailerInterface $mailer;
-
-    private MailerLite $mailerLite;
-
-    private string $mailerLiteApiKey;
-
-    private TranslatorInterface $translator;
-
-    private string $newsletterSenderEmail;
-
-    private string $newsletterRecipientEmail;
-
-    private LoggerInterface $logger;
-
     public function __construct(
-        MailerInterface $mailer,
-        MailerLite $mailerLite,
-        string $mailerLiteApiKey,
-        TranslatorInterface $translator,
-        string $newsletterSenderEmail,
-        string $newsletterRecipientEmail,
-        ?LoggerInterface $logger = null
+        private MailerInterface $mailer,
+        private MailerLite $mailerLite,
+        private string $mailerLiteApiKey,
+        private TranslatorInterface $translator,
+        private string $newsletterSenderEmail,
+        private string $newsletterRecipientEmail,
+        private ?LoggerInterface $logger = new NullLogger(),
     ) {
-        $this->mailerLite = $mailerLite;
-        $this->mailer = $mailer;
-        $this->mailerLiteApiKey = $mailerLiteApiKey;
-        $this->translator = $translator;
-        $this->newsletterSenderEmail = $newsletterSenderEmail;
-        $this->newsletterRecipientEmail = $newsletterRecipientEmail;
-        $this->logger = $logger ?? new NullLogger();
     }
 
     /**
@@ -211,10 +190,7 @@ class NewsletterService
         $this->mailer->send($message);
     }
 
-    /**
-     * @return mixed
-     */
-    private function addSubscriberToGroup(int $groupId, array $subscriberData)
+    private function addSubscriberToGroup(int $groupId, array $subscriberData): mixed
     {
         return $this->mailerLite->groups()->addSubscriber($groupId, $subscriberData);
     }

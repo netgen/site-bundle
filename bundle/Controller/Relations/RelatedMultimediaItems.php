@@ -10,13 +10,10 @@ use Netgen\IbexaSiteApi\API\Values\Location;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class RelatedMultimediaItems extends Controller
+final class RelatedMultimediaItems extends Controller
 {
-    protected LocationRelationResolverInterface $multimediaResolver;
-
-    public function __construct(LocationRelationResolverInterface $multimediaResolver)
+    public function __construct(private LocationRelationResolverInterface $multimediaResolver)
     {
-        $this->multimediaResolver = $multimediaResolver;
     }
 
     /**

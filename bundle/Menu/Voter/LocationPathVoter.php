@@ -14,13 +14,10 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use function array_map;
 use function in_array;
 
-class LocationPathVoter implements VoterInterface
+final class LocationPathVoter implements VoterInterface
 {
-    protected RequestStack $requestStack;
-
-    public function __construct(RequestStack $requestStack)
+    public function __construct(private RequestStack $requestStack)
     {
-        $this->requestStack = $requestStack;
     }
 
     /**

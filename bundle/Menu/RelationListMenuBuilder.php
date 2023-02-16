@@ -15,26 +15,14 @@ use Throwable;
 
 use function sprintf;
 
-class RelationListMenuBuilder
+final class RelationListMenuBuilder
 {
-    protected FactoryInterface $factory;
-
-    protected LoadService $loadService;
-
-    protected Provider $namedObjectProvider;
-
-    protected LoggerInterface $logger;
-
     public function __construct(
-        FactoryInterface $factory,
-        LoadService $loadService,
-        Provider $namedObjectProvider,
-        ?LoggerInterface $logger = null
+        private FactoryInterface $factory,
+        private LoadService $loadService,
+        private Provider $namedObjectProvider,
+        private LoggerInterface $logger = new NullLogger(),
     ) {
-        $this->factory = $factory;
-        $this->loadService = $loadService;
-        $this->namedObjectProvider = $namedObjectProvider;
-        $this->logger = $logger ?? new NullLogger();
     }
 
     /**

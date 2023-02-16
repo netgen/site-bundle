@@ -8,7 +8,7 @@ use Ibexa\ContentForms\Form\Type\FieldType\TextLineFieldType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class HoneypotType extends AbstractType
+final class HoneypotType extends AbstractType
 {
     public function getBlockPrefix(): string
     {

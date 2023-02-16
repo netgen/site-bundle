@@ -17,11 +17,9 @@ abstract class MultipleValued
      * Registers the matching configuration for the matcher.
      * $matchingConfig can have single (string|int...) or multiple values (array).
      *
-     * @param mixed $matchingConfig
-     *
      * @throws \InvalidArgumentException Should be thrown if $matchingConfig is not valid
      */
-    public function setMatchingConfig($matchingConfig): void
+    public function setMatchingConfig(mixed $matchingConfig): void
     {
         $this->values = !is_array($matchingConfig) ? [$matchingConfig] : $matchingConfig;
     }

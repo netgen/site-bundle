@@ -10,13 +10,10 @@ use Netgen\IbexaSiteApi\API\Values\Content;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class RelatedItems extends Controller
+final class RelatedItems extends Controller
 {
-    protected LocationRelationResolverInterface $locationResolver;
-
-    public function __construct(LocationRelationResolverInterface $locationResolver)
+    public function __construct(private LocationRelationResolverInterface $locationResolver)
     {
-        $this->locationResolver = $locationResolver;
     }
 
     /**

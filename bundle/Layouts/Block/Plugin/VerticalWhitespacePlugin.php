@@ -11,21 +11,15 @@ use Netgen\Layouts\Parameters\ParameterType;
 
 use function array_flip;
 
-class VerticalWhitespacePlugin extends Plugin
+final class VerticalWhitespacePlugin extends Plugin
 {
-    private array $top;
-
-    private array $bottom;
-
-    public function __construct(array $top, array $bottom)
+    public function __construct(private array $top, private array $bottom)
     {
-        $this->top = $top;
-        $this->bottom = $bottom;
     }
 
-    public static function getExtendedHandlers(): array
+    public static function getExtendedHandlers(): iterable
     {
-        return [BlockDefinitionHandlerInterface::class];
+        yield BlockDefinitionHandlerInterface::class;
     }
 
     public function buildParameters(ParameterBuilderInterface $builder): void

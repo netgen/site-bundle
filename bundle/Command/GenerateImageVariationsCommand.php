@@ -23,34 +23,22 @@ use function array_keys;
 use function array_map;
 use function array_unique;
 use function array_values;
+use function count;
 use function explode;
 use function in_array;
 use function iterator_to_array;
 use function trim;
 
-class GenerateImageVariationsCommand extends Command
+final class GenerateImageVariationsCommand extends Command
 {
-    private Repository $repository;
-
-    private VariationHandler $variationHandler;
-
-    private TagAwareAdapterInterface $cache;
-
-    private ConfigResolverInterface $configResolver;
-
     private SymfonyStyle $style;
 
     public function __construct(
-        Repository $repository,
-        VariationHandler $variationHandler,
-        TagAwareAdapterInterface $cache,
-        ConfigResolverInterface $configResolver
+        private Repository $repository,
+        private VariationHandler $variationHandler,
+        private TagAwareAdapterInterface $cache,
+        private ConfigResolverInterface $configResolver,
     ) {
-        $this->repository = $repository;
-        $this->variationHandler = $variationHandler;
-        $this->cache = $cache;
-        $this->configResolver = $configResolver;
-
         // Parent constructor call is mandatory for commands registered as services
         parent::__construct();
     }
@@ -75,10 +63,10 @@ class GenerateImageVariationsCommand extends Command
         $query->limit = 0;
 
         $totalCount = $this->repository->sudo(
-            function (Repository $repository) use ($query): int {
+            function () use ($query): int {
                 $languages = $this->configResolver->getParameter('languages');
 
-                return $repository->getSearchService()->findContentInfo($query, $languages, false)->totalCount ?? 0;
+                return $this->repository->getSearchService()->findContentInfo($query, $languages, false)->totalCount ?? 0;
             },
         );
 
@@ -89,7 +77,7 @@ class GenerateImageVariationsCommand extends Command
         $this->style->progressStart($totalCount);
 
         $imageVariations = $this->parseCommaDelimited($input->getOption('variations'));
-        if (empty($imageVariations)) {
+        if (count($imageVariations) === 0) {
             $imageVariations = array_keys($this->configResolver->getParameter('image_variations'));
         }
 
@@ -97,10 +85,10 @@ class GenerateImageVariationsCommand extends Command
 
         do {
             $searchHits = $this->repository->sudo(
-                function (Repository $repository) use ($query): iterable {
+                function () use ($query): iterable {
                     $languages = $this->configResolver->getParameter('languages');
 
-                    return $repository->getSearchService()->findContent($query, $languages, false)->searchHits;
+                    return $this->repository->getSearchService()->findContent($query, $languages, false)->searchHits;
                 },
             );
 
@@ -174,7 +162,7 @@ class GenerateImageVariationsCommand extends Command
     {
         foreach ($subtreeIds as $subtreeId) {
             yield $this->repository->sudo(
-                static fn (Repository $repository): string => $repository->getLocationService()->loadLocation($subtreeId)->pathString,
+                static fn (): string => $this->repository->getLocationService()->loadLocation($subtreeId)->pathString,
             );
         }
     }

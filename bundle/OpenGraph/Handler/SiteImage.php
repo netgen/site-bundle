@@ -16,21 +16,15 @@ use function ltrim;
 use function preg_match;
 use function sprintf;
 
-class SiteImage implements HandlerInterface
+final class SiteImage implements HandlerInterface
 {
     /**
      * Field identifier that provides opengraph image.
      */
-    protected const FIELD_IDENTIFIER = 'site_opengraph_image';
+    private const FIELD_IDENTIFIER = 'site_opengraph_image';
 
-    protected Provider $namedObjectProvider;
-
-    private RequestStack $requestStack;
-
-    public function __construct(Provider $namedObjectProvider, RequestStack $requestStack)
+    public function __construct(private Provider $namedObjectProvider, private RequestStack $requestStack)
     {
-        $this->namedObjectProvider = $namedObjectProvider;
-        $this->requestStack = $requestStack;
     }
 
     public function getMetaTags(string $tagName, array $params = []): array

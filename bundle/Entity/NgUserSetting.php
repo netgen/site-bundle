@@ -6,14 +6,8 @@ namespace Netgen\Bundle\SiteBundle\Entity;
 
 class NgUserSetting
 {
-    protected int $userId;
-
-    protected bool $isActivated;
-
-    public function __construct(int $userId, bool $isActivated)
+    public function __construct(private int $userId, private bool $isActivated)
     {
-        $this->userId = $userId;
-        $this->isActivated = $isActivated;
     }
 
     /**

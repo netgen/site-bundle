@@ -15,13 +15,10 @@ use Symfony\Component\Form\FormInterface;
 /**
  * Overridden to properly handle null value for information collection.
  */
-class BinaryFileFormMapper implements FieldValueFormMapperInterface
+final class BinaryFileFormMapper implements FieldValueFormMapperInterface
 {
-    private FieldTypeService $fieldTypeService;
-
-    public function __construct(FieldTypeService $fieldTypeService)
+    public function __construct(private FieldTypeService $fieldTypeService)
     {
-        $this->fieldTypeService = $fieldTypeService;
     }
 
     public function mapFieldValueForm(FormInterface $fieldForm, FieldData $data): void

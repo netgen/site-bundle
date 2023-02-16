@@ -9,7 +9,7 @@ use Netgen\Bundle\SiteBundle\Event\User\PostActivateEvent;
 use Netgen\Bundle\SiteBundle\EventListener\UserEventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class PostActivateEventListener extends UserEventListener implements EventSubscriberInterface
+final class PostActivateEventListener extends UserEventListener implements EventSubscriberInterface
 {
     /**
      * Returns an array of event names this subscriber wants to listen to.

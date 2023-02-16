@@ -20,30 +20,15 @@ use function in_array;
 use function mb_stripos;
 use function sprintf;
 
-class MenuItemExtension implements ExtensionInterface
+final class MenuItemExtension implements ExtensionInterface
 {
-    protected UrlGeneratorInterface $urlGenerator;
-
-    protected RequestStack $requestStack;
-
-    protected ConfigResolverInterface $configResolver;
-
-    protected LoggerInterface $logger;
-
-    protected ChildrenBuilder $childrenBuilder;
-
     public function __construct(
-        UrlGeneratorInterface $urlGenerator,
-        RequestStack $requestStack,
-        ConfigResolverInterface $configResolver,
-        ChildrenBuilder $childrenBuilder,
-        ?LoggerInterface $logger = null
+        private UrlGeneratorInterface $urlGenerator,
+        private RequestStack $requestStack,
+        private ConfigResolverInterface $configResolver,
+        private ChildrenBuilder $childrenBuilder,
+        private LoggerInterface $logger = new NullLogger(),
     ) {
-        $this->urlGenerator = $urlGenerator;
-        $this->requestStack = $requestStack;
-        $this->configResolver = $configResolver;
-        $this->childrenBuilder = $childrenBuilder;
-        $this->logger = $logger ?? new NullLogger();
     }
 
     public function matches(Location $location): bool
@@ -63,7 +48,7 @@ class MenuItemExtension implements ExtensionInterface
         $this->childrenBuilder->buildChildItems($item, $location->content);
     }
 
-    protected function buildItemFromContent(ItemInterface $item, Content $content): void
+    private function buildItemFromContent(ItemInterface $item, Content $content): void
     {
         if (!$content->getField('item_url')->isEmpty()) {
             $this->buildItemFromUrl($item, $content->getField('item_url')->value, $content);
@@ -89,7 +74,7 @@ class MenuItemExtension implements ExtensionInterface
         $this->buildItemFromRelatedContent($item, $content, $relatedContent);
     }
 
-    protected function buildItemFromUrl(ItemInterface $item, UrlValue $urlValue, Content $content): void
+    private function buildItemFromUrl(ItemInterface $item, UrlValue $urlValue, Content $content): void
     {
         $uri = $urlValue->link;
 
@@ -111,7 +96,7 @@ class MenuItemExtension implements ExtensionInterface
         }
     }
 
-    protected function buildItemFromRelatedContent(ItemInterface $item, Content $content, Content $relatedContent): void
+    private function buildItemFromRelatedContent(ItemInterface $item, Content $content, Content $relatedContent): void
     {
         $item
             ->setUri($this->urlGenerator->generate('', [RouteObjectInterface::ROUTE_OBJECT => $relatedContent]))

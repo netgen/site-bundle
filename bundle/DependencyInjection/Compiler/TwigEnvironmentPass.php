@@ -8,7 +8,7 @@ use Netgen\Bundle\SiteBundle\Templating\Twig\Environment;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class TwigEnvironmentPass implements CompilerPassInterface
+final class TwigEnvironmentPass implements CompilerPassInterface
 {
     /**
      * Overrides the Twig environment to add path to template to rendered markup.

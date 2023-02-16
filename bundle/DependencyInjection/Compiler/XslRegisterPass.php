@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 use function array_merge;
 
-class XslRegisterPass implements CompilerPassInterface
+final class XslRegisterPass implements CompilerPassInterface
 {
     /**
      * Registers various Docbook XSL files as custom XSL stylesheets for ezrichtext field type.
@@ -23,16 +23,16 @@ class XslRegisterPass implements CompilerPassInterface
         );
 
         foreach ($scopes as $scope) {
-            if ($container->hasParameter("ibexa.site_access.config.{$scope}.fieldtypes.ezrichtext.output_custom_xsl")) {
-                $xslConfig = $container->getParameter("ibexa.site_access.config.{$scope}.fieldtypes.ezrichtext.output_custom_xsl");
+            if ($container->hasParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ezrichtext.output_custom_xsl')) {
+                $xslConfig = $container->getParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ezrichtext.output_custom_xsl');
                 $xslConfig[] = ['path' => __DIR__ . '/../../Resources/docbook/output/core.xsl', 'priority' => 5000];
-                $container->setParameter("ibexa.site_access.config.{$scope}.fieldtypes.ezrichtext.output_custom_xsl", $xslConfig);
+                $container->setParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ezrichtext.output_custom_xsl', $xslConfig);
             }
 
-            if ($container->hasParameter("ibexa.site_access.config.{$scope}.fieldtypes.ezrichtext.edit_custom_xsl")) {
-                $xslConfig = $container->getParameter("ibexa.site_access.config.{$scope}.fieldtypes.ezrichtext.edit_custom_xsl");
+            if ($container->hasParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ezrichtext.edit_custom_xsl')) {
+                $xslConfig = $container->getParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ezrichtext.edit_custom_xsl');
                 $xslConfig[] = ['path' => __DIR__ . '/../../Resources/docbook/edit/core.xsl', 'priority' => 5000];
-                $container->setParameter("ibexa.site_access.config.{$scope}.fieldtypes.ezrichtext.edit_custom_xsl", $xslConfig);
+                $container->setParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ezrichtext.edit_custom_xsl', $xslConfig);
             }
         }
     }

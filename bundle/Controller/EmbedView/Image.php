@@ -18,16 +18,10 @@ use function mb_substr;
 use function sprintf;
 use function trim;
 
-class Image extends Controller
+final class Image extends Controller
 {
-    protected Site $site;
-
-    protected LoggerInterface $logger;
-
-    public function __construct(Site $site, ?LoggerInterface $logger = null)
+    public function __construct(private Site $site, private LoggerInterface $logger = new NullLogger())
     {
-        $this->site = $site;
-        $this->logger = $logger ?? new NullLogger();
     }
 
     /**
@@ -48,11 +42,11 @@ class Image extends Controller
                 try {
                     $location = $this->site->getLoadService()->loadLocation($locationId);
                     $content = $location->content;
-                } catch (NotFoundException $e) {
+                } catch (NotFoundException) {
                     $targetLink = null;
 
                     $this->logger->error(sprintf('Tried to generate link to non existing location #%s', $locationId));
-                } catch (UnauthorizedException $e) {
+                } catch (UnauthorizedException) {
                     $targetLink = null;
 
                     $this->logger->error(sprintf('Tried to generate link to location #%s without read rights', $locationId));
@@ -62,11 +56,11 @@ class Image extends Controller
 
                 try {
                     $content = $this->site->getLoadService()->loadContent($linkedContentId);
-                } catch (NotFoundException $e) {
+                } catch (NotFoundException) {
                     $targetLink = null;
 
                     $this->logger->error(sprintf('Tried to generate link to non existing content #%s', $linkedContentId));
-                } catch (UnauthorizedException $e) {
+                } catch (UnauthorizedException) {
                     $targetLink = null;
 
                     $this->logger->error(sprintf('Tried to generate link to content #%s without read rights', $linkedContentId));

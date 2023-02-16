@@ -11,7 +11,7 @@ use Netgen\IbexaSearchExtra\API\Values\Content\Search\Suggestion;
 use function sprintf;
 use function str_replace;
 
-class SuggestionResolver
+final class SuggestionResolver
 {
     /**
      * Get suggested search term based on returned spell check suggestions.

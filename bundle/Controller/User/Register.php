@@ -20,30 +20,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class Register extends Controller
+final class Register extends Controller
 {
-    protected UserService $userService;
-
-    protected ContentTypeService $contentTypeService;
-
-    protected EventDispatcherInterface $eventDispatcher;
-
-    protected Repository $repository;
-
-    protected ConfigResolverInterface $configResolver;
-
     public function __construct(
-        UserService $userService,
-        ContentTypeService $contentTypeService,
-        EventDispatcherInterface $eventDispatcher,
-        Repository $repository,
-        ConfigResolverInterface $configResolver
+        private UserService $userService,
+        private ContentTypeService $contentTypeService,
+        private EventDispatcherInterface $eventDispatcher,
+        private Repository $repository,
+        private ConfigResolverInterface $configResolver,
     ) {
-        $this->userService = $userService;
-        $this->contentTypeService = $contentTypeService;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->repository = $repository;
-        $this->configResolver = $configResolver;
     }
 
     /**
@@ -112,7 +97,7 @@ class Register extends Controller
                     'error' => 'username_taken',
                 ],
             );
-        } catch (NotFoundException $e) {
+        } catch (NotFoundException) {
             // do nothing
         }
 
@@ -137,9 +122,9 @@ class Register extends Controller
 
         /** @var \Ibexa\Contracts\Core\Repository\Values\User\User $newUser */
         $newUser = $this->repository->sudo(
-            static fn (Repository $repository): User => $repository->getUserService()->createUser(
+            static fn (): User => $this->repository->getUserService()->createUser(
                 $data->payload,
-                [$repository->getUserService()->loadUserGroup($userGroupId)],
+                [$this->repository->getUserService()->loadUserGroup($userGroupId)],
             ),
         );
 

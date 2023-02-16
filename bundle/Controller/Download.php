@@ -18,30 +18,15 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function str_replace;
 
-class Download extends Controller
+final class Download extends Controller
 {
-    protected Site $site;
-
-    protected IOServiceInterface $ioFileService;
-
-    protected IOServiceInterface $ioImageService;
-
-    protected TranslatorInterface $translator;
-
-    protected EventDispatcherInterface $dispatcher;
-
     public function __construct(
-        Site $site,
-        IOServiceInterface $ioFileService,
-        IOServiceInterface $ioImageService,
-        TranslatorInterface $translator,
-        EventDispatcherInterface $dispatcher
+        private Site $site,
+        private IOServiceInterface $ioFileService,
+        private IOServiceInterface $ioImageService,
+        private TranslatorInterface $translator,
+        private EventDispatcherInterface $dispatcher,
     ) {
-        $this->site = $site;
-        $this->ioFileService = $ioFileService;
-        $this->ioImageService = $ioImageService;
-        $this->translator = $translator;
-        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -63,11 +48,7 @@ class Download extends Controller
         $contentId = (int) $contentId;
         $fieldId = (int) $fieldId;
 
-        $content = $this->site->getLoadService()->loadContent(
-            $contentId,
-            $request->query->get('version'),
-            $request->query->get('inLanguage'),
-        );
+        $content = $this->site->getLoadService()->loadContent($contentId);
 
         if (!$content->hasFieldById($fieldId) || $content->getFieldById($fieldId)->isEmpty()) {
             throw $this->createNotFoundException(

@@ -11,16 +11,10 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 use function rawurldecode;
 
-class EsiFragmentEventListener implements EventSubscriberInterface
+final class EsiFragmentEventListener implements EventSubscriberInterface
 {
-    protected RequestStack $requestStack;
-
-    protected string $fragmentPath;
-
-    public function __construct(RequestStack $requestStack, string $fragmentPath)
+    public function __construct(private RequestStack $requestStack, private string $fragmentPath)
     {
-        $this->requestStack = $requestStack;
-        $this->fragmentPath = $fragmentPath;
     }
 
     public static function getSubscribedEvents(): array

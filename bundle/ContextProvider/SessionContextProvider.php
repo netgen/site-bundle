@@ -8,13 +8,10 @@ use FOS\HttpCache\UserContext\ContextProvider;
 use FOS\HttpCache\UserContext\UserContext;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class SessionContextProvider implements ContextProvider
+final class SessionContextProvider implements ContextProvider
 {
-    protected SessionInterface $session;
-
-    public function __construct(SessionInterface $session)
+    public function __construct(private SessionInterface $session)
     {
-        $this->session = $session;
     }
 
     /**

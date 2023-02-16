@@ -15,32 +15,14 @@ use Netgen\IbexaSiteApi\API\Values\ContentInfo;
 
 abstract class UserEventListener
 {
-    protected MailHelper $mailHelper;
-
-    protected ConfigResolverInterface $configResolver;
-
-    protected NgUserSettingRepository $ngUserSettingRepository;
-
-    protected UserAccountKeyRepository $userAccountKeyRepository;
-
-    protected LoadService $loadService;
-
-    protected Repository $repository;
-
     public function __construct(
-        MailHelper $mailHelper,
-        ConfigResolverInterface $configResolver,
-        NgUserSettingRepository $ngUserSettingRepository,
-        UserAccountKeyRepository $userAccountKeyRepository,
-        LoadService $loadService,
-        Repository $repository
+        protected MailHelper $mailHelper,
+        protected ConfigResolverInterface $configResolver,
+        protected NgUserSettingRepository $ngUserSettingRepository,
+        protected UserAccountKeyRepository $userAccountKeyRepository,
+        protected LoadService $loadService,
+        protected Repository $repository,
     ) {
-        $this->mailHelper = $mailHelper;
-        $this->configResolver = $configResolver;
-        $this->ngUserSettingRepository = $ngUserSettingRepository;
-        $this->userAccountKeyRepository = $userAccountKeyRepository;
-        $this->loadService = $loadService;
-        $this->repository = $repository;
     }
 
     /**
@@ -49,7 +31,7 @@ abstract class UserEventListener
     protected function getUserName(User $user): string
     {
         $contentInfo = $this->repository->sudo(
-            fn (Repository $repository): ContentInfo => $this->loadService->loadContent($user->id)->contentInfo,
+            fn (): ContentInfo => $this->loadService->loadContent($user->id)->contentInfo,
         );
 
         return $contentInfo->name;

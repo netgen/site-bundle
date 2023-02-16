@@ -7,7 +7,7 @@ namespace Netgen\Bundle\SiteBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 use Netgen\Bundle\SiteBundle\Entity\NgUserSetting;
 
-class NgUserSettingRepository extends EntityRepository
+final class NgUserSettingRepository extends EntityRepository
 {
     /**
      * Returns if user specified by $userId is activated.

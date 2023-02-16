@@ -7,16 +7,10 @@ namespace Netgen\Bundle\SiteBundle\Event\User;
 use Ibexa\Contracts\Core\Repository\Values\User\User;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class PasswordResetRequestEvent extends Event
+final class PasswordResetRequestEvent extends Event
 {
-    protected string $email;
-
-    protected ?User $user;
-
-    public function __construct(string $email, ?User $user = null)
+    public function __construct(private string $email, private ?User $user = null)
     {
-        $this->email = $email;
-        $this->user = $user;
     }
 
     public function getEmail(): string

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Event;
 
-class SiteEvents
+final class SiteEvents
 {
     /**
      * The ACTIVATION_REQUEST event occurs after the user activation process has been started.

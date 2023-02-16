@@ -10,7 +10,7 @@ use Netgen\Bundle\IbexaSiteApiBundle\View\LocationValueView;
 use Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ConfigResolverBased;
 use Netgen\IbexaSiteApi\API\Values\Location as APILocation;
 
-class LocationRemote extends ConfigResolverBased implements ViewMatcherInterface
+final class LocationRemote extends ConfigResolverBased implements ViewMatcherInterface
 {
     public function match(View $view): bool
     {

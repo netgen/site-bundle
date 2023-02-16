@@ -8,13 +8,10 @@ use Netgen\Bundle\SiteBundle\Topic\UrlGenerator;
 use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class TopicUrlRuntime
+final class TopicUrlRuntime
 {
-    private UrlGenerator $topicUrlGenerator;
-
-    public function __construct(UrlGenerator $topicUrlGenerator)
+    public function __construct(private UrlGenerator $topicUrlGenerator)
     {
-        $this->topicUrlGenerator = $topicUrlGenerator;
     }
 
     /**

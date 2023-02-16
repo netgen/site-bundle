@@ -17,18 +17,19 @@ use Netgen\Layouts\Parameters\ParameterBuilderInterface;
 use Netgen\Layouts\Parameters\ParameterType;
 use Netgen\Layouts\Standard\Block\BlockDefinition\Handler\ListHandler;
 
-class BackgroundImagePlugin extends Plugin
+final class BackgroundImagePlugin extends Plugin
 {
-    private LoadService $loadService;
-
-    public function __construct(LoadService $loadService)
+    public function __construct(private LoadService $loadService)
     {
-        $this->loadService = $loadService;
     }
 
-    public static function getExtendedHandlers(): array
+    public static function getExtendedHandlers(): iterable
     {
-        return [ListHandler::class, ContainerDefinitionHandlerInterface::class, BackgroundImagePluginInterface::class];
+        yield ListHandler::class;
+
+        yield ContainerDefinitionHandlerInterface::class;
+
+        yield BackgroundImagePluginInterface::class;
     }
 
     public function buildParameters(ParameterBuilderInterface $builder): void
@@ -68,7 +69,7 @@ class BackgroundImagePlugin extends Plugin
             $params['background_image:image_content'] = $this->loadService->loadContent(
                 $block->getParameter('background_image:image')->getValue(),
             );
-        } catch (UnauthorizedException|NotFoundException|TranslationNotMatchedException $e) {
+        } catch (UnauthorizedException|NotFoundException|TranslationNotMatchedException) {
             // Do nothing
         }
     }

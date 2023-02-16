@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle;
 
-interface NetgenSiteProjectBundleInterface
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+
+interface NetgenSiteProjectBundleInterface extends BundleInterface
 {
 }

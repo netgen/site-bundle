@@ -8,13 +8,10 @@ use FOS\HttpCache\UserContext\ContextProvider;
 use FOS\HttpCache\UserContext\UserContext;
 use Ibexa\Contracts\Core\Repository\PermissionService;
 
-class UserContextProvider implements ContextProvider
+final class UserContextProvider implements ContextProvider
 {
-    protected PermissionService $permissionService;
-
-    public function __construct(PermissionService $permissionService)
+    public function __construct(private PermissionService $permissionService)
     {
-        $this->permissionService = $permissionService;
     }
 
     /**

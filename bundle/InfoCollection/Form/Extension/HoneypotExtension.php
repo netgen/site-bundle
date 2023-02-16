@@ -9,7 +9,7 @@ use Netgen\Bundle\SiteBundle\InfoCollection\Form\Type\HoneypotType;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class HoneypotExtension extends AbstractTypeExtension
+final class HoneypotExtension extends AbstractTypeExtension
 {
     public static function getExtendedTypes(): iterable
     {

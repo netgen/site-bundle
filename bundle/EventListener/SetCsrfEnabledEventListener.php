@@ -9,13 +9,10 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Csrf\CsrfTokenManager;
 
-class SetCsrfEnabledEventListener implements EventSubscriberInterface
+final class SetCsrfEnabledEventListener implements EventSubscriberInterface
 {
-    protected ?CsrfTokenManager $csrfTokenManager;
-
-    public function __construct(?CsrfTokenManager $csrfTokenManager = null)
+    public function __construct(private ?CsrfTokenManager $csrfTokenManager = null)
     {
-        $this->csrfTokenManager = $csrfTokenManager;
     }
 
     /**

@@ -21,24 +21,18 @@ use function array_map;
 use function ctype_digit;
 use function explode;
 
-class MoveContentTypeCommand extends Command
+final class MoveContentTypeCommand extends Command
 {
-    protected static $defaultDescription = 'Assigns ContentType(s) to a single ContentTypeGroup';
-
-    private Repository $repository;
-
-    private ContentTypeService $contentTypeService;
+    protected static $defaultDescription = 'Assigns content type(s) to a single content type group';
 
     private StyleInterface $style;
 
     public function __construct(
-        Repository $repository,
-        ContentTypeService $contentTypeService
+        private Repository $repository,
+        private ContentTypeService $contentTypeService,
     ) {
+        // Parent constructor call is mandatory for commands registered as services
         parent::__construct();
-
-        $this->repository = $repository;
-        $this->contentTypeService = $contentTypeService;
     }
 
     protected function configure(): void
@@ -63,9 +57,9 @@ class MoveContentTypeCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->style->info('This command assigns given ContentType(s) to the given ContentTypeGroup and unassigns them from all other ContentTypeGroups.');
+        $this->style->info('This command assigns given content type(s) to the given content type group and un-assigns them from all other content type groups.');
 
-        if (!$this->style->confirm('Continue with this action?', true)) {
+        if (!$this->style->confirm('Continue with this action?')) {
             $this->style->error('Aborted.');
 
             return Command::FAILURE;
@@ -100,10 +94,7 @@ class MoveContentTypeCommand extends Command
         return Command::SUCCESS;
     }
 
-    /**
-     * @param string|int $identifierOrId
-     */
-    private function loadContentTypeGroup($identifierOrId): ContentTypeGroup
+    private function loadContentTypeGroup(int|string $identifierOrId): ContentTypeGroup
     {
         if (ctype_digit($identifierOrId)) {
             return $this->contentTypeService->loadContentTypeGroup((int) $identifierOrId);
@@ -112,10 +103,7 @@ class MoveContentTypeCommand extends Command
         return $this->contentTypeService->loadContentTypeGroupByIdentifier($identifierOrId);
     }
 
-    /**
-     * @param string|int $identifierOrId
-     */
-    private function loadContentType($identifierOrId): ContentType
+    private function loadContentType(int|string $identifierOrId): ContentType
     {
         if (ctype_digit($identifierOrId)) {
             return $this->contentTypeService->loadContentType((int) $identifierOrId);
@@ -132,8 +120,8 @@ class MoveContentTypeCommand extends Command
                     $this->contentTypeService->assignContentTypeGroup($contentType, $newContentTypeGroup);
                 },
             );
-        } catch (InvalidArgumentException $e) {
-            // ContentType is already assigned to the given ContentTypeGroup, do nothing
+        } catch (InvalidArgumentException) {
+            // Content type is already assigned to the given content type group, do nothing
         }
 
         foreach ($contentType->contentTypeGroups as $contentTypeGroup) {

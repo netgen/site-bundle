@@ -11,26 +11,14 @@ use Knp\Menu\Renderer\RendererProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class Menu extends Controller
+final class Menu extends Controller
 {
-    protected MenuProviderInterface $menuProvider;
-
-    protected RendererProviderInterface $menuRenderer;
-
-    protected ConfigResolverInterface $configResolver;
-
-    protected TagHandler $tagHandler;
-
     public function __construct(
-        MenuProviderInterface $menuProvider,
-        RendererProviderInterface $menuRenderer,
-        ConfigResolverInterface $configResolver,
-        TagHandler $tagHandler
+        private MenuProviderInterface $menuProvider,
+        private RendererProviderInterface $menuRenderer,
+        private ConfigResolverInterface $configResolver,
+        private TagHandler $tagHandler,
     ) {
-        $this->menuProvider = $menuProvider;
-        $this->menuRenderer = $menuRenderer;
-        $this->configResolver = $configResolver;
-        $this->tagHandler = $tagHandler;
     }
 
     /**

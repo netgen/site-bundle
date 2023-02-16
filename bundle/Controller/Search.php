@@ -16,26 +16,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 use function trim;
 
-class Search extends Controller
+final class Search extends Controller
 {
-    protected Site $site;
-
-    protected QueryTypeRegistry $queryTypeRegistry;
-
-    protected ConfigResolverInterface $configResolver;
-
-    protected SuggestionResolver $suggestionResolver;
-
     public function __construct(
-        Site $site,
-        QueryTypeRegistry $queryTypeRegistry,
-        ConfigResolverInterface $configResolver,
-        SuggestionResolver $suggestionResolver
+        private Site $site,
+        private QueryTypeRegistry $queryTypeRegistry,
+        private ConfigResolverInterface $configResolver,
+        private SuggestionResolver $suggestionResolver,
     ) {
-        $this->site = $site;
-        $this->queryTypeRegistry = $queryTypeRegistry;
-        $this->configResolver = $configResolver;
-        $this->suggestionResolver = $suggestionResolver;
     }
 
     /**
@@ -47,7 +35,7 @@ class Search extends Controller
 
         $searchText = trim($request->query->get('searchText', ''));
 
-        if (empty($searchText)) {
+        if ($searchText === '') {
             return $this->render(
                 $this->configResolver->getParameter('template.search', 'ngsite'),
                 [
@@ -74,7 +62,7 @@ class Search extends Controller
 
         try {
             $searchSuggestion = $this->suggestionResolver->getSuggestedSearchTerm($query, $pager->getAdapter()->getSuggestion());
-        } catch (NotFoundException $e) {
+        } catch (NotFoundException) {
             $searchSuggestion = null;
         }
 

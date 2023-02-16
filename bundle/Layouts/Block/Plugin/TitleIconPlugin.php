@@ -9,11 +9,11 @@ use Netgen\Layouts\Parameters\ParameterBuilderInterface;
 use Netgen\Layouts\Parameters\ParameterType;
 use Netgen\Layouts\Standard\Block\BlockDefinition\Handler\TitleHandler;
 
-class TitleIconPlugin extends Plugin
+final class TitleIconPlugin extends Plugin
 {
-    public static function getExtendedHandlers(): array
+    public static function getExtendedHandlers(): iterable
     {
-        return [TitleHandler::class];
+        yield TitleHandler::class;
     }
 
     public function buildParameters(ParameterBuilderInterface $builder): void

@@ -15,28 +15,19 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 use function md5;
 
-class LocationFactory implements FactoryInterface
+final class LocationFactory implements FactoryInterface
 {
-    protected EventDispatcherInterface $eventDispatcher;
-
-    protected ExtensionInterface $fallbackExtension;
-
     /**
-     * @var \Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\ExtensionInterface[]
+     * @param \Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\ExtensionInterface[] $extensions
      */
-    protected array $extensions = [];
-
     public function __construct(
-        EventDispatcherInterface $eventDispatcher,
-        ExtensionInterface $fallbackExtension,
-        array $extensions = []
+        private EventDispatcherInterface $eventDispatcher,
+        private ExtensionInterface $fallbackExtension,
+        private array $extensions = [],
     ) {
-        $this->eventDispatcher = $eventDispatcher;
-        $this->fallbackExtension = $fallbackExtension;
-        $this->extensions = $extensions;
     }
 
-    public function createItem($name, array $options = []): ItemInterface
+    public function createItem(string $name, array $options = []): ItemInterface
     {
         $menuItem = (new MenuItem($name, $this))->setExtra('translation_domain', false);
 
@@ -72,7 +63,7 @@ class LocationFactory implements FactoryInterface
      *
      * If none match, fallback extension is returned.
      */
-    protected function getExtension(Location $location): ExtensionInterface
+    private function getExtension(Location $location): ExtensionInterface
     {
         foreach ($this->extensions as $extension) {
             if ($extension->matches($location)) {

@@ -30,12 +30,12 @@ use function array_merge;
 final class ProxyFormHandler extends Controller
 {
     public function __construct(
-        private RequestStack $requestStack,
-        private CaptchaService $captchaService,
-        private Handler $handler,
-        private EventDispatcherInterface $eventDispatcher,
-        private RefererResolver $refererResolver,
-        private LoggerInterface $logger = new NullLogger(),
+        private readonly RequestStack $requestStack,
+        private readonly CaptchaService $captchaService,
+        private readonly Handler $handler,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly RefererResolver $refererResolver,
+        private readonly LoggerInterface $logger = new NullLogger(),
     ) {
     }
 

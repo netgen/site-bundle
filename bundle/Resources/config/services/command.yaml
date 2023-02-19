@@ -1,0 +1,56 @@
+services:
+    ngsite.command.content_type.move:
+        class: Netgen\Bundle\SiteBundle\Command\MoveContentTypeCommand
+        arguments:
+            - "@ibexa.api.repository"
+            - "@ibexa.api.service.content_type"
+        tags:
+            - { name: console.command, command: 'ngsite:content-type:move' }
+
+    ngsite.command.content.update_always_available:
+        class: Netgen\Bundle\SiteBundle\Command\UpdateContentAlwaysAvailableCommand
+        arguments:
+            - "@ibexa.api.repository"
+            - "@ibexa.api.service.content"
+        tags:
+            - { name: console.command, command: 'ngsite:content:update-always-available' }
+
+    ngsite.command.update_publish_date:
+        class: Netgen\Bundle\SiteBundle\Command\UpdatePublishDateCommand
+        arguments:
+            - "@ibexa.api.repository"
+            - "@Ibexa\\Core\\Helper\\FieldHelper"
+        tags:
+            - { name: console.command, command: 'ngsite:content:update-publish-date' }
+
+    ngsite.command.symlink_project:
+        class: Netgen\Bundle\SiteBundle\Command\SymlinkProjectCommand
+        arguments:
+            - "@kernel"
+            - "@filesystem"
+        tags:
+            - { name: console.command, command: 'ngsite:symlink:project' }
+
+    ngsite.command.dump_database:
+        class: Netgen\Bundle\SiteBundle\Command\DumpDatabaseCommand
+        arguments:
+            - "@service_container"
+        tags:
+            - { name: console.command, command: 'ngsite:database:dump' }
+
+    ngsite.command.generate_image_variations:
+        class: Netgen\Bundle\SiteBundle\Command\GenerateImageVariationsCommand
+        arguments:
+            - "@ibexa.api.repository"
+            - "@ibexa.field_type.ezimage.variation_service"
+            - "@ibexa.cache_pool"
+            - "@ibexa.config.resolver"
+        tags:
+            - { name: console.command, command: 'ngsite:content:generate-image-variations' }
+
+    ngsite.command.profiler_cache_purger:
+        class: Netgen\Bundle\SiteBundle\Command\ProfilerCachePurgerCommand
+        arguments:
+            - "@?profiler"
+        tags:
+            - { name: console.command, command: 'ngsite:profiler:clear-cache' }

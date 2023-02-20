@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 final class ViewModal extends Controller
 {
     public function __construct(
-        private readonly RefererResolver $refererResolver
+        private readonly RefererResolver $refererResolver,
     ) {
     }
 

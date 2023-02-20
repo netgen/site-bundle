@@ -35,7 +35,6 @@ services:
         arguments:
             - "@knp_menu.menu_provider"
             - "@knp_menu.renderer_provider"
-            - "@ibexa.config.resolver"
             - "@fos_http_cache.http.symfony_response_tagger"
         tags:
             - { name: 'container.service_subscriber' }

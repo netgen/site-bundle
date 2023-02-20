@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Controller;
 
-use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\HttpCache\Handler\TagHandler;
 use Knp\Menu\Provider\MenuProviderInterface;
 use Knp\Menu\Renderer\RendererProviderInterface;
@@ -14,10 +13,9 @@ use Symfony\Component\HttpFoundation\Response;
 final class Menu extends Controller
 {
     public function __construct(
-        private MenuProviderInterface $menuProvider,
-        private RendererProviderInterface $menuRenderer,
-        private ConfigResolverInterface $configResolver,
-        private TagHandler $tagHandler,
+        private readonly MenuProviderInterface $menuProvider,
+        private readonly RendererProviderInterface $menuRenderer,
+        private readonly TagHandler $tagHandler,
     ) {
     }
 
@@ -33,7 +31,7 @@ final class Menu extends Controller
             'firstClass' => $request->attributes->get('firstClass') ?? 'firstli',
             'currentClass' => $request->attributes->get('currentClass') ?? 'active',
             'lastClass' => $request->attributes->get('lastClass') ?? 'lastli',
-            'template' => $this->configResolver->getParameter('template.menu', 'ngsite'),
+            'template' => $this->getConfigResolver()->getParameter('template.menu', 'ngsite'),
         ];
 
         if ($request->attributes->has('template')) {

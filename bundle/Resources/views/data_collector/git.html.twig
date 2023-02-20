@@ -15,20 +15,22 @@
       C95.021,50.468,95.021,46.719,92.71,44.408z"/>
 </g>
 </svg>
-        <span class="sf-toolbar-value">{{ collector.gitBranch }}</span>
+        <span class="sf-toolbar-value">{% if collector.gitBranch is not empty %}{{ collector.gitBranch }}{% else %}No git repo{% endif %}</span>
     {% endset %}
 
-    {% set text %}
-        <div class="sf-toolbar-info-piece">
-            <b>Current branch: </b>
-            <span>{{ collector.gitBranch }} </span>
-        </div>
+    {% set text %}{% apply spaceless %}
+        {% if collector.gitBranch is not empty %}
+            <div class="sf-toolbar-info-piece">
+                <b>Current branch: </b>
+                <span>{{ collector.gitBranch }}</span>
+            </div>
 
-        <div class="sf-toolbar-info-piece">
-            <b>Last commit hash: </b>
-            <span>{{ collector.lastCommitHash }} </span>
-        </div>
-    {% endset %}
+            <div class="sf-toolbar-info-piece">
+                <b>Last commit hash: </b>
+                <span>{{ collector.lastCommitHash }}</span>
+            </div>
+        {% endif %}
+    {% endapply %}{% endset %}
 
     {# the 'link' value set to 'false' means that this panel doesn't show a section in the web profiler #}
     {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: false }) }}

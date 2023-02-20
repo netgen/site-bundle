@@ -12,8 +12,21 @@ use Throwable;
 
 final class GitDataCollector extends DataCollector
 {
+    public function __construct(private string $projectDir)
+    {
+    }
+
     public function collect(Request $request, Response $response, ?Throwable $exception = null): void
     {
+        if (!Repository::isGitRepository($this->projectDir)) {
+            $this->data = [
+                'git_branch' => '',
+                'last_commit_hash' => '',
+            ];
+
+            return;
+        }
+
         $repository = new Repository();
 
         $branch = $repository->getInfoOperator()->getCurrentBranch();

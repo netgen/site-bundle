@@ -6,10 +6,13 @@ namespace Netgen\Bundle\SiteBundle\DependencyInjection;
 
 use Netgen\Bundle\LayoutsBundle\NetgenLayoutsBundle;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Loader\DelegatingLoader;
+use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Yaml\Yaml;
 
@@ -20,7 +23,15 @@ final class NetgenSiteExtension extends Extension implements PrependExtensionInt
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $locator = new FileLocator(__DIR__ . '/../Resources/config');
+        $loader = new DelegatingLoader(
+            new LoaderResolver(
+                [
+                    new GlobFileLoader($container, $locator),
+                    new YamlFileLoader($container, $locator),
+                ],
+            ),
+        );
 
         $loader->load('parameters.yaml');
         $loader->load('field_types.yaml');
@@ -31,6 +42,7 @@ final class NetgenSiteExtension extends Extension implements PrependExtensionInt
         $loader->load('matchers.yaml');
         $loader->load('info_collection.yaml');
         $loader->load('services.yaml');
+        $loader->load('services/**/*.yaml', 'glob');
 
         $activatedBundles = $container->getParameter('kernel.bundles');
 

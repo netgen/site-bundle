@@ -1,38 +1,4 @@
 services:
-    ngsite.controller.view_modal:
-        class: Netgen\Bundle\SiteBundle\Controller\ViewModal
-        parent: ngsite.controller.base
-        public: true
-        arguments:
-            - "@netgen.ibexa_site_api.content_renderer"
-
-    ngsite.controller.info_collection.ajax_submit:
-        class: Netgen\Bundle\SiteBundle\Controller\InfoCollection\AjaxSubmit
-        parent: ngsite.controller.base
-        public: true
-        arguments:
-            - "@netgen.ibexa_site_api.content_renderer"
-
-    ngsite.controller.info_collection.view_modal:
-        class: Netgen\Bundle\SiteBundle\Controller\InfoCollection\ViewModal
-        parent: ngsite.controller.base
-        public: true
-        arguments:
-            - "@netgen.ibexa_site_api.content_renderer"
-            - "@ngsite.info_collection.referer_resolver"
-
-    ngsite.controller.info_collection.proxy_form_handler:
-        class: Netgen\Bundle\SiteBundle\Controller\InfoCollection\ProxyFormHandler
-        parent: ngsite.controller.base
-        public: true
-        arguments:
-            - "@request_stack"
-            - "@netgen_information_collection.captcha.service"
-            - "@netgen_information_collection.handler"
-            - "@event_dispatcher"
-            - "@ngsite.info_collection.referer_resolver"
-            - "@?logger"
-
     ngsite.info_collection.referer_resolver:
         class: Netgen\Bundle\SiteBundle\InfoCollection\RefererResolver
         arguments:

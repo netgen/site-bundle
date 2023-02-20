@@ -25,9 +25,6 @@ services:
         class: Netgen\Bundle\SiteBundle\Controller\Search
         parent: ngsite.controller.base
         arguments:
-            - "@netgen.ibexa_site_api.site"
-            - "@Ibexa\\Core\\QueryType\\ArrayQueryTypeRegistry"
-            - "@ibexa.config.resolver"
             - "@ngsite.search.resolver.suggestion"
         tags:
             - { name: 'container.service_subscriber' }

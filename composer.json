@@ -41,6 +41,9 @@
     "conflict": {
         "netgen/layouts-core": "<1.4"
     },
+    "config": {
+        "allow-plugins": false
+    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {

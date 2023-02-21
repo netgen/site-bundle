@@ -47,7 +47,7 @@ final class Search extends Controller
         try {
             $searchSuggestion = $this->suggestionResolver->getSuggestedSearchTerm(
                 $query,
-                $pager->getAdapter()->getSuggestion()
+                $pager->getAdapter()->getSuggestion(),
             );
         } catch (NotFoundException) {
             $searchSuggestion = null;

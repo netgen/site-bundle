@@ -17,6 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
 
 use function array_filter;
 use function array_keys;
@@ -27,6 +28,7 @@ use function count;
 use function explode;
 use function in_array;
 use function iterator_to_array;
+use function sprintf;
 use function trim;
 
 final class GenerateImageVariationsCommand extends Command
@@ -131,8 +133,8 @@ final class GenerateImageVariationsCommand extends Command
             foreach ($variations as $variation) {
                 try {
                     $this->variationHandler->getVariation($field, $content->versionInfo, $variation);
-                } catch (\Throwable $throwable) {
-                    $this->output->writeln("Could not get variation: " . $throwable->getMessage());
+                } catch (Throwable $throwable) {
+                    $this->style->error(sprintf('Could not get variation: %s', $throwable->getMessage()));
                 }
             }
         }

@@ -13,9 +13,8 @@ use function trim;
 
 final class Search extends Controller
 {
-    public function __construct(
-        private readonly SuggestionResolver $suggestionResolver,
-    ) {
+    public function __construct(private readonly SuggestionResolver $suggestionResolver)
+    {
     }
 
     /**

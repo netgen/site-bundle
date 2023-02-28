@@ -11,9 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class CheckRedirect extends Controller
 {
-    public function __construct(
-        private readonly RedirectHelper $redirectHelper,
-    ) {
+    public function __construct(private readonly RedirectHelper $redirectHelper)
+    {
     }
 
     /**

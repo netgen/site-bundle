@@ -10,6 +10,9 @@ use Netgen\IbexaSiteApi\API\Values\Content;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @deprecated this controller is replaced by template based relations list
+ */
 final class RelatedItems extends Controller
 {
     public function __construct(private LocationRelationResolverInterface $locationResolver)

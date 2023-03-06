@@ -129,7 +129,11 @@ final class GenerateImageVariationsCommand extends Command
             }
 
             foreach ($variations as $variation) {
-                $this->variationHandler->getVariation($field, $content->versionInfo, $variation);
+                try {
+                    $this->variationHandler->getVariation($field, $content->versionInfo, $variation);
+                } catch (\Throwable $throwable) {
+                    $this->output->writeln("Could not get variation: " . $throwable->getMessage());
+                }
             }
         }
     }

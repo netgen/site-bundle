@@ -133,11 +133,11 @@ final class NewsletterService
     private function extractSubscriberData(array $fields): array
     {
         return [
-            'email' => isset($fields['sender_email']) ? $fields['sender_email']->value->email : null,
+            'email' => $fields['sender_email']?->value->email,
             'fields' => [
-                'name' => isset($fields['sender_first_name']) ? $fields['sender_first_name']->value->text : '',
-                'last_name' => isset($fields['sender_last_name']) ? $fields['sender_last_name']->value->text : '',
-                'company' => isset($fields['sender_company']) ? $fields['sender_company']->value->text : '',
+                'name' => $fields['sender_first_name']?->value->text ?? '',
+                'last_name' => $fields['sender_last_name']?->value->text ?? '',
+                'company' => $fields['sender_company']?->value->text ?? '',
             ],
         ];
     }

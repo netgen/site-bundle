@@ -6,7 +6,7 @@ namespace Netgen\Bundle\SiteBundle\Command\MultiprocessCommand;
 
 use function count;
 
-class Items
+class ItemList
 {
     private array $items;
     private int $depth;

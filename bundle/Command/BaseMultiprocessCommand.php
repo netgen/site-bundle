@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Command;
 
 use Generator;
-use Netgen\Bundle\SiteBundle\Command\MultiprocessCommand\Items;
+use Netgen\Bundle\SiteBundle\Command\MultiprocessCommand\ItemList;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use RuntimeException;
@@ -61,7 +61,7 @@ abstract class BaseMultiprocessCommand extends Command
 
     abstract protected function getItemsGenerator(int $limit): Generator;
 
-    abstract protected function process(Items $items): void;
+    abstract protected function process(ItemList $itemList): void;
 
     protected function configure(): void
     {
@@ -186,10 +186,10 @@ abstract class BaseMultiprocessCommand extends Command
             $this->progressBar->start($count);
             $generator = $this->internalGetItemGenerator($limit);
 
-            /** @var \Netgen\Bundle\SiteBundle\Command\MultiprocessCommand\Items $items */
-            foreach ($generator as $items) {
-                $this->process($items);
-                $this->progressBar->advance($items->getCount());
+            /** @var \Netgen\Bundle\SiteBundle\Command\MultiprocessCommand\ItemList $itemList */
+            foreach ($generator as $itemList) {
+                $this->process($itemList);
+                $this->progressBar->advance($itemList->getCount());
             }
         }
 
@@ -222,7 +222,7 @@ abstract class BaseMultiprocessCommand extends Command
         /** @var \Symfony\Component\Process\Process[]|null[] $processes */
         $processes = array_fill(0, $processCount, null);
         $processDepthMap = [];
-        $items = null;
+        $itemList = null;
         $itemCount = 0;
         $timestamp = time();
 
@@ -246,10 +246,10 @@ abstract class BaseMultiprocessCommand extends Command
                 $this->progressBar->display();
             }
 
-            if ($items === null && $generator->valid()) {
-                /** @var ?\Netgen\Bundle\SiteBundle\Command\MultiprocessCommand\Items $items */
-                $items = $generator->current();
-                $itemCount = $items->getCount();
+            if ($itemList === null && $generator->valid()) {
+                /** @var ?\Netgen\Bundle\SiteBundle\Command\MultiprocessCommand\ItemList $itemList */
+                $itemList = $generator->current();
+                $itemCount = $itemList->getCount();
                 $generator->next();
             }
 
@@ -275,25 +275,25 @@ abstract class BaseMultiprocessCommand extends Command
                     $processes[$key] = null;
                 }
 
-                if ($items === null && !$generator->valid()) {
+                if ($itemList === null && !$generator->valid()) {
                     unset($processes[$key]);
 
                     continue;
                 }
 
-                if ($items === null) {
+                if ($itemList === null) {
                     break;
                 }
 
-                if ($this->shouldWait($processDepthMap, $processes, $items)) {
+                if ($this->shouldWait($processDepthMap, $processes, $itemList)) {
                     break;
                 }
 
-                $processes[$key] = $this->getSubProcess($items);
+                $processes[$key] = $this->getSubProcess($itemList);
                 $processes[$key]->start();
-                $processDepthMap[spl_object_id($processes[$key])] = $items->getDepth();
+                $processDepthMap[spl_object_id($processes[$key])] = $itemList->getDepth();
 
-                $items = null;
+                $itemList = null;
 
                 if ($generator->valid()) {
                     break;
@@ -309,7 +309,7 @@ abstract class BaseMultiprocessCommand extends Command
         if ($items = $this->input->getOption('items')) {
             $items = explode(',', $items);
 
-            yield new Items($items);
+            yield new ItemList($items);
 
             return;
         }
@@ -317,7 +317,7 @@ abstract class BaseMultiprocessCommand extends Command
         yield from $this->getItemsGenerator($limit);
     }
 
-    protected function shouldWait(array $processDepthMap, array $processes, Items $items): bool
+    protected function shouldWait(array $processDepthMap, array $processes, ItemList $itemList): bool
     {
         foreach ($processes as $process) {
             if ($process === null || !$process->isRunning()) {
@@ -330,7 +330,7 @@ abstract class BaseMultiprocessCommand extends Command
                 continue;
             }
 
-            if ($processDepth > $items->getDepth()) {
+            if ($processDepth > $itemList->getDepth()) {
                 return true;
             }
         }
@@ -338,7 +338,7 @@ abstract class BaseMultiprocessCommand extends Command
         return false;
     }
 
-    protected function getSubProcess(Items $items): Process
+    protected function getSubProcess(ItemList $itemList): Process
     {
         $arguments = [
             $this->getPhpPath(),
@@ -346,7 +346,7 @@ abstract class BaseMultiprocessCommand extends Command
             $this->getName(),
             '--processes=1',
             '--master=no',
-            '--items=' . implode(',', $items->getItems()),
+            '--items=' . implode(',', $itemList->getItems()),
         ];
 
         foreach ($this->input->getOptions() as $key => $value) {

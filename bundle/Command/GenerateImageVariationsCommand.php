@@ -59,7 +59,7 @@ final class GenerateImageVariationsCommand extends Command
         $this->style = new SymfonyStyle($input, $output);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $query = $this->getQuery($input);
         $query->limit = 0;

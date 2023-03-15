@@ -23,7 +23,7 @@ final class ProfilerCachePurgerCommand extends Command
         $this->setDescription('Clears profiler cache.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($this->profiler === null) {
             throw new RuntimeException('To clear profiler cache, you need to be in dev mode where @profiler service is available.');
@@ -32,5 +32,7 @@ final class ProfilerCachePurgerCommand extends Command
         $this->profiler->purge();
 
         $output->writeln('<info>Clearing Profiler cache finished.</info>');
+
+        return Command::SUCCESS;
     }
 }

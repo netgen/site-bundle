@@ -54,7 +54,7 @@ final class UpdatePublishDateCommand extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var \Symfony\Component\Console\Helper\QuestionHelper $questionHelper */
         $questionHelper = $this->getHelper('question');

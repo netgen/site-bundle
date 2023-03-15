@@ -38,15 +38,6 @@ class SiteView implements ViewInterface
         return 'ngsite';
     }
 
-    /**
-     * Renders a Pagerfanta.
-     *
-     * The route generator can be any callable to generate
-     * the routes receiving the page number as first and
-     * unique argument.
-     *
-     * @param \Closure $routeGenerator A callable to generate the routes
-     */
     public function render(PagerfantaInterface $pagerfanta, $routeGenerator, array $options = []): string
     {
         $this->pagerfanta = $pagerfanta;

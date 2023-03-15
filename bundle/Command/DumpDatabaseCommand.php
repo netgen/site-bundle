@@ -38,7 +38,7 @@ final class DumpDatabaseCommand extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $databaseName = $this->container->getParameter('database_name');
         $databaseHost = $this->container->getParameter('database_host');

@@ -49,7 +49,7 @@ final class SymlinkProjectCommand extends Command
         $this->setDescription('Symlinks various project files and folders to their proper locations');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->forceSymlinks = (bool) $input->getOption('force');
 

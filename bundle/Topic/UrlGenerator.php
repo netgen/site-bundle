@@ -6,6 +6,8 @@ namespace Netgen\Bundle\SiteBundle\Topic;
 
 use Ibexa\Contracts\Core\Repository\Values\Content\LocationQuery;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
+use Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchHit;
+use Ibexa\Contracts\Core\Repository\Values\ValueObject;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Netgen\IbexaSiteApi\API\FindService;
 use Netgen\IbexaSiteApi\API\LoadService;
@@ -15,6 +17,7 @@ use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+use function array_map;
 use function count;
 
 final class UrlGenerator
@@ -64,10 +67,14 @@ final class UrlGenerator
             ],
         );
 
-        $searchResult = $this->findService->findLocations($query);
+        /** @var \Netgen\IbexaSiteApi\API\Values\Location[] $locations */
+        $locations = array_map(
+            static fn (SearchHit $searchHit): ValueObject => $searchHit->valueObject,
+            $this->findService->findLocations($query)->searchHits,
+        );
 
-        if (count($searchResult->searchHits) > 0) {
-            return $searchResult->searchHits[0]->valueObject;
+        if (count($locations) > 0) {
+            return $locations[0];
         }
 
         return $tag;

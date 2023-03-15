@@ -19,7 +19,6 @@ services:
         class: Netgen\Bundle\SiteBundle\Command\UpdatePublishDateCommand
         arguments:
             - "@ibexa.api.repository"
-            - "@Ibexa\\Core\\Helper\\FieldHelper"
         tags:
             - { name: console.command, command: 'ngsite:content:update-publish-date' }
 

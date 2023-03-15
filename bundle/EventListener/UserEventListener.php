@@ -34,6 +34,6 @@ abstract class UserEventListener
             fn (): ContentInfo => $this->loadService->loadContent($user->id)->contentInfo,
         );
 
-        return $contentInfo->name;
+        return $contentInfo->name ?? '';
     }
 }

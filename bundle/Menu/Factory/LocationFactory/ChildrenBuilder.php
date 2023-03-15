@@ -11,6 +11,7 @@ use Knp\Menu\ItemInterface;
 use Netgen\IbexaSiteApi\API\FilterService;
 use Netgen\IbexaSiteApi\API\LoadService;
 use Netgen\IbexaSiteApi\API\Values\Content;
+use Netgen\IbexaSiteApi\API\Values\Location;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Throwable;
@@ -40,7 +41,7 @@ final class ChildrenBuilder
     {
         $parentContent = $parentContent instanceof Content ? $parentContent : $content->getFieldRelation('parent_node');
 
-        if (!$parentContent instanceof Content) {
+        if (!$parentContent instanceof Content || !$parentContent->mainLocation instanceof Location) {
             return;
         }
 

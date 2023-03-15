@@ -47,7 +47,7 @@ class DebugTemplate extends Template
         // Display start template comment, if applicable.
         if ($isHtmlTemplate) {
             if (str_contains(trim($templateResult), '<!doctype')) {
-                $templateResult = preg_replace(
+                $templateResult = (string) preg_replace(
                     '#(<!doctype[^>]+>)#im',
                     "$1\n<!-- START " . $templateName . ' -->',
                     $templateResult,
@@ -59,8 +59,8 @@ class DebugTemplate extends Template
 
         // Display stop template comment after result, if applicable.
         if ($isHtmlTemplate) {
-            $bodyPos = mb_stripos($templateResult, '</body>');
-            if ($bodyPos !== false) {
+            if (str_contains($templateResult, '</body>')) {
+                $bodyPos = (int) mb_stripos($templateResult, '</body>');
                 // Add layout template name before </body>, to avoid display quirks in some browsers.
                 echo mb_substr($templateResult, 0, $bodyPos)
                      . "\n<!-- STOP " . $templateName . " -->\n"

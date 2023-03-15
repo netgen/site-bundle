@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\RichText\Converter;
 
 use DOMDocument;
+use DOMNode;
 use DOMXPath;
 use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException as APINotFoundException;
 use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException as APIUnauthorizedException;
@@ -49,13 +50,17 @@ final class LinkDirectDownload implements Converter
 
             /** @var \DOMNodeList<\DOMNode> $directDownloads */
             $directDownloads = $xpath->query($directDownloadXpathExpression, $link);
-            $directDownload = $directDownloads->count() > 0 && $directDownloads->item(0)->nodeValue === 'true';
+            $directDownload = $directDownloads->count() > 0
+                && $directDownloads->item(0) instanceof DOMNode
+                && $directDownloads->item(0)->nodeValue === 'true';
 
             $openInlineXpathExpression = './docbook:ezattribute/docbook:ezvalue[@key="open-inline"]';
 
             /** @var \DOMNodeList<\DOMNode> $openInlines */
             $openInlines = $xpath->query($openInlineXpathExpression, $link);
-            $openInline = $openInlines->count() > 0 && $openInlines->item(0)->nodeValue === 'true';
+            $openInline = $openInlines->count() > 0
+                && $openInlines->item(0) instanceof DOMNode
+                && $openInlines->item(0)->nodeValue === 'true';
 
             if (!$directDownload) {
                 continue;

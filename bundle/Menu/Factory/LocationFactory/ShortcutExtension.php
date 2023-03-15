@@ -12,6 +12,7 @@ use Netgen\IbexaSiteApi\API\Values\Location;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -57,7 +58,7 @@ final class ShortcutExtension implements ExtensionInterface
             $relatedContent = $content->getFieldRelation('related_object');
         }
 
-        if (!$relatedContent instanceof Content) {
+        if (!$relatedContent instanceof Content || !$relatedContent->mainLocation instanceof Location) {
             return;
         }
 
@@ -72,10 +73,15 @@ final class ShortcutExtension implements ExtensionInterface
 
     private function buildItemFromUrl(ItemInterface $item, UrlValue $urlValue, Content $content): void
     {
-        $uri = $urlValue->link;
+        $uri = $urlValue->link ?? '';
 
-        if (!str_starts_with($urlValue->link, 'http')) {
-            $currentSiteAccess = $this->requestStack->getMainRequest()->attributes->get('siteaccess');
+        if (!str_starts_with($uri, 'http')) {
+            $request = $this->requestStack->getMainRequest();
+            if (!$request instanceof Request) {
+                return;
+            }
+
+            $currentSiteAccess = $request->attributes->get('siteaccess');
             if ($currentSiteAccess->matcher instanceof URILexer) {
                 $uri = $currentSiteAccess->matcher->analyseLink($uri);
             }

@@ -100,7 +100,7 @@ final class ContentByTopicHandler implements QueryTypeHandlerInterface
 
         $locationQuery = $this->buildLocationQuery($query, $parentLocation, $topicContent, $topicTag);
         $locationQuery->offset = $offset;
-        $locationQuery->limit = $limit;
+        $locationQuery->limit = $limit ?? 100;
 
         // We're disabling query count for performance reasons, however
         // it can only be disabled if limit is not 0
@@ -196,7 +196,7 @@ final class ContentByTopicHandler implements QueryTypeHandlerInterface
             return [null, null];
         }
 
-        $fieldValue = $content->getField('topic')->value;
+        $fieldValue = $content->getFieldValue('topic');
         if (!$fieldValue instanceof TagsFieldValue || count($fieldValue->tags) === 0) {
             return [null, null];
         }

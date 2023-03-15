@@ -249,7 +249,7 @@ abstract class BaseMultiprocessCommand extends Command
             }
 
             if ($itemList === null && $generator->valid()) {
-                /** @var ?\Netgen\Bundle\SiteBundle\Command\MultiprocessCommand\ItemList $itemList */
+                /** @var \Netgen\Bundle\SiteBundle\Command\MultiprocessCommand\ItemList $itemList */
                 $itemList = $generator->current();
                 $itemCount = $itemList->getCount();
                 $generator->next();

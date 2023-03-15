@@ -27,8 +27,11 @@ use function reset;
 final class NewsletterService
 {
     public const ALREADY_ACTIVE = 'already_active';
+
     public const NEW_UNCONFIRMED = 'new';
+
     public const PREVIOUS_UNCONFIRMED = 'unconfirmed';
+
     public const UNSUBSCRIBED = 'unsubscribed';
 
     public function __construct(
@@ -38,7 +41,7 @@ final class NewsletterService
         private TranslatorInterface $translator,
         private string $newsletterSenderEmail,
         private string $newsletterRecipientEmail,
-        private ?LoggerInterface $logger = new NullLogger(),
+        private LoggerInterface $logger = new NullLogger(),
     ) {
     }
 

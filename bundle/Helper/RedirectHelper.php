@@ -48,15 +48,16 @@ final class RedirectHelper
                 );
             }
         } elseif ($externalRedirectValue instanceof UrlValue && !$content->getField('external_redirect')->isEmpty()) {
-            if (str_starts_with($externalRedirectValue->link, 'http')) {
-                return new RedirectResponse($externalRedirectValue->link, Response::HTTP_MOVED_PERMANENTLY);
+            $externalRedirectLink = $externalRedirectValue->link ?? '';
+            if (str_starts_with($externalRedirectLink, 'http')) {
+                return new RedirectResponse($externalRedirectLink, Response::HTTP_MOVED_PERMANENTLY);
             }
 
             return new RedirectResponse(
                 sprintf(
                     '%s%s',
                     $this->urlGenerator->generate('', [RouteObjectInterface::ROUTE_OBJECT => $this->getRootLocation()]),
-                    trim($externalRedirectValue->link, '/'),
+                    trim($externalRedirectLink, '/'),
                 ),
                 Response::HTTP_MOVED_PERMANENTLY,
             );

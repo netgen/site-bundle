@@ -92,9 +92,9 @@ final class Image extends Controller
 
             if ($directDownloadLink !== null) {
                 $targetLink = $directDownloadLink;
-            } elseif (str_starts_with($targetLink, 'ezlocation://')) {
+            } elseif (str_starts_with($targetLink ?? '', 'ezlocation://')) {
                 $targetLink = $this->generateUrl('', [RouteObjectInterface::ROUTE_OBJECT => $location]);
-            } elseif (str_starts_with($targetLink, 'ezcontent://')) {
+            } elseif (str_starts_with($targetLink ?? '', 'ezcontent://')) {
                 $targetLink = $this->generateUrl('', [RouteObjectInterface::ROUTE_OBJECT => $content]);
             }
         }

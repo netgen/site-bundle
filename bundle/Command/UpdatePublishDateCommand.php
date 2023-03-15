@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Command;
 
+use DateTimeInterface;
 use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
 use Ibexa\Contracts\Core\Repository\Repository;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
@@ -12,7 +13,6 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
 use Ibexa\Contracts\Core\Repository\Values\ContentType\FieldDefinition;
 use Ibexa\Core\FieldType\Date\Value as DateValue;
 use Ibexa\Core\FieldType\DateAndTime\Value as DateAndTimeValue;
-use Ibexa\Core\Helper\FieldHelper;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -28,7 +28,7 @@ use const PHP_EOL;
 
 final class UpdatePublishDateCommand extends Command
 {
-    public function __construct(private Repository $repository, private FieldHelper $fieldHelper)
+    public function __construct(private Repository $repository)
     {
         // Parent constructor call is mandatory for commands registered as services
         parent::__construct();
@@ -109,7 +109,7 @@ final class UpdatePublishDateCommand extends Command
 
         $output->write(PHP_EOL);
 
-        $progress = new ProgressBar($output, $searchResult->totalCount);
+        $progress = new ProgressBar($output, (int) $searchResult->totalCount);
         $progress->start();
         $updatedCount = 0;
 
@@ -126,12 +126,12 @@ final class UpdatePublishDateCommand extends Command
                 /** @var \Ibexa\Contracts\Core\Repository\Values\Content\Content $content */
                 $content = $hit->valueObject;
 
-                $dateFieldValue = $content->getField(
+                $dateFieldValue = $content->getFieldValue(
                     $fieldDefIdentifier,
                     (bool) $input->getOption('use-main-translation') ?
                         $content->contentInfo->mainLanguageCode :
                         null,
-                )->value;
+                );
 
                 $dateValueData = match (true) {
                     $dateFieldValue instanceof DateAndTimeValue => $dateFieldValue->value,
@@ -145,7 +145,7 @@ final class UpdatePublishDateCommand extends Command
                 };
 
                 if (
-                    !$this->fieldHelper->isFieldEmpty($content, $fieldDefIdentifier)
+                    $dateValueData instanceof DateTimeInterface
                     && $content->contentInfo->publishedDate->getTimestamp() !== $dateValueData->getTimestamp()
                 ) {
                     $metadataUpdateStruct = $this->repository->getContentService()->newContentMetadataUpdateStruct();

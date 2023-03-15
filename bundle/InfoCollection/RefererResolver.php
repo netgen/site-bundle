@@ -34,7 +34,7 @@ final class RefererResolver
         }
 
         if ($request->headers->has('referer')) {
-            return $request->headers->get('referer');
+            return $request->headers->get('referer', '');
         }
 
         return $request->getPathInfo();

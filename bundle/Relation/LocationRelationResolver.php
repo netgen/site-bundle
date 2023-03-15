@@ -36,6 +36,7 @@ final class LocationRelationResolver implements LocationRelationResolverInterfac
 
         foreach ($field->value->destinationContentIds as $destinationContentId) {
             try {
+                /** @var \Netgen\IbexaSiteApi\API\Values\Location $destinationLocation */
                 $destinationLocation = $this->loadService->loadContent((int) $destinationContentId)->mainLocation;
             } catch (Throwable $t) {
                 // Do nothing if there's no location or we're not authorized to load it

@@ -25,6 +25,10 @@ final class CheckRedirect extends Controller
             $location = $view->getSiteContent()->mainLocation;
         }
 
+        if (!$location instanceof Location) {
+            return $view;
+        }
+
         $response = $this->redirectHelper->checkRedirect($location);
         if ($response instanceof Response) {
             return $response;

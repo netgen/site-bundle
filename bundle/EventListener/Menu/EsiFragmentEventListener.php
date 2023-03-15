@@ -7,6 +7,7 @@ namespace Netgen\Bundle\SiteBundle\EventListener\Menu;
 use Netgen\Bundle\SiteBundle\Event\Menu\LocationMenuItemEvent;
 use Netgen\Bundle\SiteBundle\Event\SiteEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 use function rawurldecode;
@@ -25,7 +26,7 @@ final class EsiFragmentEventListener implements EventSubscriberInterface
     public function onMenuItemBuild(LocationMenuItemEvent $event): void
     {
         $request = $this->requestStack->getMainRequest();
-        if ($this->fragmentPath !== rawurldecode($request->getPathInfo())) {
+        if (!$request instanceof Request || $this->fragmentPath !== rawurldecode($request->getPathInfo())) {
             return;
         }
 

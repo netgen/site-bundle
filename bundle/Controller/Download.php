@@ -83,7 +83,7 @@ final class Download extends Controller
         $response->setContentDisposition(
             (bool) $isInline ? ResponseHeaderBag::DISPOSITION_INLINE :
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            str_replace(['/', '\\'], '', $binaryFieldValue->fileName),
+            str_replace(['/', '\\'], '', $binaryFieldValue->fileName ?? ''),
             'file',
         );
 

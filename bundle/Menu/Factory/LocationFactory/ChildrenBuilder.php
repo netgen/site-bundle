@@ -85,6 +85,7 @@ final class ChildrenBuilder
 
         $searchResult = $this->filterService->filterLocations($query);
 
+        /** @var \Netgen\IbexaSiteApi\API\Values\Location[] $childLocations */
         $childLocations = array_map(
             static fn (SearchHit $searchHit) => $searchHit->valueObject,
             $searchResult->searchHits,

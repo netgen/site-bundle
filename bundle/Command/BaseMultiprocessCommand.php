@@ -379,18 +379,18 @@ abstract class BaseMultiprocessCommand extends Command
 
     protected function getPhpPath(): string
     {
-        if ($this->phpPath) {
+        if ($this->phpPath !== null) {
             return $this->phpPath;
         }
 
         $phpFinder = new PhpExecutableFinder();
-        $this->phpPath = $phpFinder->find();
+        $phpPath = $phpFinder->find();
 
-        if (!$this->phpPath) {
+        if ($phpPath === false) {
             throw new RuntimeException('PHP executable could not be found');
         }
 
-        return $this->phpPath;
+        return $this->phpPath = $phpPath;
     }
 
     protected function getNumberOfCPUCores(): int

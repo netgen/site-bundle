@@ -56,6 +56,7 @@ final class UpdatePublishDateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
+        /** @var \Symfony\Component\Console\Helper\QuestionHelper $questionHelper */
         $questionHelper = $this->getHelper('question');
 
         $contentTypeIdentifier = $input->getOption('content-type') ?? '';
@@ -99,7 +100,7 @@ final class UpdatePublishDateCommand extends Command
         }
 
         $question = new ConfirmationQuestion('Found <comment>' . $totalCount . '</comment> content items. Proceed? <info>[y/N]</info> ', false);
-        if (!$questionHelper->ask($input, $output, $question)) {
+        if (!((bool) $questionHelper->ask($input, $output, $question))) {
             return Command::FAILURE;
         }
 

@@ -13,7 +13,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\StyleInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 
@@ -25,7 +24,7 @@ final class MoveContentTypeCommand extends Command
 {
     protected static $defaultDescription = 'Assigns content type(s) to a single content type group';
 
-    private StyleInterface $style;
+    private SymfonyStyle $style;
 
     public function __construct(
         private Repository $repository,

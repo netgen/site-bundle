@@ -10,7 +10,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\StyleInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 use function array_map;
@@ -20,7 +19,7 @@ final class UpdateContentAlwaysAvailableCommand extends Command
 {
     protected static $defaultDescription = 'Update always-available state for the given Content item(s)';
 
-    private StyleInterface $style;
+    private SymfonyStyle $style;
 
     public function __construct(
         private Repository $repository,

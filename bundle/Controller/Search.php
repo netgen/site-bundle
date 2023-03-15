@@ -43,10 +43,13 @@ final class Search extends Controller
 
         $pager = $this->getFindPager($query, $currentPage, $maxPerPage);
 
+        /** @var \Netgen\IbexaSearchExtra\Core\Pagination\Pagerfanta\SearchAdapter $searchAdapter */
+        $searchAdapter = $pager->getAdapter();
+
         try {
             $searchSuggestion = $this->suggestionResolver->getSuggestedSearchTerm(
                 $query,
-                $pager->getAdapter()->getSuggestion(),
+                $searchAdapter->getSuggestion(),
             );
         } catch (NotFoundException) {
             $searchSuggestion = null;

@@ -57,7 +57,7 @@
     },
     "scripts": {
         "fix": "@php vendor/bin/php-cs-fixer fix",
-        "phpstan": "@php vendor/bin/phpstan analyse -c phpstan.neon --level=4 --ansi bundle"
+        "phpstan": "@php vendor/bin/phpstan analyse -c phpstan.neon --level=5 --ansi bundle"
     },
     "extra": {
         "branch-alias": {

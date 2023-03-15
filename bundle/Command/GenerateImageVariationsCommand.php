@@ -9,6 +9,8 @@ use Ibexa\Contracts\Core\Repository\Repository;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
+use Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchHit;
+use Ibexa\Contracts\Core\Repository\Values\ValueObject;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\Contracts\Core\Variation\VariationHandler;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
@@ -94,9 +96,15 @@ final class GenerateImageVariationsCommand extends Command
                 },
             );
 
-            foreach ($searchHits as $searchHit) {
-                $this->clearVariationCache($searchHit->valueObject);
-                $this->generateVariations($searchHit->valueObject, $imageVariations, $fields);
+            /** @var \Ibexa\Contracts\Core\Repository\Values\Content\Content[] $contentItems */
+            $contentItems = array_map(
+                static fn (SearchHit $searchHit): ValueObject => $searchHit->valueObject,
+                $searchHits,
+            );
+
+            foreach ($contentItems as $content) {
+                $this->clearVariationCache($content);
+                $this->generateVariations($content, $imageVariations, $fields);
                 $this->style->progressAdvance();
             }
 

@@ -14,3 +14,7 @@ parameters:
         # Ibexa DXP specifics
 
         - '#Access to an undefined property Ibexa\\Contracts\\Core\\FieldType\\Value::\$\w+#'
+
+        # Bug in KNP Menu
+
+        - '/Parameter #2 \$value of method Knp\\Menu\\ItemInterface::setAttribute\(\) expects bool\|string\|null, int\|null given/'

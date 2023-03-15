@@ -51,7 +51,9 @@ final class MenuItemExtension implements ExtensionInterface
     private function buildItemFromContent(ItemInterface $item, Content $content): void
     {
         if (!$content->getField('item_url')->isEmpty()) {
-            $this->buildItemFromUrl($item, $content->getField('item_url')->value, $content);
+            /** @var \Ibexa\Core\FieldType\Url\Value $urlValue */
+            $urlValue = $content->getField('item_url')->value;
+            $this->buildItemFromUrl($item, $urlValue, $content);
 
             return;
         }

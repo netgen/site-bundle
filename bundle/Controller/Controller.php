@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use function is_array;
-use function is_int;
 
 abstract class Controller extends BaseController
 {

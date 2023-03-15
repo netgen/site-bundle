@@ -80,9 +80,7 @@ final class NewsletterService
         foreach ($mailerLiteGroupIds as $mailerLiteGroupId) {
             $mailerLiteResponse = $this->addSubscriberToGroup((int) $mailerLiteGroupId, $subscriberData);
 
-            if (isset($mailerLiteResponse->error)) {
-                throw new RuntimeException('MailerLite error');
-            }
+            $mailerLiteResponse->error ?? throw new RuntimeException('MailerLite error');
 
             $subscriberId = $mailerLiteResponse->id;
 

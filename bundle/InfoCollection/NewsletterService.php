@@ -21,7 +21,6 @@ use function array_unique;
 use function count;
 use function ctype_digit;
 use function explode;
-use function is_array;
 use function preg_match;
 use function reset;
 
@@ -148,10 +147,6 @@ final class NewsletterService
         $groupIdsFieldIdentifier = 'newsletter_' . $identifier . '_group_ids';
         $mailerLiteGroupIds = $content->getFieldValue($groupIdsFieldIdentifier)->text;
         $mailerLiteGroupIds = count($mailerLiteGroupIds) > 0 ? explode(' ', $mailerLiteGroupIds) : [];
-
-        if (!is_array($mailerLiteGroupIds)) {
-            return [];
-        }
 
         return array_filter(
             $mailerLiteGroupIds,

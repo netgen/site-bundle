@@ -16,11 +16,9 @@ use Twig\Environment;
 
 use function array_key_first;
 use function count;
-use function get_debug_type;
 use function in_array;
 use function is_array;
 use function is_string;
-use function sprintf;
 
 final class MailHelper
 {
@@ -110,15 +108,6 @@ final class MailHelper
      */
     private function createReceiverAddresses(string|array $addresses): iterable
     {
-        if (!is_string($addresses) && !is_array($addresses)) {
-            $this->logger->error(
-                sprintf(
-                    'Invalid address format. Required string or array, given %s',
-                    get_debug_type($addresses),
-                ),
-            );
-        }
-
         foreach ((array) $addresses as $key => $value) {
             if (is_string($key)) {
                 yield new Address($key, $value);

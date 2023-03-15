@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Core\MVC\Symfony\Matcher\ContentBased\Id;
 
-use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
 use Ibexa\Core\MVC\Symfony\Matcher\ViewMatcherInterface;
 use Ibexa\Core\MVC\Symfony\View\View;
 use Netgen\Bundle\IbexaSiteApiBundle\View\LocationValueView;
@@ -24,12 +23,10 @@ final class ParentContentType extends ConfigResolverBased implements ViewMatcher
             return false;
         }
 
-        try {
-            $parent = $location->parent;
-        } catch (NotFoundException) {
+        if ($location->parent === null) {
             return false;
         }
 
-        return $this->doMatch($parent->contentInfo->contentTypeId);
+        return $this->doMatch($location->parent->contentInfo->contentTypeId);
     }
 }

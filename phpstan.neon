@@ -7,6 +7,10 @@ includes:
 
 parameters:
     ignoreErrors:
+        # Doctrine specifics
+
+        - '#Property Netgen\\Bundle\\SiteBundle\\Entity\\UserAccountKey::\$id is never written, only read#'
+
         # Ibexa DXP specifics
 
         - '#Access to an undefined property Ibexa\\Contracts\\Core\\FieldType\\Value::\$\w+#'

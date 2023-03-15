@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use function is_array;
+use function is_int;
 
 abstract class Controller extends BaseController
 {
@@ -26,14 +27,14 @@ abstract class Controller extends BaseController
 
         $public = true;
 
-        if (isset($cacheSettings['sharedMaxAge'])) {
+        if (is_int($cacheSettings['sharedMaxAge'] ?? 0)) {
             $response->setSharedMaxAge($cacheSettings['sharedMaxAge']);
-            if (($cacheSettings['sharedMaxAge'] ?? 0) <= 0) {
+            if ($cacheSettings['sharedMaxAge'] <= 0) {
                 $public = false;
             }
-        } elseif (isset($cacheSettings['maxAge'])) {
+        } elseif (is_int($cacheSettings['maxAge'] ?? 0)) {
             $response->setMaxAge($cacheSettings['maxAge']);
-            if (($cacheSettings['maxAge'] ?? 0) <= 0) {
+            if ($cacheSettings['maxAge'] <= 0) {
                 $public = false;
             }
         } else {

@@ -27,6 +27,9 @@ final class SiteImage implements HandlerInterface
     {
     }
 
+    /**
+     * @param mixed[] $params
+     */
     public function getMetaTags(string $tagName, array $params = []): array
     {
         $siteInfoContent = $this->namedObjectProvider->getLocation('site_info')->content;

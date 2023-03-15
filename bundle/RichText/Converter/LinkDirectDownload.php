@@ -41,15 +41,21 @@ final class LinkDirectDownload implements Converter
         $linkAttributeExpression = "starts-with( @xlink:href, 'ezlocation://' ) or starts-with( @xlink:href, 'ezcontent://' )";
         $xpathExpression = '//docbook:link[' . $linkAttributeExpression . ']|//docbook:ezlink';
 
-        /** @var \DOMElement $link */
-        foreach ($xpath->query($xpathExpression) as $link) {
+        /** @var \DOMNodeList<\DOMElement> $linkList */
+        $linkList = $xpath->query($xpathExpression);
+
+        foreach ($linkList as $link) {
             $directDownloadXpathExpression = './docbook:ezattribute/docbook:ezvalue[@key="direct-download"]';
-            $directDownload = $xpath->query($directDownloadXpathExpression, $link)->count() > 0
-                && 'true' === $xpath->query($directDownloadXpathExpression, $link)->item(0)->nodeValue;
+
+            /** @var \DOMNodeList<\DOMNode> $directDownloads */
+            $directDownloads = $xpath->query($directDownloadXpathExpression, $link);
+            $directDownload = $directDownloads->count() > 0 && $directDownloads->item(0)->nodeValue === 'true';
 
             $openInlineXpathExpression = './docbook:ezattribute/docbook:ezvalue[@key="open-inline"]';
-            $openInline = $xpath->query($openInlineXpathExpression, $link)->count() > 0
-                && 'true' === $xpath->query($openInlineXpathExpression, $link)->item(0)->nodeValue;
+
+            /** @var \DOMNodeList<\DOMNode> $openInlines */
+            $openInlines = $xpath->query($openInlineXpathExpression, $link);
+            $openInline = $openInlines->count() > 0 && $openInlines->item(0)->nodeValue === 'true';
 
             if (!$directDownload) {
                 continue;

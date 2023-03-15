@@ -82,12 +82,14 @@ final class GenerateImageVariationsCommand extends Command
 
         $imageVariations = $this->parseCommaDelimited($input->getOption('variations'));
         if (count($imageVariations) === 0) {
+            /** @var string[] $imageVariations */
             $imageVariations = array_keys($this->configResolver->getParameter('image_variations'));
         }
 
         $fields = $this->parseCommaDelimited($input->getOption('fields'));
 
         do {
+            /** @var \Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchHit[] $searchHits */
             $searchHits = $this->repository->sudo(
                 function () use ($query): iterable {
                     $languages = $this->configResolver->getParameter('languages');

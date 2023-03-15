@@ -38,9 +38,9 @@ class DebugTemplate extends Template
         // when comments appear before doctype declaration.
         ob_start();
         parent::display($context, $blocks);
-        $templateResult = ob_get_clean();
+        $templateResult = (string) ob_get_clean();
 
-        $templateName = trim($this->fileSystem->makePathRelative($this->getSourceContext()->getPath(), dirname(getcwd())), '/');
+        $templateName = trim($this->fileSystem->makePathRelative($this->getSourceContext()->getPath(), dirname((string) getcwd())), '/');
         $isHtmlTemplate = str_ends_with($templateName, 'html.twig');
         $templateName = $isHtmlTemplate ? $templateName . ' (' . $this->getSourceContext()->getName() . ')' : $templateName;
 

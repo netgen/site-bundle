@@ -109,7 +109,7 @@ class SiteView implements ViewInterface
     /**
      * Returns the list of all pages that need to be displayed.
      *
-     * @return array<string, string|false>
+     * @return array<string, mixed>
      */
     private function getPages(): array
     {

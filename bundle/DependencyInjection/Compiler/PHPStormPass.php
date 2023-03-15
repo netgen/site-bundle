@@ -20,7 +20,7 @@ final class PHPStormPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        if (!$container->getParameter('kernel.debug')) {
+        if ($container->getParameter('kernel.debug') === false) {
             return;
         }
 
@@ -29,9 +29,15 @@ final class PHPStormPass implements CompilerPassInterface
         }
 
         $pathConfig = [];
-        $twigConfigPath = realpath($container->getParameter('kernel.project_dir'));
 
-        foreach ($container->getParameter('ibexa.design.templates.path_map') as $theme => $paths) {
+        /** @var string $projectDir */
+        $projectDir = $container->getParameter('kernel.project_dir');
+        $twigConfigPath = (string) realpath($projectDir);
+
+        /** @var array<string, string[]> $pathMap */
+        $pathMap = $container->getParameter('ibexa.design.templates.path_map');
+
+        foreach ($pathMap as $theme => $paths) {
             foreach ($paths as $path) {
                 if ($theme !== '_override') {
                     $pathConfig[] = [

@@ -54,7 +54,7 @@ final class SiteImage implements HandlerInterface
 
         $request = $this->requestStack->getCurrentRequest();
 
-        if ($request instanceof Request && !preg_match('/^https?:\/\//', $siteImage)) {
+        if ($request instanceof Request && preg_match('/^https?:\/\//', $siteImage) === false) {
             $siteImage = $request->getUriForPath('/' . ltrim($siteImage, '/'));
         }
 

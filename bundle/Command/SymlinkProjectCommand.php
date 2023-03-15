@@ -176,7 +176,7 @@ final class SymlinkProjectCommand extends Command
         $this->fileSystem->symlink(
             $this->fileSystem->makePathRelative(
                 dirname($source),
-                realpath(dirname($destination)),
+                (string) realpath(dirname($destination)),
             ) . basename($source),
             $destination,
         );
@@ -206,7 +206,7 @@ final class SymlinkProjectCommand extends Command
         $this->fileSystem->symlink(
             $this->fileSystem->makePathRelative(
                 $source,
-                realpath(dirname($destination)),
+                (string) realpath(dirname($destination)),
             ),
             $destination,
         );

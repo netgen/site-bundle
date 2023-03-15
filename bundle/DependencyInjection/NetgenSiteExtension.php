@@ -44,13 +44,14 @@ final class NetgenSiteExtension extends Extension implements PrependExtensionInt
         $loader->load('services.yaml');
         $loader->load('services/**/*.yaml', 'glob');
 
+        /** @var array<class-string> $activatedBundles */
         $activatedBundles = $container->getParameter('kernel.bundles');
 
         if (in_array(NetgenLayoutsBundle::class, $activatedBundles, true)) {
             $loader->load('layouts/services.yaml');
         }
 
-        if ($container->getParameter('kernel.debug')) {
+        if ($container->getParameter('kernel.debug') === true) {
             $loader->load('debug.yaml');
         }
     }
@@ -61,6 +62,7 @@ final class NetgenSiteExtension extends Extension implements PrependExtensionInt
             $container->setParameter('ngsite.ibexa_file_storage_path', '/var/site/storage/original');
         }
 
+        /** @var array<class-string> $activatedBundles */
         $activatedBundles = $container->getParameter('kernel.bundles');
 
         $prependConfigs = [
@@ -76,7 +78,7 @@ final class NetgenSiteExtension extends Extension implements PrependExtensionInt
 
         foreach ($prependConfigs as $configFile => $prependConfig) {
             $configFile = __DIR__ . '/../Resources/config/' . $configFile;
-            $config = Yaml::parse(file_get_contents($configFile));
+            $config = Yaml::parse((string) file_get_contents($configFile));
             $container->prependExtensionConfig($prependConfig, $config);
             $container->addResource(new FileResource($configFile));
         }

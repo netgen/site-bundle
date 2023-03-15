@@ -10,6 +10,8 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
 use Ibexa\Contracts\Core\Repository\Values\ContentType\FieldDefinition;
+use Ibexa\Core\FieldType\Date\Value as DateValue;
+use Ibexa\Core\FieldType\DateAndTime\Value as DateAndTimeValue;
 use Ibexa\Core\Helper\FieldHelper;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
@@ -20,6 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 use function count;
+use function sprintf;
 
 use const PHP_EOL;
 
@@ -123,7 +126,6 @@ final class UpdatePublishDateCommand extends Command
                 /** @var \Ibexa\Contracts\Core\Repository\Values\Content\Content $content */
                 $content = $hit->valueObject;
 
-                /** @var \Ibexa\Core\FieldType\DateAndTime\Value|\Ibexa\Core\FieldType\Date\Value $dateFieldValue */
                 $dateFieldValue = $content->getField(
                     $fieldDefIdentifier,
                     (bool) $input->getOption('use-main-translation') ?
@@ -131,7 +133,16 @@ final class UpdatePublishDateCommand extends Command
                         null,
                 )->value;
 
-                $dateValueData = $fieldDefinition->fieldTypeIdentifier === 'ezdatetime' ? $dateFieldValue->value : $dateFieldValue->date;
+                $dateValueData = match (true) {
+                    $dateFieldValue instanceof DateAndTimeValue => $dateFieldValue->value,
+                    $dateFieldValue instanceof DateValue => $dateFieldValue->date,
+                    default => throw new RuntimeException(
+                        sprintf(
+                            'Field "%s" is of wrong type, ezdatetime or ezdate expected.',
+                            $fieldDefIdentifier,
+                        ),
+                    ),
+                };
 
                 if (
                     !$this->fieldHelper->isFieldEmpty($content, $fieldDefIdentifier)

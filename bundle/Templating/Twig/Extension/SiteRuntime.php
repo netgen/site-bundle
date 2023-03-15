@@ -107,7 +107,7 @@ final class SiteRuntime
         $groupedFields = [];
 
         foreach ($content->fields as $field) {
-            if (preg_match($regex, $field->fieldDefIdentifier, $matches)) {
+            if (preg_match($regex, $field->fieldDefIdentifier, $matches) !== false) {
                 $groupedFields[$matches[self::GROUP_FIELDS_GROUP]][$matches[self::GROUP_FIELDS_FIELD]] = $field;
             }
         }

@@ -8,8 +8,6 @@ use Ibexa\Bundle\Core\DependencyInjection\Configuration\ConfigResolver;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-use function array_merge;
-
 final class XslRegisterPass implements CompilerPassInterface
 {
     /**
@@ -17,19 +15,20 @@ final class XslRegisterPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container): void
     {
-        $scopes = array_merge(
-            [ConfigResolver::SCOPE_DEFAULT],
-            $container->getParameter('ibexa.site_access.list'),
-        );
+        /** @var string[] $siteAccessList */
+        $siteAccessList = $container->getParameter('ibexa.site_access.list');
+        $scopes = [ConfigResolver::SCOPE_DEFAULT, ...$siteAccessList];
 
         foreach ($scopes as $scope) {
             if ($container->hasParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ezrichtext.output_custom_xsl')) {
+                /** @var array<int, array<string, mixed>> $xslConfig */
                 $xslConfig = $container->getParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ezrichtext.output_custom_xsl');
                 $xslConfig[] = ['path' => __DIR__ . '/../../Resources/docbook/output/core.xsl', 'priority' => 5000];
                 $container->setParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ezrichtext.output_custom_xsl', $xslConfig);
             }
 
             if ($container->hasParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ezrichtext.edit_custom_xsl')) {
+                /** @var array<int, array<string, mixed>> $xslConfig */
                 $xslConfig = $container->getParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ezrichtext.edit_custom_xsl');
                 $xslConfig[] = ['path' => __DIR__ . '/../../Resources/docbook/edit/core.xsl', 'priority' => 5000];
                 $container->setParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ezrichtext.edit_custom_xsl', $xslConfig);

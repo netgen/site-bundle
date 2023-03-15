@@ -372,7 +372,9 @@ abstract class BaseMultiprocessCommand extends Command
                 continue;
             }
 
-            $arguments[] = '--' . $key . '=' . $value;
+            foreach ((array) $value as $singleValue) {
+                $arguments[] = '--' . $key . '=' . $singleValue;
+            }
         }
 
         $process = new Process($arguments);
@@ -403,7 +405,7 @@ abstract class BaseMultiprocessCommand extends Command
 
         if (is_file('/proc/cpuinfo')) {
             // Linux (and potentially Windows with linux sub systems)
-            $cpuInfo = file_get_contents('/proc/cpuinfo');
+            $cpuInfo = (string) file_get_contents('/proc/cpuinfo');
             preg_match_all('/^processor/m', $cpuInfo, $matches);
             $cores = count($matches[0]);
         } elseif (DIRECTORY_SEPARATOR === '\\') {
@@ -415,8 +417,8 @@ abstract class BaseMultiprocessCommand extends Command
             }
         } elseif (($process = @popen('sysctl -a', 'rb')) !== false) {
             // *nix (Linux, BSD and Mac)
-            $output = stream_get_contents($process);
-            if (preg_match('/hw.ncpu: (\d+)/', $output, $matches)) {
+            $output = (string) stream_get_contents($process);
+            if (preg_match('/hw.ncpu: (\d+)/', $output, $matches) !== false) {
                 $cores = (int) $matches[1];
             }
             pclose($process);

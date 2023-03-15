@@ -9,6 +9,7 @@ use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 
 use function call_user_func;
 use function in_array;
+use function is_callable;
 
 /**
  * This debug processor overrides Symfony built in DebugProcessor to exclude
@@ -36,7 +37,7 @@ final class DebugProcessor implements DebugLoggerInterface
     public function __invoke(array $record): array
     {
         $channel = $record['channel'] ?? '';
-        if (!in_array($channel, $this->excludedChannels, true)) {
+        if (is_callable($this->innerProcessor) && !in_array($channel, $this->excludedChannels, true)) {
             call_user_func($this->innerProcessor, $record);
         }
 

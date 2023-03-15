@@ -17,8 +17,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 
 use function array_map;
-use function ctype_digit;
 use function explode;
+use function is_numeric;
 
 final class MoveContentTypeCommand extends Command
 {
@@ -66,7 +66,7 @@ final class MoveContentTypeCommand extends Command
 
         $types = $input->getArgument('types');
         $contentTypeIdentifiersOrIds = array_map('trim', explode(',', $types));
-        $contentTypeGroupIdentifierOrId = $input->getArgument('group');
+        $contentTypeGroupIdentifierOrId = (string) $input->getArgument('group');
 
         $newContentTypeGroup = $this->loadContentTypeGroup($contentTypeGroupIdentifierOrId);
 
@@ -93,18 +93,18 @@ final class MoveContentTypeCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function loadContentTypeGroup(int|string $identifierOrId): ContentTypeGroup
+    private function loadContentTypeGroup(string $identifierOrId): ContentTypeGroup
     {
-        if (ctype_digit($identifierOrId)) {
+        if (is_numeric($identifierOrId)) {
             return $this->contentTypeService->loadContentTypeGroup((int) $identifierOrId);
         }
 
         return $this->contentTypeService->loadContentTypeGroupByIdentifier($identifierOrId);
     }
 
-    private function loadContentType(int|string $identifierOrId): ContentType
+    private function loadContentType(string $identifierOrId): ContentType
     {
-        if (ctype_digit($identifierOrId)) {
+        if (is_numeric($identifierOrId)) {
             return $this->contentTypeService->loadContentType((int) $identifierOrId);
         }
 

@@ -20,6 +20,7 @@ final class SuggestionResolver
      */
     public function getSuggestedSearchTerm(Query $query, Suggestion $suggestion): string
     {
+        /** @var string $searchTerm */
         $searchTerm = $query->query->value;
         $search = $suggestion->getOriginalWords();
         $replace = [];

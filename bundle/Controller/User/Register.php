@@ -77,6 +77,7 @@ final class Register extends Controller
             );
         }
 
+        /** @var \Ibexa\Contracts\Core\Repository\Values\User\User[] $users */
         $users = $this->userService->loadUsersByEmail($form->getData()->payload->email);
 
         if (count($users) > 0) {

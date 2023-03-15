@@ -27,7 +27,7 @@ final class UserRegisterVoter implements VoterInterface
                 continue;
             }
 
-            if ($this->permissionResolver->hasAccess('user', 'register')) {
+            if ($this->permissionResolver->hasAccess('user', 'register') === true) {
                 return VoterInterface::ACCESS_GRANTED;
             }
 

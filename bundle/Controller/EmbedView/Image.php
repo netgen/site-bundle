@@ -13,6 +13,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 
+use function in_array;
 use function mb_substr;
 use function sprintf;
 use function str_starts_with;
@@ -30,9 +31,9 @@ final class Image extends Controller
     public function __invoke(ContentView $view): ContentView
     {
         $parameters = $view->getParameters();
-        $targetLink = !empty($parameters['objectParameters']['href']) ? trim($parameters['objectParameters']['href']) : null;
+        $targetLink = trim($parameters['objectParameters']['href'] ?? '');
 
-        if (!empty($targetLink)) {
+        if ($targetLink !== '') {
             $location = null;
             $content = null;
 
@@ -68,7 +69,9 @@ final class Image extends Controller
             }
 
             $directDownloadLink = null;
-            if ($content !== null && !empty($parameters['objectParameters']['link_direct_download'])) {
+            $isDirectDownload = in_array($parameters['objectParameters']['link_direct_download'], [true, '1'], true);
+
+            if ($content !== null && $isDirectDownload) {
                 $fieldName = null;
                 if ($content->hasField('file') && !$content->getField('file')->isEmpty()) {
                     $fieldName = 'file';

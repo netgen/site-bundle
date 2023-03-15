@@ -28,12 +28,12 @@ abstract class Controller extends BaseController
 
         if (isset($cacheSettings['sharedMaxAge'])) {
             $response->setSharedMaxAge($cacheSettings['sharedMaxAge']);
-            if (empty($cacheSettings['sharedMaxAge'])) {
+            if (($cacheSettings['sharedMaxAge'] ?? 0) <= 0) {
                 $public = false;
             }
         } elseif (isset($cacheSettings['maxAge'])) {
             $response->setMaxAge($cacheSettings['maxAge']);
-            if (empty($cacheSettings['maxAge'])) {
+            if (($cacheSettings['maxAge'] ?? 0) <= 0) {
                 $public = false;
             }
         } else {

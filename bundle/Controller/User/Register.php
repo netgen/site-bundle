@@ -20,6 +20,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
+use function count;
+
 final class Register extends Controller
 {
     public function __construct(
@@ -52,7 +54,7 @@ final class Register extends Controller
         );
 
         $userCreateStruct->enabled = (bool) $this->configResolver->getParameter('user.auto_enable', 'ngsite');
-        $userCreateStruct->alwaysAvailable = (bool) $contentType->defaultAlwaysAvailable;
+        $userCreateStruct->alwaysAvailable = $contentType->defaultAlwaysAvailable;
 
         $data = new DataWrapper($userCreateStruct, $userCreateStruct->contentType);
 
@@ -77,7 +79,7 @@ final class Register extends Controller
 
         $users = $this->userService->loadUsersByEmail($form->getData()->payload->email);
 
-        if (!empty($users)) {
+        if (count($users) > 0) {
             return $this->render(
                 $this->configResolver->getParameter('template.user.register', 'ngsite'),
                 [
@@ -122,7 +124,7 @@ final class Register extends Controller
 
         /** @var \Ibexa\Contracts\Core\Repository\Values\User\User $newUser */
         $newUser = $this->repository->sudo(
-            static fn (): User => $this->repository->getUserService()->createUser(
+            fn (): User => $this->repository->getUserService()->createUser(
                 $data->payload,
                 [$this->repository->getUserService()->loadUserGroup($userGroupId)],
             ),
@@ -137,7 +139,7 @@ final class Register extends Controller
             );
         }
 
-        if ($this->configResolver->getParameter('user.require_admin_activation', 'ngsite')) {
+        if ((bool) $this->configResolver->getParameter('user.require_admin_activation', 'ngsite')) {
             return $this->render(
                 $this->configResolver->getParameter('template.user.activate_admin_activation_pending', 'ngsite'),
             );

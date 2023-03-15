@@ -108,7 +108,7 @@ final class ChildrenBuilder
         $childLocations = [];
 
         foreach ($content->getField('menu_items')->value->destinationContentIds as $contentId) {
-            if (empty($contentId)) {
+            if ((int) $contentId <= 0) {
                 $this->logger->error(sprintf('Empty content ID in RelationList field "%s" for content #%s', 'menu_items', $content->id));
 
                 continue;

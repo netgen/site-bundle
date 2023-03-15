@@ -13,6 +13,7 @@ use Netgen\Bundle\SiteBundle\API\Search\Criterion\FullText;
 use Netgen\IbexaSiteApi\API\Site;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use function count;
 use function trim;
 
 final class SearchQueryType extends OptionsResolverBasedQueryType
@@ -36,7 +37,7 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
 
         $optionsResolver->setAllowedValues(
             'search_text',
-            static fn (string $searchText): bool => !empty(trim($searchText)),
+            static fn (string $searchText): bool => trim($searchText) !== '',
         );
 
         $optionsResolver->setDefault('content_types', $this->configResolver->getParameter('search.content_types', 'ngsite'));
@@ -52,7 +53,7 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
             new Criterion\Visibility(Criterion\Visibility::VISIBLE),
         ];
 
-        if (!empty($parameters['content_types'])) {
+        if (count($parameters['content_types']) > 0) {
             $criteria[] = new Criterion\ContentTypeIdentifier($parameters['content_types']);
         }
 

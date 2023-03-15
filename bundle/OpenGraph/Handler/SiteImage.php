@@ -40,8 +40,8 @@ final class SiteImage implements HandlerInterface
                 ->getField(self::FIELD_IDENTIFIER)
                 ->value
                 ->uri;
-        } elseif (!empty($params[0])) {
-            $siteImage = (string) $params[0];
+        } elseif (($params[0] ?? '') !== '') {
+            $siteImage = $params[0];
         } else {
             throw new InvalidArgumentException(
                 sprintf('%s or $params[0]', self::FIELD_IDENTIFIER),

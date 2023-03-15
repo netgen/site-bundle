@@ -87,7 +87,7 @@ final class ResetPassword extends Controller
         $userUpdateStruct = $prePasswordResetEvent->getUserUpdateStruct();
 
         $user = $this->repository->sudo(
-            static fn (): User => $this->repository->getUserService()->updateUser($user, $userUpdateStruct),
+            fn (): User => $this->repository->getUserService()->updateUser($user, $userUpdateStruct),
         );
 
         $postPasswordResetEvent = new UserEvents\PostPasswordResetEvent($user);

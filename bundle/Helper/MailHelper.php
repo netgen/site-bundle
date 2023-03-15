@@ -17,6 +17,7 @@ use Twig\Environment;
 use function array_key_first;
 use function count;
 use function get_debug_type;
+use function in_array;
 use function is_array;
 use function is_string;
 use function sprintf;
@@ -76,7 +77,7 @@ final class MailHelper
      */
     private function createSenderAddress(string|array|null $sender): Address
     {
-        if (!empty($sender)) {
+        if (!in_array($sender, [null, '', []], true)) {
             if ((is_array($sender) && count($sender) === 1 && !isset($sender[0])) || is_string($sender)) {
                 if (is_array($sender)) {
                     return new Address(array_key_first($sender), $sender[array_key_first($sender)]);

@@ -36,14 +36,10 @@ final class Download extends Controller
      *
      * Dispatch \Netgen\Bundle\SiteBundle\Event\SiteEvents::CONTENT_DOWNLOAD only once
      *
-     * @param int $contentId
-     * @param int $fieldId
-     * @param bool $isInline
-     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException If file or image does not exist
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException If content has all of its locations hidden
      */
-    public function __invoke(Request $request, $contentId, $fieldId, $isInline = false): BinaryStreamResponse
+    public function __invoke(Request $request, int|string $contentId, int|string $fieldId, bool|string $isInline = false): BinaryStreamResponse
     {
         $contentId = (int) $contentId;
         $fieldId = (int) $fieldId;

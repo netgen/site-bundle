@@ -45,7 +45,7 @@ final class PostRegisterEventListener extends UserEventListener implements Event
 
         $accountKey = $this->userAccountKeyRepository->create($user->id);
 
-        if ($this->configResolver->getParameter('user.require_admin_activation', 'ngsite')) {
+        if ((bool) $this->configResolver->getParameter('user.require_admin_activation', 'ngsite')) {
             $this->mailHelper
                 ->sendMail(
                     [$user->email => $this->getUserName($user)],
@@ -56,13 +56,13 @@ final class PostRegisterEventListener extends UserEventListener implements Event
                     ],
                 );
 
-            $adminEmail = $this->configResolver->getParameter('user.mail.admin_email', 'ngsite');
-            $adminName = $this->configResolver->getParameter('user.mail.admin_name', 'ngsite');
+            $adminEmail = $this->configResolver->getParameter('user.mail.admin_email', 'ngsite') ?? '';
+            $adminName = $this->configResolver->getParameter('user.mail.admin_name', 'ngsite') ?? '';
 
-            if (!empty($adminEmail)) {
+            if ($adminEmail !== '') {
                 $this->mailHelper
                     ->sendMail(
-                        !empty($adminName) ? [$adminEmail => $adminName] : [$adminEmail],
+                        $adminName !== '' ? [$adminEmail => $adminName] : [$adminEmail],
                         'ngsite.user.activate.admin_activation_required.subject',
                         $this->configResolver->getParameter('template.user.mail.activate_admin_activation_required', 'ngsite'),
                         [

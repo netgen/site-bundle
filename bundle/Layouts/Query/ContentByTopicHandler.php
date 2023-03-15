@@ -29,6 +29,7 @@ use Netgen\TagsBundle\Core\FieldType\Tags\Value as TagsFieldValue;
 
 use function array_filter;
 use function array_map;
+use function count;
 
 final class ContentByTopicHandler implements QueryTypeHandlerInterface
 {
@@ -178,9 +179,9 @@ final class ContentByTopicHandler implements QueryTypeHandlerInterface
         $content = null;
         $contentId = $query->getParameter('topic_content_id')->getValue();
 
-        if ($query->getParameter('use_topic_from_current_content')->getValue()) {
+        if ((bool) $query->getParameter('use_topic_from_current_content')->getValue()) {
             $content = $this->contentProvider->provideContent();
-        } elseif (!empty($contentId)) {
+        } elseif ($contentId !== null) {
             try {
                 $content = $this->loadService->loadContent($contentId)->innerContent;
             } catch (NotFoundException|UnauthorizedException) {
@@ -193,7 +194,7 @@ final class ContentByTopicHandler implements QueryTypeHandlerInterface
         }
 
         $fieldValue = $content->getField('topic')->value;
-        if (!$fieldValue instanceof TagsFieldValue || empty($fieldValue->tags)) {
+        if (!$fieldValue instanceof TagsFieldValue || count($fieldValue->tags) === 0) {
             return [null, null];
         }
 

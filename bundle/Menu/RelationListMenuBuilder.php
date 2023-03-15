@@ -49,7 +49,7 @@ final class RelationListMenuBuilder
         }
 
         foreach ($field->value->destinationContentIds as $index => $destinationContentId) {
-            if (empty($destinationContentId)) {
+            if ((int) $destinationContentId <= 0) {
                 $this->logger->error(sprintf('Empty content ID in RelationList field "%s" for content #%s', $fieldIdentifier, $content->id));
 
                 continue;

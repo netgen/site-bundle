@@ -58,13 +58,13 @@ final class UpdatePublishDateCommand extends Command
     {
         $questionHelper = $this->getHelper('question');
 
-        $contentTypeIdentifier = $input->getOption('content-type');
-        if (empty($contentTypeIdentifier)) {
+        $contentTypeIdentifier = $input->getOption('content-type') ?? '';
+        if ($contentTypeIdentifier === '') {
             throw new RuntimeException("Parameter '--content-type' ('-c') is required");
         }
 
-        $fieldDefIdentifier = $input->getOption('field-def-identifier');
-        if (empty($fieldDefIdentifier)) {
+        $fieldDefIdentifier = $input->getOption('field-def-identifier') ?? '';
+        if ($fieldDefIdentifier === '') {
             throw new RuntimeException("Parameter '--field-def-identifier' ('-f') is required");
         }
 
@@ -125,7 +125,7 @@ final class UpdatePublishDateCommand extends Command
                 /** @var \Ibexa\Core\FieldType\DateAndTime\Value|\Ibexa\Core\FieldType\Date\Value $dateFieldValue */
                 $dateFieldValue = $content->getField(
                     $fieldDefIdentifier,
-                    $input->getOption('use-main-translation') ?
+                    (bool) $input->getOption('use-main-translation') ?
                         $content->contentInfo->mainLanguageCode :
                         null,
                 )->value;
@@ -140,7 +140,7 @@ final class UpdatePublishDateCommand extends Command
                     $metadataUpdateStruct->publishedDate = $dateValueData;
 
                     $this->repository->sudo(
-                        static fn (): Content => $this->repository->getContentService()->updateContentMetadata($content->contentInfo, $metadataUpdateStruct),
+                        fn (): Content => $this->repository->getContentService()->updateContentMetadata($content->contentInfo, $metadataUpdateStruct),
                     );
 
                     ++$updatedCount;

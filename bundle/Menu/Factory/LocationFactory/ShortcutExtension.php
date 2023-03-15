@@ -81,7 +81,7 @@ final class ShortcutExtension implements ExtensionInterface
 
         $item->setUri($uri);
 
-        if (!empty($urlValue->text)) {
+        if (($urlValue->text ?? '') !== '') {
             $item->setLinkAttribute('title', $urlValue->text);
 
             if (!$content->getField('use_shortcut_name')->value->bool) {

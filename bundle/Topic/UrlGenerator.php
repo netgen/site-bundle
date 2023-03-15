@@ -15,6 +15,8 @@ use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+use function count;
+
 final class UrlGenerator
 {
     public function __construct(
@@ -64,7 +66,7 @@ final class UrlGenerator
 
         $searchResult = $this->findService->findLocations($query);
 
-        if (!empty($searchResult->searchHits)) {
+        if (count($searchResult->searchHits) > 0) {
             return $searchResult->searchHits[0]->valueObject;
         }
 

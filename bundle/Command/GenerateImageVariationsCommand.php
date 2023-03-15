@@ -122,11 +122,11 @@ final class GenerateImageVariationsCommand extends Command
                 continue;
             }
 
-            if (!empty($fields) && !in_array($field->fieldDefIdentifier, $fields, true)) {
+            if (count($fields) > 0 && !in_array($field->fieldDefIdentifier, $fields, true)) {
                 continue;
             }
 
-            if (empty($field->value->uri)) {
+            if (($field->value->uri ?? '') === '') {
                 continue;
             }
 
@@ -149,15 +149,15 @@ final class GenerateImageVariationsCommand extends Command
 
         $criteria = [];
 
-        if (!empty($contentTypes)) {
+        if (count($contentTypes) > 0) {
             $criteria[] = new Criterion\ContentTypeIdentifier($contentTypes);
         }
 
-        if (!empty($subtrees)) {
+        if (count($subtrees) > 0) {
             $criteria[] = new Criterion\Subtree(iterator_to_array($this->getSubtreePathStrings($subtrees)));
         }
 
-        if (!empty($criteria)) {
+        if (count($criteria) > 0) {
             $query->filter = new Criterion\LogicalAnd($criteria);
         }
 
@@ -168,7 +168,7 @@ final class GenerateImageVariationsCommand extends Command
     {
         foreach ($subtreeIds as $subtreeId) {
             yield $this->repository->sudo(
-                static fn (): string => $this->repository->getLocationService()->loadLocation($subtreeId)->pathString,
+                fn (): string => $this->repository->getLocationService()->loadLocation($subtreeId)->pathString,
             );
         }
     }
@@ -177,7 +177,7 @@ final class GenerateImageVariationsCommand extends Command
     {
         $value = trim($value ?? '');
 
-        if (empty($value)) {
+        if ($value === '') {
             return [];
         }
 

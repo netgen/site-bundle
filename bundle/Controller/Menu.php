@@ -41,7 +41,7 @@ final class Menu extends Controller
         $response = new Response();
 
         $menuLocationId = $menu->getAttribute('location-id');
-        if (!empty($menuLocationId)) {
+        if ($menuLocationId !== null) {
             $this->tagHandler->addLocationTags([$menuLocationId]);
         }
 

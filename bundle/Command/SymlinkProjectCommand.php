@@ -103,8 +103,8 @@ final class SymlinkProjectCommand extends Command
                         continue;
                     }
 
-                    $webFolderName = $input->getOption('web-folder');
-                    $webFolderName = !empty($webFolderName) ? $webFolderName : 'public';
+                    $webFolderName = $input->getOption('web-folder') ?? '';
+                    $webFolderName = $webFolderName !== '' ? $webFolderName : 'public';
 
                     $destination = $this->kernel->getProjectDir() . '/' . $webFolderName . '/' . $item->getBasename();
 

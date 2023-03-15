@@ -303,12 +303,14 @@ abstract class BaseMultiprocessCommand extends Command
             }
 
             usleep(100000);
-        } while (!empty($processes));
+        } while (count($processes) > 0);
     }
 
     protected function internalGetItemGenerator(int $limit): Generator
     {
-        if ($items = $this->input->getOption('items')) {
+        $items = $this->input->getOption('items') ?? '';
+
+        if ($items !== '') {
             $items = explode(',', $items);
 
             yield new ItemList($items);

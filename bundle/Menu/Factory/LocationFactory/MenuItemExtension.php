@@ -87,7 +87,7 @@ final class MenuItemExtension implements ExtensionInterface
 
         $item->setUri($uri);
 
-        if (!empty($urlValue->text)) {
+        if (($urlValue->text ?? '') !== '') {
             $item->setLinkAttribute('title', $urlValue->text);
 
             if (!$content->getField('use_menu_item_name')->value->bool) {

@@ -18,6 +18,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 use function array_filter;
 use function array_unique;
+use function count;
 use function ctype_digit;
 use function explode;
 use function is_array;
@@ -146,7 +147,7 @@ final class NewsletterService
     {
         $groupIdsFieldIdentifier = 'newsletter_' . $identifier . '_group_ids';
         $mailerLiteGroupIds = $content->getFieldValue($groupIdsFieldIdentifier)->text;
-        $mailerLiteGroupIds = !empty($mailerLiteGroupIds) ? explode(' ', $mailerLiteGroupIds) : [];
+        $mailerLiteGroupIds = count($mailerLiteGroupIds) > 0 ? explode(' ', $mailerLiteGroupIds) : [];
 
         if (!is_array($mailerLiteGroupIds)) {
             return [];

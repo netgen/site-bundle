@@ -1,6 +1,3 @@
-parameters:
-    ngsite.command.base_multiprocess.php_path: ~
-
 services:
     ngsite.command.content_type.move:
         class: Netgen\Bundle\SiteBundle\Command\MoveContentTypeCommand
@@ -57,11 +54,3 @@ services:
             - "@?profiler"
         tags:
             - { name: console.command, command: 'ngsite:profiler:clear-cache' }
-
-    ngsite.command.base_multiprocess:
-        class: Netgen\Bundle\SiteBundle\Command\BaseMultiprocessCommand
-        abstract: true
-        arguments:
-            - "%kernel.project_dir%"
-            - "@?logger"
-            - "%ngsite.command.base_multiprocess.php_path%"

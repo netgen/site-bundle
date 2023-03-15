@@ -321,6 +321,10 @@ abstract class BaseMultiprocessCommand extends Command
         yield from $this->getItemsGenerator($limit);
     }
 
+    /**
+     * @param array<int, int|null> $processDepthMap
+     * @param array<int, \Symfony\Component\Process\Process|null> $processes
+     */
     protected function shouldWait(array $processDepthMap, array $processes, ItemList $itemList): bool
     {
         foreach ($processes as $process) {

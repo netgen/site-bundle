@@ -39,6 +39,9 @@ final class ContentDownloadUrlGenerator extends PathGenerator implements RouteAw
         return $this->route;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getParameters(Field $field, VersionInfo $versionInfo): array
     {
         return [

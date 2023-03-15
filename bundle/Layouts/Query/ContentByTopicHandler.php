@@ -174,6 +174,9 @@ final class ContentByTopicHandler implements QueryTypeHandlerInterface
         return $locationQuery;
     }
 
+    /**
+     * @return mixed[]|null[]
+     */
     private function getTopicTag(Query $query): array
     {
         $content = null;

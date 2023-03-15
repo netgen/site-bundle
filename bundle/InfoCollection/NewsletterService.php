@@ -54,6 +54,9 @@ final class NewsletterService
         }
     }
 
+    /**
+     * @param \Ibexa\Contracts\ContentForms\Data\Content\FieldData[] $fields
+     */
     private function subscribeToNewsletter(Content $content, array $fields, FieldData $field): void
     {
         if ($this->mailerLiteApiKey === '') {
@@ -130,6 +133,11 @@ final class NewsletterService
         return $matches['identifier'] ?? '';
     }
 
+    /**
+     * @param array<string, \Ibexa\Contracts\ContentForms\Data\Content\FieldData|null> $fields
+     *
+     * @return array<string, mixed>
+     */
     private function extractSubscriberData(array $fields): array
     {
         return [
@@ -142,6 +150,9 @@ final class NewsletterService
         ];
     }
 
+    /**
+     * @return string[]
+     */
     private function extractMailerLiteGroupIds(Content $content, string $identifier): array
     {
         $groupIdsFieldIdentifier = 'newsletter_' . $identifier . '_group_ids';
@@ -150,7 +161,7 @@ final class NewsletterService
 
         return array_filter(
             $mailerLiteGroupIds,
-            static fn ($mailerLiteGroupId) => ctype_digit($mailerLiteGroupId),
+            static fn ($mailerLiteGroupId): bool => ctype_digit($mailerLiteGroupId),
         );
     }
 
@@ -186,6 +197,9 @@ final class NewsletterService
         $this->mailer->send($message);
     }
 
+    /**
+     * @param array<string, mixed> $subscriberData
+     */
     private function addSubscriberToGroup(int $groupId, array $subscriberData): mixed
     {
         return $this->mailerLite->groups()->addSubscriber($groupId, $subscriberData);

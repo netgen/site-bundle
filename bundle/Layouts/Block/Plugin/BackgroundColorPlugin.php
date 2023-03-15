@@ -18,6 +18,8 @@ final class BackgroundColorPlugin extends Plugin
     /**
      * The list of colors available. Keys should be identifiers, while values
      * should be human readable names of the colors.
+     *
+     * @param array<string, string> $colors
      */
     public function __construct(private array $colors)
     {

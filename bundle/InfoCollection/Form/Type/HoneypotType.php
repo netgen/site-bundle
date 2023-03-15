@@ -15,6 +15,9 @@ final class HoneypotType extends AbstractType
         return 'honeypot';
     }
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add(

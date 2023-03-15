@@ -11,6 +11,9 @@ use function hash;
 use function random_bytes;
 use function time;
 
+/**
+ * @extends \Doctrine\ORM\EntityRepository<\Netgen\Bundle\SiteBundle\Entity\UserAccountKey>
+ */
 final class UserAccountKeyRepository extends EntityRepository
 {
     /**

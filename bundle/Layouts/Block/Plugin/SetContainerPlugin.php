@@ -16,6 +16,8 @@ final class SetContainerPlugin extends Plugin
     /**
      * The list of sizes available. Keys should be identifiers, while values
      * should be human readable names of the sizes.
+     *
+     * @param array<string, string> $sizes
      */
     public function __construct(private array $sizes)
     {

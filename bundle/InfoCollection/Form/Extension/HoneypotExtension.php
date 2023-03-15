@@ -16,6 +16,9 @@ final class HoneypotExtension extends AbstractTypeExtension
         yield InformationCollectionType::class;
     }
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var \Netgen\InformationCollection\API\Value\InformationCollectionStruct $struct */

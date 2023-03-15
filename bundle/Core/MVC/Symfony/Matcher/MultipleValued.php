@@ -10,6 +10,8 @@ abstract class MultipleValued
 {
     /**
      * Values to test against.
+     *
+     * @var mixed[]
      */
     protected array $values = [];
 

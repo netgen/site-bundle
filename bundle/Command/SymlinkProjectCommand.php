@@ -30,6 +30,8 @@ final class SymlinkProjectCommand extends Command
 
     /**
      * Files/directories that will not be symlinked in root and root_* folders.
+     *
+     * @var string[]
      */
     private static array $blacklistedItems = [
         'offline_cro.html',

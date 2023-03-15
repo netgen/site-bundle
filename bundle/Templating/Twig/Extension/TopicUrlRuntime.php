@@ -16,6 +16,8 @@ final class TopicUrlRuntime
 
     /**
      * Returns the path for the topic specified by provided tag.
+     *
+     * @param array<string, mixed> $parameters
      */
     public function getTopicPath(Tag $tag, array $parameters = [], bool $relative = false): string
     {
@@ -30,6 +32,8 @@ final class TopicUrlRuntime
 
     /**
      * Returns the URL for the topic specified by provided tag.
+     *
+     * @param array<string, mixed> $parameters
      */
     public function getTopicUrl(Tag $tag, array $parameters = [], bool $schemeRelative = false): string
     {

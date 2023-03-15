@@ -19,12 +19,20 @@ use function in_array;
  */
 final class DebugProcessor implements DebugLoggerInterface
 {
+    /**
+     * @param string[] $excludedChannels
+     */
     public function __construct(
         private DebugLoggerInterface $innerProcessor,
         private array $excludedChannels = ['event', 'doctrine'],
     ) {
     }
 
+    /**
+     * @param array<string, mixed> $record
+     *
+     * @return array<string, mixed>
+     */
     public function __invoke(array $record): array
     {
         $channel = $record['channel'] ?? '';
@@ -35,6 +43,9 @@ final class DebugProcessor implements DebugLoggerInterface
         return $record;
     }
 
+    /**
+     * @return string[]
+     */
     public function getLogs(?Request $request = null): array
     {
         return $this->innerProcessor->getLogs();

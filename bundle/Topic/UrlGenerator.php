@@ -32,6 +32,8 @@ final class UrlGenerator
 
     /**
      * Returns the path for the topic specified by provided tag.
+     *
+     * @param array<string, mixed> $parameters
      */
     public function generate(Tag $tag, array $parameters = [], int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {

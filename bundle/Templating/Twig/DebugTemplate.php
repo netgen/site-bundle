@@ -84,6 +84,9 @@ class DebugTemplate extends Template
         return new Source('', '');
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getDebugInfo()
     {
         return [];
@@ -91,6 +94,5 @@ class DebugTemplate extends Template
 
     protected function doDisplay(array $context, array $blocks = [])
     {
-        return '';
     }
 }

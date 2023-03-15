@@ -15,6 +15,22 @@ parameters:
 
         - '#Access to an undefined property Ibexa\\Contracts\\Core\\FieldType\\Value::\$\w+#'
 
-        # Bug in KNP Menu
+        # Wrong typehints in vendor packages
 
         - '/Parameter #2 \$value of method Knp\\Menu\\ItemInterface::setAttribute\(\) expects bool\|string\|null, int\|null given/'
+
+        -
+          message: '#has parameter \$parameters with no value type specified in iterable type array#'
+          path: bundle/Core/MVC/Symfony/FieldType/BinaryBase/ContentDownloadUrlGenerator.php
+
+        -
+          message: '#has parameter \$parameters with no value type specified in iterable type array#'
+          path: bundle/QueryType/SearchQueryType.php
+
+        -
+          message: '#has parameter \$(blocks|context) with no value type specified in iterable type array#'
+          path: bundle/Templating/Twig/DebugTemplate.php
+
+        -
+          message: '#Method Netgen\\Bundle\\SiteBundle\\Templating\\Twig\\DebugTemplate::doDisplay\(\) has no return type specified#'
+          path: bundle/Templating/Twig/DebugTemplate.php

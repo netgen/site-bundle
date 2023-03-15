@@ -7,6 +7,9 @@ namespace Netgen\Bundle\SiteBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 use Netgen\Bundle\SiteBundle\Entity\NgUserSetting;
 
+/**
+ * @extends \Doctrine\ORM\EntityRepository<\Netgen\Bundle\SiteBundle\Entity\NgUserSetting>
+ */
 final class NgUserSettingRepository extends EntityRepository
 {
     /**

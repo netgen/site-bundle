@@ -44,6 +44,10 @@ final class MailHelper
      * Sender can be:
      * a string: info@netgen.io
      * an array: array( 'info@netgen.io' => 'Netgen Site' )
+     *
+     * @param string|string[] $receivers
+     * @param array<string, mixed> $parameters
+     *  @param string|string[]|null $sender
      */
     public function sendMail(string|array $receivers, string $subject, string $template, array $parameters = [], string|array|null $sender = null): void
     {
@@ -70,6 +74,8 @@ final class MailHelper
      * If sender is not provided (if it is null), it attempts to get the sender from the parameters:
      * ngsite.default.mail.sender_email
      * ngsite.default.mail.sender_name (optional).
+     *
+     * @param string|string[]|null $sender
      *
      * @throws \InvalidArgumentException If sender was not provided
      */
@@ -104,6 +110,8 @@ final class MailHelper
     }
 
     /**
+     * @param string|string[] $addresses
+     *
      * @return iterable<\Symfony\Component\Mime\Address>
      */
     private function createReceiverAddresses(string|array $addresses): iterable

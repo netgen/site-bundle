@@ -57,6 +57,8 @@ class SiteView implements ViewInterface
 
     /**
      * Initializes the proximity.
+     *
+     * @param array<string, mixed> $options
      */
     private function initializeProximity(array $options): void
     {
@@ -106,6 +108,8 @@ class SiteView implements ViewInterface
 
     /**
      * Returns the list of all pages that need to be displayed.
+     *
+     * @return array<string, string|false>
      */
     private function getPages(): array
     {

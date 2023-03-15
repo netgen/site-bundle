@@ -123,6 +123,10 @@ final class GenerateImageVariationsCommand extends Command
         $this->cache->invalidateTags(['image-variation-content-' . $content->id]);
     }
 
+    /**
+     * @param string[] $variations
+     * @param string[] $fields
+     */
     private function generateVariations(Content $content, array $variations, array $fields): void
     {
         foreach ($content->getFields() as $field) {
@@ -153,7 +157,7 @@ final class GenerateImageVariationsCommand extends Command
         $query = new Query();
 
         $contentTypes = $this->parseCommaDelimited($input->getOption('content-types'));
-        $subtrees = $this->parseCommaDelimited($input->getOption('subtrees'));
+        $subtrees = array_map('intval', $this->parseCommaDelimited($input->getOption('subtrees')));
 
         $criteria = [];
 
@@ -172,6 +176,9 @@ final class GenerateImageVariationsCommand extends Command
         return $query;
     }
 
+    /**
+     * @param int[] $subtreeIds
+     */
     private function getSubtreePathStrings(array $subtreeIds): Generator
     {
         foreach ($subtreeIds as $subtreeId) {
@@ -181,6 +188,9 @@ final class GenerateImageVariationsCommand extends Command
         }
     }
 
+    /**
+     * @return string[]
+     */
     private function parseCommaDelimited(?string $value): array
     {
         $value = trim($value ?? '');

@@ -76,6 +76,9 @@ final class ProxyFormHandler extends Controller
         return $view;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function collectInformation(Location $location, Request $request): array
     {
         $form = $this->handler->getForm(

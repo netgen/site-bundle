@@ -27,6 +27,10 @@ final class PathHelper
 
     /**
      * Returns the path array for provided location ID.
+     *
+     * @param array<string, mixed> $options
+     *
+     * @return array<int, array<string, mixed>>
      */
     public function getPath(int $locationId, array $options = []): array
     {

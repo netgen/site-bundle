@@ -34,6 +34,10 @@ final class SiteRuntime
 
     /**
      * Returns the path for specified location ID.
+     *
+     * @param array<string, mixed> $options
+     *
+     * @return array<int, array<string, mixed>>
      */
     public function getLocationPath(int $locationId, array $options = []): array
     {
@@ -94,6 +98,8 @@ final class SiteRuntime
 
     /**
      * Returns grouped and sorted fields for selected content and field definition identifier prefix.
+     *
+     * @return array<string, array<string, \Netgen\IbexaSiteApi\API\Values\Field>>
      */
     public function groupFields(Content $content, string $prefix): array
     {

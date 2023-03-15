@@ -9,6 +9,9 @@ use Twig\TwigFunction;
 
 final class TopicUrlExtension extends AbstractExtension
 {
+    /**
+     * @return \Twig\TwigFunction[]
+     */
     public function getFunctions(): array
     {
         return [

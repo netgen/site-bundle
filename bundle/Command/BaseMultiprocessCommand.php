@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Command;
 
 use Generator;
-use Netgen\Bundle\SiteBundle\Command\MultiprocessCommand\ItemList;
+use Netgen\Bundle\SiteBundle\Command\MultiprocessCommand\Items;
 use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidOptionException;
@@ -29,6 +30,7 @@ use function in_array;
 use function is_file;
 use function is_numeric;
 use function min;
+use function number_format;
 use function pclose;
 use function popen;
 use function preg_match;
@@ -36,36 +38,30 @@ use function preg_match_all;
 use function spl_object_id;
 use function sprintf;
 use function stream_get_contents;
+use function time;
 use function usleep;
 
 use const DIRECTORY_SEPARATOR;
 
 abstract class BaseMultiprocessCommand extends Command
 {
-    protected ?string $phpPath;
-    protected string $projectDir;
-    protected LoggerInterface $logger;
     protected InputInterface $input;
     protected SymfonyStyle $symfonyStyle;
     protected ProgressBar $progressBar;
 
     public function __construct(
-        string $projectDir,
-        LoggerInterface $logger,
-        ?string $phpPath = null
+        protected readonly string $projectDir,
+        protected readonly LoggerInterface $logger = new NullLogger(),
+        protected ?string $phpPath = null,
     ) {
-        $this->projectDir = $projectDir;
-        $this->logger = $logger;
-        $this->phpPath = $phpPath;
-
         parent::__construct();
     }
 
-    abstract protected function getCount(): int;
+    abstract protected function getTotalCount(): int;
 
     abstract protected function getItemsGenerator(int $limit): Generator;
 
-    abstract protected function process($item): void;
+    abstract protected function process(Items $items): void;
 
     protected function configure(): void
     {
@@ -74,7 +70,7 @@ abstract class BaseMultiprocessCommand extends Command
             null,
             InputOption::VALUE_OPTIONAL,
             'Number of items to process in a single iteration',
-            50,
+            512,
         );
 
         $this->addOption(
@@ -90,6 +86,14 @@ abstract class BaseMultiprocessCommand extends Command
             null,
             InputOption::VALUE_OPTIONAL,
             'Comma-separated list of item identifiers',
+        );
+
+        $this->addOption(
+            'master',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'Do not use directly, this is an internal option used by sub-process dispatcher',
+            'yes',
         );
     }
 
@@ -131,7 +135,7 @@ abstract class BaseMultiprocessCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $count = $this->getCount();
+        $count = $this->getExecutionCount();
 
         if ($count < 1) {
             $this->symfonyStyle->error('Nothing to process, aborting.');
@@ -143,11 +147,11 @@ abstract class BaseMultiprocessCommand extends Command
         $iterations = $this->getNumberOfIterations($count, $limit);
         $processCount = $this->getMaxNumberOfProcesses();
         $processCount = min($iterations, $processCount);
-        $processMessage = $processCount > 1
-            ? sprintf('using up to %s parallel child processes', $processCount)
-            : 'using a single (current) process';
 
         $this->progressBar = $this->symfonyStyle->createProgressBar();
+        $this->progressBar->setProgressCharacter('>');
+        $this->progressBar->setEmptyBarCharacter(' ');
+        $this->progressBar->setBarCharacter('=');
         $this->progressBar->setFormat('very_verbose');
 
         if ($processCount > 1) {
@@ -158,36 +162,57 @@ abstract class BaseMultiprocessCommand extends Command
             $this->progressBar->setMessage(' (...)', 'process_count');
             $this->symfonyStyle->writeln(
                 sprintf(
-                    'Processing for %s items across %s iteration(s), %s:',
-                    $count,
+                    'Processing %s item(s) in chunks of %s across %s iteration(s), using up to %s parallel child processes...',
+                    number_format($count),
+                    $limit,
                     $iterations,
-                    $processMessage,
+                    $processCount,
                 ),
             );
-            $this->progressBar->start($iterations);
+            $this->symfonyStyle->newLine();
+            $this->progressBar->start($count);
 
             $this->dispatch($processCount, $limit);
         } else {
-            $this->symfonyStyle->writeln(sprintf('Processing %s items, %s:', $count, $processMessage));
+            $this->symfonyStyle->writeln(
+                sprintf(
+                    'Processing %s item(s) in chunks of %s across %s iteration(s), using a single (current) process...',
+                    number_format($count),
+                    $limit,
+                    $iterations,
+                ),
+            );
+            $this->symfonyStyle->newLine();
             $this->progressBar->start($count);
             $generator = $this->internalGetItemGenerator($limit);
 
-            /** @var \Netgen\Bundle\SiteBundle\Command\MultiprocessCommand\ItemList $itemList */
-            foreach ($generator as $itemList) {
-                foreach ($itemList->getItems() as $item) {
-                    $this->process($item);
-                    $this->progressBar->advance();
-                }
+            /** @var \Netgen\Bundle\SiteBundle\Command\MultiprocessCommand\Items $items */
+            foreach ($generator as $items) {
+                $this->process($items);
+                $this->progressBar->advance($items->getCount());
             }
         }
 
         $this->progressBar->setMessage('', 'process_count');
         $this->progressBar->finish();
         $this->symfonyStyle->newLine(2);
-        $this->symfonyStyle->success('Finished processing');
+        $this->symfonyStyle->success('Done');
         $this->progressBar->clear();
 
         return 0;
+    }
+
+    protected function getExecutionCount(): int
+    {
+        $items = $this->input->getOption('items');
+
+        if ($items !== null) {
+            $items = explode(',', $items);
+
+            return count($items);
+        }
+
+        return $this->getTotalCount();
     }
 
     protected function dispatch(int $processCount, int $limit): void
@@ -197,7 +222,9 @@ abstract class BaseMultiprocessCommand extends Command
         /** @var \Symfony\Component\Process\Process[]|null[] $processes */
         $processes = array_fill(0, $processCount, null);
         $processDepthMap = [];
-        $itemList = null;
+        $items = null;
+        $itemCount = 0;
+        $timestamp = time();
 
         do {
             $activeProcessCount = 0;
@@ -208,13 +235,21 @@ abstract class BaseMultiprocessCommand extends Command
             }
 
             $this->progressBar->setMessage(
-                ' (processes: ' . $activeProcessCount . ')',
+                sprintf(' (processes: %d)', $activeProcessCount),
                 'process_count',
             );
 
-            if ($itemList === null && $generator->valid()) {
-                /** @var ?\Netgen\Bundle\SiteBundle\Command\MultiprocessCommand\ItemList $itemList */
-                $itemList = $generator->current();
+            $currentTimestamp = time();
+
+            if ($currentTimestamp > $timestamp) {
+                $timestamp = $currentTimestamp;
+                $this->progressBar->display();
+            }
+
+            if ($items === null && $generator->valid()) {
+                /** @var ?\Netgen\Bundle\SiteBundle\Command\MultiprocessCommand\Items $items */
+                $items = $generator->current();
+                $itemCount = $items->getCount();
                 $generator->next();
             }
 
@@ -224,14 +259,14 @@ abstract class BaseMultiprocessCommand extends Command
                 }
 
                 if ($process !== null) {
-                    $this->progressBar->advance();
+                    $this->progressBar->advance($itemCount);
 
                     if (!$process->isSuccessful()) {
                         $this->logger->error(
                             sprintf(
                                 'Child process returned: %s - %s',
                                 $process->getExitCodeText(),
-                                $process->getOutput(),
+                                $process->getErrorOutput(),
                             ),
                         );
                     }
@@ -240,25 +275,25 @@ abstract class BaseMultiprocessCommand extends Command
                     $processes[$key] = null;
                 }
 
-                if ($itemList === null && !$generator->valid()) {
+                if ($items === null && !$generator->valid()) {
                     unset($processes[$key]);
 
                     continue;
                 }
 
-                if ($itemList === null) {
+                if ($items === null) {
                     break;
                 }
 
-                if ($this->shouldWait($processDepthMap, $processes, $itemList)) {
+                if ($this->shouldWait($processDepthMap, $processes, $items)) {
                     break;
                 }
 
-                $processes[$key] = $this->getProcess($itemList);
+                $processes[$key] = $this->getSubProcess($items);
                 $processes[$key]->start();
-                $processDepthMap[spl_object_id($processes[$key])] = $itemList->getDepth();
+                $processDepthMap[spl_object_id($processes[$key])] = $items->getDepth();
 
-                $itemList = null;
+                $items = null;
 
                 if ($generator->valid()) {
                     break;
@@ -274,7 +309,7 @@ abstract class BaseMultiprocessCommand extends Command
         if ($items = $this->input->getOption('items')) {
             $items = explode(',', $items);
 
-            yield new ItemList($items);
+            yield new Items($items);
 
             return;
         }
@@ -282,7 +317,7 @@ abstract class BaseMultiprocessCommand extends Command
         yield from $this->getItemsGenerator($limit);
     }
 
-    protected function shouldWait(array $processDepthMap, array $processes, ItemList $itemList): bool
+    protected function shouldWait(array $processDepthMap, array $processes, Items $items): bool
     {
         foreach ($processes as $process) {
             if ($process === null || !$process->isRunning()) {
@@ -295,7 +330,7 @@ abstract class BaseMultiprocessCommand extends Command
                 continue;
             }
 
-            if ($processDepth > $itemList->getDepth()) {
+            if ($processDepth > $items->getDepth()) {
                 return true;
             }
         }
@@ -303,18 +338,19 @@ abstract class BaseMultiprocessCommand extends Command
         return false;
     }
 
-    protected function getProcess(ItemList $itemList): Process
+    protected function getSubProcess(Items $items): Process
     {
         $arguments = [
             $this->getPhpPath(),
             sprintf('%s/bin/console', $this->projectDir),
             $this->getName(),
             '--processes=1',
-            '--items=' . implode(',', $itemList->getItems()),
+            '--master=no',
+            '--items=' . implode(',', $items->getItems()),
         ];
 
         foreach ($this->input->getOptions() as $key => $value) {
-            if (in_array($key, ['processes', 'items'], true)) {
+            if (in_array($key, ['processes', 'master', 'items'], true)) {
                 continue;
             }
 
@@ -337,9 +373,6 @@ abstract class BaseMultiprocessCommand extends Command
         return $process;
     }
 
-    /**
-     * @return string
-     */
     protected function getPhpPath(): string
     {
         if ($this->phpPath) {
@@ -356,9 +389,6 @@ abstract class BaseMultiprocessCommand extends Command
         return $this->phpPath;
     }
 
-    /**
-     * @return int
-     */
     protected function getNumberOfCPUCores(): int
     {
         $cores = 1;

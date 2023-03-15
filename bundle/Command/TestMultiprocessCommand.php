@@ -99,7 +99,7 @@ class TestMultiprocessCommand extends BaseMultiprocessCommand
         }
     }
 
-    protected function getCount(): int
+    protected function getTotalCount(): int
     {
         return count($this->data, COUNT_RECURSIVE);
     }
@@ -118,11 +118,19 @@ class TestMultiprocessCommand extends BaseMultiprocessCommand
     }
 
     /**
-     * @param mixed $item
-     *
      * @throws \Exception
      */
-    protected function process($item): void
+    protected function process(Items $items): void
+    {
+        foreach ($items->getItems() as $item) {
+            $this->processItem($item);
+        }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function processItem(mixed $item): void
     {
         sleep(random_int(1, 3));
         file_put_contents('/Users/petar/out.txt', getmypid() . ': ' . $item . "\n", FILE_APPEND);

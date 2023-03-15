@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Command\MultiprocessCommand;
 
-class ItemList
+use function count;
+
+class Items
 {
     private array $items;
     private int $depth;
@@ -23,5 +25,10 @@ class ItemList
     public function getDepth(): int
     {
         return $this->depth;
+    }
+
+    public function getCount(): int
+    {
+        return count($this->items);
     }
 }

@@ -46,7 +46,9 @@ use const DIRECTORY_SEPARATOR;
 abstract class BaseMultiprocessCommand extends Command
 {
     protected InputInterface $input;
+
     protected SymfonyStyle $symfonyStyle;
+
     protected ProgressBar $progressBar;
 
     public function __construct(
@@ -395,8 +397,8 @@ abstract class BaseMultiprocessCommand extends Command
 
         if (is_file('/proc/cpuinfo')) {
             // Linux (and potentially Windows with linux sub systems)
-            $cpuinfo = file_get_contents('/proc/cpuinfo');
-            preg_match_all('/^processor/m', $cpuinfo, $matches);
+            $cpuInfo = file_get_contents('/proc/cpuinfo');
+            preg_match_all('/^processor/m', $cpuInfo, $matches);
             $cores = count($matches[0]);
         } elseif (DIRECTORY_SEPARATOR === '\\') {
             // Windows

@@ -95,12 +95,12 @@ final class UpdatePublishDateCommand extends Command
         if ($totalCount === 0) {
             $output->writeln('No content found for <comment>' . $contentTypeIdentifier . '</comment> content type.');
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $question = new ConfirmationQuestion('Found <comment>' . $totalCount . '</comment> content items. Proceed? <info>[y/N]</info> ', false);
         if (!$questionHelper->ask($input, $output, $question)) {
-            return 1;
+            return Command::FAILURE;
         }
 
         $output->write(PHP_EOL);
@@ -158,6 +158,6 @@ final class UpdatePublishDateCommand extends Command
 
         $output->writeln(PHP_EOL . PHP_EOL . 'Updated <comment>' . $updatedCount . '</comment> content items.');
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

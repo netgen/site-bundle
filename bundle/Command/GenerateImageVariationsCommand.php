@@ -107,7 +107,7 @@ final class GenerateImageVariationsCommand extends Command
 
         $this->style->success('Generating variations completed successfully');
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     private function clearVariationCache(Content $content): void

@@ -142,7 +142,7 @@ abstract class BaseMultiprocessCommand extends Command
         if ($count < 1) {
             $this->symfonyStyle->error('Nothing to process, aborting.');
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $limit = $this->getLimit();
@@ -201,7 +201,7 @@ abstract class BaseMultiprocessCommand extends Command
         $this->symfonyStyle->success('Done');
         $this->progressBar->clear();
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     protected function getExecutionCount(): int

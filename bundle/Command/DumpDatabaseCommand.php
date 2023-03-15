@@ -87,6 +87,6 @@ final class DumpDatabaseCommand extends Command
 
         $output->writeln('<info>Database dump complete.</info>');
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

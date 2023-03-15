@@ -71,7 +71,7 @@ final class SymlinkProjectCommand extends Command
             $this->symlinkProjectFiles($projectFilesPath, $input, $output);
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     /**

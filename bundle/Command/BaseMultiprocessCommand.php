@@ -418,7 +418,7 @@ abstract class BaseMultiprocessCommand extends Command
         } elseif (($process = @popen('sysctl -a', 'rb')) !== false) {
             // *nix (Linux, BSD and Mac)
             $output = (string) stream_get_contents($process);
-            if (preg_match('/hw.ncpu: (\d+)/', $output, $matches) !== false) {
+            if (preg_match('/hw.ncpu: (\d+)/', $output, $matches) === 1) {
                 $cores = (int) $matches[1];
             }
             pclose($process);

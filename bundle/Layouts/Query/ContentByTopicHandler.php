@@ -49,10 +49,10 @@ final class ContentByTopicHandler implements QueryTypeHandlerInterface
         ObjectStateHandler $objectStateHandler,
         ContentProviderInterface $contentProvider,
     ) {
+        $this->setLocationService($locationService);
         $this->setSectionHandler($sectionHandler);
         $this->setObjectStateHandler($objectStateHandler);
         $this->setContentProvider($contentProvider);
-        $this->setLocationService($locationService);
     }
 
     public function buildParameters(ParameterBuilderInterface $builder): void

@@ -9,19 +9,10 @@ use function count;
 class ItemList
 {
     /**
-     * @var mixed[]
-     */
-    private array $items;
-
-    private int $depth;
-
-    /**
      * @param mixed[] $items
      */
-    public function __construct(array $items, int $depth = 1)
+    public function __construct(private array $items, private int $depth = 1)
     {
-        $this->items = $items;
-        $this->depth = $depth;
     }
 
     /**

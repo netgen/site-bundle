@@ -18,7 +18,9 @@ parameters:
 
         # Wrong typehints in vendor packages
 
-        - '/Parameter #2 \$value of method Knp\\Menu\\ItemInterface::setAttribute\(\) expects bool\|string\|null, int\|null given/'
+        -
+          message: '/Parameter #2 \$value of method Knp\\Menu\\ItemInterface::setAttribute\(\) expects bool\|string\|null, int\|null given/'
+          path: bundle/Menu/RelationListMenuBuilder.php
 
         -
           message: '#has parameter \$parameters with no value type specified in iterable type array#'

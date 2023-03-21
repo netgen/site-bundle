@@ -26,6 +26,11 @@ parameters:
     ngsite.default.path_helper.excluded_content_types: ['ng_container', 'folder']
     ngsite.default.container_content_types: ['ng_container', 'folder']
 
+    ngsite.default.set_creation_date.enabled: false
+    ngsite.default.set_creation_date.fields:
+        ng_news: publish_date
+        ng_blog_post: publish_date
+
     ngsite.default.mail.sender_email: 'info@example.com'
     ngsite.default.mail.sender_name: 'Netgen Site'
     ngsite.default.mail.admin_email: ~

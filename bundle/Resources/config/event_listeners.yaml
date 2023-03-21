@@ -69,3 +69,11 @@ services:
         class: Netgen\Bundle\SiteBundle\EventListener\HoneypotListener
         tags:
             - { name: kernel.event_subscriber }
+
+    ngsite.listener.content.creation_date:
+        class: Netgen\Bundle\SiteBundle\EventListener\Content\CreationDateEventListener
+        arguments:
+            - "@ibexa.config.resolver"
+            - "@ibexa.api.service.content"
+        tags:
+            - { name: kernel.event_subscriber }

@@ -20,7 +20,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * will not have any feedback that anything was out of the ordinary, which is
  * the point of the honeypot.
  */
-final class HoneypotListener implements EventSubscriberInterface
+final class HoneypotEventListener implements EventSubscriberInterface
 {
     public static function getSubscribedEvents(): array
     {

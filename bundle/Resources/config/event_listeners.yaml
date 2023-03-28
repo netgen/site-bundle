@@ -66,7 +66,7 @@ services:
             - { name: kernel.event_subscriber }
 
     ngsite.listener.honeypot:
-        class: Netgen\Bundle\SiteBundle\EventListener\HoneypotListener
+        class: Netgen\Bundle\SiteBundle\EventListener\HoneypotEventListener
         tags:
             - { name: kernel.event_subscriber }
 

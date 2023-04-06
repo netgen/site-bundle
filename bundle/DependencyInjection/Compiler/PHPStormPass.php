@@ -20,7 +20,7 @@ final class PHPStormPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        if ($container->getParameter('kernel.debug') === false) {
+        if ($container->getParameter('ngsite.phpstorm_twig_integration.enabled') === false) {
             return;
         }
 

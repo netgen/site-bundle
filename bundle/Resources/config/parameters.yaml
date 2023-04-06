@@ -59,3 +59,5 @@ parameters:
     ngsite.default.template.pagerfanta.ngsite: '@@NetgenSite/pagerfanta/ngsite.html.twig'
     ngsite.default.template.search: '@@NetgenSite/search/search.html.twig'
     ngsite.default.template.menu: '@@KnpMenu/menu.html.twig'
+
+    ngsite.phpstorm_twig_integration.enabled: '%kernel.debug%'

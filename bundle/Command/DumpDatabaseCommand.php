@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Command;
 
+use Doctrine\DBAL\Connection;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
@@ -22,7 +22,7 @@ use const DIRECTORY_SEPARATOR;
 
 final class DumpDatabaseCommand extends Command
 {
-    public function __construct(private ContainerInterface $container)
+    public function __construct(private Connection $connection)
     {
         // Parent constructor call is mandatory for commands registered as services
         parent::__construct();
@@ -40,11 +40,6 @@ final class DumpDatabaseCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $databaseName = $this->container->getParameter('database_name');
-        $databaseHost = $this->container->getParameter('database_host');
-        $databaseUser = $this->container->getParameter('database_user');
-        $databasePassword = $this->container->getParameter('database_password');
-
         $filePath = getcwd() . DIRECTORY_SEPARATOR . trim($input->getArgument('file'), '/');
         $targetDirectory = dirname($filePath);
         $fileName = basename($filePath);
@@ -54,6 +49,8 @@ final class DumpDatabaseCommand extends Command
             $fs->mkdir($targetDirectory);
         }
 
+        $params = $this->connection->getParams();
+
         // https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_opt
         // https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_quick
         // https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_single-transaction
@@ -61,19 +58,19 @@ final class DumpDatabaseCommand extends Command
             [
                 'mysqldump',
                 '-u',
-                $databaseUser,
+                $params['user'],
                 '-h',
-                $databaseHost,
+                $params['host'],
                 '--opt',
                 '--quick',
                 '--single-transaction',
                 '-r',
                 $targetDirectory . '/' . $fileName,
-                $databaseName,
+                $params['dbname'],
             ],
             null,
             [
-                'MYSQL_PWD' => $databasePassword,
+                'MYSQL_PWD' => $params['password'],
             ],
             null,
             null,

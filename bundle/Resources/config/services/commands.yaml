@@ -33,7 +33,7 @@ services:
     ngsite.command.dump_database:
         class: Netgen\Bundle\SiteBundle\Command\DumpDatabaseCommand
         arguments:
-            - "@service_container"
+            - "@ibexa.persistence.connection"
         tags:
             - { name: console.command, command: 'ngsite:database:dump' }
 

@@ -21,7 +21,7 @@ services:
         arguments:
             - "@event_dispatcher"
             - "@ngsite.menu.factory.location.extension.fallback"
-            - []
+            - !tagged_iterator ngsite.menu.factory.location.extension
 
     ngsite.menu.factory.location.extension.fallback:
         class: Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory\FallbackExtension

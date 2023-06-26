@@ -21,7 +21,10 @@ final class ViewModal extends Controller
                 $this->getLoadService()->loadContent($formContentId),
                 'modal',
                 [
-                    'referer' => $this->refererResolver->getReferer($refererLocationId),
+                    'params' => [
+                        'referer' => $this->refererResolver->getReferer($refererLocationId),
+                        'refererLocationId' => $refererLocationId,
+                    ],
                 ],
             ),
         );

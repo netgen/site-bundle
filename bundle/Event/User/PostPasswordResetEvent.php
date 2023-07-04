@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Event\User;
 
 use Ibexa\Contracts\Core\Repository\Values\User\User;
-use Symfony\Contracts\EventDispatcher\Event;
 
-final class PostPasswordResetEvent extends Event
+final class PostPasswordResetEvent extends UserEvent
 {
     public function __construct(private User $user)
     {

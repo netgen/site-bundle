@@ -49,6 +49,8 @@ final class ActivationForm extends Controller
             $users[0] ?? null,
         );
 
+        $activationRequestEvent->setParameter('form', $form);
+
         $this->eventDispatcher->dispatch($activationRequestEvent, SiteEvents::USER_ACTIVATION_REQUEST);
 
         return $this->render(

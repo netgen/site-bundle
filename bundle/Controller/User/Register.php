@@ -107,6 +107,8 @@ final class Register extends Controller
         $userGroupId = $this->configResolver->getParameter('user.user_group_content_id', 'ngsite');
 
         $preUserRegisterEvent = new UserEvents\PreRegisterEvent($data->payload);
+        $preUserRegisterEvent->setParameter('form', $form);
+
         $this->eventDispatcher->dispatch($preUserRegisterEvent, SiteEvents::USER_PRE_REGISTER);
         $data->payload = $preUserRegisterEvent->getUserCreateStruct();
 
@@ -132,6 +134,8 @@ final class Register extends Controller
         );
 
         $userRegisterEvent = new UserEvents\PostRegisterEvent($newUser);
+        $userRegisterEvent->setParameter('form', $form);
+
         $this->eventDispatcher->dispatch($userRegisterEvent, SiteEvents::USER_POST_REGISTER);
 
         if ($newUser->enabled) {

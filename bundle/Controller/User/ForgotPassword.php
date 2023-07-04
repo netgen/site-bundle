@@ -49,6 +49,8 @@ final class ForgotPassword extends Controller
             $users[0] ?? null,
         );
 
+        $passwordResetRequestEvent->setParameter('form', $form);
+
         $this->eventDispatcher->dispatch($passwordResetRequestEvent, SiteEvents::USER_PASSWORD_RESET_REQUEST);
 
         return $this->render(

@@ -6,9 +6,8 @@ namespace Netgen\Bundle\SiteBundle\Event\User;
 
 use Ibexa\Contracts\Core\Repository\Values\User\User;
 use Ibexa\Contracts\Core\Repository\Values\User\UserUpdateStruct;
-use Symfony\Contracts\EventDispatcher\Event;
 
-final class PrePasswordResetEvent extends Event
+final class PrePasswordResetEvent extends UserEvent
 {
     public function __construct(private User $user, private UserUpdateStruct $userUpdateStruct)
     {

@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Event\User;
 
 use Ibexa\Contracts\Core\Repository\Values\User\User;
-use Symfony\Contracts\EventDispatcher\Event;
 
-final class PostActivateEvent extends Event
+final class PostActivateEvent extends UserEvent
 {
     public function __construct(private User $user)
     {

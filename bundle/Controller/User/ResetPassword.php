@@ -83,6 +83,8 @@ final class ResetPassword extends Controller
         $userUpdateStruct->password = $data['password'];
 
         $prePasswordResetEvent = new UserEvents\PrePasswordResetEvent($user, $userUpdateStruct);
+        $prePasswordResetEvent->setParameter('form', $form);
+
         $this->eventDispatcher->dispatch($prePasswordResetEvent, SiteEvents::USER_PRE_PASSWORD_RESET);
         $userUpdateStruct = $prePasswordResetEvent->getUserUpdateStruct();
 
@@ -91,6 +93,8 @@ final class ResetPassword extends Controller
         );
 
         $postPasswordResetEvent = new UserEvents\PostPasswordResetEvent($user);
+        $postPasswordResetEvent->setParameter('form', $form);
+
         $this->eventDispatcher->dispatch($postPasswordResetEvent, SiteEvents::USER_POST_PASSWORD_RESET);
 
         return $this->render(

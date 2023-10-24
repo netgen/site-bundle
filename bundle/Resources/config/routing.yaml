@@ -1,5 +1,5 @@
 ngsite_download:
-    path: /content/download/{contentId}/{fieldId}/{isInline}
+    path: /ngsite/content/download/{contentId}/{fieldId}/{isInline}
     controller: ngsite.controller.download
     methods: [GET]
     requirements:
@@ -77,10 +77,4 @@ ibexa.user.register_confirmation:
     path: /_error/404
 
 ibexa.user.user_register_confirmation:
-    path: /_error/404
-
-ibexa.content.download:
-    path: /_error/404
-
-ibexa.content.download.field_id:
     path: /_error/404

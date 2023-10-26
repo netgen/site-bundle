@@ -22,7 +22,7 @@ use function in_array;
 use function preg_match;
 use function sprintf;
 
-class Link implements Converter
+final class Link implements Converter
 {
     private const DOWNLOAD_LINK_INLINE = 1;
 

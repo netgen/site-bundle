@@ -48,7 +48,7 @@ final class MailHelper
      * @param array<string, mixed> $parameters
      *  @param string|string[]|null $sender
      */
-    public function sendMail(string|array $receivers, string $subject, string $template, array $parameters = [], string|array|null $sender = null): void
+    public function sendMail(array|string $receivers, string $subject, string $template, array $parameters = [], array|string|null $sender = null): void
     {
         try {
             $senderAddress = $this->createSenderAddress($sender);
@@ -78,7 +78,7 @@ final class MailHelper
      *
      * @throws \InvalidArgumentException If sender was not provided
      */
-    private function createSenderAddress(string|array|null $sender): Address
+    private function createSenderAddress(array|string|null $sender): Address
     {
         if (!in_array($sender, [null, '', []], true)) {
             if ((is_array($sender) && count($sender) === 1 && !isset($sender[0])) || is_string($sender)) {
@@ -113,7 +113,7 @@ final class MailHelper
      *
      * @return iterable<\Symfony\Component\Mime\Address>
      */
-    private function createReceiverAddresses(string|array $addresses): iterable
+    private function createReceiverAddresses(array|string $addresses): iterable
     {
         foreach ((array) $addresses as $key => $value) {
             if (is_string($key)) {

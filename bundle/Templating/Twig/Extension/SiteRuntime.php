@@ -65,7 +65,7 @@ final class SiteRuntime
     {
         try {
             $content = $this->loadService->loadContent($contentId);
-        } catch (UnauthorizedException|NotFoundException|TranslationNotMatchedException) {
+        } catch (NotFoundException|TranslationNotMatchedException|UnauthorizedException) {
             return null;
         }
 
@@ -79,7 +79,7 @@ final class SiteRuntime
     {
         try {
             $location = $this->loadService->loadLocation($locationId);
-        } catch (UnauthorizedException|NotFoundException|TranslationNotMatchedException) {
+        } catch (NotFoundException|TranslationNotMatchedException|UnauthorizedException) {
             return null;
         }
 

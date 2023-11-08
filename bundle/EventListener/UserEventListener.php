@@ -22,8 +22,7 @@ abstract class UserEventListener
         protected UserAccountKeyRepository $userAccountKeyRepository,
         protected LoadService $loadService,
         protected Repository $repository,
-    ) {
-    }
+    ) {}
 
     /**
      * Returns the translated user name.

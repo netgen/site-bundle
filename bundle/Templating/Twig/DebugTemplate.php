@@ -92,7 +92,5 @@ class DebugTemplate extends Template
         return [];
     }
 
-    protected function doDisplay(array $context, array $blocks = [])
-    {
-    }
+    protected function doDisplay(array $context, array $blocks = []) {}
 }

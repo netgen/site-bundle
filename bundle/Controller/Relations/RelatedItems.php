@@ -16,9 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class RelatedItems extends Controller
 {
-    public function __construct(private LocationRelationResolverInterface $locationResolver)
-    {
-    }
+    public function __construct(private LocationRelationResolverInterface $locationResolver) {}
 
     /**
      * Action for rendering related items of a provided content.

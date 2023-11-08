@@ -16,9 +16,7 @@ use function in_array;
 
 final class LocationPathVoter implements VoterInterface
 {
-    public function __construct(private RequestStack $requestStack)
-    {
-    }
+    public function __construct(private RequestStack $requestStack) {}
 
     /**
      * Checks whether an item is current.

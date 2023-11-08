@@ -6,9 +6,7 @@ namespace Netgen\Bundle\SiteBundle\Entity;
 
 class NgUserSetting
 {
-    public function __construct(private int $userId, private bool $isActivated)
-    {
-    }
+    public function __construct(private int $userId, private bool $isActivated) {}
 
     /**
      * Set user ID.

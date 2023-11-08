@@ -10,9 +10,7 @@ use Ibexa\Contracts\Core\Repository\PermissionService;
 
 final class UserContextProvider implements ContextProvider
 {
-    public function __construct(private PermissionService $permissionService)
-    {
-    }
+    public function __construct(private PermissionService $permissionService) {}
 
     /**
      * Adds the current user ID to the user context. Allows varying the caches

@@ -11,9 +11,7 @@ class ItemList
     /**
      * @param mixed[] $items
      */
-    public function __construct(private array $items, private int $depth = 1)
-    {
-    }
+    public function __construct(private array $items, private int $depth = 1) {}
 
     /**
      * @return mixed[]

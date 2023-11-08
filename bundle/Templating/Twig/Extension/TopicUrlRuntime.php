@@ -10,9 +10,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class TopicUrlRuntime
 {
-    public function __construct(private UrlGenerator $topicUrlGenerator)
-    {
-    }
+    public function __construct(private UrlGenerator $topicUrlGenerator) {}
 
     /**
      * Returns the path for the topic specified by provided tag.

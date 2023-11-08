@@ -16,8 +16,7 @@ final class Menu extends Controller
         private readonly MenuProviderInterface $menuProvider,
         private readonly RendererProviderInterface $menuRenderer,
         private readonly TagHandler $tagHandler,
-    ) {
-    }
+    ) {}
 
     /**
      * Renders the menu with provided name.

@@ -16,9 +16,7 @@ use function sprintf;
 
 final class LocationRelationResolver implements LocationRelationResolverInterface
 {
-    public function __construct(private LoadService $loadService, private LoggerInterface $logger = new NullLogger())
-    {
-    }
+    public function __construct(private LoadService $loadService, private LoggerInterface $logger = new NullLogger()) {}
 
     public function loadRelations(Location $location, ?string $fieldIdentifier = null, array $options = []): array
     {

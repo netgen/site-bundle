@@ -26,8 +26,7 @@ final class Download extends Controller
         private IOServiceInterface $ioImageService,
         private TranslatorInterface $translator,
         private EventDispatcherInterface $dispatcher,
-    ) {
-    }
+    ) {}
 
     /**
      * Downloads the binary file specified by content ID and field ID.

@@ -23,9 +23,7 @@ final class SiteImage implements HandlerInterface
      */
     private const FIELD_IDENTIFIER = 'site_opengraph_image';
 
-    public function __construct(private Provider $namedObjectProvider, private RequestStack $requestStack)
-    {
-    }
+    public function __construct(private Provider $namedObjectProvider, private RequestStack $requestStack) {}
 
     /**
      * @param mixed[] $params

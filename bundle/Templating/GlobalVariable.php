@@ -16,8 +16,7 @@ final class GlobalVariable
         private Provider $namedObjectProvider,
         private PermissionService $permissionService,
         private LoadService $loadService,
-    ) {
-    }
+    ) {}
 
     public function getSiteInfoLocation(): Location
     {

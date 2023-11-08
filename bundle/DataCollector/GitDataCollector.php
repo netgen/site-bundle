@@ -12,9 +12,7 @@ use Throwable;
 
 final class GitDataCollector extends DataCollector
 {
-    public function __construct(private string $projectDir)
-    {
-    }
+    public function __construct(private string $projectDir) {}
 
     public function collect(Request $request, Response $response, ?Throwable $exception = null): void
     {

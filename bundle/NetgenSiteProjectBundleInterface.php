@@ -6,6 +6,4 @@ namespace Netgen\Bundle\SiteBundle;
 
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
-interface NetgenSiteProjectBundleInterface extends BundleInterface
-{
-}
+interface NetgenSiteProjectBundleInterface extends BundleInterface {}

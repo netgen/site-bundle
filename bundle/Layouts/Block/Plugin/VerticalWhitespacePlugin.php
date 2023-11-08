@@ -17,9 +17,7 @@ final class VerticalWhitespacePlugin extends Plugin
      * @param array<string, string> $top
      * @param array<string, string> $bottom
      */
-    public function __construct(private array $top, private array $bottom)
-    {
-    }
+    public function __construct(private array $top, private array $bottom) {}
 
     public static function getExtendedHandlers(): iterable
     {

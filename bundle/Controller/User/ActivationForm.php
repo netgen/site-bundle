@@ -22,8 +22,7 @@ final class ActivationForm extends Controller
         private UserService $userService,
         private EventDispatcherInterface $eventDispatcher,
         private ConfigResolverInterface $configResolver,
-    ) {
-    }
+    ) {}
 
     /**
      * Displays and validates the form for sending an activation mail.

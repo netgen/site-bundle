@@ -42,8 +42,7 @@ final class NewsletterService
         private string $newsletterSenderEmail,
         private string $newsletterRecipientEmail,
         private LoggerInterface $logger = new NullLogger(),
-    ) {
-    }
+    ) {}
 
     /**
      * @param \Ibexa\Contracts\ContentForms\Data\Content\FieldData[] $fields

@@ -21,9 +21,7 @@ final class BackgroundColorPlugin extends Plugin
      *
      * @param array<string, string> $colors
      */
-    public function __construct(private array $colors)
-    {
-    }
+    public function __construct(private array $colors) {}
 
     public static function getExtendedHandlers(): iterable
     {

@@ -18,9 +18,7 @@ use function trim;
 
 final class SearchQueryType extends OptionsResolverBasedQueryType
 {
-    public function __construct(private Site $site, private ConfigResolverInterface $configResolver)
-    {
-    }
+    public function __construct(private Site $site, private ConfigResolverInterface $configResolver) {}
 
     public static function getName(): string
     {

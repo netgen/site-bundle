@@ -28,8 +28,7 @@ final class MailHelper
         private TranslatorInterface $translator,
         private ConfigResolverInterface $configResolver,
         private LoggerInterface $logger = new NullLogger(),
-    ) {
-    }
+    ) {}
 
     /**
      * Sends an mail.

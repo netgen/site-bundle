@@ -23,8 +23,7 @@ final class LinkDirectDownload implements Converter
         private LoadService $loadService,
         private UrlGeneratorInterface $urlGenerator,
         private LoggerInterface $logger = new NullLogger(),
-    ) {
-    }
+    ) {}
 
     /**
      * Converts internal links (ezcontent:// and ezlocation://) to URLs.

@@ -10,9 +10,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class CreateUserListener implements EventSubscriberInterface
 {
-    public function __construct(private NgUserSettingRepository $ngUserSettingRepository)
-    {
-    }
+    public function __construct(private NgUserSettingRepository $ngUserSettingRepository) {}
 
     public static function getSubscribedEvents(): array
     {

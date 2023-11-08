@@ -25,8 +25,7 @@ final class ChildrenBuilder
         private LoadService $loadService,
         private FilterService $filterService,
         private LoggerInterface $logger = new NullLogger(),
-    ) {
-    }
+    ) {}
 
     public function buildChildItems(ItemInterface $item, Content $content): void
     {

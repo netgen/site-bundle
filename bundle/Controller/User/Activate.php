@@ -27,8 +27,7 @@ final class Activate extends Controller
         private UserAccountKeyRepository $accountKeyRepository,
         private Repository $repository,
         private ConfigResolverInterface $configResolver,
-    ) {
-    }
+    ) {}
 
     /**
      * Activates the user by hash key.

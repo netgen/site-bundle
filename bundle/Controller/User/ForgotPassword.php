@@ -22,8 +22,7 @@ final class ForgotPassword extends Controller
         private UserService $userService,
         private EventDispatcherInterface $eventDispatcher,
         private ConfigResolverInterface $configResolver,
-    ) {
-    }
+    ) {}
 
     /**
      * Displays and validates the forgot password form.

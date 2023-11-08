@@ -17,9 +17,7 @@ use Symfony\Component\Form\FormInterface;
  */
 final class BinaryFileFormMapper implements FieldValueFormMapperInterface
 {
-    public function __construct(private FieldTypeService $fieldTypeService)
-    {
-    }
+    public function __construct(private FieldTypeService $fieldTypeService) {}
 
     public function mapFieldValueForm(FormInterface $fieldForm, FieldData $data): void
     {

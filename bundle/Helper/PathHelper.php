@@ -22,8 +22,7 @@ final class PathHelper
         private LoadService $loadService,
         private ConfigResolverInterface $configResolver,
         private UrlGeneratorInterface $urlGenerator,
-    ) {
-    }
+    ) {}
 
     /**
      * Returns the path array for provided location ID.

@@ -12,9 +12,7 @@ use function trim;
 
 final class SiteName implements HandlerInterface
 {
-    public function __construct(private Provider $namedObjectProvider)
-    {
-    }
+    public function __construct(private Provider $namedObjectProvider) {}
 
     public function getMetaTags(string $tagName, array $params = []): array
     {

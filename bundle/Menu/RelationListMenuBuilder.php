@@ -22,8 +22,7 @@ final class RelationListMenuBuilder
         private LoadService $loadService,
         private Provider $namedObjectProvider,
         private LoggerInterface $logger = new NullLogger(),
-    ) {
-    }
+    ) {}
 
     /**
      * Creates the KNP menu from provided content and field identifier.

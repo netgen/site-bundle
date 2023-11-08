@@ -17,9 +17,7 @@ final class FeaturesComponentGridPlugin extends Plugin
      * number of columns, while values should be human readable names of the columns.
      * @param array<int, string> $columns
      */
-    public function __construct(private array $columns)
-    {
-    }
+    public function __construct(private array $columns) {}
 
     public static function getExtendedIdentifiers(): iterable
     {

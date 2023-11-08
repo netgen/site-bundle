@@ -8,9 +8,7 @@ use Ibexa\Contracts\Core\Repository\Values\User\User;
 
 final class PostActivateEvent extends UserEvent
 {
-    public function __construct(private User $user)
-    {
-    }
+    public function __construct(private User $user) {}
 
     public function getUser(): User
     {

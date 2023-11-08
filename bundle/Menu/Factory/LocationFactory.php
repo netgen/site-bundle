@@ -24,8 +24,7 @@ final class LocationFactory implements FactoryInterface
         private EventDispatcherInterface $eventDispatcher,
         private ExtensionInterface $fallbackExtension,
         private iterable $extensions = [],
-    ) {
-    }
+    ) {}
 
     public function createItem(string $name, array $options = []): ItemInterface
     {

@@ -30,8 +30,7 @@ final class Register extends Controller
         private EventDispatcherInterface $eventDispatcher,
         private Repository $repository,
         private ConfigResolverInterface $configResolver,
-    ) {
-    }
+    ) {}
 
     /**
      * Registers user on the site.

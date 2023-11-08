@@ -11,9 +11,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManager;
 
 final class SetCsrfEnabledEventListener implements EventSubscriberInterface
 {
-    public function __construct(private ?CsrfTokenManager $csrfTokenManager = null)
-    {
-    }
+    public function __construct(private ?CsrfTokenManager $csrfTokenManager = null) {}
 
     /**
      * Returns an array of event names this subscriber wants to listen to.

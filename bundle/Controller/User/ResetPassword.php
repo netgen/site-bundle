@@ -32,8 +32,7 @@ final class ResetPassword extends Controller
         private UserAccountKeyRepository $accountKeyRepository,
         private Repository $repository,
         private ConfigResolverInterface $configResolver,
-    ) {
-    }
+    ) {}
 
     /**
      * Displays and validates the reset password form.

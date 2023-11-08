@@ -27,8 +27,7 @@ final class UrlGenerator
         private LoadService $loadService,
         private ConfigResolverInterface $configResolver,
         private UrlGeneratorInterface $urlGenerator,
-    ) {
-    }
+    ) {}
 
     /**
      * Returns the path for the topic specified by provided tag.

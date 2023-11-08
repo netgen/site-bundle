@@ -26,8 +26,7 @@ final class DebugProcessor implements DebugLoggerInterface
     public function __construct(
         private DebugLoggerInterface $innerProcessor,
         private array $excludedChannels = ['event', 'doctrine'],
-    ) {
-    }
+    ) {}
 
     /**
      * @param array<string, mixed> $record

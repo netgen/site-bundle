@@ -36,8 +36,7 @@ final class ProxyFormHandler extends Controller
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly RefererResolver $refererResolver,
         private readonly LoggerInterface $logger = new NullLogger(),
-    ) {
-    }
+    ) {}
 
     public function __invoke(ContentView $view): ContentView
     {

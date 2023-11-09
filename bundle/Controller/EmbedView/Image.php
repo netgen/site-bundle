@@ -67,7 +67,7 @@ final class Image extends Controller
             }
 
             $directDownloadLink = null;
-            $isDirectDownload = in_array($parameters['objectParameters']['link_direct_download'], [true, '1'], true);
+            $isDirectDownload = in_array($parameters['objectParameters']['link_direct_download'] ?? false, [true, '1'], true);
 
             if ($content !== null && $isDirectDownload) {
                 $fieldName = null;

@@ -2,3 +2,4 @@ services:
     Netgen\Bundle\SiteBundle\Helper\MailHelper: "@ngsite.helper.mail_helper"
     Netgen\Bundle\SiteBundle\Helper\PathHelper: "@ngsite.helper.path_helper"
     Netgen\Bundle\SiteBundle\Helper\RedirectHelper: "@ngsite.helper.redirect_helper"
+    Netgen\Bundle\SiteBundle\Core\Search\SuggestionResolver: "@ngsite.search.resolver.suggestion"

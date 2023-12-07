@@ -155,3 +155,19 @@ services:
             - "@?logger"
         tags:
             - { name: 'container.service_subscriber' }
+
+    ngsite.controller.view_content_by_remote_id:
+        class: Netgen\Bundle\SiteBundle\Controller\ViewContentByRemoteId
+        parent: ngsite.controller.base
+        arguments:
+            - "@netgen.ibexa_site_api.load_service"
+        tags:
+            - { name: 'container.service_subscriber' }
+
+    ngsite.controller.view_location_by_remote_id:
+        class: Netgen\Bundle\SiteBundle\Controller\ViewLocationByRemoteId
+        parent: ngsite.controller.base
+        arguments:
+            - "@netgen.ibexa_site_api.load_service"
+        tags:
+            - { name: 'container.service_subscriber' }

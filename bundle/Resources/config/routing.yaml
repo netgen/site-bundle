@@ -48,6 +48,18 @@ ngsite_info_collection_ajax_submit:
     controller: ngsite.controller.info_collection.ajax_submit
     methods: [POST]
 
+ngsite_view_content_by_remote_id:
+    path: /view/remote/content/{remoteId}
+    controller: ngsite.controller.view_content_by_remote_id
+    defaults:
+        allowed_siteaccess: [admin_group]
+
+ngsite_view_location_by_remote_id:
+    path: /view/remote/location/{remoteId}
+    controller: ngsite.controller.view_location_by_remote_id
+    defaults:
+        allowed_siteaccess: [admin_group]
+
 # Additional Ibexa Admin UI routes
 
 ibexa.location.view:

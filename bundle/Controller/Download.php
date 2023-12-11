@@ -17,18 +17,20 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use function in_array;
 use function str_replace;
 
 final class Download extends Controller
 {
     private array $inlineMimeTypes;
+
     public function __construct(
         private Site $site,
         private IOServiceInterface $ioFileService,
         private IOServiceInterface $ioImageService,
         private TranslatorInterface $translator,
         private EventDispatcherInterface $dispatcher,
-        private ConfigResolverInterface $configResolver
+        private ConfigResolverInterface $configResolver,
     ) {
         $this->inlineMimeTypes = $this->configResolver->getParameter('download.show_inline', 'ngsite');
     }
@@ -60,8 +62,8 @@ final class Download extends Controller
 
         $mimeType = $content->getFieldById($fieldId)->value->mimeType;
 
-        if((int)$isInline < 0){
-            $isInline = in_array($mimeType, $this->inlineMimeTypes);
+        if ((int) $isInline < 0) {
+            $isInline = in_array($mimeType, $this->inlineMimeTypes, true);
         }
 
         $canAccess = false;

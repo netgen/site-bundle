@@ -47,7 +47,7 @@ final class Download extends Controller
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException If file or image does not exist
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException If content has all of its locations hidden
      */
-    public function __invoke(Request $request, int|string $contentId, int|string $fieldId, bool|string $isInline = '-1'): BinaryStreamResponse
+    public function __invoke(Request $request, int|string $contentId, int|string $fieldId, bool|string|null $isInline = null): BinaryStreamResponse
     {
         $contentId = (int) $contentId;
         $fieldId = (int) $fieldId;
@@ -62,7 +62,7 @@ final class Download extends Controller
 
         $mimeType = $content->getFieldById($fieldId)->value->mimeType;
 
-        if ((int) $isInline < 0) {
+        if ($isInline === null) {
             $isInline = in_array($mimeType, $this->inlineMimeTypes, true);
         }
 

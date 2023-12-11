@@ -5,9 +5,9 @@ ngsite_download:
     requirements:
         contentId: '\d+'
         fieldId: '\d+'
-        isInline: -1|0|1
+        isInline: null|0|1
     defaults:
-        isInline: -1
+        isInline: null
 
 ngsite_user_register:
     path: /user/register

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Controller;
 
 use Ibexa\Bundle\IO\BinaryStreamResponse;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\Core\FieldType\BinaryBase\Value as BinaryBaseValue;
 use Ibexa\Core\FieldType\Image\Value as ImageValue;
 use Ibexa\Core\IO\IOServiceInterface;
@@ -20,25 +21,31 @@ use function str_replace;
 
 final class Download extends Controller
 {
+    private array $inlineMimeTypes;
     public function __construct(
         private Site $site,
         private IOServiceInterface $ioFileService,
         private IOServiceInterface $ioImageService,
         private TranslatorInterface $translator,
         private EventDispatcherInterface $dispatcher,
-    ) {}
+        private ConfigResolverInterface $configResolver
+    ) {
+        $this->inlineMimeTypes = $this->configResolver->getParameter('download.show_inline', 'ngsite');
+    }
 
     /**
      * Downloads the binary file specified by content ID and field ID.
      *
      * Assumes that the file is locally stored
      *
+     * If isInline is less than 0, behaviour specified by configuration is observed.
+     *
      * Dispatch \Netgen\Bundle\SiteBundle\Event\SiteEvents::CONTENT_DOWNLOAD only once
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException If file or image does not exist
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException If content has all of its locations hidden
      */
-    public function __invoke(Request $request, int|string $contentId, int|string $fieldId, bool|string $isInline = false): BinaryStreamResponse
+    public function __invoke(Request $request, int|string $contentId, int|string $fieldId, bool|string $isInline = '-1'): BinaryStreamResponse
     {
         $contentId = (int) $contentId;
         $fieldId = (int) $fieldId;
@@ -49,6 +56,12 @@ final class Download extends Controller
             throw $this->createNotFoundException(
                 $this->translator->trans('download.file_not_found', [], 'ngsite'),
             );
+        }
+
+        $mimeType = $content->getFieldById($fieldId)->value->mimeType;
+
+        if((int)$isInline < 0){
+            $isInline = in_array($mimeType, $this->inlineMimeTypes);
         }
 
         $canAccess = false;
@@ -81,7 +94,7 @@ final class Download extends Controller
         $response = new BinaryStreamResponse($binaryFile, $ioService);
         $response->setContentDisposition(
             (bool) $isInline ? ResponseHeaderBag::DISPOSITION_INLINE :
-            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             str_replace(['/', '\\'], '', $binaryFieldValue->fileName ?? ''),
             'file',
         );

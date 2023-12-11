@@ -64,6 +64,7 @@ services:
             - "@ibexa.field_type.ezimage.io_service.published"
             - "@translator"
             - "@event_dispatcher"
+            - "@ibexa.config.resolver"
         tags:
             - { name: 'container.service_subscriber' }
 

@@ -60,4 +60,8 @@ parameters:
     ngsite.default.template.search: '@@NetgenSite/search/search.html.twig'
     ngsite.default.template.menu: '@@KnpMenu/menu.html.twig'
 
+    ngsite.default.download.show_inline:
+        - 'application/pdf'
+        # specify all mime types for which download links should do inline representation and not download the file automatically
+
     ngsite.phpstorm_twig_integration.enabled: '%kernel.debug%'

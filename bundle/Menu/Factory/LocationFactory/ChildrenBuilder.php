@@ -44,6 +44,12 @@ final class ChildrenBuilder
             return;
         }
 
+        if (!$parentContent->isVisible) {
+            $this->logger->error(sprintf('Menu item (#%s) has a related object (#%s) that is not visible as content.', $content->id, $parentContent->id));
+
+            return;
+        }
+
         if ($parentContent->mainLocation->invisible) {
             $this->logger->error(sprintf('Menu item (#%s) has a related object (#%s) that is not visible.', $content->id, $parentContent->id));
 
@@ -125,6 +131,14 @@ final class ChildrenBuilder
         }
 
         foreach ($childLocations as $index => $location) {
+            if (!$location instanceof Location) {
+                continue;
+            }
+
+            if ($location->invisible) {
+                continue;
+            }
+
             $item->addChild('', ['ibexa_location' => $location, 'index' => $index, 'menu_name' => $item->getExtra('menu_name')]);
         }
     }

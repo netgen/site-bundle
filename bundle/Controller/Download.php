@@ -40,7 +40,7 @@ final class Download extends Controller
      *
      * Assumes that the file is locally stored
      *
-     * If isInline is less than 0, behaviour specified by configuration is observed.
+     * If isInline is null, behaviour specified by configuration is obtained.
      *
      * Dispatch \Netgen\Bundle\SiteBundle\Event\SiteEvents::CONTENT_DOWNLOAD only once
      *

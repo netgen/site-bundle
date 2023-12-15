@@ -22,6 +22,9 @@ use function str_replace;
 
 final class Download extends Controller
 {
+    /**
+     * @var string[]
+     */
     private array $inlineMimeTypes;
 
     public function __construct(

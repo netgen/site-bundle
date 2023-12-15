@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Netgen\Bundle\SiteBundle\Controller;
 
 use Ibexa\Bundle\IO\BinaryStreamResponse;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\Core\FieldType\BinaryBase\Value as BinaryBaseValue;
 use Ibexa\Core\FieldType\Image\Value as ImageValue;
 use Ibexa\Core\IO\IOServiceInterface;
@@ -16,29 +17,40 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use function in_array;
 use function str_replace;
 
 final class Download extends Controller
 {
+    /**
+     * @var string[]
+     */
+    private array $inlineMimeTypes;
+
     public function __construct(
         private Site $site,
         private IOServiceInterface $ioFileService,
         private IOServiceInterface $ioImageService,
         private TranslatorInterface $translator,
         private EventDispatcherInterface $dispatcher,
-    ) {}
+        private ConfigResolverInterface $configResolver,
+    ) {
+        $this->inlineMimeTypes = $this->configResolver->getParameter('download.show_inline', 'ngsite');
+    }
 
     /**
      * Downloads the binary file specified by content ID and field ID.
      *
      * Assumes that the file is locally stored
      *
+     * If $isInline is null, behaviour specified by configuration is obtained.
+     *
      * Dispatch \Netgen\Bundle\SiteBundle\Event\SiteEvents::CONTENT_DOWNLOAD only once
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException If file or image does not exist
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException If content has all of its locations hidden
      */
-    public function __invoke(Request $request, int|string $contentId, int|string $fieldId, bool|string $isInline = false): BinaryStreamResponse
+    public function __invoke(Request $request, int|string $contentId, int|string $fieldId, bool|string|null $isInline = null): BinaryStreamResponse
     {
         $contentId = (int) $contentId;
         $fieldId = (int) $fieldId;
@@ -49,6 +61,12 @@ final class Download extends Controller
             throw $this->createNotFoundException(
                 $this->translator->trans('download.file_not_found', [], 'ngsite'),
             );
+        }
+
+        $mimeType = $content->getFieldById($fieldId)->value->mimeType;
+
+        if ($isInline === null) {
+            $isInline = in_array($mimeType, $this->inlineMimeTypes, true);
         }
 
         $canAccess = false;

@@ -13,6 +13,7 @@ use Netgen\Bundle\SiteBundle\API\Search\Criterion\FullText;
 use Netgen\IbexaSiteApi\API\Site;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use function array_key_exists;
 use function count;
 use function trim;
 
@@ -23,17 +24,46 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
      * allowed sort parameter value and value is name of class
      * that provides implementation of that key
      */
+    /** @var array<string, string> */
     private array $sortKeysAllowed;
+
     public function __construct(
         private readonly Site $site,
         private readonly ConfigResolverInterface $configResolver,
     ) {
         $this->sortKeysAllowed = $this->configResolver->getParameter('search.sort_allowed_keys', 'ngsite');
     }
+
     public static function getName(): string
     {
         return 'NetgenSite:Search';
     }
+
+    protected function doGetQuery(array $parameters): Query
+    {
+        $subtreeLocation = $this->site->getLoadService()->loadLocation($parameters['subtree']);
+        $sortingKeys = $parameters['sort'];
+        $order = $parameters['order'];
+        $descendingOrder = $order === 'desc';
+        $criteria = [
+            new Criterion\Subtree($subtreeLocation->pathString),
+            new Criterion\Visibility(Criterion\Visibility::VISIBLE),
+        ];
+        if (count($parameters['content_types']) > 0) {
+            $criteria[] = new Criterion\ContentTypeIdentifier($parameters['content_types']);
+        }
+        $query = new LocationQuery();
+        $query->query = new FullText(trim($parameters['search_text']));
+        $query->filter = new Criterion\LogicalAnd($criteria);
+        $sortClauses = [];
+        foreach ($sortingKeys as $sortingKey) {
+            $sortClauses[] = $this->createSortClause($sortingKey, $descendingOrder);
+        }
+        $query->sortClauses = $sortClauses;
+
+        return $query;
+    }
+
     protected function configureOptions(OptionsResolver $optionsResolver): void
     {
         $optionsResolver->setRequired(['search_text', 'content_types', 'subtree', 'sort', 'order']);
@@ -47,10 +77,8 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
         );
         $optionsResolver->setAllowedValues(
             'sort',
-            /** @var String[] $keys */
-            static function(array $keys): bool {
-                return $this->sortKeysAllowed($keys);
-            },
+            /** @var string[] $keys */
+            static fn (array $keys): bool => $this->sortKeysAllowed($keys),
         );
         $optionsResolver->setAllowedValues(
             'order',
@@ -60,51 +88,31 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
         $optionsResolver->setDefault('subtree', $this->site->getSettings()->rootLocationId);
         $optionsResolver->setDefault('sort', ['published_date']);
         $optionsResolver->setDefault('order', 'desc');
-
     }
-    public function doGetQuery(array $parameters): Query
+
+    private function sortKeyAllowed(string $key): bool
     {
-        $subtreeLocation = $this->site->getLoadService()->loadLocation($parameters['subtree']);
-        $sortingKeys =  $parameters['sort'];
-        $order =  $parameters['order'];
-        $descendingOrder = $order === 'desc';
-        $criteria = [
-            new Criterion\Subtree($subtreeLocation->pathString),
-            new Criterion\Visibility(Criterion\Visibility::VISIBLE),
-        ];
-        if (count($parameters['content_types']) > 0) {
-            $criteria[] = new Criterion\ContentTypeIdentifier($parameters['content_types']);
-        }
-        $query = new LocationQuery();
-        $query->query = new FullText(trim($parameters['search_text']));
-        $query->filter = new Criterion\LogicalAnd($criteria);
-        $sortClauses = [];
-        foreach ($sortingKeys as $sortingKey){
-            $sortClauses[] = $this->createSortClause($sortingKey, $descendingOrder);
-        }
-        $query->sortClauses = $sortClauses;
-
-        return $query;
-    }
-
-    private function sortKeyAllowed(string $key): bool {
         return array_key_exists(trim($key), $this->sortKeysAllowed);
     }
-    private function sortKeysAllowed(array $keys): bool {
-        foreach ($keys as $key){
-            if(!$this->sortKeyAllowed($key)){
+
+    private function sortKeysAllowed(array $keys): bool
+    {
+        foreach ($keys as $key) {
+            if (!$this->sortKeyAllowed($key)) {
                 return false;
             }
         }
+
         return true;
     }
 
-    public function createSortClause(string $name, bool $desc = true): mixed {
+    private function createSortClause(string $name, bool $desc = true): mixed
+    {
         $className = $this->sortKeysAllowed[$name];
-        if($desc){
+        if ($desc) {
             return new $className(Query::SORT_DESC);
-        } else {
-            return new $className(Query::SORT_ASC);
         }
+
+        return new $className(Query::SORT_ASC);
     }
 }

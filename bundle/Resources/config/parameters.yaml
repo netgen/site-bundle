@@ -54,6 +54,11 @@ parameters:
 
     ngsite.default.search.default_limit: 10
     ngsite.default.search.content_types: []
+    ngsite.default.search.sort_allowed_keys:
+        published_date: 'Ibexa\Contracts\Core\Repository\Values\Content\Query\SortClause\DatePublished'
+        content_name: 'Ibexa\Contracts\Core\Repository\Values\Content\Query\SortClause\ContentName'
+        score: 'Ibexa\Contracts\Core\Repository\Values\Content\Query\SortClause\Score'
+        modification_date: 'Ibexa\Contracts\Core\Repository\Values\Content\Query\SortClause\DateModified'
 
     ngsite.default.template.errors.default: '@@NetgenSite/errors/default.html.twig'
     ngsite.default.template.pagerfanta.ngsite: '@@NetgenSite/pagerfanta/ngsite.html.twig'

@@ -32,8 +32,7 @@ final class Link implements Converter
         private readonly RouterInterface $router,
         private readonly ConfigResolverInterface $configResolver,
         private readonly LoggerInterface $logger = new NullLogger(),
-    ) {
-    }
+    ) {}
 
     public function convert(DOMDocument $xmlDoc): DOMDocument
     {
@@ -112,7 +111,7 @@ final class Link implements Converter
     private function getDownloadLink(Content $content): ?string
     {
         $contentTypeIdentifier = $content->contentInfo->contentTypeIdentifier;
-        $downloadableContentTypes = $this->configResolver->getParameter('download.content_types', 'ngsite');
+        $downloadableContentTypes = $this->configResolver->getParameter('direct_download.content_types', 'ngsite');
 
         if (!in_array($contentTypeIdentifier, $downloadableContentTypes, true)
             || !$content->hasField('file')

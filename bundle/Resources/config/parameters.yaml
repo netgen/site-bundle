@@ -66,5 +66,5 @@ parameters:
 
     ngsite.phpstorm_twig_integration.enabled: '%kernel.debug%'
 
-    ngsite.default.download.content_types:
+    ngsite.default.direct_download.content_types:
         - file

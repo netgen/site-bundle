@@ -1,9 +1,0 @@
-services:
-    ngsite.field_type.ezrichtext.converter.direct_download:
-        class: Netgen\Bundle\SiteBundle\RichText\Converter\LinkDirectDownload
-        arguments:
-            - "@netgen.ibexa_site_api.load_service"
-            - "@router"
-            - "@?logger"
-        tags:
-            - { name: ibexa.field_type.richtext.converter.output.xhtml5, priority: -10 }

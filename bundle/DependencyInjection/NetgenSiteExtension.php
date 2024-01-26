@@ -34,7 +34,6 @@ final class NetgenSiteExtension extends Extension implements PrependExtensionInt
         );
 
         $loader->load('parameters.yaml');
-        $loader->load('field_types.yaml');
         $loader->load('pagerfanta.yaml');
         $loader->load('templating.yaml');
         $loader->load('menu.yaml');

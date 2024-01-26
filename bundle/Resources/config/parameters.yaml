@@ -65,3 +65,6 @@ parameters:
         - 'application/pdf'
 
     ngsite.phpstorm_twig_integration.enabled: '%kernel.debug%'
+
+    ngsite.default.direct_download.content_types:
+        - file

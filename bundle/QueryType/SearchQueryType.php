@@ -39,31 +39,6 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
         return 'NetgenSite:Search';
     }
 
-    protected function doGetQuery(array $parameters): Query
-    {
-        $subtreeLocation = $this->site->getLoadService()->loadLocation($parameters['subtree']);
-        $sortingKeys = $parameters['sort'];
-        $order = $parameters['order'];
-        $descendingOrder = $order === 'desc';
-        $criteria = [
-            new Criterion\Subtree($subtreeLocation->pathString),
-            new Criterion\Visibility(Criterion\Visibility::VISIBLE),
-        ];
-        if (count($parameters['content_types']) > 0) {
-            $criteria[] = new Criterion\ContentTypeIdentifier($parameters['content_types']);
-        }
-        $query = new LocationQuery();
-        $query->query = new FullText(trim($parameters['search_text']));
-        $query->filter = new Criterion\LogicalAnd($criteria);
-        $sortClauses = [];
-        foreach ($sortingKeys as $sortingKey) {
-            $sortClauses[] = $this->createSortClause($sortingKey, $descendingOrder);
-        }
-        $query->sortClauses = $sortClauses;
-
-        return $query;
-    }
-
     protected function configureOptions(OptionsResolver $optionsResolver): void
     {
         $optionsResolver->setRequired(['search_text', 'content_types', 'subtree', 'sort', 'order']);
@@ -88,6 +63,31 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
         $optionsResolver->setDefault('subtree', $this->site->getSettings()->rootLocationId);
         $optionsResolver->setDefault('sort', ['published_date']);
         $optionsResolver->setDefault('order', 'desc');
+    }
+
+    protected function doGetQuery(array $parameters): Query
+    {
+        $subtreeLocation = $this->site->getLoadService()->loadLocation($parameters['subtree']);
+        $sortingKeys = $parameters['sort'];
+        $order = $parameters['order'];
+        $descendingOrder = $order === 'desc';
+        $criteria = [
+            new Criterion\Subtree($subtreeLocation->pathString),
+            new Criterion\Visibility(Criterion\Visibility::VISIBLE),
+        ];
+        if (count($parameters['content_types']) > 0) {
+            $criteria[] = new Criterion\ContentTypeIdentifier($parameters['content_types']);
+        }
+        $query = new LocationQuery();
+        $query->query = new FullText(trim($parameters['search_text']));
+        $query->filter = new Criterion\LogicalAnd($criteria);
+        $sortClauses = [];
+        foreach ($sortingKeys as $sortingKey) {
+            $sortClauses[] = $this->createSortClause($sortingKey, $descendingOrder);
+        }
+        $query->sortClauses = $sortClauses;
+
+        return $query;
     }
 
     private function sortKeyAllowed(string $key): bool

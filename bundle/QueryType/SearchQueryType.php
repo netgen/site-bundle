@@ -95,6 +95,10 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
         return array_key_exists(trim($key), $this->sortKeysAllowed);
     }
 
+    /**
+     * @param string[] $keys
+     * @return bool
+     */
     private function sortKeysAllowed(array $keys): bool
     {
         foreach ($keys as $key) {

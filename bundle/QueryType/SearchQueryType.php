@@ -78,7 +78,7 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
         $optionsResolver->setAllowedValues(
             'sort',
             /** @var string[] $keys */
-            static fn (array $keys): bool => $this->sortKeysAllowed($keys),
+            fn (array $keys): bool => $this->sortKeysAllowed($keys),
         );
         $optionsResolver->setAllowedValues(
             'order',
@@ -97,6 +97,7 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
 
     /**
      * @param string[] $keys
+     *
      * @return bool
      */
     private function sortKeysAllowed(array $keys): bool

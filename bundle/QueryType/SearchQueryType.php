@@ -13,25 +13,15 @@ use Netgen\Bundle\SiteBundle\API\Search\Criterion\FullText;
 use Netgen\IbexaSiteApi\API\Site;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use function array_key_exists;
 use function count;
 use function trim;
 
 final class SearchQueryType extends OptionsResolverBasedQueryType
 {
-    /*
-     * It is a mapper that contains a set of key-value pairs, where key is
-     * allowed sort parameter value and value is name of class
-     * that provides implementation of that key
-     */
-    /** @var array<string, string> */
-    private array $sortKeysAllowed;
-
     public function __construct(
         private readonly Site $site,
         private readonly ConfigResolverInterface $configResolver,
     ) {
-        $this->sortKeysAllowed = $this->configResolver->getParameter('search.sort_allowed_keys', 'ngsite');
     }
 
     public static function getName(): string
@@ -61,7 +51,7 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
         );
         $optionsResolver->setDefault('content_types', $this->configResolver->getParameter('search.content_types', 'ngsite'));
         $optionsResolver->setDefault('subtree', $this->site->getSettings()->rootLocationId);
-        $optionsResolver->setDefault('sort', ['published_date']);
+        $optionsResolver->setDefault('sort', [Query\SortClause\DatePublished::class]);
         $optionsResolver->setDefault('order', 'desc');
     }
 
@@ -90,11 +80,6 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
         return $query;
     }
 
-    private function sortKeyAllowed(string $key): bool
-    {
-        return array_key_exists(trim($key), $this->sortKeysAllowed);
-    }
-
     /**
      * @param string[] $keys
      *
@@ -103,7 +88,7 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
     private function sortKeysAllowed(array $keys): bool
     {
         foreach ($keys as $key) {
-            if (!$this->sortKeyAllowed($key)) {
+            if (!class_exists($key)) {
                 return false;
             }
         }
@@ -113,11 +98,10 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
 
     private function createSortClause(string $name, bool $desc = true): mixed
     {
-        $className = $this->sortKeysAllowed[$name];
         if ($desc) {
-            return new $className(Query::SORT_DESC);
+            return new $name(Query::SORT_DESC);
         }
 
-        return new $className(Query::SORT_ASC);
+        return new $name(Query::SORT_ASC);
     }
 }

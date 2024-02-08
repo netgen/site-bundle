@@ -44,7 +44,7 @@ final class LocationPathVoter implements VoterInterface
             return null;
         }
 
-        $locationPath = array_map('intval', $locationView->getSiteLocation()->path);
+        $locationPath = array_map('intval', $locationView->getSiteLocation()->pathArray);
 
         if (!in_array($item->getExtra('ibexa_location')->id, $locationPath, true)) {
             return null;

@@ -51,7 +51,7 @@ final class PathHelper
         // The root location can be defined at site access level
         $rootLocationId = (int) $this->configResolver->getParameter('content.tree_root.location_id');
 
-        $path = array_map('intval', $this->loadService->loadLocation($locationId)->path);
+        $path = array_map('intval', $this->loadService->loadLocation($locationId)->pathArray);
 
         // Shift of location "1" from path as it is not a fully valid location and not readable by most users
         array_shift($path);

@@ -21,7 +21,7 @@
         "ibexa/content-forms": "^4.4",
         "symfony/mailer": "^5.4",
         "netgen/ibexa-forms-bundle": "^4.0",
-        "netgen/ibexa-site-api": "^5.1",
+        "netgen/ibexa-site-api": "^6.0",
         "netgen/information-collection-bundle": "^3.0",
         "netgen/siteaccess-routes-bundle": "^3.0",
         "netgen/content-type-list-bundle": "^3.0",

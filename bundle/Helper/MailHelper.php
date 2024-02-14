@@ -90,7 +90,6 @@ final class MailHelper
      */
     public function sendGroupMail(array|string $bcc, string $subject, string $template, array $parameters = [], array|string|null $sender = null): void
     {
-
         try {
             $senderAddress = $this->createSenderAddress($sender);
         } catch (InvalidArgumentException $e) {

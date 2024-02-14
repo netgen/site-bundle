@@ -84,9 +84,9 @@ final class MailHelper
      *  array( 'info@netgen.io', 'example@netgen.io' ) or
      *  array( 'info@netgen.io' => 'Netgen Site', 'example@netgen.io' => 'Example' )
      *
-     * @param string|string[] $receivers
+     * @param string|string[] $bcc
      * @param array<string, mixed> $parameters
-     *  @param string|string[]|null $sender
+     * @param string|string[]|null $sender
      */
     public function sendGroupMail(array|string $bcc, string $subject, string $template, array $parameters = [], array|string|null $sender = null): void
     {

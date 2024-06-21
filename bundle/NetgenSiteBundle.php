@@ -20,5 +20,6 @@ class NetgenSiteBundle extends Bundle
         $container->addCompilerPass(new Compiler\LocationFactoryPass());
         $container->addCompilerPass(new Compiler\AsseticPass());
         $container->addCompilerPass(new Compiler\IoStorageAllowListPass());
+        $container->addCompilerPass(new Compiler\WebpFormatVariationPathGeneratorDecoratorPass());
     }
 }

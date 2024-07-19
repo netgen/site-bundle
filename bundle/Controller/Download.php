@@ -63,7 +63,8 @@ final class Download extends Controller
             );
         }
 
-        $mimeType = $content->getFieldById($fieldId)->value->mimeType;
+        $binaryFieldValue = $content->getFieldById($fieldId)->value;
+        $mimeType = $binaryFieldValue->mimeType ?? $binaryFieldValue->mime ?? null;
 
         if ($isInline === null) {
             $isInline = in_array($mimeType, $this->inlineMimeTypes, true);
@@ -81,8 +82,6 @@ final class Download extends Controller
         if (!$canAccess) {
             throw $this->createAccessDeniedException();
         }
-
-        $binaryFieldValue = $content->getFieldById($fieldId)->value;
 
         if ($binaryFieldValue instanceof BinaryBaseValue) {
             $ioService = $this->ioFileService;

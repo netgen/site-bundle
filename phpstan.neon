@@ -15,7 +15,6 @@ parameters:
 
         - '#Access to an undefined property Ibexa\\Contracts\\Core\\FieldType\\Value::\$\w+#'
         - '#Cannot access property \$\w+ on Ibexa\\Contracts\\Core\\FieldType\\Value\|null#'
-        - '#Access to an undefined property Netgen\\IbexaSiteApi\\API\\Settings::\$rootLocationId#'
 
         # Wrong typehints in vendor packages
 

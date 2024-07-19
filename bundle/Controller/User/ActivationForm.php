@@ -41,6 +41,7 @@ final class ActivationForm extends Controller
             );
         }
 
+        /** @var \Ibexa\Contracts\Core\Repository\Values\User\User[] $users */
         $users = $this->userService->loadUsersByEmail($form->get('email')->getData());
 
         $activationRequestEvent = new UserEvents\ActivationRequestEvent(

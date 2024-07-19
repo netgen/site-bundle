@@ -97,7 +97,7 @@ final class SiteRuntime
     /**
      * Returns grouped and sorted fields for selected content and field definition identifier prefix.
      *
-     * @return array<string, array<string, \Netgen\IbexaSiteApi\API\Values\Field>>
+     * @return array<int, array<string, \Netgen\IbexaSiteApi\API\Values\Field>>
      */
     public function groupFields(Content $content, string $prefix): array
     {

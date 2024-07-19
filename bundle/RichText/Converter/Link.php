@@ -54,7 +54,7 @@ final class Link implements Converter
             // Set resolved href to number character as a default if it can't be resolved
             $hrefResolved = '#';
             $href = $link->getAttribute('xlink:href');
-            preg_match('~^(.+://)?([^#]*)?(#.*|\\s*)?$~', $href, $matches);
+            preg_match('~^(.+://)?([^#]*)?(#.*|\s*)?$~', $href, $matches);
             [, $scheme, $id, $fragment] = $matches;
 
             if ($scheme === 'ezcontent://') {

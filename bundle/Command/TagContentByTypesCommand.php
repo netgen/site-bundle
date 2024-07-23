@@ -36,8 +36,7 @@ final class TagContentByTypesCommand extends Command
         private Repository              $repository,
         private TagsService             $tagsService,
         private ConfigResolverInterface $configResolver,
-    )
-    {
+    ) {
         // Parent constructor call is mandatory for commands registered as services
         parent::__construct();
     }
@@ -97,7 +96,7 @@ final class TagContentByTypesCommand extends Command
                         }
 
                         $alreadyAssignedTags = $content->getFieldValue($fieldIdentifier)->tags;
-                        $tagsToAssign = array_filter($alreadyAssignedTags, fn($alreadyAssignedTag) => $this->getTag()->id !== $alreadyAssignedTag->id);
+                        $tagsToAssign = array_filter($alreadyAssignedTags, fn ($alreadyAssignedTag) => $this->getTag()->id !== $alreadyAssignedTag->id);
                         $tagsToAssign[] = $this->getTag();
                         $contentUpdateStruct->setField($fieldIdentifier, new TagFieldValue($tagsToAssign));
 

@@ -74,10 +74,11 @@ final class TagContentByTypesCommand extends Command
         $this->style->newLine();
         $this->style->progressStart($totalResults);
 
-        if ($this->input->getOption('field-identifier') === null) {
+        $fieldIdentifierInput = $this->input->getOption('field-identifier');
+        if ($fieldIdentifierInput === null) {
             $fieldIdentifier = $this->configResolver->getParameter('tag_command_default_field_identifier', 'ngsite')[0];
         } else {
-            $fieldIdentifier = $this->input->getOption('field-identifier');
+            $fieldIdentifier = $fieldIdentifierInput;
         }
 
         for ($offset = 0; $offset < $totalResults; $offset += $batchSize) {

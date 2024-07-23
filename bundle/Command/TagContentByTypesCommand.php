@@ -86,45 +86,39 @@ final class TagContentByTypesCommand extends Command
             $searchResults = $this->repository->getSearchService()->findContent($query);
 
             foreach ($searchResults->searchHits as $searchHit) {
-                $result = $this->repository->sudo(
-                    function () use ($searchHit, $fieldIdentifiers): ?int {
-                        /** @var \Ibexa\Contracts\Core\Repository\Values\Content\Content $content */
-                        $content = $searchHit->valueObject;
+                /** @var \Ibexa\Contracts\Core\Repository\Values\Content\Content $content */
+                $content = $searchHit->valueObject;
 
-                        $contentDraft = $this->repository->getContentService()->createContentDraft($content->contentInfo);
-                        $contentUpdateStruct = $this->repository->getContentService()->newContentUpdateStruct();
+                foreach ($fieldIdentifiers as $fieldIdentifier) {
+                    if ($this->hasField($content, $fieldIdentifier) === false) {
+                        continue;
+                    }
 
-                        foreach ($fieldIdentifiers as $fieldIdentifier) {
-                            if (!$this->hasField($content, $fieldIdentifier)) {
-                                continue;
-                            }
+                    if (!$content->getField($fieldIdentifier)->value instanceof TagFieldValue) {
+                        $this->style->error(sprintf('Field with identifier %s must be a type of eztags', $fieldIdentifier));
 
-                            if (!$content->getField($fieldIdentifier)->value instanceof TagFieldValue) {
-                                $this->style->error(sprintf('Field with identifier %s must be a type of eztags', $fieldIdentifier));
+                        return Command::FAILURE;
+                    }
 
-                                return Command::FAILURE;
-                            }
+                    $alreadyAssignedTags = $content->getFieldValue($fieldIdentifier)->tags;
+                    $tagsToAssign = array_filter($alreadyAssignedTags, fn ($alreadyAssignedTag) => $this->getTag()->id !== $alreadyAssignedTag->id);
+                    $tagsToAssign[] = $this->getTag();
 
-                            $alreadyAssignedTags = $content->getFieldValue($fieldIdentifier)->tags;
-                            $tagsToAssign = array_filter($alreadyAssignedTags, fn ($alreadyAssignedTag) => $this->getTag()->id !== $alreadyAssignedTag->id);
-                            $tagsToAssign[] = $this->getTag();
+                    $this->repository->sudo(
+                        function () use ($content, $fieldIdentifier, $tagsToAssign): void {
+                            $contentDraft = $this->repository->getContentService()->createContentDraft($content->contentInfo);
+                            $contentUpdateStruct = $this->repository->getContentService()->newContentUpdateStruct();
+
                             $contentUpdateStruct->setField($fieldIdentifier, new TagFieldValue($tagsToAssign));
 
-                            break;
+                            $this->repository->getContentService()->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
+                            $this->repository->getContentService()->publishVersion($contentDraft->versionInfo);
                         }
-
-                        $this->repository->getContentService()->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
-                        $this->repository->getContentService()->publishVersion($contentDraft->versionInfo);
-
-                        $this->style->progressAdvance();
-
-                        return null;
-                    }
-                );
-
-                if ($result === Command::FAILURE) {
-                    return Command::FAILURE;
+                    );
+                    break;
                 }
+
+                $this->style->progressAdvance();
             }
         }
 

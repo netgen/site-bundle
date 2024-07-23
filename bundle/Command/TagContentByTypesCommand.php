@@ -64,58 +64,72 @@ final class TagContentByTypesCommand extends Command
             new Criterion\ContentTypeIdentifier($this->getContentTypes()),
         ]);
 
-        $searchResults = $this->repository->getSearchService()->findContent($query);
-        $totalCount = $searchResults->totalCount;
+        $batchSize = 50;
 
-        if ($this->input->getOption('field-identifiers') === null) {
-            $fieldIdentifiers = $this->configResolver->getParameter('tag_command_default_field_identifiers', 'ngsite');
-        } else {
-            $fieldIdentifiers = $this->getFieldIdentifiers();
-        }
+        $searchResults = $this->repository->getSearchService()->findContent($query);
+        $totalResults = $searchResults->totalCount;
 
         $this->style->newLine();
-        $this->style->progressStart($totalCount);
+        $this->style->progressStart($totalResults);
 
-        foreach ($searchResults->searchHits as $searchHit) {
-            $result = $this->repository->sudo(
-                function () use ($searchHit, $fieldIdentifiers): ?int {
-                    /** @var \Ibexa\Contracts\Core\Repository\Values\Content\Content $content */
-                    $content = $searchHit->valueObject;
+        $this->repository->beginTransaction();
 
-                    $contentDraft = $this->repository->getContentService()->createContentDraft($content->contentInfo);
-                    $contentUpdateStruct = $this->repository->getContentService()->newContentUpdateStruct();
+        for ($offset = 0; $offset < $totalResults; $offset += $batchSize) {
+            $query->offset = $offset;
+            $query->limit = $batchSize;
+            $searchResults = $this->repository->getSearchService()->findContent($query);
 
-                    foreach ($fieldIdentifiers as $fieldIdentifier) {
-                        if (!$this->hasField($content, $fieldIdentifier)) {
-                            continue;
+            if ($this->input->getOption('field-identifiers') === null) {
+                $fieldIdentifiers = $this->configResolver->getParameter('tag_command_default_field_identifiers', 'ngsite');
+            } else {
+                $fieldIdentifiers = $this->getFieldIdentifiers();
+            }
+
+            $this->repository->beginTransaction();
+
+            foreach ($searchResults->searchHits as $searchHit) {
+                $result = $this->repository->sudo(
+                    function () use ($searchHit, $fieldIdentifiers): ?int {
+                        /** @var \Ibexa\Contracts\Core\Repository\Values\Content\Content $content */
+                        $content = $searchHit->valueObject;
+
+                        $contentDraft = $this->repository->getContentService()->createContentDraft($content->contentInfo);
+                        $contentUpdateStruct = $this->repository->getContentService()->newContentUpdateStruct();
+
+                        foreach ($fieldIdentifiers as $fieldIdentifier) {
+                            if (!$this->hasField($content, $fieldIdentifier)) {
+                                continue;
+                            }
+
+                            if (!$content->getField($fieldIdentifier)->value instanceof TagFieldValue) {
+                                $this->style->error(sprintf('Field with identifier %s must be a type of eztags', $fieldIdentifier));
+                                return Command::FAILURE;
+                            }
+
+                            $alreadyAssignedTags = $content->getFieldValue($fieldIdentifier)->tags;
+                            $tagsToAssign = array_filter($alreadyAssignedTags, fn ($alreadyAssignedTag) => $this->getTag()->id !== $alreadyAssignedTag->id);
+                            $tagsToAssign[] = $this->getTag();
+                            $contentUpdateStruct->setField($fieldIdentifier, new TagFieldValue($tagsToAssign));
+
+                            break;
                         }
 
-                        if (!$content->getField($fieldIdentifier)->value instanceof TagFieldValue) {
-                            $this->style->error(sprintf('Field with identifier %s must be a type of eztags', $fieldIdentifier));
-                            return Command::FAILURE;
-                        }
+                        $this->repository->getContentService()->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
+                        $this->repository->getContentService()->publishVersion($contentDraft->versionInfo);
 
-                        $alreadyAssignedTags = $content->getFieldValue($fieldIdentifier)->tags;
-                        $tagsToAssign = array_filter($alreadyAssignedTags, fn ($alreadyAssignedTag) => $this->getTag()->id !== $alreadyAssignedTag->id);
-                        $tagsToAssign[] = $this->getTag();
-                        $contentUpdateStruct->setField($fieldIdentifier, new TagFieldValue($tagsToAssign));
+                        $this->style->progressAdvance();
 
-                        break;
+                        return null;
                     }
+                );
 
-                    $this->repository->getContentService()->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
-                    $this->repository->getContentService()->publishVersion($contentDraft->versionInfo);
-
-                    $this->style->progressAdvance();
-
-                    return null;
+                if ($result === Command::FAILURE) {
+                    return Command::FAILURE;
                 }
-            );
-
-            if ($result === Command::FAILURE) {
-                return Command::FAILURE;
             }
         }
+
+        $this->repository->commit();
 
         $this->style->progressFinish();
         $this->style->success('Tags assigned successfully');

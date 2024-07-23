@@ -74,18 +74,16 @@ final class TagContentByTypesCommand extends Command
 
         $this->repository->beginTransaction();
 
+        if ($this->input->getOption('field-identifiers') === null) {
+            $fieldIdentifiers = $this->configResolver->getParameter('tag_command_default_field_identifiers', 'ngsite');
+        } else {
+            $fieldIdentifiers = $this->getFieldIdentifiers();
+        }
+
         for ($offset = 0; $offset < $totalResults; $offset += $batchSize) {
             $query->offset = $offset;
             $query->limit = $batchSize;
             $searchResults = $this->repository->getSearchService()->findContent($query);
-
-            if ($this->input->getOption('field-identifiers') === null) {
-                $fieldIdentifiers = $this->configResolver->getParameter('tag_command_default_field_identifiers', 'ngsite');
-            } else {
-                $fieldIdentifiers = $this->getFieldIdentifiers();
-            }
-
-            $this->repository->beginTransaction();
 
             foreach ($searchResults->searchHits as $searchHit) {
                 $result = $this->repository->sudo(

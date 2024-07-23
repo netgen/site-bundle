@@ -69,6 +69,5 @@ parameters:
     ngsite.default.direct_download.content_types:
         - file
 
-    ngsite.default.tag_command_default_field_identifiers:
+    ngsite.default.tag_command_default_field_identifier:
         - tags
-        - main_topic

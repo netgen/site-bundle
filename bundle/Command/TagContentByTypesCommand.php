@@ -37,7 +37,8 @@ final class TagContentByTypesCommand extends Command
         private Repository              $repository,
         private TagsService             $tagsService,
         private ConfigResolverInterface $configResolver,
-    ) {
+    )
+    {
         // Parent constructor call is mandatory for commands registered as services
         parent::__construct();
     }
@@ -48,7 +49,7 @@ final class TagContentByTypesCommand extends Command
             ->addOption('parent-location', null, InputOption::VALUE_REQUIRED)
             ->addOption('content-types', null, InputOption::VALUE_REQUIRED)
             ->addOption('tag-id', null, InputOption::VALUE_REQUIRED)
-            ->addOption('field-identifiers', null, InputOption::VALUE_OPTIONAL);
+            ->addOption('field-identifier', null, InputOption::VALUE_OPTIONAL);
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output): void
@@ -73,10 +74,10 @@ final class TagContentByTypesCommand extends Command
         $this->style->newLine();
         $this->style->progressStart($totalResults);
 
-        if ($this->input->getOption('field-identifiers') === null) {
-            $fieldIdentifiers = $this->configResolver->getParameter('tag_command_default_field_identifiers', 'ngsite');
+        if ($this->input->getOption('field-identifier') === null) {
+            $fieldIdentifier = $this->configResolver->getParameter('tag_command_default_field_identifier', 'ngsite')[0];
         } else {
-            $fieldIdentifiers = $this->getFieldIdentifiers();
+            $fieldIdentifier = $this->input->getOption('field-identifier');
         }
 
         for ($offset = 0; $offset < $totalResults; $offset += $batchSize) {
@@ -90,51 +91,45 @@ final class TagContentByTypesCommand extends Command
                 /** @var \Ibexa\Contracts\Core\Repository\Values\Content\Content $content */
                 $content = $searchHit->valueObject;
 
-                foreach ($fieldIdentifiers as $fieldIdentifier) {
-                    if ($this->hasField($content, $fieldIdentifier) === false) {
-                        continue;
-                    }
+                if ($this->hasField($content, $fieldIdentifier) === false) {
+                    continue;
+                }
 
-                    try {
-                        if (!$content->getField($fieldIdentifier)->value instanceof TagFieldValue) {
-                            $this->style->error(sprintf('Field with identifier %s must be a type of eztags', $fieldIdentifier));
-
-                            $this->repository->rollback();
-
-                            return Command::FAILURE;
-                        }
-
-                        $alreadyAssignedTags = $content->getFieldValue($fieldIdentifier)->tags;
-                        $tag = $this->getTag();
-                        $tagsToAssign = array_filter($alreadyAssignedTags, fn ($alreadyAssignedTag) => $tag->id !== $alreadyAssignedTag->id);
-                        $tagsToAssign[] = $tag;
-
-                        $this->repository->sudo(
-                            function () use ($content, $fieldIdentifier, $tagsToAssign): void {
-                                $contentDraft = $this->repository->getContentService()->createContentDraft($content->contentInfo);
-                                $contentUpdateStruct = $this->repository->getContentService()->newContentUpdateStruct();
-
-                                $contentUpdateStruct->setField($fieldIdentifier, new TagFieldValue($tagsToAssign));
-
-                                $this->repository->getContentService()->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
-                                $this->repository->getContentService()->publishVersion($contentDraft->versionInfo);
-                            }
-                        );
-
-                        break;
-
-                    } catch (Throwable $t) {
-                        $this->style->error($t->getMessage());
+                try {
+                    if (!$content->getField($fieldIdentifier)->value instanceof TagFieldValue) {
+                        $this->style->error(sprintf('Field with identifier %s must be a type of eztags', $fieldIdentifier));
 
                         $this->repository->rollback();
 
-                        continue;
+                        return Command::FAILURE;
                     }
+
+                    $alreadyAssignedTags = $content->getFieldValue($fieldIdentifier)->tags;
+                    $tag = $this->getTag();
+                    $tagsToAssign = array_filter($alreadyAssignedTags, fn($alreadyAssignedTag) => $tag->id !== $alreadyAssignedTag->id);
+                    $tagsToAssign[] = $tag;
+
+                    $this->repository->sudo(
+                        function () use ($content, $fieldIdentifier, $tagsToAssign): void {
+                            $contentDraft = $this->repository->getContentService()->createContentDraft($content->contentInfo);
+                            $contentUpdateStruct = $this->repository->getContentService()->newContentUpdateStruct();
+
+                            $contentUpdateStruct->setField($fieldIdentifier, new TagFieldValue($tagsToAssign));
+
+                            $this->repository->getContentService()->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
+                            $this->repository->getContentService()->publishVersion($contentDraft->versionInfo);
+                        }
+                    );
+
+                    $this->style->progressAdvance();
+                } catch (Throwable $t) {
+                    $this->style->error($t->getMessage());
+
+                    $this->repository->rollback();
+
+                    continue;
                 }
-
-                $this->style->progressAdvance();
             }
-
             $this->repository->commit();
         }
 
@@ -165,11 +160,6 @@ final class TagContentByTypesCommand extends Command
     protected function getTag(): Tag
     {
         return $this->tagsService->loadTag($this->getTagId());
-    }
-
-    protected function getFieldIdentifiers(): array
-    {
-        return $this->parseCommaDelimited($this->input->getOption('field-identifiers'));
     }
 
     protected function getTagId(): int

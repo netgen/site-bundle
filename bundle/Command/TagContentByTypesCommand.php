@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
 
 use function array_filter;
 use function array_map;
@@ -72,8 +73,6 @@ final class TagContentByTypesCommand extends Command
         $this->style->newLine();
         $this->style->progressStart($totalResults);
 
-        $this->repository->beginTransaction();
-
         if ($this->input->getOption('field-identifiers') === null) {
             $fieldIdentifiers = $this->configResolver->getParameter('tag_command_default_field_identifiers', 'ngsite');
         } else {
@@ -85,6 +84,8 @@ final class TagContentByTypesCommand extends Command
             $query->limit = $batchSize;
             $searchResults = $this->repository->getSearchService()->findContent($query);
 
+            $this->repository->beginTransaction();
+
             foreach ($searchResults->searchHits as $searchHit) {
                 /** @var \Ibexa\Contracts\Core\Repository\Values\Content\Content $content */
                 $content = $searchHit->valueObject;
@@ -94,36 +95,48 @@ final class TagContentByTypesCommand extends Command
                         continue;
                     }
 
-                    if (!$content->getField($fieldIdentifier)->value instanceof TagFieldValue) {
-                        $this->style->error(sprintf('Field with identifier %s must be a type of eztags', $fieldIdentifier));
+                    try {
+                        if (!$content->getField($fieldIdentifier)->value instanceof TagFieldValue) {
+                            $this->style->error(sprintf('Field with identifier %s must be a type of eztags', $fieldIdentifier));
 
-                        return Command::FAILURE;
-                    }
+                            $this->repository->rollback();
 
-                    $alreadyAssignedTags = $content->getFieldValue($fieldIdentifier)->tags;
-                    $tag = $this->getTag();
-                    $tagsToAssign = array_filter($alreadyAssignedTags, fn ($alreadyAssignedTag) => $tag->id !== $alreadyAssignedTag->id);
-                    $tagsToAssign[] = $tag;
-
-                    $this->repository->sudo(
-                        function () use ($content, $fieldIdentifier, $tagsToAssign): void {
-                            $contentDraft = $this->repository->getContentService()->createContentDraft($content->contentInfo);
-                            $contentUpdateStruct = $this->repository->getContentService()->newContentUpdateStruct();
-
-                            $contentUpdateStruct->setField($fieldIdentifier, new TagFieldValue($tagsToAssign));
-
-                            $this->repository->getContentService()->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
-                            $this->repository->getContentService()->publishVersion($contentDraft->versionInfo);
+                            return Command::FAILURE;
                         }
-                    );
-                    break;
+
+                        $alreadyAssignedTags = $content->getFieldValue($fieldIdentifier)->tags;
+                        $tag = $this->getTag();
+                        $tagsToAssign = array_filter($alreadyAssignedTags, fn ($alreadyAssignedTag) => $tag->id !== $alreadyAssignedTag->id);
+                        $tagsToAssign[] = $tag;
+
+                        $this->repository->sudo(
+                            function () use ($content, $fieldIdentifier, $tagsToAssign): void {
+                                $contentDraft = $this->repository->getContentService()->createContentDraft($content->contentInfo);
+                                $contentUpdateStruct = $this->repository->getContentService()->newContentUpdateStruct();
+
+                                $contentUpdateStruct->setField($fieldIdentifier, new TagFieldValue($tagsToAssign));
+
+                                $this->repository->getContentService()->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
+                                $this->repository->getContentService()->publishVersion($contentDraft->versionInfo);
+                            }
+                        );
+
+                        break;
+
+                    } catch (Throwable $t) {
+                        $this->style->error($t->getMessage());
+
+                        $this->repository->rollback();
+
+                        continue;
+                    }
                 }
 
                 $this->style->progressAdvance();
             }
-        }
 
-        $this->repository->commit();
+            $this->repository->commit();
+        }
 
         $this->style->progressFinish();
         $this->style->success('Tags assigned successfully');

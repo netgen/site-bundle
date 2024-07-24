@@ -31,6 +31,7 @@ use function trim;
 final class TagContentByTypesCommand extends Command
 {
     private SymfonyStyle $style;
+
     private InputInterface $input;
 
     public function __construct(

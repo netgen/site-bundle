@@ -142,6 +142,9 @@ final class TagContentByTypesCommand extends Command
         return $parentLocationInput;
     }
 
+    /**
+     * @return array<string>
+     */
     private function getContentTypes(string $contentTypesInput): array
     {
         return $this->parseCommaDelimited($contentTypesInput);

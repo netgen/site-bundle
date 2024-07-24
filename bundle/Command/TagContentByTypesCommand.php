@@ -105,7 +105,7 @@ final class TagContentByTypesCommand extends Command
                     }
 
                     $alreadyAssignedTags = $content->getFieldValue($fieldIdentifier)->tags;
-                    $tag = $this->getTag();
+                    $tag = $this->tagsService->loadTag($this->getTagId());
                     $tagsToAssign = array_filter($alreadyAssignedTags, fn ($alreadyAssignedTag) => $tag->id !== $alreadyAssignedTag->id);
                     $tagsToAssign[] = $tag;
 
@@ -155,11 +155,6 @@ final class TagContentByTypesCommand extends Command
     protected function getContentTypes(): array
     {
         return $this->parseCommaDelimited($this->input->getOption('content-types'));
-    }
-
-    protected function getTag(): Tag
-    {
-        return $this->tagsService->loadTag($this->getTagId());
     }
 
     protected function getTagId(): int

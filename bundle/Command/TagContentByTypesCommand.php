@@ -35,8 +35,8 @@ final class TagContentByTypesCommand extends Command
     private InputInterface $input;
 
     public function __construct(
-        private Repository              $repository,
-        private TagsService             $tagsService,
+        private Repository $repository,
+        private TagsService $tagsService,
         private ConfigResolverInterface $configResolver,
     ) {
         // Parent constructor call is mandatory for commands registered as services

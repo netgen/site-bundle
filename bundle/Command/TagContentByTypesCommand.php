@@ -147,7 +147,7 @@ final class TagContentByTypesCommand extends Command
         return $this->parseCommaDelimited($contentTypesInput);
     }
 
-    protected function getTagId(int $tagIdInput): int
+    private function getTagId(int $tagIdInput): int
     {
         if (!is_numeric($tagIdInput) || (int)$tagIdInput < 1) {
             throw new InvalidOptionException(

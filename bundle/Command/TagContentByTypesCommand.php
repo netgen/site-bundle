@@ -92,11 +92,8 @@ final class TagContentByTypesCommand extends Command
 
                 try {
                     if (!$content->getField($fieldIdentifier)->value instanceof TagFieldValue) {
-                        $this->style->error(sprintf('Field with identifier %s must be a type of eztags', $fieldIdentifier));
-
-                        $this->repository->rollback();
-
-                        return Command::FAILURE;
+                        $this->style->warning(sprintf('Field with identifier %s must be a type of eztags', $fieldIdentifier));
+                        continue;
                     }
 
                     $alreadyAssignedTags = $content->getFieldValue($fieldIdentifier)->tags;

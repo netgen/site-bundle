@@ -6,10 +6,8 @@ namespace Netgen\Bundle\SiteBundle\Command;
 
 use Ibexa\Contracts\Core\Repository\ContentService;
 use Ibexa\Contracts\Core\Repository\Repository;
-use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
-use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\Core\Repository\SearchService;
 use Netgen\TagsBundle\API\Repository\TagsService;
 use Netgen\TagsBundle\Core\FieldType\Tags\Value as TagFieldValue;
@@ -37,7 +35,7 @@ final class TagContentByTypesCommand extends Command
         private Repository $repository,
         private ContentService $contentService,
         private SearchService $searchService,
-        private TagsService $tagsService
+        private TagsService $tagsService,
     ) {
         // Parent constructor call is mandatory for commands registered as services
         parent::__construct();
@@ -93,6 +91,7 @@ final class TagContentByTypesCommand extends Command
                 try {
                     if (!$content->getField($fieldIdentifier)->value instanceof TagFieldValue) {
                         $this->style->warning(sprintf('Field with identifier %s must be a type of eztags', $fieldIdentifier));
+
                         continue;
                     }
 
@@ -110,7 +109,7 @@ final class TagContentByTypesCommand extends Command
 
                             $this->contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
                             $this->contentService->publishVersion($contentDraft->versionInfo);
-                        }
+                        },
                     );
 
                     $this->style->progressAdvance();

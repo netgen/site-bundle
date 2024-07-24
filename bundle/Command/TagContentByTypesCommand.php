@@ -86,7 +86,7 @@ final class TagContentByTypesCommand extends Command
                 /** @var \Ibexa\Contracts\Core\Repository\Values\Content\Content $content */
                 $content = $searchHit->valueObject;
 
-                if ($this->hasField($content, $fieldIdentifier) === false) {
+                if ($content->getField($fieldIdentifier) === null) {
                     continue;
                 }
 
@@ -167,12 +167,5 @@ final class TagContentByTypesCommand extends Command
         }
 
         return array_values(array_unique(array_filter(array_map('trim', explode(',', $value)))));
-    }
-
-    private function hasField(Content $content, string $fieldIdentifier): bool
-    {
-        $contentType = $this->repository->getContentTypeService()->loadContentType($content->contentInfo->contentTypeId);
-
-        return $contentType->hasFieldDefinition($fieldIdentifier);
     }
 }

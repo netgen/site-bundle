@@ -10,7 +10,6 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Netgen\TagsBundle\API\Repository\TagsService;
-use Netgen\TagsBundle\API\Repository\Values\Tags\Tag;
 use Netgen\TagsBundle\Core\FieldType\Tags\Value as TagFieldValue;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\InvalidOptionException;
@@ -32,8 +31,6 @@ final class TagContentByTypesCommand extends Command
 {
     private SymfonyStyle $style;
 
-    private InputInterface $input;
-
     public function __construct(
         private Repository $repository,
         private TagsService $tagsService,
@@ -54,7 +51,6 @@ final class TagContentByTypesCommand extends Command
 
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        $this->input = $input;
         $this->style = new SymfonyStyle($input, $output);
     }
 
@@ -62,8 +58,8 @@ final class TagContentByTypesCommand extends Command
     {
         $query = new Query();
         $query->filter = new Criterion\LogicalAnd([
-            new Criterion\ParentLocationId($this->getParentLocation()),
-            new Criterion\ContentTypeIdentifier($this->getContentTypes()),
+            new Criterion\ParentLocationId($this->getParentLocation((int) $input->getOption('parent-location'))),
+            new Criterion\ContentTypeIdentifier($this->getContentTypes($input->getOption('content-types'))),
         ]);
 
         $batchSize = 50;
@@ -74,7 +70,7 @@ final class TagContentByTypesCommand extends Command
         $this->style->newLine();
         $this->style->progressStart($totalResults);
 
-        $fieldIdentifierInput = $this->input->getOption('field-identifier');
+        $fieldIdentifierInput = $input->getOption('field-identifier');
         if ($fieldIdentifierInput === null) {
             $fieldIdentifier = $this->configResolver->getParameter('tag_command_default_field_identifier', 'ngsite')[0];
         } else {
@@ -106,7 +102,7 @@ final class TagContentByTypesCommand extends Command
                     }
 
                     $alreadyAssignedTags = $content->getFieldValue($fieldIdentifier)->tags;
-                    $tag = $this->tagsService->loadTag($this->getTagId());
+                    $tag = $this->tagsService->loadTag($this->getTagId((int) $input->getOption('tag-id')));
                     $tagsToAssign = array_filter($alreadyAssignedTags, fn ($alreadyAssignedTag) => $tag->id !== $alreadyAssignedTag->id);
                     $tagsToAssign[] = $tag;
 
@@ -140,35 +136,31 @@ final class TagContentByTypesCommand extends Command
         return Command::SUCCESS;
     }
 
-    protected function getParentLocation(): int
+    protected function getParentLocation(int $parentLocationInput): int
     {
-        $parentLocation = $this->input->getOption('parent-location');
-
-        if (!is_numeric($parentLocation) || (int)$parentLocation < 1) {
+        if (!is_numeric($parentLocationInput) || (int)$parentLocationInput < 1) {
             throw new InvalidOptionException(
-                sprintf("Argument --parent-location must be an integer > 0, you provided '%s'", $parentLocation),
+                sprintf("Argument --parent-location must be an integer > 0, you provided '%s'", $parentLocationInput),
             );
         }
 
-        return (int)$parentLocation;
+        return (int) $parentLocationInput;
     }
 
-    protected function getContentTypes(): array
+    protected function getContentTypes(string $contentTypesInput): array
     {
-        return $this->parseCommaDelimited($this->input->getOption('content-types'));
+        return $this->parseCommaDelimited($contentTypesInput);
     }
 
-    protected function getTagId(): int
+    protected function getTagId(int $tagIdInput): int
     {
-        $tagId = $this->input->getOption('tag-id');
-
-        if (!is_numeric($tagId) || (int)$tagId < 1) {
+        if (!is_numeric($tagIdInput) || (int)$tagIdInput < 1) {
             throw new InvalidOptionException(
-                sprintf("Argument --tag-id must be an integer > 0, you provided '%s'", $tagId),
+                sprintf("Argument --tag-id must be an integer > 0, you provided '%s'", $tagIdInput),
             );
         }
 
-        return (int)$tagId;
+        return (int) $tagIdInput;
     }
 
     private function parseCommaDelimited(?string $value): array

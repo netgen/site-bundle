@@ -68,7 +68,7 @@ final class TagContentByTypesCommand extends Command
         $batchSize = 50;
 
         $searchResults = $this->searchService->findContent($query);
-        $totalResults = $searchResults->totalCount;
+        $totalResults = $searchResults->totalCount ?? 0;
 
         $this->style->newLine();
         $this->style->progressStart($totalResults);
@@ -133,13 +133,13 @@ final class TagContentByTypesCommand extends Command
 
     private function getParentLocation(int $parentLocationInput): int
     {
-        if (!is_numeric($parentLocationInput) || (int)$parentLocationInput < 1) {
+        if ($parentLocationInput < 1) {
             throw new InvalidOptionException(
                 sprintf("Argument --parent-location must be an integer > 0, you provided '%s'", $parentLocationInput),
             );
         }
 
-        return (int) $parentLocationInput;
+        return $parentLocationInput;
     }
 
     private function getContentTypes(string $contentTypesInput): array
@@ -149,15 +149,18 @@ final class TagContentByTypesCommand extends Command
 
     private function getTagId(int $tagIdInput): int
     {
-        if (!is_numeric($tagIdInput) || (int)$tagIdInput < 1) {
+        if ($tagIdInput < 1) {
             throw new InvalidOptionException(
                 sprintf("Argument --tag-id must be an integer > 0, you provided '%s'", $tagIdInput),
             );
         }
 
-        return (int) $tagIdInput;
+        return $tagIdInput;
     }
 
+    /**
+     * @return array<string>
+     */
     private function parseCommaDelimited(?string $value): array
     {
         $value = trim($value ?? '');

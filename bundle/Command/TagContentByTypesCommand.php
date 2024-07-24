@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Command;
 
+use Ibexa\Contracts\Core\Repository\ContentService;
 use Ibexa\Contracts\Core\Repository\Repository;
 use Ibexa\Contracts\Core\Repository\Values\Content\Content;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query;
 use Ibexa\Contracts\Core\Repository\Values\Content\Query\Criterion;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
+use Ibexa\Core\Repository\SearchService;
 use Netgen\TagsBundle\API\Repository\TagsService;
 use Netgen\TagsBundle\Core\FieldType\Tags\Value as TagFieldValue;
 use Symfony\Component\Console\Command\Command;
@@ -33,6 +35,8 @@ final class TagContentByTypesCommand extends Command
 
     public function __construct(
         private Repository $repository,
+        private ContentService $contentService,
+        private SearchService $searchService,
         private TagsService $tagsService,
         private ConfigResolverInterface $configResolver,
     ) {
@@ -64,7 +68,7 @@ final class TagContentByTypesCommand extends Command
 
         $batchSize = 50;
 
-        $searchResults = $this->repository->getSearchService()->findContent($query);
+        $searchResults = $this->searchService->findContent($query);
         $totalResults = $searchResults->totalCount;
 
         $this->style->newLine();
@@ -80,7 +84,7 @@ final class TagContentByTypesCommand extends Command
         for ($offset = 0; $offset < $totalResults; $offset += $batchSize) {
             $query->offset = $offset;
             $query->limit = $batchSize;
-            $searchResults = $this->repository->getSearchService()->findContent($query);
+            $searchResults = $this->searchService->findContent($query);
 
             $this->repository->beginTransaction();
 
@@ -108,13 +112,13 @@ final class TagContentByTypesCommand extends Command
 
                     $this->repository->sudo(
                         function () use ($content, $fieldIdentifier, $tagsToAssign): void {
-                            $contentDraft = $this->repository->getContentService()->createContentDraft($content->contentInfo);
-                            $contentUpdateStruct = $this->repository->getContentService()->newContentUpdateStruct();
+                            $contentDraft = $this->contentService->createContentDraft($content->contentInfo);
+                            $contentUpdateStruct = $this->contentService->newContentUpdateStruct();
 
                             $contentUpdateStruct->setField($fieldIdentifier, new TagFieldValue($tagsToAssign));
 
-                            $this->repository->getContentService()->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
-                            $this->repository->getContentService()->publishVersion($contentDraft->versionInfo);
+                            $this->contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
+                            $this->contentService->publishVersion($contentDraft->versionInfo);
                         }
                     );
 

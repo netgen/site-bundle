@@ -98,7 +98,7 @@ final class TagContentByTypesCommand extends Command
 
                     $alreadyAssignedTags = $content->getFieldValue($fieldIdentifier)->tags;
                     $tag = $this->tagsService->loadTag($this->getTagId((int) $input->getOption('tag-id')));
-                    $tagsToAssign = array_filter($alreadyAssignedTags, fn ($alreadyAssignedTag) => $tag->id !== $alreadyAssignedTag->id);
+                    $tagsToAssign = array_filter($alreadyAssignedTags, static fn ($alreadyAssignedTag) => $tag->id !== $alreadyAssignedTag->id);
                     $tagsToAssign[] = $tag;
 
                     $this->repository->sudo(

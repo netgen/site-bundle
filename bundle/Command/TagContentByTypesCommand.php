@@ -131,7 +131,7 @@ final class TagContentByTypesCommand extends Command
         return Command::SUCCESS;
     }
 
-    protected function getParentLocation(int $parentLocationInput): int
+    private function getParentLocation(int $parentLocationInput): int
     {
         if (!is_numeric($parentLocationInput) || (int)$parentLocationInput < 1) {
             throw new InvalidOptionException(

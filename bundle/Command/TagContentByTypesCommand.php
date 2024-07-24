@@ -37,8 +37,7 @@ final class TagContentByTypesCommand extends Command
         private Repository $repository,
         private ContentService $contentService,
         private SearchService $searchService,
-        private TagsService $tagsService,
-        private ConfigResolverInterface $configResolver,
+        private TagsService $tagsService
     ) {
         // Parent constructor call is mandatory for commands registered as services
         parent::__construct();
@@ -50,7 +49,7 @@ final class TagContentByTypesCommand extends Command
             ->addOption('parent-location', null, InputOption::VALUE_REQUIRED)
             ->addOption('content-types', null, InputOption::VALUE_REQUIRED)
             ->addOption('tag-id', null, InputOption::VALUE_REQUIRED)
-            ->addOption('field-identifier', null, InputOption::VALUE_OPTIONAL);
+            ->addOption('field-identifier', null, InputOption::VALUE_REQUIRED);
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output): void
@@ -74,12 +73,7 @@ final class TagContentByTypesCommand extends Command
         $this->style->newLine();
         $this->style->progressStart($totalResults);
 
-        $fieldIdentifierInput = $input->getOption('field-identifier');
-        if ($fieldIdentifierInput === null) {
-            $fieldIdentifier = $this->configResolver->getParameter('tag_command_default_field_identifier', 'ngsite')[0];
-        } else {
-            $fieldIdentifier = $fieldIdentifierInput;
-        }
+        $fieldIdentifier = $input->getOption('field-identifier');
 
         for ($offset = 0; $offset < $totalResults; $offset += $batchSize) {
             $query->offset = $offset;

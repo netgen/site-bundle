@@ -61,6 +61,5 @@ services:
             - "@ibexa.api.service.content"
             - "@netgen.ibexa_site_api.repository.filtering_search_service"
             - "@netgen_tags.api.service.tags"
-            - "@ibexa.config.resolver"
         tags:
             - { name: console.command, command: 'ngsite:content:tag-content' }

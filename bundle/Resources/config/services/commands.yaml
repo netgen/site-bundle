@@ -53,3 +53,13 @@ services:
             - "@?profiler"
         tags:
             - { name: console.command, command: 'ngsite:profiler:clear-cache' }
+
+    ngsite.command.tag_content:
+        class: Netgen\Bundle\SiteBundle\Command\TagContentByTypesCommand
+        arguments:
+            - "@ibexa.api.repository"
+            - "@ibexa.api.service.content"
+            - "@netgen.ibexa_site_api.repository.filtering_search_service"
+            - "@netgen_tags.api.service.tags"
+        tags:
+            - { name: console.command, command: 'ngsite:content:tag-content' }

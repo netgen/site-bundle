@@ -79,7 +79,6 @@ final class TagContentByTypesCommand extends Command
             $searchResults = $this->searchService->findContent($query);
 
             foreach ($searchResults->searchHits as $searchHit) {
-
                 $this->repository->beginTransaction();
 
                 /** @var \Ibexa\Contracts\Core\Repository\Values\Content\Content $content */

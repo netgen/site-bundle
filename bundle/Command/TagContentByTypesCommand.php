@@ -92,9 +92,9 @@ final class TagContentByTypesCommand extends Command
                     continue;
                 }
 
-                $tag = $this->tagsService->loadTag($this->getTagId((int)$input->getOption('tag-id')));
+                $tag = $this->tagsService->loadTag($this->getTagId((int) $input->getOption('tag-id')));
                 $alreadyAssignedTags = $content->getFieldValue($fieldIdentifier)->tags;
-                $targetTagAlreadyAssigned = array_filter($alreadyAssignedTags, static fn($alreadyAssignedTag) => $tag->id === $alreadyAssignedTag->id);
+                $targetTagAlreadyAssigned = array_filter($alreadyAssignedTags, static fn ($alreadyAssignedTag) => $tag->id === $alreadyAssignedTag->id);
 
                 if (count($targetTagAlreadyAssigned) > 0) {
                     continue;
@@ -106,6 +106,7 @@ final class TagContentByTypesCommand extends Command
                 $this->repository->sudo(
                     function () use ($content, $fieldIdentifier, $tagsToAssign): void {
                         $this->repository->beginTransaction();
+
                         try {
                             $contentDraft = $this->contentService->createContentDraft($content->contentInfo);
                             $contentUpdateStruct = $this->contentService->newContentUpdateStruct();

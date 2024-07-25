@@ -73,12 +73,12 @@ final class TagContentByTypesCommand extends Command
 
         $fieldIdentifier = $input->getOption('field-identifier');
 
+        $this->repository->beginTransaction();
+
         for ($offset = 0; $offset < $totalResults; $offset += $batchSize) {
             $query->offset = $offset;
             $query->limit = $batchSize;
             $searchResults = $this->searchService->findContent($query);
-
-            $this->repository->beginTransaction();
 
             foreach ($searchResults->searchHits as $searchHit) {
                 /** @var \Ibexa\Contracts\Core\Repository\Values\Content\Content $content */
@@ -121,8 +121,9 @@ final class TagContentByTypesCommand extends Command
                     continue;
                 }
             }
-            $this->repository->commit();
         }
+
+        $this->repository->commit();
 
         $this->style->progressFinish();
         $this->style->success('Tags assigned successfully');

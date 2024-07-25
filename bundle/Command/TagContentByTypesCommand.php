@@ -79,8 +79,6 @@ final class TagContentByTypesCommand extends Command
             $searchResults = $this->searchService->findContent($query);
 
             foreach ($searchResults->searchHits as $searchHit) {
-                $this->repository->beginTransaction();
-
                 /** @var \Ibexa\Contracts\Core\Repository\Values\Content\Content $content */
                 $content = $searchHit->valueObject;
 
@@ -88,20 +86,27 @@ final class TagContentByTypesCommand extends Command
                     continue;
                 }
 
-                try {
-                    if (!$content->getField($fieldIdentifier)->value instanceof TagFieldValue) {
-                        $this->style->warning(sprintf('Field with identifier %s must be a type of eztags', $fieldIdentifier));
+                if (!$content->getField($fieldIdentifier)->value instanceof TagFieldValue) {
+                    $this->style->warning(sprintf('Field with identifier %s must be a type of eztags', $fieldIdentifier));
 
-                        continue;
-                    }
+                    continue;
+                }
 
-                    $alreadyAssignedTags = $content->getFieldValue($fieldIdentifier)->tags;
-                    $tag = $this->tagsService->loadTag($this->getTagId((int) $input->getOption('tag-id')));
-                    $tagsToAssign = array_filter($alreadyAssignedTags, static fn ($alreadyAssignedTag) => $tag->id !== $alreadyAssignedTag->id);
-                    $tagsToAssign[] = $tag;
+                $tag = $this->tagsService->loadTag($this->getTagId((int)$input->getOption('tag-id')));
+                $alreadyAssignedTags = $content->getFieldValue($fieldIdentifier)->tags;
+                $targetTagAlreadyAssigned = array_filter($alreadyAssignedTags, static fn($alreadyAssignedTag) => $tag->id === $alreadyAssignedTag->id);
 
-                    $this->repository->sudo(
-                        function () use ($content, $fieldIdentifier, $tagsToAssign): void {
+                if (count($targetTagAlreadyAssigned) > 0) {
+                    continue;
+                }
+
+                $tagsToAssign = $alreadyAssignedTags;
+                $tagsToAssign[] = $tag;
+
+                $this->repository->sudo(
+                    function () use ($content, $fieldIdentifier, $tagsToAssign): void {
+                        $this->repository->beginTransaction();
+                        try {
                             $contentDraft = $this->contentService->createContentDraft($content->contentInfo);
                             $contentUpdateStruct = $this->contentService->newContentUpdateStruct();
 
@@ -109,18 +114,16 @@ final class TagContentByTypesCommand extends Command
 
                             $this->contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
                             $this->contentService->publishVersion($contentDraft->versionInfo);
-                        },
-                    );
-                    $this->repository->commit();
 
-                    $this->style->progressAdvance();
-                } catch (Throwable $t) {
-                    $this->style->error($t->getMessage());
+                            $this->repository->commit();
+                        } catch (Throwable $t) {
+                            $this->style->error($t->getMessage());
 
-                    $this->repository->rollback();
-
-                    continue;
-                }
+                            $this->repository->rollback();
+                        }
+                    },
+                );
+                $this->style->progressAdvance();
             }
         }
 

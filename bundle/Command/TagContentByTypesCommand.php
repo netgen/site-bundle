@@ -23,7 +23,6 @@ use function array_filter;
 use function array_map;
 use function array_unique;
 use function array_values;
-use function count;
 use function explode;
 use function sprintf;
 use function trim;
@@ -60,7 +59,7 @@ final class TagContentByTypesCommand extends Command
     {
         $query = new Query();
         $query->filter = new Criterion\LogicalAnd([
-            new Criterion\ParentLocationId($this->getParentLocation((int) $input->getOption('parent-location'))),
+            new Criterion\ParentLocationId($this->getParentLocationId((int) $input->getOption('parent-location'))),
             new Criterion\ContentTypeIdentifier($this->getContentTypes($input->getOption('content-types'))),
         ]);
 
@@ -94,25 +93,26 @@ final class TagContentByTypesCommand extends Command
                 }
 
                 $tag = $this->tagsService->loadTag($this->getTagId((int) $input->getOption('tag-id')));
-                $alreadyAssignedTags = $content->getFieldValue($fieldIdentifier)->tags;
-                $targetTagAlreadyAssigned = array_filter($alreadyAssignedTags, static fn ($alreadyAssignedTag) => $tag->id === $alreadyAssignedTag->id);
+                $valueTags = $content->getFieldValue($fieldIdentifier)->tags;
 
-                if (count($targetTagAlreadyAssigned) > 0) {
-                    continue;
+                foreach ($valueTags as $valueTag) {
+                    // Skip content which already has the provided tag
+                    if ($valueTag->id === $tag->id) {
+                        continue 2;
+                    }
                 }
 
-                $tagsToAssign = $alreadyAssignedTags;
-                $tagsToAssign[] = $tag;
+                $valueTags[] = $tag;
 
                 $this->repository->sudo(
-                    function () use ($content, $fieldIdentifier, $tagsToAssign): void {
+                    function () use ($content, $fieldIdentifier, $valueTags): void {
                         $this->repository->beginTransaction();
 
                         try {
                             $contentDraft = $this->contentService->createContentDraft($content->contentInfo);
                             $contentUpdateStruct = $this->contentService->newContentUpdateStruct();
 
-                            $contentUpdateStruct->setField($fieldIdentifier, new TagFieldValue($tagsToAssign));
+                            $contentUpdateStruct->setField($fieldIdentifier, new TagFieldValue($valueTags));
 
                             $this->contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
                             $this->contentService->publishVersion($contentDraft->versionInfo);
@@ -125,6 +125,7 @@ final class TagContentByTypesCommand extends Command
                         }
                     },
                 );
+
                 $this->style->progressAdvance();
             }
         }
@@ -135,15 +136,15 @@ final class TagContentByTypesCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function getParentLocation(int $parentLocation): int
+    private function getParentLocationId(int $parentLocationId): int
     {
-        if ($parentLocation < 1) {
+        if ($parentLocationId < 1) {
             throw new InvalidOptionException(
-                sprintf("Argument --parent-location must be an integer > 0, you provided '%s'", $parentLocation),
+                sprintf("Argument --parent-location must be an integer > 0, you provided '%s'", $parentLocationId),
             );
         }
 
-        return $parentLocation;
+        return $parentLocationId;
     }
 
     /**

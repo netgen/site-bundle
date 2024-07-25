@@ -164,9 +164,9 @@ final class TagContentByTypesCommand extends Command
     /**
      * @return array<string>
      */
-    private function parseCommaDelimited(?string $value): array
+    private function parseCommaDelimited(string $value): array
     {
-        $value = trim($value ?? '');
+        $value = trim($value);
 
         if ($value === '') {
             return [];

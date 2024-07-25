@@ -87,7 +87,7 @@ final class TagContentByTypesCommand extends Command
                 }
 
                 if (!$content->getField($fieldIdentifier)->value instanceof TagFieldValue) {
-                    $this->style->warning(sprintf('Field with identifier %s must be a type of eztags', $fieldIdentifier));
+                    $this->style->warning(sprintf('Field "%s" must be of "eztags" type in content with ID #%d', $fieldIdentifier, $content->id));
 
                     continue;
                 }
@@ -140,7 +140,7 @@ final class TagContentByTypesCommand extends Command
     {
         if ($parentLocationId < 1) {
             throw new InvalidOptionException(
-                sprintf("Argument --parent-location must be an integer > 0, you provided '%s'", $parentLocationId),
+                sprintf('Argument --parent-location must be an integer > 0, you provided "%d"', $parentLocationId),
             );
         }
 
@@ -159,7 +159,7 @@ final class TagContentByTypesCommand extends Command
     {
         if ($tagId < 1) {
             throw new InvalidOptionException(
-                sprintf("Argument --tag-id must be an integer > 0, you provided '%s'", $tagId),
+                sprintf('Argument --tag-id must be an integer > 0, you provided "%d"', $tagId),
             );
         }
 

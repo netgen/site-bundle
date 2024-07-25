@@ -131,34 +131,34 @@ final class TagContentByTypesCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function getParentLocation(int $parentLocationInput): int
+    private function getParentLocation(int $parentLocation): int
     {
-        if ($parentLocationInput < 1) {
+        if ($parentLocation < 1) {
             throw new InvalidOptionException(
-                sprintf("Argument --parent-location must be an integer > 0, you provided '%s'", $parentLocationInput),
+                sprintf("Argument --parent-location must be an integer > 0, you provided '%s'", $parentLocation),
             );
         }
 
-        return $parentLocationInput;
+        return $parentLocation;
     }
 
     /**
      * @return array<string>
      */
-    private function getContentTypes(string $contentTypesInput): array
+    private function getContentTypes(string $contentTypes): array
     {
-        return $this->parseCommaDelimited($contentTypesInput);
+        return $this->parseCommaDelimited($contentTypes);
     }
 
-    private function getTagId(int $tagIdInput): int
+    private function getTagId(int $tagId): int
     {
-        if ($tagIdInput < 1) {
+        if ($tagId < 1) {
             throw new InvalidOptionException(
-                sprintf("Argument --tag-id must be an integer > 0, you provided '%s'", $tagIdInput),
+                sprintf("Argument --tag-id must be an integer > 0, you provided '%s'", $tagId),
             );
         }
 
-        return $tagIdInput;
+        return $tagId;
     }
 
     /**

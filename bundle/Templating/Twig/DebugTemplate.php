@@ -12,8 +12,6 @@ use function dirname;
 use function getcwd;
 use function mb_stripos;
 use function mb_substr;
-use function ob_get_clean;
-use function ob_start;
 use function preg_replace;
 use function str_contains;
 use function str_ends_with;
@@ -54,14 +52,14 @@ class DebugTemplate extends Template
                 $templateResult,
             );
         } else {
-            $templateResult  = "\n<!-- START " . $templateName . " -->\n" . $templateResult;
+            $templateResult = "\n<!-- START " . $templateName . " -->\n" . $templateResult;
         }
 
         // Display stop template comment after result, if applicable.
         if (str_contains($templateResult, '</body>')) {
             $bodyPos = (int) mb_stripos($templateResult, '</body>');
             // Add layout template name before </body>, to avoid display quirks in some browsers.
-            $templateResult =  mb_substr($templateResult, 0, $bodyPos)
+            $templateResult = mb_substr($templateResult, 0, $bodyPos)
                  . "\n<!-- STOP " . $templateName . " -->\n"
                  . mb_substr($templateResult, $bodyPos);
         } else {

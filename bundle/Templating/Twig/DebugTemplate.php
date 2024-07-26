@@ -29,49 +29,46 @@ class DebugTemplate extends Template
 {
     private Filesystem $fileSystem;
 
-    public function display(array $context, array $blocks = []): void
+    public function render(array $context): string
     {
         $this->fileSystem = $this->fileSystem ?? new Filesystem();
 
-        // Bufferize to be able to insert template name as HTML comments if applicable.
+        // Get the template result to be able to insert template name as HTML comments if applicable.
         // Layout template name will only appear at the end, to avoid potential quirks with old browsers
         // when comments appear before doctype declaration.
-        ob_start();
-        parent::display($context, $blocks);
-        $templateResult = (string) ob_get_clean();
+        $templateResult = parent::render($context);
 
         $templateName = trim($this->fileSystem->makePathRelative($this->getSourceContext()->getPath(), dirname((string) getcwd())), '/');
         $isHtmlTemplate = str_ends_with($templateName, 'html.twig');
         $templateName = $isHtmlTemplate ? $templateName . ' (' . $this->getSourceContext()->getName() . ')' : $templateName;
 
-        // Display start template comment, if applicable.
-        if ($isHtmlTemplate) {
-            if (str_contains(trim($templateResult), '<!doctype')) {
-                $templateResult = (string) preg_replace(
-                    '#(<!doctype[^>]+>)#im',
-                    "$1\n<!-- START " . $templateName . ' -->',
-                    $templateResult,
-                );
-            } else {
-                echo "\n<!-- START " . $templateName . " -->\n";
-            }
+        if (!$isHtmlTemplate) {
+            return $templateResult;
+        }
+
+        // Display start template comment
+        if (str_contains(trim($templateResult), '<!doctype')) {
+            $templateResult = (string) preg_replace(
+                '#(<!doctype[^>]+>)#im',
+                "$1\n<!-- START " . $templateName . ' -->',
+                $templateResult,
+            );
+        } else {
+            $templateResult  = "\n<!-- START " . $templateName . " -->\n" . $templateResult;
         }
 
         // Display stop template comment after result, if applicable.
-        if ($isHtmlTemplate) {
-            if (str_contains($templateResult, '</body>')) {
-                $bodyPos = (int) mb_stripos($templateResult, '</body>');
-                // Add layout template name before </body>, to avoid display quirks in some browsers.
-                echo mb_substr($templateResult, 0, $bodyPos)
-                     . "\n<!-- STOP " . $templateName . " -->\n"
-                     . mb_substr($templateResult, $bodyPos);
-            } else {
-                echo $templateResult;
-                echo "\n<!-- STOP " . $templateName . " -->\n";
-            }
+        if (str_contains($templateResult, '</body>')) {
+            $bodyPos = (int) mb_stripos($templateResult, '</body>');
+            // Add layout template name before </body>, to avoid display quirks in some browsers.
+            $templateResult =  mb_substr($templateResult, 0, $bodyPos)
+                 . "\n<!-- STOP " . $templateName . " -->\n"
+                 . mb_substr($templateResult, $bodyPos);
         } else {
-            echo $templateResult;
+            $templateResult .= "\n<!-- STOP " . $templateName . " -->\n";
         }
+
+        return $templateResult;
     }
 
     public function getTemplateName()

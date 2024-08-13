@@ -7,6 +7,9 @@ namespace Netgen\Bundle\SiteBundle\Core\Imagine\VariationPathGenerator;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 
+use function pathinfo;
+use function preg_replace;
+
 /**
  * Decorates VariationPathGenerator with .webp extension if image variation is configured for this format.
  */
@@ -35,7 +38,7 @@ final class WebpFormatVariationPathGenerator implements VariationPathGenerator
 
         $info = pathinfo($originalPath);
 
-        if(empty($info['extension'])){
+        if (!is_string($info['extension']) || strlen($info['extension']) === 0) {
             return $variationPath . '.webp';
         }
 

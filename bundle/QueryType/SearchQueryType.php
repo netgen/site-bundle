@@ -52,15 +52,13 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
         $optionsResolver->setDefault('content_types', $this->configResolver->getParameter('search.content_types', 'ngsite'));
         $optionsResolver->setDefault('subtree', $this->site->getSettings()->rootLocationId);
         $optionsResolver->setDefault('sort', [Query\SortClause\DatePublished::class]);
-        $optionsResolver->setDefault('order', 'desc');
+        $optionsResolver->setDefault('order', Query::SORT_DESC);
     }
 
     protected function doGetQuery(array $parameters): Query
     {
         $subtreeLocation = $this->site->getLoadService()->loadLocation($parameters['subtree']);
         $sortingKeys = $parameters['sort'];
-        $order = $parameters['order'];
-        $descendingOrder = $order === 'desc';
         $criteria = [
             new Criterion\Subtree($subtreeLocation->pathString),
             new Criterion\Visibility(Criterion\Visibility::VISIBLE),
@@ -73,7 +71,7 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
         $query->filter = new Criterion\LogicalAnd($criteria);
         $sortClauses = [];
         foreach ($sortingKeys as $sortingKey) {
-            $sortClauses[] = $this->createSortClause($sortingKey, $descendingOrder);
+            $sortClauses[] = new $sortingKey($parameters['order']);
         }
         $query->sortClauses = $sortClauses;
 
@@ -96,12 +94,4 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
         return true;
     }
 
-    private function createSortClause(string $name, bool $desc = true): mixed
-    {
-        if ($desc) {
-            return new $name(Query::SORT_DESC);
-        }
-
-        return new $name(Query::SORT_ASC);
-    }
 }

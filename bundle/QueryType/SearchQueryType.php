@@ -47,7 +47,7 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
         );
         $optionsResolver->setAllowedValues(
             'order',
-            static fn (string $searchText): bool => trim($searchText) === 'asc' || trim($searchText) === 'desc',
+            static fn (string $order): bool => in_array($order, [Query::SORT_ASC, Query::SORT_DESC], true),
         );
         $optionsResolver->setDefault('content_types', $this->configResolver->getParameter('search.content_types', 'ngsite'));
         $optionsResolver->setDefault('subtree', $this->site->getSettings()->rootLocationId);

@@ -86,7 +86,8 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
     private function sortKeysAllowed(array $keys): bool
     {
         foreach ($keys as $key) {
-            if (!class_exists($key)) {
+            if (!class_exists($key) || !is_a($key, SortClause::class, true)) {
+
                 return false;
             }
         }

@@ -13,7 +13,10 @@ use Netgen\Bundle\SiteBundle\API\Search\Criterion\FullText;
 use Netgen\IbexaSiteApi\API\Site;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use function class_exists;
 use function count;
+use function in_array;
+use function is_a;
 use function trim;
 
 final class SearchQueryType extends OptionsResolverBasedQueryType
@@ -21,8 +24,7 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
     public function __construct(
         private readonly Site $site,
         private readonly ConfigResolverInterface $configResolver,
-    ) {
-    }
+    ) {}
 
     public static function getName(): string
     {
@@ -87,12 +89,10 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
     {
         foreach ($keys as $key) {
             if (!class_exists($key) || !is_a($key, SortClause::class, true)) {
-
                 return false;
             }
         }
 
         return true;
     }
-
 }

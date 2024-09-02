@@ -73,12 +73,12 @@ class DebugTemplate extends Template
         }
     }
 
-    public function getTemplateName()
+    public function getTemplateName(): string
     {
         return '';
     }
 
-    public function getSourceContext()
+    public function getSourceContext(): Source
     {
         return new Source('', '');
     }
@@ -86,7 +86,7 @@ class DebugTemplate extends Template
     /**
      * @return array<string, mixed>
      */
-    public function getDebugInfo()
+    public function getDebugInfo(): array
     {
         return [];
     }

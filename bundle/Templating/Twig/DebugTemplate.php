@@ -83,9 +83,6 @@ class DebugTemplate extends Template
         return new Source('', '');
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     public function getDebugInfo(): array
     {
         return [];

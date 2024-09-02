@@ -37,3 +37,7 @@ parameters:
         -
           message: '#Method Netgen\\Bundle\\SiteBundle\\Templating\\Twig\\DebugTemplate::doDisplay\(\) has no return type specified#'
           path: bundle/Templating/Twig/DebugTemplate.php
+
+        -
+          message: '#Offset \d does not exist on array#'
+          path: bundle/RichText/Converter/Link.php

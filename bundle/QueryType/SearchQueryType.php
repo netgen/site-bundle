@@ -60,7 +60,7 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
     protected function doGetQuery(array $parameters): Query
     {
         $subtreeLocation = $this->site->getLoadService()->loadLocation($parameters['subtree']);
-        $sortingKeys = $parameters['sort'];
+
         $criteria = [
             new Criterion\Subtree($subtreeLocation->pathString),
             new Criterion\Visibility(Criterion\Visibility::VISIBLE),
@@ -72,7 +72,7 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
         $query->query = new FullText(trim($parameters['search_text']));
         $query->filter = new Criterion\LogicalAnd($criteria);
         $sortClauses = [];
-        foreach ($sortingKeys as $sortingKey) {
+        foreach ($parameters['sort'] as $sortingKey) {
             $sortClauses[] = new $sortingKey($parameters['order']);
         }
         $query->sortClauses = $sortClauses;

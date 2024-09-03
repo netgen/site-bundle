@@ -44,8 +44,8 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
         );
         $optionsResolver->setAllowedValues(
             'sort',
-            /** @var string[] $keys */
-            fn (array $keys): bool => $this->sortKeysAllowed($keys),
+            /** @var string[] $classNames */
+            fn (array $classNames): bool => $this->validateSortConfig($classNames),
         );
         $optionsResolver->setAllowedValues(
             'order',
@@ -73,8 +73,8 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
         $query->query = new FullText(trim($parameters['search_text']));
         $query->filter = new Criterion\LogicalAnd($criteria);
         $sortClauses = [];
-        foreach ($parameters['sort'] as $sortingKey) {
-            $sortClauses[] = new $sortingKey($parameters['order']);
+        foreach ($parameters['sort'] as $className) {
+            $sortClauses[] = new $className($parameters['order']);
         }
         $query->sortClauses = $sortClauses;
 
@@ -82,12 +82,12 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
     }
 
     /**
-     * @param string[] $keys
+     * @param string[] $classNames
      */
-    private function sortKeysAllowed(array $keys): bool
+    private function validateSortConfig(array $classNames): bool
     {
-        foreach ($keys as $key) {
-            if (!class_exists($key) || !is_a($key, SortClause::class, true)) {
+        foreach ($classNames as $className) {
+            if (!class_exists($className) || !is_a($className, SortClause::class, true)) {
                 return false;
             }
         }

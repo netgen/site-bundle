@@ -65,6 +65,7 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
             new Criterion\Subtree($subtreeLocation->pathString),
             new Criterion\Visibility(Criterion\Visibility::VISIBLE),
         ];
+        
         if (count($parameters['content_types']) > 0) {
             $criteria[] = new Criterion\ContentTypeIdentifier($parameters['content_types']);
         }

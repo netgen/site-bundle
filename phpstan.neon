@@ -6,6 +6,9 @@ includes:
     - vendor/phpstan/phpstan-symfony/rules.neon
 
 parameters:
+    excludePaths:
+        - bundle/Templating/Twig/LegacyDebugTemplate.php
+
     ignoreErrors:
         # Doctrine specifics
 
@@ -32,11 +35,11 @@ parameters:
 
         -
           message: '#has parameter \$(blocks|context) with no value type specified in iterable type array#'
-          path: bundle/Templating/Twig/DebugTemplate.php
+          path: bundle/Templating/Twig/BaseDebugTemplate.php
 
         -
-          message: '#Method Netgen\\Bundle\\SiteBundle\\Templating\\Twig\\DebugTemplate::doDisplay\(\) has no return type specified#'
-          path: bundle/Templating/Twig/DebugTemplate.php
+          message: '#Method Netgen\\Bundle\\SiteBundle\\Templating\\Twig\\BaseDebugTemplate::doDisplay\(\) has no return type specified#'
+          path: bundle/Templating/Twig/BaseDebugTemplate.php
 
         -
           message: '#Offset \d does not exist on array#'

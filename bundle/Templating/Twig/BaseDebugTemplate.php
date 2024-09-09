@@ -71,6 +71,4 @@ abstract class BaseDebugTemplate extends Template
             yield $templateResult;
         }
     }
-
-    protected function doDisplay(array $context, array $blocks = []) {}
 }

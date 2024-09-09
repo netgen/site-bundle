@@ -22,4 +22,9 @@ class DebugTemplate extends BaseDebugTemplate
     {
         return [];
     }
+
+    protected function doDisplay(array $context, array $blocks = []): iterable
+    {
+        return [];
+    }
 }

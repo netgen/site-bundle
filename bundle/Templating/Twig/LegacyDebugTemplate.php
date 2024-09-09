@@ -31,4 +31,6 @@ class LegacyDebugTemplate extends BaseDebugTemplate
     {
         return [];
     }
+
+    protected function doDisplay(array $context, array $blocks = []) {}
 }

@@ -35,11 +35,7 @@ parameters:
 
         -
           message: '#has parameter \$(blocks|context) with no value type specified in iterable type array#'
-          path: bundle/Templating/Twig/BaseDebugTemplate.php
-
-        -
-          message: '#Method Netgen\\Bundle\\SiteBundle\\Templating\\Twig\\BaseDebugTemplate::doDisplay\(\) has no return type specified#'
-          path: bundle/Templating/Twig/BaseDebugTemplate.php
+          path: bundle/Templating/Twig/
 
         -
           message: '#Offset \d does not exist on array#'

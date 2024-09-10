@@ -7,6 +7,7 @@ namespace Netgen\Bundle\SiteBundle\Core\Imagine\VariationPathGenerator;
 use Ibexa\Contracts\Core\Variation\VariationPathGenerator;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 
+use function array_key_exists;
 use function pathinfo;
 use function preg_replace;
 
@@ -21,7 +22,7 @@ final class WebpFormatVariationPathGenerator implements VariationPathGenerator
 
     public function __construct(
         VariationPathGenerator $innerVariationPathGenerator,
-        FilterConfiguration $filterConfiguration
+        FilterConfiguration $filterConfiguration,
     ) {
         $this->innerVariationPathGenerator = $innerVariationPathGenerator;
         $this->filterConfiguration = $filterConfiguration;
@@ -38,10 +39,10 @@ final class WebpFormatVariationPathGenerator implements VariationPathGenerator
 
         $info = pathinfo($originalPath);
 
-        if (!is_string($info['extension']) || strlen($info['extension']) === 0) {
+        if (!array_key_exists('extension', $info) || $info['extension'] === '') {
             return $variationPath . '.webp';
         }
 
-        return preg_replace("/\.{$info['extension']}$/", '.webp', $variationPath);
+        return preg_replace("/\\.{$info['extension']}$/", '.webp', $variationPath) ?? $variationPath;
     }
 }

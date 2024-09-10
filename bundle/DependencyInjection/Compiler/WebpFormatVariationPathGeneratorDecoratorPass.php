@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Reference;
 class WebpFormatVariationPathGeneratorDecoratorPass implements CompilerPassInterface
 {
     /**
-     * Overrides the IO resolver to disable generating absolute URIs to images.
+     * Decorates default image alias variation path generator to comply with legacy variation URL pattern
      */
     public function process(ContainerBuilder $container): void
     {

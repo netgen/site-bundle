@@ -98,7 +98,7 @@ final class ShortcutExtension implements ExtensionInterface
             $item->setLinkAttribute('title', $link->label);
 
             if (!$content->getField('use_shortcut_name')->value->bool) {
-                $item->setLabel($urlValue->text);
+                $item->setLabel($link->label);
             }
         }
     }

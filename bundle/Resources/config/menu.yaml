@@ -33,6 +33,7 @@ services:
         arguments:
             - "@router"
             - "@request_stack"
+            - "@netgen.ibexa_site_api.load_service"
             - "@?logger"
         tags:
             - { name: ngsite.menu.factory.location.extension, priority: 0 }

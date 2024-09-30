@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Menu\Factory\LocationFactory;
 
+use Ibexa\Contracts\Core\Repository\Exceptions\NotFoundException;
+use Ibexa\Contracts\Core\Repository\Exceptions\UnauthorizedException;
 use Ibexa\Core\MVC\Symfony\SiteAccess\URILexer;
 use Knp\Menu\ItemInterface;
-use Netgen\IbexaFieldTypeEnhancedLink\FieldType\Value as EnhancedLinkValue;
 use Netgen\IbexaSiteApi\API\LoadService;
 use Netgen\IbexaSiteApi\API\Values\Content;
 use Netgen\IbexaSiteApi\API\Values\Location;
@@ -38,10 +39,11 @@ final class ShortcutExtension implements ExtensionInterface
 
     public function buildItem(ItemInterface $item, Location $location): void
     {
-        /** @var EnhancedLinkValue $link */
+        /** @var \Netgen\IbexaFieldTypeEnhancedLink\FieldType\Value $link */
         $link = $location->content->getField('link')->value;
 
         $this->buildItemFromContent($item, $location->content);
+
         if ($link->isTargetLinkInNewTab()) {
             $item->setLinkAttribute('target', '_blank')
                 ->setLinkAttribute('rel', 'nofollow noopener noreferrer');
@@ -50,18 +52,22 @@ final class ShortcutExtension implements ExtensionInterface
 
     private function buildItemFromContent(ItemInterface $item, Content $content): void
     {
-        /** @var EnhancedLinkValue $link */
+        /** @var \Netgen\IbexaFieldTypeEnhancedLink\FieldType\Value $link */
         $link = $content->getField('link')->value;
 
         if ($link->isTypeExternal() && is_string($link->reference)) {
-            $this->buildItemFromUrl($item, $link, $content);
+            $this->buildItemFromUrl($item, $content);
 
             return;
         }
 
         $relatedContent = null;
         if ($link->isTypeInternal() && is_int($link->reference) && $link->reference > 0) {
-            $relatedContent = $this->loadService->loadContent($link->reference);
+            try {
+                $relatedContent = $this->loadService->loadContent($link->reference);
+            } catch (NotFoundException|UnauthorizedException) {
+                // Do nothing
+            }
         }
 
         if (!$relatedContent instanceof Content || !$relatedContent->mainLocation instanceof Location) {
@@ -74,12 +80,16 @@ final class ShortcutExtension implements ExtensionInterface
             return;
         }
 
-        $this->buildItemFromRelatedContent($item, $link, $content, $relatedContent);
+        $this->buildItemFromRelatedContent($item, $content, $relatedContent);
     }
 
-    private function buildItemFromUrl(ItemInterface $item, EnhancedLinkValue $link, Content $content): void
+    private function buildItemFromUrl(ItemInterface $item, Content $content): void
     {
+        /** @var \Netgen\IbexaFieldTypeEnhancedLink\FieldType\Value $link */
+        $link = $content->getField('link')->value;
+
         $uri = $link->reference ?? '';
+
         if (!str_starts_with($uri, 'http')) {
             $request = $this->requestStack->getMainRequest();
             if (!$request instanceof Request) {
@@ -103,8 +113,11 @@ final class ShortcutExtension implements ExtensionInterface
         }
     }
 
-    private function buildItemFromRelatedContent(ItemInterface $item, EnhancedLinkValue $link, Content $content, Content $relatedContent): void
+    private function buildItemFromRelatedContent(ItemInterface $item, Content $content, Content $relatedContent): void
     {
+        /** @var \Netgen\IbexaFieldTypeEnhancedLink\FieldType\Value $link */
+        $link = $content->getField('link')->value;
+
         if (!$content->getField('use_shortcut_name')->value->bool) {
             $item->setLabel($link->label ?? $relatedContent->name);
         }

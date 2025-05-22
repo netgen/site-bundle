@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\DependencyInjection;
 
+use Ibexa\Bundle\Core\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
+use Ibexa\Bundle\Core\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
 use Netgen\Bundle\LayoutsBundle\NetgenLayoutsBundle;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\DelegatingLoader;
@@ -23,6 +25,11 @@ final class NetgenSiteExtension extends Extension implements PrependExtensionInt
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+
+        $this->processSemanticConfig($container, $config);
+
         $locator = new FileLocator(__DIR__ . '/../Resources/config');
         $loader = new DelegatingLoader(
             new LoaderResolver(
@@ -81,5 +88,23 @@ final class NetgenSiteExtension extends Extension implements PrependExtensionInt
             $container->prependExtensionConfig($prependConfig, $config);
             $container->addResource(new FileResource($configFile));
         }
+    }
+
+    /**
+     * Processes semantic config and translates it to container parameters.
+     *
+     * @param array<string, mixed> $config
+     */
+    private function processSemanticConfig(ContainerBuilder $container, array $config): void
+    {
+        $processor = new ConfigurationProcessor($container, 'netgen_site');
+        $processor->mapConfig(
+            $config,
+            static function (array $config, string $scope, ContextualizerInterface $c): void {
+                if (isset($config['showcase']['blocks'])) {
+                    $c->setContextualParameter('showcase.blocks', $scope, $config['showcase']['blocks']);
+                }
+            },
+        );
     }
 }

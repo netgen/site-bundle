@@ -63,3 +63,25 @@ services:
             - "@netgen_tags.api.service.tags"
         tags:
             - { name: console.command, command: 'ngsite:content:tag-content' }
+
+    ngsite.command.generate_showcase:
+        class: Netgen\Bundle\SiteBundle\Command\GenerateShowcaseCommand
+        arguments:
+            - "@netgen.ibexa_site_api.named_object.provider"
+            - "@netgen.ibexa_site_api.filter_service"
+            - "@ibexa.api.repository"
+            - "@netgen_layouts.api.service.layout_resolver"
+            - "@netgen_layouts.api.service.layout"
+            - "@netgen_layouts.api.service.block"
+            - "@netgen_layouts.api.service.collection"
+            - "@netgen_layouts.api.service.transaction"
+            - "@netgen_layouts.layout.registry.layout_type"
+            - "@netgen_layouts.block.registry.block_definition"
+            - "@netgen_layouts.block.registry.block_type"
+            - "@netgen_layouts.collection.registry.item_definition"
+            - "@ibexa.config.resolver"
+            - "@Ibexa\\Core\\MVC\\Symfony\\Locale\\LocaleConverterInterface"
+            - "@Ibexa\\Core\\MVC\\Symfony\\SiteAccess"
+            - "@database_connection"
+        tags:
+            - { name: console.command, command: 'ngsite:content:generate-showcase' }

@@ -4,6 +4,7 @@ parameters:
     ngsite.default.site_domain: localhost
 
     ngsite.default.locations.site_info.id: ~
+    ngsite.default.locations.showcase.id: ~
 
     ngsite.default.google_maps.latitude: 45.79849
     ngsite.default.google_maps.longitude: 15.90777
@@ -59,7 +60,7 @@ parameters:
     ngsite.default.template.pagerfanta.ngsite: '@@NetgenSite/pagerfanta/ngsite.html.twig'
     ngsite.default.template.search: '@@NetgenSite/search/search.html.twig'
     ngsite.default.template.menu: '@@KnpMenu/menu.html.twig'
-    
+
     # specify all mime types for which download links should do inline representation and not download the file automatically
     ngsite.default.download.show_inline:
         - 'application/pdf'

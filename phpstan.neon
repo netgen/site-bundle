@@ -13,11 +13,16 @@ parameters:
         # Doctrine specifics
 
         - '#Property Netgen\\Bundle\\SiteBundle\\Entity\\UserAccountKey::\$id is never written, only read#'
+        - '#Cannot call method fetchAllAssociative\(\) on Doctrine\\DBAL\\ForwardCompatibility\\Result\|int\|string.#'
 
         # Ibexa DXP specifics
 
         - '#Access to an undefined property Ibexa\\Contracts\\Core\\FieldType\\Value::\$\w+#'
         - '#Cannot access property \$\w+ on Ibexa\\Contracts\\Core\\FieldType\\Value\|null#'
+
+        # Site API
+
+        - '#Access to an undefined property Netgen\\IbexaSiteApi\\API\\Settings::\$\w+#'
 
         # Wrong typehints in vendor packages
 

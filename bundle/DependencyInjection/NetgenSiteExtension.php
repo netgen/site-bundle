@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\DependencyInjection;
 
+use Ibexa\Bundle\Core\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
+use Ibexa\Bundle\Core\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
 use Netgen\Bundle\LayoutsBundle\NetgenLayoutsBundle;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\DelegatingLoader;
@@ -16,6 +18,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Yaml\Yaml;
 
+use function count;
 use function file_get_contents;
 use function in_array;
 
@@ -23,6 +26,11 @@ final class NetgenSiteExtension extends Extension implements PrependExtensionInt
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+
+        $this->processSemanticConfig($container, $config);
+
         $locator = new FileLocator(__DIR__ . '/../Resources/config');
         $loader = new DelegatingLoader(
             new LoaderResolver(
@@ -81,5 +89,36 @@ final class NetgenSiteExtension extends Extension implements PrependExtensionInt
             $container->prependExtensionConfig($prependConfig, $config);
             $container->addResource(new FileResource($configFile));
         }
+    }
+
+    public function getAlias(): string
+    {
+        return 'ngsite';
+    }
+
+    /**
+     * Processes semantic config and translates it to container parameters.
+     *
+     * @param array<string, mixed> $config
+     */
+    private function processSemanticConfig(ContainerBuilder $container, array $config): void
+    {
+        $processor = new ConfigurationProcessor($container, 'ngsite');
+        $processor->mapConfig(
+            $config,
+            static function (array $config, string $scope, ContextualizerInterface $c): void {
+                if (isset($config['showcase']['rule_priority'])) {
+                    $c->setContextualParameter('showcase.rule_priority', $scope, $config['showcase']['rule_priority']);
+                }
+
+                if (isset($config['showcase']['rule_group_uuid'])) {
+                    $c->setContextualParameter('showcase.rule_group_uuid', $scope, $config['showcase']['rule_group_uuid']);
+                }
+
+                if (isset($config['showcase']['blocks']) && count($config['showcase']['blocks']) > 0) {
+                    $c->setContextualParameter('showcase.blocks', $scope, $config['showcase']['blocks']);
+                }
+            },
+        );
     }
 }

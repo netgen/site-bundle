@@ -46,6 +46,9 @@
         "phpstan/phpstan-symfony": "^1.2",
         "phpstan/phpstan-doctrine": "^1.3"
     },
+    "conflict": {
+        "netgen/layouts-ibexa": "<1.4.11"
+    },
     "config": {
         "allow-plugins": false
     },

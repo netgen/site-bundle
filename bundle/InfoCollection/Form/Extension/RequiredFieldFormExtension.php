@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\InfoCollection\Form\Extension;
 
-use Netgen\Bundle\SiteBundle\InfoCollection\Validator\Constraints\RequiredField;
 use Ibexa\Contracts\ContentForms\Data\Content\FieldData;
 use Netgen\Bundle\InformationCollectionBundle\Ibexa\ContentForms\InformationCollectionFieldType;
 use Netgen\Bundle\InformationCollectionBundle\Ibexa\ContentForms\InformationCollectionType;
+use Netgen\Bundle\SiteBundle\InfoCollection\Validator\Constraints\RequiredField;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Netgen\Bundle\SiteBundle\InfoCollection\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
@@ -7,6 +9,8 @@ use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 use function filter_var;
+
+use const FILTER_VALIDATE_EMAIL;
 
 final class CustomEmailValidator extends ConstraintValidator
 {

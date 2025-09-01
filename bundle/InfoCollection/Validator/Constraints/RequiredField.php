@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace  Netgen\Bundle\SiteBundle\InfoCollection\Validator\Constraints;
+namespace Netgen\Bundle\SiteBundle\InfoCollection\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 

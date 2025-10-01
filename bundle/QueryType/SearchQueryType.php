@@ -11,6 +11,7 @@ use Ibexa\Contracts\Core\Repository\Values\Content\Query\SortClause;
 use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Ibexa\Core\QueryType\OptionsResolverBasedQueryType;
 use Netgen\Bundle\SiteBundle\API\Search\Criterion\FullText;
+use Netgen\IbexaSearchExtra\API\Values\Content\Query\Criterion\Visible;
 use Netgen\IbexaSiteApi\API\Site;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -68,7 +69,7 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
 
         $criteria = [
             new Criterion\Subtree($subtreeLocation->pathString),
-            new Criterion\Visibility(Criterion\Visibility::VISIBLE),
+            new Visible(true),
         ];
 
         if (count($parameters['content_types']) > 0) {

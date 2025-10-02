@@ -35,7 +35,8 @@
         "knplabs/knp-menu-bundle": "^3.2",
         "sensio/framework-extra-bundle": "^6.2",
         "sebastianfeldmann/git": "^3.8",
-        "mailerlite/mailerlite-api-v2-php-sdk": "^0.3.2"
+        "mailerlite/mailerlite-api-v2-php-sdk": "^0.3.2",
+        "netgen/ibexa-search-extra": "^3.6"
     },
     "require-dev": {
         "netgen/layouts-standard": "^1.4",

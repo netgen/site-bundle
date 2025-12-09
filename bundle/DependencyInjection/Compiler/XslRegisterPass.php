@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 final class XslRegisterPass implements CompilerPassInterface
 {
     /**
-     * Registers various Docbook XSL files as custom XSL stylesheets for ezrichtext field type.
+     * Registers various Docbook XSL files as custom XSL stylesheets for ibexa_richtext field type.
      */
     public function process(ContainerBuilder $container): void
     {
@@ -20,18 +20,18 @@ final class XslRegisterPass implements CompilerPassInterface
         $scopes = [ConfigResolver::SCOPE_DEFAULT, ...$siteAccessList];
 
         foreach ($scopes as $scope) {
-            if ($container->hasParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ezrichtext.output_custom_xsl')) {
+            if ($container->hasParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ibexa_richtext.output_custom_xsl')) {
                 /** @var array<int, array<string, mixed>> $xslConfig */
-                $xslConfig = $container->getParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ezrichtext.output_custom_xsl');
+                $xslConfig = $container->getParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ibexa_richtext.output_custom_xsl');
                 $xslConfig[] = ['path' => __DIR__ . '/../../Resources/docbook/output/core.xsl', 'priority' => 5000];
-                $container->setParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ezrichtext.output_custom_xsl', $xslConfig);
+                $container->setParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ibexa_richtext.output_custom_xsl', $xslConfig);
             }
 
-            if ($container->hasParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ezrichtext.edit_custom_xsl')) {
+            if ($container->hasParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ibexa_richtext.edit_custom_xsl')) {
                 /** @var array<int, array<string, mixed>> $xslConfig */
-                $xslConfig = $container->getParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ezrichtext.edit_custom_xsl');
+                $xslConfig = $container->getParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ibexa_richtext.edit_custom_xsl');
                 $xslConfig[] = ['path' => __DIR__ . '/../../Resources/docbook/edit/core.xsl', 'priority' => 5000];
-                $container->setParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ezrichtext.edit_custom_xsl', $xslConfig);
+                $container->setParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ibexa_richtext.edit_custom_xsl', $xslConfig);
             }
         }
     }

@@ -84,8 +84,8 @@ final class UpdatePublishDateCommand extends Command
             throw new RuntimeException("Field definition '" . $fieldDefIdentifier . "' does not exist in '" . $contentTypeIdentifier . "' content type");
         }
 
-        if ($fieldDefinition->fieldTypeIdentifier !== 'ezdatetime' && $fieldDefinition->fieldTypeIdentifier !== 'ezdate') {
-            throw new RuntimeException("Field definition '" . $fieldDefIdentifier . "' must be of 'ezdatetime' or 'ezdate' field type");
+        if ($fieldDefinition->fieldTypeIdentifier !== 'ibexa_datetime' && $fieldDefinition->fieldTypeIdentifier !== 'ibexa_date') {
+            throw new RuntimeException("Field definition '" . $fieldDefIdentifier . "' must be of 'ibexa_datetime' or 'ibexa_date' field type");
         }
 
         $searchService = $this->repository->getSearchService();
@@ -139,7 +139,7 @@ final class UpdatePublishDateCommand extends Command
                     $dateFieldValue instanceof DateValue => $dateFieldValue->date,
                     default => throw new RuntimeException(
                         sprintf(
-                            'Field "%s" is of wrong type, ezdatetime or ezdate expected.',
+                            'Field "%s" is of wrong type, ibexa_datetime or ibexa_date expected.',
                             $fieldDefIdentifier,
                         ),
                     ),

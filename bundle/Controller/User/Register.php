@@ -112,7 +112,7 @@ final class Register extends Controller
         $data->payload = $preUserRegisterEvent->getUserCreateStruct();
 
         foreach ($data->payload->fields as $field) {
-            if ($field->fieldTypeIdentifier !== 'ezuser') {
+            if ($field->fieldTypeIdentifier !== 'ibexa_user') {
                 continue;
             }
 

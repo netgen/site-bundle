@@ -39,14 +39,6 @@ services:
         tags:
             - { name: 'container.service_subscriber' }
 
-    ngsite.controller.relations.related_items:
-        class: Netgen\Bundle\SiteBundle\Controller\Relations\RelatedItems
-        parent: ngsite.controller.base
-        arguments:
-            - "@ngsite.relation.location_resolver"
-        tags:
-            - { name: 'container.service_subscriber' }
-
     ngsite.controller.relations.related_multimedia_items:
         class: Netgen\Bundle\SiteBundle\Controller\Relations\RelatedMultimediaItems
         parent: ngsite.controller.base

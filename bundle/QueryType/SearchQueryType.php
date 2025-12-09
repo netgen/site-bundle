@@ -15,6 +15,7 @@ use Netgen\IbexaSearchExtra\API\Values\Content\Query\Criterion\Visible;
 use Netgen\IbexaSiteApi\API\Site;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use function array_any;
 use function class_exists;
 use function count;
 use function in_array;
@@ -99,7 +100,7 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
     {
         return !array_any(
             $classNames,
-            static fn (string $className): bool => !class_exists($className) || !is_a($className, SortClause::class, true)
+            static fn (string $className): bool => !class_exists($className) || !is_a($className, SortClause::class, true),
         );
     }
 }

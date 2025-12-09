@@ -26,8 +26,6 @@ final class NetgenSiteBundle extends Bundle
 
     public function getContainerExtension(): ExtensionInterface
     {
-        $this->extension ??= new NetgenSiteExtension();
-
-        return $this->extension;
+        return $this->extension ??= new NetgenSiteExtension();
     }
 }

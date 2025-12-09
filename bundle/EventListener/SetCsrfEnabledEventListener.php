@@ -7,11 +7,11 @@ namespace Netgen\Bundle\SiteBundle\EventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Security\Csrf\CsrfTokenManager;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 final class SetCsrfEnabledEventListener implements EventSubscriberInterface
 {
-    public function __construct(private ?CsrfTokenManager $csrfTokenManager = null) {}
+    public function __construct(private ?CsrfTokenManagerInterface $csrfTokenManager = null) {}
 
     /**
      * Returns an array of event names this subscriber wants to listen to.
@@ -28,7 +28,7 @@ final class SetCsrfEnabledEventListener implements EventSubscriberInterface
     {
         $event->getRequest()->attributes->set(
             'csrf_enabled',
-            $this->csrfTokenManager instanceof CsrfTokenManager,
+            $this->csrfTokenManager instanceof CsrfTokenManagerInterface,
         );
     }
 }

@@ -9,18 +9,20 @@ use Netgen\Bundle\SiteBundle\Core\Search\SuggestionResolver;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-use function trim;
+use function mb_trim;
 
 final class Search extends Controller
 {
-    public function __construct(private readonly SuggestionResolver $suggestionResolver) {}
+    public function __construct(
+        private SuggestionResolver $suggestionResolver,
+    ) {}
 
     /**
      * Action for displaying the results of full text search.
      */
     public function __invoke(Request $request): Response
     {
-        $searchText = trim($request->query->get('searchText', ''));
+        $searchText = mb_trim($request->query->get('searchText', ''));
         $template = $this->getConfigResolver()->getParameter('template.search', 'ngsite');
 
         if ($searchText === '') {

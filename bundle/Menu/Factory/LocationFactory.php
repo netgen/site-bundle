@@ -28,7 +28,7 @@ final class LocationFactory implements FactoryInterface
 
     public function createItem(string $name, array $options = []): ItemInterface
     {
-        $menuItem = (new MenuItem($name, $this))->setExtra('translation_domain', false);
+        $menuItem = new MenuItem($name, $this)->setExtra('translation_domain', false);
 
         if (!isset($options['ibexa_location']) || !$options['ibexa_location'] instanceof Location) {
             return $menuItem;

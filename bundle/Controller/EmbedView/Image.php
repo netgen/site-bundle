@@ -15,13 +15,17 @@ use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 
 use function in_array;
 use function mb_substr;
+use function mb_trim;
 use function sprintf;
 use function str_starts_with;
-use function trim;
 
 final class Image extends Controller
 {
-    public function __construct(private Site $site, private LoggerInterface $logger = new NullLogger()) {}
+    public function __construct(
+        private Site $site,
+        private LoggerInterface $logger = new NullLogger(
+        ),
+    ) {}
 
     /**
      * Action for viewing embedded content with image content type identifier.
@@ -29,7 +33,7 @@ final class Image extends Controller
     public function __invoke(ContentView $view): ContentView
     {
         $parameters = $view->getParameters();
-        $targetLink = trim($parameters['objectParameters']['href'] ?? '');
+        $targetLink = mb_trim($parameters['objectParameters']['href'] ?? '');
 
         if ($targetLink !== '') {
             $location = null;

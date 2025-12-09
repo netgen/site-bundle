@@ -9,7 +9,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class ViewLocationByRemoteId extends Controller
 {
-    public function __construct(private LoadService $loadService) {}
+    public function __construct(
+        private LoadService $loadService,
+    ) {}
 
     public function __invoke(string $remoteId): Response
     {

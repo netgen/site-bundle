@@ -12,10 +12,10 @@ use function getcwd;
 use function implode;
 use function mb_stripos;
 use function mb_substr;
+use function mb_trim;
 use function preg_replace;
 use function str_contains;
 use function str_ends_with;
-use function trim;
 
 /**
  * Meant to be used as a Twig base template class.
@@ -36,13 +36,13 @@ abstract class BaseDebugTemplate extends Template
         // when comments appear before doctype declaration.
         $templateResult = implode('', [...parent::yield($context, $blocks)]);
 
-        $templateName = trim($this->fileSystem->makePathRelative($this->getSourceContext()->getPath(), dirname((string) getcwd())), '/');
+        $templateName = mb_trim($this->fileSystem->makePathRelative($this->getSourceContext()->getPath(), dirname((string) getcwd())), '/');
         $isHtmlTemplate = str_ends_with($templateName, 'html.twig');
         $templateName = $isHtmlTemplate ? $templateName . ' (' . $this->getSourceContext()->getName() . ')' : $templateName;
 
         // Display start template comment, if applicable.
         if ($isHtmlTemplate) {
-            if (str_contains(trim($templateResult), '<!doctype')) {
+            if (str_contains(mb_trim($templateResult), '<!doctype')) {
                 $templateResult = (string) preg_replace(
                     '#(<!doctype[^>]+>)#im',
                     "$1\n<!-- START " . $templateName . ' -->',

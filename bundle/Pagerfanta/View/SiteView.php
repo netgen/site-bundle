@@ -11,10 +11,10 @@ use Pagerfanta\View\ViewInterface;
 use Twig\Environment;
 
 use function max;
+use function mb_trim;
 use function min;
-use function trim;
 
-class SiteView implements ViewInterface
+final class SiteView implements ViewInterface
 {
     private PagerfantaInterface $pagerfanta;
 
@@ -26,7 +26,10 @@ class SiteView implements ViewInterface
 
     private int $endPage;
 
-    public function __construct(private Environment $twig, private ConfigResolverInterface $configResolver) {}
+    public function __construct(
+        private Environment $twig,
+        private ConfigResolverInterface $configResolver,
+    ) {}
 
     /**
      * Returns the canonical name.
@@ -161,6 +164,6 @@ class SiteView implements ViewInterface
 
         // We use trim here because Pagerfanta (or Symfony?) adds an extra '?'
         // at the end of page when there are no other query params
-        return trim($routeGenerator($page), '?');
+        return mb_trim($routeGenerator($page), '?');
     }
 }

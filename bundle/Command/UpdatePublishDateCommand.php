@@ -28,8 +28,9 @@ use const PHP_EOL;
 
 final class UpdatePublishDateCommand extends Command
 {
-    public function __construct(private Repository $repository)
-    {
+    public function __construct(
+        private Repository $repository,
+    ) {
         // Parent constructor call is mandatory for commands registered as services
         parent::__construct();
     }
@@ -152,7 +153,7 @@ final class UpdatePublishDateCommand extends Command
                     $metadataUpdateStruct->publishedDate = $dateValueData;
 
                     $this->repository->sudo(
-                        fn (): Content => $this->repository->getContentService()->updateContentMetadata($content->contentInfo, $metadataUpdateStruct),
+                        static fn (Repository $repository): Content => $repository->getContentService()->updateContentMetadata($content->contentInfo, $metadataUpdateStruct),
                     );
 
                     ++$updatedCount;

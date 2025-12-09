@@ -52,8 +52,8 @@ abstract class BaseMultiprocessCommand extends Command
     protected ProgressBar $progressBar;
 
     public function __construct(
-        protected readonly string $projectDir,
-        protected readonly LoggerInterface $logger = new NullLogger(),
+        protected string $projectDir,
+        protected LoggerInterface $logger = new NullLogger(),
         protected ?string $phpPath = null,
     ) {
         parent::__construct();
@@ -191,7 +191,7 @@ abstract class BaseMultiprocessCommand extends Command
             /** @var \Netgen\Bundle\SiteBundle\Command\MultiprocessCommand\ItemList $itemList */
             foreach ($generator as $itemList) {
                 $this->process($itemList);
-                $this->progressBar->advance($itemList->getCount());
+                $this->progressBar->advance($itemList->count);
             }
         }
 
@@ -251,7 +251,7 @@ abstract class BaseMultiprocessCommand extends Command
             if ($itemList === null && $generator->valid()) {
                 /** @var \Netgen\Bundle\SiteBundle\Command\MultiprocessCommand\ItemList $itemList */
                 $itemList = $generator->current();
-                $itemCount = $itemList->getCount();
+                $itemCount = $itemList->count;
                 $generator->next();
             }
 
@@ -293,7 +293,7 @@ abstract class BaseMultiprocessCommand extends Command
 
                 $processes[$key] = $this->getSubProcess($itemList);
                 $processes[$key]->start();
-                $processDepthMap[spl_object_id($processes[$key])] = $itemList->getDepth();
+                $processDepthMap[spl_object_id($processes[$key])] = $itemList->depth;
 
                 $itemList = null;
 
@@ -338,7 +338,7 @@ abstract class BaseMultiprocessCommand extends Command
                 continue;
             }
 
-            if ($processDepth > $itemList->getDepth()) {
+            if ($processDepth > $itemList->depth) {
                 return true;
             }
         }
@@ -354,7 +354,7 @@ abstract class BaseMultiprocessCommand extends Command
             $this->getName(),
             '--processes=1',
             '--master=no',
-            '--items=' . implode(',', $itemList->getItems()),
+            '--items=' . implode(',', $itemList->items),
         ];
 
         foreach ($this->input->getOptions() as $key => $value) {

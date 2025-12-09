@@ -28,7 +28,11 @@ final class SiteRuntime
     private const GROUP_FIELDS_POSITION = 'position';
     private const GROUP_FIELDS_FIELD = 'field';
 
-    public function __construct(private PathHelper $pathHelper, private LocaleConverterInterface $localeConverter, private LoadService $loadService) {}
+    public function __construct(
+        private PathHelper $pathHelper,
+        private LocaleConverterInterface $localeConverter,
+        private LoadService $loadService,
+    ) {}
 
     /**
      * Returns the path for specified location ID.

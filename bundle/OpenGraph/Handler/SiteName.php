@@ -8,11 +8,13 @@ use Netgen\Bundle\IbexaSiteApiBundle\NamedObject\Provider;
 use Netgen\Bundle\OpenGraphBundle\Handler\HandlerInterface;
 use Netgen\Bundle\OpenGraphBundle\MetaTag\Item;
 
-use function trim;
+use function mb_trim;
 
 final class SiteName implements HandlerInterface
 {
-    public function __construct(private Provider $namedObjectProvider) {}
+    public function __construct(
+        private Provider $namedObjectProvider,
+    ) {}
 
     public function getMetaTags(string $tagName, array $params = []): array
     {
@@ -24,7 +26,7 @@ final class SiteName implements HandlerInterface
             ->text;
 
         return [
-            new Item($tagName, trim($siteName)),
+            new Item($tagName, mb_trim($siteName)),
         ];
     }
 }

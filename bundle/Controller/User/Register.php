@@ -124,11 +124,10 @@ final class Register extends Controller
             break;
         }
 
-        /** @var \Ibexa\Contracts\Core\Repository\Values\User\User $newUser */
         $newUser = $this->repository->sudo(
-            fn (): User => $this->repository->getUserService()->createUser(
+            static fn (Repository $repository): User => $repository->getUserService()->createUser(
                 $data->payload,
-                [$this->repository->getUserService()->loadUserGroup($userGroupId)],
+                [$repository->getUserService()->loadUserGroup($userGroupId)],
             ),
         );
 

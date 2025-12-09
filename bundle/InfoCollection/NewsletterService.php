@@ -26,13 +26,13 @@ use function reset;
 
 final class NewsletterService
 {
-    public const ALREADY_ACTIVE = 'already_active';
+    public const string ALREADY_ACTIVE = 'already_active';
 
-    public const NEW_UNCONFIRMED = 'new';
+    public const string NEW_UNCONFIRMED = 'new';
 
-    public const PREVIOUS_UNCONFIRMED = 'unconfirmed';
+    public const string PREVIOUS_UNCONFIRMED = 'unconfirmed';
 
-    public const UNSUBSCRIBED = 'unsubscribed';
+    public const string UNSUBSCRIBED = 'unsubscribed';
 
     public function __construct(
         private MailerInterface $mailer,

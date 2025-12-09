@@ -55,14 +55,14 @@ final class ShortcutExtension implements ExtensionInterface
         /** @var \Netgen\IbexaFieldTypeEnhancedLink\FieldType\Value $link */
         $link = $content->getField('link')->value;
 
-        if ($link->isTypeExternal() && is_string($link->reference)) {
+        if (is_string($link->reference) && $link->isTypeExternal()) {
             $this->buildItemFromUrl($item, $content);
 
             return;
         }
 
         $relatedContent = null;
-        if ($link->isTypeInternal() && is_int($link->reference) && $link->reference > 0) {
+        if (is_int($link->reference) && $link->reference > 0 && $link->isTypeInternal()) {
             try {
                 $relatedContent = $this->loadService->loadContent($link->reference);
             } catch (NotFoundException|UnauthorizedException) {

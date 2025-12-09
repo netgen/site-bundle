@@ -30,8 +30,8 @@ use function count;
 use function explode;
 use function in_array;
 use function iterator_to_array;
+use function mb_trim;
 use function sprintf;
-use function trim;
 
 final class GenerateImageVariationsCommand extends Command
 {
@@ -67,10 +67,10 @@ final class GenerateImageVariationsCommand extends Command
         $query->limit = 0;
 
         $totalCount = $this->repository->sudo(
-            function () use ($query): int {
+            function (Repository $repository) use ($query): int {
                 $languages = $this->configResolver->getParameter('languages');
 
-                return $this->repository->getSearchService()->findContentInfo($query, $languages, false)->totalCount ?? 0;
+                return $repository->getSearchService()->findContentInfo($query, $languages, false)->totalCount ?? 0;
             },
         );
 
@@ -91,10 +91,10 @@ final class GenerateImageVariationsCommand extends Command
         do {
             /** @var \Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchHit[] $searchHits */
             $searchHits = $this->repository->sudo(
-                function () use ($query): iterable {
+                function (Repository $repository) use ($query): iterable {
                     $languages = $this->configResolver->getParameter('languages');
 
-                    return $this->repository->getSearchService()->findContent($query, $languages, false)->searchHits;
+                    return $repository->getSearchService()->findContent($query, $languages, false)->searchHits;
                 },
             );
 
@@ -185,7 +185,7 @@ final class GenerateImageVariationsCommand extends Command
     {
         foreach ($subtreeIds as $subtreeId) {
             yield $this->repository->sudo(
-                fn (): string => $this->repository->getLocationService()->loadLocation($subtreeId)->pathString,
+                static fn (Repository $repository): string => $repository->getLocationService()->loadLocation($subtreeId)->pathString,
             );
         }
     }
@@ -195,7 +195,7 @@ final class GenerateImageVariationsCommand extends Command
      */
     private function parseCommaDelimited(?string $value): array
     {
-        $value = trim($value ?? '');
+        $value = mb_trim($value ?? '');
 
         if ($value === '') {
             return [];

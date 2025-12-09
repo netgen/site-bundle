@@ -10,7 +10,7 @@ use Ibexa\Core\MVC\Symfony\View\ViewEvents;
 use Netgen\Bundle\IbexaSiteApiBundle\View\ContentValueView;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use function trim;
+use function mb_trim;
 
 final class AddPageCssClassEventListener implements EventSubscriberInterface
 {
@@ -45,6 +45,6 @@ final class AddPageCssClassEventListener implements EventSubscriberInterface
             return;
         }
 
-        $event->getParameterBag()->set('page_css_class', trim($fieldValue->text));
+        $event->getParameterBag()->set('page_css_class', mb_trim($fieldValue->text));
     }
 }

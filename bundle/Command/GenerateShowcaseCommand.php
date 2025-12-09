@@ -138,7 +138,7 @@ final class GenerateShowcaseCommand extends Command
             ],
         );
 
-        $searchResult = $this->repository->sudo(fn (): SearchResult => $this->filterService->filterContent($query));
+        $searchResult = $this->repository->sudo(fn (Repository $repository): SearchResult => $this->filterService->filterContent($query));
         $componentContentItems = $this->extractContentItems($searchResult);
 
         $query = new Query();
@@ -151,7 +151,7 @@ final class GenerateShowcaseCommand extends Command
             ],
         );
 
-        $searchResult = $this->repository->sudo(fn (): SearchResult => $this->filterService->filterContent($query));
+        $searchResult = $this->repository->sudo(fn (Repository $repository): SearchResult => $this->filterService->filterContent($query));
         $contentItems = $this->extractContentItems($searchResult);
 
         $blockConfigs = $this->configResolver->getParameter('showcase.blocks', 'ngsite');

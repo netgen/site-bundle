@@ -58,7 +58,7 @@ final class MailHelper
             return;
         }
 
-        $email = (new Email())
+        $email = new Email()
             ->from($senderAddress)
             ->sender($senderAddress)
             ->to(...$this->createReceiverAddresses($receivers))

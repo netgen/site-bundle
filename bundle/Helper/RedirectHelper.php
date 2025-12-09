@@ -13,13 +13,16 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+use function mb_trim;
 use function sprintf;
 use function str_starts_with;
-use function trim;
 
 final class RedirectHelper
 {
-    public function __construct(private UrlGeneratorInterface $urlGenerator, private Site $site) {}
+    public function __construct(
+        private UrlGeneratorInterface $urlGenerator,
+        private Site $site,
+    ) {}
 
     /**
      * Checks if content on give location has internal or external
@@ -55,7 +58,7 @@ final class RedirectHelper
                 sprintf(
                     '%s%s',
                     $this->urlGenerator->generate('', [RouteObjectInterface::ROUTE_OBJECT => $this->getRootLocation()]),
-                    trim($externalRedirectLink, '/'),
+                    mb_trim($externalRedirectLink, '/'),
                 ),
                 Response::HTTP_MOVED_PERMANENTLY,
             );

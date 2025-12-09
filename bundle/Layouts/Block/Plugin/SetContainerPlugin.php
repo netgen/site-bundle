@@ -19,7 +19,9 @@ final class SetContainerPlugin extends Plugin
      *
      * @param array<string, string> $sizes
      */
-    public function __construct(private array $sizes) {}
+    public function __construct(
+        private array $sizes,
+    ) {}
 
     public static function getExtendedHandlers(): iterable
     {

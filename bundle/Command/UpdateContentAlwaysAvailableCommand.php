@@ -70,7 +70,7 @@ final class UpdateContentAlwaysAvailableCommand extends Command
             $struct->alwaysAvailable = $alwaysAvailableState;
 
             $this->repository->sudo(
-                function () use ($contentInfo, $struct) {
+                function (Repository $repository) use ($contentInfo, $struct) {
                     $this->contentService->updateContentMetadata($contentInfo, $struct);
                 },
             );

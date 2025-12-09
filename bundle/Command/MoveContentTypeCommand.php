@@ -115,7 +115,7 @@ final class MoveContentTypeCommand extends Command
     {
         try {
             $this->repository->sudo(
-                function () use ($newContentTypeGroup, $contentType) {
+                function (Repository $repository) use ($newContentTypeGroup, $contentType) {
                     $this->contentTypeService->assignContentTypeGroup($contentType, $newContentTypeGroup);
                 },
             );
@@ -129,7 +129,7 @@ final class MoveContentTypeCommand extends Command
             }
 
             $this->repository->sudo(
-                function () use ($contentType, $contentTypeGroup) {
+                function (Repository $repository) use ($contentType, $contentTypeGroup) {
                     $this->contentTypeService->unassignContentTypeGroup($contentType, $contentTypeGroup);
                 },
             );

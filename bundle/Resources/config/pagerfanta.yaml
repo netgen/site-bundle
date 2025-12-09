@@ -1,7 +1,6 @@
 services:
     ngsite.pagerfanta.view.site:
         class: Netgen\Bundle\SiteBundle\Pagerfanta\View\SiteView
-        lazy: true
         arguments:
             - "@twig"
             - "@ibexa.config.resolver"

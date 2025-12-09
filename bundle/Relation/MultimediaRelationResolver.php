@@ -11,7 +11,9 @@ use function array_merge;
 
 final class MultimediaRelationResolver implements LocationRelationResolverInterface
 {
-    public function __construct(private LocationRelationResolverInterface $innerResolver) {}
+    public function __construct(
+        private LocationRelationResolverInterface $innerResolver,
+    ) {}
 
     public function loadRelations(Location $location, ?string $fieldIdentifier = null, array $options = []): array
     {

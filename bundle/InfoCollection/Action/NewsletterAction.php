@@ -12,7 +12,9 @@ final class NewsletterAction implements ActionInterface
 {
     public static string $defaultName = 'newsletter';
 
-    public function __construct(private NewsletterService $newsletterService) {}
+    public function __construct(
+        private NewsletterService $newsletterService,
+    ) {}
 
     public function act(InformationCollected $event): void
     {

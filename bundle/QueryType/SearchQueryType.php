@@ -19,13 +19,13 @@ use function class_exists;
 use function count;
 use function in_array;
 use function is_a;
-use function trim;
+use function mb_trim;
 
 final class SearchQueryType extends OptionsResolverBasedQueryType
 {
     public function __construct(
-        private readonly Site $site,
-        private readonly ConfigResolverInterface $configResolver,
+        private Site $site,
+        private ConfigResolverInterface $configResolver,
     ) {}
 
     public static function getName(): string
@@ -44,7 +44,7 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
 
         $optionsResolver->setAllowedValues(
             'search_text',
-            static fn (string $searchText): bool => trim($searchText) !== '',
+            static fn (string $searchText): bool => mb_trim($searchText) !== '',
         );
 
         $optionsResolver->setAllowedValues(
@@ -77,7 +77,7 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
         }
 
         $query = new LocationQuery();
-        $query->query = new FullText(trim($parameters['search_text']));
+        $query->query = new FullText(mb_trim($parameters['search_text']));
         $query->filter = new Criterion\LogicalAnd($criteria);
 
         $sortClauses = [];

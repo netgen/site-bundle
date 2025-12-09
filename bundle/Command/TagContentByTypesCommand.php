@@ -24,8 +24,8 @@ use function array_map;
 use function array_unique;
 use function array_values;
 use function explode;
+use function mb_trim;
 use function sprintf;
-use function trim;
 
 final class TagContentByTypesCommand extends Command
 {
@@ -105,8 +105,8 @@ final class TagContentByTypesCommand extends Command
                 $valueTags[] = $tag;
 
                 $this->repository->sudo(
-                    function () use ($content, $fieldIdentifier, $valueTags): void {
-                        $this->repository->beginTransaction();
+                    function (Repository $repository) use ($content, $fieldIdentifier, $valueTags): void {
+                        $repository->beginTransaction();
 
                         try {
                             $contentDraft = $this->contentService->createContentDraft($content->contentInfo);
@@ -117,11 +117,11 @@ final class TagContentByTypesCommand extends Command
                             $this->contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
                             $this->contentService->publishVersion($contentDraft->versionInfo);
 
-                            $this->repository->commit();
+                            $repository->commit();
                         } catch (Throwable $t) {
                             $this->style->error($t->getMessage());
 
-                            $this->repository->rollback();
+                            $repository->rollback();
                         }
                     },
                 );
@@ -171,7 +171,7 @@ final class TagContentByTypesCommand extends Command
      */
     private function parseCommaDelimited(string $value): array
     {
-        $value = trim($value);
+        $value = mb_trim($value);
 
         if ($value === '') {
             return [];

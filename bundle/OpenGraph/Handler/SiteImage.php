@@ -12,7 +12,7 @@ use Netgen\Bundle\OpenGraphBundle\MetaTag\Item;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-use function ltrim;
+use function mb_ltrim;
 use function preg_match;
 use function sprintf;
 
@@ -23,7 +23,10 @@ final class SiteImage implements HandlerInterface
      */
     private const FIELD_IDENTIFIER = 'site_opengraph_image';
 
-    public function __construct(private Provider $namedObjectProvider, private RequestStack $requestStack) {}
+    public function __construct(
+        private Provider $namedObjectProvider,
+        private RequestStack $requestStack,
+    ) {}
 
     /**
      * @param mixed[] $params
@@ -53,7 +56,7 @@ final class SiteImage implements HandlerInterface
         $request = $this->requestStack->getCurrentRequest();
 
         if ($request instanceof Request && preg_match('/^https?:\/\//', $siteImage) !== 1) {
-            $siteImage = $request->getUriForPath('/' . ltrim($siteImage, '/'));
+            $siteImage = $request->getUriForPath('/' . mb_ltrim($siteImage, '/'));
         }
 
         return [

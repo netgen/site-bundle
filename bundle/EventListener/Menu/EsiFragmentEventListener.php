@@ -14,7 +14,10 @@ use function rawurldecode;
 
 final class EsiFragmentEventListener implements EventSubscriberInterface
 {
-    public function __construct(private RequestStack $requestStack, private string $fragmentPath) {}
+    public function __construct(
+        private RequestStack $requestStack,
+        private string $fragmentPath,
+    ) {}
 
     public static function getSubscribedEvents(): array
     {

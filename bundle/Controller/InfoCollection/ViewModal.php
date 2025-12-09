@@ -10,7 +10,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class ViewModal extends Controller
 {
-    public function __construct(private readonly RefererResolver $refererResolver) {}
+    public function __construct(
+        private RefererResolver $refererResolver,
+    ) {}
 
     public function __invoke(int $formContentId, ?int $refererLocationId = null): Response
     {

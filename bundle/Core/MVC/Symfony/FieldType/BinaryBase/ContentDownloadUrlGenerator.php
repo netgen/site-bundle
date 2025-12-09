@@ -19,7 +19,9 @@ final class ContentDownloadUrlGenerator implements RouteAwarePathGenerator
 {
     private string $route = 'ngsite_download';
 
-    public function __construct(private RouterInterface $router) {}
+    public function __construct(
+        private RouterInterface $router,
+    ) {}
 
     public function getStoragePathForField(Field $field, VersionInfo $versionInfo): string
     {

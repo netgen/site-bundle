@@ -9,9 +9,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Filesystem\Filesystem;
 
 use function json_encode;
+use function mb_trim;
 use function realpath;
 use function str_replace;
-use function trim;
 
 use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
@@ -53,7 +53,7 @@ final class PHPStormPass implements CompilerPassInterface
             }
         }
 
-        (new Filesystem())->dumpFile(
+        new Filesystem()->dumpFile(
             $twigConfigPath . '/ide-twig.json',
             json_encode(
                 [
@@ -69,6 +69,6 @@ final class PHPStormPass implements CompilerPassInterface
      */
     private function makeTwigPathRelative(string $path, string $configPath): string
     {
-        return trim(str_replace($configPath, '', $path), '/');
+        return mb_trim(str_replace($configPath, '', $path), '/');
     }
 }

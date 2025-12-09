@@ -30,12 +30,12 @@ use function array_merge;
 final class ProxyFormHandler extends Controller
 {
     public function __construct(
-        private readonly RequestStack $requestStack,
-        private readonly CaptchaService $captchaService,
-        private readonly Handler $handler,
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly RefererResolver $refererResolver,
-        private readonly LoggerInterface $logger = new NullLogger(),
+        private RequestStack $requestStack,
+        private CaptchaService $captchaService,
+        private Handler $handler,
+        private EventDispatcherInterface $eventDispatcher,
+        private RefererResolver $refererResolver,
+        private LoggerInterface $logger = new NullLogger(),
     ) {}
 
     public function __invoke(ContentView $view): ContentView
@@ -93,7 +93,7 @@ final class ProxyFormHandler extends Controller
         $formSubmitted = $form->isSubmitted();
         $validCaptcha = $captcha->isValid($request);
 
-        if ($formSubmitted && $form->isValid() && $validCaptcha) {
+        if ($formSubmitted && $validCaptcha && $form->isValid()) {
             $event = new InformationCollected($form->getData(), [], ['form' => $form]);
             $this->eventDispatcher->dispatch($event, Events::INFORMATION_COLLECTED);
 

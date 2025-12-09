@@ -67,7 +67,7 @@ final class Activate extends Controller
         $userUpdateStruct = $preActivateEvent->getUserUpdateStruct();
 
         $user = $this->repository->sudo(
-            fn (): User => $this->repository->getUserService()->updateUser($user, $userUpdateStruct),
+            static fn (Repository $repository): User => $repository->getUserService()->updateUser($user, $userUpdateStruct),
         );
 
         $postActivateEvent = new UserEvents\PostActivateEvent($user);

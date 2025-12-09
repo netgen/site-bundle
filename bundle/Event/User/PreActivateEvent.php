@@ -10,22 +10,7 @@ use Ibexa\Contracts\Core\Repository\Values\User\UserUpdateStruct;
 final class PreActivateEvent extends UserEvent
 {
     public function __construct(
-        private User $user,
-        private UserUpdateStruct $userUpdateStruct,
+        public private(set) User $user,
+        public UserUpdateStruct $userUpdateStruct,
     ) {}
-
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    public function getUserUpdateStruct(): UserUpdateStruct
-    {
-        return $this->userUpdateStruct;
-    }
-
-    public function setUserUpdateStruct(UserUpdateStruct $userUpdateStruct): void
-    {
-        $this->userUpdateStruct = $userUpdateStruct;
-    }
 }

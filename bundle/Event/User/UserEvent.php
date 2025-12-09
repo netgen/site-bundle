@@ -11,15 +11,7 @@ abstract class UserEvent extends Event
     /**
      * @var array<string, mixed>
      */
-    private array $parameters = [];
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function getParameters(): array
-    {
-        return $this->parameters;
-    }
+    public private(set) array $parameters = [];
 
     public function getParameter(string $name): mixed
     {

@@ -35,8 +35,8 @@ final class EsiFragmentEventListener implements EventSubscriberInterface
             return;
         }
 
-        if ($event->getLocation()->id === (int) $request->attributes->get('activeItemId')) {
-            $event->getItem()->setCurrent(true);
+        if ($event->location->id === (int) $request->attributes->get('activeItemId')) {
+            $event->item->setCurrent(true);
         }
     }
 }

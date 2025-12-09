@@ -14,23 +14,13 @@ use Symfony\Contracts\EventDispatcher\Event;
 final class LocationMenuItemEvent extends Event
 {
     public function __construct(
-        private ItemInterface $item,
-        private Location $location,
+        /**
+         * Returns the item which was built.
+         */
+        public private(set) ItemInterface $item,
+        /**
+         * Returns the Ibexa location for which the menu item was built.
+         */
+        public private(set) Location $location,
     ) {}
-
-    /**
-     * Returns the item which was built.
-     */
-    public function getItem(): ItemInterface
-    {
-        return $this->item;
-    }
-
-    /**
-     * Returns the Ibexa location for which the menu item was built.
-     */
-    public function getLocation(): Location
-    {
-        return $this->location;
-    }
 }

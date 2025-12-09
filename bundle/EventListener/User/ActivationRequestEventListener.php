@@ -28,12 +28,11 @@ final class ActivationRequestEventListener extends UserEventListener implements 
      */
     public function onActivationRequest(ActivationRequestEvent $event): void
     {
-        $user = $event->getUser();
-        $email = $event->getEmail();
+        $user = $event->user;
 
         if (!$user instanceof User) {
             $this->mailHelper->sendMail(
-                $email,
+                $event->email,
                 'ngsite.user.activate.not_registered.subject',
                 $this->configResolver->getParameter('template.user.mail.activate_not_registered', 'ngsite'),
             );

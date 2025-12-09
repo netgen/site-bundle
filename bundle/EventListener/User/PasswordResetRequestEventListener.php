@@ -28,13 +28,12 @@ final class PasswordResetRequestEventListener extends UserEventListener implemen
      */
     public function onPasswordResetRequest(PasswordResetRequestEvent $event): void
     {
-        $user = $event->getUser();
-        $email = $event->getEmail();
+        $user = $event->user;
 
         if (!$user instanceof User) {
             $this->mailHelper
                 ->sendMail(
-                    $email,
+                    $event->email,
                     'ngsite.user.forgot_password.not_registered.subject',
                     $this->configResolver->getParameter('template.user.mail.forgot_password_not_registered', 'ngsite'),
                 );

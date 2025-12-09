@@ -9,16 +9,6 @@ use Ibexa\Contracts\Core\Repository\Values\User\UserCreateStruct;
 final class PreRegisterEvent extends UserEvent
 {
     public function __construct(
-        private UserCreateStruct $userCreateStruct,
+        public UserCreateStruct $userCreateStruct,
     ) {}
-
-    public function setUserCreateStruct(UserCreateStruct $userCreateStruct): void
-    {
-        $this->userCreateStruct = $userCreateStruct;
-    }
-
-    public function getUserCreateStruct(): UserCreateStruct
-    {
-        return $this->userCreateStruct;
-    }
 }

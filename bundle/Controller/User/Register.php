@@ -109,7 +109,7 @@ final class Register extends Controller
         $preUserRegisterEvent->setParameter('form', $form);
 
         $this->eventDispatcher->dispatch($preUserRegisterEvent, SiteEvents::USER_PRE_REGISTER);
-        $data->payload = $preUserRegisterEvent->getUserCreateStruct();
+        $data->payload = $preUserRegisterEvent->userCreateStruct;
 
         foreach ($data->payload->fields as $field) {
             if ($field->fieldTypeIdentifier !== 'ibexa_user') {

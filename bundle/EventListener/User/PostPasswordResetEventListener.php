@@ -27,7 +27,7 @@ final class PostPasswordResetEventListener extends UserEventListener implements 
      */
     public function onPasswordReset(PostPasswordResetEvent $event): void
     {
-        $user = $event->getUser();
+        $user = $event->user;
 
         $this->mailHelper
             ->sendMail(

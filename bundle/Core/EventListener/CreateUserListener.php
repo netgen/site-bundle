@@ -21,10 +21,8 @@ final class CreateUserListener implements EventSubscriberInterface
 
     public function onCreateUser(CreateUserEvent $event): void
     {
-        $user = $event->getUser();
-
-        if ($user->enabled) {
-            $this->ngUserSettingRepository->activateUser($user->id);
+        if ($event->user->enabled) {
+            $this->ngUserSettingRepository->activateUser($event->user->id);
         }
     }
 }

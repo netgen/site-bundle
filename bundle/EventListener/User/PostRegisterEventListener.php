@@ -27,7 +27,7 @@ final class PostRegisterEventListener extends UserEventListener implements Event
      */
     public function onUserRegistered(PostRegisterEvent $event): void
     {
-        $user = $event->getUser();
+        $user = $event->user;
 
         if ($user->enabled) {
             $this->mailHelper

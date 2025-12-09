@@ -27,7 +27,7 @@ final class PostActivateEventListener extends UserEventListener implements Event
      */
     public function onPostActivate(PostActivateEvent $event): void
     {
-        $user = $event->getUser();
+        $user = $event->user;
 
         $this->userAccountKeyRepository->removeByUserId($user->id);
         $this->ngUserSettingRepository->activateUser($user->id);

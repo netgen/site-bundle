@@ -60,8 +60,8 @@ services:
         parent: ngsite.controller.base
         arguments:
             - "@netgen.ibexa_site_api.site"
-            - "@ibexa.field_type.ezbinaryfile.io_service"
-            - "@ibexa.field_type.ezimage.io_service.published"
+            - "@ibexa.field_type.ibexa_binaryfile.io_service"
+            - "@ibexa.field_type.ibexa_image.io_service.published"
             - "@translator"
             - "@event_dispatcher"
             - "@ibexa.config.resolver"

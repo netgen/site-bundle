@@ -10,7 +10,7 @@ system:
                     current_user: '@=currentUserId'
     admin_group:
         fieldtypes:
-            ezrichtext:
+            ibexa_richtext:
                 classes:
                     table:
                         choices:

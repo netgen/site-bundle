@@ -41,7 +41,7 @@ services:
         class: Netgen\Bundle\SiteBundle\Command\GenerateImageVariationsCommand
         arguments:
             - "@ibexa.api.repository"
-            - "@ibexa.field_type.ezimage.variation_service"
+            - "@ibexa.field_type.ibexa_image.variation_service"
             - "@ibexa.cache_pool"
             - "@ibexa.config.resolver"
         tags:

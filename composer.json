@@ -20,6 +20,7 @@
         "ibexa/core": "^5.0",
         "ibexa/content-forms": "^5.0",
         "symfony/mailer": "^7.3",
+        "symfony/polyfill-php84": "^1.33",
         "netgen/ibexa-forms-bundle": "^5.0",
         "netgen/ibexa-site-api": "^7.0",
         "netgen/ibexa-search-extra": "^4.0",
@@ -37,6 +38,7 @@
         "mailerlite/mailerlite-api-v2-php-sdk": "^0.3.2"
     },
     "require-dev": {
+        "netgen/coding-standard": "^1.0",
         "netgen/layouts-standard": "^2.0",
         "netgen/layouts-ibexa": "^2.0",
         "phpstan/phpstan": "^2.1",

@@ -125,7 +125,7 @@ final class NewsletterService
 
     private function extractOptInIdentifier(FieldData $field): string
     {
-        $identifier = $field->fieldDefinition->identifier;
+        $identifier = $field->getFieldDefinition()->identifier;
         $success = preg_match('/^newsletter_(?<identifier>.*?)_consent/', $identifier, $matches);
 
         if ($success === false) {

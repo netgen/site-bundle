@@ -23,7 +23,7 @@ final class BinaryFileFormMapper implements FieldValueFormMapperInterface
 
     public function mapFieldValueForm(FormInterface $fieldForm, FieldData $data): void
     {
-        $fieldDefinition = $data->fieldDefinition;
+        $fieldDefinition = $data->getFieldDefinition();
         $formConfig = $fieldForm->getConfig();
         $fieldType = $this->fieldTypeService->getFieldType($fieldDefinition->fieldTypeIdentifier);
         $value = $data->value ?? $fieldType->getEmptyValue();

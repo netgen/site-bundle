@@ -85,7 +85,7 @@ final class Download extends Controller
 
         if ($binaryFieldValue instanceof BinaryBaseValue) {
             $ioService = $this->ioFileService;
-            $binaryFile = $this->ioFileService->loadBinaryFile($binaryFieldValue->id);
+            $binaryFile = $this->ioFileService->loadBinaryFile((string) $binaryFieldValue->id);
         } elseif ($binaryFieldValue instanceof ImageValue) {
             $ioService = $this->ioImageService;
             $binaryFile = $this->ioImageService->loadBinaryFile($binaryFieldValue->id);

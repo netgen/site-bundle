@@ -35,7 +35,7 @@ final class RelationListMenuBuilder
 
         $menu = $this->factory->createItem('root');
 
-        $menu->setAttribute('location-id', $content->mainLocationId);
+        $menu->setAttribute('location-id', (string) $content->mainLocationId);
         $menu->setExtra('ibexa_location', $content->mainLocation);
 
         if (!$content->hasField($fieldIdentifier)) {

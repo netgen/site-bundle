@@ -523,7 +523,7 @@ final class GenerateShowcaseCommand extends Command
         }
 
         foreach ($parameterDefinitionCollection->parameterDefinitions as $innerParameterDefinition) {
-            if (!$innerParameterDefinition instanceof ParameterDefinitionCollectionInterface) {
+            if (!$innerParameterDefinition->isCompound) {
                 continue;
             }
 

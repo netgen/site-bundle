@@ -17,8 +17,6 @@ use function explode;
 
 final class UpdateContentAlwaysAvailableCommand extends Command
 {
-    protected static $defaultDescription = 'Update always-available state for the given Content item(s)';
-
     private SymfonyStyle $style;
 
     public function __construct(
@@ -31,6 +29,7 @@ final class UpdateContentAlwaysAvailableCommand extends Command
     protected function configure(): void
     {
         $this
+            ->setDescription('Update always-available state for the given Content item(s)')
             ->addArgument(
                 'content-ids',
                 InputArgument::REQUIRED,
@@ -60,7 +59,7 @@ final class UpdateContentAlwaysAvailableCommand extends Command
         }
 
         $types = $input->getArgument('content-ids');
-        $contentIds = array_map('intval', array_map('trim', explode(',', $types)));
+        $contentIds = array_map('intval', array_map('mb_trim', explode(',', $types)));
         $alwaysAvailableState = $this->resolveAlwaysAvailableState($input->getArgument('always-available'));
 
         foreach ($contentIds as $contentId) {

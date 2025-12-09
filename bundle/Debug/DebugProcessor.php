@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\Debug;
 
+use Monolog\LogRecord;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 
@@ -28,24 +29,15 @@ final class DebugProcessor implements DebugLoggerInterface
         private array $excludedChannels = ['event', 'doctrine'],
     ) {}
 
-    /**
-     * @param array<string, mixed> $record
-     *
-     * @return array<string, mixed>
-     */
-    public function __invoke(array $record): array
+    public function __invoke(LogRecord $record): LogRecord
     {
-        $channel = $record['channel'] ?? '';
-        if (is_callable($this->innerProcessor) && !in_array($channel, $this->excludedChannels, true)) {
+        if (is_callable($this->innerProcessor) && !in_array($record->channel, $this->excludedChannels, true)) {
             call_user_func($this->innerProcessor, $record);
         }
 
         return $record;
     }
 
-    /**
-     * @return string[]
-     */
     public function getLogs(?Request $request = null): array
     {
         return $this->innerProcessor->getLogs();

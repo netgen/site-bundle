@@ -177,6 +177,15 @@ final class TagContentByTypesCommand extends Command
             return [];
         }
 
-        return array_values(array_unique(array_filter(array_map('trim', explode(',', $value)))));
+        $values = array_map('mb_trim', explode(',', $value));
+
+        return array_values(
+            array_unique(
+                array_filter(
+                    $values,
+                    static fn (string $value): bool => $value !== '',
+                )
+            )
+        );
     }
 }

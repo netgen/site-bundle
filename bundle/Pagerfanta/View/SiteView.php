@@ -16,6 +16,9 @@ use function min;
 
 final class SiteView implements ViewInterface
 {
+    /**
+     * @var \Pagerfanta\PagerfantaInterface<object>
+     */
     private PagerfantaInterface $pagerfanta;
 
     private Closure $routeGenerator;

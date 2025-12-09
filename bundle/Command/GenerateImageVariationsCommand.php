@@ -89,7 +89,7 @@ final class GenerateImageVariationsCommand extends Command
         $fields = $this->parseCommaDelimited($input->getOption('fields'));
 
         do {
-            /** @var \Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchHit[] $searchHits */
+            /** @var \Ibexa\Contracts\Core\Repository\Values\Content\Search\SearchHit<\Ibexa\Contracts\Core\Repository\Values\Content\Content>[] $searchHits */
             $searchHits = $this->repository->sudo(
                 function (Repository $repository) use ($query): iterable {
                     $languages = $this->configResolver->getParameter('languages');
@@ -98,7 +98,6 @@ final class GenerateImageVariationsCommand extends Command
                 },
             );
 
-            /** @var \Ibexa\Contracts\Core\Repository\Values\Content\Content[] $contentItems */
             $contentItems = array_map(
                 static fn (SearchHit $searchHit): ValueObject => $searchHit->valueObject,
                 $searchHits,
@@ -132,7 +131,7 @@ final class GenerateImageVariationsCommand extends Command
     private function generateVariations(Content $content, array $variations, array $fields): void
     {
         foreach ($content->getFields() as $field) {
-            if ($field->fieldTypeIdentifier !== 'ezimage') {
+            if ($field->fieldTypeIdentifier !== 'ibexa_image') {
                 continue;
             }
 
@@ -201,6 +200,15 @@ final class GenerateImageVariationsCommand extends Command
             return [];
         }
 
-        return array_values(array_unique(array_filter(array_map('trim', explode(',', $value)))));
+        $values = array_map('mb_trim', explode(',', $value));
+
+        return array_values(
+            array_unique(
+                array_filter(
+                    $values,
+                    static fn (string $value): bool => $value !== '',
+                )
+            )
+        );
     }
 }

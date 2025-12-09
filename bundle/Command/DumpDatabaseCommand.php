@@ -50,6 +50,7 @@ final class DumpDatabaseCommand extends Command
             $fs->mkdir($targetDirectory);
         }
 
+        /** @var array{ user: string, host: string, dbname: string, password: string } $params */
         $params = $this->connection->getParams();
 
         // https://dev.mysql.com/doc/refman/5.7/en/mysqldump.html#option_mysqldump_opt

@@ -7,25 +7,26 @@ includes:
 
 parameters:
     ignoreErrors:
-        # Doctrine specifics
+        # Symfony
+
+        - '#generic interface Symfony\\Component\\Form\\\w+ (but )?does not specify its types: TData#'
+        - '#extends generic class Symfony\\Component\\Form\\\w+ but does not specify its types: TData#'
+
+        # Doctrine DBAL
 
         - '#Property Netgen\\Bundle\\SiteBundle\\Entity\\UserAccountKey::\$id is never written, only read#'
-        - '#Cannot call method fetchAllAssociative\(\) on Doctrine\\DBAL\\ForwardCompatibility\\Result\|int\|string.#'
 
-        # Ibexa DXP specifics
+        # Ibexa DXP
 
         - '#Access to an undefined property Ibexa\\Contracts\\Core\\FieldType\\Value::\$\w+#'
+        - '#Access to an undefined property Ibexa\\Contracts\\Core\\Repository\\Values\\Content\\Query\\CriterionInterface::\$\w+#'
         - '#Cannot access property \$\w+ on Ibexa\\Contracts\\Core\\FieldType\\Value\|null#'
 
-        # Site API
+        # Ibexa Site API
 
         - '#Access to an undefined property Netgen\\IbexaSiteApi\\API\\Settings::\$\w+#'
 
         # Wrong typehints in vendor packages
-
-        -
-          message: '/Parameter #2 \$value of method Knp\\Menu\\ItemInterface::setAttribute\(\) expects bool\|string\|null, int\|null given/'
-          path: bundle/Menu/RelationListMenuBuilder.php
 
         -
           message: '#has parameter \$parameters with no value type specified in iterable type array#'
@@ -38,7 +39,3 @@ parameters:
         -
           message: '#has parameter \$(blocks|context) with no value type specified in iterable type array#'
           path: bundle/Templating/Twig/
-
-        -
-          message: '#Offset \d does not exist on array#'
-          path: bundle/RichText/Converter/Link.php

@@ -221,7 +221,6 @@ abstract class BaseMultiprocessCommand extends Command
     {
         $generator = $this->internalGetItemGenerator($limit);
 
-        /** @var \Symfony\Component\Process\Process[]|null[] $processes */
         $processes = array_fill(0, $processCount, null);
         $processDepthMap = [];
         $itemList = null;

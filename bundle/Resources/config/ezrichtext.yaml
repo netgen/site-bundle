@@ -1,6 +1,6 @@
 custom_tags:
     video:
-        template: '@NetgenSite/field_type/ezrichtext/custom_tag/video.html.twig'
+        template: '@NetgenSite/field_type/ibexa_richtext/custom_tag/video.html.twig'
         icon: '/bundles/ibexaadminui/img/ibexa-icons.svg#video'
         is_inline: false
         attributes:
@@ -18,7 +18,7 @@ custom_tags:
                 default_value: fit
                 choices: [fit, fill]
     factbox:
-        template: '@NetgenSite/field_type/ezrichtext/custom_tag/factbox.html.twig'
+        template: '@NetgenSite/field_type/ibexa_richtext/custom_tag/factbox.html.twig'
         icon: '/bundles/ibexaadminui/img/ibexa-icons.svg#information'
         is_inline: false
         attributes:
@@ -26,7 +26,7 @@ custom_tags:
                 type: string
                 required: false
     quote:
-        template: '@NetgenSite/field_type/ezrichtext/custom_tag/quote.html.twig'
+        template: '@NetgenSite/field_type/ibexa_richtext/custom_tag/quote.html.twig'
         icon: '/bundles/ibexaadminui/img/ibexa-icons.svg#quote'
         is_inline: false
         attributes:

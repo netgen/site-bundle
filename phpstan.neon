@@ -6,9 +6,6 @@ includes:
     - vendor/phpstan/phpstan-symfony/rules.neon
 
 parameters:
-    excludePaths:
-        - bundle/Templating/Twig/LegacyDebugTemplate.php
-
     ignoreErrors:
         # Doctrine specifics
 

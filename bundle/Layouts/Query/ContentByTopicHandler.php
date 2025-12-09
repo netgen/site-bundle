@@ -165,7 +165,7 @@ final class ContentByTopicHandler implements QueryTypeHandlerInterface
 
         $criteria = array_filter(
             $criteria,
-            static fn ($criterion): bool => $criterion instanceof Criterion,
+            static fn (mixed $criterion): bool => $criterion instanceof Criterion,
         );
 
         $locationQuery->filter = new Criterion\LogicalAnd($criteria);

@@ -8,18 +8,12 @@ use Twig\Source;
 
 class LegacyDebugTemplate extends BaseDebugTemplate
 {
-    /**
-     * @return string
-     */
-    public function getTemplateName()
+    public function getTemplateName(): string
     {
         return '';
     }
 
-    /**
-     * @return \Twig\Source
-     */
-    public function getSourceContext()
+    public function getSourceContext(): Source
     {
         return new Source('', '');
     }
@@ -27,10 +21,10 @@ class LegacyDebugTemplate extends BaseDebugTemplate
     /**
      * @return array<int, int>
      */
-    public function getDebugInfo()
+    public function getDebugInfo(): array
     {
         return [];
     }
 
-    protected function doDisplay(array $context, array $blocks = []) {}
+    protected function doDisplay(array $context, array $blocks = []): void {}
 }

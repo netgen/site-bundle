@@ -132,7 +132,7 @@ final class SiteRuntime
 
         usort(
             $groupedFields,
-            static function ($group1, $group2) {
+            static function (array $group1, array $group2): int {
                 $identifiers1 = $group1[self::GROUP_FIELDS_POSITION]->value->identifiers ?? [];
                 $identifier1 = $identifiers1 ? (int) reset($identifiers1) : 999;
 

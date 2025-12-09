@@ -21,7 +21,7 @@ final class SiteImage implements HandlerInterface
     /**
      * Field identifier that provides opengraph image.
      */
-    private const FIELD_IDENTIFIER = 'site_opengraph_image';
+    private const string FIELD_IDENTIFIER = 'site_opengraph_image';
 
     public function __construct(
         private Provider $namedObjectProvider,
@@ -37,8 +37,8 @@ final class SiteImage implements HandlerInterface
 
         if (
             $siteInfoContent->hasField(self::FIELD_IDENTIFIER)
-            && !$siteInfoContent->getField(self::FIELD_IDENTIFIER)->isEmpty()
             && $siteInfoContent->getFieldValue(self::FIELD_IDENTIFIER) instanceof ImageValue
+            && !$siteInfoContent->getField(self::FIELD_IDENTIFIER)->isEmpty()
         ) {
             $siteImage = $siteInfoContent
                 ->getField(self::FIELD_IDENTIFIER)

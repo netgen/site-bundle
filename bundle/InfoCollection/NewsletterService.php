@@ -163,7 +163,7 @@ final class NewsletterService
 
         return array_filter(
             $mailerLiteGroupIds,
-            static fn ($mailerLiteGroupId): bool => ctype_digit($mailerLiteGroupId),
+            static fn (string $mailerLiteGroupId): bool => ctype_digit($mailerLiteGroupId),
         );
     }
 

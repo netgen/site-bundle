@@ -39,7 +39,7 @@ final class SiteView implements ViewInterface
         return 'ngsite';
     }
 
-    public function render(PagerfantaInterface $pagerfanta, $routeGenerator, array $options = []): string
+    public function render(PagerfantaInterface $pagerfanta, callable $routeGenerator, array $options = []): string
     {
         $this->pagerfanta = $pagerfanta;
         $this->routeGenerator = $routeGenerator(...);

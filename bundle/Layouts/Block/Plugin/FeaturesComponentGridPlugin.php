@@ -13,9 +13,8 @@ use function array_flip;
 final class FeaturesComponentGridPlugin extends Plugin
 {
     /**
-     * @param string[] $columns The list of columns available. Key should be
-     * number of columns, while values should be human readable names of the columns.
-     * @param array<int, string> $columns
+     * @param array<int, string> $columns The list of columns available. Key should be
+     *     number of columns, while values should be human readable names of the columns.
      */
     public function __construct(private array $columns) {}
 

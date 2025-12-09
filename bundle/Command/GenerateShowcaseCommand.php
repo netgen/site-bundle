@@ -26,7 +26,6 @@ use Netgen\Layouts\API\Service\LayoutService;
 use Netgen\Layouts\API\Service\TransactionService;
 use Netgen\Layouts\API\Values\Block\Block;
 use Netgen\Layouts\API\Values\Layout\Layout;
-use Netgen\Layouts\API\Values\Value;
 use Netgen\Layouts\Block\BlockDefinitionInterface;
 use Netgen\Layouts\Block\Registry\BlockDefinitionRegistry;
 use Netgen\Layouts\Block\Registry\BlockTypeRegistry;
@@ -38,6 +37,7 @@ use Netgen\Layouts\Parameters\ParameterDefinitionCollectionInterface;
 use Netgen\Layouts\Parameters\ParameterType\BooleanType;
 use Netgen\Layouts\Parameters\ParameterType\ChoiceType;
 use Netgen\Layouts\Parameters\ParameterType\Compound\BooleanType as CompoundBooleanType;
+use Netgen\Layouts\Persistence\Values\Status;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -244,25 +244,25 @@ final class GenerateShowcaseCommand extends Command
                         sprintf('JSON_CONTAINS(c.value, \'["%s"]\')', $this->siteAccess->name),
                     ),
                 ),
-            )->setParameter('status', Value::STATUS_PUBLISHED)
+            )->setParameter('status', Status::Published->value)
             ->setParameter('locationType', 'ibexa_location', Types::STRING)
             ->setParameter('locationValue', $showcaseLocation->id, Types::STRING)
             ->setParameter('contentType', 'ibexa_content', Types::STRING)
             ->setParameter('contentValue', $showcaseLocation->contentId, Types::STRING)
             ->setParameter('conditionType', 'ibexa_site_access', Types::STRING);
 
-        $ruleUuids = array_column($query->execute()->fetchAllAssociative(), 'uuid');
+        $ruleUuids = array_column($query->fetchAllAssociative(), 'uuid');
 
         foreach ($ruleUuids as $ruleUuid) {
             $rule = $this->layoutResolverService->loadRule(Uuid::fromString($ruleUuid));
 
-            if ($rule->getLayout() instanceof Layout) {
-                $this->style->info(sprintf('Removing obsolete showcase layout named "%s".', $rule->getLayout()->getName()));
+            if ($rule->layout instanceof Layout) {
+                $this->style->info(sprintf('Removing obsolete showcase layout named "%s".', $rule->layout->name));
 
-                $this->layoutService->deleteLayout($rule->getLayout());
+                $this->layoutService->deleteLayout($rule->layout);
             }
 
-            $this->style->info(sprintf('Removing obsolete mapping with "%s" UUID.', $rule->getId()->toString()));
+            $this->style->info(sprintf('Removing obsolete mapping with "%s" UUID.', $rule->id->toString()));
 
             $this->layoutResolverService->deleteRule($rule);
         }
@@ -290,12 +290,12 @@ final class GenerateShowcaseCommand extends Command
     private function findComponentDefinition(Content $content): ?BlockDefinitionInterface
     {
         foreach ($this->blockTypeRegistry->getBlockTypes(true) as $blockType) {
-            if (!$blockType->getDefinition()->getHandler() instanceof ComponentHandler) {
+            if (!$blockType->definition->handler instanceof ComponentHandler) {
                 continue;
             }
 
-            if ($blockType->getDefaultParameters()['content_type_identifier'] === $content->contentInfo->contentTypeIdentifier) {
-                return $blockType->getDefinition();
+            if ($blockType->defaultParameters['content_type_identifier'] === $content->contentInfo->contentTypeIdentifier) {
+                return $blockType->definition;
             }
         }
 
@@ -479,7 +479,7 @@ final class GenerateShowcaseCommand extends Command
                 continue;
             }
 
-            $validValues = match ($parameterDefinition->getType()::getIdentifier()) {
+            $validValues = match ($parameterDefinition->type::getIdentifier()) {
                 BooleanType::getIdentifier(), CompoundBooleanType::getIdentifier() => [true, false],
                 ChoiceType::getIdentifier() => array_values($parameterDefinition->getOption('options')),
                 default => null,
@@ -522,7 +522,7 @@ final class GenerateShowcaseCommand extends Command
             return $parameterDefinitionCollection->getParameterDefinition($parameterName);
         }
 
-        foreach ($parameterDefinitionCollection->getParameterDefinitions() as $innerParameterDefinition) {
+        foreach ($parameterDefinitionCollection->parameterDefinitions as $innerParameterDefinition) {
             if (!$innerParameterDefinition instanceof ParameterDefinitionCollectionInterface) {
                 continue;
             }
@@ -543,7 +543,7 @@ final class GenerateShowcaseCommand extends Command
         $ruleGroupUuid = (string) $this->configResolver->getParameter('showcase.rule_group_uuid', 'ngsite');
 
         $ruleCreateStruct = $this->layoutResolverService->newRuleCreateStruct();
-        $ruleCreateStruct->layoutId = $layout->getId();
+        $ruleCreateStruct->layoutId = $layout->id;
         $ruleCreateStruct->priority = $priority;
 
         $ruleDraft = $this->layoutResolverService->createRule(

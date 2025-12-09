@@ -49,10 +49,10 @@ final class ContentByTopicHandler implements QueryTypeHandlerInterface
         ObjectStateHandler $objectStateHandler,
         ContentProviderInterface $contentProvider,
     ) {
-        $this->setLocationService($locationService);
-        $this->setSectionHandler($sectionHandler);
-        $this->setObjectStateHandler($objectStateHandler);
-        $this->setContentProvider($contentProvider);
+        $this->locationService = $locationService;
+        $this->sectionHandler = $sectionHandler;
+        $this->objectStateHandler = $objectStateHandler;
+        $this->contentProvider = $contentProvider;
     }
 
     public function buildParameters(ParameterBuilderInterface $builder): void
@@ -139,8 +139,8 @@ final class ContentByTopicHandler implements QueryTypeHandlerInterface
     public function isContextual(Query $query): bool
     {
         return
-            $query->getParameter('use_topic_from_current_content')->getValue() === true
-            || $query->getParameter('use_current_location')->getValue() === true;
+            $query->getParameter('use_topic_from_current_content')->value === true
+            || $query->getParameter('use_current_location')->value === true;
     }
 
     /**
@@ -180,9 +180,9 @@ final class ContentByTopicHandler implements QueryTypeHandlerInterface
     private function getTopicTag(Query $query): array
     {
         $content = null;
-        $contentId = $query->getParameter('topic_content_id')->getValue();
+        $contentId = $query->getParameter('topic_content_id')->value;
 
-        if ((bool) $query->getParameter('use_topic_from_current_content')->getValue()) {
+        if ((bool) $query->getParameter('use_topic_from_current_content')->value) {
             $content = $this->contentProvider->provideContent();
         } elseif ($contentId !== null) {
             try {

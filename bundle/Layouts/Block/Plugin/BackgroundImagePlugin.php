@@ -59,13 +59,13 @@ final class BackgroundImagePlugin extends Plugin
     {
         $params['background_image:image_content'] = null;
 
-        if ($block->getParameter('background_image:image')->isEmpty()) {
+        if ($block->getParameter('background_image:image')->isEmpty) {
             return;
         }
 
         try {
             $params['background_image:image_content'] = $this->loadService->loadContent(
-                $block->getParameter('background_image:image')->getValue(),
+                $block->getParameter('background_image:image')->value,
             );
         } catch (NotFoundException|TranslationNotMatchedException|UnauthorizedException) {
             // Do nothing

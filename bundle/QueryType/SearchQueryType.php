@@ -97,12 +97,9 @@ final class SearchQueryType extends OptionsResolverBasedQueryType
      */
     private function validateSortConfig(array $classNames): bool
     {
-        foreach ($classNames as $className) {
-            if (!class_exists($className) || !is_a($className, SortClause::class, true)) {
-                return false;
-            }
-        }
-
-        return true;
+        return !array_any(
+            $classNames,
+            static fn (string $className): bool => !class_exists($className) || !is_a($className, SortClause::class, true)
+        );
     }
 }

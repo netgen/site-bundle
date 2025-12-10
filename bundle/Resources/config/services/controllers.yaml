@@ -3,6 +3,8 @@ services:
         class: Netgen\Bundle\SiteBundle\Controller\Controller
         parent: netgen.ibexa_site_api.controller.base
         abstract: true
+        calls:
+            - setContainer: ["@Psr\\Container\\ContainerInterface"]
 
     ngsite.controller.check_redirect:
         class: Netgen\Bundle\SiteBundle\Controller\CheckRedirect
@@ -10,7 +12,8 @@ services:
         arguments:
             - "@ngsite.helper.redirect_helper"
         tags:
-            - { name: 'container.service_subscriber' }
+            - { name: controller.service_arguments }
+            - { name: container.service_subscriber }
 
     ngsite.controller.embed_view.image:
         class: Netgen\Bundle\SiteBundle\Controller\EmbedView\Image
@@ -19,7 +22,8 @@ services:
             - "@netgen.ibexa_site_api.site"
             - "@?logger"
         tags:
-            - { name: 'container.service_subscriber' }
+            - { name: controller.service_arguments }
+            - { name: container.service_subscriber }
 
     ngsite.controller.search:
         class: Netgen\Bundle\SiteBundle\Controller\Search
@@ -27,7 +31,8 @@ services:
         arguments:
             - "@ngsite.search.resolver.suggestion"
         tags:
-            - { name: 'container.service_subscriber' }
+            - { name: controller.service_arguments }
+            - { name: container.service_subscriber }
 
     ngsite.controller.menu:
         class: Netgen\Bundle\SiteBundle\Controller\Menu
@@ -37,7 +42,8 @@ services:
             - "@knp_menu.renderer_provider"
             - "@fos_http_cache.http.symfony_response_tagger"
         tags:
-            - { name: 'container.service_subscriber' }
+            - { name: controller.service_arguments }
+            - { name: container.service_subscriber }
 
     ngsite.controller.relations.related_multimedia_items:
         class: Netgen\Bundle\SiteBundle\Controller\Relations\RelatedMultimediaItems
@@ -45,7 +51,8 @@ services:
         arguments:
             - "@ngsite.relation.multimedia_resolver"
         tags:
-            - { name: 'container.service_subscriber' }
+            - { name: controller.service_arguments }
+            - { name: container.service_subscriber }
 
     ngsite.controller.download:
         class: Netgen\Bundle\SiteBundle\Controller\Download
@@ -58,7 +65,8 @@ services:
             - "@event_dispatcher"
             - "@ibexa.config.resolver"
         tags:
-            - { name: 'container.service_subscriber' }
+            - { name: controller.service_arguments }
+            - { name: container.service_subscriber }
 
     ngsite.controller.user.register:
         class: Netgen\Bundle\SiteBundle\Controller\User\Register
@@ -70,7 +78,8 @@ services:
             - "@ibexa.api.repository"
             - "@ibexa.config.resolver"
         tags:
-            - { name: 'container.service_subscriber' }
+            - { name: controller.service_arguments }
+            - { name: container.service_subscriber }
 
     ngsite.controller.user.activation_form:
         class: Netgen\Bundle\SiteBundle\Controller\User\ActivationForm
@@ -80,7 +89,8 @@ services:
             - "@event_dispatcher"
             - "@ibexa.config.resolver"
         tags:
-            - { name: 'container.service_subscriber' }
+            - { name: controller.service_arguments }
+            - { name: container.service_subscriber }
 
     ngsite.controller.user.activate:
         class: Netgen\Bundle\SiteBundle\Controller\User\Activate
@@ -92,7 +102,8 @@ services:
             - "@ibexa.api.repository"
             - "@ibexa.config.resolver"
         tags:
-            - { name: 'container.service_subscriber' }
+            - { name: controller.service_arguments }
+            - { name: container.service_subscriber }
 
     ngsite.controller.user.forgot_password:
         class: Netgen\Bundle\SiteBundle\Controller\User\ForgotPassword
@@ -102,7 +113,8 @@ services:
             - "@event_dispatcher"
             - "@ibexa.config.resolver"
         tags:
-            - { name: 'container.service_subscriber' }
+            - { name: controller.service_arguments }
+            - { name: container.service_subscriber }
 
     ngsite.controller.user.reset_password:
         class: Netgen\Bundle\SiteBundle\Controller\User\ResetPassword
@@ -114,19 +126,22 @@ services:
             - "@ibexa.api.repository"
             - "@ibexa.config.resolver"
         tags:
-            - { name: 'container.service_subscriber' }
+            - { name: controller.service_arguments }
+            - { name: container.service_subscriber }
 
     ngsite.controller.view_modal:
         class: Netgen\Bundle\SiteBundle\Controller\ViewModal
         parent: ngsite.controller.base
         tags:
-            - { name: 'container.service_subscriber' }
+            - { name: controller.service_arguments }
+            - { name: container.service_subscriber }
 
     ngsite.controller.info_collection.ajax_submit:
         class: Netgen\Bundle\SiteBundle\Controller\InfoCollection\AjaxSubmit
         parent: ngsite.controller.base
         tags:
-            - { name: 'container.service_subscriber' }
+            - { name: controller.service_arguments }
+            - { name: container.service_subscriber }
 
     ngsite.controller.info_collection.view_modal:
         class: Netgen\Bundle\SiteBundle\Controller\InfoCollection\ViewModal
@@ -134,7 +149,8 @@ services:
         arguments:
             - "@ngsite.info_collection.referer_resolver"
         tags:
-            - { name: 'container.service_subscriber' }
+            - { name: controller.service_arguments }
+            - { name: container.service_subscriber }
 
     ngsite.controller.info_collection.proxy_form_handler:
         class: Netgen\Bundle\SiteBundle\Controller\InfoCollection\ProxyFormHandler
@@ -147,7 +163,8 @@ services:
             - "@ngsite.info_collection.referer_resolver"
             - "@?logger"
         tags:
-            - { name: 'container.service_subscriber' }
+            - { name: controller.service_arguments }
+            - { name: container.service_subscriber }
 
     ngsite.controller.view_content_by_remote_id:
         class: Netgen\Bundle\SiteBundle\Controller\ViewContentByRemoteId
@@ -155,7 +172,8 @@ services:
         arguments:
             - "@netgen.ibexa_site_api.load_service"
         tags:
-            - { name: 'container.service_subscriber' }
+            - { name: controller.service_arguments }
+            - { name: container.service_subscriber }
 
     ngsite.controller.view_location_by_remote_id:
         class: Netgen\Bundle\SiteBundle\Controller\ViewLocationByRemoteId
@@ -163,4 +181,5 @@ services:
         arguments:
             - "@netgen.ibexa_site_api.load_service"
         tags:
-            - { name: 'container.service_subscriber' }
+            - { name: controller.service_arguments }
+            - { name: container.service_subscriber }

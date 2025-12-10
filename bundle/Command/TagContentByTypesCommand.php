@@ -184,8 +184,8 @@ final class TagContentByTypesCommand extends Command
                 array_filter(
                     $values,
                     static fn (string $value): bool => $value !== '',
-                )
-            )
+                ),
+            ),
         );
     }
 }

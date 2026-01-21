@@ -22,6 +22,7 @@ final class NetgenSiteBundle extends Bundle
         $container->addCompilerPass(new Compiler\IoStorageAllowListPass());
         $container->addCompilerPass(new Compiler\PHPStormPass(), PassConfig::TYPE_OPTIMIZE);
         $container->addCompilerPass(new Compiler\DirectDownloadPass());
+        $container->addCompilerPass(new Compiler\WebpFormatVariationPathGeneratorDecoratorPass());
     }
 
     public function getContainerExtension(): ExtensionInterface

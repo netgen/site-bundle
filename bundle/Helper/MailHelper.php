@@ -69,6 +69,47 @@ final class MailHelper
     }
 
     /**
+     * Sends a group mail to users in bcc.
+     *
+     * Sender and recipient are set to sender
+     *
+     * Sender can be:
+     * a string: info@netgen.io
+     * an array: array( 'info@netgen.io' => 'Netgen Site' )
+     *
+     * Bcc can be:
+     *  a string: info@netgen.io
+     *  or:
+     *  array( 'info@netgen.io' => 'Netgen Site' ) or
+     *  array( 'info@netgen.io', 'example@netgen.io' ) or
+     *  array( 'info@netgen.io' => 'Netgen Site', 'example@netgen.io' => 'Example' )
+     *
+     * @param string|string[] $bcc
+     * @param array<string, mixed> $parameters
+     * @param string|string[]|null $sender
+     */
+    public function sendGroupMail(array|string $bcc, string $subject, string $template, array $parameters = [], array|string|null $sender = null): void
+    {
+        try {
+            $senderAddress = $this->createSenderAddress($sender);
+        } catch (InvalidArgumentException $e) {
+            $this->logger->error($e->getMessage());
+
+            return;
+        }
+
+        $email = (new Email())
+            ->from($senderAddress)
+            ->sender($senderAddress)
+            ->to($senderAddress)
+            ->bcc(...$this->createReceiverAddresses($bcc))
+            ->subject($this->translator->trans($subject, [], 'ngsite_mail'))
+            ->html($this->twig->render($template, $parameters));
+
+        $this->mailer->send($email);
+    }
+
+    /**
      * Creates a sender address from provided value.
      * If sender is not provided (if it is null), it attempts to get the sender from the parameters:
      * ngsite.default.mail.sender_email

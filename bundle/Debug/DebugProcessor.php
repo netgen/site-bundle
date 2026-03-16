@@ -7,6 +7,7 @@ namespace Netgen\Bundle\SiteBundle\Debug;
 use Monolog\LogRecord;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
+use Symfony\Contracts\Service\ResetInterface;
 
 use function call_user_func;
 use function in_array;
@@ -19,7 +20,7 @@ use function is_callable;
  * By default, it excludes "doctrine" and "event" channels, which cause most
  * of the slowdown when rendering the profiler.
  */
-final class DebugProcessor implements DebugLoggerInterface
+final class DebugProcessor implements DebugLoggerInterface, ResetInterface
 {
     /**
      * @param string[] $excludedChannels
@@ -51,5 +52,10 @@ final class DebugProcessor implements DebugLoggerInterface
     public function clear(): void
     {
         $this->innerProcessor->clear();
+    }
+
+    public function reset(): void
+    {
+        $this->clear();
     }
 }

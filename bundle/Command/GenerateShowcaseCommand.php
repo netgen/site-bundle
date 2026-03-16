@@ -38,11 +38,11 @@ use Netgen\Layouts\Parameters\ParameterType\BooleanType;
 use Netgen\Layouts\Parameters\ParameterType\ChoiceType;
 use Netgen\Layouts\Parameters\ParameterType\Compound\BooleanType as CompoundBooleanType;
 use Netgen\Layouts\Persistence\Values\Status;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Uid\Uuid;
 
 use function array_column;
 use function array_keys;

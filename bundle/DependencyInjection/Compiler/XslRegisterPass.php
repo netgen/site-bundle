@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Netgen\Bundle\SiteBundle\DependencyInjection\Compiler;
 
-use Ibexa\Bundle\Core\DependencyInjection\Configuration\ConfigResolver;
+use Ibexa\Contracts\Core\SiteAccess\ConfigResolverInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -17,7 +17,7 @@ final class XslRegisterPass implements CompilerPassInterface
     {
         /** @var string[] $siteAccessList */
         $siteAccessList = $container->getParameter('ibexa.site_access.list');
-        $scopes = [ConfigResolver::SCOPE_DEFAULT, ...$siteAccessList];
+        $scopes = [ConfigResolverInterface::SCOPE_DEFAULT, ...$siteAccessList];
 
         foreach ($scopes as $scope) {
             if ($container->hasParameter('ibexa.site_access.config' . $scope . 'fieldtypes.ibexa_richtext.output_custom_xsl')) {

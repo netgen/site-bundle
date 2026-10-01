@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": "^8.4",
-        "ibexa/core": "^5.0",
+        "ibexa/core": "^5.0.10",
         "ibexa/content-forms": "^5.0",
         "symfony/mailer": "^7.3",
         "netgen/ibexa-forms-bundle": "^5.0",

@@ -23,6 +23,16 @@ services:
         tags:
             - { name: netgen_information_collection.action }
 
+    ngsite.info_collection.form.extension.required_field:
+        class: Netgen\Bundle\SiteBundle\InfoCollection\Form\Extension\RequiredFieldFormExtension
+        tags:
+          - { name: form.type_extension, extended_type: Netgen\Bundle\InformationCollectionBundle\Ibexa\ContentForms\InformationCollectionType, priority: -100 }
+
+    ngsite.info_collection.form.extension.email_form_extenison:
+        class: Netgen\Bundle\SiteBundle\InfoCollection\Form\Extension\EmailFormExtension
+        tags:
+          - { name: form.type_extension, extended_type: Netgen\Bundle\InformationCollectionBundle\Ibexa\ContentForms\InformationCollectionType, priority: -100 }
+
     ngsite.info_collection.form.extension.honeypot_extension:
         class: Netgen\Bundle\SiteBundle\InfoCollection\Form\Extension\HoneypotExtension
         tags:
